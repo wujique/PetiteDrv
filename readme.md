@@ -27,5 +27,11 @@ Please find the detail from :board_sysconf.c/board_sysconf.h, and Petite.
 5. emenu
 
 ## Contact us
-code@wujique.com
-www.wujique.com
+Website:
+<www.wujique.com>
+Email:
+<code@wujique.com>
+
+and you can find the doc about the hardware from :
+[google drive](https://drive.google.com/drive/folders/1Oqj1ImoYFRENd2hW38paAGbUF8PyeNXX)
+[baidu](https://pan.baidu.com/s/12o0Vh4Tv4z_O8qh49JwLjg)
