@@ -21,8 +21,12 @@ extern "C" {
 #ifndef ts_error
 #define ts_error wjq_log
 #endif
-/*---------------*/
-struct tsdev;
+
+
+struct tsdev 
+{
+	int fd;	
+};
 
 struct ts_sample //触摸屏一个样点
 {
@@ -42,7 +46,6 @@ typedef struct {
 	unsigned int a[7];	//校准得到的7个参数
 } calibration;
 
-
 /*
  * Close the touchscreen device, free all resources.
  */
@@ -52,21 +55,6 @@ extern int ts_close(struct tsdev *);
  * Configure the touchscreen device.
  */
 extern int ts_config(struct tsdev *);
-
-/*
- * Change this hook to point to your custom error handling function.
- */
-extern int (*ts_error_fn)(const char *fmt, va_list ap);
-
-/*
- * Returns the file descriptor in use for the touchscreen device.
- */
-extern int ts_fd(struct tsdev *);
-
-/*
- * Load a filter/scaling module
- */
-extern int ts_load_module(struct tsdev *, const char *mod, const char *params);
 
 /*
  * Open the touchscreen device.
@@ -83,7 +71,12 @@ extern int ts_read(struct tsdev *, struct ts_sample *, int);
  */
 extern int ts_read_raw(struct tsdev *, struct ts_sample *, int);
 
+extern struct tsdev *ts_open_module(void);
+
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
 #endif /* _TSLIB_H_ */
+
+

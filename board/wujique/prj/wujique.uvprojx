@@ -336,7 +336,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\app;..\..\wujique;..\usb\inc;..\eth\inc;..\..\..\driver;..\..\..\driver\lcd;..\..\..\driver\cdev;..\..\..\mcu\stm32407\mcu_dev;..\..\..\mcu\stm32407\StLib\STM32F4xx_StdPeriph_Driver\inc;..\..\..\panel;..\..\..\Petite;..\..\..\Utilities\FreeRTOS\Source\include;..\..\..\Utilities\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\..\..\mcu\stm32407\StLib\STM32_USB_OTG_Driver\inc;..\..\..\mcu\stm32407\StLib\STM32_USB_HOST_Library\Core\inc;..\..\..\mcu\stm32407\StLib\STM32_USB_HOST_Library\Class\MSC\inc;..\..\..\mcu\stm32407\StLib\STM32_USB_Device_Library\Core\inc;..\..\..\mcu\stm32407\StLib\STM32_USB_Device_Library\Class\msc\inc;..\..\..\Utilities\fat_fs\src;..\eth\inc;..\..\..\mcu\stm32407\StLib\STM32F4x7_ETH_Driver\inc;..\..\..\Utilities\lwip-1.4.1\port\STM32F4x7\Standalone;..\..\..\Utilities\lwip-1.4.1\src\include\ipv4;..\..\..\Utilities\lwip-1.4.1\src\include;..\..\..\Utilities\lwip-1.4.1\src\include\netif;..\..\..\Utilities\lwip-1.4.1\src\include\lwip;..\..\..\Utilities\lwip-1.4.1\port\STM32F4x7;..\..\..\Utilities\tslib\src;..\..\..\Utilities\tslib\tests;..\..\..\Utilities\cmd;..\..\..\Utilities\spiffs-0.3.7\src;..\..\..\Utilities\littlefs-master;..\usb\inc;..\..\..\mcu\stm32407;..\..\..\Utilities\font</IncludePath>
+              <IncludePath>..\..\..\app;..\..\wujique;..\usb\inc;..\eth\inc;..\..\..\driver;..\..\..\driver\lcd;..\..\..\driver\cdev;..\..\..\mcu\stm32407\mcu_dev;..\..\..\mcu\stm32407\StLib\STM32F4xx_StdPeriph_Driver\inc;..\..\..\panel;..\..\..\Petite;..\..\..\Utilities\FreeRTOS\Source\include;..\..\..\Utilities\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\..\..\mcu\stm32407\StLib\STM32_USB_OTG_Driver\inc;..\..\..\mcu\stm32407\StLib\STM32_USB_HOST_Library\Core\inc;..\..\..\mcu\stm32407\StLib\STM32_USB_HOST_Library\Class\MSC\inc;..\..\..\mcu\stm32407\StLib\STM32_USB_Device_Library\Core\inc;..\..\..\mcu\stm32407\StLib\STM32_USB_Device_Library\Class\msc\inc;..\..\..\Utilities\fat_fs\src;..\eth\inc;..\..\..\mcu\stm32407\StLib\STM32F4x7_ETH_Driver\inc;..\..\..\Utilities\lwip-1.4.1\port\STM32F4x7\Standalone;..\..\..\Utilities\lwip-1.4.1\src\include\ipv4;..\..\..\Utilities\lwip-1.4.1\src\include;..\..\..\Utilities\lwip-1.4.1\src\include\netif;..\..\..\Utilities\lwip-1.4.1\src\include\lwip;..\..\..\Utilities\lwip-1.4.1\port\STM32F4x7;..\..\..\Utilities\tslib;..\..\..\Utilities\cmd;..\..\..\Utilities\spiffs-0.3.7\src;..\..\..\Utilities\littlefs-master;..\usb\inc;..\..\..\mcu\stm32407;..\..\..\Utilities\font</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1316,76 +1316,6 @@
           <GroupName>Utilities/tslib</GroupName>
           <Files>
             <File>
-              <FileName>ts_attach.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\tslib\src\ts_attach.c</FilePath>
-            </File>
-            <File>
-              <FileName>ts_close.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\tslib\src\ts_close.c</FilePath>
-            </File>
-            <File>
-              <FileName>ts_config.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\tslib\src\ts_config.c</FilePath>
-            </File>
-            <File>
-              <FileName>ts_fd.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\tslib\src\ts_fd.c</FilePath>
-            </File>
-            <File>
-              <FileName>ts_load_module.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\tslib\src\ts_load_module.c</FilePath>
-            </File>
-            <File>
-              <FileName>ts_open.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\tslib\src\ts_open.c</FilePath>
-            </File>
-            <File>
-              <FileName>ts_parse_vars.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\tslib\src\ts_parse_vars.c</FilePath>
-            </File>
-            <File>
-              <FileName>ts_read.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\tslib\src\ts_read.c</FilePath>
-            </File>
-            <File>
-              <FileName>ts_read_raw.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\tslib\src\ts_read_raw.c</FilePath>
-            </File>
-            <File>
-              <FileName>dejitter.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\tslib\plugins\dejitter.c</FilePath>
-            </File>
-            <File>
-              <FileName>linear.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\tslib\plugins\linear.c</FilePath>
-            </File>
-            <File>
-              <FileName>pthres.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\tslib\plugins\pthres.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32-raw.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\tslib\plugins\stm32-raw.c</FilePath>
-            </File>
-            <File>
-              <FileName>variance.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\tslib\plugins\variance.c</FilePath>
-            </File>
-            <File>
               <FileName>testutils.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\Utilities\tslib\tests\testutils.c</FilePath>
@@ -1394,6 +1324,11 @@
               <FileName>ts_calibrate.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\Utilities\tslib\tests\ts_calibrate.c</FilePath>
+            </File>
+            <File>
+              <FileName>tslib.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Utilities\tslib\tslib.c</FilePath>
             </File>
           </Files>
         </Group>

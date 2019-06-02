@@ -21,6 +21,7 @@
 #include "mcu.h"
 #include "log.h"
 #include "dev_lcd.h"
+#include "tslib.h"
 
 extern void put_cross(DevLcdNode *lcd, int x, int y, unsigned colidx);
 extern void put_string_center(DevLcdNode *lcd, int x, int y, char *s, unsigned colidx);
@@ -114,8 +115,11 @@ static void get_sample (struct tsdev *ts, calibration *cal,
 	使用竖屏校准？
 
 */
-calibration cal;//测试，直接定义一个cal用于保存校准数据
-
+/*
+	测试，直接定义一个cal用于保存校准数据
+	实际项目中最好是将cal保存在文件中
+*/	
+calibration cal;
 
 struct tsdev *ts_open_module(void)
 {
@@ -127,21 +131,26 @@ struct tsdev *ts_open_module(void)
 	for (i = 0; i < 7; i++) 
 		wjq_log(LOG_DEBUG, "%d ", cal.a [i]);
 	wjq_log(LOG_DEBUG, "\n");
-	
+	/*先配置校准参数，再调ts_open*/
+	ts_set_cal(&cal);
+
 	ts = ts_open(tsdevice,0);
 
 	if (!ts) 
 	{
 		return NULL;
 	}
+	
 	if (ts_config(ts)) 
 	{
 		return NULL;
 	}
-
+	
 	return ts;
 }
-
+/*
+	校验流程
+*/
 int ts_calibrate(DevLcdNode *lcd)
 {
 	struct tsdev *ts;

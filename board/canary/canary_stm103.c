@@ -16,7 +16,7 @@
 #include "FreeRtos.h"
 #include "font.h"
 #include "emenu.h"
-
+#include "tslib.h"
 #include "main.h"
 
 extern u16 PenColor;
@@ -65,9 +65,6 @@ s32 wjq_test(void)
 	return 0;
 }
 
-
-#include "tslib-private.h"
-extern struct tsdev *ts_open_module(void);
 s32 test_tp_calibrate(void)
 {
 	DevLcdNode *lcd;

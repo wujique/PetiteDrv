@@ -336,7 +336,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\app;..\..\canary;..\..\..\driver;..\..\..\driver\lcd;..\..\..\driver\cdev;..\..\..\mcu\stm32f103;..\..\..\mcu\stm32f103\StLib\STM32F10x_StdPeriph_Driver\inc;..\..\..\mcu\stm32f103\mcu_dev;..\..\..\panel;..\..\..\Petite;..\..\..\Utilities\FreeRTOS\Source\include;..\..\..\Utilities\FreeRTOS\Source\portable\RVDS\ARM_CM3;..\..\..\Utilities\font;..\..\..\Utilities\tslib\src;..\usb_msc\inc;..\..\..\mcu\stm32f103\StLib\STM32_USB-FS-Device_Driver\inc</IncludePath>
+              <IncludePath>..\..\..\app;..\..\canary;..\..\..\driver;..\..\..\driver\lcd;..\..\..\driver\cdev;..\..\..\mcu\stm32f103;..\..\..\mcu\stm32f103\StLib\STM32F10x_StdPeriph_Driver\inc;..\..\..\mcu\stm32f103\mcu_dev;..\..\..\panel;..\..\..\Petite;..\..\..\Utilities\FreeRTOS\Source\include;..\..\..\Utilities\FreeRTOS\Source\portable\RVDS\ARM_CM3;..\..\..\Utilities\font;..\..\..\Utilities\tslib;..\usb_msc\inc;..\..\..\mcu\stm32f103\StLib\STM32_USB-FS-Device_Driver\inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -826,76 +826,6 @@
           <GroupName>Utilities/tslib</GroupName>
           <Files>
             <File>
-              <FileName>ts_attach.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\tslib\src\ts_attach.c</FilePath>
-            </File>
-            <File>
-              <FileName>ts_close.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\tslib\src\ts_close.c</FilePath>
-            </File>
-            <File>
-              <FileName>ts_config.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\tslib\src\ts_config.c</FilePath>
-            </File>
-            <File>
-              <FileName>ts_fd.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\tslib\src\ts_fd.c</FilePath>
-            </File>
-            <File>
-              <FileName>ts_load_module.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\tslib\src\ts_load_module.c</FilePath>
-            </File>
-            <File>
-              <FileName>ts_open.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\tslib\src\ts_open.c</FilePath>
-            </File>
-            <File>
-              <FileName>ts_parse_vars.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\tslib\src\ts_parse_vars.c</FilePath>
-            </File>
-            <File>
-              <FileName>ts_read.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\tslib\src\ts_read.c</FilePath>
-            </File>
-            <File>
-              <FileName>ts_read_raw.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\tslib\src\ts_read_raw.c</FilePath>
-            </File>
-            <File>
-              <FileName>dejitter.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\tslib\plugins\dejitter.c</FilePath>
-            </File>
-            <File>
-              <FileName>linear.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\tslib\plugins\linear.c</FilePath>
-            </File>
-            <File>
-              <FileName>pthres.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\tslib\plugins\pthres.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32-raw.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\tslib\plugins\stm32-raw.c</FilePath>
-            </File>
-            <File>
-              <FileName>variance.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\tslib\plugins\variance.c</FilePath>
-            </File>
-            <File>
               <FileName>testutils.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\Utilities\tslib\tests\testutils.c</FilePath>
@@ -904,6 +834,11 @@
               <FileName>ts_calibrate.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\Utilities\tslib\tests\ts_calibrate.c</FilePath>
+            </File>
+            <File>
+              <FileName>tslib.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Utilities\tslib\tslib.c</FilePath>
             </File>
           </Files>
         </Group>
