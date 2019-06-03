@@ -336,7 +336,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\app;..\..\canary;..\..\..\driver;..\..\..\driver\lcd;..\..\..\driver\cdev;..\..\..\mcu\stm32f103;..\..\..\mcu\stm32f103\StLib\STM32F10x_StdPeriph_Driver\inc;..\..\..\mcu\stm32f103\mcu_dev;..\..\..\panel;..\..\..\Petite;..\..\..\Utilities\FreeRTOS\Source\include;..\..\..\Utilities\FreeRTOS\Source\portable\RVDS\ARM_CM3;..\..\..\Utilities\font;..\..\..\Utilities\tslib;..\usb_msc\inc;..\..\..\mcu\stm32f103\StLib\STM32_USB-FS-Device_Driver\inc</IncludePath>
+              <IncludePath>..\..\..\app;..\..\canary;..\..\..\driver;..\..\..\driver\lcd;..\..\..\driver\cdev;..\..\..\mcu\stm32f103;..\..\..\mcu\stm32f103\StLib\STM32F10x_StdPeriph_Driver\inc;..\..\..\mcu\stm32f103\mcu_dev;..\..\..\panel;..\..\..\Petite;..\..\..\Utilities\FreeRTOS\Source\include;..\..\..\Utilities\FreeRTOS\Source\portable\RVDS\ARM_CM3;..\..\..\Utilities\font;..\..\..\Utilities\tslib;..\usb_msc\inc;..\..\..\mcu\stm32f103\StLib\STM32_USB-FS-Device_Driver\inc;..\..\..\mcu\stm32f103\StLib\core</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -614,6 +614,11 @@
               <FileName>system_stm32f10x.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\mcu\stm32f103\system_stm32f10x.c</FilePath>
+            </File>
+            <File>
+              <FileName>core_cm3.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\mcu\stm32f103\StLib\core\core_cm3.c</FilePath>
             </File>
           </Files>
         </Group>
