@@ -21,7 +21,6 @@
 
 #include "mcu.h"
 #include "log.h"
-#include "mcu_adc.h"
 #include "mcu_timer.h"
 #include "tslib.h"
 #include "dev_touchscreen.h"
@@ -187,9 +186,10 @@ s32 dev_touchscreen_ioctrl(void)
 */
 
 
-#include "mcu_adc.h"
+
 
 #ifdef SYS_USE_TS_ADC_CASE
+#include "mcu_adc.h"
 
 #define DEV_TP_S_PORT GPIOD
 #define DEV_TP_S0 	  GPIO_Pin_11	
