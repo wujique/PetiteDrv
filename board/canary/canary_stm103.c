@@ -58,6 +58,168 @@ s32 wjq_test_showstr(char *s)
 	
 	return 0;
 }	
+	
+/**
+ *@brief:      test_tft_display
+ *@details:    测试TFT LCD
+ *@param[in]   void  
+ *@param[out]  无
+ *@retval:     
+ */
+s32 test_tft_display(void)
+{
+	DevLcdNode *lcd;
+	u8 step = 0;
+	u8 dis = 1;
+	
+	dev_lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
+	
+	/*顶行居中显示父菜单*/
+	dev_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
+	dev_lcd_update(WJQTestLcd);
+	
+	lcd = dev_lcd_open("tftlcd");
+	if(lcd == NULL)
+	{
+		wjq_test_showstr("open lcd err!");	
+	}
+	else
+	{
+		while(1)
+		{
+			if(dis == 1)
+			{
+				dis = 0;
+				switch(step)
+				{
+					case 0:
+						dev_lcd_color_fill(lcd, 1, 1000, 1, 1000, YELLOW);
+						dev_lcd_update(lcd);
+						break;
+					case 1:
+						dev_lcd_color_fill(lcd, 1, 1000, 1, 1000, RED);
+						dev_lcd_update(lcd);
+						break;
+					case 2:
+						dev_lcd_color_fill(lcd, 1, 1000, 1, 1000, BLUE);
+						dev_lcd_put_string(lcd, TEST_FONG, 1, 120, "abc屋脊雀ADC123工作室12345678901234屋脊雀工作室", RED);
+						dev_lcd_update(lcd);
+
+						break;
+					default:
+						break;
+				}
+				step++;
+				if(step >= 3)
+					step = 0;
+			}
+			u8 keyvalue;
+			s32 res;
+			
+			res = dev_keypad_read(&keyvalue, 1);
+			if(res == 1)
+			{
+				if(keyvalue == 16)
+				{
+					dis = 1;
+				}
+				else if(keyvalue == 12)
+				{
+					break;
+				}
+			}
+		}
+	
+	}
+		return 0;
+}
+
+s32 test_cogoled_lcd_display(char *name)
+{
+	DevLcdNode *lcd;
+	u8 step = 0;
+	u8 dis = 1;
+	
+	lcd = dev_lcd_open(name);
+	if(lcd == NULL)
+	{
+		wjq_test_showstr("open cog lcd err!");	
+	}
+	else
+	{
+		while(1)
+		{
+			if(dis == 1)
+			{
+				dis = 0;
+				switch(step)
+				{
+					case 0:
+						dev_lcd_color_fill(lcd, 1, 1000, 1, 1000, BLACK);
+						dev_lcd_update(lcd);
+						break;
+					case 1:
+						dev_lcd_color_fill(lcd, 1, 1000, 1, 1000, WHITE);
+						dev_lcd_update(lcd);
+						break;
+					case 2:
+						dev_lcd_put_string(lcd, TEST_FONG, 1, 56, "abc屋脊雀ADC123工作室", BLACK);
+						dev_lcd_update(lcd);
+						break;
+						
+					default:
+						break;
+				}
+				step++;
+				if(step >= 3)
+					step = 0;
+			}
+			u8 keyvalue;
+			s32 res;
+			
+			res = dev_keypad_read(&keyvalue, 1);
+			if(res == 1)
+			{
+				if(keyvalue == 16)
+				{
+					dis = 1;
+				}
+				else if(keyvalue == 12)
+				{
+					break;
+				}
+			}
+		}
+
+	}
+	
+	return 0;
+}
+s32 test_i2c_oled_display(void)
+{
+	dev_lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
+	/*顶行居中显示父菜单*/
+	dev_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
+	dev_lcd_update(WJQTestLcd);
+	return 	test_cogoled_lcd_display("i2coledlcd");
+}
+s32 test_vspi_oled_display(void)
+{
+	dev_lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
+	/*顶行居中显示父菜单*/
+	dev_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
+	dev_lcd_update(WJQTestLcd);
+	return 	test_cogoled_lcd_display("vspioledlcd");
+}
+
+s32 test_spi_cog_display(void)
+{
+	dev_lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
+	/*顶行居中显示父菜单*/
+	dev_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
+	dev_lcd_update(WJQTestLcd);
+	return 	test_cogoled_lcd_display("spicoglcd");
+}
 
 s32 wjq_test(void)
 {
@@ -179,7 +341,7 @@ const MENU WJQTestList[]=
 		"LCD",	//英文
 		MENU_TYPE_LIST,//菜单类型
 		NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
-			/*
+		/*
 			MENU_L_2,//菜单等级
 			"VSPI OLED",//中文
 			"VSPI OLED",	//英文
@@ -190,7 +352,7 @@ const MENU WJQTestList[]=
 			"I2C OLED",//中文
 			"I2C OLED",	//英文
 			MENU_TYPE_FUN,//菜单类型
-			wjq_test,//菜单函数，功能菜单才会执行，有子菜单的不会执行
+			test_i2c_oled_display,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 			/*
 			MENU_L_2,//菜单等级
 			"SPI COG",//中文
@@ -199,18 +361,18 @@ const MENU WJQTestList[]=
 			test_spi_cog_display,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 			*/
 			MENU_L_2,//菜单等级
-			"SPI tft",//中文
-			"SPI tft",	//英文
+			"SPI cog",//中文
+			"SPI cog",	//英文
 			MENU_TYPE_FUN,//菜单类型
 			//test_lcd_spi_128128,//菜单函数，功能菜单才会执行，有子菜单的不会执行
-			wjq_test,
+			test_spi_cog_display,
 			
 			MENU_L_2,//菜单等级
 			"tft",//中文
 			"tft",	//英文
 			MENU_TYPE_FUN,//菜单类型
-			wjq_test,//菜单函数，功能菜单才会执行，有子菜单的不会执行
-	
+			test_tft_display,//菜单函数，功能菜单才会执行，有子菜单的不会执行
+				
 			MENU_L_2,//菜单等级
 			"图片测试",//中文
 			"test BMP",	//英文

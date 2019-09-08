@@ -12,6 +12,7 @@
 */
 #include "mcu.h"
 #include "board_sysconf.h"
+#include "log.h"
 
 #include "dev_spiflash.h"
 #include "bus_lcd.h"
@@ -60,6 +61,7 @@ const DevI2c DevVi2c1={
 		.sdaport = MCU_PORT_B,
 		.sdapin = GPIO_Pin_7,
 		};
+		
 const DevI2c DevVi2c2={
 		.name = "VI2C2",
 		.type = DEV_I2C_V,
@@ -90,7 +92,7 @@ const DevI2c DevI2C1={
 	IO口模拟SPI控制器
 ------------------------*/
 /*
-	VSPI1，核心板上的LCD接口中的4根IO模拟SPI，
+	VSPI1, 板上的LCD接口中的4根IO模拟SPI，
 	用于XPT2046方案触摸处理，可读可写。
 */					
 const DevSpi DevVSpi1IO={
@@ -107,6 +109,25 @@ const DevSpi DevVSpi1IO={
 		.misoport = MCU_PORT_C,
 		.misopin = GPIO_Pin_4,
 	};
+
+/* 
+	外扩接口上的硬件SPI1，此处用IO模拟实现
+*/
+const DevSpi DevVSpi2IO={
+		.name = "VSPI2",
+		.type = DEV_SPI_V,
+		
+		/*clk*/
+		.clkport = MCU_PORT_A,
+		.clkpin = GPIO_Pin_5,
+		/*mosi*/
+		.mosiport = MCU_PORT_A,
+		.mosipin = GPIO_Pin_7,
+		/*miso*/
+		.misoport = MCU_PORT_A,
+		.misopin = GPIO_Pin_6,
+	};
+
 
 /*
 	硬件SPI控制器：SPI3
@@ -134,7 +155,7 @@ const DevSpi DevSpi3IO={
 	SPI通道
 -------------------------*/
 /*
-	核心板FLASH用
+	板上FLASH用
 */
 const DevSpiCh DevSpi3CH1={
 		.name = "SPI3_CH1",
@@ -146,7 +167,7 @@ const DevSpiCh DevSpi3CH1={
 	};		
 	
 
-#if 1
+#if 0
 /*
 	模拟SPI通道，无CS
 	用来调试没有CS的LCD屏幕，
@@ -161,6 +182,18 @@ const DevSpiCh DevVSpi3CH1={
 		
 	};
 #endif
+
+/*
+	模拟SPI通道
+*/	
+const DevSpiCh DevVSpi2CH1={
+		.name = "VSPI2_CH1",
+		.spi = "VSPI2",
+		
+		.csport = MCU_PORT_A,
+		.cspin = GPIO_Pin_4,
+	};
+
 
 /* 
 	LCD座子中的触摸屏接口, IO模拟SPI
@@ -194,23 +227,25 @@ const DevSpiCh DevVSpi1CH2={
 /*
 	串行LCD接口，使用真正的SPI控制
 	外扩接口中的SPI接口
-*/
-const DevLcdBus BusLcdSpi3={
-	.name = "BusLcdSpi3",
-	.type = LCD_BUS_SPI,
-	.basebus = "SPI3_CH3",
 
-	.A0port = MCU_PORT_G,
+	测试， 暂时用模拟SPI实现
+*/
+const DevLcdBus BusLcdSpi1={
+	.name = "BusLcdSpi1",
+	.type = LCD_BUS_SPI,
+	.basebus = "VSPI2_CH1",
+
+	.A0port = MCU_PORT_E,
 	.A0pin = GPIO_Pin_4,
 
-	.rstport = MCU_PORT_G,
-	.rstpin = GPIO_Pin_7,
+	.rstport = MCU_PORT_E,
+	.rstpin = GPIO_Pin_5,
 
-	.blport = MCU_PORT_G,
+	.blport = MCU_PORT_A,
 	.blpin = GPIO_Pin_9,
 
-	.staport = MCU_PORT_F, 
-	.stapin = GPIO_Pin_2,
+	.staport = MCU_PORT_NULL, 
+	.stapin = NULL,
 };
 #else
 /*
@@ -305,15 +340,14 @@ DevLcd DevLcdSpiOled	=	{
 	.height = 128};
 */
 /*SPI接口的 COG LCD*/
-	/*
 const DevLcd DevLcdCOG1	=	{
 	.name = "spicoglcd", 
 	//.buslcd = "BusLcdVSpi2CH1", 
-	.buslcd = "BusLcdSpi3",
+	.buslcd = "BusLcdSpi1",
 	.id = 0X7565, 
 	.width = 64, 
 	.height = 128};
-*/	
+
 /*fsmc接口的 tft lcd*/
 const DevLcd DevLcdtTFT	=	{"tftlcd", 		"BusLcd8080", 	NULL, 240, 320};
 //const DevLcd DevLcdtTFT	=	{"tftlcd", 		"BusLcd8080", 	0x9325, 240, 320};
@@ -341,23 +375,30 @@ const DevLcd DevLcdtTFT	=	{"tftlcd", 		"BusLcd8080", 	NULL, 240, 320};
 */
 s32 sys_dev_register(void)
 {
+	wjq_log(LOG_INFO, "[----------register---------------]\r\n");
 	/*注册I2C总线*/
 	mcu_i2c_register(&DevVi2c1);
 			dev_lcdbus_register(&BusLcdI2C1);
 					dev_lcd_register(&DevLcdOled1);
 					
-	mcu_i2c_register(&DevVi2c2);
+	//mcu_i2c_register(&DevVi2c2);
 	
 	mcu_spi_register(&DevSpi3IO);
 			mcu_spich_register(&DevSpi3CH1);
 					dev_spiflash_register(&DevSpiFlashBoard);
+
+	mcu_spi_register(&DevVSpi2IO);
+		mcu_spich_register(&DevVSpi2CH1);
+			dev_lcdbus_register(&BusLcdSpi1);
+					dev_lcd_register(&DevLcdCOG1);				
 					
 	mcu_spi_register(&DevVSpi1IO);
 			mcu_spich_register(&DevVSpi1CH1);//8080接口的触摸屏
 	
 	dev_lcdbus_register(&BusLcd8080);
 			dev_lcd_register(&DevLcdtTFT);
-	
+			
+	wjq_log(LOG_INFO, "[---------- register finish ---------]\r\n");
 	return 0;
 }
 

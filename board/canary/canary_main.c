@@ -42,14 +42,14 @@ s32 board_mcu_preinit(void)
 
 s32 board_mcu_init(void)
 {
-	wjq_log(LOG_DEBUG, "***mcu: stm32f103 dev init!***\r\n");
+	wjq_log(LOG_DEBUG, "mcu: stm32f103 dev init!***\r\n");
 	mcu_rtc_init();
 	return 0;
 }
 
 s32 board_main_init(void)
 {
-	wjq_log(LOG_DEBUG, "***board: canary other dev init!***\r\n");
+	wjq_log(LOG_DEBUG, "board: canary other dev init!***\r\n");
 	sys_dev_register();
 	
 	#ifdef SYS_USE_KEYPAD
