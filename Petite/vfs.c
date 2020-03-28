@@ -71,7 +71,7 @@ app-----VFS ----|
 							}
 							、、、
 */
-#define Test_VFS 
+//#define Test_VFS 
 
 #ifdef Test_VFS
 #define VfsDebug wjq_log
@@ -248,7 +248,7 @@ s32 vfs_mount(const VFSDIR *Mtd)
 					FRESULT res;
 
 					/* Initialises the File System*/
-					res = f_mount(&VfsNodeList[i].pra.fatfs, SYS_FS_FATFS_SD, 1);
+					res = f_mount(&VfsNodeList[i].pra.fatfs, Mtd->dir, 1);
 					if ( res == FR_OK ) 
 					{
 						wjq_log(LOG_FUN, "> sd File System initialized.\r\n");
@@ -309,7 +309,7 @@ static FsNode *vfs_find_dir(u8* dirname)
 		
 		if(VfsNodeList[i].Mtd != NULL)
 		{
-			if(0 == strcmp(VfsNodeList[i].Mtd->name, dirname))
+			if(0 == strcmp(VfsNodeList[i].Mtd->vfsdir, dirname))
         	{
             	VfsDebug(LOG_DEBUG, "找到对应目录 %s\r\n", dirname);
         	    return &VfsNodeList[i];

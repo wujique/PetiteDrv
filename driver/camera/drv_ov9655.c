@@ -26,9 +26,8 @@
   ******************************************************************************
   */
 /* Includes ------------------------------------------------------------------*/
-#include "dcmi_ov9655.h"
+#include "drv_ov9655.h"
 #include "mcu_dcmi.h"
-
 #include "mcu_i2c.h"
 
 extern void Delay(__IO uint32_t nTime);
@@ -36,6 +35,31 @@ extern void Delay(__IO uint32_t nTime);
 /** @addtogroup STM32F4xx_StdPeriph_Examples
   * @{
   */
+/**
+  * @brief	Writes a byte at a specific Camera register
+  * @param	Addr: OV9655 register address
+  * @param	Data: data to be written to the specific register
+  * @retval 0x00 if write operation is OK
+  * 		0xFF if timeout condition occurred (device not connected or bus error).
+  */
+uint8_t OV9655_WriteReg(uint16_t Addr, uint8_t Data)
+{
+
+	return bus_sccb_writereg(OV9655_DEVICE_WRITE_ADDRESS, Addr, Data);
+
+}
+
+/**
+  * @brief	Reads a byte from a specific Camera register
+  * @param	Addr: OV9655 register address.
+  * @retval data read from the specific register or 0xFF if timeout condition
+  * 		occurred.
+  */
+uint8_t OV9655_ReadReg(uint16_t Addr)
+{
+	return bus_sccb_readreg(OV9655_DEVICE_READ_ADDRESS, Addr);
+
+}
 
 /** @addtogroup DCMI_CameraExample
   * @{
@@ -473,33 +497,6 @@ void OV9655_BrightnessConfig(uint8_t Brightness)
 {
   OV9655_WriteReg(OV9655_BRTN, Brightness);
 }
-
-/**
-  * @brief  Writes a byte at a specific Camera register
-  * @param  Addr: OV9655 register address
-  * @param  Data: data to be written to the specific register
-  * @retval 0x00 if write operation is OK
-  *         0xFF if timeout condition occurred (device not connected or bus error).
-  */
-uint8_t OV9655_WriteReg(uint16_t Addr, uint8_t Data)
-{
-
-	return bus_sccb_writereg(OV9655_DEVICE_WRITE_ADDRESS, Addr, Data);
-
-}
-
-/**
-  * @brief  Reads a byte from a specific Camera register
-  * @param  Addr: OV9655 register address.
-  * @retval data read from the specific register or 0xFF if timeout condition
-  *         occurred.
-  */
-uint8_t OV9655_ReadReg(uint16_t Addr)
-{
-	return bus_sccb_readreg(OV9655_DEVICE_READ_ADDRESS, Addr);
-
-}
-
 
 /**
   * @brief  Set the Internal Clock Prescaler.

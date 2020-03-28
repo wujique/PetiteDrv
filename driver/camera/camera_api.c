@@ -29,30 +29,22 @@
 /* Includes ------------------------------------------------------------------*/
 #include "mcu.h"
 #include "camera_api.h"
-#include "dcmi_ov9655.h"
-#include "dcmi_ov2640.h"
-
+#include "drv_ov9655.h"
+#include "drv_ov2640.h"
 #include "dev_lcd.h"
 #include "log.h"
 #include "board_sysconf.h"
 
 
 extern void Delay(__IO uint32_t nTime);
+/*
 
-/** @addtogroup STM32F4xx_StdPeriph_Examples
-  * @{
-  */
-
-/** @addtogroup DCMI_CameraExample
-  * @{
-  */ 
-
-/* Private typedef -----------------------------------------------------------*/
-/* Private define ------------------------------------------------------------*/
-/* Private macro -------------------------------------------------------------*/
-/* Private variables ---------------------------------------------------------*/
-/* Image Formats */
-
+	摄像头包含camera_api、drv_xxxx（摄像头驱动）
+	基于mcu_dcmi和sccb(i2c)驱动
+	通常使用DMA传输模式
+*/
+/* Image Formats 
+图片格式类型字符串*/
 const uint8_t *ImageForematArray[] =
 {
   (uint8_t*)"BMP QQVGA Format    ",
@@ -63,27 +55,24 @@ const uint8_t *ImageForematArray[] =
   (uint8_t*)" JPEG Image 352x288 Size    ",
 };
 
-
 Camera_TypeDef Camera;
 ImageFormat_TypeDef ImageFormat;
+
 OV9655_IDTypeDef  OV9655_Camera_ID;
 OV2640_IDTypeDef  OV2640_Camera_ID;
 s32 CameraGd = -2;
-
-/* Private function prototypes -----------------------------------------------*/
-/* Private functions ---------------------------------------------------------*/
-
 /**
  *@brief:	   dev_camera_config
  *@details:    配置摄像头
  *@param[in]   Format 图像格式
-			   Dst0 数据目标地址0
-			   Dst1 数据目标地址1，如果是直接发送到LCD，地址1为null
+			   Dst0 数据目标地址0，
+			   Dst1 数据目标地址1，
+			   			   使用两个BUF的PIPPOP缓冲模式，
+			   			   如果是直接发送到LCD，地址1为null
 		       size buff长度，单位word(u32)
  *@param[out]  无
  *@retval:	   
  */
-
 void dev_camera_config(ImageFormat_TypeDef Format, u32 Dst0, u32 Dst1, u32 size)
 {	
 	if(Camera == OV9655_CAMERA)
@@ -135,10 +124,10 @@ s32 dev_camera_stop(void)
 s32 dev_camera_init(void)
 {
 	#ifdef SYS_USE_CAMERA
+	/* 摄像头接口初始化，包含：MCOS时钟，DCMI接口，PWDN和RESET引脚，SCCB(I2C)引脚*/
 	/* camera xclk use the MCO1 */
 	MCO1_Init();
 	DCMI_PWDN_RESET_Init();
-	
 	/* Initializes the DCMI interface (I2C and GPIO) used to configure the camera */
 	BUS_DCMI_HW_Init();
 	SCCB_GPIO_Config();
@@ -147,18 +136,13 @@ s32 dev_camera_init(void)
 	OV9655_ReadID(&OV9655_Camera_ID);
 	OV2640_ReadID(&OV2640_Camera_ID);
 
-	if(OV9655_Camera_ID.PID  == 0x96)
-	{
+	if(OV9655_Camera_ID.PID  == 0x96){
 		Camera = OV9655_CAMERA;
 		wjq_log(LOG_DEBUG, "OV9655 Camera ID 0x%x\r\n", OV9655_Camera_ID.PID);
-	}
-	else if(OV2640_Camera_ID.PIDH  == 0x26)
-	{
+	}else if(OV2640_Camera_ID.PIDH  == 0x26){
 		Camera = OV2640_CAMERA;
 		wjq_log(LOG_DEBUG, "OV2640 Camera ID 0x%x\r\n", OV2640_Camera_ID.PIDH);
-	}
-	else
-	{
+	}else{
 		wjq_log(LOG_DEBUG, "Check the Camera HW and try again\r\n");
 		return -1;  
 	}
@@ -201,12 +185,7 @@ s32 dev_camera_close(void)
 	return 0;
 }
 
-/**
-  * @}
 
-	ST官方例程的main函数，移植作为一个测试函数。
-  
-  */ 
 u16 *camera_buf0;
 u16 *camera_buf1;
 
@@ -214,7 +193,9 @@ u16 *camera_buf1;
 u16 DmaCnt;
 
 #define CAMERA_USE_RAM2LCD	1
-
+/*
+	启动摄像头DMA传输，图像显示到制定的LCD上
+*/
 s32 dev_camera_show(DevLcdNode *lcd)
 {
 	uint8_t abuffer[40];
@@ -236,8 +217,7 @@ s32 dev_camera_show(DevLcdNode *lcd)
 	dev_camera_config(ImageFormat, (u32)camera_buf0, (u32)camera_buf1, LCD_BUF_SIZE/4);
 	#endif
 
-	if(ImageFormat == BMP_QQVGA)
-	{
+	if(ImageFormat == BMP_QQVGA){
 		/*  
 			设置显示区域，用的就是设置显示指针的指令，通常我们只是设置起始，
 			没有设置结束
@@ -245,15 +225,15 @@ s32 dev_camera_show(DevLcdNode *lcd)
 		/* LCD Display window */
 		dev_lcd_setdir(lcd, W_LCD, L2R_U2D);
 		dev_lcd_prepare_display(lcd, 1, 160, 1, 120);
-	}
-	else if(ImageFormat == BMP_QVGA)
+	}else if(ImageFormat == BMP_QVGA)
 	{
 		/* LCD Display window */
 		dev_lcd_setdir(lcd, W_LCD, L2R_U2D);
 		dev_lcd_prepare_display(lcd, 1, 320, 1, 240);
 	}	
+	
 	DmaCnt = 0;
-	 dev_camera_fresh();
+	dev_camera_fresh();
 
 	while(1)
 	{
@@ -272,7 +252,7 @@ s32 dev_camera_show(DevLcdNode *lcd)
 			DmaCnt++;
 		}
 		#endif
-		/*一定要先检测数据再检测帧完成，最有一次两个中断差不多同时来*/
+		/*一定要先检测数据再检测帧完成，最后一次两个中断差不多同时来*/
 		if(DCMI_FLAG_FRAME == (sta&DCMI_FLAG_FRAME))
 		{
 			wjq_log(LOG_DEBUG, "-f-%d- ", DmaCnt);

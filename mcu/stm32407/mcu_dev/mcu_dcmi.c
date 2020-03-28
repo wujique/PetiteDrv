@@ -110,7 +110,11 @@ void BUS_DCMI_Config(u16 pck, u16 vs, u16 hs)
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;		
 	NVIC_Init(&NVIC_InitStructure);
 }
-
+/*
+	配置DCMI缓冲
+	如果BufferSize == 1 ，就是目标地址不变
+	如果Memory1BaseAddr == MULL，使用单缓冲，否则使用双缓冲模式。
+*/
 void BUS_DCMI_DMA_Init(u32 Memory0BaseAddr, u32 Memory1BaseAddr, u32 BufferSize)
 {
 	DMA_InitTypeDef  DMA_InitStructure;
@@ -133,7 +137,7 @@ void BUS_DCMI_DMA_Init(u32 Memory0BaseAddr, u32 Memory1BaseAddr, u32 BufferSize)
 	if(BufferSize == 1)
 		DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Disable;	
 	else
-		DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;	//	存储器增量模式
+		DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;	//存储器增量模式
 		
 	DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Word;
 	DMA_InitStructure.DMA_MemoryDataSize = DMA_MemoryDataSize_HalfWord;

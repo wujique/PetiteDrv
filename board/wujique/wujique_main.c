@@ -9,11 +9,18 @@ RCC_ClocksTypeDef RCC_Clocks;
 
 
 const VFSDIR SdFatFs=
-	{
-		VFS_SD_DIR,
-		FS_TYPE_FATFS,	
-	};
+{
+	VFS_SD_DIR,
+	FS_TYPE_FATFS,
+	SYS_FS_FATFS_SD
+};
 
+const VFSDIR USBFatFs=
+{
+	VFS_USB_DIR,
+	FS_TYPE_FATFS,
+	SYS_FS_FATFS_USB
+};
 
 /*
 	cpu≥ı ºªØ
@@ -88,8 +95,8 @@ s32 board_main_init(void)
 	//sys_lfs_mount();
 	//lfs_test();
 
-	//usb_task_create();
-
+	usb_task_create();
+	vfs_mount(&USBFatFs);
 	wujique_407test_init();
 	
 

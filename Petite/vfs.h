@@ -22,9 +22,9 @@ typedef enum
 */
 typedef struct _strMtdPra
 {
-    u8 name[8];     //盘符名
+    u8 vfsdir[8];     //盘符名
     FS_TYPE type;       //文件系统类型
-    
+    u8 dir[8];
 }VFSDIR;
 
 #define O_RDONLY 	1

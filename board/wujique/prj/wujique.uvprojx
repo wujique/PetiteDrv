@@ -52,9 +52,9 @@
           <OutputName>wujique</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
-          <CreateHexFile>0</CreateHexFile>
+          <CreateHexFile>1</CreateHexFile>
           <DebugInformation>1</DebugInformation>
-          <BrowseInformation>1</BrowseInformation>
+          <BrowseInformation>0</BrowseInformation>
           <ListingPath>.\Listings\</ListingPath>
           <HexFormatSelection>1</HexFormatSelection>
           <Merge32K>0</Merge32K>
@@ -336,7 +336,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\app;..\..\wujique;..\usb\inc;..\eth\inc;..\..\..\driver;..\..\..\driver\lcd;..\..\..\driver\cdev;..\..\..\mcu\stm32407\mcu_dev;..\..\..\mcu\stm32407\StLib\STM32F4xx_StdPeriph_Driver\inc;..\..\..\panel;..\..\..\Petite;..\..\..\Utilities\FreeRTOS\Source\include;..\..\..\Utilities\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\..\..\mcu\stm32407\StLib\STM32_USB_OTG_Driver\inc;..\..\..\mcu\stm32407\StLib\STM32_USB_HOST_Library\Core\inc;..\..\..\mcu\stm32407\StLib\STM32_USB_HOST_Library\Class\MSC\inc;..\..\..\mcu\stm32407\StLib\STM32_USB_Device_Library\Core\inc;..\..\..\mcu\stm32407\StLib\STM32_USB_Device_Library\Class\msc\inc;..\..\..\Utilities\fat_fs\src;..\eth\inc;..\..\..\mcu\stm32407\StLib\STM32F4x7_ETH_Driver\inc;..\..\..\Utilities\lwip-1.4.1\port\STM32F4x7\Standalone;..\..\..\Utilities\lwip-1.4.1\src\include\ipv4;..\..\..\Utilities\lwip-1.4.1\src\include;..\..\..\Utilities\lwip-1.4.1\src\include\netif;..\..\..\Utilities\lwip-1.4.1\src\include\lwip;..\..\..\Utilities\lwip-1.4.1\port\STM32F4x7;..\..\..\Utilities\tslib;..\..\..\Utilities\cmd;..\..\..\Utilities\spiffs-0.3.7\src;..\..\..\Utilities\littlefs-master;..\usb\inc;..\..\..\mcu\stm32407;..\..\..\Utilities\font</IncludePath>
+              <IncludePath>..\..\..\app;..\..\wujique;..\usb\inc;..\eth\inc;..\..\..\driver;..\..\..\driver\lcd;..\..\..\driver\cdev;..\..\..\mcu\stm32407\mcu_dev;..\..\..\mcu\stm32407\StLib\STM32F4xx_StdPeriph_Driver\inc;..\..\..\panel;..\..\..\Petite;..\..\..\Utilities\FreeRTOS\Source\include;..\..\..\Utilities\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\..\..\mcu\stm32407\StLib\STM32_USB_OTG_Driver\inc;..\..\..\mcu\stm32407\StLib\STM32_USB_HOST_Library\Core\inc;..\..\..\mcu\stm32407\StLib\STM32_USB_HOST_Library\Class\MSC\inc;..\..\..\mcu\stm32407\StLib\STM32_USB_Device_Library\Core\inc;..\..\..\mcu\stm32407\StLib\STM32_USB_Device_Library\Class\msc\inc;..\..\..\Utilities\fat_fs\src;..\eth\inc;..\..\..\mcu\stm32407\StLib\STM32F4x7_ETH_Driver\inc;..\..\..\Utilities\lwip-1.4.1\port\STM32F4x7\Standalone;..\..\..\Utilities\lwip-1.4.1\src\include\ipv4;..\..\..\Utilities\lwip-1.4.1\src\include;..\..\..\Utilities\lwip-1.4.1\src\include\netif;..\..\..\Utilities\lwip-1.4.1\src\include\lwip;..\..\..\Utilities\lwip-1.4.1\port\STM32F4x7;..\..\..\Utilities\tslib;..\..\..\Utilities\cmd;..\..\..\Utilities\spiffs-0.3.7\src;..\..\..\Utilities\littlefs-master;..\usb\inc;..\..\..\mcu\stm32407;..\..\..\Utilities\font;..\..\..\driver\camera;..\..\..\mcu\stm32407\StLib\core</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -423,43 +423,8 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>board</GroupName>
-          <Files>
-            <File>
-              <FileName>board_sysconf.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\board_sysconf.c</FilePath>
-            </File>
-            <File>
-              <FileName>wujique_main.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\wujique_main.c</FilePath>
-            </File>
-            <File>
-              <FileName>wujique_test.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\wujique_test.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>driver</GroupName>
           <Files>
-            <File>
-              <FileName>camera_api.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\driver\camera_api.c</FilePath>
-            </File>
-            <File>
-              <FileName>dcmi_ov2640.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\driver\dcmi_ov2640.c</FilePath>
-            </File>
-            <File>
-              <FileName>dcmi_ov9655.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\driver\dcmi_ov9655.c</FilePath>
-            </File>
             <File>
               <FileName>dev_buzzer.c</FileName>
               <FileType>1</FileType>
@@ -594,6 +559,26 @@
               <FileName>dev_ptHCHO.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\driver\cdev\dev_ptHCHO.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>driver/camera</GroupName>
+          <Files>
+            <File>
+              <FileName>camera_api.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\driver\camera\camera_api.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_ov2640.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\driver\camera\drv_ov2640.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_ov9655.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\driver\camera\drv_ov9655.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -983,6 +968,141 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>mcu/usb/otg_driver</GroupName>
+          <Files>
+            <File>
+              <FileName>usb_core.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_OTG_Driver\src\usb_core.c</FilePath>
+            </File>
+            <File>
+              <FileName>usb_dcd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_OTG_Driver\src\usb_dcd.c</FilePath>
+            </File>
+            <File>
+              <FileName>usb_dcd_int.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_OTG_Driver\src\usb_dcd_int.c</FilePath>
+            </File>
+            <File>
+              <FileName>usb_hcd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_OTG_Driver\src\usb_hcd.c</FilePath>
+            </File>
+            <File>
+              <FileName>usb_hcd_int.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_OTG_Driver\src\usb_hcd_int.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>mcu/usb/host_core</GroupName>
+          <Files>
+            <File>
+              <FileName>usbh_core.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_HOST_Library\Core\src\usbh_core.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_hcs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_HOST_Library\Core\src\usbh_hcs.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_ioreq.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_HOST_Library\Core\src\usbh_ioreq.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_stdreq.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_HOST_Library\Core\src\usbh_stdreq.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>mcu/usb/host_class_msc</GroupName>
+          <Files>
+            <File>
+              <FileName>usbh_msc_bot.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_HOST_Library\Class\MSC\src\usbh_msc_bot.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_msc_core.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_HOST_Library\Class\MSC\src\usbh_msc_core.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_msc_fatfs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_HOST_Library\Class\MSC\src\usbh_msc_fatfs.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_msc_scsi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_HOST_Library\Class\MSC\src\usbh_msc_scsi.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>mcu/usb/device_core</GroupName>
+          <Files>
+            <File>
+              <FileName>usbd_core.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_Device_Library\Core\src\usbd_core.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbd_ioreq.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_Device_Library\Core\src\usbd_ioreq.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbd_req.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_Device_Library\Core\src\usbd_req.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>mcu/usb/device_class_msc</GroupName>
+          <Files>
+            <File>
+              <FileName>usbd_msc_bot.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_Device_Library\Class\msc\src\usbd_msc_bot.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbd_msc_core.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_Device_Library\Class\msc\src\usbd_msc_core.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbd_msc_data.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_Device_Library\Class\msc\src\usbd_msc_data.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbd_msc_scsi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_Device_Library\Class\msc\src\usbd_msc_scsi.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>mcu/STM32F4X7_ETH_Driver</GroupName>
+          <Files>
+            <File>
+              <FileName>stm32f4x7_eth.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\mcu\stm32407\StLib\STM32F4x7_ETH_Driver\src\stm32f4x7_eth.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>Utilities/lwip</GroupName>
           <Files>
             <File>
@@ -1333,137 +1453,22 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>mcu/usb/otg_driver</GroupName>
+          <GroupName>board</GroupName>
           <Files>
             <File>
-              <FileName>usb_core.c</FileName>
+              <FileName>board_sysconf.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_OTG_Driver\src\usb_core.c</FilePath>
+              <FilePath>..\board_sysconf.c</FilePath>
             </File>
             <File>
-              <FileName>usb_dcd.c</FileName>
+              <FileName>wujique_main.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_OTG_Driver\src\usb_dcd.c</FilePath>
+              <FilePath>..\wujique_main.c</FilePath>
             </File>
             <File>
-              <FileName>usb_dcd_int.c</FileName>
+              <FileName>wujique_test.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_OTG_Driver\src\usb_dcd_int.c</FilePath>
-            </File>
-            <File>
-              <FileName>usb_hcd.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_OTG_Driver\src\usb_hcd.c</FilePath>
-            </File>
-            <File>
-              <FileName>usb_hcd_int.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_OTG_Driver\src\usb_hcd_int.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>mcu/usb/host_core</GroupName>
-          <Files>
-            <File>
-              <FileName>usbh_core.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_HOST_Library\Core\src\usbh_core.c</FilePath>
-            </File>
-            <File>
-              <FileName>usbh_hcs.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_HOST_Library\Core\src\usbh_hcs.c</FilePath>
-            </File>
-            <File>
-              <FileName>usbh_ioreq.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_HOST_Library\Core\src\usbh_ioreq.c</FilePath>
-            </File>
-            <File>
-              <FileName>usbh_stdreq.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_HOST_Library\Core\src\usbh_stdreq.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>mcu/usb/host_class_msc</GroupName>
-          <Files>
-            <File>
-              <FileName>usbh_msc_bot.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_HOST_Library\Class\MSC\src\usbh_msc_bot.c</FilePath>
-            </File>
-            <File>
-              <FileName>usbh_msc_core.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_HOST_Library\Class\MSC\src\usbh_msc_core.c</FilePath>
-            </File>
-            <File>
-              <FileName>usbh_msc_fatfs.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_HOST_Library\Class\MSC\src\usbh_msc_fatfs.c</FilePath>
-            </File>
-            <File>
-              <FileName>usbh_msc_scsi.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_HOST_Library\Class\MSC\src\usbh_msc_scsi.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>mcu/usb/device_core</GroupName>
-          <Files>
-            <File>
-              <FileName>usbd_core.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_Device_Library\Core\src\usbd_core.c</FilePath>
-            </File>
-            <File>
-              <FileName>usbd_ioreq.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_Device_Library\Core\src\usbd_ioreq.c</FilePath>
-            </File>
-            <File>
-              <FileName>usbd_req.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_Device_Library\Core\src\usbd_req.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>mcu/usb/device_class_msc</GroupName>
-          <Files>
-            <File>
-              <FileName>usbd_msc_bot.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_Device_Library\Class\msc\src\usbd_msc_bot.c</FilePath>
-            </File>
-            <File>
-              <FileName>usbd_msc_core.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_Device_Library\Class\msc\src\usbd_msc_core.c</FilePath>
-            </File>
-            <File>
-              <FileName>usbd_msc_data.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_Device_Library\Class\msc\src\usbd_msc_data.c</FilePath>
-            </File>
-            <File>
-              <FileName>usbd_msc_scsi.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_Device_Library\Class\msc\src\usbd_msc_scsi.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>mcu/STM32F4X7_ETH_Driver</GroupName>
-          <Files>
-            <File>
-              <FileName>stm32f4x7_eth.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\StLib\STM32F4x7_ETH_Driver\src\stm32f4x7_eth.c</FilePath>
+              <FilePath>..\wujique_test.c</FilePath>
             </File>
           </Files>
         </Group>

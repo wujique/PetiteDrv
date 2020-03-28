@@ -35,8 +35,8 @@
 #include "mcu.h"
 
 /* Exported constants --------------------------------------------------------*/
-#define DCMI_DR_ADDRESS       0x50050028
-#define FSMC_LCD_ADDRESS      0x6C010000//0x68000002 wujique modify
+#define DCMI_DR_ADDRESS       0x50050028//DMA传输DCMI的地址
+#define FSMC_LCD_ADDRESS      0x6C010000//DMA传输目的地址       LCD 地址
 #define NOKEY                 0
 #define SEL                   1
 #define UP                    2
@@ -66,8 +66,6 @@ typedef enum
 extern s32 dev_camera_init(void);
 extern s32 dev_camera_open(void);
 extern s32 dev_camera_close(void);
-extern s32 camera_test(void);
-
 #endif /* __CAMERA_API_H */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
