@@ -21,7 +21,7 @@
 
 #include "mcu.h"
 #include "log.h"
-#include "list.h"
+#include "p_list.h"
 #include "bus_i2c.h"
 #include "bus_vi2c.h"
 #include "alloc.h"

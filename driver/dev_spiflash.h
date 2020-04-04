@@ -1,7 +1,7 @@
 #ifndef __DEV_SPIFLASH_H_
 #define __DEV_SPIFLASH_H_
 
-#include "list.h"
+#include "p_list.h"
 
 /*SPI FLASH пео╒*/
 typedef struct

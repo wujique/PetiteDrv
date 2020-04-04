@@ -606,11 +606,6 @@
               <FilePath>..\..\..\Petite\alloc.c</FilePath>
             </File>
             <File>
-              <FileName>list.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Petite\list.c</FilePath>
-            </File>
-            <File>
               <FileName>maths.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\Petite\maths.c</FilePath>
@@ -659,6 +654,11 @@
               <FileName>stimer.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\Petite\stimer.c</FilePath>
+            </File>
+            <File>
+              <FileName>p_list.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Petite\p_list.c</FilePath>
             </File>
           </Files>
         </Group>

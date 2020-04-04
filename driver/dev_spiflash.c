@@ -23,7 +23,7 @@
 #include "mcu.h"
 #include "log.h"
 #include "alloc.h"
-#include "list.h"
+#include "p_list.h"
 #include "bus_spi.h"
 #include "dev_spiflash.h"
 

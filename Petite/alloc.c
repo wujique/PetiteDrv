@@ -35,7 +35,7 @@ _ALLOC_FIRST_FIT_ 首次适应法
 #pragma section = "HEAP"
 #endif
 
-#if 0
+
 #ifdef ALLOC_USE_ARRAY
 
 /*不同编译器用的宏不一样，各编译器定义请参考core_m4.h*/
@@ -44,20 +44,6 @@ __attribute((aligned(4))) char AllocArray[AllocArraySize];
 #else
 __align(4) //保证内存池四字节对齐
 char AllocArray[AllocArraySize];
-#endif
-
-#endif
-#endif
-
-#ifdef ALLOC_USE_ARRAY
-#define AllocArraySize (1024*256)
-//保证内存池四字节对齐
-#if defined  (__GNUC__)
-    __attribute__((aligned(4)))
-    char AllocArray[AllocArraySize];
-#else
-    __align(4)
-    char AllocArray[AllocArraySize];
 #endif
 
 #endif

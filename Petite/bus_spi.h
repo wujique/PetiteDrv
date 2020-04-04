@@ -1,7 +1,7 @@
 #ifndef __BUS_SPI_H_
 #define __BUS_SPI_H_
 
-#include "list.h"
+#include "p_list.h"
 #include "petite.h"
 
 typedef enum{

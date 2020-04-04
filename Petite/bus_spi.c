@@ -21,7 +21,7 @@
 */
 #include "mcu.h"
 #include "log.h"
-#include "list.h"
+#include "p_list.h"
 #include "board_sysconf.h"
 
 #include "bus_spi.h"

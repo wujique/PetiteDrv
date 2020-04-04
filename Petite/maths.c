@@ -27,7 +27,7 @@
 非递归判断一个数是2的多少次方
 
 */
-int log2(int value) 
+int math_log2(int value) 
 { 
   int x=0; 
   while(value>1) 
@@ -71,31 +71,114 @@ void ShellSort(u16 *pSrc, s32 Len)
 	函数功能: 二分法查找u16
 	入口参数: 
 	返 回 值: 返回-1没找到，其他为索引值
+	待查数据是降序
 */
-int BinarySearch(u16 *pArray, u16 data, int front, int end)
+int BinarySearch(u16 *pArray, u16 data, u16 len)
 {
-    int low, high, mid;
-    low = front;
-    high = end;
-    while(low <= high)
+    s16 s, e, mid;
+	
+    s = 0;
+    e = len - 1;
+	wjq_log(LOG_INFO,"find: %d---", data);
+	
+    while(s <= e)
     {
 
-        mid = (low + high) / 2;
-        if (*(pArray + mid) < data)
+        mid = (s + e) / 2;
+
+        if (*(pArray + mid) > data)
         {
-            low = mid + 1;
+            s = mid + 1;
         }
-        else if (*(pArray + mid) > data)
+        else if (*(pArray + mid) < data)
         {
-            high = mid - 1;
+            e = mid - 1;
         }
         else 
         {
+        	wjq_log(LOG_INFO,"yes %d %d %d\r\n", s,e,mid);
             return mid;
         }
     }
+	
+	mid = s;
+	s = e;
+	e = mid;
+	
+	wjq_log(LOG_INFO,"no %d %d\r\n", s,e);
     return -1;
 }
+/*
+	待查数据是升序
+*/
+int BinarySearchD(u16 *pArray, u16 data, u16 len)
+{
+    s16 s, e, mid;
+	
+    
+	wjq_log(LOG_INFO,"find: %d---", data);
+
+	s = 0;
+    e = len - 1;
+	
+    while(1)
+    {
+
+        mid = (s + e) / 2;
+
+        if (*(pArray + mid) < data)
+        {
+            s = mid;
+        }
+        else if (*(pArray + mid) > data)
+        {
+            e = mid;
+        }
+        else 
+        {
+        	wjq_log(LOG_INFO,"yes %d %d %d\r\n", s,e,mid);
+            return mid;
+        }
+		
+		if(s == e)
+			break;
+    }
+	
+	wjq_log(LOG_INFO,"no %d %d\r\n", s,e);
+    return -1;
+}
+
+#if 0
+//const u16 test1[10] = {100, 90, 80, 70, 60, 50, 40, 30, 20, 10};
+const u16 test1[10] = {10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+
+
+const u16 test2[30] = {101, 100,99, 
+						91, 90, 89, 
+						81, 80, 79,
+						71, 70, 69, 
+						61, 60, 59,
+						51, 50, 49, 
+						41, 40, 39, 
+						31, 30, 29, 
+						21, 20, 19,
+						11, 10, 9};
+
+void test_bs(void)
+{
+	u16 i=0;
+
+	while(i<30)
+	{
+		BinarySearchD(test1, test2[i], 10);	
+		i++;
+	}
+
+	while(1);
+}
+
+#endif
+
 /*
 	函数名称: 
 	函数功能: asc转U32

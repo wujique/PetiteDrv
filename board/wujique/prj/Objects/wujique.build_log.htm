@@ -1,0 +1,60 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Tool Versions:</h2>
+IDE-Version: ¦ÌVision V5.24.2.0
+Copyright (C) 2017 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: xuejia huang, tst, LIC=9N045-GN7KJ-UL9CE-58Z5D-6HJEL-AF8CA
+ 
+Tool Versions:
+Toolchain:       MDK-ARM Professional  Version: 5.24.1
+Toolchain Path:  d:\Keil_v5\ARM\ARMCC\Bin
+C Compiler:      Armcc.exe V5.06 update 5 (build 528)
+Assembler:       Armasm.exe V5.06 update 5 (build 528)
+Linker/Locator:  ArmLink.exe V5.06 update 5 (build 528)
+Library Manager: ArmAr.exe V5.06 update 5 (build 528)
+Hex Converter:   FromElf.exe V5.06 update 5 (build 528)
+CPU DLL:         SARMCM3.DLL V5.24.1
+Dialog DLL:      DCM.DLL V1.16.0.0
+Target DLL:      CMSIS_AGDI.dll V1.28.3.0
+Dialog DLL:      TCM.DLL V1.32.0.0
+ 
+<h2>Project:</h2>
+I:\PetiteDrv\prog\PetiteDrv\board\wujique\prj\wujique.uvprojx
+Project File Date:  04/05/2020
+
+<h2>Output:</h2>
+*** Using Compiler 'V5.06 update 5 (build 528)', folder: 'd:\Keil_v5\ARM\ARMCC\Bin'
+Build target 'wujique'
+compiling alloc.c...
+..\..\..\Petite\alloc.c(253): warning:  #111-D: statement is unreachable
+  			return NULL;
+..\..\..\Petite\alloc.c(299): warning:  #177-D: variable "p"  was declared but never referenced
+  	ALLOC_HDR*bp, *p, *np;
+..\..\..\Petite\alloc.c(299): warning:  #177-D: variable "np"  was declared but never referenced
+  	ALLOC_HDR*bp, *p, *np;
+..\..\..\Petite\alloc.c(302): warning:  #177-D: variable "aunits"  was declared but never referenced
+  	unsigned aunits;
+..\..\..\Petite\alloc.c: 4 warnings, 0 errors
+linking...
+Program Size: Code=118884 RO-data=190912 RW-data=2160 ZI-data=129800  
+FromELF: creating hex file...
+".\Objects\wujique.axf" - 0 Error(s), 4 Warning(s).
+
+<h2>Software Packages used:</h2>
+
+Package Vendor: Keil
+                http://www.keil.com/pack/Keil.STM32F4xx_DFP.2.13.0.pack
+                Keil.STM32F4xx_DFP.2.13.0
+                STMicroelectronics STM32F4 Series Device Support, Drivers and Examples
+
+<h2>Collection of Component include folders:</h2>
+  .\RTE\_wujique
+  d:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include
+
+<h2>Collection of Component Files used:</h2>
+Build Time Elapsed:  00:00:06
+</pre>
+</body>
+</html>
