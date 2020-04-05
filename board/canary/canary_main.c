@@ -4,52 +4,11 @@
 #include "board_sysconf.h"
 
 
-RCC_ClocksTypeDef RCC_Clocks;
-
-/*
-	cpu初始化
-*/
-s32 board_mcu_preinit(void)
-{
-		/* Set the Vector Table base address at 0x08000000 */
-		NVIC_SetVectorTable(NVIC_VectTab_FLASH, 0x00);
-		/*
-			中断优先级分组
-		*/	
-		/* 2 bit for pre-emption priority, 2 bits for subpriority */
-		NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
-
-		RCC_GetClocksFreq(&RCC_Clocks);
-		
-	#ifndef SYS_USE_RTOS
-		/* SysTick end of count event */
-		SysTick_Config(RCC_Clocks.HCLK_Frequency / (1000/1));
-	#endif
-		
-		/*IO跟串口是调试信息的依赖，所以最早初始化*/
-		mcu_io_init();
-		mcu_uart_init();
-		mcu_uart_open(PC_PORT);
-
-		wjq_log(LOG_DEBUG, "***SYSCLK_Frequency:%d Hz\r\n", RCC_Clocks.SYSCLK_Frequency);
-		wjq_log(LOG_DEBUG, "***HCLK_Frequency:%d Hz\r\n", RCC_Clocks.HCLK_Frequency);
-		wjq_log(LOG_DEBUG, "***PCLK1_Frequency:%d Hz\r\n", RCC_Clocks.PCLK1_Frequency);
-		wjq_log(LOG_DEBUG, "***PCLK2_Frequency:%d Hz\r\n", RCC_Clocks.PCLK2_Frequency);
-		wjq_log(LOG_DEBUG, "***ADCCLK_Frequency:%d Hz\r\n", RCC_Clocks.ADCCLK_Frequency);
-		
-		return 0;
-}
-
-s32 board_mcu_init(void)
-{
-	wjq_log(LOG_DEBUG, "mcu: stm32f103 dev init!***\r\n");
-	mcu_rtc_init();
-	return 0;
-}
-
 s32 board_main_init(void)
 {
-	wjq_log(LOG_DEBUG, "board: canary other dev init!***\r\n");
+	wjq_log(LOG_DEBUG, "board: canary!\r\n");
+	wjq_log(LOG_DEBUG, "    www.wujiue.com\r\n");
+	
 	sys_dev_register();
 	
 	#ifdef SYS_USE_KEYPAD

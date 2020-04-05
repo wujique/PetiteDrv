@@ -32,8 +32,15 @@ void start_task(void *pvParameters);
 int petite_app(void)
 {
 
-	wjq_log(LOG_INFO,"\r\n---petite_app!----\r\n");
-		
+	/*           http://www.network-science.de/ascii/   */
+wjq_log(LOG_INFO,"*********************************************************\r\n");
+wjq_log(LOG_INFO,"*   ___     _   _ _          ___                        \r\n");       
+wjq_log(LOG_INFO,"*  / _ \\___| |_(_) |_ ___   /   \\_ ____   __             \r\n");
+wjq_log(LOG_INFO,"* / /_)/ _ \\ __| | __/ _ \\ / /\\ / '__\\ \\ / /             \r\n");
+wjq_log(LOG_INFO,"*/ ___/  __/ |_| | ||  __// /_//| |   \\ V /              \r\n");
+wjq_log(LOG_INFO,"*\\/    \\___|\\__|_|\\__\\___/___,' |_|    \\_/www.wujique.com\r\n");
+wjq_log(LOG_INFO,"*********************************************************\r\n");
+
   /* Infinite loop */
 	#ifdef SYS_USE_RTOS
 	wjq_log(LOG_INFO,"create start task!\r\n");

@@ -47,7 +47,7 @@ void mcu_io_init(void)
 }
 
 
-s32 mcu_io_config_timer(MCU_PORT port, u16 pin, McuTimerNum timer)
+s32 mcu_io_config_timer(MCU_PORT port, MCU_IO pin, McuTimerNum timer)
 {
 	GPIO_InitTypeDef GPIO_InitStructure;
 	
@@ -61,7 +61,7 @@ s32 mcu_io_config_timer(MCU_PORT port, u16 pin, McuTimerNum timer)
 	return 0;
 }
 
-s32 mcu_io_config_dac(MCU_PORT port, u16 pin)
+s32 mcu_io_config_dac(MCU_PORT port, MCU_IO pin)
 {
 	GPIO_InitTypeDef GPIO_InitStructure;
 
@@ -72,7 +72,7 @@ s32 mcu_io_config_dac(MCU_PORT port, u16 pin)
 	return 0;
 }
 
-void mcu_io_config_in(MCU_PORT port, u16 pin)
+void mcu_io_config_in(MCU_PORT port, MCU_IO pin)
 {
     GPIO_InitTypeDef GPIO_InitStructure;
 	
@@ -86,7 +86,7 @@ void mcu_io_config_in(MCU_PORT port, u16 pin)
 }
 
 
-void mcu_io_config_out(MCU_PORT port, u16 pin)
+void mcu_io_config_out(MCU_PORT port, MCU_IO pin)
 {
 	GPIO_InitTypeDef GPIO_InitStructure;
 
@@ -103,7 +103,7 @@ void mcu_io_config_out(MCU_PORT port, u16 pin)
 	这个要改，改为设置功能，而不是设置所谓的AF，AF是STM32的概念
 	要改为，配置为PWM、DAC、ADC等通用功能
 */
-void mcu_io_config_af(MCU_PORT port, u16 pin)
+void mcu_io_config_af(MCU_PORT port, MCU_IO pin)
 {
 	GPIO_InitTypeDef GPIO_InitStructure;
 	
@@ -116,7 +116,7 @@ void mcu_io_config_af(MCU_PORT port, u16 pin)
 	GPIO_Init((GPIO_TypeDef *)Stm32PortList[port], &GPIO_InitStructure); //初始化 PA3
 }
 
-void mcu_io_output_setbit(MCU_PORT port, u16 pin)
+void mcu_io_output_setbit(MCU_PORT port, MCU_IO pin)
 {
 	if(port == NULL)
 		return;
@@ -124,7 +124,7 @@ void mcu_io_output_setbit(MCU_PORT port, u16 pin)
 	GPIO_SetBits((GPIO_TypeDef *)Stm32PortList[port], pin);
 }
 
-void mcu_io_output_resetbit(MCU_PORT port, u16 pin)
+void mcu_io_output_resetbit(MCU_PORT port, MCU_IO pin)
 {
 	if(port == NULL)
 		return;
@@ -132,7 +132,7 @@ void mcu_io_output_resetbit(MCU_PORT port, u16 pin)
 	GPIO_ResetBits((GPIO_TypeDef *)Stm32PortList[port], pin);
 }		
 
-u8 mcu_io_input_readbit(MCU_PORT port, u16 pin)
+u8 mcu_io_input_readbit(MCU_PORT port, MCU_IO pin)
 {
 	if(port == NULL)
 		return Bit_SET;
