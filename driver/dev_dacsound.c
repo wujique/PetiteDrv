@@ -685,8 +685,8 @@ u32 DacSoundSampleIndex;
 s32 dev_dacsound_init(void)
 {
 
-	mcu_io_config_out(MCU_PORT_A, GPIO_Pin_5);
-	mcu_io_output_resetbit(MCU_PORT_A, GPIO_Pin_5);
+	mcu_io_config_out(MCU_PORT_A, MCU_IO_5);
+	mcu_io_output_resetbit(MCU_PORT_A, MCU_IO_5);
 
 	return 0;
 }

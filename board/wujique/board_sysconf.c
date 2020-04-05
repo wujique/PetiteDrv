@@ -30,15 +30,15 @@
 KeyPadIO KeyPadIOList[KEY_PAD_ROW_NUM+KEY_PAD_COL_NUM]=
 		{
 			/*ROW*/
-			{MCU_PORT_F, GPIO_Pin_12},
-			{MCU_PORT_F, GPIO_Pin_13},
-			{MCU_PORT_F, GPIO_Pin_14},
-			{MCU_PORT_F, GPIO_Pin_15},
+			{MCU_PORT_F, MCU_IO_12},
+			{MCU_PORT_F, MCU_IO_13},
+			{MCU_PORT_F, MCU_IO_14},
+			{MCU_PORT_F, MCU_IO_15},
 			/*COL*/
-			{MCU_PORT_F, GPIO_Pin_11},
-			{MCU_PORT_F, GPIO_Pin_10},
-			{MCU_PORT_F, GPIO_Pin_9},
-			{MCU_PORT_F, GPIO_Pin_8},
+			{MCU_PORT_F, MCU_IO_11},
+			{MCU_PORT_F, MCU_IO_10},
+			{MCU_PORT_F, MCU_IO_9},
+			{MCU_PORT_F, MCU_IO_8},
 		};
 
 
@@ -56,10 +56,10 @@ const DevI2c DevVi2c1={
 		.type = DEV_I2C_V,
 		
 		.sclport = MCU_PORT_D,
-		.sclpin = GPIO_Pin_6,
+		.sclpin = MCU_IO_6,
 
 		.sdaport = MCU_PORT_D,
-		.sdapin = GPIO_Pin_7,
+		.sdapin = MCU_IO_7,
 		};
 	
 		
@@ -90,13 +90,13 @@ const DevSpi DevVSpi1IO={
 		
 		/*clk*/
 		.clkport = MCU_PORT_B,
-		.clkpin = GPIO_Pin_0,
+		.clkpin = MCU_IO_0,
 		/*mosi*/
 		.mosiport = MCU_PORT_D,
-		.mosipin = GPIO_Pin_11,
+		.mosipin = MCU_IO_11,
 		/*miso*/
 		.misoport = MCU_PORT_D,
-		.misopin = GPIO_Pin_12,
+		.misopin = MCU_IO_12,
 	};
 
 #if 1
@@ -110,11 +110,11 @@ const DevSpi DevVspi3IO={
 		
 		/*clk*/
 		.clkport = MCU_PORT_G,
-		.clkpin = GPIO_Pin_6,
+		.clkpin = MCU_IO_6,
 		
 		/*mosi*/
 		.mosiport = MCU_PORT_F,
-		.mosipin = GPIO_Pin_2,
+		.mosipin = MCU_IO_2,
 
 		/*miso*/
 		.misoport = NULL,
@@ -133,15 +133,15 @@ const DevSpi DevVspi2IO={
 		
 		/*clk*/
 		.clkport = MCU_PORT_F,
-		.clkpin = GPIO_Pin_11,
+		.clkpin = MCU_IO_11,
 		
 		/*mosi*/
 		.mosiport = MCU_PORT_F,
-		.mosipin = GPIO_Pin_10,
+		.mosipin = MCU_IO_10,
 
 		/*miso*/
 		.misoport = MCU_PORT_F,
-		.misopin = GPIO_Pin_9,
+		.misopin = MCU_IO_9,
 
 	};
 #endif
@@ -156,15 +156,15 @@ const DevSpi DevSpi3IO={
 		
 		/*clk*/
 		.clkport = MCU_PORT_B,
-		.clkpin = GPIO_Pin_3,
+		.clkpin = MCU_IO_3,
 		
 		/*mosi*/
 		.mosiport = MCU_PORT_B,
-		.mosipin = GPIO_Pin_5,
+		.mosipin = MCU_IO_5,
 
 		/*miso*/
 		.misoport = MCU_PORT_B,
-		.misopin = GPIO_Pin_4,
+		.misopin = MCU_IO_4,
 	};
 
 /*------------------------ 
@@ -178,7 +178,7 @@ const DevSpiCh DevSpi3CH1={
 		.spi = "SPI3",
 		
 		.csport = MCU_PORT_B,
-		.cspin = GPIO_Pin_14,
+		.cspin = MCU_IO_14,
 		
 	};		
 /*
@@ -189,7 +189,7 @@ const DevSpiCh DevSpi3CH2={
 		.spi = "SPI3",
 		
 		.csport = MCU_PORT_G,
-		.cspin = GPIO_Pin_15,
+		.cspin = MCU_IO_15,
 		
 	};
 /*
@@ -200,7 +200,7 @@ const DevSpiCh DevSpi3CH3={
 		.spi = "SPI3",
 		
 		.csport = MCU_PORT_G,
-		.cspin = GPIO_Pin_6,
+		.cspin = MCU_IO_6,
 		
 	};
 		
@@ -249,7 +249,7 @@ const DevSpiCh DevVSpi1CH1={
 		.spi = "VSPI1",
 		
 		.csport = MCU_PORT_B,
-		.cspin = GPIO_Pin_1,
+		.cspin = MCU_IO_1,
 		
 	};
 #if 0		
@@ -294,16 +294,16 @@ const DevLcdBus BusLcdSpi3={
 	.basebus = "SPI3_CH3",
 
 	.A0port = MCU_PORT_G,
-	.A0pin = GPIO_Pin_4,
+	.A0pin = MCU_IO_4,
 
 	.rstport = MCU_PORT_G,
-	.rstpin = GPIO_Pin_7,
+	.rstpin = MCU_IO_7,
 
 	.blport = MCU_PORT_G,
-	.blpin = GPIO_Pin_9,
+	.blpin = MCU_IO_9,
 
 	.staport = MCU_PORT_F, 
-	.stapin = GPIO_Pin_2,
+	.stapin = MCU_IO_2,
 };
 #else
 /*
@@ -359,10 +359,10 @@ const DevLcdBus BusLcd8080={
 	.A0pin = NULL,
 
 	.rstport = MCU_PORT_A,
-	.rstpin = GPIO_Pin_15,
+	.rstpin = MCU_IO_15,
 	
 	.blport = MCU_PORT_B,
-	.blpin = GPIO_Pin_15,
+	.blpin = MCU_IO_15,
 
 };
 

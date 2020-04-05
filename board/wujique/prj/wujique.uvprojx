@@ -381,11 +381,6 @@
           <GroupName>app</GroupName>
           <Files>
             <File>
-              <FileName>main.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\app\main.c</FilePath>
-            </File>
-            <File>
               <FileName>sys_littlefs.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\app\sys_littlefs.c</FilePath>
@@ -394,6 +389,11 @@
               <FileName>sys_spiffs.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\app\sys_spiffs.c</FilePath>
+            </File>
+            <File>
+              <FileName>app.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\app\app.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1469,6 +1469,11 @@
               <FileName>wujique_test.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\wujique_test.c</FilePath>
+            </File>
+            <File>
+              <FileName>main.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\main.c</FilePath>
             </File>
           </Files>
         </Group>

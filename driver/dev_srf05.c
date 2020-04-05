@@ -44,10 +44,10 @@ s32 Srf05Gd = -2;
 	超声波测距使用PF8 进行捕获，PF8是定时器13的通道1 
 */
 
-#define SRF05_TRIG_PIN GPIO_Pin_9
+#define SRF05_TRIG_PIN MCU_IO_9
 #define SRF05_TRIG_PORT MCU_PORT_B
 
-#define SRF05_ECHO_PIN	GPIO_Pin_8
+#define SRF05_ECHO_PIN	MCU_IO_8
 #define SRF05_ECHO_PORT	MCU_PORT_B
 
 /**

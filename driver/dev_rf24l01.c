@@ -39,9 +39,9 @@
 #define RF24L01_SPI "SPI3_CH3"
 
 #define RF24L01_CE_PORT	 MCU_PORT_G
-#define RF24L01_CE_PIN	 GPIO_Pin_7
+#define RF24L01_CE_PIN	 MCU_IO_7
 #define RF24L01_IRQ_PORT MCU_PORT_G
-#define RF24L01_IRQ_PIN  GPIO_Pin_4
+#define RF24L01_IRQ_PIN  MCU_IO_4
 
 
 #define NRF_READ_REG 0x00 	//¶ÁÅäÖÃ¼Ä´æÆ÷,µÍ5Î»Îª¼Ä´æÆ÷µØÖ·

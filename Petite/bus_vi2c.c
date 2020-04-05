@@ -72,10 +72,10 @@ void mcu_vi2c_sda_output(DevI2c *dev)
 static s32 mcu_vi2c_readsda(DevI2c *dev)
 {
 
-    if(Bit_SET == mcu_io_input_readbit(dev->sdaport, dev->sdapin))
-        return 1;
+    if(MCU_IO_STA_1 == mcu_io_input_readbit(dev->sdaport, dev->sdapin))
+        return MCU_IO_STA_1;
     else
-        return 0;
+        return MCU_IO_STA_0;
 }
 /**
  *@brief:      mcu_vi2c_sda
@@ -87,11 +87,11 @@ static s32 mcu_vi2c_readsda(DevI2c *dev)
 static void mcu_vi2c_sda(DevI2c *dev, u8 sta)
 {
 
-    if(sta == 1)
+    if(sta == MCU_IO_STA_1)
     {
 		mcu_io_output_setbit(dev->sdaport, dev->sdapin);
     }
-    else if(sta == 0)
+    else if(sta == MCU_IO_STA_0)
     {
     	mcu_io_output_resetbit(dev->sdaport, dev->sdapin);
     }
@@ -108,11 +108,11 @@ static void mcu_vi2c_sda(DevI2c *dev, u8 sta)
 static void mcu_vi2c_scl(DevI2c *dev, u8 sta)
 {
 
-	if(sta == 1)
+	if(sta == MCU_IO_STA_1)
     {
 		mcu_io_output_setbit(dev->sclport, dev->sclpin);
     }
-    else if(sta == 0)
+    else if(sta == MCU_IO_STA_0)
     {
     	mcu_io_output_resetbit(dev->sclport, dev->sclpin);
     }
@@ -128,14 +128,14 @@ static void mcu_vi2c_start(DevI2c *dev)
 {
     mcu_vi2c_sda_output(dev);
     
-    mcu_vi2c_sda(dev, 1);  
-    mcu_vi2c_scl(dev, 1);
+    mcu_vi2c_sda(dev, MCU_IO_STA_1);  
+    mcu_vi2c_scl(dev, MCU_IO_STA_1);
 
     mcu_vi2c_delay();
-    mcu_vi2c_sda(dev, 0);
+    mcu_vi2c_sda(dev, MCU_IO_STA_0);
 
     mcu_vi2c_delay();
-    mcu_vi2c_scl(dev, 0);
+    mcu_vi2c_scl(dev, MCU_IO_STA_0);
 }
 /**
  *@brief:      mcu_i2c_stop
@@ -148,14 +148,14 @@ static void mcu_vi2c_stop(DevI2c *dev)
 {
     mcu_vi2c_sda_output(dev);
 
-    mcu_vi2c_scl(dev, 0);
-    mcu_vi2c_sda(dev, 0);   
+    mcu_vi2c_scl(dev, MCU_IO_STA_0);
+    mcu_vi2c_sda(dev, MCU_IO_STA_0);   
     mcu_vi2c_delay();
     
-    mcu_vi2c_scl(dev, 1);
+    mcu_vi2c_scl(dev, MCU_IO_STA_1);
     mcu_vi2c_delay();
     
-    mcu_vi2c_sda(dev, 1);
+    mcu_vi2c_sda(dev, MCU_IO_STA_1);
     mcu_vi2c_delay();
 }
 
@@ -172,10 +172,10 @@ static s32 mcu_vi2c_wait_ack(DevI2c *dev)
     
     //sda×ªÊäÈë
     mcu_vi2c_sda_input(dev);
-    mcu_vi2c_sda(dev, 1);
+    mcu_vi2c_sda(dev, MCU_IO_STA_1);
     mcu_vi2c_delay();
     
-    mcu_vi2c_scl(dev, 1);
+    mcu_vi2c_scl(dev, MCU_IO_STA_1);
     mcu_vi2c_delay();
     
     while(1)
@@ -188,13 +188,13 @@ static s32 mcu_vi2c_wait_ack(DevI2c *dev)
             return 1;
         }
 
-        if(0 == mcu_vi2c_readsda(dev))
+        if(MCU_IO_STA_0 == mcu_vi2c_readsda(dev))
         {   
             break;
         }
     }
     
-    mcu_vi2c_scl(dev, 0);
+    mcu_vi2c_scl(dev, MCU_IO_STA_0);
     
     return 0;
 }
@@ -207,16 +207,16 @@ static s32 mcu_vi2c_wait_ack(DevI2c *dev)
  */
 static void mcu_vi2c_ack(DevI2c *dev)
 {
-    mcu_vi2c_scl(dev, 0);
+    mcu_vi2c_scl(dev, MCU_IO_STA_0);
     mcu_vi2c_sda_output(dev);
     
-    mcu_vi2c_sda(dev, 0);
+    mcu_vi2c_sda(dev, MCU_IO_STA_0);
     mcu_vi2c_delay();
     
-    mcu_vi2c_scl(dev, 1);
+    mcu_vi2c_scl(dev, MCU_IO_STA_1);
     mcu_vi2c_delay();
     
-    mcu_vi2c_scl(dev, 0);
+    mcu_vi2c_scl(dev, MCU_IO_STA_0);
 }
 /**
  *@brief:      mcu_i2c_writebyte
@@ -231,26 +231,26 @@ static s32 mcu_vi2c_writebyte(DevI2c *dev, u8 data)
 
     mcu_vi2c_sda_output(dev);
 
-    mcu_vi2c_scl(dev, 0);
+    mcu_vi2c_scl(dev, MCU_IO_STA_0);
     
     while(i<8)
     {
     
         if((0x80 & data) == 0x80)
         {
-            mcu_vi2c_sda(dev, 1);   
+            mcu_vi2c_sda(dev, MCU_IO_STA_1);   
         }
         else
         {
-            mcu_vi2c_sda(dev, 0);
+            mcu_vi2c_sda(dev, MCU_IO_STA_0);
         }
         
         mcu_vi2c_delay();
 
-        mcu_vi2c_scl(dev, 1);
+        mcu_vi2c_scl(dev, MCU_IO_STA_1);
         mcu_vi2c_delay();
         
-        mcu_vi2c_scl(dev, 0);
+        mcu_vi2c_scl(dev, MCU_IO_STA_0);
         mcu_vi2c_delay();
         
         data = data <<1;
@@ -274,10 +274,10 @@ static u8 mcu_vi2c_readbyte(DevI2c *dev)
     
     while(i<8)
     {
-        mcu_vi2c_scl(dev, 0);
+        mcu_vi2c_scl(dev, MCU_IO_STA_0);
         mcu_vi2c_delay();
         
-        mcu_vi2c_scl(dev, 1);
+        mcu_vi2c_scl(dev, MCU_IO_STA_1);
 
         data = (data <<1);
 

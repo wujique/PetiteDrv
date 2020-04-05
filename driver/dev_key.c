@@ -51,7 +51,7 @@ s32 KeyGd = -1;
  */
 s32 dev_key_init(void)
 {
-	mcu_io_config_in(MCU_PORT_A, GPIO_Pin_0);
+	mcu_io_config_in(MCU_PORT_A, MCU_IO_0);
 	return 0;
 }
 /**
@@ -98,7 +98,7 @@ s32 dev_key_scan(void)
 		return -1;
 
 	/*读按键状态*/
-	sta = mcu_io_input_readbit(MCU_PORT_A, GPIO_Pin_0);
+	sta = mcu_io_input_readbit(MCU_PORT_A, MCU_IO_0);
 	/*
 		判断跟上次读的状态是不是一样，
 		原因是，保证防抖过程的状态是连续一样的。

@@ -35,7 +35,7 @@ s32 dev_buzzer_init(void)
 	/*
 		用户从手册可以知道管脚和定时器通道的关系
 	*/
-	mcu_io_config_timer(MCU_PORT_D, GPIO_Pin_13, MCU_TIMER_4);
+	mcu_io_config_timer(MCU_PORT_D, MCU_IO_13, MCU_TIMER_4);
 	mcu_timer_pwm_init(MCU_TIMER_4, MCU_TIMER_1US, 250, 50, MCU_TIMER_CH2);
 	return 0;
 }
@@ -48,7 +48,7 @@ s32 dev_buzzer_init(void)
  */
 s32 dev_buzzer_open(void)
 {
-	mcu_io_config_timer(MCU_PORT_D, GPIO_Pin_13, MCU_TIMER_4);
+	mcu_io_config_timer(MCU_PORT_D, MCU_IO_13, MCU_TIMER_4);
     //---使能 TIM4 
 	mcu_timer_start(MCU_TIMER_4);
 	
@@ -67,8 +67,8 @@ s32 dev_buzzer_close(void)
 
 
 	/*关闭蜂鸣器时，要将IO改为普通IO，并且输出低电平，否则蜂鸣器会造成大电流*/
-	mcu_io_config_out(MCU_PORT_D, GPIO_Pin_13);
-	mcu_io_output_resetbit(MCU_PORT_D, GPIO_Pin_13);
+	mcu_io_config_out(MCU_PORT_D, MCU_IO_13);
+	mcu_io_output_resetbit(MCU_PORT_D, MCU_IO_13);
 	
 	return 0;
 }

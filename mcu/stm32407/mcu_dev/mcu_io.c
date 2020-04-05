@@ -22,9 +22,10 @@
 	封装IO操作，以便移植到其他芯片
 */
 #include "stm32f4xx.h"
+
+#include "mcu.h"
+
 #include "log.h"
-#include "mcu_io.h"
-#include "mcu_timer.h"
 
 const GPIO_TypeDef *Stm32PortList[MCU_PORT_MAX] = {NULL, GPIOA,  GPIOB, GPIOC, GPIOD,
 									GPIOE, GPIOF, GPIOG, GPIOH,
@@ -68,7 +69,7 @@ uint8_t GpioTimDef[MCU_TIMER_MAX]=
 	};
 
 
-s32 mcu_io_config_timer(MCU_PORT port, u16 pin, McuTimerNum timer)
+s32 mcu_io_config_timer(MCU_PORT port, MCU_IO pin, McuTimerNum timer)
 {
 	GPIO_InitTypeDef GPIO_InitStructure;
 	uint16_t pinsource;
@@ -94,7 +95,7 @@ s32 mcu_io_config_timer(MCU_PORT port, u16 pin, McuTimerNum timer)
     GPIO_Init((GPIO_TypeDef *)Stm32PortList[port], &GPIO_InitStructure);
 }
 
-s32 mcu_io_config_dac(MCU_PORT port, u16 pin)
+s32 mcu_io_config_dac(MCU_PORT port, MCU_IO pin)
 {
 	GPIO_InitTypeDef GPIO_InitStructure;
 	
@@ -104,8 +105,10 @@ s32 mcu_io_config_dac(MCU_PORT port, u16 pin)
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_Init((GPIO_TypeDef *)Stm32PortList[port], &GPIO_InitStructure);//---初始化 GPIO
 }
-
-void mcu_io_config_in(MCU_PORT port, u16 pin)
+/*
+	将IO口配置为输入， 上拉
+*/
+void mcu_io_config_in(MCU_PORT port, MCU_IO pin)
 {
     GPIO_InitTypeDef GPIO_InitStructure;
 	
@@ -121,7 +124,7 @@ void mcu_io_config_in(MCU_PORT port, u16 pin)
 }
 
 
-void mcu_io_config_out(MCU_PORT port, u16 pin)
+void mcu_io_config_out(MCU_PORT port, MCU_IO pin)
 {
 	GPIO_InitTypeDef GPIO_InitStructure;
 
@@ -136,7 +139,7 @@ void mcu_io_config_out(MCU_PORT port, u16 pin)
 	GPIO_Init((GPIO_TypeDef *)Stm32PortList[port], &GPIO_InitStructure);//初始化
 }
 
-void mcu_io_output_setbit(MCU_PORT port, u16 pin)
+void mcu_io_output_setbit(MCU_PORT port, MCU_IO pin)
 {
 	if(port == NULL)
 		return;
@@ -144,7 +147,7 @@ void mcu_io_output_setbit(MCU_PORT port, u16 pin)
 	GPIO_SetBits((GPIO_TypeDef *)Stm32PortList[port], pin);
 }
 
-void mcu_io_output_resetbit(MCU_PORT port, u16 pin)
+void mcu_io_output_resetbit(MCU_PORT port, MCU_IO pin)
 {
 	if(port == NULL)
 		return;
@@ -152,7 +155,7 @@ void mcu_io_output_resetbit(MCU_PORT port, u16 pin)
 	GPIO_ResetBits((GPIO_TypeDef *)Stm32PortList[port], pin);
 }		
 
-u8 mcu_io_input_readbit(MCU_PORT port, u16 pin)
+u8 mcu_io_input_readbit(MCU_PORT port, MCU_IO pin)
 {
 	if(port == NULL)
 		return Bit_SET;

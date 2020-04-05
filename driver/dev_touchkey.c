@@ -61,8 +61,8 @@ s32 TouchKeyGd = -2;
  */
 static s32 dev_touchkey_resetpad(void)
 {
-	mcu_io_config_out(MCU_PORT_A, GPIO_Pin_3);
-	mcu_io_output_setbit(MCU_PORT_A, GPIO_Pin_3);
+	mcu_io_config_out(MCU_PORT_A, MCU_IO_3);
+	mcu_io_output_setbit(MCU_PORT_A, MCU_IO_3);
 
 	return 0;
 }
@@ -75,7 +75,7 @@ static s32 dev_touchkey_resetpad(void)
  */
 static s32 dev_touchkey_iocap(void)
 {
-	mcu_io_config_timer(MCU_PORT_A, GPIO_Pin_3, MCU_TIMER_2);
+	mcu_io_config_timer(MCU_PORT_A, MCU_IO_3, MCU_TIMER_2);
 	return 0;
 
 }

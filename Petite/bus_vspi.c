@@ -208,7 +208,7 @@ s32 mcu_vspi_transfer(DevSpiNode *node, u8 *snd, u8 *rsv, s32 len)
 			}
 			
 			misosta = mcu_io_input_readbit(dev->misoport, dev->misopin);
-			if(misosta == Bit_SET)
+			if(misosta == MCU_IO_STA_1)
 			{
 				data |=0x01;
 			}

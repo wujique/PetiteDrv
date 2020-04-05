@@ -79,7 +79,7 @@ static void bus_lcd_IO_init(const DevLcdBus *dev)
  */
 s32 bus_lcd_bl(DevLcdBusNode *node, u8 sta)
 {
-	if(sta ==1)
+	if(sta ==MCU_IO_STA_1)
 	{
 		mcu_io_output_setbit(node->dev.blport, node->dev.blpin);
 	}
@@ -99,7 +99,7 @@ s32 bus_lcd_bl(DevLcdBusNode *node, u8 sta)
 
 s32 bus_lcd_rst(DevLcdBusNode *node, u8 sta)
 {
-	if(sta ==1)
+	if(sta ==MCU_IO_STA_1)
 	{
 		mcu_io_output_setbit(node->dev.rstport, node->dev.rstpin);
 	}
