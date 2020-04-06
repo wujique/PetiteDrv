@@ -10,8 +10,6 @@
  *   作    者:         wujique
  *   修改内容:   创建文件
 */
-#include <stdarg.h>
-#include <stdio.h>
 #include "stm32f4xx.h"
 #include "log.h"
 #include "mcu_rtc.h"

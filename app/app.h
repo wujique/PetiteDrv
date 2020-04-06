@@ -26,20 +26,17 @@
   */
   
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __MAIN_H
-#define __MAIN_H
+#ifndef __APP_H
+#define __APPS_H
 
 /* Includes ------------------------------------------------------------------*/
-#include "log.h"
-#include "board_sysconf.h"
+
 
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
-extern void Time_Update(void);
-extern void Delay(__IO uint32_t nTime);
-extern uint32_t Time_Get_LocalTime(void);
+
 #endif /* __MAIN_H */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

@@ -21,6 +21,7 @@
 #include "mcu.h"
 #include "log.h"
 #include "board_sysconf.h"
+#include "alloc.h"
 #include "vfs.h"
 #ifdef SYS_FS_FATFS
 #include "ff.h"
@@ -251,12 +252,12 @@ s32 vfs_mount(const VFSDIR *Mtd)
 					res = f_mount(&VfsNodeList[i].pra.fatfs, Mtd->dir, 1);
 					if ( res == FR_OK ) 
 					{
-						wjq_log(LOG_FUN, "> sd File System initialized.\r\n");
+						wjq_log(LOG_FUN, "> vfs mount fatfs initialized.\r\n");
 						return 0;
 					}
 					//vfs_explore_disk("1:/", 1);
 					
-					wjq_log(LOG_FUN, "> sd Cannot initialize File System:%d\r\n", res);
+					wjq_log(LOG_FUN, "> vfs mount fatfs err:%d\r\n", res);
 					#endif
 					return -1;
 					
@@ -339,7 +340,7 @@ int vfs_open(const char *pathname, int oflags)
 	if(fsnode == NULL)
 		return NULL;
 
-	filenode = wjq_malloc(sizeof(FileNode));
+	filenode = (FileNode *)wjq_malloc(sizeof(FileNode));
 	if(filenode == NULL)
 		return NULL;
 	filenode->fsnode = fsnode;

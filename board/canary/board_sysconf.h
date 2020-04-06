@@ -13,24 +13,7 @@
 #ifndef __WUJIQUE_SYSCONF__
 #define __WUJIQUE_SYSCONF__
 
-#include "alloc.h"
-
-#include "dev_buzzer.h"
-#include "dev_key.h"
-#include "dev_keypad.h"
-#include "dev_dacsound.h"
-#include "dev_spiflash.h"
-#include "dev_tea5767.h"
-#include "dev_wm8978.h"
-#include "dev_lcd.h"
-#include "dev_touchkey.h"
-#include "dev_rs485.h"
-#include "dev_esp8266.h"
-#include "dev_touchkey.h"
-#include "dev_touchscreen.h"
-#include "soundplay.h"
-#include "dev_htu21d.h"
-
+/*定义调试信息输出串口号*/
 #define PC_PORT  MCU_UART_3 
 
 /* 
@@ -47,8 +30,6 @@
 #define TFT_LCD_DRIVER_7789
 #define TFT_LCD_DRIVER_91874
 #define TFT_LCD_DRIVER_3820
-
-
 
 /*
 	选择触摸屏检测方案
@@ -95,13 +76,10 @@
 //#define SYS_USE_VSPI2 1
 //#define SYS_USE_VI2C2	1
 #define SYS_USE_KEYPAD	1
-
 #ifdef SYS_USE_KEYPAD
 #define KEY_PAD_COL_NUM (4)//4列
 #define KEY_PAD_ROW_NUM (4)//4行	
-extern KeyPadIO KeyPadIOList[KEY_PAD_COL_NUM+KEY_PAD_ROW_NUM];
 #endif
-
 
 #define BOARD_DEV_HTU21U	1
 #ifdef  BOARD_DEV_HTU21U
@@ -151,14 +129,19 @@ extern KeyPadIO KeyPadIOList[KEY_PAD_COL_NUM+KEY_PAD_ROW_NUM];
  #error "please just select one touch device!(in wujique_sysconf.h file)"
 #endif
 
-/*
-是否使用RTOS
-*/
+/*是否使用RTOS*/
 #define SYS_USE_RTOS
-/*
-	定义内存管理数组
-*/
-#define AllocArraySize (48*1024)
+#ifdef SYS_USE_RTOS
+#define CANARY_TASK_STK_SIZE (1024)
+#define CANARY_TASK_PRIO	1
+
+#define START_TASK_STK_SIZE (512)
+#define START_TASK_PRIO	3//
+
+#endif
+
+/*	定义内存管理数组*/
+#define AllocArraySize (32*1024)
 /*
 	文件系统数
 */

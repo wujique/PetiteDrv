@@ -3,6 +3,8 @@
 #include "log.h"
 #include "board_sysconf.h"
 
+#include "dev_spiflash.h"
+
 #include "lfs.h"
 
 

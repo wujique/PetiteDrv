@@ -222,13 +222,14 @@
   */ 
 
 /* Includes ------------------------------------------------------------------*/
+#include "mcu.h"
 #include "mcu_sdio.h"
 #include "stm324xg_eval_sdio_sd.h"
 
 #include "log.h"
 
 
-#define DEV_SDIO_DEBUG
+//#define DEV_SDIO_DEBUG
 
 #ifdef DEV_SDIO_DEBUG
 #define SDIO_DEBUG	wjq_log 

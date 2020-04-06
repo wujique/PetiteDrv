@@ -97,11 +97,11 @@ s32 mcu_hspi_init(const DevSpi *dev)
 		RCC_CLK = RCC_APB1Periph_SPI3;
     }
 	
-	pinsource = log2(dev->clkpin);
+	pinsource = math_log2(dev->clkpin);
     GPIO_PinAFConfig((GPIO_TypeDef *)Stm32PortList[dev->clkport], pinsource,  GPIO_AF); //复用
-    pinsource = log2(dev->misopin);
+    pinsource = math_log2(dev->misopin);
     GPIO_PinAFConfig((GPIO_TypeDef *)Stm32PortList[dev->misoport], pinsource, GPIO_AF); //复用
-    pinsource = log2(dev->mosipin);
+    pinsource = math_log2(dev->mosipin);
     GPIO_PinAFConfig((GPIO_TypeDef *)Stm32PortList[dev->mosiport], pinsource, GPIO_AF); //复用
 
     RCC_APB1PeriphClockCmd(RCC_CLK, ENABLE);// ---使能时钟

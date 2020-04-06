@@ -28,12 +28,14 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "mcu.h"
+#include "mcu_dcmi.h"
 #include "camera_api.h"
 #include "drv_ov9655.h"
 #include "drv_ov2640.h"
 #include "dev_lcd.h"
 #include "log.h"
 #include "board_sysconf.h"
+#include "alloc.h"
 
 
 extern void Delay(__IO uint32_t nTime);
@@ -211,8 +213,8 @@ s32 dev_camera_show(DevLcdNode *lcd)
 	dev_camera_config(ImageFormat, FSMC_LCD_ADDRESS, NULL, 1);
 	#else
 	/*放到buf*/
-	camera_buf0 = wjq_malloc(LCD_BUF_SIZE);
-	camera_buf1 = wjq_malloc(LCD_BUF_SIZE);
+	camera_buf0 = (u16 *)wjq_malloc(LCD_BUF_SIZE);
+	camera_buf1 = (u16 *)wjq_malloc(LCD_BUF_SIZE);
 	/*除4的原因：LCD_BUF_SIZE是u8，DMA数据源是u32，目标数据是u16*/
 	dev_camera_config(ImageFormat, (u32)camera_buf0, (u32)camera_buf1, LCD_BUF_SIZE/4);
 	#endif

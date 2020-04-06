@@ -336,7 +336,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\app;..\..\wujique;..\usb\inc;..\eth\inc;..\..\..\driver;..\..\..\driver\lcd;..\..\..\driver\cdev;..\..\..\mcu\stm32407\mcu_dev;..\..\..\mcu\stm32407\StLib\STM32F4xx_StdPeriph_Driver\inc;..\..\..\panel;..\..\..\Petite;..\..\..\Utilities\FreeRTOS\Source\include;..\..\..\Utilities\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\..\..\mcu\stm32407\StLib\STM32_USB_OTG_Driver\inc;..\..\..\mcu\stm32407\StLib\STM32_USB_HOST_Library\Core\inc;..\..\..\mcu\stm32407\StLib\STM32_USB_HOST_Library\Class\MSC\inc;..\..\..\mcu\stm32407\StLib\STM32_USB_Device_Library\Core\inc;..\..\..\mcu\stm32407\StLib\STM32_USB_Device_Library\Class\msc\inc;..\..\..\Utilities\fat_fs\src;..\eth\inc;..\..\..\mcu\stm32407\StLib\STM32F4x7_ETH_Driver\inc;..\..\..\Utilities\lwip-1.4.1\port\STM32F4x7\Standalone;..\..\..\Utilities\lwip-1.4.1\src\include\ipv4;..\..\..\Utilities\lwip-1.4.1\src\include;..\..\..\Utilities\lwip-1.4.1\src\include\netif;..\..\..\Utilities\lwip-1.4.1\src\include\lwip;..\..\..\Utilities\lwip-1.4.1\port\STM32F4x7;..\..\..\Utilities\tslib;..\..\..\Utilities\cmd;..\..\..\Utilities\spiffs-0.3.7\src;..\..\..\Utilities\littlefs-master;..\usb\inc;..\..\..\mcu\stm32407;..\..\..\Utilities\font;..\..\..\driver\camera;..\..\..\mcu\stm32407\StLib\core</IncludePath>
+              <IncludePath>..\..\..\app;..\..\wujique;..\usb\inc;..\eth\inc;..\..\..\driver;..\..\..\driver\lcd;..\..\..\driver\cdev;..\..\..\mcu\stm32407\mcu_dev;..\..\..\mcu\stm32407\StLib\STM32F4xx_StdPeriph_Driver\inc;..\..\..\panel;..\..\..\Petite;..\..\..\Utilities\FreeRTOS\Source\include;..\..\..\mcu\stm32407\StLib\STM32_USB_OTG_Driver\inc;..\..\..\mcu\stm32407\StLib\STM32_USB_HOST_Library\Core\inc;..\..\..\mcu\stm32407\StLib\STM32_USB_HOST_Library\Class\MSC\inc;..\..\..\mcu\stm32407\StLib\STM32_USB_Device_Library\Core\inc;..\..\..\mcu\stm32407\StLib\STM32_USB_Device_Library\Class\msc\inc;..\..\..\Utilities\fat_fs\src;..\eth\inc;..\..\..\mcu\stm32407\StLib\STM32F4x7_ETH_Driver\inc;..\..\..\Utilities\lwip-1.4.1\port\STM32F4x7\Standalone;..\..\..\Utilities\lwip-1.4.1\src\include\ipv4;..\..\..\Utilities\lwip-1.4.1\src\include;..\..\..\Utilities\lwip-1.4.1\src\include\netif;..\..\..\Utilities\lwip-1.4.1\src\include\lwip;..\..\..\Utilities\lwip-1.4.1\port\STM32F4x7;..\..\..\Utilities\tslib;..\..\..\Utilities\cmd;..\..\..\Utilities\spiffs-0.3.7\src;..\..\..\Utilities\littlefs-master;..\usb\inc;..\..\..\mcu\stm32407;..\..\..\Utilities\font;..\..\..\driver\camera;..\..\..\mcu\stm32407\StLib\core;..\rtos</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -665,11 +665,6 @@
         <Group>
           <GroupName>mcu</GroupName>
           <Files>
-            <File>
-              <FileName>stm32f4xx_it.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\stm32f4xx_it.c</FilePath>
-            </File>
             <File>
               <FileName>system_stm32f4xx.c</FileName>
               <FileType>1</FileType>
@@ -1356,9 +1351,9 @@
               <FilePath>..\..\..\Utilities\FreeRTOS\Source\frtos_timers.c</FilePath>
             </File>
             <File>
-              <FileName>port.c</FileName>
+              <FileName>heap_4.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\FreeRTOS\Source\portable\RVDS\ARM_CM4F\port.c</FilePath>
+              <FilePath>..\..\..\Utilities\FreeRTOS\Source\portable\MemMang\heap_4.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1461,19 +1456,29 @@
               <FilePath>..\board_sysconf.c</FilePath>
             </File>
             <File>
-              <FileName>wujique_main.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\wujique_main.c</FilePath>
-            </File>
-            <File>
-              <FileName>wujique_test.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\wujique_test.c</FilePath>
-            </File>
-            <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\main.c</FilePath>
+            </File>
+            <File>
+              <FileName>board_test.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\board_test.c</FilePath>
+            </File>
+            <File>
+              <FileName>board.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\board.c</FilePath>
+            </File>
+            <File>
+              <FileName>port.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\rtos\port.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_it.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\stm32f4xx_it.c</FilePath>
             </File>
           </Files>
         </Group>

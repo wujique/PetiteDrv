@@ -13,23 +13,6 @@
 #ifndef __WUJIQUE_SYSCONF__
 #define __WUJIQUE_SYSCONF__
 
-#include "alloc.h"
-
-#include "dev_buzzer.h"
-#include "dev_key.h"
-#include "dev_keypad.h"
-#include "dev_dacsound.h"
-#include "dev_spiflash.h"
-#include "dev_tea5767.h"
-#include "dev_wm8978.h"
-#include "dev_lcd.h"
-#include "dev_touchkey.h"
-#include "dev_rs485.h"
-#include "dev_esp8266.h"
-#include "dev_touchkey.h"
-#include "dev_touchscreen.h"
-#include "soundplay.h"
-
 /*定义调试信息输出串口号*/
 #define PC_PORT  MCU_UART_3 
 
@@ -93,15 +76,12 @@
 //#define SYS_USE_VSPI2 1
 //#define SYS_USE_VI2C2	1
 #define SYS_USE_KEYPAD	1
-
 #ifdef SYS_USE_KEYPAD
 #define KEY_PAD_COL_NUM (4)//4列
 #define KEY_PAD_ROW_NUM (4)//4行	
-extern KeyPadIO KeyPadIOList[KEY_PAD_COL_NUM+KEY_PAD_ROW_NUM];
 #endif
 
 #define BOARD_DEV_HTU21U	1
-
 #ifdef  BOARD_DEV_HTU21U
 #define DEV_HTU21D_I2CBUS "VI2C2"
 #endif
@@ -149,41 +129,39 @@ extern KeyPadIO KeyPadIOList[KEY_PAD_COL_NUM+KEY_PAD_ROW_NUM];
  #error "please just select one touch device!(in wujique_sysconf.h file)"
 #endif
 
+/* 是否使用RTOS */
+#define SYS_USE_RTOS 1
+
+#ifdef SYS_USE_RTOS
+#define Wujique407_TASK_STK_SIZE (1024)
+#define Wujique407_TASK_PRIO	1
+
+#define START_TASK_STK_SIZE (512)
+#define START_TASK_PRIO	3//
+
+#define USB_TASK_STK_SIZE (1024)
+#define USB_TASK_PRIO	2
+#endif
+
+/*定义alloc.c内存管理数组*/
+
+#define AllocArraySize (80*1024)
 
 
-/*
-是否使用RTOS
-*/
-#define SYS_USE_RTOS
-/*
-	定义内存管理数组
-*/
-#define AllocArraySize (96*1024)
-
-
-/*
-	文件系统数
-*/
+/*  配置 虚拟文件系统 */
 #define SYS_FS_NUM 5
-
 #define SYS_FS_FATFS 1//使能FATFS
-
 #define VFS_SD_DIR	"mtd0"//sd卡文件系统挂载vfs中的目录名
 #define SYS_FS_FATFS_SD "1:/"//sd卡目录名， 这个名字跟diso.c中的序号有关系
-
 #define VFS_USB_DIR	"mtd1"//USB
 #define SYS_FS_FATFS_USB "2:/"
 
-/*
-	字体类型定义
-*/
+/*	字体类型定义 */
 #define FONT_LIST_MAX 4	
 extern struct fbcon_font_desc *FontList[FONT_LIST_MAX];
 
 
-/* 
-中断优先级统一管理
-*/
+/* 中断优先级统一管理          */
 #define NVIC_PRE(x) NVIC_PRE_PRI_##x
 #define NVIC_SUB(x) NVIC_SUB_PRI_##x
 /*

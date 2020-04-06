@@ -26,13 +26,10 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
-#include "main.h"
+#include "mcu.h"
 #include "log.h"
-#include "FreeRTos.h"
-
-extern s32 board_mcu_preinit(void);
-extern s32 board_mcu_init(void);
-extern s32 board_main_init(void);
+#include "stimer.h"
+#include "board_sysconf.h"
 
 /** @addtogroup Template_Project
   * @{
@@ -47,7 +44,6 @@ extern s32 board_main_init(void);
 
 /* Private functions ---------------------------------------------------------*/
 
-
 RCC_ClocksTypeDef RCC_Clocks;
 
 /*
@@ -55,35 +51,38 @@ RCC_ClocksTypeDef RCC_Clocks;
 */
 s32 board_mcu_preinit(void)
 {
-		/* Set the Vector Table base address at 0x08000000 */
-		NVIC_SetVectorTable(NVIC_VectTab_FLASH, 0x00);
-		/*
-			中断优先级分组
-		*/	
-		/* 2 bit for pre-emption priority, 2 bits for subpriority */
-		NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
+	/* Set the Vector Table base address at 0x08000000 */
+	NVIC_SetVectorTable(NVIC_VectTab_FLASH, 0x00);
+	/*
+		中断优先级分组
+	*/	
+	/* 2 bit for pre-emption priority, 2 bits for subpriority */
+	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
+	  
+	RCC_GetClocksFreq(&RCC_Clocks);
+		
+	/*IO跟串口是调试信息的依赖，所以最早初始化*/
+	mcu_io_init();
+	mcu_uart_init();
+	mcu_uart_open(PC_PORT);
+	
+	wjq_log(LOG_DEBUG, "****************************************\r\n");
+	wjq_log(LOG_DEBUG, "        Board canary stm32f103\r\n");
+	wjq_log(LOG_DEBUG, "****************************************\r\n\r\n");
+	wjq_log(LOG_DEBUG, "***SYSCLK_Frequency:%d Hz\r\n", RCC_Clocks.SYSCLK_Frequency);
+	wjq_log(LOG_DEBUG, "***HCLK_Frequency:  %d Hz\r\n", RCC_Clocks.HCLK_Frequency);
+	wjq_log(LOG_DEBUG, "***PCLK1_Frequency: %d Hz\r\n", RCC_Clocks.PCLK1_Frequency);
+	wjq_log(LOG_DEBUG, "***PCLK2_Frequency: %d Hz\r\n", RCC_Clocks.PCLK2_Frequency);
+	wjq_log(LOG_DEBUG, "***ADCCLK_Frequency:%d Hz\r\n", RCC_Clocks.ADCCLK_Frequency);
+	
+	#ifndef SYS_USE_RTOS
+	/* SysTick end of count event */
+	wjq_log(LOG_DEBUG, "init systick no rtos\r\n");
+	SysTick_Config(RCC_Clocks.HCLK_Frequency / (1000/SYSTEMTICK_PERIOD_MS));
+	#endif
 
-		RCC_GetClocksFreq(&RCC_Clocks);
-		
-#ifndef SYS_USE_RTOS
-		/* SysTick end of count event */
-		SysTick_Config(RCC_Clocks.HCLK_Frequency / (1000/1));
-#endif
-		
-		/*IO跟串口是调试信息的依赖，所以最早初始化*/
-		mcu_io_init();
-		mcu_uart_init();
-		mcu_uart_open(PC_PORT);
-		
-		wjq_log(LOG_DEBUG, "Power On, cpu: stm32f103\r\n");
-		wjq_log(LOG_DEBUG, "***SYSCLK_Frequency:%d Hz\r\n", RCC_Clocks.SYSCLK_Frequency);
-		wjq_log(LOG_DEBUG, "***HCLK_Frequency:  %d Hz\r\n", RCC_Clocks.HCLK_Frequency);
-		wjq_log(LOG_DEBUG, "***PCLK1_Frequency: %d Hz\r\n", RCC_Clocks.PCLK1_Frequency);
-		wjq_log(LOG_DEBUG, "***PCLK2_Frequency: %d Hz\r\n", RCC_Clocks.PCLK2_Frequency);
-		wjq_log(LOG_DEBUG, "***ADCCLK_Frequency:%d Hz\r\n", RCC_Clocks.ADCCLK_Frequency);
-
-		mcu_rtc_init();
-		return 0;
+	//mcu_rtc_init();
+	return 0;
 }
 
 /**

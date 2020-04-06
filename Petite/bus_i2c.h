@@ -2,7 +2,7 @@
 #define __BUS_I2C_H_
 
 #include "p_list.h"
-#include "petite.h"
+#include "petie_def.h"
 
 typedef enum{
 	DEV_I2C_H = 1,//Ó²¼şSPI¿ØÖÆÆ÷

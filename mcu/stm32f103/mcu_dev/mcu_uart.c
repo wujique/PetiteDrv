@@ -606,6 +606,7 @@ void mcu_uart1_IRQhandler(void)
 	}
 }
 
+#if 0
 /**
  *@brief:      mcu_dev_uart_test
  *@details:    ´®¿Ú²âÊÔ
@@ -626,4 +627,5 @@ void mcu_uart_test(void)
     wjq_log(LOG_FUN, "%s,%s,%d,%s\r\n", __FUNCTION__,__FILE__,__LINE__,__DATE__);
     
 }
+#endif
 

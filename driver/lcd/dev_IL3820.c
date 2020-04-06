@@ -22,14 +22,12 @@
 /*
 	3820 ¥Û¡¨º—œ‘ GDEH154D27
 */
-#include "stdlib.h"
-#include "string.h"
-
 #include "mcu.h"
 
 #include "board_sysconf.h"
 #include "alloc.h"
 #include "log.h"
+#include "bus_spi.h"
 #include "bus_lcd.h"
 #include "dev_lcd.h"
 #include "dev_IL3820.h"

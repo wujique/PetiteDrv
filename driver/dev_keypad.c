@@ -21,9 +21,11 @@
 */
 #include "mcu.h"
 #include "log.h"
-#include "board_sysconf.h"
 #include "dev_keypad.h"
+#include "board_sysconf.h"
 
+/*need fix: 直接extern引用不符合规范*/
+extern KeyPadIO KeyPadIOList[KEY_PAD_ROW_NUM+KEY_PAD_COL_NUM];
 
 #ifdef SYS_USE_KEYPAD
 
@@ -95,8 +97,7 @@ s32 dev_keypad_init(void)
 
 	/* r */
 	i = 0;
-	while(1)
-	{
+	while(1){
 		mcu_io_config_out(KeyPadIOList[i].port, KeyPadIOList[i].pin);
 		mcu_io_output_setbit(KeyPadIOList[i].port, KeyPadIOList[i].pin);
 		i++;
@@ -106,8 +107,7 @@ s32 dev_keypad_init(void)
 
 	/* c */
 	i = 0;
-	while(1)
-	{
+	while(1){
 		mcu_io_config_in(KeyPadIOList[i+KEY_PAD_ROW_NUM].port, KeyPadIOList[i+KEY_PAD_ROW_NUM].pin);
 		i++;
 		if(i >= KEY_PAD_COL_NUM)
@@ -115,8 +115,7 @@ s32 dev_keypad_init(void)
 	}
 
 	
-	for(i = 0; i< KEY_PAD_ROW_NUM; i++)
-	{
+	for(i = 0; i< KEY_PAD_ROW_NUM; i++){
 		KeyPadCtrl[i].dec = 0;
 		KeyPadCtrl[i].oldsta = KEYPAD_INIT_STA_MASK;
 		KeyPadCtrl[i].newsta = KEYPAD_INIT_STA_MASK;
@@ -136,8 +135,7 @@ s32 dev_keypad_init(void)
  */
 s32 dev_keypad_open(void)
 {
-	if(DevKeypadGd == -1)
-	{
+	if(DevKeypadGd == -1){
 		DevKeypadGd	 = 0;
 	}
 	else
@@ -157,24 +155,19 @@ s32 dev_keypad_read(u8 *key, u8 len)
 {
 	u8 i =0;
 	
-	if(DevKeypadGd != 0)
-		return -1;
+	if(DevKeypadGd != 0)return -1;
 
-	while(1)
-	{
-		if(KeyPadBuffR != KeyPadBuffW)
-		{
+	while(1){
+		if(KeyPadBuffR != KeyPadBuffW){
 			*(key+i) = KeyPadBuff[KeyPadBuffR];
 			KeyPadBuffR++;
 			if(KeyPadBuffR >= KEYPAD_BUFF_SIZE)
 				KeyPadBuffR = 0;
-		}
-		else
+		}else
 			break;
 
 		i++;
-		if(i>= len)
-			break;
+		if(i>= len)	break;
 	}
 
 	return i;
@@ -195,8 +188,7 @@ s32 dev_keypad_scan(void)
 	u8 keyvalue;
 	u8 i;
 	
-	if(DevKeypadGd != 0)
-		return -1;
+	if(DevKeypadGd != 0) return -1;
 	
 	/*读输入的状态，如果不是连续IO，先拼成连续IO*/
 	#if 0
@@ -205,8 +197,7 @@ s32 dev_keypad_scan(void)
 	#else
 	i = 0;
 	ColSta = 0x00;
-	while(1)
-	{
+	while(1){
 		ColSta = ColSta<<1;
 		
 		keyvalue = mcu_io_input_readbit(KeyPadIOList[i+KEY_PAD_ROW_NUM].port, KeyPadIOList[i+KEY_PAD_ROW_NUM].pin);
@@ -214,25 +205,22 @@ s32 dev_keypad_scan(void)
 			ColSta++;
 	
 		i++;
-		if(i >= KEY_PAD_COL_NUM)
-			break;
+		if(i >= KEY_PAD_COL_NUM)break;
 	}
 	#endif
 
 	/*记录新状态，新状态必须是连续稳定，否则重新计数*/
-	if(ColSta != KeyPadCtrl[scanrow].newsta)
-	{
+	if(ColSta != KeyPadCtrl[scanrow].newsta){
 		KeyPadCtrl[scanrow].newsta = ColSta;
 		KeyPadCtrl[scanrow].dec = 0;
 	}
 
 	/*如新状态与旧状态有变化，进行扫描判断*/
-	if(ColSta != KeyPadCtrl[scanrow].oldsta)
-	{
+	if(ColSta != KeyPadCtrl[scanrow].oldsta){
 		KEYPAD_DEBUG(LOG_DEBUG, " chg--");
 		KeyPadCtrl[scanrow].dec++;
-		if(KeyPadCtrl[scanrow].dec >= KEY_PAD_DEC_TIME)//大于防抖次数
-		{
+		if(KeyPadCtrl[scanrow].dec >= KEY_PAD_DEC_TIME){
+			//大于防抖次数
 			/*确定有变化*/
 			KeyPadCtrl[scanrow].dec = 0;
 			/*新旧对比，找出变化位*/
@@ -241,26 +229,20 @@ s32 dev_keypad_scan(void)
 
 			/*根据变化的位，求出变化的按键位置*/
 			u8 i;
-			for(i=0;i<KEY_PAD_COL_NUM;i++)
-			{
-				if((chgbit & (0x01<<i))!=0)
-				{
+			for(i=0;i<KEY_PAD_COL_NUM;i++){
+				if((chgbit & (0x01<<i))!=0){
 					keyvalue = 	scanrow*KEY_PAD_COL_NUM+i;
 					/*添加通断（按下松开）标志*/
-					if((KeyPadCtrl[scanrow].newsta&(0x01<<i)) == 0)
-					{
+					if((KeyPadCtrl[scanrow].newsta&(0x01<<i)) == 0){
 						KEYPAD_DEBUG(LOG_DEBUG, "press\r\n");
-					}
-					else
-					{
+					}else{
 						KEYPAD_DEBUG(LOG_DEBUG, "rel\r\n");
 						keyvalue += KEYPAD_PR_MASK;
 					}
 					/**/
 					KeyPadBuff[KeyPadBuffW] =keyvalue+1;//+1，调整到1开始，不从0开始
 					KeyPadBuffW++;
-					if(KeyPadBuffW>=KEYPAD_BUFF_SIZE)
-						KeyPadBuffW = 0;
+					if(KeyPadBuffW>=KEYPAD_BUFF_SIZE)KeyPadBuffW = 0;
 				}
 			}
 			
@@ -271,16 +253,13 @@ s32 dev_keypad_scan(void)
 
 	/*将下一行的IO输出0*/
 	scanrow++;
-	if(scanrow >= KEY_PAD_ROW_NUM)
-		scanrow = 0;
+	if(scanrow >= KEY_PAD_ROW_NUM)scanrow = 0;
 
 	i = 0;
-	while(1)
-	{
+	while(1){
 		mcu_io_output_setbit(KeyPadIOList[i].port, KeyPadIOList[i].pin);
 		i++;
-		if(i >= KEY_PAD_ROW_NUM)
-			break;
+		if(i >= KEY_PAD_ROW_NUM)break;
 	}
 	mcu_io_output_resetbit(KeyPadIOList[scanrow].port, KeyPadIOList[scanrow].pin);
 
@@ -298,8 +277,7 @@ s32 dev_keypad_test(void)
 	u8 key;
 	s32 res;
 	res = dev_keypad_read(&key, 1);
-	if(res == 1)
-	{
+	if(res == 1){
 		wjq_log(LOG_FUN, "get a key:%02x\r\n", key);
 	}
 	return 0;

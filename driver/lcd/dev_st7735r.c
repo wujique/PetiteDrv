@@ -21,9 +21,6 @@
 /*
 	1.44´ç ÖÐ¾°Ô° tft lcd
 */
-#include "stdlib.h"
-#include "string.h"
-
 #include "mcu.h"
 
 #include "board_sysconf.h"

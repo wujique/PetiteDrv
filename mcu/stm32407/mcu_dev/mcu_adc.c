@@ -18,7 +18,7 @@
 		7 如侵犯你的权利，请联系：code@wujique.com
 		8 一切解释权归屋脊雀工作室所有。
 */
-#include "stm32f4xx.h"
+#include "mcu.h"
 #include "log.h"
 #include "mcu_adc.h"
 

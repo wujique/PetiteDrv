@@ -22,9 +22,6 @@
 /* 
 	1.3寸，IPS，中景园，只有SCL&SDA的SPI接口LCD
 */	
-
-#include "stdlib.h"
-#include "string.h"
 #include "mcu.h"
 #include "board_sysconf.h"
 #include "alloc.h"

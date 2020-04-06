@@ -24,10 +24,6 @@
 	COG LCD µÄÇý¶¯
 
 */
-
-
-#include <stdarg.h>
-#include <stdio.h>
 #include "mcu.h"
 #include "main.h"
 #include "log.h"
@@ -658,6 +654,8 @@ s32 drv_ST7565_update(DevLcdNode *lcd)
 s32 drv_ssd1615_init(DevLcdNode *lcd)
 {
 	DevLcdBusNode * node;
+
+	wjq_log(LOG_INFO, "drv_ssd1615_init\r\n");
 	
 	node = bus_lcd_open(lcd->dev.buslcd);
 

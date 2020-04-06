@@ -35,6 +35,8 @@
 	2 接收计时用定时器捕获。
 */
 #include "mcu.h"
+#include "mcu_timer.h"
+#include "mcu_io.h"
 #include "log.h"
 #include "dev_srf05.h"
 

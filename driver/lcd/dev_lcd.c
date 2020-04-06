@@ -18,9 +18,6 @@
 		7 如侵犯你的权利，请联系：code@wujique.com
 		8 一切解释权归屋脊雀工作室所有。
 */
-#include <stdarg.h>
-#include <stdio.h>
-#include "string.h"
 #include "mcu.h"
 #include "log.h"
 #include "p_list.h"
@@ -71,7 +68,7 @@ _lcd_drv *LcdDrvList[] = {
 	可自动识别ID的驱动
 
 */
-_lcd_drv *LcdProbDrv8080List[] = {
+_lcd_drv *LcdProbDrvList[] = {
 					&TftLcdILI9341Drv,
 					&TftLcdILI9325Drv,
 };
@@ -88,15 +85,12 @@ static _lcd_drv *dev_lcd_finddrv(u16 id)
 {
 	u8 i =0;
 	
-	while(1)
-	{
-		if(LcdDrvList[i]->id == id)
-		{
+	while(1){
+		if(LcdDrvList[i]->id == id){
 			return LcdDrvList[i];
 		}
 		i++;
-		if(i>= sizeof(LcdDrvList)/sizeof(_lcd_drv *))
-		{
+		if(i>= sizeof(LcdDrvList)/sizeof(_lcd_drv *)){
 			return NULL;
 		}
 	}
@@ -122,21 +116,17 @@ s32 dev_lcd_register(const DevLcd *dev)
 		先要查询当前，防止重名
 	*/
 	listp = DevLcdRoot.next;
-	while(1)
-	{
-		if(listp == &DevLcdRoot)
-			break;
+	while(1){
+		if(listp == &DevLcdRoot)break;
 
 		plcdnode = list_entry(listp, DevLcdNode, list);
 
-		if(strcmp(dev->name, plcdnode->dev.name) == 0)
-		{
+		if(strcmp(dev->name, plcdnode->dev.name) == 0){
 			wjq_log(LOG_INFO, "lcd dev name err!\r\n");
 			return -1;
 		}
 
-		if(strcmp(dev->buslcd, plcdnode->dev.buslcd) == 0)
-		{
+		if(strcmp(dev->buslcd, plcdnode->dev.buslcd) == 0){
 			wjq_log(LOG_INFO, "one lcd bus just for one lcd!\r\n");
 			return -1;
 		}
@@ -155,54 +145,42 @@ s32 dev_lcd_register(const DevLcd *dev)
 	plcdnode->gd = -1;
 
 	/*初始化*/
-	if(dev->id == NULL)
-	{
+	if(dev->id == NULL){
 		LCD_DEBUG(LOG_DEBUG, "prob LCD id\r\n");
 
 		/*找到驱动跟规格后，初始化*/
 		u8 j = 0;
 
-		while(1)
-		{
-			ret = LcdProbDrv8080List[j]->init(plcdnode);
-			if(ret == 0)
-			{
+		while(1){
+			ret = LcdProbDrvList[j]->init(plcdnode);
+			if(ret == 0){
 				LCD_DEBUG(LOG_DEBUG, "lcd drv prob ok!\r\n");	
-				plcdnode->drv = LcdProbDrv8080List[j];
+				plcdnode->drv = LcdProbDrvList[j];
 				break;
-			}	
-			else
-			{
+			}else{
 				j++;
-				if(j >= sizeof(LcdProbDrv8080List)/sizeof(_lcd_drv *))
-				{
+				if(j >= sizeof(LcdProbDrvList)/sizeof(_lcd_drv *)){
 					LCD_DEBUG(LOG_DEBUG, "lcd prob err\r\n");
 					break;
 				}
 			}
 		}
-
 	}
-	else
-	{
+	else{
 		ret = -1;
-		
+		LCD_DEBUG(LOG_DEBUG, "find lcd drv, id:%04x...", dev->id);
 		plcdnode->drv = dev_lcd_finddrv(dev->id);
-		if(plcdnode->drv != NULL)
-		{
+		if(plcdnode->drv != NULL){
 			/*找到驱动跟规格后，初始化*/
+			LCD_DEBUG(LOG_DEBUG, "suc!\r\n");
 			ret = plcdnode->drv->init(plcdnode);
 
-		}
-		else
-		{
-			
-			LCD_DEBUG(LOG_DEBUG, "lcd find drv fail!\r\n");
+		}else{
+			LCD_DEBUG(LOG_DEBUG, "fail!\r\n");
 		}
 	}
 
-	if(ret == 0)
-	{
+	if(ret == 0){
 		plcdnode->gd = -1;
 		
 		plcdnode->dir = H_LCD;
@@ -219,9 +197,7 @@ s32 dev_lcd_register(const DevLcd *dev)
 		plcdnode->drv->backlight(plcdnode, 1);
 
 		wjq_log(LOG_INFO, "lcd init OK\r\n");
-	}
-	else
-	{
+	}else{
 		plcdnode->gd = -2;
 		wjq_log(LOG_INFO, "lcd drv init err!\r\n");
 	}
@@ -248,29 +224,23 @@ DevLcdNode *dev_lcd_open(char *name)
 	listp = DevLcdRoot.next;
 	node = NULL;
 	
-	while(1)
-	{
-		if(listp == &DevLcdRoot)
-			break;
+	while(1){
+		if(listp == &DevLcdRoot)break;
 
 		node = list_entry(listp, DevLcdNode, list);
 		//LCD_DEBUG(LOG_INFO, "lcd name:%s!\r\n", node->dev.name);
 		
-		if(strcmp(name, node->dev.name) == 0)
-		{
+		if(strcmp(name, node->dev.name) == 0){
 			//LCD_DEBUG(LOG_INFO, "lcd dev get ok!\r\n");
 			break;
-		}
-		else
-		{
+		}else{
 			node = NULL;
 		}
 		
 		listp = listp->next;
 	}
 
-	if(node != NULL)
-	{
+	if(node != NULL){
 		if(node->gd > (-2))
 			node->gd++;
 		else
@@ -289,10 +259,8 @@ DevLcdNode *dev_lcd_open(char *name)
  */
 s32 dev_lcd_close(DevLcdNode *node)
 {
-	if(node->gd <0)
-		return -1;
-	else
-	{
+	if(node->gd <0)	return -1;
+	else{
 		node->gd -= 1;
 		return 0;
 	}
@@ -306,16 +274,14 @@ s32 dev_lcd_close(DevLcdNode *node)
 */
 s32 dev_lcd_drawpoint(DevLcdNode *lcd, u16 x, u16 y, u16 color)
 {
-	if(lcd == NULL)
-		return -1;
+	if(lcd == NULL)	return -1;
 	
 	return lcd->drv->draw_point(lcd, x-1, y-1, color);
 }
 
 s32 dev_lcd_prepare_display(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey)
 {
-	if(lcd == NULL)
-		return -1;
+	if(lcd == NULL)	return -1;
 	
 	return lcd->drv->prepare_display(lcd, sx-1, ex-1, sy-1, ey-1);
 }
@@ -323,45 +289,39 @@ s32 dev_lcd_prepare_display(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey)
 
 s32 dev_lcd_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
 {	
-	if(lcd == NULL)
-		return -1;
+	if(lcd == NULL)	return -1;
 	
 	return lcd->drv->fill(lcd, sx-1,ex-1,sy-1,ey-1,color);
 }
 s32 dev_lcd_color_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 color)
 {
-	if(lcd == NULL)
-		return -1;
+	if(lcd == NULL)	return -1;
 	
 	return lcd->drv->color_fill(lcd, sx-1,ex-1,sy-1,ey-1,color);
 }
 s32 dev_lcd_backlight(DevLcdNode *lcd, u8 sta)
 {
-	if(lcd == NULL)
-		return -1;
+	if(lcd == NULL)	return -1;
 	
 	lcd->drv->backlight(lcd, sta);
 	return 0;
 }
 s32 dev_lcd_display_onoff(DevLcdNode *lcd, u8 sta)
 {
-	if(lcd == NULL)
-		return -1;
+	if(lcd == NULL)	return -1;
 
 	return lcd->drv->onoff(lcd, sta);
 }
 
 s32 dev_lcd_flush(DevLcdNode *lcd, u16 *color, u32 len)
 {
-	if(lcd == NULL)
-		return -1;
+	if(lcd == NULL)	return -1;
 
 	return lcd->drv->flush(lcd, color, len);	
 }
 s32 dev_lcd_update(DevLcdNode *lcd)
 {
-	if(lcd == NULL)
-		return -1;
+	if(lcd == NULL)	return -1;
 
 	return lcd->drv->update(lcd);
 }
@@ -378,12 +338,10 @@ s32 dev_lcd_setdir(DevLcdNode *node, u8 dir, u8 scan_dir)
 	u16 temp;
 	u8 scan_dir_tmp;
 
-	if(node == NULL)
-		return -1;
+	if(node == NULL) return -1;
 
-	
-	if(dir != node->dir)//切换屏幕方向	
-	{
+	//切换屏幕方向	
+	if(dir != node->dir){
 		
 		node->dir = node->dir^0x01;
 		temp = node->width;
@@ -392,9 +350,8 @@ s32 dev_lcd_setdir(DevLcdNode *node, u8 dir, u8 scan_dir)
 		LCD_DEBUG(LOG_DEBUG, "set dir w:%d, h:%d\r\n", node->width, node->height);
 	}
 	
-	
-	if(node->dir == W_LCD)//横屏，扫描方向映射转换
-	{
+	//横屏，扫描方向映射转换
+	if(node->dir == W_LCD){
 		/*
 			横屏	 竖屏
 			LR----UD
@@ -404,23 +361,18 @@ s32 dev_lcd_setdir(DevLcdNode *node, u8 dir, u8 scan_dir)
 			UDLR----LRUD
 		*/
 		scan_dir_tmp = 0;
-		if((scan_dir&LRUD_BIT_MASK) == 0)
-		{
+		if((scan_dir&LRUD_BIT_MASK) == 0){
 			scan_dir_tmp += LRUD_BIT_MASK;
 		}
 
-		if((scan_dir&LR_BIT_MASK) == LR_BIT_MASK)
-		{
+		if((scan_dir&LR_BIT_MASK) == LR_BIT_MASK){
 			scan_dir_tmp += UD_BIT_MASK;	
 		}
 
-		if((scan_dir&UD_BIT_MASK) == 0)
-		{
+		if((scan_dir&UD_BIT_MASK) == 0){
 			scan_dir_tmp += LR_BIT_MASK;
 		}
-	}
-	else
-	{
+	}else{
 		scan_dir_tmp = scan_dir;
 	}
 	
@@ -455,13 +407,10 @@ void line (DevLcdNode *lcd, int x1, int y1, int x2, int y2, unsigned colidx)
 	int dx = x2 - x1;
 	int dy = y2 - y1;
 
-	if(lcd == NULL)
-		return;
+	if(lcd == NULL)	return;
 
-	if (abs (dx) < abs (dy)) 
-	{
-		if (y1 > y2) 
-		{
+	if (abs (dx) < abs (dy)) {
+		if (y1 > y2) {
 			tmp = x1; x1 = x2; x2 = tmp;
 			tmp = y1; y1 = y2; y2 = tmp;
 			dx = -dx; dy = -dy;
@@ -469,17 +418,13 @@ void line (DevLcdNode *lcd, int x1, int y1, int x2, int y2, unsigned colidx)
 		x1 <<= 16;
 		/* dy is apriori >0 */
 		dx = (dx << 16) / dy;
-		while (y1 <= y2)
-		{
+		while (y1 <= y2){
 			dev_lcd_drawpoint(lcd, x1 >> 16, y1, colidx);
 			x1 += dx;
 			y1++;
 		}
-	} 
-	else 
-	{
-		if (x1 > x2) 
-		{
+	}else{
+		if (x1 > x2) {
 			tmp = x1; x1 = x2; x2 = tmp;
 			tmp = y1; y1 = y2; y2 = tmp;
 			dx = -dx; dy = -dy;
@@ -487,8 +432,7 @@ void line (DevLcdNode *lcd, int x1, int y1, int x2, int y2, unsigned colidx)
 		
 		y1 <<= 16;
 		dy = dx ? (dy << 16) / dx : 0;
-		while (x1 <= x2) 
-		{
+		while (x1 <= x2) {
 			dev_lcd_drawpoint(lcd, x1, y1 >> 16, colidx);
 			y1 += dy;
 			x1++;
@@ -507,8 +451,7 @@ void line (DevLcdNode *lcd, int x1, int y1, int x2, int y2, unsigned colidx)
  */
 void put_cross(DevLcdNode *lcd, int x, int y, unsigned colidx)
 {
-	if(lcd == NULL)
-		return;
+	if(lcd == NULL)	return;
 	
 	line (lcd, x - 10, y, x - 2, y, colidx);
 	line (lcd, x + 2, y, x + 10, y, colidx);
@@ -540,17 +483,13 @@ void put_char(DevLcdNode *lcd, int x, int y, int c, int colidx)
 	int i,j,bits;
 	u8* p;
 	
-	if(lcd == NULL)
-		return;	
+	if(lcd == NULL)	return;	
 	
 	p = (u8*)font_vga_8x8.path;//need fix
-	for (i = 0; i < font_vga_8x8.height; i++) 
-	{
+	for (i = 0; i < font_vga_8x8.height; i++){
 		bits =  p[font_vga_8x8.height * c + i];
-		for (j = 0; j < font_vga_8x8.width; j++, bits <<= 1)
-		{
-			if (bits & 0x80)
-			{
+		for (j = 0; j < font_vga_8x8.width; j++, bits <<= 1){
+			if (bits & 0x80){
 				lcd->drv->draw_point(lcd, x + j, y + i, colidx);
 			}
 		}
@@ -570,8 +509,7 @@ void put_string(DevLcdNode *lcd, int x, int y, char *s, unsigned colidx)
 {
 	int i;
 	
-	if(lcd == NULL)
-		return;	
+	if(lcd == NULL)	return;	
 	
 	for (i = 0; *s; i++, x += font_vga_8x8.width, s++)
 		put_char(lcd, x, y, *s, colidx);
@@ -590,8 +528,7 @@ void put_string_center(DevLcdNode *lcd, int x, int y, char *s, unsigned colidx)
 {
 	int sl = strlen (s);
 	
-	if(lcd == NULL)
-		return;	
+	if(lcd == NULL)	return;	
 	
     put_string (lcd, x - (sl / 2) * font_vga_8x8.width,
                 y - font_vga_8x8.height / 2, s, colidx);
@@ -610,8 +547,7 @@ void put_string_center(DevLcdNode *lcd, int x, int y, char *s, unsigned colidx)
  */
 void rect (DevLcdNode *lcd, int x1, int y1, int x2, int y2, unsigned colidx)
 {
-	if(lcd == NULL)
-		return;
+	if(lcd == NULL)	return;
 
 	line (lcd, x1, y1, x2, y1, colidx);
 	line (lcd, x2, y1, x2, y2, colidx);
@@ -638,8 +574,7 @@ s32 dev_lcd_put_string(DevLcdNode *lcd, char *font, int x, int y, char *s, unsig
 	u32 xbase;//显示在x轴偏移量
 	u16 fontw,fonth;
 	
-	if(lcd == NULL)
-		return -1;
+	if(lcd == NULL)	return -1;
 	
 	/* 通过刷一整块，提高显示速度 */
 	slen = strlen(s);
@@ -657,10 +592,9 @@ s32 dev_lcd_put_string(DevLcdNode *lcd, char *font, int x, int y, char *s, unsig
 	sidx = 0;
 
 	/*获取点阵，并转化为LCD像素*/
-	while(1)
-	{
-		if(*(s+sidx) < 0x81)//英文字母
-		{
+	while(1){
+		//英文字母
+		if(*(s+sidx) < 0x81){
 			//uart_printf("eng\r\n");
 			u8 ch;
 			/*获取点阵*/
@@ -669,20 +603,15 @@ s32 dev_lcd_put_string(DevLcdNode *lcd, char *font, int x, int y, char *s, unsig
 			res = font_get_asc(font, &ch, dotbuf);
 			//PrintFormat(dotbuf, 16);
 			/*asc是横库*/
-			for(j=0;j<fonth;j++)
-			{
+			for(j=0;j<fonth;j++){
 
 				xbase = xlen*j + sidx*fontw;//当前字符X轴偏移量
-				for(i=0;i<fontw;i++)
-				{
+				for(i=0;i<fontw;i++){
 					/*暂时只处理6*12，8*16的ASC，每一列1个字节*/
-					if((dotbuf[j*1+i/8]&(0x80>>(i%8)))!= 0)
-					{
+					if((dotbuf[j*1+i/8]&(0x80>>(i%8)))!= 0)	{
 						//uart_printf("* ");
 						framebuff[xbase + i] = colidx;
-					}
-					else
-					{
+					}else{
 						//uart_printf("- ");
 						framebuff[xbase + i] = BackColor;
 					}
@@ -691,27 +620,20 @@ s32 dev_lcd_put_string(DevLcdNode *lcd, char *font, int x, int y, char *s, unsig
 			}	
 			
 			sidx++;
-		}
-		else//汉字
-		{
+		}		else{//汉字
 			//uart_printf("ch\r\n");
 			res = font_get_hz(font, s+sidx, dotbuf);//从SD卡读取一个1616汉字的点阵要1ms
 			//PrintFormat(dotbuf, 32);
 
 			/*仅仅支持纵库，取模方式2,16*16*/
-			for(j=0; j<fonth; j++)
-			{
+			for(j=0; j<fonth; j++){
 				xbase = xlen*j + sidx*fontw;//当前字符X轴偏移量
-				for(i=0;i<(fontw*2);i++)//汉子是ASC两倍宽
-				{
+				for(i=0;i<(fontw*2);i++){//汉子是ASC两倍宽
 					/*暂时只做1212，1616，每一列2个字节数据*/
-					if((dotbuf[i*2+j/8]&(0x80>>(j%8)))!= 0)
-					{
+					if((dotbuf[i*2+j/8]&(0x80>>(j%8)))!= 0)	{
 						//uart_printf("* ");
 						framebuff[xbase + i] = colidx;
-					}
-					else
-					{
+					}else{
 						//uart_printf("- ");
 						framebuff[xbase + i] = BackColor;
 					}
@@ -722,31 +644,26 @@ s32 dev_lcd_put_string(DevLcdNode *lcd, char *font, int x, int y, char *s, unsig
 			sidx+= 2;
 		}
 
-		if(sidx >= slen)
-		{
+		if(sidx >= slen){
 			//uart_printf("finish");
 			break;
 		}
 	}
 
 
-	if( y + ylen > lcd->height)
-	{
+	if( y + ylen > lcd->height){
 		/*显示超出屏幕*/
 		ylen = lcd->height - y+1;//假设height = 240,y = 240, 也就意味着只显示一行
 	}
 	
-	if(x + xlen >= lcd->width)
-	{
+	if(x + xlen >= lcd->width){
 		/*显示超出屏幕宽度*/
 		i = lcd->width - x + 1;
 		
 		/*调整数据*/
 		j = 1;
-		while(1)
-		{
-			if(j >= ylen)
-				break;
+		while(1){
+			if(j >= ylen)break;
 			memcpy(framebuff+j*i, framebuff+ j*xlen, 2*i);
 			j++;
 		}
@@ -846,8 +763,7 @@ s32 dev_lcd_show_bmp(DevLcdNode *lcd, u16 x, u16 y, u16 xlen, u16 ylen, s8 *BmpF
 
 	bmpfd = vfs_open(BmpFileName, O_RDONLY);
 
-	if(bmpfd == NULL)
-	{
+	if(bmpfd == NULL){
 		wjq_log(LOG_DEBUG, "bmp open file err\r\n");
 		return -1;
 	}
@@ -900,8 +816,7 @@ s32 dev_lcd_show_bmp(DevLcdNode *lcd, u16 x, u16 y, u16 xlen, u16 ylen, s8 *BmpF
 	
 	if(bi.biClrUsed!=0)
 		NumColors=(unsigned long)bi.biClrUsed;//如果 bi.biClrUsed 不为零，就是本图象实际用到的颜色
-	else
-	{
+	else{
 	    switch(bi.biBitCount)
 	    {
 	    case 1:
@@ -927,18 +842,15 @@ s32 dev_lcd_show_bmp(DevLcdNode *lcd, u16 x, u16 y, u16 xlen, u16 ylen, s8 *BmpF
 	}
 
 	/* 读调色板 */
-	if(NumColors != 0)
-	{
+	if(NumColors != 0){
 		palatte = wjq_malloc(4*NumColors);
 		rlen = vfs_read(bmpfd, (void *)palatte, 4*NumColors);
 
 	}
 
-	if(xlen > bi.biWidth)
-        xlen = bi.biWidth;
+	if(xlen > bi.biWidth) xlen = bi.biWidth;
 
-    if(ylen > bi.biHeight)
-        ylen = bi.biHeight;
+    if(ylen > bi.biHeight) ylen = bi.biHeight;
 
 	pdata = wjq_malloc(LineBytes*linecnt);
 	
@@ -948,20 +860,17 @@ s32 dev_lcd_show_bmp(DevLcdNode *lcd, u16 x, u16 y, u16 xlen, u16 ylen, s8 *BmpF
     {
     case 1:
 		pcc = wjq_malloc(xlen*sizeof(u16));
-	
-		for(j=0; j<ylen;) //图片取模:横向,左高右低
-        {
+		//图片取模:横向,左高右低
+		for(j=0; j<ylen;){
         	if(j+linecnt >= ylen)
 				linecnt = ylen-j;
 
 			rlen = vfs_read(bmpfd, (void *)pdata, LineBytes*linecnt);
-			if(rlen != LineBytes*linecnt)
-			{
+			if(rlen != LineBytes*linecnt){
 				wjq_log(LOG_DEBUG, "bmp read data err!\r\n");
 			}
 			l = 0;
-			while(l < linecnt)
-			{
+			while(l < linecnt){
 				k = l*LineBytes;
 				#if 0//不用除法， 测试
 				i = 0;				
@@ -993,8 +902,7 @@ s32 dev_lcd_show_bmp(DevLcdNode *lcd, u16 x, u16 y, u16 xlen, u16 ylen, s8 *BmpF
 					k++;
 	            }
 				#else
-				for(i=0; i<xlen; i++)
-		        {
+				for(i=0; i<xlen; i++){
 		        	/*
 		        		一个字节8个像素，高位在前
 		        		调色板有256种颜色
@@ -1020,20 +928,17 @@ s32 dev_lcd_show_bmp(DevLcdNode *lcd, u16 x, u16 y, u16 xlen, u16 ylen, s8 *BmpF
         
     case 4:
 		pcc = wjq_malloc(xlen*sizeof(u16));
-	
-		for(j=0; j<ylen;) //图片取模:横向,左高右低
-        {
+		//图片取模:横向,左高右低s
+		for(j=0; j<ylen;){
         	if(j+linecnt >= ylen)
 				linecnt = ylen-j;
 			
 			rlen = vfs_read(bmpfd, (void *)pdata, LineBytes*linecnt);			
-			if(rlen != LineBytes*linecnt)
-			{
+			if(rlen != LineBytes*linecnt){
 				wjq_log(LOG_DEBUG, "bmp read data err!\r\n");
 			}
 			l = 0;
-			while(l < linecnt)
-			{
+			while(l < linecnt){
 				k = l*LineBytes;
 
 				#if 0//不用除法,测试
@@ -1074,8 +979,7 @@ s32 dev_lcd_show_bmp(DevLcdNode *lcd, u16 x, u16 y, u16 xlen, u16 ylen, s8 *BmpF
 					k++;
 	            }
 				#else
-				for(i=0; i < xlen; i++)
-				{
+				for(i=0; i < xlen; i++){
 									/*4个bit 1个像素，要进行对U16的转换
 					rgb565
 	#define BLUE			 0x001F  
@@ -1109,23 +1013,19 @@ s32 dev_lcd_show_bmp(DevLcdNode *lcd, u16 x, u16 y, u16 xlen, u16 ylen, s8 *BmpF
 
     case 8:
 		pcc = wjq_malloc(xlen*sizeof(u16));	
-		for(j=0; j<ylen;) //图片取模:横向,左高右低
-        {
-        	if(j+linecnt >= ylen)
-				linecnt = ylen-j;
+		//图片取模:横向,左高右低
+		for(j=0; j<ylen;){
+        	if(j+linecnt >= ylen)linecnt = ylen-j;
 			rlen = vfs_read(bmpfd, (void *)pdata, LineBytes*linecnt);			
-			if(rlen != LineBytes*linecnt)
-			{
+			if(rlen != LineBytes*linecnt){
 				wjq_log(LOG_DEBUG, "bmp read data err!\r\n");
 			}
 			
 			l = 0;
-			while(l < linecnt)
-			{
+			while(l < linecnt){
 				k = l*LineBytes;
 				
-            	for(i=0; i < xlen; i++)
-	            {
+            	for(i=0; i < xlen; i++){
 					/*1个字节1个像素，要进行对U16的转换
 					rgb565
 					#define BLUE         	 0x001F  
@@ -1159,24 +1059,20 @@ s32 dev_lcd_show_bmp(DevLcdNode *lcd, u16 x, u16 y, u16 xlen, u16 ylen, s8 *BmpF
 		
     case 24://65K真彩色		
 		pcc = (u16 *)pdata;
-	
-        for(j=0; j<ylen;) //图片取模:横向,左高右低
-        {
+		//图片取模:横向,左高右低
+        for(j=0; j<ylen;) {
 			if(j+linecnt >= ylen)
 				linecnt = ylen-j;
 			rlen = vfs_read(bmpfd, (void *)pdata, LineBytes*linecnt);
-			if(rlen != LineBytes*linecnt)
-			{
+			if(rlen != LineBytes*linecnt){
 				wjq_log(LOG_DEBUG, "bmp read data err!\r\n");
 			}
 			
 			l = 0;
-			while(l < linecnt)
-			{
+			while(l < linecnt){
 				k = l*LineBytes;
 				
-            	for(i=0; i < xlen; i++)
-	            {
+            	for(i=0; i < xlen; i++){
 	            	/*3个字节1个像素，要进行对U16的转换
 						rgb565
 						#define BLUE         	 0x001F  
@@ -1212,8 +1108,7 @@ s32 dev_lcd_show_bmp(DevLcdNode *lcd, u16 x, u16 y, u16 xlen, u16 ylen, s8 *BmpF
 	dev_lcd_update(lcd);
 	
 	wjq_free(pdata);
-	if(NumColors != 0)
-	{
+	if(NumColors != 0){
 		wjq_free(palatte);
 	}
 	vfs_close(bmpfd);
@@ -1316,8 +1211,7 @@ void dev_i2coledlcd_test(void)
 	
 	/*打开背光*/
 	dev_lcd_backlight(LcdOledI2C, 1);
-	while(1)
-	{
+	while(1){
 		dev_lcd_put_string(LcdOledI2C, "songti12", 10,1, "ABC-abc，", BLACK);
 		dev_lcd_put_string(LcdOledI2C, "siyuan16", 1,13, "这是LcdOledI2C", BLACK);
 		dev_lcd_put_string(LcdOledI2C, "songti12", 10,30, "www.wujique.com", BLACK);

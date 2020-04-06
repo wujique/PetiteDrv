@@ -1,10 +1,8 @@
 #ifndef __DEV_KEYPAD_H__
 #define __DEV_KEYPAD_H__
 
-#include "mcu.h"
 /*键值中标识通断的位*/
 #define KEYPAD_PR_MASK (0x80)
-
 
 typedef struct _str_keypad_io
 {

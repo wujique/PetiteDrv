@@ -21,10 +21,8 @@
 /*
 	封装IO操作，以便移植到其他芯片
 */
-#include "stm32f4xx.h"
-
 #include "mcu.h"
-
+#include "mcu_timer.h"
 #include "log.h"
 
 const GPIO_TypeDef *Stm32PortList[MCU_PORT_MAX] = {NULL, GPIOA,  GPIOB, GPIOC, GPIOD,
@@ -68,7 +66,6 @@ uint8_t GpioTimDef[MCU_TIMER_MAX]=
 		GPIO_AF_TIM14,	
 	};
 
-
 s32 mcu_io_config_timer(MCU_PORT port, MCU_IO pin, McuTimerNum timer)
 {
 	GPIO_InitTypeDef GPIO_InitStructure;
@@ -83,7 +80,7 @@ s32 mcu_io_config_timer(MCU_PORT port, MCU_IO pin, McuTimerNum timer)
 	
 	GPIO_AF = GpioTimDef[timer];
 
-	pinsource = log2(pin);
+	pinsource = math_log2(pin);
 	/*need fix*/
 	GPIO_PinAFConfig((GPIO_TypeDef *)Stm32PortList[port], pinsource, GPIO_AF); //---管脚复用为 TIM4功能
 	

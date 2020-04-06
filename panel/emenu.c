@@ -10,13 +10,21 @@
  *   作    者:         wujique屋脊雀工作室
  *   修改内容:   创建文件
 */
-#include <stdio.h>
 #include "mcu.h"
 #include "log.h"
 #include "emenu.h"
 #include "dev_lcd.h"
 #include "font.h"
 #include "dev_keypad.h"
+
+//#define EMENU_DEBUG_EN
+
+#ifdef EMENU_DEBUG_EN
+#define EMENU_DEBUG	wjq_log 
+#else
+#define EMENU_DEBUG(a, ...)
+#endif
+
 
 extern u16 PenColor;
 extern u16 BackColor;
@@ -57,12 +65,10 @@ u8 emenu_get_key(void)
 	s32 res;
 	
 	res = dev_keypad_read(&key, 1);
-	if(res == 1)
-	{
-		//wjq_log(LOG_DEBUG,"key:%02x\r\n", key);
+	if(res == 1){
+		EMENU_DEBUG(LOG_DEBUG,"key:%02x\r\n", key);
 		
-		if((key & KEYPAD_PR_MASK)!= KEYPAD_PR_MASK  )
-		{
+		if((key & KEYPAD_PR_MASK)!= KEYPAD_PR_MASK  ){
 			return emunu_key_chg[key];
 		}
 	}
@@ -85,23 +91,19 @@ s32 emenu_check_list(MENU *list, u16 len)
 	MenuLel now_lel = MENU_L_0;//当前菜单等级
 	MENU *p = list;
 	
-	while(1)
-	{
-		if(i>= len)
-			return err;
+	while(1){
+		if(i>= len)	return err;
 
 		/*菜单等级不能跳级*/
 		if((p->l != now_lel)
 			&&(p->l != (now_lel-1))
 			&&(p->l != (now_lel+1))
-			)
-		{
-			wjq_log(LOG_DEBUG,"level err!\r\n");
+			)	{
+			EMENU_DEBUG(LOG_DEBUG,"level err!\r\n");
 			return err;
 		}
 		/*功能菜单函数不能为空*/
-		if(p->type == MENU_TYPE_FUN)
-		{
+		if(p->type == MENU_TYPE_FUN){
 		
 		}
 
@@ -154,14 +156,11 @@ MENU *emenu_find_fa(MENU *fp)
 	p = fp;
 
 	/*根节点没父亲*/
-	if(p->l == MENU_L_0)
-			return NULL;
+	if(p->l == MENU_L_0)return NULL;
 	
-	while(1)
-	{
+	while(1){
 		p--;
-		if(p->l == ((menu_ctrl.fa->l)-1))
-		{
+		if(p->l == ((menu_ctrl.fa->l)-1)){
 			/*找到父节点*/
 			return p;	
 		}
@@ -173,31 +172,22 @@ MENU *emunu_find_next(MENU *fp, u8 mode)
 	MENU *p;
 	p = fp;
 
-	while(1)
-	{
+	while(1){
 		if(mode == 1)
 			p++;
 		else
 			p--;
 		
 		/*菜单等级比父节点低一级（大1）*/
-		if(p->l == ((menu_ctrl.fa->l)+1))
-		{
+		if(p->l == ((menu_ctrl.fa->l)+1)){
 			return p;	
-		}
-		else if(p->l == (menu_ctrl.fa->l))
-		{
+		}else if(p->l == (menu_ctrl.fa->l))	{
 			/*跟父菜单等级一致，说明没子菜单了*/	
 			return 0;
-		}
-		else if(p->l == MENU_L_0)
-		{
-			wjq_log(LOG_DEBUG,"menu end\r\n");
+		}else if(p->l == MENU_L_0){
+			EMENU_DEBUG(LOG_DEBUG,"menu end\r\n");
 			return 0;
-		}
-		else
-		{
-			
+		}else{			
 		}
 
 	}
@@ -222,7 +212,7 @@ s32 emenu_display(DevLcdNode *lcd)
 	/*计算不同语言显示内容的偏移*/
 	lang = menu_ctrl.lang*MENU_LANG_BUF_SIZE;
 	
-	wjq_log(LOG_DEBUG,"emenu display:%s\r\n", menu_ctrl.fa->cha + lang);
+	//EMENU_DEBUG(LOG_DEBUG,"emenu display:%s\r\n", menu_ctrl.fa->cha + lang);
 	
 	dev_lcd_color_fill(lcd, 1, menu_ctrl.lcdw, 1, menu_ctrl.lcdh, BackColor);
 	
@@ -243,30 +233,23 @@ s32 emenu_display(DevLcdNode *lcd)
 			*/
 			
 			p =  menu_ctrl.fa +1;
-			while(1)
-			{
+			while(1){
 				/*菜单等级比父节点低一级（大1）*/
-				if(p->l == ((menu_ctrl.fa->l)+1))
-				{
+				if(p->l == ((menu_ctrl.fa->l)+1)){
 					menu_num++;
 					/*开始显示，之前的菜单不显示*/
-					if(p>=menu_ctrl.dis)
-					{
+					if(p>=menu_ctrl.dis){
 						if(disy + menu_ctrl.fonth-1 > menu_ctrl.lcdh)//显示12的字符，从1，开始，只要到dot11就可以显示完了。
 						{
-							wjq_log(LOG_DEBUG,"over the lcd\r\n");
+							EMENU_DEBUG(LOG_DEBUG,"over the lcd\r\n");
 							break;
 						}
 						
 						memset(disbuf,0,sizeof(disbuf));
 						/*菜单被选中，加上效果*/
-						if(p == menu_ctrl.sel)
-						{
-							//uart_printf("sel menu\r\n");	
+						if(p == menu_ctrl.sel){	
 							sprintf(disbuf, ">%d.", menu_num);
-						}
-						else
-						{
+						}else{
 							sprintf(disbuf, "%d.", menu_num);	
 						}
 						strcat(disbuf, p->cha + lang);
@@ -276,19 +259,14 @@ s32 emenu_display(DevLcdNode *lcd)
 						disy += (menu_ctrl.fonth + menu_ctrl.spaced);//每行间隔
 					}
 				}
-				else if(p->l == (menu_ctrl.fa->l))
-				{
+				else if(p->l == (menu_ctrl.fa->l)){
 					/*跟父菜单等级一致，说明没子菜单了*/	
 					break;
-				}
-				else if(p->l == MENU_L_0)
-				{
+				}else if(p->l == MENU_L_0){
 					/* 末尾节点*/
-					wjq_log(LOG_DEBUG, "menu end\r\n");
+					EMENU_DEBUG(LOG_DEBUG, "menu end\r\n");
 					break;
-				}
-				else
-				{
+				}else{
 					/*比当前父节点低两级，说明是孙菜单*/
 				}
 				p++;
@@ -301,31 +279,25 @@ s32 emenu_display(DevLcdNode *lcd)
 				数字键只有0-9，因此双列菜单最多显示8个菜单一页，用1-8按键选择
 			*/
 			col2_dis_num = (menu_ctrl.line-1)*2;
-			if(col2_dis_num > 8)
-				col2_dis_num = 8;
+			if(col2_dis_num > 8)col2_dis_num = 8;
 			
 			p = menu_ctrl.dis;//直接从显示节点开始分析，不用统计子节点数量
 			
 			disy += menu_ctrl.fonth + menu_ctrl.spaced;
 		
 			menu_ctrl.d = 0;
-			while(1)
-			{
+			while(1){
 
-				if(p->l == ((menu_ctrl.fa->l)+1))
-				{
+				if(p->l == ((menu_ctrl.fa->l)+1)){
 					menu_num++;
 					
-					if(menu_num > col2_dis_num)
-						break;
+					if(menu_num > col2_dis_num)	break;
 					/*处理显示位置*/
-					if(menu_num  == (col2_dis_num/2+1))
-					{
+					if(menu_num  == (col2_dis_num/2+1))	{
 						disy = menu_ctrl.fonth + menu_ctrl.spaced + 1;
 						discol++;
-						if(discol>=2)
-						{
-							wjq_log(LOG_DEBUG,"over the lcd\r\n");
+						if(discol>=2){
+							EMENU_DEBUG(LOG_DEBUG,"over the lcd\r\n");
 							break;
 						}
 					}
@@ -341,19 +313,14 @@ s32 emenu_display(DevLcdNode *lcd)
 
 					disy += (menu_ctrl.fonth + menu_ctrl.spaced);
 				}
-				else if(p->l == (menu_ctrl.fa->l))
-				{
+				else if(p->l == (menu_ctrl.fa->l)){
 					/*跟父菜单等级一致，说明没子菜单了*/	
 					break;
-				}
-				else if(p->l == MENU_L_0)
-				{
+				}else if(p->l == MENU_L_0){
 					/* 末尾节点*/
-					wjq_log(LOG_DEBUG,"menu end\r\n");
+					EMENU_DEBUG(LOG_DEBUG,"menu end\r\n");
 					break;
-				}
-				else
-				{
+				}else{
 					/*比当前父节点低两级，说明是孙菜单*/
 				}
 				p++;
@@ -388,25 +355,19 @@ s32 emenu_deal_key_list(u8 key)
 	
 		case EMENU_KEYU_DOWM://down
 			menup = emunu_find_next(menu_ctrl.sel, 1);
-			if(menup!=0)
-			{
+			if(menup!=0){
 				menu_ctrl.sel = menup;	
-				wjq_log(LOG_DEBUG,"%");
+				EMENU_DEBUG(LOG_DEBUG,"%");
 				if(menu_ctrl.d>= menu_ctrl.line-2)//如果一屏能显示5行，顶行是显示内容，4行菜单，间距为3，因此-2
 				{
 					menup = emunu_find_next(menu_ctrl.dis, 1);
-					if(menup!=0)
-					{
+					if(menup!=0){
 						menu_ctrl.dis = menup;	
 					}
-				}
-				else
-				{
+				}else{
 					menu_ctrl.d++;
 				}
-			}
-			else
-			{
+			}else{
 				/*已经是最后一个菜单，从头开始显示第一个菜单	*/
 				menu_ctrl.sel = menu_ctrl.fa+1;
 				menu_ctrl.dis = menu_ctrl.sel;
@@ -417,66 +378,49 @@ s32 emenu_deal_key_list(u8 key)
 		case EMENU_KEYU_UP://up
 			menup = emunu_find_next(menu_ctrl.sel, 0);
 			
-			if(menup!=0)
-			{
+			if(menup!=0){
 				menu_ctrl.sel = menup;	
-				wjq_log(LOG_DEBUG,"%");
-				if(menu_ctrl.d == 0)
-				{
+				EMENU_DEBUG(LOG_DEBUG,"%");
+				if(menu_ctrl.d == 0){
 						menu_ctrl.dis = menu_ctrl.sel;	
-				}
-				else
-				{
+				}else{
 					menu_ctrl.d--;
 				}
-			}
-			else
-			{
+			}else{
 				/*第一个节点，那么翻到最后一个节点*/
-				while(1)
-				{
+				while(1){
 					menup = emunu_find_next(menu_ctrl.sel, 1);
-					if(menup!=0)
-					{
+					if(menup!=0){
 						menu_ctrl.sel = menup;	
 
-						if(menu_ctrl.d>= menu_ctrl.line-2)
-						{
+						if(menu_ctrl.d>= menu_ctrl.line-2){
 							menup = emunu_find_next(menu_ctrl.dis, 1);
-							if(menup!=0)
-							{
+							if(menup!=0){
 								menu_ctrl.dis = menup;	
 							}
-						}
-						else
-						{
+						}else{
 							/*显示菜单不变，只是移动了选择*/
 							menu_ctrl.d++;
 						}
-						}
-						else
-						{
-							/*已经是最后一个菜单，从头开始显示第一个菜单	*/
-							break;
-						}
+					}else{
+						/*已经是最后一个菜单，从头开始显示第一个菜单	*/
+						break;
+					}
 				}
 			}
 			break;
 			
 		case EMENU_KEYU_ENTER://enter
 			/*保证子菜单有效*/
-			if(menu_ctrl.sel->l == (menu_ctrl.fa->l)+1)
-			{
-				if(menu_ctrl.sel->type == MENU_TYPE_FUN)
-				{
-					if(menu_ctrl.sel->fun != NULL)
+			if(menu_ctrl.sel->l == (menu_ctrl.fa->l)+1)	{
+				if(menu_ctrl.sel->type == MENU_TYPE_FUN){
+					if(menu_ctrl.sel->fun != NULL){
 						/*执行真实测试函数*/
 						menu_ctrl.sel->fun();
-				}
-				else
-				{
-					wjq_log(LOG_DEBUG, "sel:%s\r\n", menu_ctrl.sel->cha);
-					wjq_log(LOG_DEBUG, "dis:%s\r\n", menu_ctrl.dis->cha);
+					}
+				}else{
+					EMENU_DEBUG(LOG_DEBUG, "sel:%s\r\n", menu_ctrl.sel->cha);
+					EMENU_DEBUG(LOG_DEBUG, "dis:%s\r\n", menu_ctrl.dis->cha);
 					
 					emenu_stack[(menu_ctrl.fa->l)*2] = menu_ctrl.sel;
 					emenu_stack[(menu_ctrl.fa->l)*2+1] = menu_ctrl.dis;
@@ -493,16 +437,15 @@ s32 emenu_deal_key_list(u8 key)
 			
 		case EMENU_KEYU_ESC://ESC
 			menup = emenu_find_fa(menu_ctrl.fa);
-			if(menup != NULL)
-			{
+			if(menup != NULL){
 				menu_ctrl.fa = 	menup;
 				
 				menu_ctrl.sel = emenu_stack[(menu_ctrl.fa->l)*2];
 				menu_ctrl.dis = emenu_stack[(menu_ctrl.fa->l)*2+1];
 				menu_ctrl.d = d_rec[menu_ctrl.fa->l];
 
-				wjq_log(LOG_DEBUG, "sel:%s\r\n", menu_ctrl.sel->cha);
-				wjq_log(LOG_DEBUG, "dis:%s\r\n", menu_ctrl.dis->cha);
+				EMENU_DEBUG(LOG_DEBUG, "sel:%s\r\n", menu_ctrl.sel->cha);
+				EMENU_DEBUG(LOG_DEBUG, "dis:%s\r\n", menu_ctrl.dis->cha);
 
 			}
 			break;
@@ -523,20 +466,17 @@ s32 emenu_deal_key_2col(u8 key)
 	
 		case EMENU_KEYU_DOWM://down
 			menup = emunu_find_next(menu_ctrl.sel, 1);
-			if(menup != 0)
-			{
+			if(menup != 0){
 				menu_ctrl.dis = menup;	
 			}
 			break;
 			
 		case EMENU_KEYU_UP://up
-			wjq_log(LOG_DEBUG, "2COL UP\r\n");
+			EMENU_DEBUG(LOG_DEBUG, "2COL UP\r\n");
 			u8 i = 0;
-			while(1)
-			{
+			while(1){
 				menup = emunu_find_next(menu_ctrl.dis, 0);
-				if(menup != 0)
-				{
+				if(menup != 0){
 					menu_ctrl.dis = menup;
 				}
 				else
@@ -547,27 +487,24 @@ s32 emenu_deal_key_2col(u8 key)
 					数字键只有0-9，因此双列菜单最多显示8个菜单一页，用1-8按键选择
 				*/
 				col2_dis_num = (menu_ctrl.line-1)*2;
-				if(col2_dis_num > 8)
-					col2_dis_num = 8;
+				if(col2_dis_num > 8)col2_dis_num = 8;
 				
 				i++;
-				if( i>= col2_dis_num)
-					break;
+				if( i>= col2_dis_num)break;
 			}
 			break;
 			
 		case EMENU_KEYU_ESC://ESC
 			menup = emenu_find_fa(menu_ctrl.fa);
-			if(menup != NULL)
-			{
+			if(menup != NULL){
 				menu_ctrl.fa = 	menup;
 				
 				menu_ctrl.sel = emenu_stack[(menu_ctrl.fa->l)*2];
 				menu_ctrl.dis = emenu_stack[(menu_ctrl.fa->l)*2+1];
 				menu_ctrl.d = d_rec[menu_ctrl.fa->l];
 
-				wjq_log(LOG_DEBUG, "sel:%s\r\n", menu_ctrl.sel->cha);
-				wjq_log(LOG_DEBUG, "dis:%s\r\n", menu_ctrl.dis->cha);
+				EMENU_DEBUG(LOG_DEBUG, "sel:%s\r\n", menu_ctrl.sel->cha);
+				EMENU_DEBUG(LOG_DEBUG, "dis:%s\r\n", menu_ctrl.dis->cha);
 			}
 			break;
 
@@ -581,33 +518,26 @@ s32 emenu_deal_key_2col(u8 key)
 		case EMENU_KEYU_8:
 		case EMENU_KEYU_9:	
 			index = key-'0';
-			wjq_log(LOG_DEBUG, "index:%d\r\n", index);
-			if(index <= menu_ctrl.d)
-			{
+			EMENU_DEBUG(LOG_DEBUG, "index:%d\r\n", index);
+			if(index <= menu_ctrl.d){
 				menup = menu_ctrl.dis;
-				while(1)
-				{
+				while(1){
 					index--;
-					if(index == 0)
-						break;
+					if(index == 0)	break;
 					
 					menup = emunu_find_next(menup, 1);
-					if(menup == 0)
-						return -1;
+					if(menup == 0)	return -1;
 				}
 				
-				if(menup->l == (menu_ctrl.fa->l)+1)
-				{
-					if(menup->type == MENU_TYPE_FUN)
-					{
-						if(menup->fun != NULL)
+				if(menup->l == (menu_ctrl.fa->l)+1)	{
+					if(menup->type == MENU_TYPE_FUN){
+						if(menup->fun != NULL){
 							/*执行真实测试函数*/
 							menup->fun();
-					}
-					else
-					{
-						wjq_log(LOG_DEBUG, "sel:%s\r\n", menu_ctrl.sel->cha);
-						wjq_log(LOG_DEBUG, "dis:%s\r\n", menu_ctrl.dis->cha);
+						}
+					}else{
+						EMENU_DEBUG(LOG_DEBUG, "sel:%s\r\n", menu_ctrl.sel->cha);
+						EMENU_DEBUG(LOG_DEBUG, "dis:%s\r\n", menu_ctrl.dis->cha);
 						
 						emenu_stack[(menu_ctrl.fa->l)*2] = menu_ctrl.sel;
 						emenu_stack[(menu_ctrl.fa->l)*2+1] = menu_ctrl.dis;
@@ -621,10 +551,8 @@ s32 emenu_deal_key_2col(u8 key)
 					}
 				}	
 				
-			}
-			else
-			{
-				wjq_log(LOG_DEBUG, "out list\r\n");
+			}else{
+				EMENU_DEBUG(LOG_DEBUG, "out list\r\n");
 			}
 			break;
 		
@@ -675,12 +603,10 @@ s32 emenu_run(DevLcdNode *lcd, MENU *p, u16 len, char *font, u8 spaced, u8 lang)
 	menu_ctrl.d = 0;
 	menu_ctrl.line = (menu_ctrl.lcdh+1)/(menu_ctrl.fonth + menu_ctrl.spaced);//+1，因为最后一行可以不要间距，
 	
-	wjq_log(LOG_DEBUG, "line:%d\r\n", menu_ctrl.line);
+	EMENU_DEBUG(LOG_DEBUG, "line:%d\r\n", menu_ctrl.line);
 	
-	while(1)
-	{
-		if(1==disflag)
-		{
+	while(1){
+		if(1==disflag){
 			emenu_display(lcd);
 			disflag = 0;
 		}
@@ -689,19 +615,15 @@ s32 emenu_run(DevLcdNode *lcd, MENU *p, u16 len, char *font, u8 spaced, u8 lang)
 
 		key = emenu_get_key();
 		
-		if(key != 0)
-		{
-			//wjq_log(LOG_DEBUG, "KEY:%02x\r\n", key);
+		if(key != 0){
+			//EMENU_DEBUG(LOG_DEBUG, "KEY:%02x\r\n", key);
 			
-			if(menu_ctrl.fa->type == MENU_TYPE_LIST)
-			{
+			if(menu_ctrl.fa->type == MENU_TYPE_LIST){
 				ret = emenu_deal_key_list(key);
-			}
-			else if(menu_ctrl.fa->type == MENU_TYPE_KEY_2COL)
-			{
+			}else if(menu_ctrl.fa->type == MENU_TYPE_KEY_2COL){
 				ret = emenu_deal_key_2col(key);
 			}
-			//wjq_log(LOG_DEBUG,"get a key:%02x\r\n", key);
+			//EMENU_DEBUG(LOG_DEBUG,"get a key:%02x\r\n", key);
 			if(ret == 0)
 				disflag = 1;
 

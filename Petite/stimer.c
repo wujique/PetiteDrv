@@ -27,9 +27,7 @@
 #include "board_sysconf.h"
 #include "log.h"
 
-
-#define SYSTEMTICK_PERIOD_MS  1
-
+#include "stimer.h"
 
 volatile uint32_t LocalTime = 0; 
 uint32_t timingdelay;

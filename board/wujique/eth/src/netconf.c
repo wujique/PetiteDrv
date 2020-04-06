@@ -38,6 +38,7 @@
 #include "netconf.h"
 #include <stdio.h>
 
+#include "mcu.h"
 #include "log.h"
 /* Private typedef -----------------------------------------------------------*/
 #define MAX_DHCP_TRIES        4

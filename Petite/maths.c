@@ -25,13 +25,13 @@
 /*
 
 非递归判断一个数是2的多少次方
-
+need fix
 */
 int math_log2(int value) 
 { 
   int x=0; 
-  while(value>1) 
-  { 
+  
+  while(value>1){ 
 	value>>=1; 
 	x++; 
   } 

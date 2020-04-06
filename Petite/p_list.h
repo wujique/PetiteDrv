@@ -1,8 +1,6 @@
 #ifndef _LINUX_LIST_H
 #define _LINUX_LIST_H
 
-#include "mcu.h"
-
 #define size_t u32
 #if 0
 #define offsetof(type,  member)    ((size_t) &((type *)0)-> member)

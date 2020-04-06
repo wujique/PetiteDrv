@@ -29,6 +29,7 @@
 #include <string.h>
 #include "usbh_msc_usr.h"
 #include "dual_func_demo.h"
+#include "mcu.h"
 #include "log.h"
 
 /** @addtogroup USBH_USER

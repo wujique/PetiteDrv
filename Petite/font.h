@@ -11,7 +11,7 @@
 #ifndef _VIDEO_FONT_H
 #define _VIDEO_FONT_H
 
-#include "mcu.h"
+
 
 struct fbcon_font_desc 
 {

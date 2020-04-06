@@ -1,10 +1,8 @@
 #ifndef _DEV_LCDBUS_H_
 #define _DEV_LCDBUS_H_
 
-#include "mcu.h"
-
 #include "p_list.h"
-#include "petite.h"
+#include "petie_def.h"
 
 /*
 	系统总共有三种LCD总线, SPI,I2C,8080

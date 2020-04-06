@@ -2,6 +2,8 @@
 #include "mcu.h"
 #include "log.h"
 #include "board_sysconf.h"
+
+#include "dev_spiflash.h"
 #include <spiffs.h>
 
 

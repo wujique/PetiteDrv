@@ -1,6 +1,7 @@
 #ifndef _MCU_BSP_H_
 #define _MCU_BSP_H_
 
+#include "mcu_timer.h"
 
 extern const GPIO_TypeDef *Stm32PortList[MCU_PORT_MAX];
 

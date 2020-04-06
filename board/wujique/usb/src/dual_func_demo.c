@@ -36,6 +36,7 @@
 #include "usbd_msc_core.h"
 
 #include "usb_conf.h"
+#include "mcu.h"
 #include "log.h"
 #include "board_sysconf.h"
 
@@ -848,8 +849,7 @@ s32 usb_loop_task(void)
 	创建USB任务
 */
 #include "FreeRtos.h"
-#define USB_TASK_STK_SIZE 1024
-#define USB_TASK_PRIO	2
+
 TaskHandle_t  UsbTaskHandle;
 
 void usb_main(void)
@@ -869,13 +869,16 @@ void usb_main(void)
 
 s32 usb_task_create(void)
 {
+	BaseType_t xReturn = pdPASS;
+	
 	xTaskCreate(	(TaskFunction_t) usb_main,
 					(const char *)"usb task",		/*lint !e971 Unqualified char types are allowed for strings and single characters only. */
 					(const configSTACK_DEPTH_TYPE) USB_TASK_STK_SIZE,
 					(void *) NULL,
 					(UBaseType_t) USB_TASK_PRIO,
 					(TaskHandle_t *) &UsbTaskHandle );	
-					
+	if(xReturn != pdPASS)	
+		wjq_log(LOG_DEBUG, "xTaskCreate usb_main err!\r\n");					
 					return 0;
 }
 

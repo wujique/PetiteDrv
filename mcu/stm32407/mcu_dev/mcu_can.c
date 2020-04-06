@@ -11,10 +11,7 @@
  *   修改内容:   创建文件
 */
 
-#include <stdarg.h>
-#include <stdio.h>
 #include "stm32f4xx.h"
-
 #include "log.h"
 
 #define MCU_CAN_DEBUG

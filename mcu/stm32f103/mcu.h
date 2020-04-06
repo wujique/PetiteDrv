@@ -1,41 +1,13 @@
 #ifndef __MCU_H__
 #define __MCU_H__
 
-
 #include "stm32f10x.h"
 
+#ifndef NULL
+#define NULL 0
+#endif
 
-typedef int32_t  s32;
-typedef int16_t s16;
-typedef int8_t  s8;
-
-typedef const int32_t sc32;  /*!< Read Only */
-typedef const int16_t sc16;  /*!< Read Only */
-typedef const int8_t sc8;   /*!< Read Only */
-
-typedef __IO int32_t  vs32;
-typedef __IO int16_t  vs16;
-typedef __IO int8_t   vs8;
-
-typedef __I int32_t vsc32;  /*!< Read Only */
-typedef __I int16_t vsc16;  /*!< Read Only */
-typedef __I int8_t vsc8;   /*!< Read Only */
-
-typedef uint32_t  u32;
-typedef uint16_t u16;
-typedef uint8_t  u8;
-
-typedef const uint32_t uc32;  /*!< Read Only */
-typedef const uint16_t uc16;  /*!< Read Only */
-typedef const uint8_t uc8;   /*!< Read Only */
-
-typedef __IO uint32_t  vu32;
-typedef __IO uint16_t vu16;
-typedef __IO uint8_t  vu8;
-
-typedef __I uint32_t vuc32;  /*!< Read Only */
-typedef __I uint16_t vuc16;  /*!< Read Only */
-typedef __I uint8_t vuc8;   /*!< Read Only */
+typedef   unsigned int size_t;
 
 /* io端口组名称转义*/
 typedef enum{
@@ -53,7 +25,9 @@ typedef enum{
 	MCU_PORT_K,
 	MCU_PORT_MAX
 }MCU_PORT;
-	
+
+extern const GPIO_TypeDef *Stm32PortList[MCU_PORT_MAX];
+
 /*IO 电平定义 */
 typedef enum{
 	MCU_IO_STA_0 = 0x00,
@@ -81,13 +55,25 @@ typedef enum{
 	MCU_IO_MAX = 16,
 }MCU_IO;
 
-#include "mcu_timer.h"
-#include "mcu_io.h"
+typedef enum {
+  MCU_UART_1 =0,
+  MCU_UART_2,
+  MCU_UART_3,
+  MCU_UART_MAX,
+}McuUartNum; 
 
-#include "mcu_uart.h"
-#include "mcu_i2c.h"
-#include "mcu_spi.h"
-#include "mcu_rtc.h"
-#include "mcu_fsmc.h"
+
+/*
+SPI模式
+*/
+typedef enum{
+	SPI_MODE_0 =0,
+	SPI_MODE_1,
+	SPI_MODE_2,
+	SPI_MODE_3,
+	SPI_MODE_MAX
+}SPI_MODE;
+
 
 #endif
+

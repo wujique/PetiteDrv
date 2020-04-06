@@ -4,6 +4,8 @@
 /*                                            */
 /**********************************************/
 
+#include "mcu.h"
+
 #include "font.h"
 
 #define FONTDATAMAX (12*0x80)

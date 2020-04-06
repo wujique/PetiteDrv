@@ -29,7 +29,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx.h"
-#include "stm324xg_eval_fsmc_sram.h"
+#include "mcu_fsmc.h"
 
 /** @addtogroup Utilities
   * @{

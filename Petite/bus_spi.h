@@ -2,7 +2,7 @@
 #define __BUS_SPI_H_
 
 #include "p_list.h"
-#include "petite.h"
+#include "petie_def.h"
 
 typedef enum{
 	DEV_SPI_H = 1,//硬件SPI控制器
@@ -87,18 +87,6 @@ typedef struct
 	struct list_head list;
 }DevSpiChNode;
 
-/*
-
-SPI模式
-
-*/
-typedef enum{
-	SPI_MODE_0 =0,
-	SPI_MODE_1,
-	SPI_MODE_2,
-	SPI_MODE_3,
-	SPI_MODE_MAX
-}SPI_MODE;
 
 extern s32 mcu_spi_register(const DevSpi *dev);
 extern s32 mcu_spich_register(const DevSpiCh *dev);

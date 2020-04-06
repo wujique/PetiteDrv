@@ -22,12 +22,11 @@
 /*
 	91874 大连佳显 2.7寸电子纸 三色屏
 */
-#include "stdlib.h"
-#include "string.h"
 #include "mcu.h"
 #include "board_sysconf.h"
 #include "alloc.h"
 #include "log.h"
+#include "bus_spi.h"
 #include "bus_lcd.h"
 #include "dev_lcd.h"
 #include "dev_IL91874.h"

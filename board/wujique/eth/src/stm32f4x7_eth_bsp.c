@@ -33,6 +33,8 @@
 #include "netif.h"
 #include "netconf.h"
 #include "lwip/dhcp.h"
+
+#include "mcu.h"
 #include "log.h"
 
 #define ETH_BSP_DEBUG

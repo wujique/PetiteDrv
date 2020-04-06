@@ -24,6 +24,7 @@
 #include "log.h"
 #include "tslib.h"
 
+#include "bus_spi.h"
 #include "mcu_spi.h"
 #include "dev_touchscreen.h"
 #include "mcu_timer.h"

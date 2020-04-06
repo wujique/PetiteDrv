@@ -28,6 +28,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "usbd_usr.h"
 #include <stdio.h>
+#include "mcu.h"
 #include "log.h"
 
 /** @addtogroup USBD_USER

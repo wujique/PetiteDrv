@@ -53,16 +53,13 @@ s32 mcu_i2c_register(const DevI2c * dev)
 		先要查询当前I2C控制器，防止重名
 	*/
 	listp = DevI2cGdRoot.next;
-	while(1)
-	{
-		if(listp == &DevI2cGdRoot)
-			break;
+	while(1){
+		if(listp == &DevI2cGdRoot)break;
 
 		p = list_entry(listp, DevI2cNode, list);
 		//wjq_log(LOG_INFO, "i2c dev name:%s!\r\n", p->dev.name);
 		
-		if(strcmp(dev->name, p->dev.name) == 0)
-		{
+		if(strcmp(dev->name, p->dev.name) == 0){
 			wjq_log(LOG_INFO, "i2c dev name err!\r\n");
 			return -1;
 		}
@@ -108,16 +105,13 @@ DevI2cNode *mcu_i2c_open(char *name)
 	listp = DevI2cGdRoot.next;
 	node = NULL;
 	
-	while(1)
-	{
-		if(listp == &DevI2cGdRoot)
-			break;
+	while(1){
+		if(listp == &DevI2cGdRoot)break;
 
 		node = list_entry(listp, DevI2cNode, list);
 		//I2C_DEBUG(LOG_INFO, "i2c dev name:%s!\r\n", node->dev.name);
 		
-		if(strcmp(name, node->dev.name) == 0)
-		{
+		if(strcmp(name, node->dev.name) == 0){
 			//I2C_DEBUG(LOG_INFO, "i2c dev open ok!\r\n");
 			break;
 		}
@@ -125,14 +119,10 @@ DevI2cNode *mcu_i2c_open(char *name)
 		listp = listp->next;
 	}
 
-	if(node != NULL)
-	{
-		if(node->gd == 0)
-		{
+	if(node != NULL){
+		if(node->gd == 0){
 			node = NULL;
-		}
-		else
-		{
+		}else{
 			node->gd = 0;
 		}
 	}
@@ -147,11 +137,9 @@ DevI2cNode *mcu_i2c_open(char *name)
  */
 s32 mcu_i2c_close(DevI2cNode *node)
 {
-	if(node == NULL)
-		return -1;
+	if(node == NULL)return -1;
 
-	if(node->gd != 0)
-		return -1;
+	if(node->gd != 0)return -1;
 
 	node->gd = -1; 
 
@@ -171,15 +159,13 @@ s32 mcu_i2c_close(DevI2cNode *node)
  */
 s32 mcu_i2c_transfer(DevI2cNode *node, u8 addr, u8 rw, u8* data, s32 datalen)
 {
-	if(node == NULL)
-		return -1;
+	if(node == NULL)return -1;
 
 	if(node->dev.type == DEV_I2C_H)
 		return mcu_hi2c_transfer(node, addr, rw, data, datalen);
 	else if(node->dev.type == DEV_I2C_V)	
 		return mcu_vi2c_transfer(node, addr, rw, data, datalen);
-	else
-	{
+	else{
 		wjq_log(LOG_DEBUG, "i2c dev type err\r\n");	
 	}	
 	return -1;

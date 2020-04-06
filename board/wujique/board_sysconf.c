@@ -23,25 +23,6 @@
 /*
 	本文件用于配置系统有哪些设备和资源
 */
-/*
-	矩阵按键硬件定义
-	row输出，放前面
-*/
-KeyPadIO KeyPadIOList[KEY_PAD_ROW_NUM+KEY_PAD_COL_NUM]=
-		{
-			/*ROW*/
-			{MCU_PORT_F, MCU_IO_12},
-			{MCU_PORT_F, MCU_IO_13},
-			{MCU_PORT_F, MCU_IO_14},
-			{MCU_PORT_F, MCU_IO_15},
-			/*COL*/
-			{MCU_PORT_F, MCU_IO_11},
-			{MCU_PORT_F, MCU_IO_10},
-			{MCU_PORT_F, MCU_IO_9},
-			{MCU_PORT_F, MCU_IO_8},
-		};
-
-
 
 /*---------------之下，是SPI I2C LCD 等抽象的比较好的设备和接口定义----------------*/
 /*-------------------------------
@@ -484,7 +465,7 @@ const DevLcd DevLcdtTFT	=	{"tftlcd", 		"BusLcd8080", 	NULL, 240, 320};
 */
 s32 sys_dev_register(void)
 {
-	wjq_log(LOG_DEBUG, "***board: wujique Petite dev init!***\r\n");
+	wjq_log(LOG_DEBUG, "***board: sys_dev_register!***\r\n");
 	/*注册I2C总线*/
 	mcu_i2c_register(&DevVi2c1);
 			dev_lcdbus_register(&BusLcdI2C1);

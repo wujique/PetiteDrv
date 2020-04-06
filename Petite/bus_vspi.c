@@ -20,9 +20,12 @@
 		8 一切解释权归屋脊雀工作室所有。
 */
 #include "mcu.h"
+#include "mcu_io.h"
 #include "log.h"
 #include "board_sysconf.h"
 #include "bus_spi.h"
+#include "mcu_spi.h"
+#include "bus_vspi.h"
 
 #define BUS_VSPI_DEBUG
 
@@ -70,8 +73,7 @@ void vspi_delay(u32 delay)
 {
 	volatile u32 i=delay;
 
-	while(i>0)
-	{
+	while(i>0){
 		i--;	
 	}
 
@@ -91,11 +93,9 @@ u32 VspiDelay = 0;
 s32 mcu_vspi_open(DevSpiNode *node, SPI_MODE mode, u16 pre)
 {
 
-	if(node == NULL)
-		return -1;
+	if(node == NULL)return -1;
 	
-	if(node->gd != -1)
-	{
+	if(node->gd != -1){
 		//VSPI_DEBUG(LOG_DEBUG, "vspi dev busy\r\n");
 		return -1;
 	}
@@ -116,8 +116,7 @@ s32 mcu_vspi_open(DevSpiNode *node, SPI_MODE mode, u16 pre)
  */
 s32 mcu_vspi_close(DevSpiNode *node)
 {
-	if(node->gd != 0)
-		return -1;
+	if(node->gd != 0)return -1;
 	//VSPI_DEBUG(LOG_DEBUG, "vc-");
 	node->gd = -1;
 	
@@ -146,20 +145,17 @@ s32 mcu_vspi_transfer(DevSpiNode *node, u8 *snd, u8 *rsv, s32 len)
 	
 	DevSpi *dev;
 	
-	if(node == NULL)
-	{
+	if(node == NULL){
 		VSPI_DEBUG(LOG_DEBUG, "vspi dev err\r\n");
 		return -1;
 	}
 
-	if(node->gd != 0)
-	{
+	if(node->gd != 0){
 		VSPI_DEBUG(LOG_DEBUG, "vspi dev no open\r\n");
 		return -1;
 	}
 	
-    if( ((snd == NULL) && (rsv == NULL)) || (len < 0) )
-    {
+    if( ((snd == NULL) && (rsv == NULL)) || (len < 0) ){
         return -1;
     }
 
@@ -167,23 +163,19 @@ s32 mcu_vspi_transfer(DevSpiNode *node, u8 *snd, u8 *rsv, s32 len)
 
 	slen = 0;
 
-	while(1)
-	{
-		if(slen >= len)
-			break;
+	while(1){
+		if(slen >= len)	break;
 
 		if(snd == NULL)
 			data = 0xff;
 		else
 			data = *(snd+slen);
 		
-		for(i=0; i<8; i++)
-		{
+		for(i=0; i<8; i++){
 			mcu_io_output_resetbit(dev->clkport, dev->clkpin);
 
 			delay = node->clk;
-			while(delay>0)
-			{
+			while(delay>0){
 				delay--;	
 			}
 			
@@ -193,8 +185,7 @@ s32 mcu_vspi_transfer(DevSpiNode *node, u8 *snd, u8 *rsv, s32 len)
 				mcu_io_output_resetbit(dev->mosiport, dev->mosipin);
 			
 			delay = node->clk;
-			while(delay>0)
-			{
+			while(delay>0){
 				delay--;	
 			}
 			
@@ -202,24 +193,19 @@ s32 mcu_vspi_transfer(DevSpiNode *node, u8 *snd, u8 *rsv, s32 len)
 			mcu_io_output_setbit(dev->clkport, dev->clkpin);
 			
 			delay = node->clk;
-			while(delay>0)
-			{
+			while(delay>0){
 				delay--;	
 			}
 			
 			misosta = mcu_io_input_readbit(dev->misoport, dev->misopin);
-			if(misosta == MCU_IO_STA_1)
-			{
+			if(misosta == MCU_IO_STA_1){
 				data |=0x01;
-			}
-			else
-			{
+			}else{
 				data &=0xfe;
 			}
 			
 			delay = node->clk;
-			while(delay>0)
-			{
+			while(delay>0){
 				delay--;	
 			}
 			

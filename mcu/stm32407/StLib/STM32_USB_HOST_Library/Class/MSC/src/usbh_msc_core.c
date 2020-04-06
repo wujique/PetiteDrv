@@ -43,6 +43,8 @@
 #include "usbh_msc_scsi.h"
 #include "usbh_msc_bot.h"
 #include "usbh_core.h"
+
+#include "mcu.h"
 #include "log.h"
 
 

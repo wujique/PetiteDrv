@@ -11,6 +11,7 @@
  *   修改内容:   创建文件
 */
 #include "mcu.h"
+#include "bus_spi.h"
 #include "mcu_spi.h"
 #include "log.h"
 #include "board_sysconf.h"

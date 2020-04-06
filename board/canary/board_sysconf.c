@@ -24,25 +24,6 @@
 /*
 	本文件用于配置系统有哪些设备
 */
-
-/*
-	矩阵按键硬件定义
-	row输出，放前面
-*/
-KeyPadIO KeyPadIOList[KEY_PAD_ROW_NUM+KEY_PAD_COL_NUM]=
-		{
-			/*ROW*/
-			{MCU_PORT_E, GPIO_Pin_0},
-			{MCU_PORT_E, GPIO_Pin_1},
-			{MCU_PORT_E, GPIO_Pin_2},
-			{MCU_PORT_E, GPIO_Pin_3},
-			/*COL*/
-			{MCU_PORT_C, GPIO_Pin_3},
-			{MCU_PORT_C, GPIO_Pin_2},
-			{MCU_PORT_C, GPIO_Pin_1},
-			{MCU_PORT_C, GPIO_Pin_0},
-		};
-
 /*---------------之下，是SPI I2C LCD 等抽象的比较好的设备和接口定义----------------*/
 
 /*-------------------------------
@@ -56,10 +37,10 @@ const DevI2c DevVi2c1={
 		.type = DEV_I2C_V,
 		
 		.sclport = MCU_PORT_B,
-		.sclpin = GPIO_Pin_6,
+		.sclpin = MCU_IO_6,
 
 		.sdaport = MCU_PORT_B,
-		.sdapin = GPIO_Pin_7,
+		.sdapin = MCU_IO_7,
 		};
 		
 const DevI2c DevVi2c2={
@@ -67,10 +48,10 @@ const DevI2c DevVi2c2={
 		.type = DEV_I2C_V,
 		
 		.sclport = MCU_PORT_B,
-		.sclpin = GPIO_Pin_8,
+		.sclpin = MCU_IO_8,
 
 		.sdaport = MCU_PORT_B,
-		.sdapin = GPIO_Pin_9,
+		.sdapin = MCU_IO_9,
 		};
 
 /*
@@ -83,10 +64,10 @@ const DevI2c DevI2C1={
 		.type = DEV_I2C_H,
 		
 		.sclport = MCU_PORT_B,
-		.sclpin = GPIO_Pin_6,
+		.sclpin = MCU_IO_6,
 
 		.sdaport = MCU_PORT_B,
-		.sdapin = GPIO_Pin_7,
+		.sdapin = MCU_IO_7,
 		};	
 /*----------------------
 	IO口模拟SPI控制器
@@ -101,13 +82,13 @@ const DevSpi DevVSpi1IO={
 		
 		/*clk*/
 		.clkport = MCU_PORT_B,
-		.clkpin = GPIO_Pin_0,
+		.clkpin = MCU_IO_0,
 		/*mosi*/
 		.mosiport = MCU_PORT_C,
-		.mosipin = GPIO_Pin_5,
+		.mosipin = MCU_IO_5,
 		/*miso*/
 		.misoport = MCU_PORT_C,
-		.misopin = GPIO_Pin_4,
+		.misopin = MCU_IO_4,
 	};
 
 /* 
@@ -119,13 +100,13 @@ const DevSpi DevVSpi2IO={
 		
 		/*clk*/
 		.clkport = MCU_PORT_A,
-		.clkpin = GPIO_Pin_5,
+		.clkpin = MCU_IO_5,
 		/*mosi*/
 		.mosiport = MCU_PORT_A,
-		.mosipin = GPIO_Pin_7,
+		.mosipin = MCU_IO_7,
 		/*miso*/
 		.misoport = MCU_PORT_A,
-		.misopin = GPIO_Pin_6,
+		.misopin = MCU_IO_6,
 	};
 
 
@@ -140,15 +121,15 @@ const DevSpi DevSpi3IO={
 		
 		/*clk*/
 		.clkport = MCU_PORT_B,
-		.clkpin = GPIO_Pin_3,
+		.clkpin = MCU_IO_3,
 		
 		/*mosi*/
 		.mosiport = MCU_PORT_B,
-		.mosipin = GPIO_Pin_5,
+		.mosipin = MCU_IO_5,
 
 		/*miso*/
 		.misoport = MCU_PORT_B,
-		.misopin = GPIO_Pin_4,
+		.misopin = MCU_IO_4,
 	};
 
 /*------------------------ 
@@ -162,7 +143,7 @@ const DevSpiCh DevSpi3CH1={
 		.spi = "SPI3",
 		
 		.csport = MCU_PORT_C,
-		.cspin = GPIO_Pin_7,
+		.cspin = MCU_IO_7,
 		
 	};		
 	
@@ -191,7 +172,7 @@ const DevSpiCh DevVSpi2CH1={
 		.spi = "VSPI2",
 		
 		.csport = MCU_PORT_A,
-		.cspin = GPIO_Pin_4,
+		.cspin = MCU_IO_4,
 	};
 
 
@@ -203,7 +184,7 @@ const DevSpiCh DevVSpi1CH1={
 		.spi = "VSPI1",
 		
 		.csport = MCU_PORT_B,
-		.cspin = GPIO_Pin_1,
+		.cspin = MCU_IO_1,
 		
 	};
 #if 0		
@@ -215,7 +196,7 @@ const DevSpiCh DevVSpi1CH2={
 		.spi = "VSPI1",
 		
 		.csport = MCU_PORT_D,
-		.cspin = GPIO_Pin_14,
+		.cspin = MCU_IO_14,
 	};
 #endif
 
@@ -236,13 +217,13 @@ const DevLcdBus BusLcdSpi1={
 	.basebus = "VSPI2_CH1",
 
 	.A0port = MCU_PORT_E,
-	.A0pin = GPIO_Pin_4,
+	.A0pin = MCU_IO_4,
 
 	.rstport = MCU_PORT_E,
-	.rstpin = GPIO_Pin_5,
+	.rstpin = MCU_IO_5,
 
 	.blport = MCU_PORT_A,
-	.blpin = GPIO_Pin_9,
+	.blpin = MCU_IO_9,
 
 	.staport = MCU_PORT_NULL, 
 	.stapin = NULL,
@@ -298,10 +279,10 @@ const DevLcdBus BusLcd8080={
 	.A0pin = NULL,
 
 	.rstport = MCU_PORT_A,
-	.rstpin = GPIO_Pin_15,
+	.rstpin = MCU_IO_15,
 	
 	.blport = MCU_PORT_B,
-	.blpin = GPIO_Pin_15,
+	.blpin = MCU_IO_15,
 
 };
 

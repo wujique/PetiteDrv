@@ -336,7 +336,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\app;..\..\canary;..\..\..\driver;..\..\..\driver\lcd;..\..\..\driver\cdev;..\..\..\mcu\stm32f103;..\..\..\mcu\stm32f103\StLib\STM32F10x_StdPeriph_Driver\inc;..\..\..\mcu\stm32f103\mcu_dev;..\..\..\panel;..\..\..\Petite;..\..\..\Utilities\FreeRTOS\Source\include;..\..\..\Utilities\FreeRTOS\Source\portable\RVDS\ARM_CM3;..\..\..\Utilities\font;..\..\..\Utilities\tslib;..\usb_msc\inc;..\..\..\mcu\stm32f103\StLib\STM32_USB-FS-Device_Driver\inc;..\..\..\mcu\stm32f103\StLib\core</IncludePath>
+              <IncludePath>..\..\..\app;..\..\canary;..\..\..\driver;..\..\..\driver\lcd;..\..\..\driver\cdev;..\..\..\mcu\stm32f103;..\..\..\mcu\stm32f103\StLib\STM32F10x_StdPeriph_Driver\inc;..\..\..\mcu\stm32f103\mcu_dev;..\..\..\panel;..\..\..\Petite;..\..\..\Utilities\FreeRTOS\Source\include;..\..\..\Utilities\font;..\..\..\Utilities\tslib;..\usb_msc\inc;..\..\..\mcu\stm32f103\StLib\STM32_USB-FS-Device_Driver\inc;..\..\..\mcu\stm32f103\StLib\core;..\rtos</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -411,24 +411,34 @@
           <GroupName>board</GroupName>
           <Files>
             <File>
-              <FileName>canary_stm103.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\canary_stm103.c</FilePath>
-            </File>
-            <File>
               <FileName>board_sysconf.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\board_sysconf.c</FilePath>
             </File>
             <File>
-              <FileName>canary_main.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\canary_main.c</FilePath>
-            </File>
-            <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\main.c</FilePath>
+            </File>
+            <File>
+              <FileName>port.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\rtos\port.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f10x_it.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\stm32f10x_it.c</FilePath>
+            </File>
+            <File>
+              <FileName>board_test.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\board_test.c</FilePath>
+            </File>
+            <File>
+              <FileName>board_canary.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\board_canary.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -609,11 +619,6 @@
               <FileName>startup_stm32f10x_hd.s</FileName>
               <FileType>2</FileType>
               <FilePath>..\..\..\mcu\stm32f103\startup_stm32f10x_hd.s</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f10x_it.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32f103\stm32f10x_it.c</FilePath>
             </File>
             <File>
               <FileName>system_stm32f10x.c</FileName>
@@ -826,9 +831,9 @@
               <FilePath>..\..\..\Utilities\FreeRTOS\Source\frtos_timers.c</FilePath>
             </File>
             <File>
-              <FileName>port.c</FileName>
+              <FileName>heap_4.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\FreeRTOS\Source\portable\RVDS\ARM_CM3\port.c</FilePath>
+              <FilePath>..\..\..\Utilities\FreeRTOS\Source\portable\MemMang\heap_4.c</FilePath>
             </File>
           </Files>
         </Group>

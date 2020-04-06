@@ -2,6 +2,7 @@
 #define __DEV_SPIFLASH_H_
 
 #include "p_list.h"
+#include "bus_spi.h"
 
 /*SPI FLASH пео╒*/
 typedef struct

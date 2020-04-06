@@ -1,8 +1,6 @@
 #ifndef __BUS_VSPI_H_
 #define __BUS_VSPI_H_
 
-#include "bus_spi.h"
-
 extern s32 mcu_vspi_init(const DevSpi *dev);
 extern s32 mcu_vspi_open(DevSpiNode *node, SPI_MODE mode, u16 pre);
 extern s32 mcu_vspi_close(DevSpiNode *node);

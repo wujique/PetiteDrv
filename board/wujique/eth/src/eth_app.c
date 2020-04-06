@@ -30,7 +30,7 @@
 #include "netconf.h"
 #include "eth_app.h"
 #include "tcp_echoserver.h"
-#include <stdio.h>
+#include "mcu.h"
 #include "log.h"
 
 /* Private typedef -----------------------------------------------------------*/
