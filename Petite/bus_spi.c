@@ -47,7 +47,7 @@ struct list_head DevSpiRoot = {&DevSpiRoot, &DevSpiRoot};
  *@param[out]  无
  *@retval:     
  */
-s32 mcu_spi_register(const DevSpi *dev)
+s32 bus_spi_register(const DevSpi *dev)
 {
 
 	struct list_head *listp;
@@ -82,7 +82,7 @@ s32 mcu_spi_register(const DevSpi *dev)
 	
 	/*初始化*/
 	if(dev->type == DEV_SPI_V)
-		mcu_vspi_init(dev);
+		bus_vspi_init(dev);
 	else if(dev->type == DEV_SPI_H)
 		mcu_hspi_init(dev);
 	
@@ -99,7 +99,7 @@ struct list_head DevSpiChRoot = {&DevSpiChRoot, &DevSpiChRoot};
  *@param[out]  无
  *@retval:     
  */
-s32 mcu_spich_register(const DevSpiCh *dev)
+s32 bus_spich_register(const DevSpiCh *dev)
 {
 	struct list_head *listp;
 	DevSpiChNode *p;
@@ -170,7 +170,7 @@ s32 mcu_spich_register(const DevSpiCh *dev)
  *@retval:     
  			   打开一次SPI，在F407上大概要2us
  */
-DevSpiChNode *mcu_spi_open(char *name, SPI_MODE mode, u16 pre)
+DevSpiChNode *bus_spich_open(char *name, SPI_MODE mode, u16 pre)
 {
 
 	s32 res;
@@ -208,7 +208,7 @@ DevSpiChNode *mcu_spi_open(char *name, SPI_MODE mode, u16 pre)
 			if(node->spi->dev.type == DEV_SPI_H){
 				res = mcu_hspi_open(node->spi, mode, pre);	
 			}else if(node->spi->dev.type == DEV_SPI_V){
-				res = mcu_vspi_open(node->spi, mode, pre);	
+				res = bus_vspi_open(node->spi, mode, pre);	
 			}
 
 			if(res == 0){
@@ -234,12 +234,12 @@ DevSpiChNode *mcu_spi_open(char *name, SPI_MODE mode, u16 pre)
  *@param[out]  无
  *@retval:     
  */
-s32 mcu_spi_close(DevSpiChNode * node)
+s32 bus_spich_close(DevSpiChNode * node)
 {
 	if(node->spi->dev.type == DEV_SPI_H){
 		mcu_hspi_close(node->spi);
 	}else
-		mcu_vspi_close(node->spi);
+		bus_vspi_close(node->spi);
 	
 	/*拉高CS*/
 	mcu_io_output_setbit(node->dev.csport, node->dev.cspin);
@@ -257,14 +257,14 @@ s32 mcu_spi_close(DevSpiChNode * node)
  *@param[out]  无
  *@retval:     
  */
-s32 mcu_spi_transfer(DevSpiChNode * node, u8 *snd, u8 *rsv, s32 len)
+s32 bus_spich_transfer(DevSpiChNode * node, u8 *snd, u8 *rsv, s32 len)
 {
 	if(node == NULL)return -1;
 
 	if(node->spi->dev.type == DEV_SPI_H)
 		return mcu_hspi_transfer(node->spi, snd, rsv, len);
 	else if(node->spi->dev.type == DEV_SPI_V)	
-		return mcu_vspi_transfer(node->spi, snd, rsv, len);
+		return bus_vspi_transfer(node->spi, snd, rsv, len);
 	else{
 		BUSSPI_DEBUG(LOG_DEBUG, "spi dev type err\r\n");	
 	}
@@ -278,7 +278,7 @@ s32 mcu_spi_transfer(DevSpiChNode * node, u8 *snd, u8 *rsv, s32 len)
  *@param[out]  无
  *@retval:     
  */
-s32 mcu_spi_cs(DevSpiChNode * node, u8 sta)
+s32 bus_spich_cs(DevSpiChNode * node, u8 sta)
 {
 	switch(sta)
 	{

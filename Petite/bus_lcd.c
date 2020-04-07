@@ -110,7 +110,6 @@ s32 bus_lcd_rst(DevLcdBusNode *node, u8 sta)
  *@param[out]  
  *@retval:     
  */
-
 DevLcdBusNode *bus_lcd_open(char *name)
 {
 	/*找设备*/
@@ -122,8 +121,7 @@ DevLcdBusNode *bus_lcd_open(char *name)
 	listp = DevBusLcdRoot.next;
 	node = NULL;
 	
-	while(1)
-	{
+	while(1){
 		if(listp == &DevBusLcdRoot)	break;
 
 		node = list_entry(listp, DevLcdBusNode, list);
@@ -145,10 +143,10 @@ DevLcdBusNode *bus_lcd_open(char *name)
 		}else{
 			
 			if(node->dev.type == LCD_BUS_SPI){
-				node->basenode = (void *)mcu_spi_open(node->dev.basebus, SPI_MODE_3, SPI_BaudRatePrescaler_2);
+				node->basenode = (void *)bus_spich_open(node->dev.basebus, SPI_MODE_3, SPI_BaudRatePrescaler_2);
 
 			}else if(node->dev.type == LCD_BUS_I2C){
-				node->basenode = mcu_i2c_open(node->dev.basebus);
+				node->basenode = bus_i2c_open(node->dev.basebus);
 			}else if(node->dev.type == LCD_BUS_8080){
 				/*8080特殊处理*/
 				node->basenode = (void *)1;
@@ -181,10 +179,10 @@ s32 bus_lcd_close(DevLcdBusNode *node)
 	if(node->gd != 0)return -1;
 	
 	if(node->dev.type == LCD_BUS_SPI){
-		mcu_spi_close((DevSpiChNode *)node->basenode);
+		bus_spich_close((DevSpiChNode *)node->basenode);
 		
 	}else if(node->dev.type == LCD_BUS_I2C){
-		mcu_i2c_close((DevI2cNode *)node->basenode);	
+		bus_i2c_close((DevI2cNode *)node->basenode);	
 	}else if(node->dev.type == LCD_BUS_8080){
 		/*8080特殊处理*/
 		node->basenode = NULL;
@@ -213,14 +211,14 @@ s32 bus_lcd_write_data(DevLcdBusNode *node, u8 *data, u32 len)
 	{
 		case LCD_BUS_SPI:
 		{
-			mcu_spi_transfer((DevSpiChNode *)node->basenode,  data, NULL, len);
+			bus_spich_transfer((DevSpiChNode *)node->basenode,  data, NULL, len);
 		}
 		break;
 		case LCD_BUS_I2C:
 		{
 			tmp[0] = 0x40;
 			memcpy(&tmp[1], data, len);
-			mcu_i2c_transfer((DevI2cNode *)node->basenode, 0x3C, MCU_I2C_MODE_W, tmp, len+1);
+			bus_i2c_transfer((DevI2cNode *)node->basenode, 0x3C, MCU_I2C_MODE_W, tmp, len+1);
 		}
 		break;
 		case LCD_BUS_8080:			
@@ -426,7 +424,7 @@ s32 bus_lcd_read_data(DevLcdBusNode *node, u8 *data, u32 len)
 	{
 		case LCD_BUS_SPI:
 		{	
-			mcu_spi_transfer((DevSpiChNode *)node->basenode,  NULL, data, len);
+			bus_spich_transfer((DevSpiChNode *)node->basenode,  NULL, data, len);
 		}
 		break;
 		
@@ -468,7 +466,7 @@ s32 bus_lcd_write_cmd(DevLcdBusNode *node, u8 cmd)
 		{	
 			mcu_io_output_resetbit(node->dev.A0port, node->dev.A0pin);
 			tmp[0] = cmd;
-			mcu_spi_transfer((DevSpiChNode *)node->basenode,  &tmp[0], NULL, 1);
+			bus_spich_transfer((DevSpiChNode *)node->basenode,  &tmp[0], NULL, 1);
 			mcu_io_output_setbit(node->dev.A0port, node->dev.A0pin);
 		}
 		break;
@@ -478,7 +476,7 @@ s32 bus_lcd_write_cmd(DevLcdBusNode *node, u8 cmd)
 			tmp[0] = 0x00;
 			tmp[1] = cmd;
 			
-			mcu_i2c_transfer((DevI2cNode *)node->basenode, 0x3C, MCU_I2C_MODE_W, tmp, 2);
+			bus_i2c_transfer((DevI2cNode *)node->basenode, 0x3C, MCU_I2C_MODE_W, tmp, 2);
 		}
 		break;
 		

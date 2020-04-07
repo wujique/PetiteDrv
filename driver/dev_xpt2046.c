@@ -172,17 +172,17 @@ void dev_xpt2046_task(void)
 	
 	/*------------------------*/
 	
-	Xpt2046SpiCHNode = mcu_spi_open(XPT2046_SPI, SPI_MODE_0, XPT2046_SPI_PRE);
+	Xpt2046SpiCHNode = bus_spich_open(XPT2046_SPI, SPI_MODE_0, XPT2046_SPI_PRE);
 
 	if(Xpt2046SpiCHNode == NULL)
 		return;
 	
 	stmp[0] = XPT2046_CMD_Z2;
-	mcu_spi_transfer(Xpt2046SpiCHNode, stmp, NULL, 1);
+	bus_spich_transfer(Xpt2046SpiCHNode, stmp, NULL, 1);
 	//vspi_delay(100);
 	stmp[0] = 0x00;
 	stmp[1] = XPT2046_CMD_Z1;
-	mcu_spi_transfer(Xpt2046SpiCHNode, stmp, rtmp, 2);
+	bus_spich_transfer(Xpt2046SpiCHNode, stmp, rtmp, 2);
 	//wjq_log(LOG_DEBUG, "%d, %d- ", rtmp[0], rtmp[1]);
 	
 	pre_y = ((u16)(rtmp[0]&0x7f)<<5) + (rtmp[1]>>3);
@@ -190,22 +190,22 @@ void dev_xpt2046_task(void)
 	//vspi_delay(100);
 	stmp[0] = 0x00;
 	stmp[1] = XPT2046_CMD_X;
-	mcu_spi_transfer(Xpt2046SpiCHNode, stmp, rtmp, 2);
+	bus_spich_transfer(Xpt2046SpiCHNode, stmp, rtmp, 2);
 	pre_x = ((u16)(rtmp[0]&0x7f)<<5) + (rtmp[1]>>3);
 	/*------------------------*/
 	//vspi_delay(100);
 	stmp[0] = 0x00;
 	stmp[1] = XPT2046_CMD_Y;
-	mcu_spi_transfer(Xpt2046SpiCHNode, stmp, rtmp, 2);
+	bus_spich_transfer(Xpt2046SpiCHNode, stmp, rtmp, 2);
 	sample_x = ((u16)(rtmp[0]&0x7f)<<5) + (rtmp[1]>>3);
 	/*------------------------*/
 	//vspi_delay(100);
 	stmp[0] = 0x00;
 	stmp[1] = 0X00;
-	mcu_spi_transfer(Xpt2046SpiCHNode, stmp, rtmp, 2);
+	bus_spich_transfer(Xpt2046SpiCHNode, stmp, rtmp, 2);
 	sample_y = ((u16)(rtmp[0]&0x7f)<<5) + (rtmp[1]>>3);
 	
-	mcu_spi_close(Xpt2046SpiCHNode);
+	bus_spich_close(Xpt2046SpiCHNode);
 
 	/*
 		À„—π¡¶

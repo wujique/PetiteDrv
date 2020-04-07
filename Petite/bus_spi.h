@@ -88,13 +88,13 @@ typedef struct
 }DevSpiChNode;
 
 
-extern s32 mcu_spi_register(const DevSpi *dev);
-extern s32 mcu_spich_register(const DevSpiCh *dev);
+extern s32 bus_spi_register(const DevSpi *dev);
+extern s32 bus_spich_register(const DevSpiCh *dev);
 
-extern DevSpiChNode *mcu_spi_open(char *name, SPI_MODE mode, u16 pre);
-extern s32 mcu_spi_close(DevSpiChNode * node);
-extern s32 mcu_spi_transfer(DevSpiChNode * node, u8 *snd, u8 *rsv, s32 len);
-extern s32 mcu_spi_cs(DevSpiChNode * node, u8 sta);
+extern DevSpiChNode *bus_spich_open(char *name, SPI_MODE mode, u16 pre);
+extern s32 bus_spich_close(DevSpiChNode * node);
+extern s32 bus_spich_transfer(DevSpiChNode * node, u8 *snd, u8 *rsv, s32 len);
+extern s32 bus_spich_cs(DevSpiChNode * node, u8 sta);
 
 
 #endif

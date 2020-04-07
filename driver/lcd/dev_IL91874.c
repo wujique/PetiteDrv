@@ -137,17 +137,17 @@ void SPI_Delay(unsigned char xrate)
 */
 s32 drv_il91874_write_cmd(DevLcdBusNode *node, u8 cmd)
 {
-	mcu_spi_cs((DevSpiChNode *)node->basenode, 0);
+	bus_spich_cs((DevSpiChNode *)node->basenode, 0);
 	bus_lcd_write_cmd(node, cmd);
-	mcu_spi_cs((DevSpiChNode *)node->basenode, 1);
+	bus_spich_cs((DevSpiChNode *)node->basenode, 1);
 	return 0;
 }
 
 s32 drv_il91874_write_data(DevLcdBusNode *node, u8 *data, u32 len)
 {
-	mcu_spi_cs((DevSpiChNode *)node->basenode, 0);
+	bus_spich_cs((DevSpiChNode *)node->basenode, 0);
 	bus_lcd_write_data(node, data, len);
-	mcu_spi_cs((DevSpiChNode *)node->basenode, 1);
+	bus_spich_cs((DevSpiChNode *)node->basenode, 1);
 	return 0;
 }
 

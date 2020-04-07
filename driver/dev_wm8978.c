@@ -60,9 +60,9 @@ s32 dev_wm8978_writereg(u8 reg, u16 vaule)
 	data[0] = (reg<<1) | ((vaule>>8)&0x01);
 	data[1] = vaule & 0xff;
 
-	dev = mcu_i2c_open(DEV_WM8978_I2CBUS);
-	ret = mcu_i2c_transfer(dev, WM8978_SLAVE_ADDRESS, MCU_I2C_MODE_W, data, 2);
-	mcu_i2c_close(dev);
+	dev = bus_i2c_open(DEV_WM8978_I2CBUS);
+	ret = bus_i2c_transfer(dev, WM8978_SLAVE_ADDRESS, MCU_I2C_MODE_W, data, 2);
+	bus_i2c_close(dev);
 	
 	if(ret == 0)
 	{

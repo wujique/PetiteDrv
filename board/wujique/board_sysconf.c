@@ -467,7 +467,7 @@ s32 sys_dev_register(void)
 {
 	wjq_log(LOG_DEBUG, "***board: sys_dev_register!***\r\n");
 	/*注册I2C总线*/
-	mcu_i2c_register(&DevVi2c1);
+	bus_i2c_register(&DevVi2c1);
 			dev_lcdbus_register(&BusLcdI2C1);
 					dev_lcd_register(&DevLcdOled1);
 					
@@ -476,27 +476,27 @@ s32 sys_dev_register(void)
 	#endif
 	
 	/*硬SPI3控制器，核心板和底板的FLASH、外扩接口的SPI口*/
-	mcu_spi_register(&DevSpi3IO);
-			mcu_spich_register(&DevSpi3CH1);
+	bus_spi_register(&DevSpi3IO);
+			bus_spich_register(&DevSpi3CH1);
 					dev_spiflash_register(&DevSpiFlashBoard);
-			mcu_spich_register(&DevSpi3CH2);
+			bus_spich_register(&DevSpi3CH2);
 					dev_spiflash_register(&DevSpiFlashCore);
-			mcu_spich_register(&DevSpi3CH3);
+			bus_spich_register(&DevSpi3CH3);
 					//dev_lcdbus_register(&BusLcdSpi3);
 						//dev_lcd_register(&DevLcdSPIEPaper);
 							//dev_lcd_register(&DevLcdCOG1);
 			//mcu_spich_register(&DevSpi3CH4);
 	
 	#ifdef SYS_USE_VSPI1
-	mcu_spi_register(&DevVSpi1IO);
-			mcu_spich_register(&DevVSpi1CH1);//8080接口的触摸屏
+	bus_spi_register(&DevVSpi1IO);
+			bus_spich_register(&DevVSpi1CH1);//8080接口的触摸屏
 			//mcu_spich_register(&DevVSpi1CH2);
 					//dev_lcdbus_register(&BusLcdVSpi1CH2);
 	#endif
 	
 	#ifdef SYS_USE_VSPI2
-	mcu_spi_register(&DevVspi2IO);
-			mcu_spich_register(&DevVSpi2CH1);
+	bus_spi_register(&DevVspi2IO);
+			bus_spich_register(&DevVSpi2CH1);
 					dev_lcdbus_register(&BusLcdVSpi2CH1);
 							dev_lcd_register(&DevLcdSpiOled);
 	#endif

@@ -26,20 +26,17 @@
 #include "bus_vi2c.h"
 #include "alloc.h"
 
-/*
-	I2C模块维护一个链表，记录有当前初始化的I2C控制器
-*/
+/*	I2C模块维护一个链表，记录有当前初始化的I2C控制器*/
 struct list_head DevI2cGdRoot = {&DevI2cGdRoot, &DevI2cGdRoot};
 
-
 /**
- *@brief:      mcu_i2c_register
+ *@brief:      bus_i2c_register
  *@details:    初始化I2C接口， 相当于注册一个I2C设备
  *@param[in]   const DevI2c * dev I2C设备信息
  *@param[out]  无
  *@retval:     
  */
-s32 mcu_i2c_register(const DevI2c * dev)
+s32 bus_i2c_register(const DevI2c * dev)
 {
     
 	struct list_head *listp;
@@ -84,13 +81,13 @@ s32 mcu_i2c_register(const DevI2c * dev)
 	return 0;
 }
 /**
- *@brief:      mcu_i2c_open
+ *@brief:      bus_i2c_open
  *@details:    根据名字打开一个i2c接口
  *@param[in]   void  
  *@param[out]  无
  *@retval:     返回设备节点
  */
-DevI2cNode *mcu_i2c_open(char *name)
+DevI2cNode *bus_i2c_open(char *name)
 {
 
 	DevI2cNode *node;
@@ -131,7 +128,7 @@ DevI2cNode *mcu_i2c_open(char *name)
  *@param[out]  无
  *@retval:     -1 关闭失败；0 关闭成功
  */
-s32 mcu_i2c_close(DevI2cNode *node)
+s32 bus_i2c_close(DevI2cNode *node)
 {
 	if(node == NULL)return -1;
 
@@ -153,7 +150,7 @@ s32 mcu_i2c_close(DevI2cNode *node)
  *@param[out]  无
  *@retval:     
  */
-s32 mcu_i2c_transfer(DevI2cNode *node, u8 addr, u8 rw, u8* data, s32 datalen)
+s32 bus_i2c_transfer(DevI2cNode *node, u8 addr, u8 rw, u8* data, s32 datalen)
 {
 	if(node == NULL)return -1;
 

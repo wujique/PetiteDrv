@@ -358,23 +358,23 @@ s32 sys_dev_register(void)
 {
 	wjq_log(LOG_INFO, "[----------register---------------]\r\n");
 	/*注册I2C总线*/
-	mcu_i2c_register(&DevVi2c1);
+	bus_i2c_register(&DevVi2c1);
 			dev_lcdbus_register(&BusLcdI2C1);
 					dev_lcd_register(&DevLcdOled1);
 					
 	//mcu_i2c_register(&DevVi2c2);
 	
-	mcu_spi_register(&DevSpi3IO);
-			mcu_spich_register(&DevSpi3CH1);
+	bus_spi_register(&DevSpi3IO);
+			bus_spich_register(&DevSpi3CH1);
 					dev_spiflash_register(&DevSpiFlashBoard);
 
-	mcu_spi_register(&DevVSpi2IO);
-		mcu_spich_register(&DevVSpi2CH1);
+	bus_spi_register(&DevVSpi2IO);
+		bus_spich_register(&DevVSpi2CH1);
 			dev_lcdbus_register(&BusLcdSpi1);
 					dev_lcd_register(&DevLcdCOG1);				
 					
-	mcu_spi_register(&DevVSpi1IO);
-			mcu_spich_register(&DevVSpi1CH1);//8080接口的触摸屏
+	bus_spi_register(&DevVSpi1IO);
+			bus_spich_register(&DevVSpi1CH1);//8080接口的触摸屏
 	
 	dev_lcdbus_register(&BusLcd8080);
 			dev_lcd_register(&DevLcdtTFT);

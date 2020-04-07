@@ -50,9 +50,7 @@ typedef struct
 	char name[DEV_NAME_SIZE]; //设备名字
 	
 	char buslcd[DEV_NAME_SIZE]; //挂在那条LCD总线上
-	
 	u16 id;
-
 	u16 width;	//LCD 宽度   竖屏
 	u16 height;	//LCD 高度    竖屏
 }DevLcd;

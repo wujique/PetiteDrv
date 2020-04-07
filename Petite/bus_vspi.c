@@ -43,7 +43,7 @@
  *@param[out]  无
  *@retval:     
  */
-s32 mcu_vspi_init(const DevSpi *dev)
+s32 bus_vspi_init(const DevSpi *dev)
 {
 
 	wjq_log(LOG_DEBUG, "vspi init:%s\r\n", dev->name);
@@ -90,7 +90,7 @@ u32 VspiDelay = 0;
  *@param[out]  无
  *@retval:     
  */
-s32 mcu_vspi_open(DevSpiNode *node, SPI_MODE mode, u16 pre)
+s32 bus_vspi_open(DevSpiNode *node, SPI_MODE mode, u16 pre)
 {
 
 	if(node == NULL)return -1;
@@ -114,7 +114,7 @@ s32 mcu_vspi_open(DevSpiNode *node, SPI_MODE mode, u16 pre)
  *@param[out]  无
  *@retval:     
  */
-s32 mcu_vspi_close(DevSpiNode *node)
+s32 bus_vspi_close(DevSpiNode *node)
 {
 	if(node->gd != 0)return -1;
 	//VSPI_DEBUG(LOG_DEBUG, "vc-");
@@ -134,7 +134,7 @@ s32 mcu_vspi_close(DevSpiNode *node)
 
  		node->clk = 0, CLK时钟1.5M 2018.06.02
  */
-s32 mcu_vspi_transfer(DevSpiNode *node, u8 *snd, u8 *rsv, s32 len)
+s32 bus_vspi_transfer(DevSpiNode *node, u8 *snd, u8 *rsv, s32 len)
 {
 	u8 i;
 	u8 data;

@@ -65,9 +65,9 @@ s32 dev_htu21d_init(void)
 
 	tmp[0] = HTU21D_CMD_RESET;
 	
-	dev = mcu_i2c_open(DEV_HTU21D_I2CBUS);
-    mcu_i2c_transfer(dev, HTU21D_I2C_ADDR, MCU_I2C_MODE_W, tmp, 1);
-	mcu_i2c_close(dev);
+	dev = bus_i2c_open(DEV_HTU21D_I2CBUS);
+    bus_i2c_transfer(dev, HTU21D_I2C_ADDR, MCU_I2C_MODE_W, tmp, 1);
+	bus_i2c_close(dev);
 	return 0;	
 }
 /**
@@ -104,30 +104,26 @@ s32 dev_htu21d_read(u8 type)
 	else
 		return -1;
 	
-	dev = mcu_i2c_open(DEV_HTU21D_I2CBUS);
+	dev = bus_i2c_open(DEV_HTU21D_I2CBUS);
 	wjq_log(LOG_INFO, "HTU21D_CMD_TTM_NH\r\n");	
-    mcu_i2c_transfer(dev, HTU21D_I2C_ADDR, MCU_I2C_MODE_W, tmp, 1);
+    bus_i2c_transfer(dev, HTU21D_I2C_ADDR, MCU_I2C_MODE_W, tmp, 1);
 
 	wjq_log(LOG_INFO, "read data \r\n");
 	temp = 0;
-	while(1)
-	{
+	while(1){
 		Delay(5);
-		res = mcu_i2c_transfer(dev, HTU21D_I2C_ADDR, MCU_I2C_MODE_R, tmp, 3);
-		if(res == 0)
-			break;	
+		res = bus_i2c_transfer(dev, HTU21D_I2C_ADDR, MCU_I2C_MODE_R, tmp, 3);
+		if(res == 0)break;	
 		
 		temp++;
-		if(temp >= 10)
-		{
+		if(temp >= 10){
 			res = -1;
 			break;
 		}
 	}
-	mcu_i2c_close(dev);
+	bus_i2c_close(dev);
 	
-	if(res == -1)
-		return -1;
+	if(res == -1)return -1;
 	
 	/**/
 	wjq_log(LOG_INFO, " %02x %02x %02x\r\n", tmp[0], tmp[1], tmp[2]);
@@ -136,13 +132,10 @@ s32 dev_htu21d_read(u8 type)
 	//计算温湿度
 	data = tmp[0]*256+(tmp[1]&0xfc);
 	
-	if((tmp[1] & 0x02) == 0x00)//温度测量
-	{
+	if((tmp[1] & 0x02) == 0x00){//温度测量
 		temp = ((17572*data)>>16)-4685;
 		wjq_log(LOG_INFO, "data: %d, temp:%d\r\n", data, temp);
-	}
-	else//湿度测量
-	{
+	}else{//湿度测量
 		temp = ((125*data)>>16)-6;
 		wjq_log(LOG_INFO, "data: %d, humi:%d\r\n", data, temp);	
 	}

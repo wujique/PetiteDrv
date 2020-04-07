@@ -56,18 +56,18 @@ u8 tea5767_initbuf[5]={0xaa,0xb6,0x51,0x11,0x40};//静音，上电初始化
 static s32 dev_tea5767_readreg(u8* data)
 {
 	DevI2cNode *dev;
-	dev = mcu_i2c_open(DEV_TEA5767_I2CBUS);
-	mcu_i2c_transfer(dev, DEV_TEA5767_I2CC_ADDR, MCU_I2C_MODE_R, data, 5);
-	mcu_i2c_close(dev);	
+	dev = bus_i2c_open(DEV_TEA5767_I2CBUS);
+	bus_i2c_transfer(dev, DEV_TEA5767_I2CC_ADDR, MCU_I2C_MODE_R, data, 5);
+	bus_i2c_close(dev);	
 	return 0;
 }
 static s32 dev_tea5767_writereg(u8* data)
 {
 	DevI2cNode *dev;
 
-	dev = mcu_i2c_open(DEV_TEA5767_I2CBUS);
-    mcu_i2c_transfer(dev, DEV_TEA5767_I2CC_ADDR, MCU_I2C_MODE_W, data, 5);
-	mcu_i2c_close(dev);
+	dev = bus_i2c_open(DEV_TEA5767_I2CBUS);
+    bus_i2c_transfer(dev, DEV_TEA5767_I2CC_ADDR, MCU_I2C_MODE_W, data, 5);
+	bus_i2c_close(dev);
 	return 0;	
 }
 
@@ -80,13 +80,10 @@ static s32 dev_tea5767_writereg(u8* data)
  */
 static u32 dev_tea5767_fre2pll(u8 hlsi, u32 fre)
 {
-    if (hlsi)
-    {
+    if (hlsi){
         //return (((fre+225)*4000)/32768);
 		return (u32)((float)((fre+225))/(float)8.192);
-    }
-	else
-	{
+    }else{
         //return (((fre-225)*4000)/32768);
 		return (u32)((float)((fre-225))/(float)8.192);
 	}
@@ -187,27 +184,19 @@ s32 dev_tea5767_auto_search(u8 mode)
 	dev_tea5767_readreg(tea5767_readbuf);
 	dev_tea5767_getfre();
 
-    if(mode)
-    {
+    if(mode){
         tea5767_writebuf[2] |=0x80;
 
-    }
-    else
-    {
+    }else{
         tea5767_writebuf[2] &=0x7f; 
     }          
 	
-	while(1)
-	{
+	while(1){
 		flag = 0;
 		
-		if(mode)
-    	{
+		if(mode){
         	Tea5767Fre += 20;
-
-    	}
-    	else
-    	{
+    	}else{
         	Tea5767Fre -= 20;
     	} 
 		TEA5767_DEBUG(LOG_DEBUG, "Tea5767Fre:%d\r\n", Tea5767Fre);
@@ -217,20 +206,17 @@ s32 dev_tea5767_auto_search(u8 mode)
 		tea5767_writebuf[1]=Tea5767Pll%256;   
 
 		dev_tea5767_writereg(tea5767_writebuf);
-	    while(1)     
-	    {
+	    while(1){
 	        dev_tea5767_readreg(tea5767_readbuf);
-	        if(0x80 == (tea5767_readbuf[0]&0x80))//搜台成功标志
-	        {
+			//搜台成功标志
+	        if(0x80 == (tea5767_readbuf[0]&0x80)){
 				dev_tea5767_getfre();
 				if_counter = tea5767_readbuf[2]&0x7f;
-				if((0x31 < if_counter) && (0x3e > if_counter))
-				{         
+				if((0x31 < if_counter) && (0x3e > if_counter)){         
 					adc = (tea5767_readbuf[3]>>4);
 					TEA5767_DEBUG(LOG_DEBUG, "fre:%d, adc:%d\r\n", Tea5767Fre, adc);
 					//比较leve 电平确认是否收到台 实际测试使用此数 不会漏台
-					if( adc >= 8)
-					{
+					if( adc >= 8){
 						TEA5767_DEBUG(LOG_DEBUG, "fre: \r\n", Tea5767Fre);
 						return 0;
 					}
@@ -238,8 +224,7 @@ s32 dev_tea5767_auto_search(u8 mode)
 	            flag = 1;
 	        }
 
-			if(0x60 == (tea5767_readbuf[0]&0x60))//到达频率极限
-			{
+			if(0x60 == (tea5767_readbuf[0]&0x60)){//到达频率极限
 				TEA5767_DEBUG(LOG_DEBUG, "tea5767  search fail!\r\n");
 				
 				if(mode)
@@ -250,8 +235,7 @@ s32 dev_tea5767_auto_search(u8 mode)
 				flag = 1;
 			}
 
-			if(flag == 1)
-			{
+			if(flag == 1){
 				break;
 			}
 	    }  
@@ -274,21 +258,17 @@ s32 dev_tea5767_search(u8 mode)
 	dev_tea5767_getfre();
     TEA5767_DEBUG(LOG_DEBUG, "Tea5767Fre:%d\r\n", Tea5767Fre);
 
-	if(mode)
-	{
+	if(mode){
 	    Tea5767Fre += 100;
 		if(Tea5767Fre > TEA5767_MAX_FREQ)
 			Tea5767Fre = TEA5767_MIN_FREQ;
-	}
-	else
-	{
+	}else{
 	    Tea5767Fre -= 100;
 		if(Tea5767Fre < TEA5767_MIN_FREQ)
 			Tea5767Fre = TEA5767_MAX_FREQ;
 	}
 	
-	while(1)
-	{
+	while(1){
 		
 		dev_tea5767_setfre(Tea5767Fre);
 		
@@ -296,20 +276,16 @@ s32 dev_tea5767_search(u8 mode)
 		dev_tea5767_readreg(tea5767_readbuf);
 		adc = (tea5767_readbuf[3]>>4);
 		
-		if( adc >=7)
-		{
+		if( adc >=7){
 			TEA5767_DEBUG(LOG_DEBUG, "fre:%d, adc:%d\r\n", Tea5767Fre, adc);
 			return 0;
 		}
 
-		if(mode)
-		{
+		if(mode){
 		    Tea5767Fre += 20;
 			if(Tea5767Fre > TEA5767_MAX_FREQ)
 				Tea5767Fre = TEA5767_MIN_FREQ;
-		}
-		else
-		{
+		}else{
 		    Tea5767Fre -= 20;
 			if(Tea5767Fre < TEA5767_MIN_FREQ)
 				Tea5767Fre = TEA5767_MAX_FREQ;
@@ -369,8 +345,7 @@ s32 dev_tea5767_test(void)
 
     dev_tea5767_open();
 	dev_tea5767_setfre(89800);
-	while(1)
-	{
+	while(1){
 		Delay(5000);
 		dev_tea5767_auto_search(1);
 	}
