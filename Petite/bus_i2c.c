@@ -27,9 +27,7 @@
 #include "alloc.h"
 
 /*
-
 	I2C模块维护一个链表，记录有当前初始化的I2C控制器
-
 */
 struct list_head DevI2cGdRoot = {&DevI2cGdRoot, &DevI2cGdRoot};
 
@@ -49,9 +47,7 @@ s32 mcu_i2c_register(const DevI2c * dev)
 	
 	wjq_log(LOG_INFO, "[register] i2c:%s!\r\n", dev->name);
 
-	/*
-		先要查询当前I2C控制器，防止重名
-	*/
+	/*	先要查询当前I2C控制器，防止重名	*/
 	listp = DevI2cGdRoot.next;
 	while(1){
 		if(listp == &DevI2cGdRoot)break;
@@ -81,7 +77,7 @@ s32 mcu_i2c_register(const DevI2c * dev)
 	p->gd = -1;
 
 	if(dev->type == DEV_I2C_V)
-		mcu_vi2c_init(&p->dev);
+		bus_vi2c_init(&p->dev);
 	else if(dev->type == DEV_I2C_H)
 		mcu_hi2c_init(&p->dev);
 	
@@ -164,7 +160,7 @@ s32 mcu_i2c_transfer(DevI2cNode *node, u8 addr, u8 rw, u8* data, s32 datalen)
 	if(node->dev.type == DEV_I2C_H)
 		return mcu_hi2c_transfer(node, addr, rw, data, datalen);
 	else if(node->dev.type == DEV_I2C_V)	
-		return mcu_vi2c_transfer(node, addr, rw, data, datalen);
+		return bus_vi2c_transfer(node, addr, rw, data, datalen);
 	else{
 		wjq_log(LOG_DEBUG, "i2c dev type err\r\n");	
 	}	
