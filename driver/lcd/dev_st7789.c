@@ -32,8 +32,8 @@
 
 extern void Delay(__IO uint32_t nTime);
 
+#if( LCD_DRIVER_7789 == 1 )
 
-#ifdef TFT_LCD_DRIVER_7789
 #define ST7789_CMD_WRAM 0x2c
 #define ST7789_CMD_SETX 0x2a
 #define ST7789_CMD_SETY 0x2b

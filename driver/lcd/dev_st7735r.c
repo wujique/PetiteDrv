@@ -32,8 +32,8 @@
 
 extern void Delay(__IO uint32_t nTime);
 
+#if( LCD_DRIVER_7735 == 1 )
 
-#ifdef TFT_LCD_DRIVER_7735
 #define ST7735R_CMD_WRAM 0x2c
 #define ST7735R_CMD_SETX 0x2a
 #define ST7735R_CMD_SETY 0x2b

@@ -11,17 +11,14 @@
 #ifndef _VIDEO_FONT_H
 #define _VIDEO_FONT_H
 
-
-
+/* github 上有一个 DisplayCore, 计划参考它来做字库管理 */
 struct fbcon_font_desc 
 {
-
-    char *name;
-	char *path;
-    u16 width, height;
+    char *name;//字库名称
+	char *path;//字库路径
+    u16 width, height;//字库宽度与高度
 	u16 size;//每个字符字节数
 };
-
 
 extern struct fbcon_font_desc font_vga_8x8;
 extern struct fbcon_font_desc font_vga_8x16;

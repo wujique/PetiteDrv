@@ -19,11 +19,7 @@
 		7 如侵犯你的权利，请联系：code@wujique.com
 		8 一切解释权归屋脊雀工作室所有。
 */
-/*
-
-	COG LCD 的驱动
-
-*/
+/*	COG LCD 的驱动*/
 #include "mcu.h"
 #include "main.h"
 #include "log.h"
@@ -34,10 +30,7 @@
 #include "dev_lcd.h"
 #include "dev_str7565.h"
 
-
-/*
-	驱动使用的数据结构，不对外
-*/
+/*	驱动使用的数据结构，不对外*/
 struct _cog_drv_data
 {
 	u8 gram[8][128];
@@ -54,7 +47,7 @@ struct _cog_drv_data
 };	
 
 
-#ifdef TFT_LCD_DRIVER_COG12864
+#if( LCD_DRIVER_ST7565 == 1 )
 
 s32 drv_ST7565_init(DevLcdNode *lcd);
 static s32 drv_ST7565_drawpoint(DevLcdNode *lcd, u16 x, u16 y, u16 color);
@@ -68,11 +61,7 @@ s32 drv_ST7565_flush(DevLcdNode *lcd, u16 *color, u32 len);
 s32 drv_ST7565_update(DevLcdNode *lcd);
 
 
-/*
-
-	定义一个TFT LCD，使用ST7565驱动IC的设备
-
-*/
+/*	定义一个TFT LCD，使用ST7565驱动IC的设备*/
 _lcd_drv CogLcdST7565Drv = {
 							.id = 0X7565,
 
@@ -636,13 +625,10 @@ s32 drv_ST7565_update(DevLcdNode *lcd)
 #endif
 
 
-/*
-
-	OLED 跟 COG LCD 操作类似
+/*	OLED 跟 COG LCD 操作类似
 	仅仅初始化不一样
-	OLED有两种驱动，SSD1315，SSD1615，一样的。
-*/
-#ifdef TFT_LCD_DRIVER_SSD1615
+	OLED有两种驱动，SSD1315，SSD1615，一样的。*/
+#if( LCD_DRIVER_SSD1615 == 1 )
 
 /**
  *@brief:	   drv_ssd1615_init

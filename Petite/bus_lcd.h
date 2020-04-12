@@ -2,32 +2,19 @@
 #define _DEV_LCDBUS_H_
 
 #include "p_list.h"
-#include "petie_def.h"
+#include "petite_def.h"
 
-/*
-	系统总共有三种LCD总线, SPI,I2C,8080
-	*/
-typedef enum{
-	LCD_BUS_NULL = 0,
-	LCD_BUS_SPI,
-	LCD_BUS_I2C,
-	LCD_BUS_8080,
-	LCD_BUS_MAX
-}LcdBusType;
 
+/*LCD 总线定义 */
 typedef struct
 {
-	/*设备名称*/
-	char name[DEV_NAME_SIZE];
-	/*总线类型：SPI or I2C or 8080*/
-	LcdBusType type;
-	/*总线名字*/
+	PetiteNode pnode;
+	
+	/*依赖总线名字*/
 	char basebus[DEV_NAME_SIZE];
 
-	/*
-		3根线：A0-命令数据，rst-复位，bl-背光
-		I2C总线的LCD不需要这三根线
-	*/
+	/*	3根线：A0-命令数据，rst-复位，bl-背光
+		I2C总线的LCD不需要这三根线    	*/
 
 	MCU_PORT A0port;
 	u16 A0pin;
@@ -42,14 +29,14 @@ typedef struct
 	MCU_PORT staport;
 	u16 stapin;
 }DevLcdBus;
-
+/* 设备节点定义 */
 typedef struct
 {
-	s32 gd;
 	
 	DevLcdBus dev;
 
-	void *basenode;
+	s32 gd;	
+	void *basenode;	
 	
 	struct list_head list;
 }DevLcdBusNode;

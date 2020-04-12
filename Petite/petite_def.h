@@ -7,6 +7,17 @@
 /* 设备名长度 */
 #define DEV_NAME_SIZE	16
 
+/* 	用宏控制哪些LCD驱动参加编译*/
+#define TFT_LCD_DRIVER_COG12864
+#define TFT_LCD_DRIVER_SSD1615
+#define TFT_LCD_DRIVER_9341
+#define TFT_LCD_DRIVER_9341_8BIT
+#define TFT_LCD_DRIVER_9325
+#define TFT_LCD_DRIVER_7735
+#define TFT_LCD_DRIVER_7789
+#define TFT_LCD_DRIVER_91874
+#define TFT_LCD_DRIVER_3820
+
 /*设备类型定义*/
 typedef enum{
 	DEV_NULL = 0,

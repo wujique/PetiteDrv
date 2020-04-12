@@ -73,7 +73,7 @@ void bus_vi2c_sda_output(DevI2c *dev)
 static s32 bus_vi2c_readsda(DevI2c *dev)
 {
 
-    if(MCU_IO_STA_1 == mcu_io_input_readbit(dev->sdaport, dev->sdapin))
+    if (MCU_IO_STA_1 == mcu_io_input_readbit(dev->sdaport, dev->sdapin))
         return MCU_IO_STA_1;
     else
         return MCU_IO_STA_0;
@@ -88,10 +88,9 @@ static s32 bus_vi2c_readsda(DevI2c *dev)
 static void bus_vi2c_sda(DevI2c *dev, u8 sta)
 {
 
-    if(sta == MCU_IO_STA_1) {
+    if (sta == MCU_IO_STA_1) {
 		mcu_io_output_setbit(dev->sdaport, dev->sdapin);
-    }else if(sta == MCU_IO_STA_0)
-    {
+    } else if (sta == MCU_IO_STA_0) {
     	mcu_io_output_resetbit(dev->sdaport, dev->sdapin);
     }
 
@@ -107,9 +106,9 @@ static void bus_vi2c_sda(DevI2c *dev, u8 sta)
 static void bus_vi2c_scl(DevI2c *dev, u8 sta)
 {
 
-	if(sta == MCU_IO_STA_1){
+	if (sta == MCU_IO_STA_1) {
 		mcu_io_output_setbit(dev->sclport, dev->sclpin);
-    }else if(sta == MCU_IO_STA_0){
+    } else if (sta == MCU_IO_STA_0) {
     	mcu_io_output_resetbit(dev->sclport, dev->sclpin);
     }
 }
@@ -174,15 +173,15 @@ static s32 bus_vi2c_wait_ack(DevI2c *dev)
     bus_vi2c_scl(dev, MCU_IO_STA_1);
     bus_vi2c_delay();
     
-    while(1){
+    while(1) {
         time_out++;
-        if(time_out > MCU_I2C_TIMEOUT){
+        if (time_out > MCU_I2C_TIMEOUT) {
             bus_vi2c_stop(dev);
             //wjq_log(LOG_ERR, "i2c:wait ack time out!\r\n");
             return 1;
         }
 
-        if(MCU_IO_STA_0 == bus_vi2c_readsda(dev)){   
+        if (MCU_IO_STA_0 == bus_vi2c_readsda(dev)) {   
             break;
         }
     }
@@ -226,11 +225,11 @@ static s32 bus_vi2c_writebyte(DevI2c *dev, u8 data)
 
     bus_vi2c_scl(dev, MCU_IO_STA_0);
     
-    while(i<8){
+    while(i<8) {
     
-        if((0x80 & data) == 0x80){
+        if ((0x80 & data) == 0x80) {
             bus_vi2c_sda(dev, MCU_IO_STA_1);   
-        }else{
+        } else {
             bus_vi2c_sda(dev, MCU_IO_STA_0);
         }
         
@@ -261,7 +260,7 @@ static u8 bus_vi2c_readbyte(DevI2c *dev)
 
     bus_vi2c_sda_input(dev);
     
-    while(i<8){
+    while (i<8) {
         bus_vi2c_scl(dev, MCU_IO_STA_0);
         bus_vi2c_delay();
         
@@ -269,9 +268,9 @@ static u8 bus_vi2c_readbyte(DevI2c *dev)
 
         data = (data <<1);
 
-        if(1 == bus_vi2c_readsda(dev)){
+        if (1 == bus_vi2c_readsda(dev)) {
             data =data|0x01;    
-        }else{
+        } else {
             data = data & 0xfe;
         }
 
@@ -325,7 +324,7 @@ s32 bus_vi2c_transfer(DevI2cNode *node, u8 addr, u8 rw, u8* data, s32 datalen)
     }   
     #endif
 
-	if(node == NULL)return -1;
+	if (node == NULL) return -1;
 
 	dev = &node->dev;
 	
@@ -334,10 +333,10 @@ s32 bus_vi2c_transfer(DevI2cNode *node, u8 addr, u8 rw, u8* data, s32 datalen)
     bus_vi2c_start(dev);
     //发送地址+读写标志
     //处理ADDR
-    if(rw == MCU_I2C_MODE_W){
+    if (rw == MCU_I2C_MODE_W) {
         addr = ((addr<<1)&0xfe);
         //uart_printf("write\r\n");
-    }else{
+    } else {
         addr = ((addr<<1)|0x01);
         //uart_printf("read\r\n");
     }
@@ -345,23 +344,23 @@ s32 bus_vi2c_transfer(DevI2cNode *node, u8 addr, u8 rw, u8* data, s32 datalen)
     bus_vi2c_writebyte(dev, addr);
 	
     res = bus_vi2c_wait_ack(dev);
-	if(res == 1)return 1;
+	if (res == 1) return 1;
 	
     i = 0;
 
     //数据传输
-    if(rw == MCU_I2C_MODE_W){
-	    while(i < datalen){
+    if (rw == MCU_I2C_MODE_W) {
+	    while(i < datalen) {
             ch = *(data+i);
             bus_vi2c_writebyte(dev, ch);
             res = bus_vi2c_wait_ack(dev);
-			if(res == 1)
+			if (res == 1)
 				return 1;
 			
 			i++;
 	    }
-    }else if(rw == MCU_I2C_MODE_R){
-       	while(i < datalen){
+    } else if (rw == MCU_I2C_MODE_R) {
+       	while(i < datalen) {
             ch = bus_vi2c_readbyte(dev);  
             bus_vi2c_ack(dev);
             *(data+i) = ch;

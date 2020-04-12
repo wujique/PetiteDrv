@@ -16,20 +16,16 @@
 /*定义调试信息输出串口号*/
 #define PC_PORT  MCU_UART_3 
 
-/* 
-
-	用宏控制哪些LCD驱动参加编译
-
-*/
-#define TFT_LCD_DRIVER_COG12864
-#define TFT_LCD_DRIVER_SSD1615
-#define TFT_LCD_DRIVER_9341
-#define TFT_LCD_DRIVER_9341_8BIT
-#define TFT_LCD_DRIVER_9325
-#define TFT_LCD_DRIVER_7735
-#define TFT_LCD_DRIVER_7789
-#define TFT_LCD_DRIVER_91874
-#define TFT_LCD_DRIVER_3820
+/* 	用宏控制哪些LCD驱动参加编译*/
+#define LCD_DRIVER_ST7565		1
+#define LCD_DRIVER_SSD1615		1
+#define LCD_DRIVER_9341			1
+//#define LCD_DRIVER_9341_8BIT	1
+#define LCD_DRIVER_9325			1
+//#define LCD_DRIVER_7735			1
+//#define LCD_DRIVER_7789			1
+//#define LCD_DRIVER_91874		1
+//#define LCD_DRIVER_3820			1
 
 /*
 	选择触摸屏检测方案

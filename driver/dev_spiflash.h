@@ -1,6 +1,7 @@
 #ifndef __DEV_SPIFLASH_H_
 #define __DEV_SPIFLASH_H_
 
+#include "petite_def.h"
 #include "p_list.h"
 #include "bus_spi.h"
 
@@ -21,11 +22,14 @@ typedef struct
 /*SPI FLASH设备定义*/
 typedef struct
 {
-	char *name;//设备名称
+	PetiteNode pnode;
+	
 	char *spich;//挂载在哪条SPI通道
+	
 	_strSpiFlash *pra;//设备信息
 }DevSpiFlash;
 
+/*设备节点定义*/
 typedef struct
 {
 	/**/

@@ -91,7 +91,7 @@ s32 mcu_hspi_init(const DevSpi *dev)
 
 
     //配置引脚复用映射
-    if(strcmp(dev->name, "SPI3") == 0)
+    if(strcmp(dev->pnode.name, "SPI3") == 0)
     {
 		GPIO_AF = GPIO_AF_SPI3;
 		RCC_CLK = RCC_APB1Periph_SPI3;
@@ -123,17 +123,14 @@ s32 mcu_hspi_open(DevSpiNode *node, SPI_MODE mode, u16 pre)
 	SPI_InitTypeDef SPI_InitStruct;
 	SPI_TypeDef* SPIC;
 	
-	if(node->gd != -1)
-	{
+	if (node->gd != -1) {
 		//SPI_DEBUG(LOG_DEBUG, "spi dev busy\r\n");
 		return -1;
 	}
 	
-	if(mode >= SPI_MODE_MAX)
-		return -1;
+	if (mode >= SPI_MODE_MAX) return -1;
 
-	if(strcmp(node->dev.name, "SPI3") == 0)
-    {
+	if (strcmp(node->dev.pnode.name, "SPI3") == 0) {
 		SPIC = SPI3;
     }
 
@@ -169,11 +166,10 @@ s32 mcu_hspi_close(DevSpiNode *node)
 {
     SPI_TypeDef* SPIC;
 	
-	if(node->gd != 0)
+	if (node->gd != 0)
 		return -1;
 	
-	if(strcmp(node->dev.name, "SPI3") == 0)
-    {
+	if (strcmp(node->dev.pnode.name, "SPI3") == 0) {
 		SPIC = SPI3;
     }
 	
@@ -198,55 +194,45 @@ s32 mcu_hspi_transfer(DevSpiNode *node, u8 *snd, u8 *rsv, s32 len)
     u16 ch;
 	SPI_TypeDef* SPIC;
 	
-	if(node == NULL)
+	if (node == NULL)
 		return -1;
 
-	if(node->gd != 0)
-	{
+	if (node->gd != 0) {
 		SPI_DEBUG(LOG_DEBUG, "spi dev no open\r\n");
 		return -1;
 	}
 	
-    if( ((snd == NULL) && (rsv == NULL)) || (len < 0) )
-    {
+    if ( ((snd == NULL) && (rsv == NULL)) || (len < 0) ) {
         return -1;
     }
 	
-    if(strcmp(node->dev.name, "SPI3") == 0)
-    {
+    if (strcmp(node->dev.pnode.name, "SPI3") == 0) {
 		SPIC = SPI3;
     }
     /* 忙等待 */
     time_out = 0;
-    while(SPI_I2S_GetFlagStatus(SPIC, SPI_I2S_FLAG_BSY) == SET)
-    {
-        if(time_out++ > MCU_SPI_WAIT_TIMEOUT)
-        {
+    while (SPI_I2S_GetFlagStatus(SPIC, SPI_I2S_FLAG_BSY) == SET) {
+        if (time_out++ > MCU_SPI_WAIT_TIMEOUT) {
             return(-1);
         }
     }
 
     /* 清空SPI缓冲数据，防止读到上次传输遗留的数据 */
     time_out = 0;
-    while(SPI_I2S_GetFlagStatus(SPIC, SPI_I2S_FLAG_RXNE) == SET)
-    {
+    while (SPI_I2S_GetFlagStatus(SPIC, SPI_I2S_FLAG_RXNE) == SET) {
         SPI_I2S_ReceiveData(SPIC);
-        if(time_out++ > 2)
-        {
+        if(time_out++ > 2) {
             return(-1);
         }
     }
 
     /* 开始传输 */
-    for(i=0; i < len; )
-    {
+    for(i=0; i < len; ) {
         // 写数据
-        if(snd == NULL)/*发送指针为NULL，说明仅仅是读数据 */
-        {
+        /*发送指针为NULL，说明仅仅是读数据 */
+        if(snd == NULL) {
             SPI_I2S_SendData(SPIC, 0xff);
-        }
-        else
-        {
+        } else {
             ch = (u16)snd[i];
             SPI_I2S_SendData(SPIC, ch);
         }
@@ -254,21 +240,17 @@ s32 mcu_hspi_transfer(DevSpiNode *node, u8 *snd, u8 *rsv, s32 len)
         
         // 等待接收结束
         time_out = 0;
-        while(SPI_I2S_GetFlagStatus(SPIC, SPI_I2S_FLAG_RXNE) == RESET)
-        {
+        while (SPI_I2S_GetFlagStatus(SPIC, SPI_I2S_FLAG_RXNE) == RESET) {
             time_out++;
-            if(time_out > MCU_SPI_WAIT_TIMEOUT)
-            {
+            if (time_out > MCU_SPI_WAIT_TIMEOUT) {
                 return -1;
             }    
         }
         // 读数据
-        if(rsv == NULL)/* 接收指针为空，读数据后丢弃 */
-        {
+        /* 接收指针为空，读数据后丢弃 */
+        if (rsv == NULL) {
             SPI_I2S_ReceiveData(SPIC);
-        }
-        else
-        {
+        } else { 
             ch = SPI_I2S_ReceiveData(SPIC);
             rsv[pos] = (u8)ch;
         } 

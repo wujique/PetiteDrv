@@ -43,9 +43,9 @@ const VFSDIR USBFatFs=
 */
 s32 board_init(void)
 {
-	wjq_log(LOG_DEBUG, "***board: wujique other dev init!***\r\n");
+	wjq_log(LOG_DEBUG, "[   board] wujique other dev init!***\r\n");
 
-	sys_dev_register();
+	petite_dev_register();
 	
 	dev_key_init();
 	

@@ -177,8 +177,7 @@ s32 dev_spiflash_write(DevSpiFlashNode *node,  u32 addr, u16 wlen, u8* src)
     s32 len;
     u8 command[4];
 
-    while (wlen)
-    {    
+    while (wlen) {    
 		dev_spiflash_writeen(node);
 	
         command[0] = SPIFLASH_WRITE;
@@ -191,15 +190,12 @@ s32 dev_spiflash_write(DevSpiFlashNode *node,  u32 addr, u16 wlen, u8* src)
         bus_spich_transfer(node->spichnode, command, NULL, len);
 		
         len = 256 - (addr & 0xff);
-        if(len < wlen)
-        {
+        if (len < wlen) {
             bus_spich_transfer(node->spichnode, src, NULL, len);
             wlen -= len;
             src += len;
             addr += len;
-        }
-        else
-        {
+        } else {
             bus_spich_transfer(node->spichnode, src, NULL, wlen);
             wlen = 0;
             addr += wlen;
@@ -349,35 +345,32 @@ DevSpiFlashNode *dev_spiflash_open(char* name)
 	listp = DevSpiFlashRoot.next;
 	node = NULL;
 	
-	while(1)
-	{
+	while(1) {
 		if(listp == &DevSpiFlashRoot)
 			break;
 
 		node = list_entry(listp, DevSpiFlashNode, list);
-		SPIFLASH_DEBUG(LOG_INFO, "spi ch name%s!\r\n", node->dev.name);
+		SPIFLASH_DEBUG(LOG_INFO, "spi ch name%s!\r\n", node->dev.pnode.name);
 		
-		if(strcmp(name, node->dev.name) == 0){
+		if (strcmp(name, node->dev.pnode.name) == 0) {
 			SPIFLASH_DEBUG(LOG_INFO, "spi ch dev get ok!\r\n");
 			break;
-		}else{
+		} else {
 			node = NULL;
 		}
 		
 		listp = listp->next;
 	}
 
-	if(node != NULL){
+	if (node != NULL) {
 		
-		if(node->gd == 0){
+		if (node->gd == 0) {
 			SPIFLASH_DEBUG(LOG_INFO, "spi flash open err:using!\r\n");
 			node = NULL;
-		}else{
+		} else {
 			node->spichnode = bus_spich_open(node->dev.spich, SPI_MODE_3, SPI_BaudRatePrescaler_4);
-			if(node->spichnode == NULL)
-				node = NULL;
-			else
-				node->gd = 0;
+			if(node->spichnode == NULL)	node = NULL;
+			else node->gd = 0;
 		}
 	}
 	
@@ -413,18 +406,18 @@ s32 dev_spiflash_register(const DevSpiFlash *dev)
 	u32 MID = 0;
 	u8 index = 0;
 	
-	wjq_log(LOG_INFO, "[register] spi flash :%s!\r\n", dev->name);
+	wjq_log(LOG_INFO, "[register] spi flash :%s!\r\n", dev->pnode.name);
 
 	/*
 		先要查询当前，防止重名
 	*/
 	listp = DevSpiFlashRoot.next;
-	while(1){
-		if(listp == &DevSpiFlashRoot)break;
+	while(1) {
+		if (listp == &DevSpiFlashRoot) break;
 
 		node = list_entry(listp, DevSpiFlashNode, list);
 		
-		if(strcmp(dev->name, node->dev.name) == 0){
+		if (strcmp(dev->pnode.name, node->dev.pnode.name) == 0) {
 			wjq_log(LOG_INFO, "spi flash dev name err!\r\n");
 			return -1;
 		}
@@ -444,17 +437,17 @@ s32 dev_spiflash_register(const DevSpiFlash *dev)
 	/*读 ID，超找FLASH信息*/
 	node->spichnode = bus_spich_open(dev->spich, SPI_MODE_3, SPI_BaudRatePrescaler_4); //打开spi
 
-	if(node->spichnode != NULL){
+	if (node->spichnode != NULL) {
 		JID = dev_spiflash_readJTD(node);
-		wjq_log(LOG_DEBUG, "%s jid:0x%x\r\n", dev->name, JID);
+		wjq_log(LOG_DEBUG, "%s jid:0x%x\r\n", dev->pnode.name, JID);
 		
 		MID  = dev_spiflash_readMTD(node);
-		wjq_log(LOG_DEBUG, "%s mid:0x%x\r\n", dev->name, MID);
+		wjq_log(LOG_DEBUG, "%s mid:0x%x\r\n", dev->pnode.name, MID);
 		
 		/*根据JID查找设备信息*/
-		for(index = 0; index<(sizeof(SpiFlashPraList)/sizeof(_strSpiFlash));index++){
-			if((SpiFlashPraList[index].JID == JID)
-				&&(SpiFlashPraList[index].MID == MID)){
+		for (index = 0; index<(sizeof(SpiFlashPraList)/sizeof(_strSpiFlash));index++) {
+			if ((SpiFlashPraList[index].JID == JID)
+				&&(SpiFlashPraList[index].MID == MID)) {
 				node->dev.pra = &(SpiFlashPraList[index]);
 				break;
 			}
@@ -487,13 +480,13 @@ void dev_spiflash_test_fun(char *name)
 	
     wjq_log(LOG_FUN, ">:-------dev_spiflash_test-------\r\n");
     node = dev_spiflash_open(name);
-	wjq_log(LOG_FUN, ">:-------%s-------\r\n", node->dev.name);
-	if(node == NULL){
+	wjq_log(LOG_FUN, ">:-------%s-------\r\n", node->dev.pnode.name);
+	if (node == NULL) {
 		wjq_log(LOG_FUN, "open spi flash ERR\r\n");
 		while(1);
 	}
     i = 0;
-    for(tmp = 0; tmp < 4096; tmp++){
+    for (tmp = 0; tmp < 4096; tmp++) {
         wbuf[tmp] = i;
         i++;
     }
@@ -507,8 +500,8 @@ void dev_spiflash_test_fun(char *name)
     dev_spiflash_sector_read(node, addr, rbuf);;//读一页回来
     wjq_log(LOG_FUN, "read...");
     
-    for(tmp = 0; tmp < node->dev.pra->sectorsize; tmp++){
-        if(rbuf[tmp] != 0xff){
+    for (tmp = 0; tmp < node->dev.pra->sectorsize; tmp++) {
+        if (rbuf[tmp] != 0xff) {
             wjq_log(LOG_FUN, "%x=%02X ", tmp, rbuf[tmp]);//擦除后不等于0XFF,坏块    
             err_flag = 1;
         }
@@ -522,14 +515,14 @@ void dev_spiflash_test_fun(char *name)
     
     wjq_log(LOG_FUN, "\r\n>:test wr..\r\n");
     
-    for(tmp = 0; tmp < node->dev.pra->sectorsize; tmp++){
-        if(rbuf[tmp] != wbuf[tmp]){
+    for (tmp = 0; tmp < node->dev.pra->sectorsize; tmp++) {
+        if (rbuf[tmp] != wbuf[tmp]) {
             wjq_log(LOG_FUN, "%x ", tmp);//读出来的跟写进去的不相等 
             err_flag = 1;
         }
     }
 
-    if(err_flag == 1)
+    if (err_flag == 1)
         wjq_log(LOG_FUN, "bad sector\r\n");
     else
         wjq_log(LOG_FUN, "OK sector\r\n");
@@ -553,8 +546,8 @@ void dev_spiflash_test_chipcheck(char *name)
 	
     wjq_log(LOG_FUN, ">:-------dev_spiflash_test-------\r\n");
     node = dev_spiflash_open(name);
-	wjq_log(LOG_FUN, ">:-------%s-------\r\n", node->dev.name);
-	if(node == NULL){
+	wjq_log(LOG_FUN, ">:-------%s-------\r\n", node->dev.pnode.name);
+	if (node == NULL) {
 		wjq_log(LOG_FUN, "open spi flash ERR\r\n");
 		while(1);
 	}
@@ -562,10 +555,10 @@ void dev_spiflash_test_chipcheck(char *name)
 	rbuf = (u8*)wjq_malloc(node->dev.pra->sectorsize);
 	wbuf = (u8*)wjq_malloc(node->dev.pra->sectorsize);
 
-	for(sector = 0; sector < node->dev.pra->sectornum; sector++){
+	for (sector = 0; sector < node->dev.pra->sectornum; sector++) {
 	    i = sector%0xff;
 		
-	    for(tmp = 0; tmp < node->dev.pra->sectorsize; tmp++){
+	    for (tmp = 0; tmp < node->dev.pra->sectorsize; tmp++) {
 	        wbuf[tmp] = i;
 	        i++;
 	    }
@@ -579,8 +572,8 @@ void dev_spiflash_test_chipcheck(char *name)
 	    dev_spiflash_sector_read(node, sector, rbuf);;//读一页回来
 	    wjq_log(LOG_FUN, "read...");
 	    
-	    for(tmp = 0; tmp < node->dev.pra->sectorsize; tmp++){
-	        if(rbuf[tmp] != 0xff){
+	    for (tmp = 0; tmp < node->dev.pra->sectorsize; tmp++) {
+	        if (rbuf[tmp] != 0xff) {
 	            //wjq_log(LOG_FUN, "%x=%02X ", tmp, rbuf[tmp]);//擦除后不等于0XFF,坏块    
 	            err_flag = 1;
 	        }
@@ -592,14 +585,14 @@ void dev_spiflash_test_chipcheck(char *name)
 	    dev_spiflash_sector_read(node, sector, rbuf);
 	    wjq_log(LOG_FUN, "read...");
 	    
-	    for(tmp = 0; tmp < node->dev.pra->sectorsize; tmp++){
-	        if(rbuf[tmp] != wbuf[tmp]){
+	    for (tmp = 0; tmp < node->dev.pra->sectorsize; tmp++) {
+	        if (rbuf[tmp] != wbuf[tmp]) {
 	            //wjq_log(LOG_FUN, "%x ", tmp);//读出来的跟写进去的不相等 
 	            err_flag = 1;
 	        }
 	    }
 
-	    if(err_flag == 1)
+	    if (err_flag == 1)
 	        wjq_log(LOG_FUN, "bad sector\r\n");
 	    else
 	        wjq_log(LOG_FUN, "OK sector\r\n");
@@ -624,15 +617,15 @@ void dev_spiflash_test_chiperase(char *name)
 	
     wjq_log(LOG_FUN, ">:-------dev_spiflash_test-------\r\n");
     node = dev_spiflash_open(name);
-	wjq_log(LOG_FUN, ">:-------%s-------\r\n", node->dev.name);
-	if(node == NULL){
+	wjq_log(LOG_FUN, ">:-------%s-------\r\n", node->dev.pnode.name);
+	if (node == NULL) {
 		wjq_log(LOG_FUN, "open spi flash ERR\r\n");
 		while(1);
 	}
 	
 	rbuf = (u8*)wjq_malloc(node->dev.pra->sectorsize);
 
-	for(sector = 0; sector < node->dev.pra->sectornum; sector++){
+	for (sector = 0; sector < node->dev.pra->sectornum; sector++) {
 
 	    addr = sector * (node->dev.pra->sectorsize);
 		
@@ -643,8 +636,8 @@ void dev_spiflash_test_chiperase(char *name)
 	    dev_spiflash_sector_read(node, sector, rbuf);;//读一页回来
 	    wjq_log(LOG_FUN, "read...");
 	    
-	    for(tmp = 0; tmp < node->dev.pra->sectorsize; tmp++){
-	        if(rbuf[tmp] != 0xff){
+	    for (tmp = 0; tmp < node->dev.pra->sectorsize; tmp++) {
+	        if (rbuf[tmp] != 0xff) {
 	            //wjq_log(LOG_FUN, "%x=%02X ", tmp, rbuf[tmp]);//擦除后不等于0XFF,坏块    
 	            err_flag = 1;
 	        }

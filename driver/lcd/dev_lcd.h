@@ -2,7 +2,7 @@
 #define _DEV_LCD_H_
 
 #include "bus_lcd.h"
-#include "petite.h"
+#include "petite_def.h"
 
 #include "font.h"
 
@@ -47,18 +47,14 @@ typedef struct
 */
 typedef struct
 {
-	char name[DEV_NAME_SIZE]; //设备名字
+	PetiteNode pnode;
 	
 	char buslcd[DEV_NAME_SIZE]; //挂在那条LCD总线上
 	u16 id;
 	u16 width;	//LCD 宽度   竖屏
 	u16 height;	//LCD 高度    竖屏
 }DevLcd;
-/*
-	初始化的时候会根据设备数定义，
-	并且匹配驱动跟参数，并初始化变量。
-	打开的时候只是获取了一个指针
-*/
+/* 设备节点*/
 struct _strDevLcdNode
 {
 	s32 gd;//句柄，控制是否可以打开

@@ -2,24 +2,13 @@
 #define __BUS_I2C_H_
 
 #include "p_list.h"
-#include "petie_def.h"
+#include "petite_def.h"
 
-typedef enum{
-	DEV_I2C_H = 1,//硬件SPI控制器
-	DEV_I2C_V = 2,//IO模拟SPI
-}DEV_I2C_TYPE;
 
-/*
-	i2c设备定义
-*/
-
+/*	i2c设备定义 */
 typedef struct
 {
-	/*设备名称*/
-	char name[DEV_NAME_SIZE];
-
-	/*设备类型，IO模拟 or 硬件控制器*/
-	DEV_I2C_TYPE type;
+	PetiteNode pnode;
 
 	/*设备需要的资源，模拟I2C只需要两根IO口*/
 	MCU_PORT sclport;
@@ -29,17 +18,16 @@ typedef struct
 	u16 sdapin;
 }DevI2c;
 
-/*
-	
-
-*/
+/*  设备节点 */
 typedef struct
 {
 	s32 gd;
+	
+	
 	DevI2c dev;	
+
 	struct list_head list;
 }DevI2cNode;
-
 
 #define MCU_I2C_MODE_W 0
 #define MCU_I2C_MODE_R 1

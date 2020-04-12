@@ -81,9 +81,7 @@ struct _epaper_drv_data
 
 };
 
-
-
-#ifdef TFT_LCD_DRIVER_91874
+#if( LCD_DRIVER_91874 == 1 )
 
 s32 drv_IL91874_init(DevLcdNode *lcd);
 static s32 drv_IL91874_drawpoint(DevLcdNode *lcd, u16 x, u16 y, u16 color);
@@ -96,11 +94,8 @@ void drv_IL91874_lcd_bl(DevLcdNode *lcd, u8 sta);
 s32 drv_IL91874_flush(DevLcdNode *lcd, u16 *color, u32 len);
 s32 drv_IL91874_update(DevLcdNode *lcd);
 
-
 /*
-
 	定义一个TFT LCD，使用IL91874驱动IC的设备
-
 */
 _lcd_drv TftLcdIL91874Drv = {
 							.id = 0X9187,

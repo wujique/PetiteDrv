@@ -37,12 +37,9 @@
 
 extern void Delay(__IO uint32_t nTime);
 
-/*
+/*	9341驱动*/
+#if( LCD_DRIVER_9341 == 1 )
 
-	9341驱动
-
-*/
-#ifdef TFT_LCD_DRIVER_9341
 /*9341命令定义*/
 #define ILI9341_CMD_WRAM 0x2c
 #define ILI9341_CMD_SETX 0x2a
@@ -601,15 +598,12 @@ s32 drv_ILI9341_update(DevLcdNode *lcd)
 
 #endif
 
-#ifdef TFT_LCD_DRIVER_9341_8BIT
 
-/*
+#if( LCD_DRIVER_9341_8BIT == 1 )
 
-	定义一个TFT LCD，使用ILI9341驱动IC的设备
+/*	定义一个TFT LCD，使用ILI9341驱动IC的设备
 	但是这个驱动使用的是SPI或者I2C，8位接口，
-	相对8080 16位接口，需要特殊处理
-
-*/
+	相对8080 16位接口，需要特殊处理 */
 
 s32 drv_ILI9341_8_init(DevLcdNode *lcd);
 static s32 drv_ILI9341_8_drawpoint(DevLcdNode *lcd, u16 x, u16 y, u16 color);

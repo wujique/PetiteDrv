@@ -42,17 +42,17 @@ s32 bus_i2c_register(const DevI2c * dev)
 	struct list_head *listp;
 	DevI2cNode *p;
 	
-	wjq_log(LOG_INFO, "[register] i2c:%s!\r\n", dev->name);
+	wjq_log(LOG_INFO, "[register] i2c:%s!\r\n", dev->pnode.name);
 
 	/*	先要查询当前I2C控制器，防止重名	*/
 	listp = DevI2cGdRoot.next;
-	while(1){
-		if(listp == &DevI2cGdRoot)break;
+	while(1) {
+		if (listp == &DevI2cGdRoot) break;
 
 		p = list_entry(listp, DevI2cNode, list);
 		//wjq_log(LOG_INFO, "i2c dev name:%s!\r\n", p->dev.name);
 		
-		if(strcmp(dev->name, p->dev.name) == 0){
+		if (strcmp(dev->pnode.name, p->dev.pnode.name) == 0) {
 			wjq_log(LOG_INFO, "i2c dev name err!\r\n");
 			return -1;
 		}
@@ -60,22 +60,17 @@ s32 bus_i2c_register(const DevI2c * dev)
 		listp = listp->next;
 	}
 
-	/* 
-		申请一个节点空间 
-		
-	*/
-	p = (DevI2cNode *)wjq_malloc(sizeof(DevI2cNode));
+	/* 申请一个节点空间   并插入链表     	*/
+	p = (DevI2cNode *) wjq_malloc(sizeof(DevI2cNode));
 	list_add(&(p->list), &DevI2cGdRoot);
 	
-	/*
-		初始化设备节点
-	*/
+	/*	初始化设备节点 	*/
 	memcpy((u8 *)&p->dev, (u8 *)dev, sizeof(DevI2c));
 	p->gd = -1;
 
-	if(dev->type == DEV_I2C_V)
+	if (dev->pnode.type == BUS_I2C_V)
 		bus_vi2c_init(&p->dev);
-	else if(dev->type == DEV_I2C_H)
+	else if (dev->pnode.type == BUS_I2C_H)
 		mcu_hi2c_init(&p->dev);
 	
 	return 0;
@@ -98,13 +93,13 @@ DevI2cNode *bus_i2c_open(char *name)
 	listp = DevI2cGdRoot.next;
 	node = NULL;
 	
-	while(1){
-		if(listp == &DevI2cGdRoot)break;
+	while(1) {
+		if (listp == &DevI2cGdRoot) break;
 
 		node = list_entry(listp, DevI2cNode, list);
 		//I2C_DEBUG(LOG_INFO, "i2c dev name:%s!\r\n", node->dev.name);
-		
-		if(strcmp(name, node->dev.name) == 0){
+		 
+		if (strcmp(name, node->dev.pnode.name) == 0) {
 			//I2C_DEBUG(LOG_INFO, "i2c dev open ok!\r\n");
 			break;
 		}
@@ -112,10 +107,10 @@ DevI2cNode *bus_i2c_open(char *name)
 		listp = listp->next;
 	}
 
-	if(node != NULL){
-		if(node->gd == 0){
+	if (node != NULL) {
+		if (node->gd == 0) {
 			node = NULL;
-		}else{
+		} else {
 			node->gd = 0;
 		}
 	}
@@ -130,9 +125,9 @@ DevI2cNode *bus_i2c_open(char *name)
  */
 s32 bus_i2c_close(DevI2cNode *node)
 {
-	if(node == NULL)return -1;
+	if  (node == NULL) return -1;
 
-	if(node->gd != 0)return -1;
+	if (node->gd != 0) return -1;
 
 	node->gd = -1; 
 
@@ -152,13 +147,13 @@ s32 bus_i2c_close(DevI2cNode *node)
  */
 s32 bus_i2c_transfer(DevI2cNode *node, u8 addr, u8 rw, u8* data, s32 datalen)
 {
-	if(node == NULL)return -1;
+	if (node == NULL) return -1;
 
-	if(node->dev.type == DEV_I2C_H)
-		return mcu_hi2c_transfer(node, addr, rw, data, datalen);
-	else if(node->dev.type == DEV_I2C_V)	
+	if(node->dev.pnode.type == BUS_I2C_H)
+		return mcu_hi2c_transfer (node, addr, rw, data, datalen);
+	else if (node->dev.pnode.type == BUS_I2C_V)	
 		return bus_vi2c_transfer(node, addr, rw, data, datalen);
-	else{
+	else {
 		wjq_log(LOG_DEBUG, "i2c dev type err\r\n");	
 	}	
 	return -1;

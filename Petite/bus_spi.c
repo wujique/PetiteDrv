@@ -53,18 +53,18 @@ s32 bus_spi_register(const DevSpi *dev)
 	struct list_head *listp;
 	DevSpiNode *p;
 	
-	wjq_log(LOG_INFO, "[register] spi :%s!\r\n", dev->name);
+	wjq_log(LOG_INFO, "[register] spi :%s!\r\n", dev->pnode.name);
 
 	/*
 		先要查询当前，防止重名
 	*/
 	listp = DevSpiRoot.next;
-	while(1){
-		if(listp == &DevSpiRoot)break;
+	while(1) {
+		if (listp == &DevSpiRoot) break;
 
 		p = list_entry(listp, DevSpiNode, list);
 
-		if(strcmp(dev->name, p->dev.name) == 0){
+		if (strcmp(dev->pnode.name, p->dev.pnode.name) == 0) {
 			wjq_log(LOG_INFO, "spi dev name err!\r\n");
 			return -1;
 		}
@@ -81,9 +81,9 @@ s32 bus_spi_register(const DevSpi *dev)
 	memcpy((u8 *)&p->dev, (u8 *)dev, sizeof(DevSpi));
 	
 	/*初始化*/
-	if(dev->type == DEV_SPI_V)
+	if (dev->pnode.type == BUS_SPI_V)
 		bus_vspi_init(dev);
-	else if(dev->type == DEV_SPI_H)
+	else if (dev->pnode.type == BUS_SPI_H)
 		mcu_hspi_init(dev);
 	
 	p->gd = -1;
@@ -105,19 +105,19 @@ s32 bus_spich_register(const DevSpiCh *dev)
 	DevSpiChNode *p;
 	DevSpiNode *p_spi;
 	
-	wjq_log(LOG_INFO, "[register] spi ch :%s!\r\n", dev->name);
+	wjq_log(LOG_INFO, "[register] spi ch :%s!\r\n", dev->pnode.name);
 
 	/*
 		先要查询当前，防止重名
 	*/
 	listp = DevSpiChRoot.next;
-	while(1){
-		if(listp == &DevSpiChRoot)	break;
+	while(1) {
+		if (listp == &DevSpiChRoot)	break;
 
 		p = list_entry(listp, DevSpiChNode, list);
 		
-		if(strcmp(dev->name, p->dev.name) == 0)	{
-			wjq_log(LOG_INFO, ">--------------------spi ch dev name err!\r\n");
+		if (strcmp(dev->pnode.name, p->dev.pnode.name) == 0) {
+			wjq_log(LOG_INFO, "         spi ch dev name err!\r\n");
 			return -1;
 		}
 		
@@ -126,26 +126,22 @@ s32 bus_spich_register(const DevSpiCh *dev)
 
 	/* 寻找SPI控制器*/
 	listp = DevSpiRoot.next;
-	while(1){
-		if(listp == &DevSpiRoot)	{
-			wjq_log(LOG_INFO, ">---------------------spi ch reg err:no spi!\r\n");
+	while(1) {
+		if (listp == &DevSpiRoot) {
+			wjq_log(LOG_INFO, "         spi ch reg err:no spi!\r\n");
 			return -1;
 		}
 
-
 		p_spi = list_entry(listp, DevSpiNode, list);
 
-		if(strcmp(dev->spi, p_spi->dev.name) == 0){
+		if (strcmp(dev->spi, p_spi->dev.pnode.name) == 0) {
 			//wjq_log(LOG_INFO, "spi ch find spi!\r\n");
 			break;
 		}
 		
 		listp = listp->next;
 	}
-	/* 
-		申请一个节点空间 
-		
-	*/
+	/* 申请一个节点空间 	*/
 	p = (DevSpiChNode *)wjq_malloc(sizeof(DevSpiChNode));
 	list_add(&(p->list), &DevSpiChRoot);
 	memcpy((u8 *)&p->dev, (u8 *)dev, sizeof(DevSpiCh));
@@ -182,47 +178,46 @@ DevSpiChNode *bus_spich_open(char *name, SPI_MODE mode, u16 pre)
 	listp = DevSpiChRoot.next;
 	node = NULL;
 	
-	while(1){
-		if(listp == &DevSpiChRoot)	break;
+	while(1) {
+		if (listp == &DevSpiChRoot)	break;
 
 		node = list_entry(listp, DevSpiChNode, list);
 		//BUSSPI_DEBUG(LOG_INFO, "spi ch name%s!\r\n", node->dev.name);
 		
-		if(strcmp(name, node->dev.name) == 0){
+		if (strcmp(name, node->dev.pnode.name) == 0) {
 			//BUSSPI_DEBUG(LOG_INFO, "spi ch dev get ok!\r\n");
 			break;
-		}else{
+		} else {
 			node = NULL;
 		}
 		
 		listp = listp->next;
 	}
 
-	if(node != NULL){
+	if (node != NULL) {
 		
-		if(node->gd == 0){
+		if(node->gd == 0) {
 			//BUSSPI_DEBUG(LOG_INFO, "spi ch open err:using!\r\n");
 			node = NULL;
-		}else{
+		} else {
 			/*打开SPI控制器*/
-			if(node->spi->dev.type == DEV_SPI_H){
+			if (node->spi->dev.pnode.type == BUS_SPI_H) {
 				res = mcu_hspi_open(node->spi, mode, pre);	
-			}else if(node->spi->dev.type == DEV_SPI_V){
+			} else if(node->spi->dev.pnode.type == BUS_SPI_V) {
 				res = bus_vspi_open(node->spi, mode, pre);	
 			}
 
-			if(res == 0){
+			if (res == 0) {
 				node->gd = 0;
 				//BUSSPI_DEBUG(LOG_INFO, "spi dev open ok: %s!\r\n", name);
 				mcu_io_output_resetbit(node->dev.csport, node->dev.cspin);
-			}else{
+			} else {
 				//BUSSPI_DEBUG(LOG_INFO, "spi dev open err!\r\n");
 				node = NULL;
 			}
 		}
-	}
-	else{
-		BUSSPI_DEBUG(LOG_INFO, ">-------spi ch no exist!\r\n");	
+	}else {
+		BUSSPI_DEBUG(LOG_INFO, "         spi ch no exist!\r\n");	
 	}
 	
 	return node;
@@ -236,7 +231,7 @@ DevSpiChNode *bus_spich_open(char *name, SPI_MODE mode, u16 pre)
  */
 s32 bus_spich_close(DevSpiChNode * node)
 {
-	if(node->spi->dev.type == DEV_SPI_H){
+	if(node->spi->dev.pnode.type == BUS_SPI_H){
 		mcu_hspi_close(node->spi);
 	}else
 		bus_vspi_close(node->spi);
@@ -259,14 +254,14 @@ s32 bus_spich_close(DevSpiChNode * node)
  */
 s32 bus_spich_transfer(DevSpiChNode * node, u8 *snd, u8 *rsv, s32 len)
 {
-	if(node == NULL)return -1;
+	if (node == NULL) return -1;
 
-	if(node->spi->dev.type == DEV_SPI_H)
+	if (node->spi->dev.pnode.type == BUS_SPI_H)
 		return mcu_hspi_transfer(node->spi, snd, rsv, len);
-	else if(node->spi->dev.type == DEV_SPI_V)	
+	else if (node->spi->dev.pnode.type == BUS_SPI_V)	
 		return bus_vspi_transfer(node->spi, snd, rsv, len);
-	else{
-		BUSSPI_DEBUG(LOG_DEBUG, "spi dev type err\r\n");	
+	else {
+		BUSSPI_DEBUG(LOG_DEBUG, "        spi dev type err\r\n");	
 	}
 	return -1;
 }

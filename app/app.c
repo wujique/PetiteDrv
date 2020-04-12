@@ -42,7 +42,7 @@ int petite_app(void)
 
   /* Infinite loop */
 	#ifdef SYS_USE_RTOS
-	wjq_log(LOG_INFO,"create start task!\r\n");
+	wjq_log(LOG_INFO,"ccreate start task!\r\n");
 	xReturn = xTaskCreate(	(TaskFunction_t) start_task,
 					(const char *)"StartTask",
 					(const configSTACK_DEPTH_TYPE)START_TASK_STK_SIZE,
@@ -51,10 +51,10 @@ int petite_app(void)
 					(TaskHandle_t *) &StartTaskHandle );
 	
 	if(pdPASS == xReturn){
-		wjq_log(LOG_INFO,"freertos Scheduler\r\n");
+		wjq_log(LOG_INFO,"[    _app] freertos Scheduler\r\n");
 		vTaskStartScheduler();
 	}else{
-		wjq_log(LOG_INFO,"xTaskCreate fail\r\n");
+		wjq_log(LOG_INFO,"[    _app] xTaskCreate fail\r\n");
 	}
 	
 	#else
@@ -79,7 +79,7 @@ extern s32 board_init(void);
  */
 void start_task(void *pvParameters)
 {
-	wjq_log(LOG_INFO,"start task---\r\n");
+	wjq_log(LOG_INFO,"[    _app] start task\r\n");
 
 	board_init();
 	

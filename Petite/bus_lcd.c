@@ -52,20 +52,20 @@ struct list_head DevBusLcdRoot = {&DevBusLcdRoot, &DevBusLcdRoot};
 static void bus_lcd_IO_init(const DevLcdBus *dev) 
 {
 
-	if(dev->type == LCD_BUS_I2C)return;
+	if (dev->pnode.type == BUS_LCD_I2C) return;
 
 	/* 初始化管脚 */
-	if(dev->A0port != NULL){
+	if (dev->A0port != NULL) {
 		mcu_io_config_out(dev->A0port,dev->A0pin);
 		mcu_io_output_setbit(dev->A0port,dev->A0pin);
 	}
 	
-	if(dev->rstport != NULL){
+	if (dev->rstport != NULL) {
 		mcu_io_config_out(dev->rstport,dev->rstpin);
 		mcu_io_output_setbit(dev->rstport,dev->rstpin);
 	}
 	
-	if(dev->blport != NULL){
+	if (dev->blport != NULL) {
 		mcu_io_config_out(dev->blport,dev->blpin);
 		mcu_io_output_setbit(dev->blport,dev->blpin);
 	}
@@ -79,9 +79,9 @@ static void bus_lcd_IO_init(const DevLcdBus *dev)
  */
 s32 bus_lcd_bl(DevLcdBusNode *node, u8 sta)
 {
-	if(sta ==MCU_IO_STA_1){
+	if (sta ==MCU_IO_STA_1) {
 		mcu_io_output_setbit(node->dev.blport, node->dev.blpin);
-	}else{
+	} else {
 		mcu_io_output_resetbit(node->dev.blport, node->dev.blpin);	
 	}
 	return 0;
@@ -93,12 +93,11 @@ s32 bus_lcd_bl(DevLcdBusNode *node, u8 sta)
  *@param[out]  
  *@retval:     
  */
-
 s32 bus_lcd_rst(DevLcdBusNode *node, u8 sta)
 {
-	if(sta ==MCU_IO_STA_1){
+	if (sta ==MCU_IO_STA_1) {
 		mcu_io_output_setbit(node->dev.rstport, node->dev.rstpin);
-	}else{
+	} else {
 		mcu_io_output_resetbit(node->dev.rstport, node->dev.rstpin);	
 	}
 	return 0;
@@ -121,46 +120,46 @@ DevLcdBusNode *bus_lcd_open(char *name)
 	listp = DevBusLcdRoot.next;
 	node = NULL;
 	
-	while(1){
-		if(listp == &DevBusLcdRoot)	break;
+	while(1) {
+		if (listp == &DevBusLcdRoot) break;
 
 		node = list_entry(listp, DevLcdBusNode, list);
 		//wjq_log(LOG_INFO, "lcd bus name:%s!\r\n", node->dev.name);
 		
-		if(strcmp(name, node->dev.name) == 0){
+		if(strcmp (name, node->dev.pnode.name) == 0) {
 			break;
-		}else{
+		} else {
 			node = NULL;
 		}
 		
 		listp = listp->next;
 	}
 
-	if(node != NULL){
-		if(node->gd == 0){
+	if (node != NULL) {
+		if (node->gd == 0) {
 			wjq_log(LOG_INFO, "lcd bus open err:using!\r\n");
 			node = NULL;
-		}else{
+		} else {
 			
-			if(node->dev.type == LCD_BUS_SPI){
+			if (node->dev.pnode.type == BUS_LCD_SPI) {
 				node->basenode = (void *)bus_spich_open(node->dev.basebus, SPI_MODE_3, SPI_BaudRatePrescaler_2);
 
-			}else if(node->dev.type == LCD_BUS_I2C){
+			} else if (node->dev.pnode.type == BUS_LCD_I2C) {
 				node->basenode = bus_i2c_open(node->dev.basebus);
-			}else if(node->dev.type == LCD_BUS_8080){
+			} else if (node->dev.pnode.type == BUS_LCD_8080) {
 				/*8080特殊处理*/
 				node->basenode = (void *)1;
 			}
 			
-			if(node->basenode == NULL){
+			if (node->basenode == NULL) {
 				wjq_log(LOG_INFO, "lcd bus open base bus err!\r\n");	
 				node =  NULL;
-			}else{
+			} else {
 				node->gd = 0;
 
 			}
 		}
-	}else{
+	}else {
 		wjq_log(LOG_INFO, "lcd bus open err:%s!\r\n", name);
 	}
 
@@ -178,12 +177,12 @@ s32 bus_lcd_close(DevLcdBusNode *node)
 {
 	if(node->gd != 0)return -1;
 	
-	if(node->dev.type == LCD_BUS_SPI){
+	if(node->dev.pnode.type == BUS_LCD_SPI){
 		bus_spich_close((DevSpiChNode *)node->basenode);
 		
-	}else if(node->dev.type == LCD_BUS_I2C){
+	}else if(node->dev.pnode.type == BUS_LCD_I2C){
 		bus_i2c_close((DevI2cNode *)node->basenode);	
-	}else if(node->dev.type == LCD_BUS_8080){
+	}else if(node->dev.pnode.type == BUS_LCD_8080){
 		/*8080特殊处理*/
 		node->basenode = NULL;
 	}
@@ -207,21 +206,21 @@ s32 bus_lcd_write_data(DevLcdBusNode *node, u8 *data, u32 len)
 	u8 tmp[256];
 	u32 i;
 
-	switch(node->dev.type)
+	switch(node->dev.pnode.type)
 	{
-		case LCD_BUS_SPI:
+		case BUS_LCD_SPI:
 		{
 			bus_spich_transfer((DevSpiChNode *)node->basenode,  data, NULL, len);
 		}
 		break;
-		case LCD_BUS_I2C:
+		case BUS_LCD_I2C:
 		{
 			tmp[0] = 0x40;
 			memcpy(&tmp[1], data, len);
 			bus_i2c_transfer((DevI2cNode *)node->basenode, 0x3C, MCU_I2C_MODE_W, tmp, len+1);
 		}
 		break;
-		case LCD_BUS_8080:			
+		case BUS_LCD_8080:			
 		{
 			u16 *p;
 			p = (u16 *)data;
@@ -244,19 +243,19 @@ s32 bus_lcd_w_data(DevLcdBusNode *node, u16 color, u32 len)
 
 	u32 i;
 
-	switch(node->dev.type)
+	switch(node->dev.pnode.type)
 	{
-		case LCD_BUS_SPI:
+		case BUS_LCD_SPI:
 		{
 
 		}
 		break;
-		case LCD_BUS_I2C:
+		case BUS_LCD_I2C:
 		{
 
 		}
 		break;
-		case LCD_BUS_8080:			
+		case BUS_LCD_8080:			
 		{
 			for(i=len; i>0; i--)
 			{
@@ -420,21 +419,21 @@ s32 bus_lcd_read_data(DevLcdBusNode *node, u8 *data, u32 len)
 {
 	u32 i;
 	
-	switch(node->dev.type)
+	switch(node->dev.pnode.type)
 	{
-		case LCD_BUS_SPI:
+		case BUS_LCD_SPI:
 		{	
 			bus_spich_transfer((DevSpiChNode *)node->basenode,  NULL, data, len);
 		}
 		break;
 		
-		case LCD_BUS_I2C:
+		case BUS_LCD_I2C:
 		{	
 
 		}
 		break;
 		
-		case LCD_BUS_8080:
+		case BUS_LCD_8080:
 		{
 			u16 *p;
 			p = (u16 *)data;
@@ -460,9 +459,9 @@ s32 bus_lcd_write_cmd(DevLcdBusNode *node, u8 cmd)
 {
 	u8 tmp[2];
 
-	switch(node->dev.type)
+	switch(node->dev.pnode.type)
 	{
-		case LCD_BUS_SPI:
+		case BUS_LCD_SPI:
 		{	
 			mcu_io_output_resetbit(node->dev.A0port, node->dev.A0pin);
 			tmp[0] = cmd;
@@ -471,7 +470,7 @@ s32 bus_lcd_write_cmd(DevLcdBusNode *node, u8 cmd)
 		}
 		break;
 		
-		case LCD_BUS_I2C:
+		case BUS_LCD_I2C:
 		{	
 			tmp[0] = 0x00;
 			tmp[1] = cmd;
@@ -480,7 +479,7 @@ s32 bus_lcd_write_cmd(DevLcdBusNode *node, u8 cmd)
 		}
 		break;
 		
-		case LCD_BUS_8080:
+		case BUS_LCD_8080:
 		{
 			*LcdReg = cmd;	
 		}
@@ -502,18 +501,16 @@ s32 dev_lcdbus_register(const DevLcdBus *dev)
 	struct list_head *listp;
 	DevLcdBusNode *p;
 
-	wjq_log(LOG_INFO, "[register] lcd bus :%s, base on:%s!\r\n", dev->name, dev->basebus);
+	wjq_log(LOG_INFO, "[register] lcd bus :%s, base on:%s!\r\n", dev->pnode.name, dev->basebus);
 
-	/*
-		先要查询当前，防止重名
-	*/
+	/*	先要查询当前，防止重名 	*/
 	listp = DevBusLcdRoot.next;
-	while(1){
-		if(listp == &DevBusLcdRoot)	break;
+	while(1) {
+		if (listp == &DevBusLcdRoot) break;
 
 		p = list_entry(listp, DevLcdBusNode, list);
 
-		if(strcmp(dev->name, p->dev.name) == 0)	{
+		if (strcmp(dev->pnode.name, p->dev.pnode.name) == 0) {
 			wjq_log(LOG_INFO, "bus lcd dev name err!\r\n");
 			return -1;
 		}
@@ -521,10 +518,7 @@ s32 dev_lcdbus_register(const DevLcdBus *dev)
 		listp = listp->next;
 	}
 
-	/* 
-		申请一个节点空间 
-		
-	*/
+	/* 申请一个节点空间    	*/
 	p = (DevLcdBusNode *)wjq_malloc(sizeof(DevLcdBusNode));
 	list_add(&(p->list), &DevBusLcdRoot);
 	/*复制设备信息*/
@@ -534,7 +528,7 @@ s32 dev_lcdbus_register(const DevLcdBus *dev)
 	/*初始化*/
 	bus_lcd_IO_init(dev);
 
-	if(dev->type == LCD_BUS_8080){
+	if(dev->pnode.type == BUS_LCD_8080){
 		//初始FSMC
 		mcu_fsmc_lcd_Init();
 	}

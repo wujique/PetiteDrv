@@ -226,16 +226,11 @@ s32 mcu_hi2c_init(DevI2c * dev)
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_Init((GPIO_TypeDef *)Stm32PortList[dev->sdaport], &GPIO_InitStructure);
 
-	if(strcmp(dev->name, "I2C1") == 0)
-    {
+	if (strcmp(dev->pnode.name, "I2C1") == 0) {
 		SCCB_GPIO_Config(I2C1);
-    }
-	else if(strcmp(dev->name, "I2C2") == 0)
-    {
+    } else if (strcmp(dev->pnode.name, "I2C2") == 0) {
 		SCCB_GPIO_Config(I2C2);
-    }
-	else
-	{
+    } else {
 		return -1;
 	}
 	

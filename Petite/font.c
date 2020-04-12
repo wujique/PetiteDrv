@@ -28,12 +28,9 @@
 	暂时不做这么复杂了。
 */
 
-/*
-
-	asc字符点阵，使用横库。
+/*	asc字符点阵，使用横库。
 	ASC字库内置在源代码中。
-	FontAscList的定义要跟汉字库定义排列一致
-*/
+	FontAscList的定义要跟汉字库定义排列一致 */
 const struct fbcon_font_desc *FontAscList[FONT_LIST_MAX]=
 		{
 			&font_vga_8x16,
@@ -50,16 +47,13 @@ u8 font_find_index(char *font)
 {
 	u8 i =0;
 
-	while(1)
-	{
-		if(0 == strcmp(FontList[i]->name, font))
-        {
+	while(1) {
+		if(0 == strcmp(FontList[i]->name, font)) {
         	return i;
 		}
 		
 		i++;
-		if(i>=FONT_LIST_MAX)
-			break;
+		if(i>=FONT_LIST_MAX) break;
 	}
 	return i;
 	
@@ -76,21 +70,16 @@ s32 font_hzfont_init(void)
 	u8 i;
 
 	i = 0;
-	while(1)
-	{
-		if(i>= FONT_LIST_MAX)
-			break;
+	while(1) {
+		if(i>= FONT_LIST_MAX) break;
 
 		wjq_log(LOG_INFO, "font:%s , path:%s,", FontList[i]->name, FontList[i]->path);
 		
 		FontFd[i] = vfs_open(FontList[i]->path, O_RDONLY);
 		
-		if(FontFd[i] == NULL)
-		{
+		if(FontFd[i] == NULL) {
 			wjq_log(LOG_INFO, "err\r\n");
-		}
-		else
-		{
+		} else {
 			wjq_log(LOG_INFO, "ok!\r\n");	
 		}
 		
@@ -131,8 +120,7 @@ s32 font_get_hz(char *font, u8 *ch, u8 *buf)
 	
 	if((hcode < 0x81) 
 		|| (hcode > 0xfe)
-		)
-	{
+		) {
 		//uart_printf("no china hz\r\n");
 		return -1;
 	}
@@ -140,12 +128,9 @@ s32 font_get_hz(char *font, u8 *ch, u8 *buf)
 	//uart_printf("hz code:%02x, %02x\r\n", hcode, lcode);
 
 	addr = (hcode-0x81)*190;
-	if(lcode<0x7f)
-	{
+	if(lcode<0x7f) {
 		addr = addr+lcode-0x40;	
-	}
-	else
-	{
+	} else {
 		addr = addr+lcode-0x41;	
 	}
 	addr = addr*FontList[i]->size;
@@ -155,8 +140,7 @@ s32 font_get_hz(char *font, u8 *ch, u8 *buf)
 	res = vfs_read(FontFd[i], (const void *)buf, FontList[i]->size);
 	
 
-	if(res != FontList[i]->size)
-	{
+	if(res != FontList[i]->size) {
 		//uart_printf("font read err\r\n");
 		return -1;
 	}
@@ -178,16 +162,14 @@ s32 font_get_asc(char *font, u8 *ch, u8 *buf)
 	u8* fp;
 	u8 i;
 	
-	if(*ch >= 0x80)
-		return -1;
+	if(*ch >= 0x80)	return -1;
 	
 	if(FontInit == -1)
-			font_hzfont_init();
+		font_hzfont_init();
 	
 	i = font_find_index(font);
 	
-	if(i >= FONT_LIST_MAX)
-		return -1;
+	if(i >= FONT_LIST_MAX)	return -1;
 
 	fp = (u8*)FontAscList[i]->path + (*ch)*FontAscList[i]->size;
 	//wjq_log(LOG_DEBUG, "dot data\r\n");

@@ -34,7 +34,8 @@ extern void Delay(__IO uint32_t nTime);
 	9325
 
 */
-#ifdef TFT_LCD_DRIVER_9325
+#if( LCD_DRIVER_9325 == 1 )
+
 /*
 	9325特点：
 	9325不使用page跟colum，使用Horizontal和Vertical，对于我们的模组，H是240短边，V是320长边

@@ -81,8 +81,8 @@ s32 board_mcu_preinit(void)
 	SysTick_Config(RCC_Clocks.HCLK_Frequency / (1000/SYSTEMTICK_PERIOD_MS));
 	#endif
 
-		mcu_rtc_init();
-		return 0;
+	mcu_rtc_init();
+	return 0;
 }
 
 /**

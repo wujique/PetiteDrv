@@ -74,7 +74,7 @@ struct _epaper3820_drv_data
 
 };
 
-#ifdef TFT_LCD_DRIVER_3820
+#if( LCD_DRIVER_3820 == 1 )	
 
 s32 drv_IL3820_init(DevLcdNode *lcd);
 static s32 drv_IL3820_drawpoint(DevLcdNode *lcd, u16 x, u16 y, u16 color);
@@ -88,11 +88,7 @@ s32 drv_IL3820_flush(DevLcdNode *lcd, u16 *color, u32 len);
 s32 drv_IL3820_update(DevLcdNode *lcd);
 
 
-/*
-
-	定义一个TFT LCD，使用IL3820驱动IC的设备
-
-*/
+/*	定义一个TFT LCD，使用IL3820驱动IC的设备*/
 _lcd_drv TftLcdIL3820Drv = {
 							.id = 0X3820,
 

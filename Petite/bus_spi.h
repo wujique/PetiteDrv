@@ -2,31 +2,17 @@
 #define __BUS_SPI_H_
 
 #include "p_list.h"
-#include "petie_def.h"
-
-typedef enum{
-	DEV_SPI_H = 1,//硬件SPI控制器
-	DEV_SPI_V = 2,//IO模拟SPI
-}DEV_SPI_TYPE;
+#include "petite_def.h"
 
 /*
 	SPI 分两层，
 	1层是SPI控制器，不包含CS
 	2层是SPI通道，由控制器+CS组成
-	
 */
-/*
-
-	SPI 设备定义
-
-*/
+/*	SPI 设备定义 */
 typedef struct
 {
-	/*设备名称*/
-	char name[DEV_NAME_SIZE];
-	
-	/*设备类型，IO模拟 or 硬件控制器*/
-	DEV_SPI_TYPE type;
+	PetiteNode pnode;
 	
 	MCU_PORT clkport;
 	u16 clkpin;
@@ -39,11 +25,7 @@ typedef struct
 
 }DevSpi;
 
-/*
-
-	SPI控制器设备节点
-	
-*/
+/*	SPI控制器设备节点 */
 typedef struct
 {
 	/*句柄，空闲为-1，打开为0，spi控制器不能重复打开*/
@@ -57,15 +39,12 @@ typedef struct
 	struct list_head list;
 }DevSpiNode;
 
-/*
-	SPI 通道定义
-	一个SPI通道，有一个SPI控制器+一根CS引脚组成
-
-*/
+/*	SPI 通道定义
+	一个SPI通道，有一个SPI控制器+一根CS引脚组成*/
 typedef struct
 {
-	/*通道名称，相当于设备名称*/
-	char name[DEV_NAME_SIZE];
+	PetiteNode pnode;
+	
 	/*SPI控制器名称*/
 	char spi[DEV_NAME_SIZE];
 
@@ -77,7 +56,6 @@ typedef struct
 /*SPI通道节点*/
 typedef struct
 {
-	/**/
 	s32 gd;
 	
 	DevSpiCh dev;
@@ -86,7 +64,6 @@ typedef struct
 	
 	struct list_head list;
 }DevSpiChNode;
-
 
 extern s32 bus_spi_register(const DevSpi *dev);
 extern s32 bus_spich_register(const DevSpiCh *dev);
