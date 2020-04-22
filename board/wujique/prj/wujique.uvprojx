@@ -545,6 +545,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\driver\lcd\dev_str7565.c</FilePath>
             </File>
+            <File>
+              <FileName>drv_nt35510.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\driver\lcd\drv_nt35510.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

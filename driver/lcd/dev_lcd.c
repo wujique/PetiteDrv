@@ -35,6 +35,7 @@
 #include "dev_ILI9325.h"
 #include "dev_st7789.h"
 #include "dev_st7735r.h"
+#include "drv_nt35510.h"
 
 #define DEV_LCD_DEBUG
 
@@ -85,6 +86,11 @@ _lcd_drv *LcdDrvList[] = {
 				#if( LCD_DRIVER_3820 == 1 )	
 					&TftLcdIL3820Drv,
 				#endif
+
+				/*全动 NT35510 */
+				#if( LCD_DRIVER_NT35510 == 1 )	
+					&TftLcdNT35510Drv,
+				#endif
 };
 /*	可自动识别ID的驱动*/
 _lcd_drv *LcdProbDrvList[] = {
@@ -93,6 +99,11 @@ _lcd_drv *LcdProbDrvList[] = {
 				#endif
 				#if( LCD_DRIVER_9325 == 1 )	
 					&TftLcdILI9325Drv,
+				#endif
+				
+				/*全动 NT35510 */
+				#if( LCD_DRIVER_NT35510 == 1 )	
+					&TftLcdNT35510Drv,
 				#endif
 };
 /**
@@ -207,7 +218,7 @@ s32 dev_lcd_register(const DevLcd *dev)
 		plcdnode->height = plcdnode->dev.height;
 		plcdnode->width = plcdnode->dev.width;
 		
-		dev_lcd_setdir(plcdnode, W_LCD, L2R_U2D);
+		dev_lcd_setdir(plcdnode, H_LCD, L2R_U2D);
 		
 		plcdnode->drv->onoff((plcdnode),1);//打开显示
 		

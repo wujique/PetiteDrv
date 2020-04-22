@@ -490,6 +490,7 @@ const DevLcd DevLcdCOG1	=	{
 	.height = 128};
 
 /*fsmc接口的 tft lcd*/
+#if 0
 const DevLcd DevLcdtTFT	=	{
 	.pnode={
 				.name = "tftlcd",
@@ -501,7 +502,18 @@ const DevLcd DevLcdtTFT	=	{
 	.width = 240, 
 	.height = 320,
 };
-	
+#endif				
+const DevLcd DevLcdtTFT	=	{
+	.pnode={
+				.name = "tftlcd",
+				.type = DEV_LCD,
+			},
+			
+	.buslcd = "BusLcd8080",  
+	.id = NULL, 
+	.width = 480, 
+	.height = 800,
+};	
 //const DevLcd DevLcdtTFT	=	{"tftlcd", 		"BusLcd8080", 	0x9325, 240, 320};
 //const DevLcd DevLcdtTFT	=	{"tftlcd", 		"BusLcd8080", 	0x9341, 240, 320};
 /*1408, 4.0寸的IPS屏幕*/

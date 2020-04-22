@@ -31,7 +31,6 @@
 #include "bus_spi.h"
 #include "bus_lcd.h"
 
-/*need fix: rename mcu_fsmc.h????*/
 #include "mcu_fsmc.h"
 
 /*
@@ -455,7 +454,7 @@ s32 bus_lcd_read_data(DevLcdBusNode *node, u8 *data, u32 len)
  *@param[out]  
  *@retval:     
  */
-s32 bus_lcd_write_cmd(DevLcdBusNode *node, u8 cmd)
+s32 bus_lcd_write_cmd(DevLcdBusNode *node, u16 cmd)
 {
 	u8 tmp[2];
 
