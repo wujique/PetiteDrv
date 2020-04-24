@@ -1,4 +1,13 @@
 
+/*
+
+	https://item.taobao.com/item.htm?spm=a1z09.2.0.0.5b272e8dwhV16d&id=530740333497&_u=m24vq7f2b27
+	全动电子
+	全新4.0寸 TFT液晶屏触摸屏模块 IPS全视角 超高清800X480 带底板
+	60块钱
+
+*/
+
 #include "mcu.h"
 #include "board_sysconf.h"
 #include "alloc.h"
@@ -6,8 +15,6 @@
 #include "bus_lcd.h"
 
 #include "dev_lcd.h"
-
-#include "mcu_fsmc.h"
 
 #define DRV_NT35510_DEBUG
 
@@ -26,6 +33,7 @@ extern void Delay(__IO uint32_t nTime);
 #define NT35510_CMD_WRAM 0x2c00
 #define NT35510_CMD_SETX 0x2a00
 #define NT35510_CMD_SETY 0x2b00
+#define NT35510_CMD_DIR  0x3600
 
 s32 drv_NT35510_init(DevLcdNode *lcd);
 static s32 drv_NT35510_drawpoint(DevLcdNode *lcd, u16 x, u16 y, u16 color);
@@ -120,7 +128,7 @@ static void drv_NT35510_scan_dir(DevLcdNode *lcd, u8 dir)
 	DevLcdBusNode * node;
 	node = bus_lcd_open(lcd->dev.buslcd);
 	
-	bus_lcd_write_cmd(node, (0x3600));
+	bus_lcd_write_cmd(node, (NT35510_CMD_DIR));
 	
 	u16 tmp[2];
 	tmp[0] = regval;
@@ -438,7 +446,7 @@ s32 drv_NT35510_init(DevLcdNode *lcd)
 
 	if(data != TftLcdNT35510Drv.id)
 	{
-		NT35510_DEBUG(LOG_DEBUG, "lcd drive no 9341\r\n");	
+		NT35510_DEBUG(LOG_DEBUG, "lcd drive no NT35510\r\n");	
 		bus_lcd_close(node);
 		return -1;
 	}

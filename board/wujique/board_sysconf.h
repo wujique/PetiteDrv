@@ -27,7 +27,7 @@
 //#define LCD_DRIVER_91874		1
 //#define LCD_DRIVER_3820			1
 #define LCD_DRIVER_NT35510		1
-
+#define LCD_DRIVER_R61408		1
 
 /*
 	Ñ¡Ôñ´¥ÃþÆÁ¼ì²â·½°¸

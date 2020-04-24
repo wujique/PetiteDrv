@@ -36,6 +36,7 @@
 #include "dev_st7789.h"
 #include "dev_st7735r.h"
 #include "drv_nt35510.h"
+#include "drv_r61408.h"
 
 #define DEV_LCD_DEBUG
 
@@ -91,6 +92,11 @@ _lcd_drv *LcdDrvList[] = {
 				#if( LCD_DRIVER_NT35510 == 1 )	
 					&TftLcdNT35510Drv,
 				#endif
+				/* 好矩润 R61408*/
+				#if( LCD_DRIVER_R61408 == 1 )	
+					&TftLcdR61408Drv,
+				#endif
+					
 };
 /*	可自动识别ID的驱动*/
 _lcd_drv *LcdProbDrvList[] = {
@@ -104,6 +110,10 @@ _lcd_drv *LcdProbDrvList[] = {
 				/*全动 NT35510 */
 				#if( LCD_DRIVER_NT35510 == 1 )	
 					&TftLcdNT35510Drv,
+				#endif
+
+				#if( LCD_DRIVER_R61408 == 1 )	
+					&TftLcdR61408Drv,
 				#endif
 };
 /**
