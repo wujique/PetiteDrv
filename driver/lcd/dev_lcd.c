@@ -228,7 +228,7 @@ s32 dev_lcd_register(const DevLcd *dev)
 		plcdnode->height = plcdnode->dev.height;
 		plcdnode->width = plcdnode->dev.width;
 		
-		dev_lcd_setdir(plcdnode, H_LCD, L2R_U2D);
+		dev_lcd_setdir(plcdnode, W_LCD, L2R_U2D);
 		
 		plcdnode->drv->onoff((plcdnode),1);//╢Р©╙отй╬
 		
