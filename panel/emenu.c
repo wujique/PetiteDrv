@@ -11,13 +11,17 @@
  *   修改内容:   创建文件
 */
 #include "mcu.h"
+#include "petite_config.h"
+
+#if (PANEL_EMENU_MODULE == 1)
 #include "log.h"
 #include "emenu.h"
-#include "dev_lcd.h"
 #include "font.h"
-#include "dev_keypad.h"
 
-//#define EMENU_DEBUG_EN
+#include "drv_keypad.h"
+#include "drv_lcd.h"
+
+#define EMENU_DEBUG_EN
 
 #ifdef EMENU_DEBUG_EN
 #define EMENU_DEBUG	wjq_log 
@@ -25,10 +29,8 @@
 #define EMENU_DEBUG(a, ...)
 #endif
 
-
 extern u16 PenColor;
 extern u16 BackColor;
-
 
 /*按键定义*/
 #define EMENU_KEYU_0	'0'
@@ -58,11 +60,11 @@ const u8 emunu_key_chg[17]=
 	EMENU_KEYU_7,EMENU_KEYU_8,EMENU_KEYU_9,EMENU_KEYU_ESC,
 	EMENU_KEYU_STAR,EMENU_KEYU_0,EMENU_KEYU_HASH,EMENU_KEYU_ENTER
 };
-	
+/*  need fix 如果没有按键，只有触屏，如何支持？*/	
 u8 emenu_get_key(void)
 {
 	u8 key;
-	s32 res;
+	s32 res = 0;
 	
 	res = dev_keypad_read(&key, 1);
 	if (res == 1) {
@@ -617,4 +619,6 @@ s32 emenu_run(DevLcdNode *lcd, MENU *p, u16 len, char *font, u8 spaced, u8 lang)
 	}
 		
 }
+
+#endif
 

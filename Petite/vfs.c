@@ -19,11 +19,15 @@
 	8 一切解释权归屋脊雀工作室所有。
 */
 #include "mcu.h"
+#include "petite_config.h"
+
+#if (SYS_USE_VFS == 1)
 #include "log.h"
 #include "board_sysconf.h"
 #include "alloc.h"
 #include "vfs.h"
-#ifdef SYS_FS_FATFS
+
+#if (SYS_FS_FATFS == 1)
 #include "ff.h"
 #endif
 /*
@@ -222,7 +226,7 @@ void vfs_init(void)
 **Returned value:        
 **                   
 */
-s32 vfs_mount(const VFSDIR *Mtd)
+int vfs_mount(const VFSDIR *Mtd)
 {
 	u8 i = 0;
 	
@@ -535,5 +539,5 @@ int vfs_close(int fd)
 	return NULL;
 }
 
-
+#endif
 

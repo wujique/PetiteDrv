@@ -25,10 +25,19 @@
   *
   ******************************************************************************
   */
+
+#include "mcu.h"
+#include "petite_config.h"
+
 /* Includes ------------------------------------------------------------------*/
-#include "drv_ov9655.h"
+#if (DRV_CAMERA_OV9655 == 1)
+
+#include "board_sysconf.h"
+
 #include "mcu_dcmi.h"
 #include "mcu_i2c.h"
+
+#include "drv_ov9655.h"
 
 extern void Delay(__IO uint32_t nTime);
 
@@ -568,6 +577,7 @@ void OV9655_SelectRGBOption(uint8_t OV9665_RGBOption)
 }
 
 
+#endif
 /**
   * @}
   */ 

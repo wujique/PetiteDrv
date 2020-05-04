@@ -9,12 +9,14 @@
 */
 
 #include "mcu.h"
-#include "board_sysconf.h"
+#include "petite_config.h"
+
+#if( LCD_DRIVER_NT35510 == 1 )
+
 #include "alloc.h"
 #include "log.h"
 #include "bus_lcd.h"
-
-#include "dev_lcd.h"
+#include "drv_lcd.h"
 
 #define DRV_NT35510_DEBUG
 
@@ -25,10 +27,6 @@
 #endif
 
 extern void Delay(__IO uint32_t nTime);
-
-
-#if( LCD_DRIVER_NT35510 == 1 )
-
 
 #define NT35510_CMD_WRAM 0x2c00
 #define NT35510_CMD_SETX 0x2a00

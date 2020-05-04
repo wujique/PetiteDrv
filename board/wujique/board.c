@@ -1,9 +1,10 @@
 #include "mcu.h"
-#include "log.h"
-#include "board_sysconf.h"
-#include "vfs.h"
 
-#include "dev_keypad.h"
+#include "board_sysconf.h"
+#include "log.h"
+
+#include "vfs.h"
+#include "drv_keypad.h"
 /*
 	矩阵按键硬件定义
 	row输出，放前面
@@ -65,15 +66,13 @@ s32 board_init(void)
 	dev_8266_init();
 
 	mcu_adc_temprate_init();
-	dev_htu21d_init();
-	dev_ptHCHO_init();
-
+	//dev_htu21d_init();
+	//dev_ptHCHO_init();
 	//dev_srf05_test();
 
 	vfs_init();
 	vfs_mount(&SdFatFs);
 
-	font_hzfont_init();
 	//sys_spiffs_mount_coreflash();
 	//sys_lfs_mount();
 	//lfs_test();

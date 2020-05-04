@@ -27,14 +27,21 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
+
+
 #include "mcu.h"
+#include "petite_config.h"
+
+#if (DRV_CAMERA_MODULE == 1)
+
+#include "board_sysconf.h"
+
 #include "mcu_dcmi.h"
 #include "camera_api.h"
 #include "drv_ov9655.h"
 #include "drv_ov2640.h"
-#include "dev_lcd.h"
+#include "drv_lcd.h"
 #include "log.h"
-#include "board_sysconf.h"
 #include "alloc.h"
 
 
@@ -264,6 +271,8 @@ s32 dev_camera_show(DevLcdNode *lcd)
 	}
 	return 0;
 }
+
+#endif
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
 

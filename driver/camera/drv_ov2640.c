@@ -25,11 +25,18 @@
   *
   ******************************************************************************
   */
+#include "mcu.h"
 
-/* Includes ------------------------------------------------------------------*/
-#include "drv_ov2640.h"
+#include "petite_config.h"
+
+#if (DRV_CAMERA_OV2640 == 1)
+
+#include "board_sysconf.h"
 #include "mcu_dcmi.h"
 #include "mcu_i2c.h"
+
+#include "drv_ov2640.h"
+
 
 extern void Delay(__IO uint32_t nTime);
 
@@ -1355,6 +1362,8 @@ void OV2640_SpecialEffects(uint8_t index)
       break;
   }
 }
+
+#endif
 
 /**
   * @}

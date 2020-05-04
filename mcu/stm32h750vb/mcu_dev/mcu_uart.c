@@ -74,6 +74,11 @@ UART_HandleTypeDef McuHuart2;
   * @param None
   * @retval None
   */
+/*
+	要注意，硬件初始化函数在
+	void HAL_UART_MspInit(UART_HandleTypeDef* huart)；
+	这是由cube生成的。
+*/
 static void mcu_MX_UART4_Init(void)
 {
 
@@ -403,12 +408,18 @@ void mcu_uart_test(void)
     u8 buf[12];
     s32 len;
     s32 res;
-    
-    len =  mcu_uart_read (MCU_UART_4, buf, 10);
-    wjq_log(LOG_FUN, "mcu_dev_uart_read :%d\r\n", len);
-    res = mcu_uart_write(MCU_UART_4, buf, len);
-    wjq_log(LOG_FUN, "mcu_dev_uart_write res: %d\r\n", res);
-    wjq_log(LOG_FUN, "%s,%s,%d,%s\r\n", __FUNCTION__,__FILE__,__LINE__,__DATE__);
+
+	wjq_log(LOG_FUN, "%s,%s,%d,%s\r\n", __FUNCTION__,__FILE__,__LINE__,__DATE__);
+	while(1)
+	{
+	    len =  mcu_uart_read (MCU_UART_4, buf, 10);
+		if(len != 0)
+		{
+	    	wjq_log(LOG_FUN, "mcu_dev_uart_read :%d\r\n", len);
+	    	res = mcu_uart_write(MCU_UART_4, buf, len);
+	    	wjq_log(LOG_FUN, "mcu_dev_uart_write res: %d\r\n", res);
+		}
+	}
     
 }
 

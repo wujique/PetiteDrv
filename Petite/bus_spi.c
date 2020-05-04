@@ -166,7 +166,7 @@ s32 bus_spich_register(const DevSpiCh *dev)
  *@retval:     
  			   打开一次SPI，在F407上大概要2us
  */
-DevSpiChNode *bus_spich_open(char *name, SPI_MODE mode, u16 pre)
+DevSpiChNode *bus_spich_open(char *name, SPI_MODE mode, u16 KHz)
 {
 
 	s32 res;
@@ -202,9 +202,9 @@ DevSpiChNode *bus_spich_open(char *name, SPI_MODE mode, u16 pre)
 		} else {
 			/*打开SPI控制器*/
 			if (node->spi->dev.pnode.type == BUS_SPI_H) {
-				res = mcu_hspi_open(node->spi, mode, pre);	
+				res = mcu_hspi_open(node->spi, mode, KHz);	
 			} else if(node->spi->dev.pnode.type == BUS_SPI_V) {
-				res = bus_vspi_open(node->spi, mode, pre);	
+				res = bus_vspi_open(node->spi, mode, KHz);	
 			}
 
 			if (res == 0) {

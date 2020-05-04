@@ -1,12 +1,13 @@
 
 #include "mcu.h"
-#include "log.h"
+#include "petite_config.h"
+
+#if (SYS_FS_LITTLEFS == 1)
+
 #include "board_sysconf.h"
-
-#include "dev_spiflash.h"
-
+#include "log.h"
+#include "drv_spiflash.h"
 #include "lfs.h"
-
 
 #define LFS_FLASH_NAME "board_spiflash"
 /*
@@ -147,4 +148,5 @@ int lfs_test(void)
     wjq_log(3, "boot_count: %d\r\n", boot_count);
 }
 
+#endif
 

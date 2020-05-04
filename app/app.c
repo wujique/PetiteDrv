@@ -2,6 +2,8 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "mcu.h"
+#include "petite_config.h"
+
 #include "log.h"
 #include "FreeRTos.h"
 #include "board_sysconf.h"
@@ -83,8 +85,7 @@ void start_task(void *pvParameters)
 
 	board_init();
 	
-	while (1)
-	{
+	while (1) {
 		vTaskDelay(2);
 		board_low_task();
 	}

@@ -75,7 +75,7 @@ s32 board_mcu_preinit(void)
 	wjq_log(LOG_INFO, "PCLK1_Frequency: %d Hz\r\n", RCC_Clocks.PCLK1_Frequency);
 	wjq_log(LOG_INFO, "PCLK2_Frequency: %d Hz\r\n", RCC_Clocks.PCLK2_Frequency);
 
-	#ifndef SYS_USE_RTOS
+	#if 0//ndef SYS_USE_RTOS
 	/* SysTick end of count event */
 	wjq_log(LOG_DEBUG, "init systick no rtos\r\n");
 	SysTick_Config(RCC_Clocks.HCLK_Frequency / (1000/SYSTEMTICK_PERIOD_MS));

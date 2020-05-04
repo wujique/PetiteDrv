@@ -2,8 +2,8 @@
 #include "mcu.h"
 #include "log.h"
 #include "emenu.h"
-#include "dev_lcd.h"
-#include "dev_keypad.h"
+#include "drv_lcd.h"
+#include "drv_keypad.h"
 #include "font.h"
 #include "mcu_uart.h"
 

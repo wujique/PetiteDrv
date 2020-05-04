@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ScratchFile FileVersion="3.0">
+  <FileVersion>3.0</FileVersion>
+  <Workspace>
+    <WorkspaceType>Single-project</WorkspaceType>
+    <WorkspacePath>I:\PetiteDrv\prog\PetiteDrv\board\Albatross\</WorkspacePath>
+    <underRoot>true</underRoot>
+    <TrustZone>0</TrustZone>
+    <HAL_Driver>C:\Users\Administrator\STM32Cube\Repository\STM32Cube_FW_H7_V1.6.0</HAL_Driver>
+    <CMSIS>Drivers/CMSIS</CMSIS>
+    <Toolchain>STM32CubeIDE</Toolchain>
+    <IocFile>H750_cube_demo.ioc</IocFile>
+    <Project>
+      <ProjectName>H750_cube_demo</ProjectName>
+      <ProjectNature>C</ProjectNature>
+      <Secure/>
+      <filestoremove/>
+      <sourceEntriesToRemove>
+        <sourceEntry/>
+      </sourceEntriesToRemove>
+      <configs>
+        <config>
+          <name>H750_cube_demo</name>
+          <mainSourceRepo>Core</mainSourceRepo>
+          <sourceStructure>Advanced</sourceStructure>
+          <device>STM32H750VBTx</device>
+          <cpucore>ARM Cortex-M7</cpucore>
+          <fpu>DP</fpu>
+          <memories>
+            <memory access="xrw" name="DTCMRAM" size="128" start="0x20000000"/>
+            <memory access="xrw" name="RAM_D1" size="512" start="0x24000000"/>
+            <memory access="xrw" name="RAM_D2" size="288" start="0x30000000"/>
+            <memory access="xrw" name="RAM_D3" size="64" start="0x38000000"/>
+            <memory access="xrw" name="ITCMRAM" size="64" start="0x00000000"/>
+            <memory access="rx" name="FLASH" size="128" start="0x8000000"/>
+          </memories>
+          <startup>C:\Users\Administrator\STM32Cube\Repository\STM32Cube_FW_H7_V1.6.0\Drivers\CMSIS\Device\ST\STM32H7xx\Source\Templates\gcc\startup_stm32h750xx.s</startup>
+          <LinkSettings>
+            <LinkAdditionalLibs/>
+          </LinkSettings>
+          <heapSize>0x200</heapSize>
+          <stackSize>0x400</stackSize>
+          <board>custom</board>
+          <optimization/>
+          <Aincludes>
+            <include/>
+          </Aincludes>
+          <Adefines/>
+          <Cdefines>
+            <define>USE_HAL_DRIVER</define>
+            <define>STM32H750xx</define>
+          </Cdefines>
+          <Ldefines/>
+          <Cincludes>
+            <include>Core\Inc</include>
+            <include>Drivers\STM32H7xx_HAL_Driver\Inc</include>
+            <include>Drivers\STM32H7xx_HAL_Driver\Inc\Legacy</include>
+            <include>Drivers\CMSIS\Device\ST\STM32H7xx\Include</include>
+            <include>Drivers\CMSIS\Include</include>
+          </Cincludes>
+          <definestoremove>
+            <Adefines/>
+            <Cdefines>
+              <define>USE_FULL_LL_DRIVER</define>
+              <define>MBEDTLS_CONFIG_FILE="mbedtls_config.h"</define>
+              <define>USE_FULL_ASSERT=1U</define>
+            </Cdefines>
+            <Ldefines/>
+          </definestoremove>
+          <inctoremove>
+            <Aincludes>
+              <include/>
+            </Aincludes>
+            <Cincludes/>
+          </inctoremove>
+        </config>
+      </configs>
+      <copyAsReference>false</copyAsReference>
+      <sourceEntries>
+        <sourceEntry>
+          <name>Core</name>
+        </sourceEntry>
+        <sourceEntry>
+          <name>Drivers</name>
+        </sourceEntry>
+      </sourceEntries>
+      <Groups/>
+    </Project>
+  </Workspace>
+</ScratchFile>

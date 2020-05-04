@@ -1,9 +1,11 @@
 
 #include "mcu.h"
-#include "log.h"
-#include "board_sysconf.h"
+#include "petite_config.h"
 
-#include "dev_spiflash.h"
+#if (SYS_FS_SPIFS == 1)
+
+#include "log.h"
+#include "drv_spiflash.h"
 #include <spiffs.h>
 
 
@@ -241,4 +243,6 @@ void test_spiffs(void)
   // check it
   wjq_log(LOG_INFO, "--> %s <--\n", buf);
 }
+
+#endif
 

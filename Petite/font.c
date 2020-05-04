@@ -19,10 +19,11 @@
 	8 一切解释权归屋脊雀工作室所有。
 */
 #include "mcu.h"
-#include "log.h"
-#include "vfs.h"
-#include "board_sysconf.h"
+#include "petite_config.h"
 #include "font.h"
+#include "log.h"
+#include "board_sysconf.h"
+
 /*
 	最好的方案其实是让字库自举，也就是在字库的头部包含字库信息。
 	暂时不做这么复杂了。
@@ -58,6 +59,65 @@ u8 font_find_index(char *font)
 	return i;
 	
 }
+
+/**
+ *@brief:      font_get_asc
+ *@details:    获取ASC字符点阵数据
+ *@param[in]   FontType type  
+               char *ch       
+               char *buf      
+ *@param[out]  无
+ *@retval:     
+ */
+s32 font_get_asc(char *font, u8 *ch, u8 *buf)
+{
+	u8* fp;
+	u8 i;
+	
+	if(*ch >= 0x80)	return -1;
+	
+	i = font_find_index(font);
+	
+	if(i >= FONT_LIST_MAX)	return -1;
+
+	fp = (u8*)FontAscList[i]->path + (*ch)*FontAscList[i]->size;
+	//wjq_log(LOG_DEBUG, "dot data\r\n");
+	//PrintFormat(fp, 16);
+	
+	memcpy(buf, fp, FontAscList[i]->size);
+
+	return 0;
+}
+/**
+ *@brief:      font_get_hw
+ *@details:    获取字体长宽
+ *@param[in]   FontType type  
+               u8 *h       
+               u8 *w      
+ *@param[out]  无
+ *@retval:     
+ 			返回的是单个字符长宽，也就是对应的ASC宽度，汉字算两个字符宽度
+ */
+
+s32 font_get_hw(char *font, u16 *h, u16 *w)
+{
+	u8 i;
+	
+	i = font_find_index(font);
+	
+	if(i >= FONT_LIST_MAX)
+		return -1;
+
+	*w = FontAscList[i]->width;
+	*h = FontAscList[i]->height;
+
+	return 0;
+}
+
+#if (PANEL_FONT_MODULE == 1)
+
+#include "vfs.h"
+
 /**
  *@brief:      font_check_hzfont
  *@details:    检查字库，主要是汉字库
@@ -148,63 +208,12 @@ s32 font_get_hz(char *font, u8 *ch, u8 *buf)
 	return 0;
 	
 }
-/**
- *@brief:      font_get_asc
- *@details:    获取ASC字符点阵数据
- *@param[in]   FontType type  
-               char *ch       
-               char *buf      
- *@param[out]  无
- *@retval:     
- */
-s32 font_get_asc(char *font, u8 *ch, u8 *buf)
+#else
+s32 font_get_hz(char *font, u8 *ch, u8 *buf)
 {
-	u8* fp;
-	u8 i;
-	
-	if(*ch >= 0x80)	return -1;
-	
-	if(FontInit == -1)
-		font_hzfont_init();
-	
-	i = font_find_index(font);
-	
-	if(i >= FONT_LIST_MAX)	return -1;
-
-	fp = (u8*)FontAscList[i]->path + (*ch)*FontAscList[i]->size;
-	//wjq_log(LOG_DEBUG, "dot data\r\n");
-	//PrintFormat(fp, 16);
-	
-	memcpy(buf, fp, FontAscList[i]->size);
-
-	return 0;
+	return -1;
 }
-/**
- *@brief:      font_get_hw
- *@details:    获取字体长宽
- *@param[in]   FontType type  
-               u8 *h       
-               u8 *w      
- *@param[out]  无
- *@retval:     
- 			返回的是单个字符长宽，也就是对应的ASC宽度，汉字算两个字符宽度
- */
 
-s32 font_get_hw(char *font, u16 *h, u16 *w)
-{
-	u8 i;
-	
-	if(FontInit == -1)
-		font_hzfont_init();
 
-	i = font_find_index(font);
-	
-	if(i >= FONT_LIST_MAX)
-		return -1;
-
-	*w = FontAscList[i]->width;
-	*h = FontAscList[i]->height;
-
-	return 0;
-}
+#endif
 

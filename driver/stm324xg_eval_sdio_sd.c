@@ -223,6 +223,10 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "mcu.h"
+#include "petite_config.h"
+
+#if (DRV_SDIO_MODULE == 1)
+
 #include "mcu_sdio.h"
 #include "stm324xg_eval_sdio_sd.h"
 
@@ -3626,5 +3630,7 @@ s32 tf_file_test(void)
 		
 	}
 }
+#endif
+
 #endif
 

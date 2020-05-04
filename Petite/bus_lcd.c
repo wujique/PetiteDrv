@@ -141,7 +141,7 @@ DevLcdBusNode *bus_lcd_open(char *name)
 		} else {
 			
 			if (node->dev.pnode.type == BUS_LCD_SPI) {
-				node->basenode = (void *)bus_spich_open(node->dev.basebus, SPI_MODE_3, SPI_BaudRatePrescaler_2);
+				node->basenode = (void *)bus_spich_open(node->dev.basebus, SPI_MODE_3, 10000);
 
 			} else if (node->dev.pnode.type == BUS_LCD_I2C) {
 				node->basenode = bus_i2c_open(node->dev.basebus);

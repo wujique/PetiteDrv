@@ -88,7 +88,7 @@ u32 VspiDelay = 0;
  *@param[out]  无
  *@retval:     
  */
-s32 bus_vspi_open(DevSpiNode *node, SPI_MODE mode, u16 pre)
+s32 bus_vspi_open(DevSpiNode *node, SPI_MODE mode, u16 KHz)
 {
 
 	if (node == NULL) return -1;
@@ -99,8 +99,11 @@ s32 bus_vspi_open(DevSpiNode *node, SPI_MODE mode, u16 pre)
 	}
 	
 	//VSPI_DEBUG(LOG_DEBUG, "vo-");
+	/* 根据传入的参数KHz，转换为程序延时参数
+	   当前固定为2
+	*/
+	node->clk = 1;
 	
-	node->clk = pre;
 	node->gd = 0;
 		
     return 0;

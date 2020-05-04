@@ -33,6 +33,7 @@ LOG_L LogLevel = LOG_DEBUG;//系统调试信息等级
 */
 s8 string[256];//调试信息缓冲，输出调试信息一次不可以大于256
 
+#if 0
 #ifdef __GNUC__
 /* With GCC/RAISONANCE, small printf (option LD Linker->Libraries->Small printf
      set to 'Yes') calls __io_putchar() */
@@ -52,6 +53,7 @@ PUTCHAR_PROTOTYPE
     return ch;
 }
 
+#endif 
 extern int vsprintf(char * s, const char * format, __va_list arg);
 /**
  *@brief:      uart_printf

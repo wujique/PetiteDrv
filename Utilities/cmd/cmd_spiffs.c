@@ -6,7 +6,7 @@
 
 int cmd_spiffs_ls( cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
 {
-	sys_spiffs_ls();
+	//sys_spiffs_ls();
 	return 0;
 }
 
@@ -18,7 +18,7 @@ REGISTER_CMD(
 
 int cmd_spiffs_format( cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
 {
-	sys_spiffs_format();
+	//sys_spiffs_format();
 	return 0;
 }
 

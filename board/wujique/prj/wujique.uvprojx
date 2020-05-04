@@ -426,74 +426,74 @@
           <GroupName>driver</GroupName>
           <Files>
             <File>
-              <FileName>dev_buzzer.c</FileName>
+              <FileName>drv_buzzer.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\driver\dev_buzzer.c</FilePath>
+              <FilePath>..\..\..\driver\drv_buzzer.c</FilePath>
             </File>
             <File>
-              <FileName>dev_dacsound.c</FileName>
+              <FileName>drv_dacsound.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\driver\dev_dacsound.c</FilePath>
+              <FilePath>..\..\..\driver\drv_dacsound.c</FilePath>
             </File>
             <File>
-              <FileName>dev_esp8266.c</FileName>
+              <FileName>drv_esp8266.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\driver\dev_esp8266.c</FilePath>
+              <FilePath>..\..\..\driver\drv_esp8266.c</FilePath>
             </File>
             <File>
-              <FileName>dev_key.c</FileName>
+              <FileName>drv_key.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\driver\dev_key.c</FilePath>
+              <FilePath>..\..\..\driver\drv_key.c</FilePath>
             </File>
             <File>
-              <FileName>dev_keypad.c</FileName>
+              <FileName>drv_keypad.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\driver\dev_keypad.c</FilePath>
+              <FilePath>..\..\..\driver\drv_keypad.c</FilePath>
             </File>
             <File>
-              <FileName>dev_rf24l01.c</FileName>
+              <FileName>drv_rf24l01.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\driver\dev_rf24l01.c</FilePath>
+              <FilePath>..\..\..\driver\drv_rf24l01.c</FilePath>
             </File>
             <File>
-              <FileName>dev_rs485.c</FileName>
+              <FileName>drv_rs485.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\driver\dev_rs485.c</FilePath>
+              <FilePath>..\..\..\driver\drv_rs485.c</FilePath>
             </File>
             <File>
-              <FileName>dev_spiflash.c</FileName>
+              <FileName>drv_spiflash.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\driver\dev_spiflash.c</FilePath>
+              <FilePath>..\..\..\driver\drv_spiflash.c</FilePath>
             </File>
             <File>
-              <FileName>dev_srf05.c</FileName>
+              <FileName>drv_srf05.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\driver\dev_srf05.c</FilePath>
+              <FilePath>..\..\..\driver\drv_srf05.c</FilePath>
             </File>
             <File>
-              <FileName>dev_tea5767.c</FileName>
+              <FileName>drv_tea5767.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\driver\dev_tea5767.c</FilePath>
+              <FilePath>..\..\..\driver\drv_tea5767.c</FilePath>
             </File>
             <File>
-              <FileName>dev_touchkey.c</FileName>
+              <FileName>drv_touchkey.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\driver\dev_touchkey.c</FilePath>
+              <FilePath>..\..\..\driver\drv_touchkey.c</FilePath>
             </File>
             <File>
-              <FileName>dev_touchscreen.c</FileName>
+              <FileName>drv_touchscreen.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\driver\dev_touchscreen.c</FilePath>
+              <FilePath>..\..\..\driver\drv_touchscreen.c</FilePath>
             </File>
             <File>
-              <FileName>dev_wm8978.c</FileName>
+              <FileName>drv_wm8978.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\driver\dev_wm8978.c</FilePath>
+              <FilePath>..\..\..\driver\drv_wm8978.c</FilePath>
             </File>
             <File>
-              <FileName>dev_xpt2046.c</FileName>
+              <FileName>drv_xpt2046.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\driver\dev_xpt2046.c</FilePath>
+              <FilePath>..\..\..\driver\drv_xpt2046.c</FilePath>
             </File>
             <File>
               <FileName>stm324xg_eval_sdio_sd.c</FileName>
@@ -506,46 +506,6 @@
           <GroupName>driver/lcd</GroupName>
           <Files>
             <File>
-              <FileName>dev_IL3820.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\driver\lcd\dev_IL3820.c</FilePath>
-            </File>
-            <File>
-              <FileName>dev_IL91874.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\driver\lcd\dev_IL91874.c</FilePath>
-            </File>
-            <File>
-              <FileName>dev_ILI9325.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\driver\lcd\dev_ILI9325.c</FilePath>
-            </File>
-            <File>
-              <FileName>dev_ILI9341.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\driver\lcd\dev_ILI9341.c</FilePath>
-            </File>
-            <File>
-              <FileName>dev_lcd.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\driver\lcd\dev_lcd.c</FilePath>
-            </File>
-            <File>
-              <FileName>dev_st7735r.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\driver\lcd\dev_st7735r.c</FilePath>
-            </File>
-            <File>
-              <FileName>dev_st7789.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\driver\lcd\dev_st7789.c</FilePath>
-            </File>
-            <File>
-              <FileName>dev_str7565.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\driver\lcd\dev_str7565.c</FilePath>
-            </File>
-            <File>
               <FileName>drv_nt35510.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\driver\lcd\drv_nt35510.c</FilePath>
@@ -555,20 +515,60 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\driver\lcd\drv_r61408.c</FilePath>
             </File>
+            <File>
+              <FileName>drv_IL3820.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\driver\lcd\drv_IL3820.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_IL91874.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\driver\lcd\drv_IL91874.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_ILI9325.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\driver\lcd\drv_ILI9325.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_ILI9341.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\driver\lcd\drv_ILI9341.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_lcd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\driver\lcd\drv_lcd.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_st7735r.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\driver\lcd\drv_st7735r.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_st7789.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\driver\lcd\drv_st7789.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_str7565.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\driver\lcd\drv_str7565.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
           <GroupName>driver/cdev</GroupName>
           <Files>
             <File>
-              <FileName>dev_htu21d.c</FileName>
+              <FileName>drv_htu21d.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\driver\cdev\dev_htu21d.c</FilePath>
+              <FilePath>..\..\..\driver\cdev\drv_htu21d.c</FilePath>
             </File>
             <File>
-              <FileName>dev_ptHCHO.c</FileName>
+              <FileName>drv_ptHCHO.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\driver\cdev\dev_ptHCHO.c</FilePath>
+              <FilePath>..\..\..\driver\cdev\drv_ptHCHO.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -19,9 +19,12 @@
 #include "tslib.h"
 #include <stdarg.h>
 #include "mcu.h"
-#include "log.h"
-#include "dev_lcd.h"
+
 #include "tslib.h"
+
+#include "log.h"
+
+#include "drv_lcd.h"
 
 extern void put_cross(DevLcdNode *lcd, int x, int y, unsigned colidx);
 extern void put_string_center(DevLcdNode *lcd, int x, int y, char *s, unsigned colidx);

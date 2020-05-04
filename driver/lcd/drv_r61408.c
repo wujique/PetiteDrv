@@ -1,13 +1,15 @@
 
 #include "mcu.h"
-#include "board_sysconf.h"
+#include "petite_config.h"
+
+#if( LCD_DRIVER_R61408 == 1 )
+#include "mcu_fsmc.h"
+
 #include "alloc.h"
 #include "log.h"
+
 #include "bus_lcd.h"
-
-#include "dev_lcd.h"
-
-#include "mcu_fsmc.h"
+#include "drv_lcd.h"
 
 #define DRV_R61408_DEBUG
 
@@ -18,10 +20,6 @@
 #endif
 
 extern void Delay(__IO uint32_t nTime);
-
-
-#if( LCD_DRIVER_R61408 == 1 )
-
 
 #define R61408_CMD_WRAM 0x2c
 #define R61408_CMD_SETX 0x2a

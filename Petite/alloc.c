@@ -11,8 +11,9 @@
 #include "stdlib.h"
 
 #include "mcu.h"
+#include "petite_config.h"
+
 #include "log.h"
-#include "board_sysconf.h"
 #include "alloc.h"
 
 /*
@@ -34,7 +35,6 @@ _ALLOC_FIRST_FIT_ 首次适应法
 #ifdef ALLOC_USE_HEAP
 #pragma section = "HEAP"
 #endif
-
 
 #ifdef ALLOC_USE_ARRAY
 

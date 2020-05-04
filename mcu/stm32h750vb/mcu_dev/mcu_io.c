@@ -28,18 +28,18 @@
 const GPIO_TypeDef *Stm32H750PortList[MCU_PORT_MAX] = {NULL, GPIOA,  GPIOB, GPIOC, GPIOD,
 									GPIOE, GPIOF, GPIOG};
 
-									
-const u16 Stm32H750PinList[MCU_IO_MAX] = {GPIO_PIN_0, GPIO_PIN_1,  GPIO_PIN_2, GPIO_PIN_3, 
-											GPIO_PIN_4, GPIO_PIN_5,  GPIO_PIN_6, GPIO_PIN_7, 
-											GPIO_PIN_8, GPIO_PIN_9,  GPIO_PIN_10, GPIO_PIN_11, 
-											GPIO_PIN_12, GPIO_PIN_13,  GPIO_PIN_14, GPIO_PIN_15, 
-											};
-
 /*
 	初始化所有IO的时钟
 */
 void mcu_io_init(void)
 {
+	  /* GPIO Ports Clock Enable */
+  	__HAL_RCC_GPIOA_CLK_ENABLE();
+  	__HAL_RCC_GPIOB_CLK_ENABLE();
+  	__HAL_RCC_GPIOC_CLK_ENABLE();
+  	__HAL_RCC_GPIOD_CLK_ENABLE();	
+  	__HAL_RCC_GPIOE_CLK_ENABLE();
+	__HAL_RCC_GPIOH_CLK_ENABLE();
 	return;
 }
 
@@ -80,7 +80,7 @@ void mcu_io_config_in(MCU_PORT port, MCU_IO pin)
 	if(port == NULL)
 		return;
 
-  	GPIO_InitStruct.Pin = Stm32H750PinList[pin];
+  	GPIO_InitStruct.Pin = pin;
   	GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   	GPIO_InitStruct.Pull = GPIO_PULLUP;
   	HAL_GPIO_Init((GPIO_TypeDef *)Stm32H750PortList[port], &GPIO_InitStruct);
@@ -94,9 +94,9 @@ void mcu_io_config_out(MCU_PORT port, MCU_IO pin)
 	if(port == NULL)
 		return;
 
-	GPIO_InitStruct.Pin = Stm32H750PinList[pin];
+	GPIO_InitStruct.Pin = pin;
   	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  	GPIO_InitStruct.Pull = GPIO_NOPULL;
+  	GPIO_InitStruct.Pull = GPIO_PULLUP;
   	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   	HAL_GPIO_Init((GPIO_TypeDef *)Stm32H750PortList[port], &GPIO_InitStruct);
 
@@ -125,7 +125,7 @@ void mcu_io_output_setbit(MCU_PORT port, MCU_IO pin)
 	if(port == NULL)
 		return;
 	
-	HAL_GPIO_WritePin((GPIO_TypeDef *)Stm32H750PortList[port], Stm32H750PinList[pin], GPIO_PIN_SET);
+	HAL_GPIO_WritePin((GPIO_TypeDef *)Stm32H750PortList[port], pin, GPIO_PIN_SET);
 }
 
 void mcu_io_output_resetbit(MCU_PORT port, MCU_IO pin)
@@ -133,7 +133,7 @@ void mcu_io_output_resetbit(MCU_PORT port, MCU_IO pin)
 	if(port == NULL)
 		return;
 	
-	HAL_GPIO_WritePin((GPIO_TypeDef *)Stm32H750PortList[port], Stm32H750PinList[pin], GPIO_PIN_RESET);
+	HAL_GPIO_WritePin((GPIO_TypeDef *)Stm32H750PortList[port], pin, GPIO_PIN_RESET);
 }		
 
 u8 mcu_io_input_readbit(MCU_PORT port, MCU_IO pin)
@@ -141,7 +141,7 @@ u8 mcu_io_input_readbit(MCU_PORT port, MCU_IO pin)
 	if(port == NULL)
 		return GPIO_PIN_SET;
 	
-	return HAL_GPIO_ReadPin((GPIO_TypeDef *)Stm32H750PortList[port], Stm32H750PinList[pin]);
+	return HAL_GPIO_ReadPin((GPIO_TypeDef *)Stm32H750PortList[port], pin);
 }
 
 u16 mcu_io_input_readport(MCU_PORT port)

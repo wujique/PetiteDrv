@@ -160,9 +160,7 @@ void UsageFault_Handler(void)
 void SVC_Handler(void)
 {
     //uart_printf("SVC_Handler\r\n");
-    #ifdef SYS_USE_RTOS
 	vPortSVCHandler();
-	#endif
 }
 
 /**
@@ -183,9 +181,8 @@ void DebugMon_Handler(void)
 void PendSV_Handler(void)
 {
     //uart_printf("PendSV_Handler\r\n");
-    #ifdef SYS_USE_RTOS
 	xPortPendSVHandler();
-	#endif
+
 }
 
 /**
@@ -200,9 +197,8 @@ void SysTick_Handler(void)
   /*
 	freertos的接口放在这里
   */
-  #ifdef SYS_USE_RTOS
   xPortSysTickHandler();
-  #endif
+
 }
 
 /******************************************************************************/

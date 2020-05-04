@@ -28,14 +28,18 @@
 
 */
 #include "mcu.h"
-#include "vfs.h"
-#include "stm32f4xx_spi.h"
-#include "dev_wm8978.h"
-#include "mcu_i2s.h"
-#include "soundplay.h"
+#include "petite_config.h"
+
+#if (PANEL_SOUND_MODULE == 1)
+
 #include "log.h"
 #include "alloc.h"
-#include "dev_dacsound.h"
+
+#include "vfs.h"
+
+#include "drv_wm8978.h"
+#include "drv_dacsound.h"
+#include "soundplay.h"
 
 #define FUN_SOUND_DEBUG
 
@@ -44,8 +48,6 @@
 #else
 #define SOUND_DEBUG(a, ...)
 #endif
-
-
 
 /*wav 文件结构*/
 typedef struct _TWavHeader 
@@ -712,4 +714,6 @@ void fun_play_rec_test(void)
 {
 	fun_sound_play("1:/rec9.wav", "wm8978");	
 }
+
+#endif
 

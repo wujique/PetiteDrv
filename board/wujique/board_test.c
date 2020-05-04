@@ -11,18 +11,19 @@
  *   修改内容:   创建文件
 */
 #include "mcu.h"
-#include "log.h"
 #include "board_sysconf.h"
+
+#include "log.h"
 #include "font.h"
 #include "emenu.h"
 #include "tslib.h"
 
-#include "dev_wm8978.h"
-#include "dev_lcd.h"
+#include "drv_wm8978.h"
+#include "drv_lcd.h"
 #include "soundplay.h"
-#include "dev_touchkey.h"
-#include "dev_keypad.h"
-#include "dev_key.h"
+#include "drv_touchkey.h"
+#include "drv_keypad.h"
+#include "drv_key.h"
 
 extern u16 PenColor;
 extern u16 BackColor;
@@ -33,18 +34,14 @@ DevLcdNode * WJQTestLcd;
 
 s32 wjq_wait_key(u8 key)
 {
-	while(1)
-	{
+	while(1) {
 		u8 keyvalue;
 		s32 res;
 		
 		res = dev_keypad_read(&keyvalue, 1);
-		if(res == 1)
-		{
-			if(key == 0)
-				break;
-			else if(keyvalue == key)
-				break;	
+		if(res == 1) {
+			if(key == 0) break;
+			else if(keyvalue == key) break;	
 		}
 	}	
 	return 0;
@@ -82,16 +79,11 @@ s32 test_tft_display(void)
 	dev_lcd_update(WJQTestLcd);
 	
 	lcd = dev_lcd_open("tftlcd");
-	if(lcd == NULL)
-	{
+	if (lcd == NULL)	{
 		wjq_test_showstr("open lcd err!");	
-	}
-	else
-	{
-		while(1)
-		{
-			if(dis == 1)
-			{
+	} else {
+		while(1) {
+			if (dis == 1) {
 				dis = 0;
 				switch(step)
 				{
@@ -120,14 +112,10 @@ s32 test_tft_display(void)
 			s32 res;
 			
 			res = dev_keypad_read(&keyvalue, 1);
-			if(res == 1)
-			{
-				if(keyvalue == 16)
-				{
+			if (res == 1) {
+				if(keyvalue == 16) {
 					dis = 1;
-				}
-				else if(keyvalue == 12)
-				{
+				} else if(keyvalue == 12) {
 					break;
 				}
 			}
@@ -144,16 +132,11 @@ s32 test_cogoled_lcd_display(char *name)
 	u8 dis = 1;
 	
 	lcd = dev_lcd_open(name);
-	if(lcd == NULL)
-	{
+	if (lcd == NULL) {
 		wjq_test_showstr("open cog lcd err!");	
-	}
-	else
-	{
-		while(1)
-		{
-			if(dis == 1)
-			{
+	} else {
+		while(1) {
+			if(dis == 1) {
 				dis = 0;
 				switch(step)
 				{
@@ -181,14 +164,10 @@ s32 test_cogoled_lcd_display(char *name)
 			s32 res;
 			
 			res = dev_keypad_read(&keyvalue, 1);
-			if(res == 1)
-			{
-				if(keyvalue == 16)
-				{
+			if (res == 1) {
+				if(keyvalue == 16) {
 					dis = 1;
-				}
-				else if(keyvalue == 12)
-				{
+				} else if(keyvalue == 12) {
 					break;
 				}
 			}
@@ -238,18 +217,13 @@ s32 test_lcd_spi_128128(void)
 	dev_lcd_update(WJQTestLcd);
 	
 	lcd = dev_lcd_open("spitftlcd");
-	if(lcd == NULL)
-	{
+	if (lcd == NULL)	{
 		wjq_test_showstr("open lcd err!");	
-	}
-	else
-	{
+	} else	{
 		dev_lcd_setdir(lcd, W_LCD, L2R_D2U);
 		
-		while(1)
-		{
-			if(dis == 1)
-			{
+		while(1) {
+			if (dis == 1) {
 				dis = 0;
 				switch(step)
 				{
@@ -280,21 +254,17 @@ s32 test_lcd_spi_128128(void)
 			s32 res;
 			
 			res = dev_keypad_read(&keyvalue, 1);
-			if(res == 1)
-			{
-				if(keyvalue == 16)
-				{
+			if (res == 1) {
+				if (keyvalue == 16) {
 					dis = 1;
-				}
-				else if(keyvalue == 12)
-				{
+				} else if(keyvalue == 12) {
 					break;
 				}
 			}
 		}
 	
 	}
-		return 0;
+	return 0;
 }
 
 s32 test_lcd_pic(void)
@@ -308,8 +278,7 @@ s32 test_lcd_pic(void)
 	dev_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
 	dev_lcd_update(WJQTestLcd);
 	lcd = dev_lcd_open("tftlcd");
-	if(lcd == NULL)
-	{
+	if (lcd == NULL)	{
 		wjq_test_showstr("open lcd err!");	
 		return -1;
 	}
@@ -353,24 +322,17 @@ s32 test_sound_buzzer(void)
 	/*顶行居中显示父菜单*/
 	dev_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
 	dev_lcd_update(WJQTestLcd);
-	while(1)
-	{
+	while(1) {
 		u8 keyvalue;
 		s32 res;
 		
 		res = dev_keypad_read(&keyvalue, 1);
-		if(res == 1)
-		{
-			if(keyvalue == 16)
-			{
+		if (res == 1) {
+			if(keyvalue == 16) {
 				dev_buzzer_open();	
-			}
-			else if(keyvalue == (0x80+16))
-			{
+			} else if(keyvalue == (0x80+16)) {
 				dev_buzzer_close();
-			}
-			else if(keyvalue == 12)
-			{
+			} else if(keyvalue == 12) {
 				break;
 			}
 		}
@@ -426,8 +388,7 @@ s32 test_sound_rec(void)
 	wjq_wait_key(16);
 	fun_rec_stop();
 	fun_sound_play("mtd0/1:/rec8.wav", "wm8978");	
-	while(1)
-	{
+	while(1) {
 		if(SOUND_IDLE == fun_sound_get_sta())
 			break;
 
@@ -435,10 +396,8 @@ s32 test_sound_rec(void)
 		s32 res;
 		
 		res = dev_keypad_read(&keyvalue, 1);
-		if(res == 1)
-		{
-			if(keyvalue == 12)
-			{
+		if (res == 1) {
+			if(keyvalue == 12) {
 				break;
 			}
 		}
@@ -456,12 +415,9 @@ s32 test_tp_calibrate(void)
 	dev_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
 	dev_lcd_update(WJQTestLcd);
 	lcd = dev_lcd_open("tftlcd");
-	if(lcd == NULL)
-	{
+	if(lcd == NULL) {
 		wjq_test_showstr("open lcd err!");	
-	}
-	else
-	{
+	} else	{
 		dev_lcd_setdir(lcd, H_LCD, L2R_U2D);
 		dev_touchscreen_open();
 		ts_calibrate(lcd);
@@ -485,12 +441,9 @@ s32 test_tp_test(void)
 	dev_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
 	dev_lcd_update(WJQTestLcd);
 	lcd = dev_lcd_open("tftlcd");
-	if(lcd == NULL)
-	{
+	if (lcd == NULL)	{
 		wjq_test_showstr("open lcd err!");	
-	}
-	else
-	{
+	} else {
 		dev_lcd_setdir(lcd, H_LCD, L2R_U2D);
 		dev_touchscreen_open();	
 	
@@ -500,22 +453,17 @@ s32 test_tp_test(void)
 		struct ts_sample samp[10];
 		int ret;
 		u8 i =0;	
-		while(1)
-		{
+		while(1) {
 			ret = ts_read(ts, samp, 10);
-			if(ret != 0)
-			{
+			if (ret != 0) {
 				//uart_printf("pre:%d, x:%d, y:%d\r\n", samp[0].pressure, samp[0].x, samp[0].y);
 						
 				i = 0;
 				
-				while(1)
-				{
-					if(i>= ret)
-						break;
+				while(1) {
+					if (i>= ret) break;
 					
-					if(samp[i].pressure != 0 )
-					{
+					if (samp[i].pressure != 0 ) {
 						//uart_printf("pre:%d, x:%d, y:%d\r\n", samp.pressure, samp.x, samp.y);
 						dev_lcd_drawpoint(lcd, samp[i].x, samp[i].y, RED); 
 					}
@@ -527,15 +475,11 @@ s32 test_tp_test(void)
 			s32 res;
 			
 			res = dev_keypad_read(&keyvalue, 1);
-			if(res == 1)
-			{
-				if(keyvalue == 8)
-				{
+			if (res == 1) {
+				if (keyvalue == 8) {
 					dev_lcd_color_fill(lcd, 1, 1000, 1, 1000, BLUE);
 					dev_lcd_update(lcd);
-				}
-				else if(keyvalue == 12)
-				{
+				} else if(keyvalue == 12) {
 					break;
 				}
 			}
@@ -558,28 +502,21 @@ s32 test_key(void)
 	dev_lcd_update(WJQTestLcd);
 	dev_key_open();
 
-	while(1)
-	{
+	while(1) {
 		res = dev_key_read(&tmp, 1);
-		if(1 == res)
-		{
-			if(tmp == DEV_KEY_PRESS)
-			{
+		if(1 == res) {
+			if (tmp == DEV_KEY_PRESS) {
 				dev_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 10, "	   press	", BLACK);
 				dev_lcd_update(WJQTestLcd);
-			}
-			else if(tmp == DEV_KEY_REL)
-			{
+			} else if(tmp == DEV_KEY_REL) {
 				dev_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 10, "	 release	  ", BLACK);
 				dev_lcd_update(WJQTestLcd);
 			}
 		}
 
 		res = dev_keypad_read(&keyvalue, 1);
-		if(res == 1)
-		{
-			if(keyvalue == 12)
-			{
+		if (res == 1) {
+			if (keyvalue == 12) {
 				break;
 			}
 		}
@@ -1359,12 +1296,11 @@ void wujique_stm407_test(void)
 {
 	wjq_log(LOG_DEBUG,"run app\r\n");
 
-	
 	//WJQTestLcd = dev_lcd_open("tftlcd");
 	WJQTestLcd = dev_lcd_open("i2coledlcd");
 	if(WJQTestLcd == NULL)
 	{
-		wjq_log(LOG_DEBUG, "open oled lcd err\r\n");
+		wjq_log(LOG_DEBUG, "emenu open lcd err\r\n");
 	}
 
 	dev_key_open();

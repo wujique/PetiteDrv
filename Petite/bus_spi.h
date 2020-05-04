@@ -68,7 +68,7 @@ typedef struct
 extern s32 bus_spi_register(const DevSpi *dev);
 extern s32 bus_spich_register(const DevSpiCh *dev);
 
-extern DevSpiChNode *bus_spich_open(char *name, SPI_MODE mode, u16 pre);
+extern DevSpiChNode *bus_spich_open(char *name, SPI_MODE mode, u16 KHz);
 extern s32 bus_spich_close(DevSpiChNode * node);
 extern s32 bus_spich_transfer(DevSpiChNode * node, u8 *snd, u8 *rsv, s32 len);
 extern s32 bus_spich_cs(DevSpiChNode * node, u8 sta);

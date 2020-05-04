@@ -21,8 +21,8 @@
 */
 #include "mcu.h"
 #include "log.h"
-#include "board_sysconf.h"
 #include "bus_spi.h"
+#include "board_sysconf.h"
 
 #define MCU_SPI_DEBUG
 
@@ -122,11 +122,10 @@ s32 mcu_hspi_init(const DevSpi *dev)
  *@param[out]  无
  *@retval:     
  */
-s32 mcu_hspi_open(DevSpiNode *node, SPI_MODE mode, u16 clk)
+s32 mcu_hspi_open(DevSpiNode *node, SPI_MODE mode, u16 KHz)
 {
 
-	if(node->gd != -1)
-	{
+	if (node->gd != -1) {
 		SPI_DEBUG(LOG_DEBUG, "spi dev busy\r\n");
 		return -1;
 	}
@@ -134,18 +133,17 @@ s32 mcu_hspi_open(DevSpiNode *node, SPI_MODE mode, u16 clk)
 	if(mode >= SPI_MODE_MAX)
 		return -1;
 	
-	if(strcmp(node->dev.name, "SPI2") != 0)
-    {
+	if (strcmp(node->dev.pnode.name, "SPI2") != 0) {
 		return -1;
     }
 
 	McuHspi2.Init.CLKPolarity = SpiModeSet[mode].CPOL;
   	McuHspi2.Init.CLKPhase = SpiModeSet[mode].CPHA;
 
-	McuHspi2.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_256;
+	/* 根据传入的KHz 计算分频*/
+	McuHspi2.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_64;
 	
-	if (HAL_SPI_Init(&McuHspi2) != HAL_OK)
-  	{
+	if (HAL_SPI_Init(&McuHspi2) != HAL_OK) {
 		Error_Handler();
   	}
 
@@ -164,11 +162,9 @@ s32 mcu_hspi_close(DevSpiNode *node)
 {
     SPI_TypeDef* SPIC;
 	
-	if(node->gd != 0)
-		return -1;
+	if(node->gd != 0) return -1;
 	
-	if(strcmp(node->dev.name, "SPI2") == 0)
-    {
+	if (strcmp(node->dev.pnode.name, "SPI2") == 0) {
 
     }
 	
@@ -191,37 +187,28 @@ s32 mcu_hspi_transfer(DevSpiNode *node, u8 *snd, u8 *rsv, s32 len)
 
 	HAL_StatusTypeDef res;
 	
-	if(node == NULL)
-		return -1;
+	if(node == NULL) return -1;
 
-	if(node->gd != 0)
-	{
+	if (node->gd != 0) {
 		SPI_DEBUG(LOG_DEBUG, "spi dev no open\r\n");
 		return -1;
 	}
 	
-    if( ((snd == NULL) && (rsv == NULL)) || (len < 0) )
-    {
+    if ( ((snd == NULL) && (rsv == NULL)) || (len < 0) ) {
         return -1;
     }
 	
-	if(strcmp(node->dev.name, "SPI2") != 0)
-	{
+	if (strcmp(node->dev.pnode.name, "SPI2") != 0) {
 		return -1;
 	}
 	
-	if(snd == NULL)
-	{
+	if (snd == NULL)	{
 		//SPI_DEBUG(LOG_DEBUG, "r ");
 		res = HAL_SPI_Receive(&McuHspi2, rsv, len, 20);//need fix 超时要根据速度和数据定
-	}
-	else if(rsv == NULL)
-	{	
+	} else if(rsv == NULL) {	
 		//SPI_DEBUG(LOG_DEBUG, "t ");
 		res = HAL_SPI_Transmit(&McuHspi2, snd, len, 20);
-	}
-	else
-	{
+	} else {
 		//SPI_DEBUG(LOG_DEBUG, "tr ");
 		res = HAL_SPI_TransmitReceive(&McuHspi2, snd, rsv, len, 20);
 	}

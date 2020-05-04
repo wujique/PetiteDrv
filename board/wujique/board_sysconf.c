@@ -11,15 +11,20 @@
  *   修改内容:   创建文件
 */
 #include "mcu.h"
+
 #include "board_sysconf.h"
+
 #include "log.h"	
-#include "dev_spiflash.h"
+#include "font.h"
+
 #include "bus_lcd.h"
 #include "bus_spi.h"
 #include "bus_i2c.h"
-#include "dev_lcd.h"
 
-#include "font.h"
+
+#include "drv_spiflash.h"
+#include "drv_lcd.h"
+
 /*
 	本文件用于配置系统有哪些设备和资源
 */
@@ -102,7 +107,7 @@ const DevSpi DevVspi3IO={
 		.mosipin = MCU_IO_2,
 
 		/*miso*/
-		.misoport = NULL,
+		.misoport = MCU_PORT_NULL,
 		.misopin = NULL,
 
 	};
@@ -237,7 +242,7 @@ const DevSpiCh DevVSpi3CH1={
 		
 		.spi = "VSPI3",
 		
-		.csport = NULL,
+		.csport = MCU_PORT_NULL,
 		.cspin = NULL,
 		
 	};
@@ -346,16 +351,16 @@ const DevLcdBus BusLcdI2C1={
 	.basebus = "VI2C1",
 
 	/*I2C接口的LCD总线，不需要其他IO*/
-	.A0port = NULL,
+	.A0port = MCU_PORT_NULL,
 	.A0pin = NULL,
 
-	.rstport = NULL,
+	.rstport = MCU_PORT_NULL,
 	.rstpin = NULL,
 
-	.blport = NULL,
+	.blport = MCU_PORT_NULL,
 	.blpin = NULL,
 
-	.staport = NULL, 
+	.staport = MCU_PORT_NULL, 
 	.stapin = NULL,
 };
 /*
@@ -370,7 +375,7 @@ const DevLcdBus BusLcd8080={
 	.basebus = "8080",//无意义，8080操作直接嵌入在LCD BUS代码内
 
 	/* 8080 不用A0*/
-	.A0port = NULL,
+	.A0port = MCU_PORT_NULL,
 	.A0pin = NULL,
 
 	.rstport = MCU_PORT_A,
@@ -490,7 +495,8 @@ const DevLcd DevLcdCOG1	=	{
 	.height = 128};
 
 /*fsmc接口的 tft lcd*/
-#if 0
+#if 1
+/* 屋脊雀2.8寸屏幕 */
 const DevLcd DevLcdtTFT	=	{
 	.pnode={
 				.name = "tftlcd",
@@ -502,7 +508,8 @@ const DevLcd DevLcdtTFT	=	{
 	.width = 240, 
 	.height = 320,
 };
-#endif				
+#endif		
+#if 0
 const DevLcd DevLcdtTFT	=	{
 	.pnode={
 				.name = "tftlcd",
@@ -514,6 +521,7 @@ const DevLcd DevLcdtTFT	=	{
 	.width = 480, 
 	.height = 800,
 };	
+#endif
 //const DevLcd DevLcdtTFT	=	{"tftlcd", 		"BusLcd8080", 	0x9325, 240, 320};
 //const DevLcd DevLcdtTFT	=	{"tftlcd", 		"BusLcd8080", 	0x9341, 240, 320};
 /*1408, 4.0寸的IPS屏幕*/
@@ -546,10 +554,7 @@ s32 petite_dev_register(void)
 			dev_lcdbus_register(&BusLcdI2C1);
 					dev_lcd_register(&DevLcdOled1);
 					
-	#ifdef SYS_USE_VI2C2
-	//mcu_i2c_register(&DevVi2c2);
-	#endif
-	
+
 	/*硬SPI3控制器，核心板和底板的FLASH、外扩接口的SPI口*/
 	bus_spi_register(&DevSpi3IO);
 			bus_spich_register(&DevSpi3CH1);
