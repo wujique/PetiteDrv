@@ -1087,6 +1087,8 @@ int do_run (cmd_tbl_t * cmdtp, int flag, int argc, char *argv[])
 
 
 #include "FreeRtos.h"
+#include "frtos_task.h"
+
 #define FUN_CMD_TASK_STK_SIZE 1024
 #define FUN_CMD_TASK_PRIO	1
 TaskHandle_t  FunCmdTaskHandle;

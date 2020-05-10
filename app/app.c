@@ -6,6 +6,7 @@
 
 #include "log.h"
 #include "FreeRTos.h"
+#include "frtos_task.h"
 #include "board_sysconf.h"
 
 /** @addtogroup Template_Project

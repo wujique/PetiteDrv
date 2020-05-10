@@ -1,6 +1,6 @@
 /*
- * FreeRTOS Kernel V10.0.0
- * Copyright (C) 2017 Amazon.com, Inc. or its affiliates.  All Rights Reserved.
+ * FreeRTOS Kernel V10.3.1
+ * Copyright (C) 2020 Amazon.com, Inc. or its affiliates.  All Rights Reserved.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -10,8 +10,7 @@
  * subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software. If you wish to use our Amazon
- * FreeRTOS name, please do so in a fair use way that does not cause confusion.
+ * copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
@@ -44,7 +43,7 @@
  * (such as xStreamBufferSend()) inside a critical section and set the send
  * block time to 0.  Likewise, if there are to be multiple different readers
  * then the application writer must place each call to a reading API function
- * (such as xStreamBufferRead()) inside a critical section section and set the
+ * (such as xStreamBufferReceive()) inside a critical section section and set the
  * receive block time to 0.
  *
  */
@@ -52,13 +51,22 @@
 #ifndef STREAM_BUFFER_H
 #define STREAM_BUFFER_H
 
+#ifndef INC_FREERTOS_H
+	#error "include FreeRTOS.h must appear in source files before include stream_buffer.h"
+#endif
+
+#if defined( __cplusplus )
+extern "C" {
+#endif
+
 /**
  * Type by which stream buffers are referenced.  For example, a call to
  * xStreamBufferCreate() returns an StreamBufferHandle_t variable that can
  * then be used as a parameter to xStreamBufferSend(), xStreamBufferReceive(),
  * etc.
  */
-typedef void * StreamBufferHandle_t;
+struct StreamBufferDef_t;
+typedef struct StreamBufferDef_t * StreamBufferHandle_t;
 
 
 /**
@@ -217,7 +225,7 @@ size_t xStreamBufferSend( StreamBufferHandle_t xStreamBuffer,
                           const void *pvTxData,
                           size_t xDataLengthBytes,
                           TickType_t xTicksToWait );
-<pre>
+</pre>
  *
  * Sends bytes to a stream buffer.  The bytes are copied into the stream buffer.
  *
@@ -233,7 +241,7 @@ size_t xStreamBufferSend( StreamBufferHandle_t xStreamBuffer,
  * (such as xStreamBufferSend()) inside a critical section and set the send
  * block time to 0.  Likewise, if there are to be multiple different readers
  * then the application writer must place each call to a reading API function
- * (such as xStreamBufferRead()) inside a critical section and set the receive
+ * (such as xStreamBufferReceive()) inside a critical section and set the receive
  * block time to 0.
  *
  * Use xStreamBufferSend() to write to a stream buffer from a task.  Use
@@ -314,7 +322,7 @@ size_t xStreamBufferSendFromISR( StreamBufferHandle_t xStreamBuffer,
                                  const void *pvTxData,
                                  size_t xDataLengthBytes,
                                  BaseType_t *pxHigherPriorityTaskWoken );
-<pre>
+</pre>
  *
  * Interrupt safe version of the API function that sends a stream of bytes to
  * the stream buffer.
@@ -331,7 +339,7 @@ size_t xStreamBufferSendFromISR( StreamBufferHandle_t xStreamBuffer,
  * (such as xStreamBufferSend()) inside a critical section and set the send
  * block time to 0.  Likewise, if there are to be multiple different readers
  * then the application writer must place each call to a reading API function
- * (such as xStreamBufferRead()) inside a critical section and set the receive
+ * (such as xStreamBufferReceive()) inside a critical section and set the receive
  * block time to 0.
  *
  * Use xStreamBufferSend() to write to a stream buffer from a task.  Use
@@ -431,7 +439,7 @@ size_t xStreamBufferReceive( StreamBufferHandle_t xStreamBuffer,
  * (such as xStreamBufferSend()) inside a critical section and set the send
  * block time to 0.  Likewise, if there are to be multiple different readers
  * then the application writer must place each call to a reading API function
- * (such as xStreamBufferRead()) inside a critical section and set the receive
+ * (such as xStreamBufferReceive()) inside a critical section and set the receive
  * block time to 0.
  *
  * Use xStreamBufferReceive() to read from a stream buffer from a task.  Use
@@ -836,6 +844,8 @@ StreamBufferHandle_t xStreamBufferGenericCreateStatic( size_t xBufferSizeBytes,
 													   uint8_t * const pucStreamBufferStorageArea,
 													   StaticStreamBuffer_t * const pxStaticStreamBuffer ) PRIVILEGED_FUNCTION;
 
+size_t xStreamBufferNextMessageLengthBytes( StreamBufferHandle_t xStreamBuffer ) PRIVILEGED_FUNCTION;
+
 #if( configUSE_TRACE_FACILITY == 1 )
 	void vStreamBufferSetStreamBufferNumber( StreamBufferHandle_t xStreamBuffer, UBaseType_t uxStreamBufferNumber ) PRIVILEGED_FUNCTION;
 	UBaseType_t uxStreamBufferGetStreamBufferNumber( StreamBufferHandle_t xStreamBuffer ) PRIVILEGED_FUNCTION;
@@ -843,7 +853,7 @@ StreamBufferHandle_t xStreamBufferGenericCreateStatic( size_t xBufferSizeBytes,
 #endif
 
 #if defined( __cplusplus )
-extern "C" {
+}
 #endif
 
 #endif	/* !defined( STREAM_BUFFER_H ) */

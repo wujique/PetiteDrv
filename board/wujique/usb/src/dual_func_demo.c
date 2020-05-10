@@ -850,6 +850,7 @@ s32 usb_loop_task(void)
 	创建USB任务
 */
 #include "FreeRtos.h"
+#include "frtos_task.h"
 
 TaskHandle_t  UsbTaskHandle;
 

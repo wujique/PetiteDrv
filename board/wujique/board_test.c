@@ -1313,6 +1313,7 @@ void wujique_stm407_test(void)
 }
 
 #include "FreeRtos.h"
+#include "frtos_task.h"
 
 TaskHandle_t  Wujique407TaskHandle;
 
