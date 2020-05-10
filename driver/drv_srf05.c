@@ -2,37 +2,37 @@
  * @file            dev_srf05.c
  * @brief           
  * @author          wujique
- * @date            2019Äê03ÔÂ23ÈÕ ÐÇÆÚ¶þ
- * @version         ³õ¸å
- * @par             °æÈ¨ËùÓÐ (C), 2013-2023
+ * @date            2019å¹´03æœˆ23æ—¥ æ˜ŸæœŸäºŒ
+ * @version         åˆç¨¿
+ * @par             ç‰ˆæƒæ‰€æœ‰ (C), 2013-2023
  * @par History:
- * 1.ÈÕ    ÆÚ:    
- *   ×÷    Õß:      ÎÝ¼¹È¸¹¤×÷ÊÒ
- *   ÐÞ¸ÄÄÚÈÝ:   ´´½¨ÎÄ¼þ
-   		1 Ô´Âë¹éÎÝ¼¹È¸¹¤×÷ÊÒËùÓÐ¡£
-		2 ¿ÉÒÔÓÃÓÚµÄÆäËûÉÌÒµÓÃÍ¾£¨ÅäÌ×¿ª·¢°åÏúÊÛ³ýÍâ£©£¬²»ÐëÊÚÈ¨¡£
-		3 ÎÝ¼¹È¸¹¤×÷ÊÒ²»¶Ô´úÂë¹¦ÄÜ×öÈÎºÎ±£Ö¤£¬ÇëÊ¹ÓÃÕß×ÔÐÐ²âÊÔ£¬ºó¹û×Ô¸º¡£
-		4 ¿ÉËæÒâÐÞ¸ÄÔ´Âë²¢·Ö·¢£¬µ«²»¿ÉÖ±½ÓÏúÊÛ±¾´úÂë»ñÀû£¬²¢ÇÒÇë±£ÁôWUJIQUE°æÈ¨ËµÃ÷¡£
-		5 Èç·¢ÏÖBUG»òÓÐÓÅ»¯£¬»¶Ó­·¢²¼¸üÐÂ¡£ÇëÁªÏµ£ºcode@wujique.com
-		6 Ê¹ÓÃ±¾Ô´ÂëÔòÏàµ±ÓÚÈÏÍ¬±¾°æÈ¨ËµÃ÷¡£
-		7 ÈçÇÖ·¸ÄãµÄÈ¨Àû£¬ÇëÁªÏµ£ºcode@wujique.com
-		8 Ò»ÇÐ½âÊÍÈ¨¹éÎÝ¼¹È¸¹¤×÷ÊÒËùÓÐ¡£
+ * 1.æ—¥    æœŸ:    
+ *   ä½œ    è€…:      å±‹è„Šé›€å·¥ä½œå®¤
+ *   ä¿®æ”¹å†…å®¹:   åˆ›å»ºæ–‡ä»¶
+   		1 æºç å½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
+		2 å¯ä»¥ç”¨äºŽçš„å…¶ä»–å•†ä¸šç”¨é€”ï¼ˆé…å¥—å¼€å‘æ¿é”€å”®é™¤å¤–ï¼‰ï¼Œä¸é¡»æŽˆæƒã€‚
+		3 å±‹è„Šé›€å·¥ä½œå®¤ä¸å¯¹ä»£ç åŠŸèƒ½åšä»»ä½•ä¿è¯ï¼Œè¯·ä½¿ç”¨è€…è‡ªè¡Œæµ‹è¯•ï¼ŒåŽæžœè‡ªè´Ÿã€‚
+		4 å¯éšæ„ä¿®æ”¹æºç å¹¶åˆ†å‘ï¼Œä½†ä¸å¯ç›´æŽ¥é”€å”®æœ¬ä»£ç èŽ·åˆ©ï¼Œå¹¶ä¸”è¯·ä¿ç•™WUJIQUEç‰ˆæƒè¯´æ˜Žã€‚
+		5 å¦‚å‘çŽ°BUGæˆ–æœ‰ä¼˜åŒ–ï¼Œæ¬¢è¿Žå‘å¸ƒæ›´æ–°ã€‚è¯·è”ç³»ï¼šcode@wujique.com
+		6 ä½¿ç”¨æœ¬æºç åˆ™ç›¸å½“äºŽè®¤åŒæœ¬ç‰ˆæƒè¯´æ˜Žã€‚
+		7 å¦‚ä¾µçŠ¯ä½ çš„æƒåˆ©ï¼Œè¯·è”ç³»ï¼šcode@wujique.com
+		8 ä¸€åˆ‡è§£é‡Šæƒå½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
 */
 /*
-	³¬Éù²¨²â¾àÄ£¿éHY-SRF05
-	Ô­Àí£º
-	1 VCC ÊÇ5V¹©µç£¬Êµ²â3.3VÒ²ÄÜ¹¤×÷
-	2 Trig½ÅÊä³öÖÁÉÙ10us¸ßµçÆ½£¬´¥·¢²âÁ¿¡£
-	3 Ä£¿é×Ô¶¯·¢ËÍ³¬Éù²¨¼ì²â¾àÀë¡£
-	4 Èç²âÁ¿³É¹¦£¬ÔòÔÚECHO½Å·µ»ØÒ»¸ö¸ßµçÆ½£¬µçÆ½³ÖÐøÊ±¼ä¾ÍÊÇ³¬Éù²¨·¢Éä·µ»ØÊ±¼ä
-		¾àÀë  mm = 340*100*10/(1*1000*1000)/2*T
-		ÆäÖÐTµ¥Î»us£¬¹«Ê½¼ò»¯£ºXmm = Tus*17/100
+	è¶…å£°æ³¢æµ‹è·æ¨¡å—HY-SRF05
+	åŽŸç†ï¼š
+	1 VCC æ˜¯5Vä¾›ç”µï¼Œå®žæµ‹3.3Vä¹Ÿèƒ½å·¥ä½œ
+	2 Trigè„šè¾“å‡ºè‡³å°‘10usé«˜ç”µå¹³ï¼Œè§¦å‘æµ‹é‡ã€‚
+	3 æ¨¡å—è‡ªåŠ¨å‘é€è¶…å£°æ³¢æ£€æµ‹è·ç¦»ã€‚
+	4 å¦‚æµ‹é‡æˆåŠŸï¼Œåˆ™åœ¨ECHOè„šè¿”å›žä¸€ä¸ªé«˜ç”µå¹³ï¼Œç”µå¹³æŒç»­æ—¶é—´å°±æ˜¯è¶…å£°æ³¢å‘å°„è¿”å›žæ—¶é—´
+		è·ç¦»  mm = 340*100*10/(1*1000*1000)/2*T
+		å…¶ä¸­Tå•ä½usï¼Œå…¬å¼ç®€åŒ–ï¼šXmm = Tus*17/100
 
-		½¨Òé²âÊÔ¼ä¸ô³¬¹ý60ms¡£
+		å»ºè®®æµ‹è¯•é—´éš”è¶…è¿‡60msã€‚
 
-	Çý¶¯Éè¼Æ£º
-	1 ·¢ËÍÑÓÊ±Ê¹ÓÃÓ²ÑÓÊ±¡£
-	2 ½ÓÊÕ¼ÆÊ±ÓÃ¶¨Ê±Æ÷²¶»ñ¡£
+	é©±åŠ¨è®¾è®¡ï¼š
+	1 å‘é€å»¶æ—¶ä½¿ç”¨ç¡¬å»¶æ—¶ã€‚
+	2 æŽ¥æ”¶è®¡æ—¶ç”¨å®šæ—¶å™¨æ•èŽ·ã€‚
 */
 #include "mcu.h"
 #include "petite_config.h"
@@ -45,7 +45,7 @@
 
 s32 Srf05Gd = -2;
 /*
-	³¬Éù²¨²â¾àÊ¹ÓÃPF8 ½øÐÐ²¶»ñ£¬PF8ÊÇ¶¨Ê±Æ÷13µÄÍ¨µÀ1 
+	è¶…å£°æ³¢æµ‹è·ä½¿ç”¨PF8 è¿›è¡Œæ•èŽ·ï¼ŒPF8æ˜¯å®šæ—¶å™¨13çš„é€šé“1 
 */
 
 #define SRF05_TRIG_PIN MCU_IO_9
@@ -56,9 +56,9 @@ s32 Srf05Gd = -2;
 
 /**
  *@brief:      dev_srf05_trig
- *@details:    ´¥·¢²âÁ¿£¬10usÒÔÉÏ¸ßµçÆ½
+ *@details:    è§¦å‘æµ‹é‡ï¼Œ10usä»¥ä¸Šé«˜ç”µå¹³
  *@param[in]   void  
- *@param[out]  ÎÞ
+ *@param[out]  æ— 
  *@retval:     
  */
 static s32 dev_srf05_trig(void)
@@ -98,10 +98,10 @@ s32 dev_srf05_close(void)
 }
 /**
  *@brief:      dev_touchkey_read
- *@details:    ¶ÁÉè±¸£¬»ñÈ¡´¥ÃþÊÂ¼þ
+ *@details:    è¯»è®¾å¤‡ï¼ŒèŽ·å–è§¦æ‘¸äº‹ä»¶
  *@param[in]   u8 *buf    
                u32 count  
- *@param[out]  ÎÞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_srf05_read(u8 *buf, u32 count)

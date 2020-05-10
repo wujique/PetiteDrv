@@ -228,7 +228,7 @@ void usb_Demo_Init (void)
 
 void Demo_Process (void)
 {
-	/*Ö»ÓÐÔÚHOST×´Ì¬²ÅÓÐÂÖÑ¯£¿ÔÚDEVICEÄ£Ê½£¬¶¼ÊÇÖÐ¶Ï»Øµ÷£¿*/
+	/*åªæœ‰åœ¨HOSTçŠ¶æ€æ‰æœ‰è½®è¯¢ï¼Ÿåœ¨DEVICEæ¨¡å¼ï¼Œéƒ½æ˜¯ä¸­æ–­å›žè°ƒï¼Ÿ*/
   if(demo.state == DEMO_HOST)
   {
     if(HCD_IsDeviceConnected(&USB_OTG_Core))
@@ -246,7 +246,7 @@ void Demo_Process (void)
 *         manage the menu on the screen
 * @param  menu : menu table
 *         item : selected item to be highlighted
-	      ½çÃæ£¬¸ßÁÁÑ¡ÖÐµÄÄÇÐÐ²Ëµ¥
+	      ç•Œé¢ï¼Œé«˜äº®é€‰ä¸­çš„é‚£è¡Œèœå•
 * @retval None
 */
 static void Demo_SelectItem (uint8_t **menu , uint8_t item)
@@ -279,8 +279,8 @@ static void Demo_Application (void)
   case  DEMO_WAIT:
   	//wjq_log(LOG_DEBUG, "DEMO_WAIT");
 	/*
-		ÔÚÕâÀï½øÐÐOTGÊÇHOST»¹ÊÇDEVICEµÄ¼ì²â
-		Èç¹û¶¼²»ÊÇ£¬¾ÍÒ»Ö±¼ì²â
+		åœ¨è¿™é‡Œè¿›è¡ŒOTGæ˜¯HOSTè¿˜æ˜¯DEVICEçš„æ£€æµ‹
+		å¦‚æžœéƒ½ä¸æ˜¯ï¼Œå°±ä¸€ç›´æ£€æµ‹
   	*/
 	if(1 == 1)
 	{
@@ -323,9 +323,9 @@ static void Demo_Application (void)
     case  DEMO_HOST_WAIT:
 
 	  /*
-	  	HOST Ä£Ê½¶Ï¿ª
-		Á÷³Ì»á·µ»ØDEMO_IDLE
-		ÖØÐÂ¿ªÊ¼¼ì²âÄ£Ê½
+	  	HOST æ¨¡å¼æ–­å¼€
+		æµç¨‹ä¼šè¿”å›žDEMO_IDLE
+		é‡æ–°å¼€å§‹æ£€æµ‹æ¨¡å¼
 		*/	
       if (!HCD_IsDeviceConnected(&USB_OTG_Core))
       {
@@ -334,17 +334,17 @@ static void Demo_Application (void)
       }
 
 	  /*
-	  	1 Enum_DoneÖ»»áÔÚ
-		USBH_USR_MSC_Applicationº¯ÊýÖÐ¸³Öµ1
-		Õâ¸öº¯ÊýÊÇÒ»¸ö»Øµ÷
+	  	1 Enum_Doneåªä¼šåœ¨
+		USBH_USR_MSC_Applicationå‡½æ•°ä¸­èµ‹å€¼1
+		è¿™ä¸ªå‡½æ•°æ˜¯ä¸€ä¸ªå›žè°ƒ
 		
-		2 ÔÚUSBH_MSC_Handleº¯Êý×´Ì¬
+		2 åœ¨USBH_MSC_Handleå‡½æ•°çŠ¶æ€
 		USBH_MSC_DEFAULT_APPLI_STATE
-		µÄÊ±ºò»Øµ÷
+		çš„æ—¶å€™å›žè°ƒ
 
-		¸³ÖµÎª1µÄÊ±ºòËµÃ÷USB HOSTÒÑ¾­Ã¶¾Ù³É¹¦ÁË£¬
-		ÏÂÒ»²½¾ÍÊÇ¹ÒÔØÎÄ¼þÏµÍ³ÁË
-		Èç¹ûÒª×öHOST¸úDEVICE×Ô¶¯ÇÐ»»£¬¿Ï¶¨ÔÚ³õÊ¼»¯Ö®Ç°
+		èµ‹å€¼ä¸º1çš„æ—¶å€™è¯´æ˜ŽUSB HOSTå·²ç»æžšä¸¾æˆåŠŸäº†ï¼Œ
+		ä¸‹ä¸€æ­¥å°±æ˜¯æŒ‚è½½æ–‡ä»¶ç³»ç»Ÿäº†
+		å¦‚æžœè¦åšHOSTè·ŸDEVICEè‡ªåŠ¨åˆ‡æ¢ï¼Œè‚¯å®šåœ¨åˆå§‹åŒ–ä¹‹å‰
 		USBH_Init
 		USBD_Init
 	  */
@@ -513,7 +513,7 @@ static void Demo_Application (void)
             demo.select = 0;
             wjq_log(LOG_DEBUG, "> Device application closed.\n");
             __enable_irq();
-			/*¶Ï¿ªÉè±¸*/
+			/*æ–­å¼€è®¾å¤‡*/
             DCD_DevDisconnect (&USB_OTG_Core);
             USB_OTG_StopDevice(&USB_OTG_Core);               
             break;
@@ -786,7 +786,7 @@ static uint8_t Check_BMP_file(uint8_t *buf)
 
 /*
 
-	²âÊÔUSB_IDÖÐ¶Ï
+	æµ‹è¯•USB_IDä¸­æ–­
 
 */
 void USB_ID_EXTIConfig(void)
@@ -847,7 +847,7 @@ s32 usb_loop_task(void)
 }
 
 /*
-	´´½¨USBÈÎÎñ
+	åˆ›å»ºUSBä»»åŠ¡
 */
 #include "FreeRtos.h"
 

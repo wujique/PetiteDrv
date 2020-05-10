@@ -1,14 +1,14 @@
 #ifndef __PETITE_CONFIG_H__
 #define __PETITE_CONFIG_H__
 
-/* ÅäÖÃPetiteDrv */
+/* é…ç½®PetiteDrv */
 
-/* Éè±¸Ãû³¤¶È */
+/* è®¾å¤‡åé•¿åº¦ */
 #define DEV_NAME_SIZE	16
 
-/* ÕâÀïµÄ¶¨Òå¾ö¶¨ÊÇ·ñ±àÒë¶ÔÓ¦µÄÇý¶¯ */
+/* è¿™é‡Œçš„å®šä¹‰å†³å®šæ˜¯å¦ç¼–è¯‘å¯¹åº”çš„é©±åŠ¨ */
 
-/* ÖÐ¼ä¼þÅäÖÃ */
+/* ä¸­é—´ä»¶é…ç½® */
 #define PANEL_SOUND_MODULE	1
 #define PANEL_SOUND_I2S		1
 #define PANEL_SOUND_DAC		1
@@ -25,12 +25,12 @@
 #define DRV_HTU21U_MODULE		0
 #define DRV_HCOC_MODULE			0
 
-/* ÉãÏñÍ·¹¦ÄÜ */
+/* æ‘„åƒå¤´åŠŸèƒ½ */
 #define DRV_CAMERA_MODULE		1
 #define DRV_CAMERA_OV2640 		1
 #define DRV_CAMERA_OV9655	 	1
 
-/* 	ÓÃºê¿ØÖÆÄÄÐ©LCDÇý¶¯²Î¼Ó±àÒë*/
+/* 	ç”¨å®æŽ§åˆ¶å“ªäº›LCDé©±åŠ¨å‚åŠ ç¼–è¯‘*/
 #define LCD_DRIVER_ST7565		1
 #define LCD_DRIVER_SSD1615		1
 #define LCD_DRIVER_9341			1
@@ -43,17 +43,17 @@
 #define LCD_DRIVER_NT35510		1
 #define LCD_DRIVER_R61408		1
 
-/* ÊÇ·ñÊ¹ÓÃRTOS */
+/* æ˜¯å¦ä½¿ç”¨RTOS */
 #define SYS_USE_RTOS 1
 
-/* ÎÄ¼þÏµÍ³ */
+/* æ–‡ä»¶ç³»ç»Ÿ */
 #define SYS_USE_VFS		1
 #define SYS_FS_FATFS	1
 #define SYS_FS_LITTLEFS	0
 #define SYS_FS_SPIFS	0
 
 
-/*¶¨Òåalloc.cÄÚ´æ¹ÜÀíÊý×é*/
+/*å®šä¹‰alloc.cå†…å­˜ç®¡ç†æ•°ç»„*/
 #define AllocArraySize (80*1024)
 
 

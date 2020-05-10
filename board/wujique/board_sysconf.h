@@ -1,50 +1,50 @@
 /**
  * @file                wujique_sysconf.h
- * @brief           ÏµÍ³ÅäÖÃ
+ * @brief           ç³»ç»Ÿé…ç½®
  * @author          wujique
- * @date            2018Äê3ÔÂ30ÈÕ ĞÇÆÚÎå
- * @version         ³õ¸å
- * @par             °æÈ¨ËùÓĞ (C), 2013-2023
+ * @date            2018å¹´3æœˆ30æ—¥ æ˜ŸæœŸäº”
+ * @version         åˆç¨¿
+ * @par             ç‰ˆæƒæ‰€æœ‰ (C), 2013-2023
  * @par History:
- * 1.ÈÕ    ÆÚ:        2018Äê3ÔÂ30ÈÕ ĞÇÆÚÎå
- *   ×÷    Õß:         wujique
- *   ĞŞ¸ÄÄÚÈİ:   ´´½¨ÎÄ¼ş
+ * 1.æ—¥    æœŸ:        2018å¹´3æœˆ30æ—¥ æ˜ŸæœŸäº”
+ *   ä½œ    è€…:         wujique
+ *   ä¿®æ”¹å†…å®¹:   åˆ›å»ºæ–‡ä»¶
 */
 #ifndef __WUJIQUE_SYSCONF__
 #define __WUJIQUE_SYSCONF__
 
-/*¶¨Òåµ÷ÊÔĞÅÏ¢Êä³ö´®¿ÚºÅ*/
+/*å®šä¹‰è°ƒè¯•ä¿¡æ¯è¾“å‡ºä¸²å£å·*/
 #define PC_PORT  MCU_UART_3 
 
 /* 
-	±¾ÎÄ¼ş¶¨Òå°åÉè±¸Çé¿ö¡£
-	ÊÇ¶Ôboard_sysconf.cµÄ²¹³ä0	
+	æœ¬æ–‡ä»¶å®šä¹‰æ¿è®¾å¤‡æƒ…å†µã€‚
+	æ˜¯å¯¹board_sysconf.cçš„è¡¥å……0	
 */
 
 /*-----------------------------------------------------------*/
-/*	Ñ¡Ôñ´¥ÃşÆÁ¼ì²â·½°¸: Ê¹ÓÃ´¥ÃşIC »ò     ÄÚ²¿ADC×ª»»*/
+/*	é€‰æ‹©è§¦æ‘¸å±æ£€æµ‹æ–¹æ¡ˆ: ä½¿ç”¨è§¦æ‘¸IC æˆ–     å†…éƒ¨ADCè½¬æ¢*/
 #define SYS_USE_TS_IC_CASE		1
 //#define SYS_USE_TS_ADC_CASE 	0
 
-/*´¥ÃşÆÁ¼ì²â·½°¸£ºxpt2046 ·½°¸ºÍADC·½°¸Ö»ÄÜÑ¡Ò»ÖÖ*/
+/*è§¦æ‘¸å±æ£€æµ‹æ–¹æ¡ˆï¼šxpt2046 æ–¹æ¡ˆå’ŒADCæ–¹æ¡ˆåªèƒ½é€‰ä¸€ç§*/
 #if defined(SYS_USE_TS_IC_CASE) && defined(SYS_USE_TS_ADC_CASE)
  #error "please just select one touch device!"
 #endif
 
-/*	¶¨Òåxpt 2046Ê¹ÓÃ Ä£ÄâSPI1_ch1
-	·ÖÆµÉèÖÃÎª0      */
+/*	å®šä¹‰xpt 2046ä½¿ç”¨ æ¨¡æ‹ŸSPI1_ch1
+	åˆ†é¢‘è®¾ç½®ä¸º0      */
 #define SYS_USE_VSPI1	 1	
 #define XPT2046_SPI "VSPI1_CH1"
 #define XPT2046_SPI_KHZ	 2000
 
 #if 0
-/*	Èç¹ûÊ¹ÓÃÓ²¼şSPI3_CH4,
-	·ÖÆµ²»ÄÜÉèÖÃÌ«¿ì*/
+/*	å¦‚æœä½¿ç”¨ç¡¬ä»¶SPI3_CH4,
+	åˆ†é¢‘ä¸èƒ½è®¾ç½®å¤ªå¿«*/
 //#define XPT2046_SPI "SPI3_CH4"
 //#define XPT2046_SPI_PRE	SPI_BaudRatePrescaler_8
 #endif
 /*-----------------------------------------------------------*/
-/*	RS485¸úÍâÀ©´®¿ÚÉè±¸¹²ÓÃ¡£*/
+/*	RS485è·Ÿå¤–æ‰©ä¸²å£è®¾å¤‡å…±ç”¨ã€‚*/
 //#define SYS_USE_RS485	1
 //#define SYS_USE_EXUART	1
 #define SYS_USE_USB	1
@@ -68,13 +68,13 @@
  #error "please not define SYS_USE_RS485 & SYS_USE_CAMERA sametime!(in wujique_sysconf.h file)"
 #endif
 /*-----------------------------------------------------------*/
-/* 	¶ÔÍâÀ©½Ó¿Ú½øĞĞ¹¦ÄÜ¶¨Òå   */
+/* 	å¯¹å¤–æ‰©æ¥å£è¿›è¡ŒåŠŸèƒ½å®šä¹‰   */
 
-/*	VSPI2 VI2C2 KEYPAD ,3ÕßÖ»ÄÜÓÃÒ»¸ö*/
+/*	VSPI2 VI2C2 KEYPAD ,3è€…åªèƒ½ç”¨ä¸€ä¸ª*/
 //#define SYS_USE_VSPI2 1
 //#define SYS_USE_VI2C2	1
 #define SYS_USE_KEYPAD	1
-/*	ĞéÄâSPI2£¬Ê¹ÓÃÍâÀ©IO£¬¸ú¾ØÕó°´¼ü³åÍ»£¬¸úI2C2Ò²¹²ÓÃ*/
+/*	è™šæ‹ŸSPI2ï¼Œä½¿ç”¨å¤–æ‰©IOï¼Œè·ŸçŸ©é˜µæŒ‰é”®å†²çªï¼Œè·ŸI2C2ä¹Ÿå…±ç”¨*/
 #if (defined(SYS_USE_VSPI2) && defined(SYS_USE_KEYPAD))
  #error "please not define SYS_USE_VSPI2 & SYS_USE_KEYPAD sametime!(in wujique_sysconf.h file)"
 #endif
@@ -86,8 +86,8 @@
 #endif
 
 #ifdef SYS_USE_KEYPAD
-#define KEY_PAD_COL_NUM (4)//4ÁĞ
-#define KEY_PAD_ROW_NUM (4)//4ĞĞ	
+#define KEY_PAD_COL_NUM (4)//4åˆ—
+#define KEY_PAD_ROW_NUM (4)//4è¡Œ	
 #endif
 
 /*-----------------------------------------------------------*/
@@ -106,20 +106,20 @@
 #define USB_TASK_STK_SIZE (1024)
 #define USB_TASK_PRIO	2
 
-/*  ÅäÖÃ ĞéÄâÎÄ¼şÏµÍ³ */
+/*  é…ç½® è™šæ‹Ÿæ–‡ä»¶ç³»ç»Ÿ */
 #define SYS_FS_NUM 5
 
-#define VFS_SD_DIR	"mtd0"//sd¿¨ÎÄ¼şÏµÍ³¹ÒÔØvfsÖĞµÄÄ¿Â¼Ãû
-#define SYS_FS_FATFS_SD "1:/"//sd¿¨Ä¿Â¼Ãû£¬ Õâ¸öÃû×Ö¸údiso.cÖĞµÄĞòºÅÓĞ¹ØÏµ
+#define VFS_SD_DIR	"mtd0"//sdå¡æ–‡ä»¶ç³»ç»ŸæŒ‚è½½vfsä¸­çš„ç›®å½•å
+#define SYS_FS_FATFS_SD "1:/"//sdå¡ç›®å½•åï¼Œ è¿™ä¸ªåå­—è·Ÿdiso.cä¸­çš„åºå·æœ‰å…³ç³»
 #define VFS_USB_DIR	"mtd1"//USB
 #define SYS_FS_FATFS_USB "2:/"
 
-/*	×ÖÌåÀàĞÍ¶¨Òå */
+/*	å­—ä½“ç±»å‹å®šä¹‰ */
 #define FONT_LIST_MAX 4	
 extern struct fbcon_font_desc *FontList[FONT_LIST_MAX];
 
 /*--------------------------------------------------------------------------------*/
-/* ÖĞ¶ÏÓÅÏÈ¼¶Í³Ò»¹ÜÀí          */
+/* ä¸­æ–­ä¼˜å…ˆçº§ç»Ÿä¸€ç®¡ç†          */
 #define NVIC_PRE(x) NVIC_PRE_PRI_##x
 #define NVIC_SUB(x) NVIC_SUB_PRI_##x
 /*
@@ -127,7 +127,7 @@ extern struct fbcon_font_desc *FontList[FONT_LIST_MAX];
 #define NVIC_SUB_PRI_
 */
 /*
-	USB ÖĞ¶Ï
+	USB ä¸­æ–­
 	
 */
 #define NVIC_PRE_PRI_OTG_FS_IRQn	1
@@ -169,21 +169,21 @@ SD_SDIO_DMA_IRQn 0 1
 #define NVIC_PRE_PRI_CAN1_RX0_IRQn	2
 #define NVIC_SUB_PRI_CAN1_RX0_IRQn	0
 /*
-i2s ²¥·Å
+i2s æ’­æ”¾
 DMA1_Stream4_IRQn 0 0
 */
 #define NVIC_PRE_PRI_DMA1_Stream4_IRQn	0
 #define NVIC_SUB_PRI_DMA1_Stream4_IRQn 	0
 
 /*
-i2s Â¼Òô
+i2s å½•éŸ³
 DMA1_Stream3_IRQn	0 0
 */
 #define NVIC_PRE_PRI_DMA1_Stream3_IRQn	0
 #define NVIC_SUB_PRI_DMA1_Stream3_IRQn	0
 
 /*
-¼òÒ×µÎ´ğÊ±ÖÓ
+ç®€æ˜“æ»´ç­”æ—¶é’Ÿ
 TIM5_IRQn 2 2
 */
 #define NVIC_PRE_PRI_TIM5_IRQn	2
@@ -197,14 +197,14 @@ TIM5_IRQn 2 2
 #define NVIC_SUB_PRI_TIM3_IRQn	0
 
 /* 
-adc ·½Ê½´¥ÃşÆÁÁ÷³Ì¿ØÖÆ
+adc æ–¹å¼è§¦æ‘¸å±æµç¨‹æ§åˆ¶
 TIM7_IRQn 1 1
 */
 #define NVIC_PRE_PRI_TIM7_IRQn	1
 #define NVIC_SUB_PRI_TIM7_IRQn	1
 
 /*
-Íø¿Ú¼ì²â
+ç½‘å£æ£€æµ‹
 EXTI15_10_IRQn 1 1
 */
 #define NVIC_PRE_PRI_EXTI15_10_IRQn	1

@@ -1,22 +1,22 @@
 /**
  * @file            dev_ILI9325.c
- * @brief           TFT LCD Çı¶¯Ğ¾Æ¬ILI9325Çı¶¯³ÌĞò
+ * @brief           TFT LCD é©±åŠ¨èŠ¯ç‰‡ILI9325é©±åŠ¨ç¨‹åº
  * @author          wujique
- * @date            2017Äê11ÔÂ8ÈÕ ĞÇÆÚÈı
- * @version         ³õ¸å
- * @par             °æÈ¨ËùÓĞ (C), 2013-2023
+ * @date            2017å¹´11æœˆ8æ—¥ æ˜ŸæœŸä¸‰
+ * @version         åˆç¨¿
+ * @par             ç‰ˆæƒæ‰€æœ‰ (C), 2013-2023
  * @par History:
- * 1.ÈÕ    ÆÚ:        2017Äê11ÔÂ8ÈÕ ĞÇÆÚÈı
- *   ×÷    Õß:         wujique
- *   ĞŞ¸ÄÄÚÈİ:   ´´½¨ÎÄ¼ş
-       	1 Ô´Âë¹éÎİ¼¹È¸¹¤×÷ÊÒËùÓĞ¡£
-		2 ¿ÉÒÔÓÃÓÚµÄÆäËûÉÌÒµÓÃÍ¾£¨ÅäÌ×¿ª·¢°åÏúÊÛ³ıÍâ£©£¬²»ĞëÊÚÈ¨¡£
-		3 Îİ¼¹È¸¹¤×÷ÊÒ²»¶Ô´úÂë¹¦ÄÜ×öÈÎºÎ±£Ö¤£¬ÇëÊ¹ÓÃÕß×ÔĞĞ²âÊÔ£¬ºó¹û×Ô¸º¡£
-		4 ¿ÉËæÒâĞŞ¸ÄÔ´Âë²¢·Ö·¢£¬µ«²»¿ÉÖ±½ÓÏúÊÛ±¾´úÂë»ñÀû£¬²¢ÇÒÇë±£ÁôWUJIQUE°æÈ¨ËµÃ÷¡£
-		5 Èç·¢ÏÖBUG»òÓĞÓÅ»¯£¬»¶Ó­·¢²¼¸üĞÂ¡£ÇëÁªÏµ£ºcode@wujique.com
-		6 Ê¹ÓÃ±¾Ô´ÂëÔòÏàµ±ÓÚÈÏÍ¬±¾°æÈ¨ËµÃ÷¡£
-		7 ÈçÇÖ·¸ÄãµÄÈ¨Àû£¬ÇëÁªÏµ£ºcode@wujique.com
-		8 Ò»ÇĞ½âÊÍÈ¨¹éÎİ¼¹È¸¹¤×÷ÊÒËùÓĞ¡£
+ * 1.æ—¥    æœŸ:        2017å¹´11æœˆ8æ—¥ æ˜ŸæœŸä¸‰
+ *   ä½œ    è€…:         wujique
+ *   ä¿®æ”¹å†…å®¹:   åˆ›å»ºæ–‡ä»¶
+       	1 æºç å½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
+		2 å¯ä»¥ç”¨äºçš„å…¶ä»–å•†ä¸šç”¨é€”ï¼ˆé…å¥—å¼€å‘æ¿é”€å”®é™¤å¤–ï¼‰ï¼Œä¸é¡»æˆæƒã€‚
+		3 å±‹è„Šé›€å·¥ä½œå®¤ä¸å¯¹ä»£ç åŠŸèƒ½åšä»»ä½•ä¿è¯ï¼Œè¯·ä½¿ç”¨è€…è‡ªè¡Œæµ‹è¯•ï¼Œåæœè‡ªè´Ÿã€‚
+		4 å¯éšæ„ä¿®æ”¹æºç å¹¶åˆ†å‘ï¼Œä½†ä¸å¯ç›´æ¥é”€å”®æœ¬ä»£ç è·åˆ©ï¼Œå¹¶ä¸”è¯·ä¿ç•™WUJIQUEç‰ˆæƒè¯´æ˜ã€‚
+		5 å¦‚å‘ç°BUGæˆ–æœ‰ä¼˜åŒ–ï¼Œæ¬¢è¿å‘å¸ƒæ›´æ–°ã€‚è¯·è”ç³»ï¼šcode@wujique.com
+		6 ä½¿ç”¨æœ¬æºç åˆ™ç›¸å½“äºè®¤åŒæœ¬ç‰ˆæƒè¯´æ˜ã€‚
+		7 å¦‚ä¾µçŠ¯ä½ çš„æƒåˆ©ï¼Œè¯·è”ç³»ï¼šcode@wujique.com
+		8 ä¸€åˆ‡è§£é‡Šæƒå½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
 */
 #include "mcu.h"
 #include "petite_config.h"
@@ -39,29 +39,29 @@ extern void Delay(__IO uint32_t nTime);
 
 
 /*
-	9325ÌØµã£º
-	9325²»Ê¹ÓÃpage¸úcolum£¬Ê¹ÓÃHorizontalºÍVertical£¬¶ÔÓÚÎÒÃÇµÄÄ£×é£¬HÊÇ240¶Ì±ß£¬VÊÇ320³¤±ß
-	1 ÉèÖÃÉ¨ÃèÆğÊ¼µØÖ·,  Ò²¾ÍÊÇ H, VµØÖ·£¬ HVµØÖ·×é³É²ÎÊıAD
-	  ADµÍ°ËÎ»¶ÔÓ¦H£¬¸ß°ËÎ»¶ÔÓ¦V
+	9325ç‰¹ç‚¹ï¼š
+	9325ä¸ä½¿ç”¨pageè·Ÿcolumï¼Œä½¿ç”¨Horizontalå’ŒVerticalï¼Œå¯¹äºæˆ‘ä»¬çš„æ¨¡ç»„ï¼ŒHæ˜¯240çŸ­è¾¹ï¼ŒVæ˜¯320é•¿è¾¹
+	1 è®¾ç½®æ‰«æèµ·å§‹åœ°å€,  ä¹Ÿå°±æ˜¯ H, Våœ°å€ï¼Œ HVåœ°å€ç»„æˆå‚æ•°AD
+	  ADä½å…«ä½å¯¹åº”Hï¼Œé«˜å…«ä½å¯¹åº”V
 	  
-	2 É¨Ãè´°¿ÚµØÖ·£¬
-	  9325½Ğ×öHSA/HEA/VSA/VEA
-	  ´°¿ÚHÒª´óÓÚµÈÓÚ4
-	  ¡°00¡±h ¡Ü HSA[7:0]< HEA[7:0] ¡Ü ¡°EF¡±h. and ¡°04¡±h¨QHEA-HAS
-	  ¡°000¡±h ¡Ü VSA[8:0]< VEA[8:0] ¡Ü ¡°13F¡±h.
+	2 æ‰«æçª—å£åœ°å€ï¼Œ
+	  9325å«åšHSA/HEA/VSA/VEA
+	  çª—å£Hè¦å¤§äºç­‰äº4
+	  â€œ00â€h â‰¤ HSA[7:0]< HEA[7:0] â‰¤ â€œEFâ€h. and â€œ04â€hâ‰¦HEA-HAS
+	  â€œ000â€h â‰¤ VSA[8:0]< VEA[8:0] â‰¤ â€œ13Fâ€h.
 
-	3 ÔÚÉèÖÃÉ¨Ãè·½Ïò£¬ÏÈÉÏÏÂ»¹ÊÇÏÈ×óÓÒÊ±£¬H¸úV²»±ä¡£
+	3 åœ¨è®¾ç½®æ‰«ææ–¹å‘ï¼Œå…ˆä¸Šä¸‹è¿˜æ˜¯å…ˆå·¦å³æ—¶ï¼ŒHè·ŸVä¸å˜ã€‚
 
-	4 ÎŞÂÛÉ¨Ãè·½ÏòÔõÃ´±ä£¬Ô­µã¶¼ÊÇÊúÆÁµÄ×óÉÏ½Ç¡£ÆäËûÆÁÄ»ÊÇÉ¨Ãè·½ÏòµÄÆğµã¡£
-	ÀıÈç£¬ÉèÖÃÎªºáÆÁ£¬×óµ½ÓÒ£¬ÉÏµ½ÏÂ
+	4 æ— è®ºæ‰«ææ–¹å‘æ€ä¹ˆå˜ï¼ŒåŸç‚¹éƒ½æ˜¯ç«–å±çš„å·¦ä¸Šè§’ã€‚å…¶ä»–å±å¹•æ˜¯æ‰«ææ–¹å‘çš„èµ·ç‚¹ã€‚
+	ä¾‹å¦‚ï¼Œè®¾ç½®ä¸ºæ¨ªå±ï¼Œå·¦åˆ°å³ï¼Œä¸Šåˆ°ä¸‹
 	dev_tftlcd_setdir( W_LCD, L2R_U2D);
-	È»ºóË¢ĞÂÒ»¸öÊı¾İ¿é
+	ç„¶ååˆ·æ–°ä¸€ä¸ªæ•°æ®å—
 	TftLcd->color_fill(0, TftLcd->width/4, 0 , TftLcd->height/4, RED);
-	ÆäËûÆÁÄ»Ë¢ĞÂµÄÊÇºáÆÁµÄ×óÉÏ½Ç£¬
-	9325Ë¢µÄÊÇ×óÏÂÏÂ½Ç£¬
-	¶øÇÒÊÇÏÈË¢×îµ×ÏÂÒ»ĞĞ£¬Ò²¾ÍÊÇµÚ0ĞĞ£¬·½ÏòÊÇ´Ó×óµ½ÓÒ¡£
-	È»ºóÔÙË¢×îÉÏÒ»ĞĞ£¬Ò²ÊÇ´Ó×óµ½ÓÒ¡£
-	Òò´ËĞèÒª½«É¨ÃèÆğµãÉèÎªXYÖáµÄÆğµã
+	å…¶ä»–å±å¹•åˆ·æ–°çš„æ˜¯æ¨ªå±çš„å·¦ä¸Šè§’ï¼Œ
+	9325åˆ·çš„æ˜¯å·¦ä¸‹ä¸‹è§’ï¼Œ
+	è€Œä¸”æ˜¯å…ˆåˆ·æœ€åº•ä¸‹ä¸€è¡Œï¼Œä¹Ÿå°±æ˜¯ç¬¬0è¡Œï¼Œæ–¹å‘æ˜¯ä»å·¦åˆ°å³ã€‚
+	ç„¶åå†åˆ·æœ€ä¸Šä¸€è¡Œï¼Œä¹Ÿæ˜¯ä»å·¦åˆ°å³ã€‚
+	å› æ­¤éœ€è¦å°†æ‰«æèµ·ç‚¹è®¾ä¸ºXYè½´çš„èµ·ç‚¹
 	
 	
 */
@@ -83,7 +83,7 @@ s32 drv_ILI9325_update(DevLcdNode *lcd);
 
 /*
 
-	9325Çı¶¯
+	9325é©±åŠ¨
 
 */
 _lcd_drv TftLcdILI9325Drv = {
@@ -112,9 +112,9 @@ void drv_ILI9325_lcd_bl(DevLcdNode *lcd, u8 sta)
 }	
 /**
  *@brief:	   drv_ILI9325_scan_dir
- *@details:    ÉèÖÃÏÔ´æÉ¨Ãè·½Ïò
+ *@details:    è®¾ç½®æ˜¾å­˜æ‰«ææ–¹å‘
  *@param[in]   u8 dir  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:	   static OK
  */
 static void drv_ILI9325_scan_dir(DevLcdNode *lcd, u8 dir)
@@ -124,28 +124,28 @@ static void drv_ILI9325_scan_dir(DevLcdNode *lcd, u8 dir)
 	
 	switch(dir)
     {
-        case L2R_U2D://´Ó×óµ½ÓÒ,´ÓÉÏµ½ÏÂ
+        case L2R_U2D://ä»å·¦åˆ°å³,ä»ä¸Šåˆ°ä¸‹
             regval|=(1<<5)|(1<<4)|(0<<3); 
             break;
-        case L2R_D2U://´Ó×óµ½ÓÒ,´ÓÏÂµ½ÉÏ
+        case L2R_D2U://ä»å·¦åˆ°å³,ä»ä¸‹åˆ°ä¸Š
             regval|=(0<<5)|(1<<4)|(0<<3); 
             break;
-        case R2L_U2D://´ÓÓÒµ½×ó,´ÓÉÏµ½ÏÂ
+        case R2L_U2D://ä»å³åˆ°å·¦,ä»ä¸Šåˆ°ä¸‹
             regval|=(1<<5)|(0<<4)|(0<<3);
             break;
-        case R2L_D2U://´ÓÓÒµ½×ó,´ÓÏÂµ½ÉÏ
+        case R2L_D2U://ä»å³åˆ°å·¦,ä»ä¸‹åˆ°ä¸Š
             regval|=(0<<5)|(0<<4)|(0<<3); 
             break;   
-        case U2D_L2R://´ÓÉÏµ½ÏÂ,´Ó×óµ½ÓÒ
+        case U2D_L2R://ä»ä¸Šåˆ°ä¸‹,ä»å·¦åˆ°å³
             regval|=(1<<5)|(1<<4)|(1<<3); 
             break;
-        case U2D_R2L://´ÓÉÏµ½ÏÂ,´ÓÓÒµ½×ó
+        case U2D_R2L://ä»ä¸Šåˆ°ä¸‹,ä»å³åˆ°å·¦
             regval|=(1<<5)|(0<<4)|(1<<3); 
             break;
-        case D2U_L2R://´ÓÏÂµ½ÉÏ,´Ó×óµ½ÓÒ
+        case D2U_L2R://ä»ä¸‹åˆ°ä¸Š,ä»å·¦åˆ°å³
             regval|=(0<<5)|(1<<4)|(1<<3); 
             break;
-        case D2U_R2L://´ÓÏÂµ½ÉÏ,´ÓÓÒµ½×ó
+        case D2U_R2L://ä»ä¸‹åˆ°ä¸Š,ä»å³åˆ°å·¦
             regval|=(0<<5)|(0<<4)|(1<<3); 
             break;   
     }
@@ -168,13 +168,13 @@ static void drv_ILI9325_scan_dir(DevLcdNode *lcd, u8 dir)
 
 /**
  *@brief:      drv_ILI9325_set_cp_addr
- *@details:    ÉèÖÃ¿ØÖÆÆ÷µÄĞĞÁĞµØÖ··¶Î§
+ *@details:    è®¾ç½®æ§åˆ¶å™¨çš„è¡Œåˆ—åœ°å€èŒƒå›´
  *@param[in]   u16 sc  
                u16 ec  
                u16 sp  
                u16 ep  
- *@param[out]  ÎŞ
- *@retval:     9325ÉèÖÃÉ¨ÃèÇøÓòÓĞÒ»¸öÏŞÖÆ£¬ÄÇ¾ÍÊÇ´°¿Ú¿í¶È²»ÄÜĞ¡ÓÚËÄ
+ *@param[out]  æ— 
+ *@retval:     9325è®¾ç½®æ‰«æåŒºåŸŸæœ‰ä¸€ä¸ªé™åˆ¶ï¼Œé‚£å°±æ˜¯çª—å£å®½åº¦ä¸èƒ½å°äºå››
  */
 static s32 drv_ILI9325_set_cp_addr(DevLcdNode *lcd, u16 hsa, u16 hea, u16 vsa, u16 vea)
 {
@@ -184,7 +184,7 @@ static s32 drv_ILI9325_set_cp_addr(DevLcdNode *lcd, u16 hsa, u16 hea, u16 vsa, u
 	
 	node = bus_lcd_open(lcd->dev.buslcd);
 
-	/* ÉèÖÃÉ¨Ãè´°¿Ú */
+	/* è®¾ç½®æ‰«æçª—å£ */
 	if((hsa+4) > hea)
 		heatmp = hsa+4;
 	else
@@ -207,7 +207,7 @@ static s32 drv_ILI9325_set_cp_addr(DevLcdNode *lcd, u16 hsa, u16 hea, u16 vsa, u
 	bus_lcd_write_data(node, (u8*)tmp, 1);
 	
 	/*
-		ÉèÖÃÉ¨ÃèÆğÊ¼µØÖ·¡£
+		è®¾ç½®æ‰«æèµ·å§‹åœ°å€ã€‚
 	*/
 	if((lcd->scandir&LR_BIT_MASK) == LR_BIT_MASK)
 	{
@@ -244,9 +244,9 @@ static s32 drv_ILI9325_set_cp_addr(DevLcdNode *lcd, u16 hsa, u16 hea, u16 vsa, u
 
 /**
  *@brief:	   drv_ILI9325_display_onoff
- *@details:    ÏÔÊ¾»ò¹Ø±Õ
+ *@details:    æ˜¾ç¤ºæˆ–å…³é—­
  *@param[in]   u8 sta  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:	   static OK
  */
 static s32 drv_ILI9325_display_onoff(DevLcdNode *lcd, u8 sta)
@@ -274,9 +274,9 @@ static s32 drv_ILI9325_display_onoff(DevLcdNode *lcd, u8 sta)
 
 /**
  *@brief:	   drv_ILI9325_init
- *@details:    ³õÊ¼»¯FSMC£¬²¢ÇÒ¶ÁÈ¡ILI9325µÄÉè±¸ID
+ *@details:    åˆå§‹åŒ–FSMCï¼Œå¹¶ä¸”è¯»å–ILI9325çš„è®¾å¤‡ID
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:	   
  */
 s32 drv_ILI9325_init(DevLcdNode *lcd)
@@ -294,7 +294,7 @@ s32 drv_ILI9325_init(DevLcdNode *lcd)
 	bus_lcd_rst(node, 1);
 	Delay(50);
 	/*
-		¶Á9325µÄID
+		è¯»9325çš„ID
 		
 	*/
 	bus_lcd_write_cmd(node, (0x0000));
@@ -443,7 +443,7 @@ s32 drv_ILI9325_init(DevLcdNode *lcd)
 
 	/*
 	Horizontal and Vertical RAM Address Position 219*319
-	ÉèÖÃÉ¨Ãè´°¿Ú
+	è®¾ç½®æ‰«æçª—å£
 
 	*/
 	bus_lcd_write_cmd(node, (0x0050));
@@ -520,15 +520,15 @@ s32 drv_ILI9325_init(DevLcdNode *lcd)
 }
 /**
  *@brief:      drv_ILI9325_xy2cp
- *@details:    ½«xy×ø±ê×ª»»ÎªCP×ø±ê
- *@param[in]   ÎŞ
- *@param[out]  ÎŞ
+ *@details:    å°†xyåæ ‡è½¬æ¢ä¸ºCPåæ ‡
+ *@param[in]   æ— 
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 drv_ILI9325_xy2cp(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey, u16 *hsa, u16 *hea, u16 *vsa, u16 *vea)
 {
 	/*
-		ÏÔÊ¾XYÖá·¶Î§
+		æ˜¾ç¤ºXYè½´èŒƒå›´
 	*/
 	if(sx >= lcd->width)
 		sx = lcd->width-1;
@@ -542,13 +542,13 @@ s32 drv_ILI9325_xy2cp(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey, u16 *hsa,
 	if(ey >= lcd->height)
 		ey = lcd->height-1;
 	/*
-		XYÖá£¬ÊµÎïÀ´¿´£¬·½ÏòÈ¡¾öÓÚºáÆÁ»¹ÊÇÊúÆÁ
-		CPÖá£¬ÊÇ¿ØÖÆÆ÷ÏÔ´æ£¬
-		Ó³Éä¹ØÏµÈ¡¾öÓÚÉ¨Ãè·½Ïò
+		XYè½´ï¼Œå®ç‰©æ¥çœ‹ï¼Œæ–¹å‘å–å†³äºæ¨ªå±è¿˜æ˜¯ç«–å±
+		CPè½´ï¼Œæ˜¯æ§åˆ¶å™¨æ˜¾å­˜ï¼Œ
+		æ˜ å°„å…³ç³»å–å†³äºæ‰«ææ–¹å‘
 	*/
 	/* 
-		ºáÆÁ£¬ÓÃ»§ÊÓ½ÇµÄXY×ø±ê£¬¸úLCDÉ¨ÃèµÄCP×ø±êÒª½øĞĞÒ»¸ö¶Ôµ÷
-		¶øÇÒ£¬9325ÔÚºáÊúÆÁÒ²Òª½øĞĞÓ³Éä
+		æ¨ªå±ï¼Œç”¨æˆ·è§†è§’çš„XYåæ ‡ï¼Œè·ŸLCDæ‰«æçš„CPåæ ‡è¦è¿›è¡Œä¸€ä¸ªå¯¹è°ƒ
+		è€Œä¸”ï¼Œ9325åœ¨æ¨ªç«–å±ä¹Ÿè¦è¿›è¡Œæ˜ å°„
 		
 	*/
 	if(lcd->dir == W_LCD)
@@ -571,11 +571,11 @@ s32 drv_ILI9325_xy2cp(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey, u16 *hsa,
 }
 /**
  *@brief:      drv_ILI9325_drawpoint
- *@details:    »­µã
+ *@details:    ç”»ç‚¹
  *@param[in]   u16 x      
                u16 y      
                u16 color  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     static
  */
 static s32 drv_ILI9325_drawpoint(DevLcdNode *lcd, u16 x, u16 y, u16 color)
@@ -596,13 +596,13 @@ static s32 drv_ILI9325_drawpoint(DevLcdNode *lcd, u16 x, u16 y, u16 color)
 }
 /**
  *@brief:      dev_ILI9325_color_fill
- *@details:    ½«Ò»¿éÇøÓòÉè¶¨ÎªÄ³ÖÖÑÕÉ«
+ *@details:    å°†ä¸€å—åŒºåŸŸè®¾å®šä¸ºæŸç§é¢œè‰²
  *@param[in]   u16 sx     
                u16 sy     
                u16 ex     
                u16 ey     
                u16 color  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 drv_ILI9325_color_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 color)
@@ -616,8 +616,8 @@ s32 drv_ILI9325_color_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 colo
 	drv_ILI9325_xy2cp(lcd, sx, ex, sy, ey, &hsa,&hea,&vsa,&vea);
 	drv_ILI9325_set_cp_addr(lcd, hsa, hea, vsa, vea);
 
-	width = hea - hsa + 1;//µÃµ½Ìî³äµÄ¿í¶È
-	height = vea - vsa + 1;//¸ß¶È
+	width = hea - hsa + 1;//å¾—åˆ°å¡«å……çš„å®½åº¦
+	height = vea - vsa + 1;//é«˜åº¦
 	
 	//uart_printf("ili9325 width:%d, height:%d\r\n", width, height);
 	//GPIO_ResetBits(GPIOG, GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2| GPIO_Pin_3);
@@ -670,8 +670,8 @@ s32 drv_ILI9325_color_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 colo
 	drv_ILI9325_xy2cp(lcd, sx, ex, sy, ey, &hsa,&hea,&vsa,&vea);
 	drv_ILI9325_set_cp_addr(lcd, hsa, hea, vsa, vea);
 
-	width = hea - hsa + 1;//µÃµ½Ìî³äµÄ¿í¶È
-	height = vea - vsa + 1;//¸ß¶È
+	width = hea - hsa + 1;//å¾—åˆ°å¡«å……çš„å®½åº¦
+	height = vea - vsa + 1;//é«˜åº¦
 	
 	//uart_printf("ili9325 width:%d, height:%d\r\n", width, height);
 	
@@ -693,13 +693,13 @@ s32 drv_ILI9325_color_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 colo
 #endif
 /**
  *@brief:      dev_ILI9325_color_fill
- *@details:    Ìî³ä¾ØĞÎÇøÓò
+ *@details:    å¡«å……çŸ©å½¢åŒºåŸŸ
  *@param[in]   u16 sx      
                u16 sy      
                u16 ex      
                u16 ey      
-               u16 *color  Ã¿Ò»¸öµãµÄÑÕÉ«Êı¾İ
- *@param[out]  ÎŞ
+               u16 *color  æ¯ä¸€ä¸ªç‚¹çš„é¢œè‰²æ•°æ®
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 drv_ILI9325_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
@@ -712,8 +712,8 @@ s32 drv_ILI9325_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
 	drv_ILI9325_xy2cp(lcd, sx, ex, sy, ey, &hsa,&hea,&vsa,&vea);
 	drv_ILI9325_set_cp_addr(lcd, hsa, hea, vsa, vea);
 
-	width=(hea +1) - hsa ;//µÃµ½Ìî³äµÄ¿í¶È +1ÊÇÒòÎª×ø±ê´Ó0¿ªÊ¼
-	height=(vea +1) - vsa;//¸ß¶È
+	width=(hea +1) - hsa ;//å¾—åˆ°å¡«å……çš„å®½åº¦ +1æ˜¯å› ä¸ºåæ ‡ä»0å¼€å§‹
+	height=(vea +1) - vsa;//é«˜åº¦
 	
 	//uart_printf("ili9325 width:%d, height:%d\r\n", width, height);
 	//GPIO_ResetBits(GPIOG, GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2| GPIO_Pin_3);

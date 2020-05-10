@@ -7,7 +7,7 @@
 typedef   unsigned int size_t;
 
 
-/* io¶Ë¿Ú×éÃû³Æ×ªÒå*/
+/* ioç«¯å£ç»„åç§°è½¬ä¹‰*/
 typedef enum{
 	MCU_PORT_NULL = 0x00,
 	MCU_PORT_A,
@@ -26,13 +26,13 @@ typedef enum{
 
 extern const GPIO_TypeDef *Stm32PortList[MCU_PORT_MAX];
 
-/*IO µçÆ½¶¨Òå */
+/*IO ç”µå¹³å®šä¹‰ */
 typedef enum{
 	MCU_IO_STA_0 = 0x00,
 	MCU_IO_STA_1,
 }MCU_IO_STA;
 	
-/*IOÎ»¶¨Òå£¬Ã¿¸öPORTÖ§³Ö16¸öBIT*/
+/*IOä½å®šä¹‰ï¼Œæ¯ä¸ªPORTæ”¯æŒ16ä¸ªBIT*/
 typedef enum{
 	MCU_IO_0 = 0x0001,
 	MCU_IO_1 = 0x0002,
@@ -62,7 +62,7 @@ typedef enum {
 
 
 /*
-SPIÄ£Ê½
+SPIæ¨¡å¼
 */
 typedef enum{
 	SPI_MODE_0 =0,

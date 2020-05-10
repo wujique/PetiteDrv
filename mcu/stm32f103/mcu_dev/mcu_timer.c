@@ -1,22 +1,22 @@
 /**
  * @file            mcu_timer.c
- * @brief           CPUÆ¬ÉÏ¶¨Ê±Æ÷Çý¶¯
+ * @brief           CPUç‰‡ä¸Šå®šæ—¶å™¨é©±åŠ¨
  * @author          test
- * @date            2017Äê10ÔÂ25ÈÕ ÐÇÆÚÈý
- * @version         ³õ¸å
+ * @date            2017å¹´10æœˆ25æ—¥ æ˜ŸæœŸä¸‰
+ * @version         åˆç¨¿
  * @par             
  * @par History:
- * 1.ÈÕ    ÆÚ:      2017Äê10ÔÂ25ÈÕ ÐÇÆÚÈý
- *   ×÷    Õß:      ÎÝ¼¹È¸¹¤×÷ÊÒ
- *   ÐÞ¸ÄÄÚÈÝ:      ´´½¨ÎÄ¼þ
- 		1 Ô´Âë¹éÎÝ¼¹È¸¹¤×÷ÊÒËùÓÐ¡£
-		2 ¿ÉÒÔÓÃÓÚµÄÆäËûÉÌÒµÓÃÍ¾£¨ÅäÌ×¿ª·¢°åÏúÊÛ³ýÍâ£©£¬²»ÐëÊÚÈ¨¡£
-		3 ÎÝ¼¹È¸¹¤×÷ÊÒ²»¶Ô´úÂë¹¦ÄÜ×öÈÎºÎ±£Ö¤£¬ÇëÊ¹ÓÃÕß×ÔÐÐ²âÊÔ£¬ºó¹û×Ô¸º¡£
-		4 ¿ÉËæÒâÐÞ¸ÄÔ´Âë²¢·Ö·¢£¬µ«²»¿ÉÖ±½ÓÏúÊÛ±¾´úÂë»ñÀû£¬²¢ÇÒÇë±£ÁôWUJIQUE°æÈ¨ËµÃ÷¡£
-		5 Èç·¢ÏÖBUG»òÓÐÓÅ»¯£¬»¶Ó­·¢²¼¸üÐÂ¡£ÇëÁªÏµ£ºcode@wujique.com
-		6 Ê¹ÓÃ±¾Ô´ÂëÔòÏàµ±ÓÚÈÏÍ¬±¾°æÈ¨ËµÃ÷¡£
-		7 ÈçÇÖ·¸ÄãµÄÈ¨Àû£¬ÇëÁªÏµ£ºcode@wujique.com
-		8 Ò»ÇÐ½âÊÍÈ¨¹éÎÝ¼¹È¸¹¤×÷ÊÒËùÓÐ¡£
+ * 1.æ—¥    æœŸ:      2017å¹´10æœˆ25æ—¥ æ˜ŸæœŸä¸‰
+ *   ä½œ    è€…:      å±‹è„Šé›€å·¥ä½œå®¤
+ *   ä¿®æ”¹å†…å®¹:      åˆ›å»ºæ–‡ä»¶
+ 		1 æºç å½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
+		2 å¯ä»¥ç”¨äºŽçš„å…¶ä»–å•†ä¸šç”¨é€”ï¼ˆé…å¥—å¼€å‘æ¿é”€å”®é™¤å¤–ï¼‰ï¼Œä¸é¡»æŽˆæƒã€‚
+		3 å±‹è„Šé›€å·¥ä½œå®¤ä¸å¯¹ä»£ç åŠŸèƒ½åšä»»ä½•ä¿è¯ï¼Œè¯·ä½¿ç”¨è€…è‡ªè¡Œæµ‹è¯•ï¼ŒåŽæžœè‡ªè´Ÿã€‚
+		4 å¯éšæ„ä¿®æ”¹æºç å¹¶åˆ†å‘ï¼Œä½†ä¸å¯ç›´æŽ¥é”€å”®æœ¬ä»£ç èŽ·åˆ©ï¼Œå¹¶ä¸”è¯·ä¿ç•™WUJIQUEç‰ˆæƒè¯´æ˜Žã€‚
+		5 å¦‚å‘çŽ°BUGæˆ–æœ‰ä¼˜åŒ–ï¼Œæ¬¢è¿Žå‘å¸ƒæ›´æ–°ã€‚è¯·è”ç³»ï¼šcode@wujique.com
+		6 ä½¿ç”¨æœ¬æºç åˆ™ç›¸å½“äºŽè®¤åŒæœ¬ç‰ˆæƒè¯´æ˜Žã€‚
+		7 å¦‚ä¾µçŠ¯ä½ çš„æƒåˆ©ï¼Œè¯·è”ç³»ï¼šcode@wujique.com
+		8 ä¸€åˆ‡è§£é‡Šæƒå½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
 */
 
 #include "mcu.h"
@@ -25,10 +25,10 @@
 
 /*
 
-	¶Ô¶¨Ê±Æ÷½øÐÐ³éÏó£¬³éÏóµÄ½Ó¿ÚÌá¹©¸øÉÏ²ãÇý¶¯Ê¹ÓÃ¡£
-	1. ¶¨Ê±Æ÷·ÖÈí¶¨Ê±Æ÷ºÍÓ²¶¨Ê±Æ÷¡£
-	2. Ó²¶¨Ê±Æ÷·Ö3ÖÖ¹¦ÄÜ£ºPWN£¬²¶»ñ£¬¶¨Ê±¡£
-	3. ¶¨Ê±Æ÷Ìá¹©½Ó¿Ú
+	å¯¹å®šæ—¶å™¨è¿›è¡ŒæŠ½è±¡ï¼ŒæŠ½è±¡çš„æŽ¥å£æä¾›ç»™ä¸Šå±‚é©±åŠ¨ä½¿ç”¨ã€‚
+	1. å®šæ—¶å™¨åˆ†è½¯å®šæ—¶å™¨å’Œç¡¬å®šæ—¶å™¨ã€‚
+	2. ç¡¬å®šæ—¶å™¨åˆ†3ç§åŠŸèƒ½ï¼šPWNï¼Œæ•èŽ·ï¼Œå®šæ—¶ã€‚
+	3. å®šæ—¶å™¨æä¾›æŽ¥å£
 
 */
 
@@ -47,7 +47,7 @@ typedef struct _strTimerCtrl
 }McuTimerCtrl;
 
 McuTimerCtrl McuTimerCtrlList[MCU_TIMER_MAX];
-/*STM32Ïà¹Ø²Ù×÷¶¨Òå*/
+/*STM32ç›¸å…³æ“ä½œå®šä¹‰*/
 const TIM_TypeDef *STM32TimerList[MCU_TIMER_MAX]={
 	0,
 		TIM1,TIM2,TIM3,TIM4,
@@ -60,8 +60,8 @@ const uint32_t STM32TimerRccList[MCU_TIMER_MAX]={
 		RCC_APB1Periph_TIM5,RCC_APB1Periph_TIM6,RCC_APB1Periph_TIM7,RCC_APB2Periph_TIM8
 	};
 /*
-	´ÓÕâ¸ö±í¸ñ¿ÉÒÔ¿´³ö£¬23457Õâ5¸ö¶¨Ê±Æ÷ÖÐ¶ÏÈë¿ÚÃ»ÓÐ¸´ÓÃ£¬
-	¼òµ¥µÄ¶¨Ê±¹¦ÄÜ×îºÃÓÃÕâ4¸ö
+	ä»Žè¿™ä¸ªè¡¨æ ¼å¯ä»¥çœ‹å‡ºï¼Œ23457è¿™5ä¸ªå®šæ—¶å™¨ä¸­æ–­å…¥å£æ²¡æœ‰å¤ç”¨ï¼Œ
+	ç®€å•çš„å®šæ—¶åŠŸèƒ½æœ€å¥½ç”¨è¿™4ä¸ª
 */	
 const uint8_t STM32TimerIRQList[MCU_TIMER_MAX]={
 	0,
@@ -69,26 +69,26 @@ const uint8_t STM32TimerIRQList[MCU_TIMER_MAX]={
 		TIM5_IRQn, TIM6_IRQn, TIM7_IRQn, TIM8_UP_IRQn
 	};
 /*
-    ¶¨Ê±Æ÷Ê±ÖÓÎª84M,
+    å®šæ—¶å™¨æ—¶é’Ÿä¸º84M,
     Tout=((SYSTEM_CLK_PERIOD)*(SYSTEM_CLK_PRESCALER))/Ft us.
 
-	Ô¤·ÖÆµ,8400¸öÊ±ÖÓ²Å´¥·¢Ò»´Î¶¨Ê±Æ÷¼ÆÊý 
-	ÄÇÃ´Ò»¸ö¶¨Ê±Æ÷¼ÆÊýµÄÊ±¼ä¾ÍÊÇ(1/84M)*8400 = 100us	  
+	é¢„åˆ†é¢‘,8400ä¸ªæ—¶é’Ÿæ‰è§¦å‘ä¸€æ¬¡å®šæ—¶å™¨è®¡æ•° 
+	é‚£ä¹ˆä¸€ä¸ªå®šæ—¶å™¨è®¡æ•°çš„æ—¶é—´å°±æ˜¯(1/84M)*8400 = 100us	  
 */	
 const u16  STM32TimerTickSet[MCU_TIMER_DEF_MAX] =
 	{
 		0,
 		84,//1us
-		840,//840Ô¤·ÖÆµ£¬Ò»¸ötick=10us
-		8400,//8400Ô¤·ÖÆµ£¬Ò»¸ötick=100us
-		42000,//Ô¤·ÖÆµ£¬Ò»¸ötick=500us
-		8,//Ô¼µÈÓÚ100ns£¬Í¨³£ÓÃÓÚ²¶»ñ¼ÆÊý¶ø²»ÊÇ¶¨Ê±
+		840,//840é¢„åˆ†é¢‘ï¼Œä¸€ä¸ªtick=10us
+		8400,//8400é¢„åˆ†é¢‘ï¼Œä¸€ä¸ªtick=100us
+		42000,//é¢„åˆ†é¢‘ï¼Œä¸€ä¸ªtick=500us
+		8,//çº¦ç­‰äºŽ100nsï¼Œé€šå¸¸ç”¨äºŽæ•èŽ·è®¡æ•°è€Œä¸æ˜¯å®šæ—¶
 	}; 
 /**
  *@brief:	   mcu_tim3_IRQhandler
- *@details:    ¶¨Ê±Æ÷ÖÐ¶Ï´¦Àíº¯Êý
+ *@details:    å®šæ—¶å™¨ä¸­æ–­å¤„ç†å‡½æ•°
  *@param[in]   void  
- *@param[out]  ÎÞ
+ *@param[out]  æ— 
  *@retval:	   
  */
 void mcu_tim3_IRQhandler(void)
@@ -98,7 +98,7 @@ void mcu_tim3_IRQhandler(void)
 		TIM_ClearFlag(TIM3, TIM_FLAG_Update);
 
 		if(McuTimerCtrlList[MCU_TIMER_3].retype == 1)
-			TIM_Cmd(TIM3, DISABLE);//Í£Ö¹¶¨Ê±Æ÷
+			TIM_Cmd(TIM3, DISABLE);//åœæ­¢å®šæ—¶å™¨
 		if(McuTimerCtrlList[MCU_TIMER_3].Callback != NULL)	
 			McuTimerCtrlList[MCU_TIMER_3].Callback();
 
@@ -107,9 +107,9 @@ void mcu_tim3_IRQhandler(void)
 
 /**
  *@brief:	   mcu_tim5_IRQhandler
- *@details:    ¶¨Ê±Æ÷ÖÐ¶Ï´¦Àíº¯Êý
+ *@details:    å®šæ—¶å™¨ä¸­æ–­å¤„ç†å‡½æ•°
  *@param[in]   void  
- *@param[out]  ÎÞ
+ *@param[out]  æ— 
  *@retval:	   
  */
 void mcu_tim5_IRQhandler(void)
@@ -119,7 +119,7 @@ void mcu_tim5_IRQhandler(void)
 		TIM_ClearFlag(TIM5, TIM_FLAG_Update);
 
 		if(McuTimerCtrlList[MCU_TIMER_5].retype == 1)
-			TIM_Cmd(TIM5, DISABLE);//Í£Ö¹¶¨Ê±Æ÷
+			TIM_Cmd(TIM5, DISABLE);//åœæ­¢å®šæ—¶å™¨
 		if(McuTimerCtrlList[MCU_TIMER_5].Callback != NULL)	
 			McuTimerCtrlList[MCU_TIMER_5].Callback();
  
@@ -128,9 +128,9 @@ void mcu_tim5_IRQhandler(void)
 
 /**
  *@brief:	   mcu_tim7_IRQhandler
- *@details:    ¶¨Ê±Æ÷ÖÐ¶Ï´¦Àíº¯Êý
+ *@details:    å®šæ—¶å™¨ä¸­æ–­å¤„ç†å‡½æ•°
  *@param[in]   void  
- *@param[out]  ÎÞ
+ *@param[out]  æ— 
  *@retval:	   
  */
 void mcu_tim7_IRQhandler(void)
@@ -140,7 +140,7 @@ void mcu_tim7_IRQhandler(void)
 		TIM_ClearFlag(TIM7, TIM_FLAG_Update);
 		
 		if(McuTimerCtrlList[MCU_TIMER_7].retype == 1)
-			TIM_Cmd(TIM7, DISABLE);//Í£Ö¹¶¨Ê±Æ÷
+			TIM_Cmd(TIM7, DISABLE);//åœæ­¢å®šæ—¶å™¨
 		if(McuTimerCtrlList[MCU_TIMER_7].Callback != NULL)	
 			McuTimerCtrlList[MCU_TIMER_7].Callback();
 		
@@ -163,25 +163,25 @@ s32 mcu_timer_init(McuTimerNum timer)
 			|| timer >= MCU_TIMER_MAX)
 		return -1;
 	
-    //´ò¿ª¶¨Ê±Æ÷Ê±ÖÓ
+    //æ‰“å¼€å®šæ—¶å™¨æ—¶é’Ÿ
     if(timer == MCU_TIMER_1 || timer == MCU_TIMER_8)
 		RCC_APB2PeriphClockCmd(STM32TimerRccList[timer], ENABLE);	
 	else
     	RCC_APB1PeriphClockCmd(STM32TimerRccList[timer], ENABLE);
 	
-    //¸´Î»¶¨Ê±Æ÷
+    //å¤ä½å®šæ—¶å™¨
     TIM_Cmd((TIM_TypeDef *)STM32TimerList[timer], DISABLE);
 	
     TIM_SetCounter((TIM_TypeDef *)STM32TimerList[timer], 0);
     
-	/*ÖÐ¶ÏÓÅÏÈ¼¶ÔÚµ×²ã¹Ì¶¨*/
+	/*ä¸­æ–­ä¼˜å…ˆçº§åœ¨åº•å±‚å›ºå®š*/
 	NVIC_InitStructure.NVIC_IRQChannel = STM32TimerIRQList[timer];	
-    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;//ÇÀÕ¼ÓÅÏÈ¼¶
-    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;      //ÏìÓ¦ÓÅÏÈ¼¶
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;//æŠ¢å ä¼˜å…ˆçº§
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;      //å“åº”ä¼˜å…ˆçº§
     NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
     NVIC_Init(&NVIC_InitStructure);
 	
-    TIM_ITConfig((TIM_TypeDef *)STM32TimerList[timer], TIM_IT_Update, ENABLE);//´ò¿ª¶¨Ê±Æ÷ÖÐ¶Ï
+    TIM_ITConfig((TIM_TypeDef *)STM32TimerList[timer], TIM_IT_Update, ENABLE);//æ‰“å¼€å®šæ—¶å™¨ä¸­æ–­
     
 	McuTimerCtrlList[timer].Callback = NULL;
 	return 0;
@@ -201,22 +201,22 @@ s32 mcu_timer_config(McuTimerNum timer, McuTimerTickDef tickdef, u32 tick, void 
 	McuTimerCtrlList[timer].Callback = callback;
 	McuTimerCtrlList[timer].retype = type;
 	
-	//¸´Î»¶¨Ê±Æ÷
+	//å¤ä½å®šæ—¶å™¨
     TIM_Cmd((TIM_TypeDef *)STM32TimerList[timer], DISABLE);
     TIM_SetCounter((TIM_TypeDef *)STM32TimerList[timer], 0);
 
-	TIM_TimeBaseInitStruct.TIM_Prescaler = STM32TimerTickSet[tickdef]-1;//·ÖÆµ
+	TIM_TimeBaseInitStruct.TIM_Prescaler = STM32TimerTickSet[tickdef]-1;//åˆ†é¢‘
 	TIM_TimeBaseInitStruct.TIM_ClockDivision=TIM_CKD_DIV1;
-    TIM_TimeBaseInitStruct.TIM_CounterMode = TIM_CounterMode_Up;//ÏòÉÏ¼ÆÊý
-    TIM_TimeBaseInitStruct.TIM_Period = tick - 1;  //ÖÜÆÚ
+    TIM_TimeBaseInitStruct.TIM_CounterMode = TIM_CounterMode_Up;//å‘ä¸Šè®¡æ•°
+    TIM_TimeBaseInitStruct.TIM_Period = tick - 1;  //å‘¨æœŸ
     TIM_TimeBaseInitStruct.TIM_RepetitionCounter = 1;
     TIM_TimeBaseInit((TIM_TypeDef *)STM32TimerList[timer], &TIM_TimeBaseInitStruct);
 
 	TIM_ClearFlag((TIM_TypeDef *)STM32TimerList[timer], TIM_FLAG_Update);
 	
-	TIM_ITConfig((TIM_TypeDef *)STM32TimerList[timer], TIM_IT_Update, ENABLE);//´ò¿ª¶¨Ê±Æ÷ÖÐ¶Ï
+	TIM_ITConfig((TIM_TypeDef *)STM32TimerList[timer], TIM_IT_Update, ENABLE);//æ‰“å¼€å®šæ—¶å™¨ä¸­æ–­
 
-	TIM_Cmd((TIM_TypeDef *)STM32TimerList[timer], ENABLE);//Ê¹ÄÜ¶¨Ê±Æ÷(Æô¶¯)	
+	TIM_Cmd((TIM_TypeDef *)STM32TimerList[timer], ENABLE);//ä½¿èƒ½å®šæ—¶å™¨(å¯åŠ¨)	
 	
 	return 0;
 }
@@ -246,7 +246,7 @@ s32 mcu_timer_stop(McuTimerNum timer)
  *@brief:      mcu_timer_pwm_init
  *@details:    
  *@param[in]   
- *@param[out]  ÎÞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 mcu_timer_pwm_init(McuTimerNum timer, McuTimerTickDef tickdef, u32 tick, u8 duty, McuTimerCh ch)
@@ -261,16 +261,16 @@ s32 mcu_timer_pwm_init(McuTimerNum timer, McuTimerTickDef tickdef, u32 tick, u8 
 
 	TIM_TimeBaseStructure.TIM_Prescaler = STM32TimerTickSet[tickdef]-1;
     TIM_TimeBaseStructure.TIM_ClockDivision=TIM_CKD_DIV1;
-    TIM_TimeBaseStructure.TIM_CounterMode=TIM_CounterMode_Up; //---ÏòÉÏ¼ÆÊýÄ£Ê½
-    TIM_TimeBaseStructure.TIM_Period= tick - 1; //---×Ô¶¯ÖØ×°ÔØÖµ
-    TIM_TimeBaseInit((TIM_TypeDef *)STM32TimerList[timer], &TIM_TimeBaseStructure);//---³õÊ¼»¯¶¨Ê±Æ÷ 4
+    TIM_TimeBaseStructure.TIM_CounterMode=TIM_CounterMode_Up; //---å‘ä¸Šè®¡æ•°æ¨¡å¼
+    TIM_TimeBaseStructure.TIM_Period= tick - 1; //---è‡ªåŠ¨é‡è£…è½½å€¼
+    TIM_TimeBaseInit((TIM_TypeDef *)STM32TimerList[timer], &TIM_TimeBaseStructure);//---åˆå§‹åŒ–å®šæ—¶å™¨ 4
     
-    //----³õÊ¼»¯ TIM4 PWM Ä£Ê½
-    TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1; //---PWM µ÷ÖÆÄ£Ê½ 1
-    TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable; //---±È½ÏÊä³öÊ¹ÄÜ
-    TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_Low; //---Êä³ö¼«ÐÔµÍ
+    //----åˆå§‹åŒ– TIM4 PWM æ¨¡å¼
+    TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1; //---PWM è°ƒåˆ¶æ¨¡å¼ 1
+    TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable; //---æ¯”è¾ƒè¾“å‡ºä½¿èƒ½
+    TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_Low; //---è¾“å‡ºæžæ€§ä½Ž
 
-	/*Ä¬ÈÏÅäÖÃµÄÊÇÍ¨µÀ2*/
+	/*é»˜è®¤é…ç½®çš„æ˜¯é€šé“2*/
 	if(ch == MCU_TIMER_CH1)
 	{
     	TIM_OC1Init((TIM_TypeDef *)STM32TimerList[timer], &TIM_OCInitStructure);
@@ -303,14 +303,14 @@ s32 mcu_timer_pwm_init(McuTimerNum timer, McuTimerTickDef tickdef, u32 tick, u8 
 	return 0;
 }
 /*
-	¶¨Ê±Æ÷²¶»ñ
+	å®šæ—¶å™¨æ•èŽ·
 */
 /**
  *@brief:      mcu_timer_cap_init
- *@details:    ³õÊ¼»¯¶¨Ê±Æ÷²¶»ñ£¬²»Ê¹ÓÃÖÐ¶Ï
+ *@details:    åˆå§‹åŒ–å®šæ—¶å™¨æ•èŽ·ï¼Œä¸ä½¿ç”¨ä¸­æ–­
  *@param[in]     
                
- *@param[out]  ÎÞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 mcu_timer_cap_init(McuTimerNum timer, McuTimerTickDef tickdef, McuTimerCh ch, McuTimerCapEdge edge)
@@ -329,11 +329,11 @@ s32 mcu_timer_cap_init(McuTimerNum timer, McuTimerTickDef tickdef, McuTimerCh ch
 	else
     	RCC_APB1PeriphClockCmd(STM32TimerRccList[timer], ENABLE);
 	
-	TIM_TimeBaseStructure.TIM_Period = 0xffff; //Éè¶¨¼ÆÊýÆ÷×Ô¶¯ÖØ×°Öµ
-	TIM_TimeBaseStructure.TIM_Prescaler =STM32TimerTickSet[tickdef]; //Ô¤·ÖÆµÆ÷ 
+	TIM_TimeBaseStructure.TIM_Period = 0xffff; //è®¾å®šè®¡æ•°å™¨è‡ªåŠ¨é‡è£…å€¼
+	TIM_TimeBaseStructure.TIM_Prescaler =STM32TimerTickSet[tickdef]; //é¢„åˆ†é¢‘å™¨ 
 	TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;
-	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up; //TIM ÏòÉÏ¼ÆÊý
-	TIM_TimeBaseInit((TIM_TypeDef *)STM32TimerList[timer], &TIM_TimeBaseStructure); // ³õÊ¼»¯¶¨Ê±Æ÷ 2
+	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up; //TIM å‘ä¸Šè®¡æ•°
+	TIM_TimeBaseInit((TIM_TypeDef *)STM32TimerList[timer], &TIM_TimeBaseStructure); // åˆå§‹åŒ–å®šæ—¶å™¨ 2
 
 	if(ch == MCU_TIMER_CH1)
 	{
@@ -358,8 +358,8 @@ s32 mcu_timer_cap_init(McuTimerNum timer, McuTimerTickDef tickdef, McuTimerCh ch
 	else
 		return -1;
 
-	//³õÊ¼»¯Í¨µÀ 4
-	TIM2_ICInitStructure.TIM_Channel = timerch; //Ñ¡ÔñÊäÈë¶Ë IC4 Ó³Éäµ½ TIM2
+	//åˆå§‹åŒ–é€šé“ 4
+	TIM2_ICInitStructure.TIM_Channel = timerch; //é€‰æ‹©è¾“å…¥ç«¯ IC4 æ˜ å°„åˆ° TIM2
 
 
 	if(edge == MCU_TIMER_CAP_RISING)
@@ -370,11 +370,11 @@ s32 mcu_timer_cap_init(McuTimerNum timer, McuTimerTickDef tickdef, McuTimerCh ch
 		TIM2_ICInitStructure.TIM_ICPolarity = TIM_ICPolarity_BothEdge; 
 		
 	TIM2_ICInitStructure.TIM_ICSelection = TIM_ICSelection_DirectTI;
-	TIM2_ICInitStructure.TIM_ICPrescaler = TIM_ICPSC_DIV1; //ÅäÖÃÊäÈë·ÖÆµ,²»·ÖÆµ
-	TIM2_ICInitStructure.TIM_ICFilter = 0x00;//ÅäÖÃÊäÈëÂË²¨Æ÷ ²»ÂË²¨
-	TIM_ICInit((TIM_TypeDef *)STM32TimerList[timer], &TIM2_ICInitStructure);//³õÊ¼»¯ TIM2 IC4
+	TIM2_ICInitStructure.TIM_ICPrescaler = TIM_ICPSC_DIV1; //é…ç½®è¾“å…¥åˆ†é¢‘,ä¸åˆ†é¢‘
+	TIM2_ICInitStructure.TIM_ICFilter = 0x00;//é…ç½®è¾“å…¥æ»¤æ³¢å™¨ ä¸æ»¤æ³¢
+	TIM_ICInit((TIM_TypeDef *)STM32TimerList[timer], &TIM2_ICInitStructure);//åˆå§‹åŒ– TIM2 IC4
 
-	TIM_ClearITPendingBit((TIM_TypeDef *)STM32TimerList[timer], timitcc|TIM_IT_Update); //Çå³ýÖÐ¶Ï±êÖ¾
+	TIM_ClearITPendingBit((TIM_TypeDef *)STM32TimerList[timer], timitcc|TIM_IT_Update); //æ¸…é™¤ä¸­æ–­æ ‡å¿—
 	TIM_SetCounter((TIM_TypeDef *)STM32TimerList[timer], 0); 
 
 	return 0;
@@ -382,10 +382,10 @@ s32 mcu_timer_cap_init(McuTimerNum timer, McuTimerTickDef tickdef, McuTimerCh ch
 }
 /**
  *@brief:      mcu_timer_get_cap
- *@details:    ²éÑ¯»ñÈ¡¶¨Ê±È¥²¶»ñÖµ
+ *@details:    æŸ¥è¯¢èŽ·å–å®šæ—¶åŽ»æ•èŽ·å€¼
  *@param[in]   void  
- *@param[out]  ÎÞ
- *@retval:     ²¶»ñÖµ£¬³¬Ê±Ôò·µ»Ø×î´óÖµ	
+ *@param[out]  æ— 
+ *@retval:     æ•èŽ·å€¼ï¼Œè¶…æ—¶åˆ™è¿”å›žæœ€å¤§å€¼	
  */
 u32 mcu_timer_get_cap(McuTimerNum timer, McuTimerCh ch)
 { 
@@ -418,7 +418,7 @@ u32 mcu_timer_get_cap(McuTimerNum timer, McuTimerCh ch)
 	while(TIM_GetFlagStatus((TIM_TypeDef *)STM32TimerList[timer], timitcc) == RESET)
 	{
 		if(TIM_GetCounter((TIM_TypeDef *)STM32TimerList[timer]) > 0xffffffff-1000)
-			return TIM_GetCounter((TIM_TypeDef *)STM32TimerList[timer]);//³¬Ê±ÁË,Ö±½Ó·µ»Ø CNT µÄÖµ
+			return TIM_GetCounter((TIM_TypeDef *)STM32TimerList[timer]);//è¶…æ—¶äº†,ç›´æŽ¥è¿”å›ž CNT çš„å€¼
 	}
 	
 	if(ch == MCU_TIMER_CH1)
@@ -446,9 +446,9 @@ u32 mcu_timer_get_cap(McuTimerNum timer, McuTimerCh ch)
 */
 /**
  *@brief:	   mcu_tim5_test
- *@details:    ¶¨Ê±Æ÷²âÊÔ
+ *@details:    å®šæ—¶å™¨æµ‹è¯•
  *@param[in]   void  
- *@param[out]  ÎÞ
+ *@param[out]  æ— 
  *@retval:	   
  */
 void mcu_tim5_test(void)

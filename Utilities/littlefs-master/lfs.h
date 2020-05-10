@@ -207,14 +207,14 @@ typedef struct lfs_entry {
 } lfs_entry_t;
 /*
 	cache
-	cacheµÄ³¤¶È£¬ÓÉcfgÎÄ¼şÌá¹©
-	¸ù¾İÉèÖÃ£¬cache¿ÉÄÜ²¢Ã»ÓĞÒ»¸ö¿éÄÇÃ´´ó
-	ËùÒÔÓĞÒ»¸öoff²ÎÊı×öÆ«ÒÆ
+	cacheçš„é•¿åº¦ï¼Œç”±cfgæ–‡ä»¶æä¾›
+	æ ¹æ®è®¾ç½®ï¼Œcacheå¯èƒ½å¹¶æ²¡æœ‰ä¸€ä¸ªå—é‚£ä¹ˆå¤§
+	æ‰€ä»¥æœ‰ä¸€ä¸ªoffå‚æ•°åšåç§»
 */
 typedef struct lfs_cache {
-    lfs_block_t block;	//cacheÊı¾İµÄ¿éºÅ
-    lfs_off_t off;		//cacheÊı¾İÔÚ¿éÖĞµÄÆ«ÒÆ
-    uint8_t *buffer;	//cacheÊı¾İÖ¸Õë
+    lfs_block_t block;	//cacheæ•°æ®çš„å—å·
+    lfs_off_t off;		//cacheæ•°æ®åœ¨å—ä¸­çš„åç§»
+    uint8_t *buffer;	//cacheæ•°æ®æŒ‡é’ˆ
 } lfs_cache_t;
 
 typedef struct lfs_file {
@@ -233,9 +233,9 @@ typedef struct lfs_file {
     lfs_cache_t cache;
 } lfs_file_t;
 /*
-	Ä¿Â¼½á¹¹
+	ç›®å½•ç»“æ„
 */
-/*lfs_disk_dir ²ÅÊÇÕæÕı±£´æÔÚ´ÅÅÌµÄdir½á¹¹*/
+/*lfs_disk_dir æ‰æ˜¯çœŸæ­£ä¿å­˜åœ¨ç£ç›˜çš„dirç»“æ„*/
 struct lfs_disk_dir {
 	uint32_t rev;
 	lfs_size_t size;
@@ -243,7 +243,7 @@ struct lfs_disk_dir {
 };
 
 typedef struct lfs_dir {
-    struct lfs_dir *next;/*Ä¿Â¼Á´±í£¬Ö¸ÏòÏÂÒ»¸öÄ¿Â¼*/
+    struct lfs_dir *next;/*ç›®å½•é“¾è¡¨ï¼ŒæŒ‡å‘ä¸‹ä¸€ä¸ªç›®å½•*/
     lfs_block_t pair[2];
     lfs_off_t off;
 
@@ -252,7 +252,7 @@ typedef struct lfs_dir {
 
     struct lfs_disk_dir d;
 } lfs_dir_t;
-/* ³¬¼¶¿éÔÚ´ÅÅÌÉÏ±£´æµÄ½á¹¹ */
+/* è¶…çº§å—åœ¨ç£ç›˜ä¸Šä¿å­˜çš„ç»“æ„ */
 struct lfs_disk_superblock {
     uint8_t type;
     uint8_t elen;

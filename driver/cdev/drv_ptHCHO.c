@@ -2,21 +2,21 @@
  * @file            
  * @brief           
  * @author          
- * @date            2019Äê03ÔÂ12ÈÕ
- * @version         ³õ¸å
- * @par             °æÈ¨ËùÓÐ (C), 2013-2023
+ * @date            2019å¹´03æœˆ12æ—¥
+ * @version         åˆç¨¿
+ * @par             ç‰ˆæƒæ‰€æœ‰ (C), 2013-2023
  * @par History:
- * 1.ÈÕ    ÆÚ:      
- *   ×÷    Õß:         ÎÝ¼¹È¸¹¤×÷ÊÒ
- *   ÐÞ¸ÄÄÚÈÝ:      ´´½¨ÎÄ¼þ
-     	1 Ô´Âë¹éÎÝ¼¹È¸¹¤×÷ÊÒËùÓÐ¡£
-		2 ¿ÉÒÔÓÃÓÚµÄÆäËûÉÌÒµÓÃÍ¾£¨ÅäÌ×¿ª·¢°åÏúÊÛ³ýÍâ£©£¬²»ÐëÊÚÈ¨¡£
-		3 ÎÝ¼¹È¸¹¤×÷ÊÒ²»¶Ô´úÂë¹¦ÄÜ×öÈÎºÎ±£Ö¤£¬ÇëÊ¹ÓÃÕß×ÔÐÐ²âÊÔ£¬ºó¹û×Ô¸º¡£
-		4 ¿ÉËæÒâÐÞ¸ÄÔ´Âë²¢·Ö·¢£¬µ«²»¿ÉÖ±½ÓÏúÊÛ±¾´úÂë»ñÀû£¬²¢ÇÒÇë±£ÁôWUJIQUE°æÈ¨ËµÃ÷¡£
-		5 Èç·¢ÏÖBUG»òÓÐÓÅ»¯£¬»¶Ó­·¢²¼¸üÐÂ¡£ÇëÁªÏµ£ºcode@wujique.com
-		6 Ê¹ÓÃ±¾Ô´ÂëÔòÏàµ±ÓÚÈÏÍ¬±¾°æÈ¨ËµÃ÷¡£
-		7 ÈçÇÖ·¸ÄãµÄÈ¨Àû£¬ÇëÁªÏµ£ºcode@wujique.com
-		8 Ò»ÇÐ½âÊÍÈ¨¹éÎÝ¼¹È¸¹¤×÷ÊÒËùÓÐ¡£
+ * 1.æ—¥    æœŸ:      
+ *   ä½œ    è€…:         å±‹è„Šé›€å·¥ä½œå®¤
+ *   ä¿®æ”¹å†…å®¹:      åˆ›å»ºæ–‡ä»¶
+     	1 æºç å½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
+		2 å¯ä»¥ç”¨äºŽçš„å…¶ä»–å•†ä¸šç”¨é€”ï¼ˆé…å¥—å¼€å‘æ¿é”€å”®é™¤å¤–ï¼‰ï¼Œä¸é¡»æŽˆæƒã€‚
+		3 å±‹è„Šé›€å·¥ä½œå®¤ä¸å¯¹ä»£ç åŠŸèƒ½åšä»»ä½•ä¿è¯ï¼Œè¯·ä½¿ç”¨è€…è‡ªè¡Œæµ‹è¯•ï¼ŒåŽæžœè‡ªè´Ÿã€‚
+		4 å¯éšæ„ä¿®æ”¹æºç å¹¶åˆ†å‘ï¼Œä½†ä¸å¯ç›´æŽ¥é”€å”®æœ¬ä»£ç èŽ·åˆ©ï¼Œå¹¶ä¸”è¯·ä¿ç•™WUJIQUEç‰ˆæƒè¯´æ˜Žã€‚
+		5 å¦‚å‘çŽ°BUGæˆ–æœ‰ä¼˜åŒ–ï¼Œæ¬¢è¿Žå‘å¸ƒæ›´æ–°ã€‚è¯·è”ç³»ï¼šcode@wujique.com
+		6 ä½¿ç”¨æœ¬æºç åˆ™ç›¸å½“äºŽè®¤åŒæœ¬ç‰ˆæƒè¯´æ˜Žã€‚
+		7 å¦‚ä¾µçŠ¯ä½ çš„æƒåˆ©ï¼Œè¯·è”ç³»ï¼šcode@wujique.com
+		8 ä¸€åˆ‡è§£é‡Šæƒå½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
 */
 #include "mcu.h"
 
@@ -104,15 +104,15 @@ s32 dev_ptHCHO_ioctrl(void)
 
 */
 const u8 HCHOAskCmd[7] = {0x42, 0x4D, 0x01, 0x00, 0x00, 0x00, 0x90};
-//ÆøÌåÃû³Æ
+//æ°”ä½“åç§°
 const char numNameInx[][5] = {
-  "ÎÞ", "CO", "H2S", "CH4", "CL2", "HCL", "F2", "HF", "NH3", "HCN", "PH3", "NO", "NO2", "O3", "O2", "SO2", "CLO2",
+  "æ— ", "CO", "H2S", "CH4", "CL2", "HCL", "F2", "HF", "NH3", "HCN", "PH3", "NO", "NO2", "O3", "O2", "SO2", "CLO2",
   "COCL", "PH3", "SiH4", "HCHO", "CO2", "VOC", "ETO", "C2H4", "C2H2", "SF6", "AsH3", "H2", "TOX1", "TOX2"//,
-  //"ÆøÌåÁ÷Á¿L/M", "µç³ØµçÁ¿/%"
+  //"æ°”ä½“æµé‡L/M", "ç”µæ± ç”µé‡/%"
 };
-//Êý¾ÝÄÚÈÝµ¥Î»
+//æ•°æ®å†…å®¹å•ä½
 const char numUnitInx[][5] = {"", "ppm", "VOL", "LEL", "Ppb", "MgM3"};
-//Êý¾Ýµ±Á¿
+//æ•°æ®å½“é‡
 const int numKeysInx[] = {1, 1, 10, 100, 1000};
 
 s32 dev_ptHCHO_test(void)

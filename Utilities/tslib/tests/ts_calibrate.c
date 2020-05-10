@@ -10,9 +10,9 @@
  *
  * Basic test program for touchscreen library.
 
-	ԭ����У������ǻ���linux LCD��ʾ�����ģ�
-	��STM32�ϣ�û��LCD����ʾ�ܹ���
-	��˱�У������޸Ľϴ�
+	原来的校验程序是基于linux LCD显示驱动的，
+	在STM32上，没有LCD的显示架构，
+	因此本校验程序修改较大。
 
  */
 #include <stdio.h>
@@ -32,10 +32,10 @@ extern void put_string_center(DevLcdNode *lcd, int x, int y, char *s, unsigned c
 extern int getxy(struct tsdev *ts, int *x, int *y);
 /*
 
-	����У׼���㣬����������Ǻ����㷨
+	进行校准计算，这个函数才是核心算法
 
-	1.4Դ��������㷨�����⣬��������������һ���㷨��
-	�ο���Tslib�д�����У׼ԭ������ʵ��.pdf��
+	1.4源码里面的算法有问题，从网上找了另外一个算法，
+	参考《Tslib中触摸屏校准原理及其实现.pdf》
 
 */
 int perform_calibration(calibration *cal) 
@@ -114,13 +114,13 @@ static void get_sample (struct tsdev *ts, calibration *cal,
 }
 /*
 
-	У׼���̣���LCD��ʾ���
-	ʹ������У׼��
+	校准过程，与LCD显示相关
+	使用竖屏校准？
 
 */
 /*
-	���ԣ�ֱ�Ӷ���һ��cal���ڱ���У׼����
-	ʵ����Ŀ������ǽ�cal�������ļ���
+	测试，直接定义一个cal用于保存校准数据
+	实际项目中最好是将cal保存在文件中
 */	
 calibration cal;
 
@@ -134,7 +134,7 @@ struct tsdev *ts_open_module(void)
 	for (i = 0; i < 7; i++) 
 		wjq_log(LOG_DEBUG, "%d ", cal.a [i]);
 	wjq_log(LOG_DEBUG, "\n");
-	/*������У׼�������ٵ�ts_open*/
+	/*先配置校准参数，再调ts_open*/
 	ts_set_cal(&cal);
 
 	ts = ts_open(tsdevice,0);
@@ -152,7 +152,7 @@ struct tsdev *ts_open_module(void)
 	return ts;
 }
 /*
-	У������
+	校验流程
 */
 int ts_calibrate(DevLcdNode *lcd)
 {
@@ -173,10 +173,10 @@ int ts_calibrate(DevLcdNode *lcd)
 		return -1;
 	}
 
-	/*���濪ʼ����У׼*/
-	/*ˢLCD����*/
+	/*下面开始进入校准*/
+	/*刷LCD背景*/
 
-	/*  ��ʾ��ʾ��     */
+	/*  显示提示语     */
 	int xres = 240;
 	int yres = 320;
 
@@ -187,7 +187,7 @@ int ts_calibrate(DevLcdNode *lcd)
 
 	wjq_log(LOG_DEBUG, "xres = %d, yres = %d\n", xres, yres);
 	
-	//----У׼���̣���ȡ5���������-------
+	//----校准过程，获取5个点的数据-------
 	put_cross(lcd,  50, 50, RED);
 	get_sample (ts, &cal, 0, 50,        50,        "Top left");
 	wjq_log(LOG_DEBUG, "-----------------------Top left finish\r\n");
@@ -210,7 +210,7 @@ int ts_calibrate(DevLcdNode *lcd)
 
 	if (0 == perform_calibration (&cal)) 
 	{
-		//У׼��õ�������
+		//校准后得到的数据
 		wjq_log(LOG_DEBUG, "Calibration constants: ");
 		for (i = 0; i < 7; i++) 
 			wjq_log(LOG_DEBUG, "%d ", cal.a [i]);

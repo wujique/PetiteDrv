@@ -1,22 +1,22 @@
 /**
  * @file            
- * @brief           ÊýÑ§º¯Êý
+ * @brief           æ•°å­¦å‡½æ•°
  * @author          wujique
- * @date            2018Äê06ÔÂ26ÈÕ ÐÇÆÚ¶þ
- * @version         ³õ¸å
- * @par             °æÈ¨ËùÓÐ (C), 2013-2023
+ * @date            2018å¹´06æœˆ26æ—¥ æ˜ŸæœŸäºŒ
+ * @version         åˆç¨¿
+ * @par             ç‰ˆæƒæ‰€æœ‰ (C), 2013-2023
  * @par History:
- * 1.ÈÕ    ÆÚ:      
- *   ×÷    Õß:         wujique
- *   ÐÞ¸ÄÄÚÈÝ:   ´´½¨ÎÄ¼þ
-       	1 Ô´Âë¹éÎÝ¼¹È¸¹¤×÷ÊÒËùÓÐ¡£
-		2 ¿ÉÒÔÓÃÓÚµÄÆäËûÉÌÒµÓÃÍ¾£¨ÅäÌ×¿ª·¢°åÏúÊÛ³ýÍâ£©£¬²»ÐëÊÚÈ¨¡£
-		3 ÎÝ¼¹È¸¹¤×÷ÊÒ²»¶Ô´úÂë¹¦ÄÜ×öÈÎºÎ±£Ö¤£¬ÇëÊ¹ÓÃÕß×ÔÐÐ²âÊÔ£¬ºó¹û×Ô¸º¡£
-		4 ¿ÉËæÒâÐÞ¸ÄÔ´Âë²¢·Ö·¢£¬µ«²»¿ÉÖ±½ÓÏúÊÛ±¾´úÂë»ñÀû£¬²¢ÇÒÇë±£ÁôWUJIQUE°æÈ¨ËµÃ÷¡£
-		5 Èç·¢ÏÖBUG»òÓÐÓÅ»¯£¬»¶Ó­·¢²¼¸üÐÂ¡£ÇëÁªÏµ£ºcode@wujique.com
-		6 Ê¹ÓÃ±¾Ô´ÂëÔòÏàµ±ÓÚÈÏÍ¬±¾°æÈ¨ËµÃ÷¡£
-		7 ÈçÇÖ·¸ÄãµÄÈ¨Àû£¬ÇëÁªÏµ£ºcode@wujique.com
-		8 Ò»ÇÐ½âÊÍÈ¨¹éÎÝ¼¹È¸¹¤×÷ÊÒËùÓÐ¡£
+ * 1.æ—¥    æœŸ:      
+ *   ä½œ    è€…:         wujique
+ *   ä¿®æ”¹å†…å®¹:   åˆ›å»ºæ–‡ä»¶
+       	1 æºç å½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
+		2 å¯ä»¥ç”¨äºŽçš„å…¶ä»–å•†ä¸šç”¨é€”ï¼ˆé…å¥—å¼€å‘æ¿é”€å”®é™¤å¤–ï¼‰ï¼Œä¸é¡»æŽˆæƒã€‚
+		3 å±‹è„Šé›€å·¥ä½œå®¤ä¸å¯¹ä»£ç åŠŸèƒ½åšä»»ä½•ä¿è¯ï¼Œè¯·ä½¿ç”¨è€…è‡ªè¡Œæµ‹è¯•ï¼ŒåŽæžœè‡ªè´Ÿã€‚
+		4 å¯éšæ„ä¿®æ”¹æºç å¹¶åˆ†å‘ï¼Œä½†ä¸å¯ç›´æŽ¥é”€å”®æœ¬ä»£ç èŽ·åˆ©ï¼Œå¹¶ä¸”è¯·ä¿ç•™WUJIQUEç‰ˆæƒè¯´æ˜Žã€‚
+		5 å¦‚å‘çŽ°BUGæˆ–æœ‰ä¼˜åŒ–ï¼Œæ¬¢è¿Žå‘å¸ƒæ›´æ–°ã€‚è¯·è”ç³»ï¼šcode@wujique.com
+		6 ä½¿ç”¨æœ¬æºç åˆ™ç›¸å½“äºŽè®¤åŒæœ¬ç‰ˆæƒè¯´æ˜Žã€‚
+		7 å¦‚ä¾µçŠ¯ä½ çš„æƒåˆ©ï¼Œè¯·è”ç³»ï¼šcode@wujique.com
+		8 ä¸€åˆ‡è§£é‡Šæƒå½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
 */
 
 #include "mcu.h"
@@ -24,7 +24,7 @@
 
 /*
 
-·ÇµÝ¹éÅÐ¶ÏÒ»¸öÊýÊÇ2µÄ¶àÉÙ´Î·½
+éžé€’å½’åˆ¤æ–­ä¸€ä¸ªæ•°æ˜¯2çš„å¤šå°‘æ¬¡æ–¹
 need fix
 */
 int math_log2(int value) 
@@ -39,11 +39,11 @@ int math_log2(int value)
 } 
 
 /*
-	¶ÔÊäÈëµÄU16 ½øÐÐÏ£¶ûÅÅÐò
+	å¯¹è¾“å…¥çš„U16 è¿›è¡Œå¸Œå°”æŽ’åº
 */
 void ShellSort(u16 *pSrc, s32 Len)
 {
-    u32 d;//ÔöÁ¿
+    u32 d;//å¢žé‡
     s32 j, k;
 
     u16 temp;
@@ -67,11 +67,11 @@ void ShellSort(u16 *pSrc, s32 Len)
 }
 
 /*
-	º¯ÊýÃû³Æ: 
-	º¯Êý¹¦ÄÜ: ¶þ·Ö·¨²éÕÒu16
-	Èë¿Ú²ÎÊý: 
-	·µ »Ø Öµ: ·µ»Ø-1Ã»ÕÒµ½£¬ÆäËûÎªË÷ÒýÖµ
-	´ý²éÊý¾ÝÊÇ½µÐò
+	å‡½æ•°åç§°: 
+	å‡½æ•°åŠŸèƒ½: äºŒåˆ†æ³•æŸ¥æ‰¾u16
+	å…¥å£å‚æ•°: 
+	è¿” å›ž å€¼: è¿”å›ž-1æ²¡æ‰¾åˆ°ï¼Œå…¶ä»–ä¸ºç´¢å¼•å€¼
+	å¾…æŸ¥æ•°æ®æ˜¯é™åº
 */
 int BinarySearch(u16 *pArray, u16 data, u16 len)
 {
@@ -109,7 +109,7 @@ int BinarySearch(u16 *pArray, u16 data, u16 len)
     return -1;
 }
 /*
-	´ý²éÊý¾ÝÊÇÉýÐò
+	å¾…æŸ¥æ•°æ®æ˜¯å‡åº
 */
 int BinarySearchD(u16 *pArray, u16 data, u16 len)
 {
@@ -180,10 +180,10 @@ void test_bs(void)
 #endif
 
 /*
-	º¯ÊýÃû³Æ: 
-	º¯Êý¹¦ÄÜ: asc×ªU32
-	Èë¿Ú²ÎÊý: 
-	·µ »Ø Öµ: ·µ»Ø-1Ã»ÕÒµ½£¬ÆäËûÎªË÷ÒýÖµ
+	å‡½æ•°åç§°: 
+	å‡½æ•°åŠŸèƒ½: ascè½¬U32
+	å…¥å£å‚æ•°: 
+	è¿” å›ž å€¼: è¿”å›ž-1æ²¡æ‰¾åˆ°ï¼Œå…¶ä»–ä¸ºç´¢å¼•å€¼
 */
 u32 ascii_2_u32(u8 *pb,u8 asciidatalen)
 {
@@ -219,12 +219,12 @@ u32 ascii_2_u32(u8 *pb,u8 asciidatalen)
 }
 
 /*
-	º¯ÊýÃû³Æ: 
-	º¯Êý¹¦ÄÜ: ÔÚÖ¸Õë  pData ¿ªÊ¼Î»ÖÃ²éÕÒÒ»¸ö[...]×Ö·û´®£¬²¢°ÑÖÐÀ¨ºÅÖ®¼ä
-                    µÄÄÚÈÝ¿½±´µ½segÖÐ£¬lenËµÃ÷seg bufµÄ³¤¶È£¬ÕÒµ½ºó·µ»Ø×Ö·û´®³¤¶È
-                    Í¬Ê±·µ»ØÒÑ¾­²éÑ¯µÄ³¤¶Èindex
-	Èë¿Ú²ÎÊý: 
-	·µ »Ø Öµ: 0 ÕÒµ½£¬-1 Ã»ÕÒµ½
+	å‡½æ•°åç§°: 
+	å‡½æ•°åŠŸèƒ½: åœ¨æŒ‡é’ˆ  pData å¼€å§‹ä½ç½®æŸ¥æ‰¾ä¸€ä¸ª[...]å­—ç¬¦ä¸²ï¼Œå¹¶æŠŠä¸­æ‹¬å·ä¹‹é—´
+                    çš„å†…å®¹æ‹·è´åˆ°segä¸­ï¼Œlenè¯´æ˜Žseg bufçš„é•¿åº¦ï¼Œæ‰¾åˆ°åŽè¿”å›žå­—ç¬¦ä¸²é•¿åº¦
+                    åŒæ—¶è¿”å›žå·²ç»æŸ¥è¯¢çš„é•¿åº¦index
+	å…¥å£å‚æ•°: 
+	è¿” å›ž å€¼: 0 æ‰¾åˆ°ï¼Œ-1 æ²¡æ‰¾åˆ°
 */
 s32 vfs_find_seg(const u8 *pData, u32 DataLen,u8 *seg, u32 *len ,u32 *ScanLen)
 {

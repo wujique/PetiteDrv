@@ -31,7 +31,7 @@ void start_task(void *pvParameters);
   */
 int petite_app(void)
 {
-	BaseType_t xReturn = pdPASS;/* 定义一个创建信息返回值，默认为pdPASS */
+	BaseType_t xReturn = pdPASS;/* 瀹氫箟涓�涓垱寤轰俊鎭繑鍥炲�硷紝榛樿涓簆dPASS */
 	
 	/*           http://www.network-science.de/ascii/   */
 	wjq_log(LOG_INFO,"\r\n*********************************************************\r\n");

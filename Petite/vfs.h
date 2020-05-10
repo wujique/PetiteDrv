@@ -2,12 +2,12 @@
 #ifndef _FS_VS_H_
 #define _FS_VS_H_
 
-#define SEEK_SET 0 //½«Æ«ÒÆÁ¿ÉèÖÃÎª¾àÀëÎÄ¼şoffset¸ö×Ö½Ú´¦
-#define SEEK_CUR 1 //µ±Ç°Æ«ÒÆÁ¿¼Óoffset,offset¿ÉÎªÕı»ò¸º
-#define SEEK_END 2 //ÉèÖÃÎªÎÄ¼ş³¤¶È¼Óoffset,offset¿ÉÎªÕı»ò¸º
+#define SEEK_SET 0 //å°†åç§»é‡è®¾ç½®ä¸ºè·ç¦»æ–‡ä»¶offsetä¸ªå­—èŠ‚å¤„
+#define SEEK_CUR 1 //å½“å‰åç§»é‡åŠ offset,offsetå¯ä¸ºæ­£æˆ–è´Ÿ
+#define SEEK_END 2 //è®¾ç½®ä¸ºæ–‡ä»¶é•¿åº¦åŠ offset,offsetå¯ä¸ºæ­£æˆ–è´Ÿ
 
-#define VFS_DIR_LEN  8//Ä¿Â¼³¤¶È£¬Ò»°ã¶¼ÊÇmtd0 mtd1
-#define VFS_NAME_LEN 30//ÎÄ¼şÃû³¤¶È
+#define VFS_DIR_LEN  8//ç›®å½•é•¿åº¦ï¼Œä¸€èˆ¬éƒ½æ˜¯mtd0 mtd1
+#define VFS_NAME_LEN 30//æ–‡ä»¶åé•¿åº¦
 
 typedef enum 
 {
@@ -17,13 +17,13 @@ typedef enum
 	FS_TYPE_CONSTFS
 }FS_TYPE;
 /*
-	vfs Ä¿Â¼£¬
-	Ò²¾ÍÊÇvfs mountĞèÒªµÄĞÅÏ¢
+	vfs ç›®å½•ï¼Œ
+	ä¹Ÿå°±æ˜¯vfs mountéœ€è¦çš„ä¿¡æ¯
 */
 typedef struct _strMtdPra
 {
-    u8 vfsdir[8];     //ÅÌ·ûÃû
-    FS_TYPE type;       //ÎÄ¼şÏµÍ³ÀàĞÍ
+    u8 vfsdir[8];     //ç›˜ç¬¦å
+    FS_TYPE type;       //æ–‡ä»¶ç³»ç»Ÿç±»å‹
     u8 dir[8];
 }VFSDIR;
 

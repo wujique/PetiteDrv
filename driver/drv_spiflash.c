@@ -1,23 +1,23 @@
 /**
  * @file            dev_spiflash.c
- * @brief           spi flash Çı¶¯³ÌĞò
+ * @brief           spi flash é©±åŠ¨ç¨‹åº
  * @author          test
- * @date            2017Äê10ÔÂ26ÈÕ ĞÇÆÚËÄ
- * @version         ³õ¸å
- * @par             °æÈ¨ËùÓĞ (C), 2013-2023
+ * @date            2017å¹´10æœˆ26æ—¥ æ˜ŸæœŸå››
+ * @version         åˆç¨¿
+ * @par             ç‰ˆæƒæ‰€æœ‰ (C), 2013-2023
  * @par History:
- * 1.ÈÕ    ÆÚ:      2017Äê10ÔÂ26ÈÕ ĞÇÆÚËÄ
- *   ×÷    Õß:      test
- *   ĞŞ¸ÄÄÚÈİ:      ´´½¨ÎÄ¼ş
-  °æÈ¨ËµÃ÷£º
-		1 Ô´Âë¹éÎİ¼¹È¸¹¤×÷ÊÒËùÓĞ¡£
-		2 ¿ÉÒÔÓÃÓÚµÄÆäËûÉÌÒµÓÃÍ¾£¨ÅäÌ×¿ª·¢°åÏúÊÛ³ıÍâ£©£¬²»ĞëÊÚÈ¨¡£
-		3 Îİ¼¹È¸¹¤×÷ÊÒ²»¶Ô´úÂë¹¦ÄÜ×öÈÎºÎ±£Ö¤£¬ÇëÊ¹ÓÃÕß×ÔĞĞ²âÊÔ£¬ºó¹û×Ô¸º¡£
-		4 ¿ÉËæÒâĞŞ¸ÄÔ´Âë²¢·Ö·¢£¬µ«²»¿ÉÖ±½ÓÏúÊÛ±¾´úÂë»ñÀû£¬²¢ÇÒÇë±£ÁôWUJIQUE°æÈ¨ËµÃ÷¡£
-		5 Èç·¢ÏÖBUG»òÓĞÓÅ»¯£¬»¶Ó­·¢²¼¸üĞÂ¡£ÇëÁªÏµ£ºcode@wujique.com
-		6 Ê¹ÓÃ±¾Ô´ÂëÔòÏàµ±ÓÚÈÏÍ¬±¾°æÈ¨ËµÃ÷¡£
-		7 ÈçÇÖ·¸ÄãµÄÈ¨Àû£¬ÇëÁªÏµ£ºcode@wujique.com
-		8 Ò»ÇĞ½âÊÍÈ¨¹éÎİ¼¹È¸¹¤×÷ÊÒËùÓĞ¡£
+ * 1.æ—¥    æœŸ:      2017å¹´10æœˆ26æ—¥ æ˜ŸæœŸå››
+ *   ä½œ    è€…:      test
+ *   ä¿®æ”¹å†…å®¹:      åˆ›å»ºæ–‡ä»¶
+  ç‰ˆæƒè¯´æ˜ï¼š
+		1 æºç å½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
+		2 å¯ä»¥ç”¨äºçš„å…¶ä»–å•†ä¸šç”¨é€”ï¼ˆé…å¥—å¼€å‘æ¿é”€å”®é™¤å¤–ï¼‰ï¼Œä¸é¡»æˆæƒã€‚
+		3 å±‹è„Šé›€å·¥ä½œå®¤ä¸å¯¹ä»£ç åŠŸèƒ½åšä»»ä½•ä¿è¯ï¼Œè¯·ä½¿ç”¨è€…è‡ªè¡Œæµ‹è¯•ï¼Œåæœè‡ªè´Ÿã€‚
+		4 å¯éšæ„ä¿®æ”¹æºç å¹¶åˆ†å‘ï¼Œä½†ä¸å¯ç›´æ¥é”€å”®æœ¬ä»£ç è·åˆ©ï¼Œå¹¶ä¸”è¯·ä¿ç•™WUJIQUEç‰ˆæƒè¯´æ˜ã€‚
+		5 å¦‚å‘ç°BUGæˆ–æœ‰ä¼˜åŒ–ï¼Œæ¬¢è¿å‘å¸ƒæ›´æ–°ã€‚è¯·è”ç³»ï¼šcode@wujique.com
+		6 ä½¿ç”¨æœ¬æºç åˆ™ç›¸å½“äºè®¤åŒæœ¬ç‰ˆæƒè¯´æ˜ã€‚
+		7 å¦‚ä¾µçŠ¯ä½ çš„æƒåˆ©ï¼Œè¯·è”ç³»ï¼šcode@wujique.com
+		8 ä¸€åˆ‡è§£é‡Šæƒå½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
 */
 #include "mcu.h"
 #include "petite_config.h"
@@ -39,11 +39,11 @@
 #endif
 
 /*
-	SPI FLASH£¬ÃüÁîµÄ¿ªÊ¼ÊÇ´ÓCSÏÂ½µÑØ¿ªÊ¼£¬ËùÒÔÃ¿´Î²Ù×÷¶¼ĞèÒª½øĞĞCS²Ù×÷
+	SPI FLASHï¼Œå‘½ä»¤çš„å¼€å§‹æ˜¯ä»CSä¸‹é™æ²¿å¼€å§‹ï¼Œæ‰€ä»¥æ¯æ¬¡æ“ä½œéƒ½éœ€è¦è¿›è¡ŒCSæ“ä½œ
 */
 
 /*
-	³£ÓÃµÄSPI FLASH ²ÎÊıĞÅÏ¢
+	å¸¸ç”¨çš„SPI FLASH å‚æ•°ä¿¡æ¯
 */
 _strSpiFlash SpiFlashPraList[]=
 {
@@ -51,7 +51,7 @@ _strSpiFlash SpiFlashPraList[]=
 	{"W25Q64JVSI", 0Xef4017, 0Xef16, 2048, 4096, 8388608}
 };
 	
-/* spi flash ÃüÁî*/
+/* spi flash å‘½ä»¤*/
 #define SPIFLASH_WRITE      0x02  /* Write to Memory instruction  Page Program */
 #define SPIFLASH_WRSR       0x01  /* Write Status Register instruction */
 #define SPIFLASH_WREN       0x06  /* Write enable instruction */
@@ -70,10 +70,10 @@ _strSpiFlash SpiFlashPraList[]=
 
 /**
  *@brief:      dev_spiflash_writeen
- *@details:    FLASH Ğ´Ê¹ÄÜ:ÉèÖÃFLASHÄÚµÄ¼Ä´æÆ÷£¬
-               ÔÊĞíĞ´/²Á³ı£¬Ã¿´ÎĞ´/²Á³ıÖ®Ç°¶¼ĞèÒª·¢ËÍ
+ *@details:    FLASH å†™ä½¿èƒ½:è®¾ç½®FLASHå†…çš„å¯„å­˜å™¨ï¼Œ
+               å…è®¸å†™/æ“¦é™¤ï¼Œæ¯æ¬¡å†™/æ“¦é™¤ä¹‹å‰éƒ½éœ€è¦å‘é€
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 static s32 dev_spiflash_writeen(DevSpiFlashNode *node)  
@@ -81,16 +81,16 @@ static s32 dev_spiflash_writeen(DevSpiFlashNode *node)
     s32 len = 1;
     u8 command = SPIFLASH_WREN;
 	bus_spich_cs(node->spichnode, 0);
-	bus_spich_transfer(node->spichnode, &command, NULL, len); //Êı¾İ´«Êä
+	bus_spich_transfer(node->spichnode, &command, NULL, len); //æ•°æ®ä¼ è¾“
 	bus_spich_cs(node->spichnode, 1);
     return 0;
 }
 
 /**
  *@brief:      dev_spiflash_waitwriteend
- *@details:    ²éÑ¯FLASH×´Ì¬£¬µÈ´ıĞ´²Ù×÷½áÊø
+ *@details:    æŸ¥è¯¢FLASHçŠ¶æ€ï¼Œç­‰å¾…å†™æ“ä½œç»“æŸ
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 static s32 dev_spiflash_waitwriteend(DevSpiFlashNode *node)
@@ -111,9 +111,9 @@ static s32 dev_spiflash_waitwriteend(DevSpiFlashNode *node)
 }
 /**
  *@brief:      dev_spiflash_erase
- *@details:    ²Á³ıÒ»¸ösector
- *@param[in]   u32 addr  µØÖ·£¬°üº¬Õâ¸öµØÖ·µÄsector½«±»²Á³ı
- *@param[out]  ÎŞ
+ *@details:    æ“¦é™¤ä¸€ä¸ªsector
+ *@param[in]   u32 addr  åœ°å€ï¼ŒåŒ…å«è¿™ä¸ªåœ°å€çš„sectorå°†è¢«æ“¦é™¤
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_spiflash_erase(DevSpiFlashNode *node, u32 addr)
@@ -139,11 +139,11 @@ return 0;
 
 /**
  *@brief:      dev_spiflash_readmorebyte
- *@details:    ¶ÁËæÒâ³¤¶ÈFLASHÊı¾İ
+ *@details:    è¯»éšæ„é•¿åº¦FLASHæ•°æ®
  *@param[in]   u32 addr  
                u8 *dst  
                u32 len      
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_spiflash_read(DevSpiFlashNode *node, u32 addr, u32 rlen, u8 *dst)
@@ -167,11 +167,11 @@ s32 dev_spiflash_read(DevSpiFlashNode *node, u32 addr, u32 rlen, u8 *dst)
 }
 /**
  *@brief:      dev_spiflash_write
- *@details:    Ğ´Êı¾İµ½FLASH
+ *@details:    å†™æ•°æ®åˆ°FLASH
  *@param[in]   u8* pbuffer     
                u32 addr  
                u16 wlen        
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 
@@ -215,9 +215,9 @@ s32 dev_spiflash_write(DevSpiFlashNode *node,  u32 addr, u16 wlen, u8* src)
 
 /**
  *@brief:      dev_spiflash_sector_erase
- *@details:    ²Á³ıÒ»¸ösector
- *@param[in]   u32 sector  sectorºÅ
- *@param[out]  ÎŞ
+ *@details:    æ“¦é™¤ä¸€ä¸ªsector
+ *@param[in]   u32 sector  sectorå·
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_spiflash_sector_erase(DevSpiFlashNode *node, u32 sector)
@@ -236,11 +236,11 @@ s32 dev_spiflash_sector_erase(DevSpiFlashNode *node, u32 sector)
 
 /**
  *@brief:      dev_spiflash_sector_read
- *@details:    ¶ÁÈ¡Ò»¸öÉÈÇø
+ *@details:    è¯»å–ä¸€ä¸ªæ‰‡åŒº
  *@param[in]   DevSpiFlash *dev  
-               u32 sector  ÉÈÇøºÅ
+               u32 sector  æ‰‡åŒºå·
                u8 *dst           
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_spiflash_sector_read(DevSpiFlashNode *node, u32 sector, u8 *dst)	
@@ -252,11 +252,11 @@ s32 dev_spiflash_sector_read(DevSpiFlashNode *node, u32 sector, u8 *dst)
 }
 /**
  *@brief:      dev_spiflash_sector_write
- *@details:    Ğ´Ò»¸öÉÈÇø
+ *@details:    å†™ä¸€ä¸ªæ‰‡åŒº
  *@param[in]   DevSpiFlash *dev  
                u32 sector        
                u8 *src           
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_spiflash_sector_write(DevSpiFlashNode *node, u32 sector, u8 *src)
@@ -272,9 +272,9 @@ s32 dev_spiflash_sector_write(DevSpiFlashNode *node, u32 sector, u8 *src)
 }
 /**
  *@brief:      dev_spiflash_readMTD
- *@details:    ¶ÁFLASH MIDºÅ
+ *@details:    è¯»FLASH MIDå·
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 static u32 dev_spiflash_readMTD(DevSpiFlashNode *node)
@@ -301,9 +301,9 @@ static u32 dev_spiflash_readMTD(DevSpiFlashNode *node)
 }
 /**
  *@brief:      dev_spiflash_readJTD
- *@details:    ¶ÁFLASH JTDºÅ
+ *@details:    è¯»FLASH JTDå·
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 static u32 dev_spiflash_readJTD(DevSpiFlashNode *node)
@@ -332,9 +332,9 @@ struct list_head DevSpiFlashRoot = {&DevSpiFlashRoot, &DevSpiFlashRoot};
 
 /**
  *@brief:      SpiFlashOpen
- *@details:    ´ò¿ªSPI FLASH
+ *@details:    æ‰“å¼€SPI FLASH
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 DevSpiFlashNode *dev_spiflash_open(char* name)
@@ -382,9 +382,9 @@ DevSpiFlashNode *dev_spiflash_open(char* name)
 
 /**
  *@brief:      dev_spiflash_close
- *@details:       ¹Ø±ÕSPI FLASHÉè±¸
+ *@details:       å…³é—­SPI FLASHè®¾å¤‡
  *@param[in]  DevSpiFlash *dev  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_spiflash_close(DevSpiFlashNode *node)
@@ -412,7 +412,7 @@ s32 dev_spiflash_register(const DevSpiFlash *dev)
 	wjq_log(LOG_INFO, "[register] spi flash :%s!\r\n", dev->pnode.name);
 
 	/*
-		ÏÈÒª²éÑ¯µ±Ç°£¬·ÀÖ¹ÖØÃû
+		å…ˆè¦æŸ¥è¯¢å½“å‰ï¼Œé˜²æ­¢é‡å
 	*/
 	listp = DevSpiFlashRoot.next;
 	while(1) {
@@ -429,7 +429,7 @@ s32 dev_spiflash_register(const DevSpiFlash *dev)
 	}
 
 	/* 
-		ÉêÇëÒ»¸ö½Úµã¿Õ¼ä 
+		ç”³è¯·ä¸€ä¸ªèŠ‚ç‚¹ç©ºé—´ 
 		
 	*/
 	node = (DevSpiFlashNode *)wjq_malloc(sizeof(DevSpiFlashNode));
@@ -437,8 +437,8 @@ s32 dev_spiflash_register(const DevSpiFlash *dev)
 	memcpy((u8 *)&node->dev, (u8 *)dev, sizeof(DevSpiFlash));
 	node->gd = -1;
 
-	/*¶Á ID£¬³¬ÕÒFLASHĞÅÏ¢*/
-	node->spichnode = bus_spich_open(dev->spich, SPI_MODE_3, 10000); //´ò¿ªspi
+	/*è¯» IDï¼Œè¶…æ‰¾FLASHä¿¡æ¯*/
+	node->spichnode = bus_spich_open(dev->spich, SPI_MODE_3, 10000); //æ‰“å¼€spi
 
 	if (node->spichnode != NULL) {
 		JID = dev_spiflash_readJTD(node);
@@ -447,7 +447,7 @@ s32 dev_spiflash_register(const DevSpiFlash *dev)
 		MID  = dev_spiflash_readMTD(node);
 		wjq_log(LOG_DEBUG, "%s mid:0x%x\r\n", dev->pnode.name, MID);
 		
-		/*¸ù¾İJID²éÕÒÉè±¸ĞÅÏ¢*/
+		/*æ ¹æ®JIDæŸ¥æ‰¾è®¾å¤‡ä¿¡æ¯*/
 		for (index = 0; index<(sizeof(SpiFlashPraList)/sizeof(_strSpiFlash));index++) {
 			if ((SpiFlashPraList[index].JID == JID)
 				&&(SpiFlashPraList[index].MID == MID)) {
@@ -464,9 +464,9 @@ s32 dev_spiflash_register(const DevSpiFlash *dev)
 
 /**
  *@brief:      dev_spiflash_test_fun
- *@details:    ²âÊÔFLASH,²Á³ıĞ´¶Á£¬µ÷ÊÔÊ±Ê¹ÓÃ£¬Á¿²ú´æÊı¾İºó²»Òª²âÊÔ
+ *@details:    æµ‹è¯•FLASH,æ“¦é™¤å†™è¯»ï¼Œè°ƒè¯•æ—¶ä½¿ç”¨ï¼Œé‡äº§å­˜æ•°æ®åä¸è¦æµ‹è¯•
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 void dev_spiflash_test_fun(char *name)
@@ -493,19 +493,19 @@ void dev_spiflash_test_fun(char *name)
         wbuf[tmp] = i;
         i++;
     }
-    //sector 1 ½øĞĞ²Á³ı£¬È»ºóĞ´£¬Ğ£Ñé¡£
+    //sector 1 è¿›è¡Œæ“¦é™¤ï¼Œç„¶åå†™ï¼Œæ ¡éªŒã€‚
     wjq_log(LOG_FUN, ">:-------test sector erase-------\r\n", addr);
     
     addr = 0;
     dev_spiflash_sector_erase(node, addr);
     wjq_log(LOG_FUN, "erase...");
 
-    dev_spiflash_sector_read(node, addr, rbuf);;//¶ÁÒ»Ò³»ØÀ´
+    dev_spiflash_sector_read(node, addr, rbuf);;//è¯»ä¸€é¡µå›æ¥
     wjq_log(LOG_FUN, "read...");
     
     for (tmp = 0; tmp < node->dev.pra->sectorsize; tmp++) {
         if (rbuf[tmp] != 0xff) {
-            wjq_log(LOG_FUN, "%x=%02X ", tmp, rbuf[tmp]);//²Á³ıºó²»µÈÓÚ0XFF,»µ¿é    
+            wjq_log(LOG_FUN, "%x=%02X ", tmp, rbuf[tmp]);//æ“¦é™¤åä¸ç­‰äº0XFF,åå—    
             err_flag = 1;
         }
     }
@@ -520,7 +520,7 @@ void dev_spiflash_test_fun(char *name)
     
     for (tmp = 0; tmp < node->dev.pra->sectorsize; tmp++) {
         if (rbuf[tmp] != wbuf[tmp]) {
-            wjq_log(LOG_FUN, "%x ", tmp);//¶Á³öÀ´µÄ¸úĞ´½øÈ¥µÄ²»ÏàµÈ 
+            wjq_log(LOG_FUN, "%x ", tmp);//è¯»å‡ºæ¥çš„è·Ÿå†™è¿›å»çš„ä¸ç›¸ç­‰ 
             err_flag = 1;
         }
     }
@@ -533,7 +533,7 @@ void dev_spiflash_test_fun(char *name)
 	dev_spiflash_close(node);
 }
 /*
-	¼ì²âÕûÆ¬FLASH
+	æ£€æµ‹æ•´ç‰‡FLASH
 */
 void dev_spiflash_test_chipcheck(char *name)
 {
@@ -572,12 +572,12 @@ void dev_spiflash_test_chipcheck(char *name)
 	    dev_spiflash_sector_erase(node, sector);
 	    wjq_log(LOG_FUN, "erase...");
 
-	    dev_spiflash_sector_read(node, sector, rbuf);;//¶ÁÒ»Ò³»ØÀ´
+	    dev_spiflash_sector_read(node, sector, rbuf);;//è¯»ä¸€é¡µå›æ¥
 	    wjq_log(LOG_FUN, "read...");
 	    
 	    for (tmp = 0; tmp < node->dev.pra->sectorsize; tmp++) {
 	        if (rbuf[tmp] != 0xff) {
-	            //wjq_log(LOG_FUN, "%x=%02X ", tmp, rbuf[tmp]);//²Á³ıºó²»µÈÓÚ0XFF,»µ¿é    
+	            //wjq_log(LOG_FUN, "%x=%02X ", tmp, rbuf[tmp]);//æ“¦é™¤åä¸ç­‰äº0XFF,åå—    
 	            err_flag = 1;
 	        }
 	    }
@@ -590,7 +590,7 @@ void dev_spiflash_test_chipcheck(char *name)
 	    
 	    for (tmp = 0; tmp < node->dev.pra->sectorsize; tmp++) {
 	        if (rbuf[tmp] != wbuf[tmp]) {
-	            //wjq_log(LOG_FUN, "%x ", tmp);//¶Á³öÀ´µÄ¸úĞ´½øÈ¥µÄ²»ÏàµÈ 
+	            //wjq_log(LOG_FUN, "%x ", tmp);//è¯»å‡ºæ¥çš„è·Ÿå†™è¿›å»çš„ä¸ç›¸ç­‰ 
 	            err_flag = 1;
 	        }
 	    }
@@ -636,12 +636,12 @@ void dev_spiflash_test_chiperase(char *name)
 	    dev_spiflash_sector_erase(node, sector);
 	    wjq_log(LOG_FUN, "erase...");
 
-	    dev_spiflash_sector_read(node, sector, rbuf);;//¶ÁÒ»Ò³»ØÀ´
+	    dev_spiflash_sector_read(node, sector, rbuf);;//è¯»ä¸€é¡µå›æ¥
 	    wjq_log(LOG_FUN, "read...");
 	    
 	    for (tmp = 0; tmp < node->dev.pra->sectorsize; tmp++) {
 	        if (rbuf[tmp] != 0xff) {
-	            //wjq_log(LOG_FUN, "%x=%02X ", tmp, rbuf[tmp]);//²Á³ıºó²»µÈÓÚ0XFF,»µ¿é    
+	            //wjq_log(LOG_FUN, "%x=%02X ", tmp, rbuf[tmp]);//æ“¦é™¤åä¸ç­‰äº0XFF,åå—    
 	            err_flag = 1;
 	        }
 	    }

@@ -1,22 +1,22 @@
 /**
  * @file            mcu_i2s.c
- * @brief           CPU Æ¬ÉÏÉè±¸I2SÇı¶¯
+ * @brief           CPU ç‰‡ä¸Šè®¾å¤‡I2Sé©±åŠ¨
  * @author          wujique
- * @date            2017Äê11ÔÂ16ÈÕ ĞÇÆÚËÄ
- * @version         ³õ¸å
- * @par             °æÈ¨ËùÓĞ (C), 2013-2023
+ * @date            2017å¹´11æœˆ16æ—¥ æ˜ŸæœŸå››
+ * @version         åˆç¨¿
+ * @par             ç‰ˆæƒæ‰€æœ‰ (C), 2013-2023
  * @par History:
- * 1.ÈÕ    ÆÚ:        2017Äê11ÔÂ16ÈÕ ĞÇÆÚËÄ
- *   ×÷    Õß:         wujique
- *   ĞŞ¸ÄÄÚÈİ:   ´´½¨ÎÄ¼ş
-       	1 Ô´Âë¹éÎİ¼¹È¸¹¤×÷ÊÒËùÓĞ¡£
-		2 ¿ÉÒÔÓÃÓÚµÄÆäËûÉÌÒµÓÃÍ¾£¨ÅäÌ×¿ª·¢°åÏúÊÛ³ıÍâ£©£¬²»ĞëÊÚÈ¨¡£
-		3 Îİ¼¹È¸¹¤×÷ÊÒ²»¶Ô´úÂë¹¦ÄÜ×öÈÎºÎ±£Ö¤£¬ÇëÊ¹ÓÃÕß×ÔĞĞ²âÊÔ£¬ºó¹û×Ô¸º¡£
-		4 ¿ÉËæÒâĞŞ¸ÄÔ´Âë²¢·Ö·¢£¬µ«²»¿ÉÖ±½ÓÏúÊÛ±¾´úÂë»ñÀû£¬²¢ÇÒÇë±£ÁôWUJIQUE°æÈ¨ËµÃ÷¡£
-		5 Èç·¢ÏÖBUG»òÓĞÓÅ»¯£¬»¶Ó­·¢²¼¸üĞÂ¡£ÇëÁªÏµ£ºcode@wujique.com
-		6 Ê¹ÓÃ±¾Ô´ÂëÔòÏàµ±ÓÚÈÏÍ¬±¾°æÈ¨ËµÃ÷¡£
-		7 ÈçÇÖ·¸ÄãµÄÈ¨Àû£¬ÇëÁªÏµ£ºcode@wujique.com
-		8 Ò»ÇĞ½âÊÍÈ¨¹éÎİ¼¹È¸¹¤×÷ÊÒËùÓĞ¡£
+ * 1.æ—¥    æœŸ:        2017å¹´11æœˆ16æ—¥ æ˜ŸæœŸå››
+ *   ä½œ    è€…:         wujique
+ *   ä¿®æ”¹å†…å®¹:   åˆ›å»ºæ–‡ä»¶
+       	1 æºç å½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
+		2 å¯ä»¥ç”¨äºçš„å…¶ä»–å•†ä¸šç”¨é€”ï¼ˆé…å¥—å¼€å‘æ¿é”€å”®é™¤å¤–ï¼‰ï¼Œä¸é¡»æˆæƒã€‚
+		3 å±‹è„Šé›€å·¥ä½œå®¤ä¸å¯¹ä»£ç åŠŸèƒ½åšä»»ä½•ä¿è¯ï¼Œè¯·ä½¿ç”¨è€…è‡ªè¡Œæµ‹è¯•ï¼Œåæœè‡ªè´Ÿã€‚
+		4 å¯éšæ„ä¿®æ”¹æºç å¹¶åˆ†å‘ï¼Œä½†ä¸å¯ç›´æ¥é”€å”®æœ¬ä»£ç è·åˆ©ï¼Œå¹¶ä¸”è¯·ä¿ç•™WUJIQUEç‰ˆæƒè¯´æ˜ã€‚
+		5 å¦‚å‘ç°BUGæˆ–æœ‰ä¼˜åŒ–ï¼Œæ¬¢è¿å‘å¸ƒæ›´æ–°ã€‚è¯·è”ç³»ï¼šcode@wujique.com
+		6 ä½¿ç”¨æœ¬æºç åˆ™ç›¸å½“äºè®¤åŒæœ¬ç‰ˆæƒè¯´æ˜ã€‚
+		7 å¦‚ä¾µçŠ¯ä½ çš„æƒåˆ©ï¼Œè¯·è”ç³»ï¼šcode@wujique.com
+		8 ä¸€åˆ‡è§£é‡Šæƒå½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
 */
 
 #include "stm32f4xx.h"
@@ -25,15 +25,15 @@
 extern s32 fun_sound_set_free_buf(u8 index);
 /*
 
-	Ó²¼şÉÏÊ¹ÓÃI2S2
+	ç¡¬ä»¶ä¸Šä½¿ç”¨I2S2
 
 */
 
 /**
  *@brief:      mcu_i2s_init
- *@details:    ³õÊ¼»¯I2S½Ó¿ÚÓ²¼ş
+ *@details:    åˆå§‹åŒ–I2Sæ¥å£ç¡¬ä»¶
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 void mcu_i2s_init (void)
@@ -47,7 +47,7 @@ void mcu_i2s_init (void)
 		DACDAT	PC3
 		MCLK	PC6
 	*/
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB|RCC_AHB1Periph_GPIOC, ENABLE);	// ³õÊ¼»¯Ê±ÖÓ
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB|RCC_AHB1Periph_GPIOC, ENABLE);	// åˆå§‹åŒ–æ—¶é’Ÿ
 
 	GPIO_PinAFConfig(GPIOB,	GPIO_PinSource12,		GPIO_AF_SPI2);
 	GPIO_PinAFConfig(GPIOB,	GPIO_PinSource13,		GPIO_AF_SPI2);	
@@ -55,10 +55,10 @@ void mcu_i2s_init (void)
 	GPIO_PinAFConfig(GPIOC,	GPIO_PinSource3,		GPIO_AF_SPI2);	
 	GPIO_PinAFConfig(GPIOC,	GPIO_PinSource6,		GPIO_AF_SPI2);
 	
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;			// ¸´ÓÃÄ£Ê½
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;	// ËÙ¶ÈµÈ¼¶
-	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;		// ÍÆÍìÊä³ö
-	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;	//	ÎŞÉÏÏÂÀ­
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;			// å¤ç”¨æ¨¡å¼
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;	// é€Ÿåº¦ç­‰çº§
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;		// æ¨æŒ½è¾“å‡º
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;	//	æ— ä¸Šä¸‹æ‹‰
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12|GPIO_Pin_13;	
 	GPIO_Init(GPIOB, &GPIO_InitStructure);
 	
@@ -68,42 +68,42 @@ void mcu_i2s_init (void)
 }
 /**
  *@brief:      mcu_i2s_config
- *@details:    I2SÅäÖÃ
- *@param[in]   u32 AudioFreq   ÆµÂÊ
-               u16 Standard    ±ê×¼
-               u16 DataFormat  ¸ñÊ½
- *@param[out]  ÎŞ
+ *@details:    I2Sé…ç½®
+ *@param[in]   u32 AudioFreq   é¢‘ç‡
+               u16 Standard    æ ‡å‡†
+               u16 DataFormat  æ ¼å¼
+ *@param[out]  æ— 
  *@retval:     
  */
 void mcu_i2s_config(u32 AudioFreq, u16 Standard,u16 DataFormat)
 {
 	I2S_InitTypeDef I2S_InitStructure;
 
-	RCC_I2SCLKConfig(RCC_I2S2CLKSource_PLLI2S);				// ÅäÖÃIIS PLLÊ±ÖÓ
-	RCC_PLLI2SCmd(ENABLE);											// Ê¹ÄÜPLL
-	while( RCC_GetFlagStatus(RCC_FLAG_PLLI2SRDY) == 0 );	// µÈ´ıÅäÖÃÍê³É
+	RCC_I2SCLKConfig(RCC_I2S2CLKSource_PLLI2S);				// é…ç½®IIS PLLæ—¶é’Ÿ
+	RCC_PLLI2SCmd(ENABLE);											// ä½¿èƒ½PLL
+	while( RCC_GetFlagStatus(RCC_FLAG_PLLI2SRDY) == 0 );	// ç­‰å¾…é…ç½®å®Œæˆ
 	
-	RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI2, ENABLE);					// ³õÊ¼»¯IISÊ±ÖÓ
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI2, ENABLE);					// åˆå§‹åŒ–IISæ—¶é’Ÿ
 
 	SPI_I2S_DeInit(SPI2);
 	
-	I2S_InitStructure.I2S_AudioFreq 	= AudioFreq;			// ÉèÖÃÒôÆµ²ÉÑùÆµÂÊ 
-	I2S_InitStructure.I2S_Standard 		= Standard;	//	I2S Philips ±ê×¼
-	I2S_InitStructure.I2S_DataFormat 	= DataFormat;		// Êı¾İ³¤¶È16Î»
-	I2S_InitStructure.I2S_CPOL 			= I2S_CPOL_Low;				// ¿ÕÏĞ×´Ì¬µçÆ½Î»µÍ
-	I2S_InitStructure.I2S_Mode 			= I2S_Mode_MasterTx;			// Ö÷»ú·¢ËÍ
-	I2S_InitStructure.I2S_MCLKOutput 	= I2S_MCLKOutput_Enable;	// Ö÷Ê±ÖÓÊä³ö
+	I2S_InitStructure.I2S_AudioFreq 	= AudioFreq;			// è®¾ç½®éŸ³é¢‘é‡‡æ ·é¢‘ç‡ 
+	I2S_InitStructure.I2S_Standard 		= Standard;	//	I2S Philips æ ‡å‡†
+	I2S_InitStructure.I2S_DataFormat 	= DataFormat;		// æ•°æ®é•¿åº¦16ä½
+	I2S_InitStructure.I2S_CPOL 			= I2S_CPOL_Low;				// ç©ºé—²çŠ¶æ€ç”µå¹³ä½ä½
+	I2S_InitStructure.I2S_Mode 			= I2S_Mode_MasterTx;			// ä¸»æœºå‘é€
+	I2S_InitStructure.I2S_MCLKOutput 	= I2S_MCLKOutput_Enable;	// ä¸»æ—¶é’Ÿè¾“å‡º
 	I2S_Init(SPI2, &I2S_InitStructure);
 	
-	I2S_Cmd(SPI2, ENABLE);	// Ê¹ÄÜIIS
+	I2S_Cmd(SPI2, ENABLE);	// ä½¿èƒ½IIS
 }
 /**
  *@brief:      mcu_i2s_dam_init
- *@details:    ³õÊ¼»¯I2SÊ¹ÓÃµÄDMAÍ¨µÀ£¬Ë«»º³åÄ£Ê½
+ *@details:    åˆå§‹åŒ–I2Sä½¿ç”¨çš„DMAé€šé“ï¼ŒåŒç¼“å†²æ¨¡å¼
  *@param[in]   u16 *buffer0  
                u16 *buffer1  
                u32 len       
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 void mcu_i2s_dma_init(u16 *buffer0,u16 *buffer1,u32 len)
@@ -111,89 +111,89 @@ void mcu_i2s_dma_init(u16 *buffer0,u16 *buffer1,u32 len)
 	NVIC_InitTypeDef   NVIC_InitStructure;
 	DMA_InitTypeDef  DMA_str;
 
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_DMA1,ENABLE);	// Ê¹IIS DMAÊ±ÖÓ 
-	DMA_DeInit(DMA1_Stream4);	//	»Ö¸´³õÊ¼DMAÅäÖÃ
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_DMA1,ENABLE);	// ä½¿IIS DMAæ—¶é’Ÿ 
+	DMA_DeInit(DMA1_Stream4);	//	æ¢å¤åˆå§‹DMAé…ç½®
 
-	DMA_str.DMA_Channel 				= DMA_Channel_0;  					//	IIS DMAÍ¨µÀ 
-	DMA_str.DMA_PeripheralBaseAddr 	= (u32)&SPI2->DR;							//	ÍâÉèµØÖ·
-	DMA_str.DMA_Memory0BaseAddr 		= (u32)buffer0;							//	»º³åÇø0
-	DMA_str.DMA_DIR 					= DMA_DIR_MemoryToPeripheral;			//	´æ´¢Æ÷µ½ÍâÉèÄ£Ê½
-	DMA_str.DMA_BufferSize 			= len;										//	Êı¾İ³¤¶È 
-	DMA_str.DMA_PeripheralInc 		= DMA_PeripheralInc_Disable;			//	ÍâÉè·ÇÔöÁ¿Ä£Ê½
+	DMA_str.DMA_Channel 				= DMA_Channel_0;  					//	IIS DMAé€šé“ 
+	DMA_str.DMA_PeripheralBaseAddr 	= (u32)&SPI2->DR;							//	å¤–è®¾åœ°å€
+	DMA_str.DMA_Memory0BaseAddr 		= (u32)buffer0;							//	ç¼“å†²åŒº0
+	DMA_str.DMA_DIR 					= DMA_DIR_MemoryToPeripheral;			//	å­˜å‚¨å™¨åˆ°å¤–è®¾æ¨¡å¼
+	DMA_str.DMA_BufferSize 			= len;										//	æ•°æ®é•¿åº¦ 
+	DMA_str.DMA_PeripheralInc 		= DMA_PeripheralInc_Disable;			//	å¤–è®¾éå¢é‡æ¨¡å¼
 
 	if(len == 1)
 		DMA_str.DMA_MemoryInc 			= DMA_MemoryInc_Disable;	
 	else
-		DMA_str.DMA_MemoryInc 			= DMA_MemoryInc_Enable;					//	´æ´¢Æ÷ÔöÁ¿Ä£Ê½
+		DMA_str.DMA_MemoryInc 			= DMA_MemoryInc_Enable;					//	å­˜å‚¨å™¨å¢é‡æ¨¡å¼
 
-	DMA_str.DMA_PeripheralDataSize 	= DMA_PeripheralDataSize_HalfWord;	//	ÍâÉèÊı¾İ³¤¶È16Î»
-	DMA_str.DMA_MemoryDataSize 		= DMA_MemoryDataSize_HalfWord;		//	´æ´¢Æ÷Êı¾İ³¤¶È16Î» 
-	DMA_str.DMA_Mode 					= DMA_Mode_Circular;						//	Ñ­»·Ä£Ê½ 
-	DMA_str.DMA_Priority 				= DMA_Priority_High;						//	¸ßÓÅÏÈ¼¶
-	DMA_str.DMA_FIFOMode 				= DMA_FIFOMode_Disable; 				//	²»Ê¹ÓÃFIFO      
-	DMA_str.DMA_FIFOThreshold 		= DMA_FIFOThreshold_1QuarterFull;	//	FIFOãĞÖµ 
-	DMA_str.DMA_MemoryBurst 			= DMA_MemoryBurst_Single;				//	ÍâÉèÍ»·¢µ¥´Î´«Êä
-	DMA_str.DMA_PeripheralBurst 		= DMA_PeripheralBurst_Single;			//	´æ´¢Æ÷Í»·¢µ¥´Î´«Êä
-	DMA_Init(DMA1_Stream4, &DMA_str);										//	³õÊ¼»¯DMA
+	DMA_str.DMA_PeripheralDataSize 	= DMA_PeripheralDataSize_HalfWord;	//	å¤–è®¾æ•°æ®é•¿åº¦16ä½
+	DMA_str.DMA_MemoryDataSize 		= DMA_MemoryDataSize_HalfWord;		//	å­˜å‚¨å™¨æ•°æ®é•¿åº¦16ä½ 
+	DMA_str.DMA_Mode 					= DMA_Mode_Circular;						//	å¾ªç¯æ¨¡å¼ 
+	DMA_str.DMA_Priority 				= DMA_Priority_High;						//	é«˜ä¼˜å…ˆçº§
+	DMA_str.DMA_FIFOMode 				= DMA_FIFOMode_Disable; 				//	ä¸ä½¿ç”¨FIFO      
+	DMA_str.DMA_FIFOThreshold 		= DMA_FIFOThreshold_1QuarterFull;	//	FIFOé˜ˆå€¼ 
+	DMA_str.DMA_MemoryBurst 			= DMA_MemoryBurst_Single;				//	å¤–è®¾çªå‘å•æ¬¡ä¼ è¾“
+	DMA_str.DMA_PeripheralBurst 		= DMA_PeripheralBurst_Single;			//	å­˜å‚¨å™¨çªå‘å•æ¬¡ä¼ è¾“
+	DMA_Init(DMA1_Stream4, &DMA_str);										//	åˆå§‹åŒ–DMA
 			
-	DMA_DoubleBufferModeConfig(DMA1_Stream4,(uint32_t)buffer0, DMA_Memory_0);	//	ÅäÖÃ»º³åÇø1
+	DMA_DoubleBufferModeConfig(DMA1_Stream4,(uint32_t)buffer0, DMA_Memory_0);	//	é…ç½®ç¼“å†²åŒº1
 	
-	DMA_DoubleBufferModeConfig(DMA1_Stream4,(uint32_t)buffer1, DMA_Memory_1);	//	ÅäÖÃ»º³åÇø1
+	DMA_DoubleBufferModeConfig(DMA1_Stream4,(uint32_t)buffer1, DMA_Memory_1);	//	é…ç½®ç¼“å†²åŒº1
 
-	DMA_DoubleBufferModeCmd(DMA1_Stream4,ENABLE);										//	¿ªÆôË«»º³åÄ£Ê½
-	DMA_ITConfig(DMA1_Stream4,DMA_IT_TC,ENABLE);	//¿ªÆô´«ÊäÍê³ÉÖĞ¶Ï
+	DMA_DoubleBufferModeCmd(DMA1_Stream4,ENABLE);										//	å¼€å¯åŒç¼“å†²æ¨¡å¼
+	DMA_ITConfig(DMA1_Stream4,DMA_IT_TC,ENABLE);	//å¼€å¯ä¼ è¾“å®Œæˆä¸­æ–­
 
-	SPI_I2S_DMACmd(SPI2, SPI_I2S_DMAReq_Tx,ENABLE);		//IIS TX DMAÊ¹ÄÜ.
+	SPI_I2S_DMACmd(SPI2, SPI_I2S_DMAReq_Tx,ENABLE);		//IIS TX DMAä½¿èƒ½.
 
 	NVIC_InitStructure.NVIC_IRQChannel = DMA1_Stream4_IRQn;	
-    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;//ÇÀÕ¼ÓÅÏÈ¼¶
-    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;      //ÏìÓ¦ÓÅÏÈ¼¶
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;//æŠ¢å ä¼˜å…ˆçº§
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;      //å“åº”ä¼˜å…ˆçº§
     NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
     NVIC_Init(&NVIC_InitStructure);
 }
 
 /**
  *@brief:      mcu_i2s_dma_start
- *@details:    ¿ªÊ¼DMA´«Êä
+ *@details:    å¼€å§‹DMAä¼ è¾“
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 void mcu_i2s_dma_start(void)
 {   	  
-	DMA_Cmd(DMA1_Stream4,ENABLE);	// ¿ªÆôDMA TX´«Êä
+	DMA_Cmd(DMA1_Stream4,ENABLE);	// å¼€å¯DMA TXä¼ è¾“
 }
 /**
  *@brief:      mcu_i2s_dma_stop
- *@details:       Í£Ö¹DMA´«Êä
+ *@details:       åœæ­¢DMAä¼ è¾“
  *@param[in]  void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 void mcu_i2s_dma_stop(void)
 {   	 
-	DMA_Cmd(DMA1_Stream4,DISABLE);	//¹Ø±Õ DMA TX´«Êä
+	DMA_Cmd(DMA1_Stream4,DISABLE);	//å…³é—­ DMA TXä¼ è¾“
 }
 
 /**
  *@brief:      mcu_i2s_dma_process
- *@details:    I2SÊ¹ÓÃµÄDMAÖĞ¶Ï´¦Àíº¯Êı
+ *@details:    I2Sä½¿ç”¨çš„DMAä¸­æ–­å¤„ç†å‡½æ•°
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
 
- Î» 19 CT£ºµ±Ç°Ä¿±ê£¨½öÔÚË«»º³åÇøÄ£Ê½ÏÂ£© (Current target (only in double buffer mode))
-´ËÎ»ÓÉÓ²¼şÖÃ 1 ºÍÇåÁã£¬Ò²¿ÉÓÉÈí¼şĞ´Èë¡£
-0£ºµ±Ç°Ä¿±ê´æ´¢Æ÷Îª´æ´¢Æ÷ 0£¨Ê¹ÓÃ DMA_SxM0AR Ö¸ÕëÑ°Ö·£©
-1£ºµ±Ç°Ä¿±ê´æ´¢Æ÷Îª´æ´¢Æ÷ 1£¨Ê¹ÓÃ DMA_SxM1AR Ö¸ÕëÑ°Ö·£©
-Ö»ÓĞ EN Îª¡°0¡±Ê±£¬´ËÎ»²Å¿ÉÒÔĞ´Èë£¬ÒÔÖ¸Ê¾µÚÒ»´Î´«ÊäµÄÄ¿±ê´æ´¢Çø¡£ÔÚÊ¹ÄÜÊı¾İÁ÷
-ºó£¬´ËÎ»Ïàµ±ÓÚÒ»¸ö×´Ì¬±êÖ¾£¬ÓÃÓÚÖ¸Ê¾×÷Îªµ±Ç°Ä¿±êµÄ´æ´¢Çø¡£
+ ä½ 19 CTï¼šå½“å‰ç›®æ ‡ï¼ˆä»…åœ¨åŒç¼“å†²åŒºæ¨¡å¼ä¸‹ï¼‰ (Current target (only in double buffer mode))
+æ­¤ä½ç”±ç¡¬ä»¶ç½® 1 å’Œæ¸…é›¶ï¼Œä¹Ÿå¯ç”±è½¯ä»¶å†™å…¥ã€‚
+0ï¼šå½“å‰ç›®æ ‡å­˜å‚¨å™¨ä¸ºå­˜å‚¨å™¨ 0ï¼ˆä½¿ç”¨ DMA_SxM0AR æŒ‡é’ˆå¯»å€ï¼‰
+1ï¼šå½“å‰ç›®æ ‡å­˜å‚¨å™¨ä¸ºå­˜å‚¨å™¨ 1ï¼ˆä½¿ç”¨ DMA_SxM1AR æŒ‡é’ˆå¯»å€ï¼‰
+åªæœ‰ EN ä¸ºâ€œ0â€æ—¶ï¼Œæ­¤ä½æ‰å¯ä»¥å†™å…¥ï¼Œä»¥æŒ‡ç¤ºç¬¬ä¸€æ¬¡ä¼ è¾“çš„ç›®æ ‡å­˜å‚¨åŒºã€‚åœ¨ä½¿èƒ½æ•°æ®æµ
+åï¼Œæ­¤ä½ç›¸å½“äºä¸€ä¸ªçŠ¶æ€æ ‡å¿—ï¼Œç”¨äºæŒ‡ç¤ºä½œä¸ºå½“å‰ç›®æ ‡çš„å­˜å‚¨åŒºã€‚
  */
 void mcu_i2s_dma_process(void)
 {
 	if(DMA1_Stream4->CR&(1<<19))
 	{
-		/*µ±Ç°Ä¿±ê´æ´¢Æ÷Îª1£¬ÎÒÃÇ¾ÍÉèÖÃ¿ÕÏĞBUFÎª0*/
+		/*å½“å‰ç›®æ ‡å­˜å‚¨å™¨ä¸º1ï¼Œæˆ‘ä»¬å°±è®¾ç½®ç©ºé—²BUFä¸º0*/
 		fun_sound_set_free_buf(0);
 	}
 	else
@@ -206,42 +206,42 @@ void mcu_i2s_dma_process(void)
 
 	I2SEXT
 	
-	À©Õ¹ I2S (I2Sx_ext) Ö»ÄÜÓÃÓÚÈ«Ë«¹¤Ä£Ê½¡£ I2Sx_ext Ê¼ÖÕÔÚ´ÓÄ£Ê½ÏÂ¹¤×÷¡£
+	æ‰©å±• I2S (I2Sx_ext) åªèƒ½ç”¨äºå…¨åŒå·¥æ¨¡å¼ã€‚ I2Sx_ext å§‹ç»ˆåœ¨ä»æ¨¡å¼ä¸‹å·¥ä½œã€‚
 */
 extern s32 fun_rec_set_free_buf(u8 index);
 
 #define I2S2_EXT_DMA DMA1_Stream3
 /**
  *@brief:      mcu_i2sext_config
- *@details:    ÅäÖÃI2SEXT£¨Ó¦¸Ã¸úI2SÒ»Ñù°É£¿ºÏ²¢£¿£©
+ *@details:    é…ç½®I2SEXTï¼ˆåº”è¯¥è·ŸI2Sä¸€æ ·å§ï¼Ÿåˆå¹¶ï¼Ÿï¼‰
  *@param[in]   u32 AudioFreq   
                u16 Standard    
                u16 DataFormat  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 void mcu_i2sext_config(u32 AudioFreq, u16 Standard,u16 DataFormat)
 {  
 	I2S_InitTypeDef I2S2ext_InitStructure;
 	
-	I2S2ext_InitStructure.I2S_Mode = I2S_Mode_MasterTx;//I2S_FullDuplexConfig»á½øĞĞ×ª»»
-	I2S2ext_InitStructure.I2S_Standard=Standard;//IIS±ê×¼
-	I2S2ext_InitStructure.I2S_DataFormat=DataFormat;//IISÊı¾İ³¤¶È
-	I2S2ext_InitStructure.I2S_MCLKOutput=I2S_MCLKOutput_Enable;//Ö÷Ê±ÖÓÊä³ö,i2sextÎŞĞ§
-	I2S2ext_InitStructure.I2S_AudioFreq=AudioFreq;//IISÆµÂÊÉèÖÃ
-	I2S2ext_InitStructure.I2S_CPOL=I2S_CPOL_Low;//¿ÕÏĞ×´Ì¬Ê±ÖÓµçÆ½
+	I2S2ext_InitStructure.I2S_Mode = I2S_Mode_MasterTx;//I2S_FullDuplexConfigä¼šè¿›è¡Œè½¬æ¢
+	I2S2ext_InitStructure.I2S_Standard=Standard;//IISæ ‡å‡†
+	I2S2ext_InitStructure.I2S_DataFormat=DataFormat;//IISæ•°æ®é•¿åº¦
+	I2S2ext_InitStructure.I2S_MCLKOutput=I2S_MCLKOutput_Enable;//ä¸»æ—¶é’Ÿè¾“å‡º,i2sextæ— æ•ˆ
+	I2S2ext_InitStructure.I2S_AudioFreq=AudioFreq;//IISé¢‘ç‡è®¾ç½®
+	I2S2ext_InitStructure.I2S_CPOL=I2S_CPOL_Low;//ç©ºé—²çŠ¶æ€æ—¶é’Ÿç”µå¹³
 	
-	I2S_FullDuplexConfig(I2S2ext, &I2S2ext_InitStructure);//³õÊ¼»¯I2S2extÅäÖÃ
+	I2S_FullDuplexConfig(I2S2ext, &I2S2ext_InitStructure);//åˆå§‹åŒ–I2S2exté…ç½®
 	
-	I2S_Cmd(I2S2ext, ENABLE);		//I2S2ext I2S ENÊ¹ÄÜ.
+	I2S_Cmd(I2S2ext, ENABLE);		//I2S2ext I2S ENä½¿èƒ½.
 }
 /**
  *@brief:      mcu_i2sext_dma_init
- *@details:    ÉèÖÃI2S EXT DMA»º³å
+ *@details:    è®¾ç½®I2S EXT DMAç¼“å†²
  *@param[in]   u16* buf0  
                u16 *buf1  
                u32 len    
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 void mcu_i2sext_dma_init(u16* buf0, u16 *buf1, u32 len)
@@ -251,75 +251,75 @@ void mcu_i2sext_dma_init(u16* buf0, u16 *buf1, u32 len)
 	DMA_InitTypeDef  DMA_InitStructure;
 
 
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_DMA1,ENABLE);//DMA1Ê±ÖÓÊ¹ÄÜ 
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_DMA1,ENABLE);//DMA1æ—¶é’Ÿä½¿èƒ½ 
 
 	DMA_DeInit(I2S2_EXT_DMA);
-	while (DMA_GetCmdStatus(I2S2_EXT_DMA) != DISABLE){}//µÈ´ıDMA1_Stream3¿ÉÅäÖÃ 
+	while (DMA_GetCmdStatus(I2S2_EXT_DMA) != DISABLE){}//ç­‰å¾…DMA1_Stream3å¯é…ç½® 
 
-	DMA_ClearITPendingBit(I2S2_EXT_DMA,DMA_IT_FEIF3|DMA_IT_DMEIF3|DMA_IT_TEIF3|DMA_IT_HTIF3|DMA_IT_TCIF3);//Çå¿ÕDMA1_Stream3ÉÏËùÓĞÖĞ¶Ï±êÖ¾
+	DMA_ClearITPendingBit(I2S2_EXT_DMA,DMA_IT_FEIF3|DMA_IT_DMEIF3|DMA_IT_TEIF3|DMA_IT_HTIF3|DMA_IT_TCIF3);//æ¸…ç©ºDMA1_Stream3ä¸Šæ‰€æœ‰ä¸­æ–­æ ‡å¿—
 
-	/* ÅäÖÃ DMA Stream */
+	/* é…ç½® DMA Stream */
 	DMA_InitStructure.DMA_Channel = DMA_Channel_3;
 	DMA_InitStructure.DMA_PeripheralBaseAddr = (u32)&I2S2ext->DR;
-	DMA_InitStructure.DMA_Memory0BaseAddr = (u32)buf0;//DMA ´æ´¢Æ÷0µØÖ·
-	DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralToMemory;//ÍâÉèµ½´æ´¢Æ÷Ä£Ê½
-	DMA_InitStructure.DMA_BufferSize = len;//Êı¾İ´«ÊäÁ¿ 
-	DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;//ÍâÉè·ÇÔöÁ¿Ä£Ê½
-	DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;//´æ´¢Æ÷ÔöÁ¿Ä£Ê½
-	DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_HalfWord;//ÍâÉèÊı¾İ³¤¶È:16Î»
-	DMA_InitStructure.DMA_MemoryDataSize = DMA_MemoryDataSize_HalfWord;//´æ´¢Æ÷Êı¾İ³¤¶È£º16Î» 
-	DMA_InitStructure.DMA_Mode = DMA_Mode_Circular;// Ê¹ÓÃÑ­»·Ä£Ê½ 
+	DMA_InitStructure.DMA_Memory0BaseAddr = (u32)buf0;//DMA å­˜å‚¨å™¨0åœ°å€
+	DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralToMemory;//å¤–è®¾åˆ°å­˜å‚¨å™¨æ¨¡å¼
+	DMA_InitStructure.DMA_BufferSize = len;//æ•°æ®ä¼ è¾“é‡ 
+	DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;//å¤–è®¾éå¢é‡æ¨¡å¼
+	DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;//å­˜å‚¨å™¨å¢é‡æ¨¡å¼
+	DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_HalfWord;//å¤–è®¾æ•°æ®é•¿åº¦:16ä½
+	DMA_InitStructure.DMA_MemoryDataSize = DMA_MemoryDataSize_HalfWord;//å­˜å‚¨å™¨æ•°æ®é•¿åº¦ï¼š16ä½ 
+	DMA_InitStructure.DMA_Mode = DMA_Mode_Circular;// ä½¿ç”¨å¾ªç¯æ¨¡å¼ 
 	DMA_InitStructure.DMA_Priority = DMA_Priority_High;
-	DMA_InitStructure.DMA_FIFOMode = DMA_FIFOMode_Disable; //²»Ê¹ÓÃFIFOÄ£Ê½		  
+	DMA_InitStructure.DMA_FIFOMode = DMA_FIFOMode_Disable; //ä¸ä½¿ç”¨FIFOæ¨¡å¼		  
 	DMA_InitStructure.DMA_FIFOThreshold = DMA_FIFOThreshold_1QuarterFull;
-	DMA_InitStructure.DMA_MemoryBurst = DMA_MemoryBurst_Single;//ÍâÉèÍ»·¢µ¥´Î´«Êä
-	DMA_InitStructure.DMA_PeripheralBurst = DMA_PeripheralBurst_Single;//´æ´¢Æ÷Í»·¢µ¥´Î´«Êä
-	DMA_Init(I2S2_EXT_DMA, &DMA_InitStructure);//³õÊ¼»¯DMA Stream
+	DMA_InitStructure.DMA_MemoryBurst = DMA_MemoryBurst_Single;//å¤–è®¾çªå‘å•æ¬¡ä¼ è¾“
+	DMA_InitStructure.DMA_PeripheralBurst = DMA_PeripheralBurst_Single;//å­˜å‚¨å™¨çªå‘å•æ¬¡ä¼ è¾“
+	DMA_Init(I2S2_EXT_DMA, &DMA_InitStructure);//åˆå§‹åŒ–DMA Stream
 
-	DMA_DoubleBufferModeConfig(I2S2_EXT_DMA, (u32)buf0, DMA_Memory_0);//Ë«»º³åÄ£Ê½ÅäÖÃ
-	DMA_DoubleBufferModeConfig(I2S2_EXT_DMA, (u32)buf1, DMA_Memory_1);//Ë«»º³åÄ£Ê½ÅäÖÃ
+	DMA_DoubleBufferModeConfig(I2S2_EXT_DMA, (u32)buf0, DMA_Memory_0);//åŒç¼“å†²æ¨¡å¼é…ç½®
+	DMA_DoubleBufferModeConfig(I2S2_EXT_DMA, (u32)buf1, DMA_Memory_1);//åŒç¼“å†²æ¨¡å¼é…ç½®
 	
-	DMA_DoubleBufferModeCmd(I2S2_EXT_DMA,ENABLE);//Ë«»º³åÄ£Ê½¿ªÆô
+	DMA_DoubleBufferModeCmd(I2S2_EXT_DMA,ENABLE);//åŒç¼“å†²æ¨¡å¼å¼€å¯
 
-	DMA_ITConfig(I2S2_EXT_DMA,DMA_IT_TC,ENABLE);//¿ªÆô´«ÊäÍê³ÉÖĞ¶Ï
+	DMA_ITConfig(I2S2_EXT_DMA,DMA_IT_TC,ENABLE);//å¼€å¯ä¼ è¾“å®Œæˆä¸­æ–­
 
-	SPI_I2S_DMACmd(I2S2ext, SPI_I2S_DMAReq_Rx, ENABLE);//I2S2ext RX DMAÇëÇóÊ¹ÄÜ.
+	SPI_I2S_DMACmd(I2S2ext, SPI_I2S_DMAReq_Rx, ENABLE);//I2S2ext RX DMAè¯·æ±‚ä½¿èƒ½.
 	
 	NVIC_InitStructure.NVIC_IRQChannel = DMA1_Stream3_IRQn; 
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority =0x00;//ÇÀÕ¼ÓÅÏÈ¼¶0
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0x00;//×ÓÓÅÏÈ¼¶1
-	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;//Ê¹ÄÜÍâ²¿ÖĞ¶ÏÍ¨µÀ
-	NVIC_Init(&NVIC_InitStructure);//ÅäÖÃ
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority =0x00;//æŠ¢å ä¼˜å…ˆçº§0
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0x00;//å­ä¼˜å…ˆçº§1
+	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;//ä½¿èƒ½å¤–éƒ¨ä¸­æ–­é€šé“
+	NVIC_Init(&NVIC_InitStructure);//é…ç½®
 
 } 
 
 /**
  *@brief:      mcu_i2sext_dma_start
- *@details:    ¿ªÊ¼I2SEXT DMA´«Êä
+ *@details:    å¼€å§‹I2SEXT DMAä¼ è¾“
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 void mcu_i2sext_dma_start(void)
 {   	  
-	DMA_Cmd(I2S2_EXT_DMA,ENABLE);	// ¿ªÆôDMA TX´«Êä
+	DMA_Cmd(I2S2_EXT_DMA,ENABLE);	// å¼€å¯DMA TXä¼ è¾“
 }
 /**
  *@brief:      mcu_i2sext_dma_stop
- *@details:    Í£Ö¹DMA´«Êä
+ *@details:    åœæ­¢DMAä¼ è¾“
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 void mcu_i2sext_dma_stop(void)
 {   	 
-	DMA_Cmd(I2S2_EXT_DMA,DISABLE);	//¹Ø±Õ DMA TX´«Êä
+	DMA_Cmd(I2S2_EXT_DMA,DISABLE);	//å…³é—­ DMA TXä¼ è¾“
 }
 /**
  *@brief:      mcu_i2sext_dma_process
- *@details:    DMAÖĞ¶Ï
+ *@details:    DMAä¸­æ–­
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 void mcu_i2sext_dma_process(void)

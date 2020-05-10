@@ -1,22 +1,22 @@
 /**
  * @file            mcu_timer.c
- * @brief           CPUÆ¬ÉÏ¶¨Ê±Æ÷Çı¶¯
+ * @brief           CPUç‰‡ä¸Šå®šæ—¶å™¨é©±åŠ¨
  * @author          test
- * @date            2017Äê10ÔÂ25ÈÕ ĞÇÆÚÈı
- * @version         ³õ¸å
+ * @date            2017å¹´10æœˆ25æ—¥ æ˜ŸæœŸä¸‰
+ * @version         åˆç¨¿
  * @par             
  * @par History:
- * 1.ÈÕ    ÆÚ:      2017Äê10ÔÂ25ÈÕ ĞÇÆÚÈı
- *   ×÷    Õß:      Îİ¼¹È¸¹¤×÷ÊÒ
- *   ĞŞ¸ÄÄÚÈİ:      ´´½¨ÎÄ¼ş
- 		1 Ô´Âë¹éÎİ¼¹È¸¹¤×÷ÊÒËùÓĞ¡£
-		2 ¿ÉÒÔÓÃÓÚµÄÆäËûÉÌÒµÓÃÍ¾£¨ÅäÌ×¿ª·¢°åÏúÊÛ³ıÍâ£©£¬²»ĞëÊÚÈ¨¡£
-		3 Îİ¼¹È¸¹¤×÷ÊÒ²»¶Ô´úÂë¹¦ÄÜ×öÈÎºÎ±£Ö¤£¬ÇëÊ¹ÓÃÕß×ÔĞĞ²âÊÔ£¬ºó¹û×Ô¸º¡£
-		4 ¿ÉËæÒâĞŞ¸ÄÔ´Âë²¢·Ö·¢£¬µ«²»¿ÉÖ±½ÓÏúÊÛ±¾´úÂë»ñÀû£¬²¢ÇÒÇë±£ÁôWUJIQUE°æÈ¨ËµÃ÷¡£
-		5 Èç·¢ÏÖBUG»òÓĞÓÅ»¯£¬»¶Ó­·¢²¼¸üĞÂ¡£ÇëÁªÏµ£ºcode@wujique.com
-		6 Ê¹ÓÃ±¾Ô´ÂëÔòÏàµ±ÓÚÈÏÍ¬±¾°æÈ¨ËµÃ÷¡£
-		7 ÈçÇÖ·¸ÄãµÄÈ¨Àû£¬ÇëÁªÏµ£ºcode@wujique.com
-		8 Ò»ÇĞ½âÊÍÈ¨¹éÎİ¼¹È¸¹¤×÷ÊÒËùÓĞ¡£
+ * 1.æ—¥    æœŸ:      2017å¹´10æœˆ25æ—¥ æ˜ŸæœŸä¸‰
+ *   ä½œ    è€…:      å±‹è„Šé›€å·¥ä½œå®¤
+ *   ä¿®æ”¹å†…å®¹:      åˆ›å»ºæ–‡ä»¶
+ 		1 æºç å½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
+		2 å¯ä»¥ç”¨äºçš„å…¶ä»–å•†ä¸šç”¨é€”ï¼ˆé…å¥—å¼€å‘æ¿é”€å”®é™¤å¤–ï¼‰ï¼Œä¸é¡»æˆæƒã€‚
+		3 å±‹è„Šé›€å·¥ä½œå®¤ä¸å¯¹ä»£ç åŠŸèƒ½åšä»»ä½•ä¿è¯ï¼Œè¯·ä½¿ç”¨è€…è‡ªè¡Œæµ‹è¯•ï¼Œåæœè‡ªè´Ÿã€‚
+		4 å¯éšæ„ä¿®æ”¹æºç å¹¶åˆ†å‘ï¼Œä½†ä¸å¯ç›´æ¥é”€å”®æœ¬ä»£ç è·åˆ©ï¼Œå¹¶ä¸”è¯·ä¿ç•™WUJIQUEç‰ˆæƒè¯´æ˜ã€‚
+		5 å¦‚å‘ç°BUGæˆ–æœ‰ä¼˜åŒ–ï¼Œæ¬¢è¿å‘å¸ƒæ›´æ–°ã€‚è¯·è”ç³»ï¼šcode@wujique.com
+		6 ä½¿ç”¨æœ¬æºç åˆ™ç›¸å½“äºè®¤åŒæœ¬ç‰ˆæƒè¯´æ˜ã€‚
+		7 å¦‚ä¾µçŠ¯ä½ çš„æƒåˆ©ï¼Œè¯·è”ç³»ï¼šcode@wujique.com
+		8 ä¸€åˆ‡è§£é‡Šæƒå½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
 */
 
 #include "mcu.h"
@@ -25,10 +25,10 @@
 
 /*
 
-	¶Ô¶¨Ê±Æ÷½øĞĞ³éÏó£¬³éÏóµÄ½Ó¿ÚÌá¹©¸øÉÏ²ãÇı¶¯Ê¹ÓÃ¡£
-	1. ¶¨Ê±Æ÷·ÖÈí¶¨Ê±Æ÷ºÍÓ²¶¨Ê±Æ÷¡£
-	2. Ó²¶¨Ê±Æ÷·Ö3ÖÖ¹¦ÄÜ£ºPWN£¬²¶»ñ£¬¶¨Ê±¡£
-	3. ¶¨Ê±Æ÷Ìá¹©½Ó¿Ú
+	å¯¹å®šæ—¶å™¨è¿›è¡ŒæŠ½è±¡ï¼ŒæŠ½è±¡çš„æ¥å£æä¾›ç»™ä¸Šå±‚é©±åŠ¨ä½¿ç”¨ã€‚
+	1. å®šæ—¶å™¨åˆ†è½¯å®šæ—¶å™¨å’Œç¡¬å®šæ—¶å™¨ã€‚
+	2. ç¡¬å®šæ—¶å™¨åˆ†3ç§åŠŸèƒ½ï¼šPWNï¼Œæ•è·ï¼Œå®šæ—¶ã€‚
+	3. å®šæ—¶å™¨æä¾›æ¥å£
 
 */
 
@@ -47,7 +47,7 @@ typedef struct _strTimerCtrl
 }McuTimerCtrl;
 
 McuTimerCtrl McuTimerCtrlList[MCU_TIMER_MAX];
-/*STM32Ïà¹Ø²Ù×÷¶¨Òå*/
+/*STM32ç›¸å…³æ“ä½œå®šä¹‰*/
 const TIM_TypeDef *STM32TimerList[MCU_TIMER_MAX]={
 	0,
 		TIM1,TIM2,TIM3,TIM4,
@@ -60,8 +60,8 @@ const uint32_t STM32TimerRccList[MCU_TIMER_MAX]={
 		5,6,7,8
 	};
 /*
-	´ÓÕâ¸ö±í¸ñ¿ÉÒÔ¿´³ö£¬23457Õâ5¸ö¶¨Ê±Æ÷ÖĞ¶ÏÈë¿ÚÃ»ÓĞ¸´ÓÃ£¬
-	¼òµ¥µÄ¶¨Ê±¹¦ÄÜ×îºÃÓÃÕâ4¸ö
+	ä»è¿™ä¸ªè¡¨æ ¼å¯ä»¥çœ‹å‡ºï¼Œ23457è¿™5ä¸ªå®šæ—¶å™¨ä¸­æ–­å…¥å£æ²¡æœ‰å¤ç”¨ï¼Œ
+	ç®€å•çš„å®šæ—¶åŠŸèƒ½æœ€å¥½ç”¨è¿™4ä¸ª
 */	
 const uint8_t STM32TimerIRQList[MCU_TIMER_MAX]={
 	0,
@@ -69,26 +69,26 @@ const uint8_t STM32TimerIRQList[MCU_TIMER_MAX]={
 		4, 5, 6, 7
 	};
 /*
-    ¶¨Ê±Æ÷Ê±ÖÓÎª84M,
+    å®šæ—¶å™¨æ—¶é’Ÿä¸º84M,
     Tout=((SYSTEM_CLK_PERIOD)*(SYSTEM_CLK_PRESCALER))/Ft us.
 
-	Ô¤·ÖÆµ,8400¸öÊ±ÖÓ²Å´¥·¢Ò»´Î¶¨Ê±Æ÷¼ÆÊı 
-	ÄÇÃ´Ò»¸ö¶¨Ê±Æ÷¼ÆÊıµÄÊ±¼ä¾ÍÊÇ(1/84M)*8400 = 100us	  
+	é¢„åˆ†é¢‘,8400ä¸ªæ—¶é’Ÿæ‰è§¦å‘ä¸€æ¬¡å®šæ—¶å™¨è®¡æ•° 
+	é‚£ä¹ˆä¸€ä¸ªå®šæ—¶å™¨è®¡æ•°çš„æ—¶é—´å°±æ˜¯(1/84M)*8400 = 100us	  
 */	
 const u16  STM32TimerTickSet[MCU_TIMER_DEF_MAX] =
 	{
 		0,
 		84,//1us
-		840,//840Ô¤·ÖÆµ£¬Ò»¸ötick=10us
-		8400,//8400Ô¤·ÖÆµ£¬Ò»¸ötick=100us
-		42000,//Ô¤·ÖÆµ£¬Ò»¸ötick=500us
-		8,//Ô¼µÈÓÚ100ns£¬Í¨³£ÓÃÓÚ²¶»ñ¼ÆÊı¶ø²»ÊÇ¶¨Ê±
+		840,//840é¢„åˆ†é¢‘ï¼Œä¸€ä¸ªtick=10us
+		8400,//8400é¢„åˆ†é¢‘ï¼Œä¸€ä¸ªtick=100us
+		42000,//é¢„åˆ†é¢‘ï¼Œä¸€ä¸ªtick=500us
+		8,//çº¦ç­‰äº100nsï¼Œé€šå¸¸ç”¨äºæ•è·è®¡æ•°è€Œä¸æ˜¯å®šæ—¶
 	}; 
 /**
  *@brief:	   mcu_tim3_IRQhandler
- *@details:    ¶¨Ê±Æ÷ÖĞ¶Ï´¦Àíº¯Êı
+ *@details:    å®šæ—¶å™¨ä¸­æ–­å¤„ç†å‡½æ•°
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:	   
  */
 void mcu_tim3_IRQhandler(void)
@@ -98,9 +98,9 @@ void mcu_tim3_IRQhandler(void)
 
 /**
  *@brief:	   mcu_tim5_IRQhandler
- *@details:    ¶¨Ê±Æ÷ÖĞ¶Ï´¦Àíº¯Êı
+ *@details:    å®šæ—¶å™¨ä¸­æ–­å¤„ç†å‡½æ•°
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:	   
  */
 void mcu_tim5_IRQhandler(void)
@@ -109,9 +109,9 @@ void mcu_tim5_IRQhandler(void)
 
 /**
  *@brief:	   mcu_tim7_IRQhandler
- *@details:    ¶¨Ê±Æ÷ÖĞ¶Ï´¦Àíº¯Êı
+ *@details:    å®šæ—¶å™¨ä¸­æ–­å¤„ç†å‡½æ•°
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:	   
  */
 void mcu_tim7_IRQhandler(void)
@@ -169,7 +169,7 @@ s32 mcu_timer_stop(McuTimerNum timer)
  *@brief:      mcu_timer_pwm_init
  *@details:    
  *@param[in]   
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 mcu_timer_pwm_init(McuTimerNum timer, McuTimerTickDef tickdef, u32 tick, u8 duty, McuTimerCh ch)
@@ -180,14 +180,14 @@ s32 mcu_timer_pwm_init(McuTimerNum timer, McuTimerTickDef tickdef, u32 tick, u8 
 	return 0;
 }
 /*
-	¶¨Ê±Æ÷²¶»ñ
+	å®šæ—¶å™¨æ•è·
 */
 /**
  *@brief:      mcu_timer_cap_init
- *@details:    ³õÊ¼»¯¶¨Ê±Æ÷²¶»ñ£¬²»Ê¹ÓÃÖĞ¶Ï
+ *@details:    åˆå§‹åŒ–å®šæ—¶å™¨æ•è·ï¼Œä¸ä½¿ç”¨ä¸­æ–­
  *@param[in]     
                
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 mcu_timer_cap_init(McuTimerNum timer, McuTimerTickDef tickdef, McuTimerCh ch, McuTimerCapEdge edge)
@@ -199,10 +199,10 @@ s32 mcu_timer_cap_init(McuTimerNum timer, McuTimerTickDef tickdef, McuTimerCh ch
 }
 /**
  *@brief:      mcu_timer_get_cap
- *@details:    ²éÑ¯»ñÈ¡¶¨Ê±È¥²¶»ñÖµ
+ *@details:    æŸ¥è¯¢è·å–å®šæ—¶å»æ•è·å€¼
  *@param[in]   void  
- *@param[out]  ÎŞ
- *@retval:     ²¶»ñÖµ£¬³¬Ê±Ôò·µ»Ø×î´óÖµ	
+ *@param[out]  æ— 
+ *@retval:     æ•è·å€¼ï¼Œè¶…æ—¶åˆ™è¿”å›æœ€å¤§å€¼	
  */
 u32 mcu_timer_get_cap(McuTimerNum timer, McuTimerCh ch)
 { 
@@ -217,9 +217,9 @@ u32 mcu_timer_get_cap(McuTimerNum timer, McuTimerCh ch)
 */
 /**
  *@brief:	   mcu_tim5_test
- *@details:    ¶¨Ê±Æ÷²âÊÔ
+ *@details:    å®šæ—¶å™¨æµ‹è¯•
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:	   
  */
 void mcu_tim5_test(void)

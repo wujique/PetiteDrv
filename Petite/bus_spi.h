@@ -5,11 +5,11 @@
 #include "petite_def.h"
 
 /*
-	SPI ·ÖÁ½²ã£¬
-	1²ãÊÇSPI¿ØÖÆÆ÷£¬²»°üº¬CS
-	2²ãÊÇSPIÍ¨µÀ£¬ÓÉ¿ØÖÆÆ÷+CS×é³É
+	SPI åˆ†ä¸¤å±‚ï¼Œ
+	1å±‚æ˜¯SPIæŽ§åˆ¶å™¨ï¼Œä¸åŒ…å«CS
+	2å±‚æ˜¯SPIé€šé“ï¼Œç”±æŽ§åˆ¶å™¨+CSç»„æˆ
 */
-/*	SPI Éè±¸¶¨Òå */
+/*	SPI è®¾å¤‡å®šä¹‰ */
 typedef struct
 {
 	PetiteNode pnode;
@@ -25,42 +25,42 @@ typedef struct
 
 }DevSpi;
 
-/*	SPI¿ØÖÆÆ÷Éè±¸½Úµã */
+/*	SPIæŽ§åˆ¶å™¨è®¾å¤‡èŠ‚ç‚¹ */
 typedef struct
 {
-	/*¾ä±ú£¬¿ÕÏÐÎª-1£¬´ò¿ªÎª0£¬spi¿ØÖÆÆ÷²»ÄÜÖØ¸´´ò¿ª*/
+	/*å¥æŸ„ï¼Œç©ºé—²ä¸º-1ï¼Œæ‰“å¼€ä¸º0ï¼ŒspiæŽ§åˆ¶å™¨ä¸èƒ½é‡å¤æ‰“å¼€*/
 	s32 gd;
-	/*¿ØÖÆÆ÷Ó²¼þÐÅÏ¢£¬³õÊ¼»¯¿ØÖÆÆ÷Ê±¿½±´Éè±¸Ê÷µÄÐÅÏ¢µ½´Ë*/
+	/*æŽ§åˆ¶å™¨ç¡¬ä»¶ä¿¡æ¯ï¼Œåˆå§‹åŒ–æŽ§åˆ¶å™¨æ—¶æ‹·è´è®¾å¤‡æ ‘çš„ä¿¡æ¯åˆ°æ­¤*/
 	DevSpi dev;	
 	
-	/*Ä£ÄâSPIµÄÊ±ÖÓ·ÖÆµÉèÖÃ*/
+	/*æ¨¡æ‹ŸSPIçš„æ—¶é’Ÿåˆ†é¢‘è®¾ç½®*/
 	u16 clk;
-	/*Á´±í*/
+	/*é“¾è¡¨*/
 	struct list_head list;
 }DevSpiNode;
 
-/*	SPI Í¨µÀ¶¨Òå
-	Ò»¸öSPIÍ¨µÀ£¬ÓÐÒ»¸öSPI¿ØÖÆÆ÷+Ò»¸ùCSÒý½Å×é³É*/
+/*	SPI é€šé“å®šä¹‰
+	ä¸€ä¸ªSPIé€šé“ï¼Œæœ‰ä¸€ä¸ªSPIæŽ§åˆ¶å™¨+ä¸€æ ¹CSå¼•è„šç»„æˆ*/
 typedef struct
 {
 	PetiteNode pnode;
 	
-	/*SPI¿ØÖÆÆ÷Ãû³Æ*/
+	/*SPIæŽ§åˆ¶å™¨åç§°*/
 	char spi[DEV_NAME_SIZE];
 
-	/*cs½Å*/
+	/*csè„š*/
 	MCU_PORT csport;
 	u16 cspin;
 }DevSpiCh;
 
-/*SPIÍ¨µÀ½Úµã*/
+/*SPIé€šé“èŠ‚ç‚¹*/
 typedef struct
 {
 	s32 gd;
 	
 	DevSpiCh dev;
 	
-	DevSpiNode *spi;//¿ØÖÆÆ÷½ÚµãÖ¸Õë
+	DevSpiNode *spi;//æŽ§åˆ¶å™¨èŠ‚ç‚¹æŒ‡é’ˆ
 	
 	struct list_head list;
 }DevSpiChNode;

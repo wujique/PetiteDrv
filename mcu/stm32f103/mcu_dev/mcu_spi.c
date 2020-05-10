@@ -1,23 +1,23 @@
 /**
  * @file            mcu_spi.c
- * @brief           Æ¬ÉÏSPI¿ØÖÆÆ÷Çı¶¯
+ * @brief           ç‰‡ä¸ŠSPIæ§åˆ¶å™¨é©±åŠ¨
  * @author          test
- * @date            2017Äê10ÔÂ26ÈÕ ĞÇÆÚËÄ
- * @version         ³õ¸å
+ * @date            2017å¹´10æœˆ26æ—¥ æ˜ŸæœŸå››
+ * @version         åˆç¨¿
  * @par             
  * @par History:
- * 1.ÈÕ    ÆÚ:      2017Äê10ÔÂ26ÈÕ ĞÇÆÚËÄ
- *   ×÷    Õß:      test
- *   ĞŞ¸ÄÄÚÈİ:      ´´½¨ÎÄ¼ş
-		°æÈ¨ËµÃ÷£º
-		1 Ô´Âë¹éÎİ¼¹È¸¹¤×÷ÊÒËùÓĞ¡£
-		2 ¿ÉÒÔÓÃÓÚµÄÆäËûÉÌÒµÓÃÍ¾£¨ÅäÌ×¿ª·¢°åÏúÊÛ³ıÍâ£©£¬²»ĞëÊÚÈ¨¡£
-		3 Îİ¼¹È¸¹¤×÷ÊÒ²»¶Ô´úÂë¹¦ÄÜ×öÈÎºÎ±£Ö¤£¬ÇëÊ¹ÓÃÕß×ÔĞĞ²âÊÔ£¬ºó¹û×Ô¸º¡£
-		4 ¿ÉËæÒâĞŞ¸ÄÔ´Âë²¢·Ö·¢£¬µ«²»¿ÉÖ±½ÓÏúÊÛ±¾´úÂë»ñÀû£¬²¢ÇÒ±£Áô°æÈ¨ËµÃ÷¡£
-		5 Èç·¢ÏÖBUG»òÓĞÓÅ»¯£¬»¶Ó­·¢²¼¸üĞÂ¡£ÇëÁªÏµ£ºcode@wujique.com
-		6 Ê¹ÓÃ±¾Ô´ÂëÔòÏàµ±ÓÚÈÏÍ¬±¾°æÈ¨ËµÃ÷¡£
-		7 ÈçÇÖ·¸ÄãµÄÈ¨Àû£¬ÇëÁªÏµ£ºcode@wujique.com
-		8 Ò»ÇĞ½âÊÍÈ¨¹éÎİ¼¹È¸¹¤×÷ÊÒËùÓĞ¡£
+ * 1.æ—¥    æœŸ:      2017å¹´10æœˆ26æ—¥ æ˜ŸæœŸå››
+ *   ä½œ    è€…:      test
+ *   ä¿®æ”¹å†…å®¹:      åˆ›å»ºæ–‡ä»¶
+		ç‰ˆæƒè¯´æ˜ï¼š
+		1 æºç å½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
+		2 å¯ä»¥ç”¨äºçš„å…¶ä»–å•†ä¸šç”¨é€”ï¼ˆé…å¥—å¼€å‘æ¿é”€å”®é™¤å¤–ï¼‰ï¼Œä¸é¡»æˆæƒã€‚
+		3 å±‹è„Šé›€å·¥ä½œå®¤ä¸å¯¹ä»£ç åŠŸèƒ½åšä»»ä½•ä¿è¯ï¼Œè¯·ä½¿ç”¨è€…è‡ªè¡Œæµ‹è¯•ï¼Œåæœè‡ªè´Ÿã€‚
+		4 å¯éšæ„ä¿®æ”¹æºç å¹¶åˆ†å‘ï¼Œä½†ä¸å¯ç›´æ¥é”€å”®æœ¬ä»£ç è·åˆ©ï¼Œå¹¶ä¸”ä¿ç•™ç‰ˆæƒè¯´æ˜ã€‚
+		5 å¦‚å‘ç°BUGæˆ–æœ‰ä¼˜åŒ–ï¼Œæ¬¢è¿å‘å¸ƒæ›´æ–°ã€‚è¯·è”ç³»ï¼šcode@wujique.com
+		6 ä½¿ç”¨æœ¬æºç åˆ™ç›¸å½“äºè®¤åŒæœ¬ç‰ˆæƒè¯´æ˜ã€‚
+		7 å¦‚ä¾µçŠ¯ä½ çš„æƒåˆ©ï¼Œè¯·è”ç³»ï¼šcode@wujique.com
+		8 ä¸€åˆ‡è§£é‡Šæƒå½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
 */
 #include "mcu.h"
 #include "log.h"
@@ -36,7 +36,7 @@
 #define MCU_SPI_WAIT_TIMEOUT 0x40000
 
 /*
-	ÏàÎ»ÅäÖÃ£¬Ò»¹²ËÄÖÖÄ£Ê½
+	ç›¸ä½é…ç½®ï¼Œä¸€å…±å››ç§æ¨¡å¼
 */
 typedef struct
 {
@@ -55,9 +55,9 @@ const _strSpiModeSet SpiModeSet[SPI_MODE_MAX]=
 
 /**
  *@brief:      mcu_spi_init
- *@details:    ³õÊ¼»¯SPI¿ØÖÆÆ÷£¬ÔİÊ±Ö§³ÖSPI3
+ *@details:    åˆå§‹åŒ–SPIæ§åˆ¶å™¨ï¼Œæš‚æ—¶æ”¯æŒSPI3
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 mcu_hspi_init(const DevSpi *dev)
@@ -74,7 +74,7 @@ s32 mcu_hspi_init(const DevSpi *dev)
 		return -1;
 	}
 
-	/*ÅäÖÃIO¿Ú*/
+	/*é…ç½®IOå£*/
     GPIO_InitStructure.GPIO_Pin = dev->clkpin;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
@@ -95,11 +95,11 @@ s32 mcu_hspi_init(const DevSpi *dev)
 
 /**
  *@brief:      mcu_spi_open
- *@details:       ´ò¿ªSPI
- *@param[in]   SPI_DEV dev  £ºSPIºÅ
-               u8 mode      Ä£Ê½
-               u16 pre      Ô¤·ÖÆµ
- *@param[out]  ÎŞ
+ *@details:       æ‰“å¼€SPI
+ *@param[in]   SPI_DEV dev  ï¼šSPIå·
+               u8 mode      æ¨¡å¼
+               u16 pre      é¢„åˆ†é¢‘
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 mcu_hspi_open(DevSpiNode *node, SPI_MODE mode, u16 pre)
@@ -121,15 +121,15 @@ s32 mcu_hspi_open(DevSpiNode *node, SPI_MODE mode, u16 pre)
 	SPI_I2S_DeInit(SPIC);
 	SPI_Cmd(SPIC, DISABLE); 
 	
-    SPI_InitStruct.SPI_Direction = SPI_Direction_2Lines_FullDuplex;//---Ë«ÏßË«ÏòÈ«Ë«¹¤
-    SPI_InitStruct.SPI_Mode = SPI_Mode_Master;//---Ö÷Ä£Ê½
-    SPI_InitStruct.SPI_DataSize = SPI_DataSize_8b;//---8bitÖ¡½á¹¹
+    SPI_InitStruct.SPI_Direction = SPI_Direction_2Lines_FullDuplex;//---åŒçº¿åŒå‘å…¨åŒå·¥
+    SPI_InitStruct.SPI_Mode = SPI_Mode_Master;//---ä¸»æ¨¡å¼
+    SPI_InitStruct.SPI_DataSize = SPI_DataSize_8b;//---8bitå¸§ç»“æ„
     SPI_InitStruct.SPI_CPOL = SpiModeSet[mode].CPOL;
     SPI_InitStruct.SPI_CPHA = SpiModeSet[mode].CPHA;
-    SPI_InitStruct.SPI_NSS = SPI_NSS_Soft; //---SPI_NSS_Hard; Æ¬Ñ¡ÓÉÓ²¼ş¹ÜÀí£¬SPI¿ØÖÆÆ÷²»¹ÜÀí
-    SPI_InitStruct.SPI_BaudRatePrescaler = pre;  //---Ô¤·ÖÆµ
-    SPI_InitStruct.SPI_FirstBit = SPI_FirstBit_MSB;//---Êı¾İ´«Êä´Ó MSB Î»¿ªÊ¼
-    SPI_InitStruct.SPI_CRCPolynomial = 7;//---CRC Öµ¼ÆËãµÄ¶àÏîÊ½
+    SPI_InitStruct.SPI_NSS = SPI_NSS_Soft; //---SPI_NSS_Hard; ç‰‡é€‰ç”±ç¡¬ä»¶ç®¡ç†ï¼ŒSPIæ§åˆ¶å™¨ä¸ç®¡ç†
+    SPI_InitStruct.SPI_BaudRatePrescaler = pre;  //---é¢„åˆ†é¢‘
+    SPI_InitStruct.SPI_FirstBit = SPI_FirstBit_MSB;//---æ•°æ®ä¼ è¾“ä» MSB ä½å¼€å§‹
+    SPI_InitStruct.SPI_CRCPolynomial = 7;//---CRC å€¼è®¡ç®—çš„å¤šé¡¹å¼
 
     SPI_Init(SPIC, &SPI_InitStruct);
 
@@ -141,9 +141,9 @@ s32 mcu_hspi_open(DevSpiNode *node, SPI_MODE mode, u16 pre)
 }
 /**
  *@brief:      mcu_spi_close
- *@details:    ¹Ø±ÕSPI ¿ØÖÆÆ÷
+ *@details:    å…³é—­SPI æ§åˆ¶å™¨
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 mcu_hspi_close(DevSpiNode *node)
@@ -162,11 +162,11 @@ s32 mcu_hspi_close(DevSpiNode *node)
 }
 /**
  *@brief:      mcu_spi_transfer
- *@details:    SPI ´«Êä
+ *@details:    SPI ä¼ è¾“
  *@param[in]   u8 *snd  
                u8 *rsv  
                s32 len  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 mcu_hspi_transfer(DevSpiNode *node, u8 *snd, u8 *rsv, s32 len)
@@ -192,7 +192,7 @@ s32 mcu_hspi_transfer(DevSpiNode *node, u8 *snd, u8 *rsv, s32 len)
     if(strcmp(node->dev.pnode.name, "SPI3") == 0) {
 		SPIC = SPI3;
     }
-    /* Ã¦µÈ´ı */
+    /* å¿™ç­‰å¾… */
     time_out = 0;
     while(SPI_I2S_GetFlagStatus(SPIC, SPI_I2S_FLAG_BSY) == SET) {
         if(time_out++ > MCU_SPI_WAIT_TIMEOUT) {
@@ -200,7 +200,7 @@ s32 mcu_hspi_transfer(DevSpiNode *node, u8 *snd, u8 *rsv, s32 len)
         }
     }
 
-    /* Çå¿ÕSPI»º³åÊı¾İ£¬·ÀÖ¹¶Áµ½ÉÏ´Î´«ÊäÒÅÁôµÄÊı¾İ */
+    /* æ¸…ç©ºSPIç¼“å†²æ•°æ®ï¼Œé˜²æ­¢è¯»åˆ°ä¸Šæ¬¡ä¼ è¾“é—ç•™çš„æ•°æ® */
     time_out = 0;
     while(SPI_I2S_GetFlagStatus(SPIC, SPI_I2S_FLAG_RXNE) == SET) {
         SPI_I2S_ReceiveData(SPIC);
@@ -209,10 +209,10 @@ s32 mcu_hspi_transfer(DevSpiNode *node, u8 *snd, u8 *rsv, s32 len)
         }
     }
 
-    /* ¿ªÊ¼´«Êä */
+    /* å¼€å§‹ä¼ è¾“ */
     for (i=0; i < len; ) {
-        // Ğ´Êı¾İ
-        /*·¢ËÍÖ¸ÕëÎªNULL£¬ËµÃ÷½ö½öÊÇ¶ÁÊı¾İ */
+        // å†™æ•°æ®
+        /*å‘é€æŒ‡é’ˆä¸ºNULLï¼Œè¯´æ˜ä»…ä»…æ˜¯è¯»æ•°æ® */
         if (snd == NULL) {
             SPI_I2S_SendData(SPIC, 0xff);
         } else {
@@ -221,7 +221,7 @@ s32 mcu_hspi_transfer(DevSpiNode *node, u8 *snd, u8 *rsv, s32 len)
         }
         i++;
         
-        // µÈ´ı½ÓÊÕ½áÊø
+        // ç­‰å¾…æ¥æ”¶ç»“æŸ
         time_out = 0;
         while (SPI_I2S_GetFlagStatus(SPIC, SPI_I2S_FLAG_RXNE) == RESET) {
             time_out++;
@@ -229,8 +229,8 @@ s32 mcu_hspi_transfer(DevSpiNode *node, u8 *snd, u8 *rsv, s32 len)
                 return -1;
             }    
         }
-        // ¶ÁÊı¾İ
-        /* ½ÓÊÕÖ¸ÕëÎª¿Õ£¬¶ÁÊı¾İºó¶ªÆú */
+        // è¯»æ•°æ®
+        /* æ¥æ”¶æŒ‡é’ˆä¸ºç©ºï¼Œè¯»æ•°æ®åä¸¢å¼ƒ */
         if (rsv == NULL) {
             SPI_I2S_ReceiveData(SPIC);
         } else {

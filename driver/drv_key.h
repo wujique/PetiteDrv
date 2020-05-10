@@ -8,7 +8,7 @@ extern s32 dev_key_read(u8 *key, u8 len);
 extern s32 dev_key_open(void);
 extern s32 dev_key_close(void);
 
-#define DEV_KEY_PR_MASK	(0X80)/*°´¼ü°´ÏÂËÉ¿ª±êÖ¾*/
-#define DEV_KEY_PRESS	(0X01)/*¼üÖµ£¬Ö»ÓĞÒ»¸ö¼ü£¬Ö±½Ó¶¨Òå*/
+#define DEV_KEY_PR_MASK	(0X80)/*æŒ‰é”®æŒ‰ä¸‹æ¾å¼€æ ‡å¿—*/
+#define DEV_KEY_PRESS	(0X01)/*é”®å€¼ï¼Œåªæœ‰ä¸€ä¸ªé”®ï¼Œç›´æ¥å®šä¹‰*/
 #define DEV_KEY_REL		(DEV_KEY_PRESS|DEV_KEY_PR_MASK)
 #endif

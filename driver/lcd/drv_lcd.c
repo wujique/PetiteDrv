@@ -1,22 +1,22 @@
 /**
  * @file            dev_lcd.c
- * @brief           LCD ÖĞ¼ä²ã
+ * @brief           LCD ä¸­é—´å±‚
  * @author          wujique
- * @date            2018Äê4ÔÂ17ÈÕ ĞÇÆÚ¶ş
- * @version         ³õ¸å
- * @par             °æÈ¨ËùÓĞ (C), 2013-2023
+ * @date            2018å¹´4æœˆ17æ—¥ æ˜ŸæœŸäºŒ
+ * @version         åˆç¨¿
+ * @par             ç‰ˆæƒæ‰€æœ‰ (C), 2013-2023
  * @par History:
- * 1.ÈÕ    ÆÚ:        2018Äê4ÔÂ17ÈÕ ĞÇÆÚ¶ş
- *   ×÷    Õß:         wujique
- *   ĞŞ¸ÄÄÚÈİ:   ´´½¨ÎÄ¼ş
- 		1 Ô´Âë¹éÎİ¼¹È¸¹¤×÷ÊÒËùÓĞ¡£
-		2 ¿ÉÒÔÓÃÓÚµÄÆäËûÉÌÒµÓÃÍ¾£¨ÅäÌ×¿ª·¢°åÏúÊÛ³ıÍâ£©£¬²»ĞëÊÚÈ¨¡£
-		3 Îİ¼¹È¸¹¤×÷ÊÒ²»¶Ô´úÂë¹¦ÄÜ×öÈÎºÎ±£Ö¤£¬ÇëÊ¹ÓÃÕß×ÔĞĞ²âÊÔ£¬ºó¹û×Ô¸º¡£
-		4 ¿ÉËæÒâĞŞ¸ÄÔ´Âë²¢·Ö·¢£¬µ«²»¿ÉÖ±½ÓÏúÊÛ±¾´úÂë»ñÀû£¬²¢ÇÒÇë±£ÁôWUJIQUE°æÈ¨ËµÃ÷¡£
-		5 Èç·¢ÏÖBUG»òÓĞÓÅ»¯£¬»¶Ó­·¢²¼¸üĞÂ¡£ÇëÁªÏµ£ºcode@wujique.com
-		6 Ê¹ÓÃ±¾Ô´ÂëÔòÏàµ±ÓÚÈÏÍ¬±¾°æÈ¨ËµÃ÷¡£
-		7 ÈçÇÖ·¸ÄãµÄÈ¨Àû£¬ÇëÁªÏµ£ºcode@wujique.com
-		8 Ò»ÇĞ½âÊÍÈ¨¹éÎİ¼¹È¸¹¤×÷ÊÒËùÓĞ¡£
+ * 1.æ—¥    æœŸ:        2018å¹´4æœˆ17æ—¥ æ˜ŸæœŸäºŒ
+ *   ä½œ    è€…:         wujique
+ *   ä¿®æ”¹å†…å®¹:   åˆ›å»ºæ–‡ä»¶
+ 		1 æºç å½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
+		2 å¯ä»¥ç”¨äºçš„å…¶ä»–å•†ä¸šç”¨é€”ï¼ˆé…å¥—å¼€å‘æ¿é”€å”®é™¤å¤–ï¼‰ï¼Œä¸é¡»æˆæƒã€‚
+		3 å±‹è„Šé›€å·¥ä½œå®¤ä¸å¯¹ä»£ç åŠŸèƒ½åšä»»ä½•ä¿è¯ï¼Œè¯·ä½¿ç”¨è€…è‡ªè¡Œæµ‹è¯•ï¼Œåæœè‡ªè´Ÿã€‚
+		4 å¯éšæ„ä¿®æ”¹æºç å¹¶åˆ†å‘ï¼Œä½†ä¸å¯ç›´æ¥é”€å”®æœ¬ä»£ç è·åˆ©ï¼Œå¹¶ä¸”è¯·ä¿ç•™WUJIQUEç‰ˆæƒè¯´æ˜ã€‚
+		5 å¦‚å‘ç°BUGæˆ–æœ‰ä¼˜åŒ–ï¼Œæ¬¢è¿å‘å¸ƒæ›´æ–°ã€‚è¯·è”ç³»ï¼šcode@wujique.com
+		6 ä½¿ç”¨æœ¬æºç åˆ™ç›¸å½“äºè®¤åŒæœ¬ç‰ˆæƒè¯´æ˜ã€‚
+		7 å¦‚ä¾µçŠ¯ä½ çš„æƒåˆ©ï¼Œè¯·è”ç³»ï¼šcode@wujique.com
+		8 ä¸€åˆ‡è§£é‡Šæƒå½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
 */
 #include "mcu.h"
 #include "petite_config.h"
@@ -52,7 +52,7 @@
 u16 PenColor = BLACK;
 u16 BackColor = BLUE;
 
-/*	LCDÇı¶¯ÁĞ±í */
+/*	LCDé©±åŠ¨åˆ—è¡¨ */
 _lcd_drv *LcdDrvList[] = {
 				/* tft lcd ILI9341 */
 				#if( LCD_DRIVER_9341 == 1 )
@@ -70,38 +70,38 @@ _lcd_drv *LcdDrvList[] = {
 				#if( LCD_DRIVER_SSD1615 == 1 )
 					&OledLcdSSD1615rv,
 				#endif
-				/* tft lcd, ²»ÊÇ²¢¿Ú£¬SPI »òI2C »ò8BIT  */
+				/* tft lcd, ä¸æ˜¯å¹¶å£ï¼ŒSPI æˆ–I2C æˆ–8BIT  */
 				#if( LCD_DRIVER_9341_8BIT == 1 )
 					&TftLcdILI9341_8_Drv,
 				#endif
-				/* 1.44´ç ÖĞ¾°Ô° tft lcd  */
+				/* 1.44å¯¸ ä¸­æ™¯å›­ tft lcd  */
 				#if( LCD_DRIVER_7735 == 1 )
 					&TftLcdST7735R_Drv,
 				#endif
-				/* 1.3´ç£¬IPS£¬ÖĞ¾°Ô°£¬Ö»ÓĞSCL&SDAµÄSPI½Ó¿ÚLCD*/
+				/* 1.3å¯¸ï¼ŒIPSï¼Œä¸­æ™¯å›­ï¼Œåªæœ‰SCL&SDAçš„SPIæ¥å£LCD*/
 				#if( LCD_DRIVER_7789 == 1 )
 					&TftLcdST7789_Drv,
 				#endif
-				/*91874 ´óÁ¬¼ÑÏÔ 2.7´çµç×ÓÖ½ ÈıÉ«ÆÁ*/
+				/*91874 å¤§è¿ä½³æ˜¾ 2.7å¯¸ç”µå­çº¸ ä¸‰è‰²å±*/
 				#if( LCD_DRIVER_91874 == 1 )
 					&TftLcdIL91874Drv,
 				#endif
-				/*3820 ´óÁ¬¼ÑÏÔ GDEH154D27*/
+				/*3820 å¤§è¿ä½³æ˜¾ GDEH154D27*/
 				#if( LCD_DRIVER_3820 == 1 )	
 					&TftLcdIL3820Drv,
 				#endif
 
-				/*È«¶¯ NT35510 */
+				/*å…¨åŠ¨ NT35510 */
 				#if( LCD_DRIVER_NT35510 == 1 )	
 					&TftLcdNT35510Drv,
 				#endif
-				/* ºÃ¾ØÈó R61408*/
+				/* å¥½çŸ©æ¶¦ R61408*/
 				#if( LCD_DRIVER_R61408 == 1 )	
 					&TftLcdR61408Drv,
 				#endif
 					
 };
-/*	¿É×Ô¶¯Ê¶±ğIDµÄÇı¶¯*/
+/*	å¯è‡ªåŠ¨è¯†åˆ«IDçš„é©±åŠ¨*/
 _lcd_drv *LcdProbDrvList[] = {
 				#if( LCD_DRIVER_9341 == 1 )
 					&TftLcdILI9341Drv,
@@ -110,7 +110,7 @@ _lcd_drv *LcdProbDrvList[] = {
 					&TftLcdILI9325Drv,
 				#endif
 				
-				/*È«¶¯ NT35510 */
+				/*å…¨åŠ¨ NT35510 */
 				#if( LCD_DRIVER_NT35510 == 1 )	
 					&TftLcdNT35510Drv,
 				#endif
@@ -121,9 +121,9 @@ _lcd_drv *LcdProbDrvList[] = {
 };
 /**
  *@brief:      dev_lcd_finddrv
- *@details:    ¸ù¾İID²éÕÒÉè±¸Çı¶¯
+ *@details:    æ ¹æ®IDæŸ¥æ‰¾è®¾å¤‡é©±åŠ¨
  *@param[in]   u16 id  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     _lcd_drv
  */
 static _lcd_drv *dev_lcd_finddrv(u16 id)
@@ -144,7 +144,7 @@ static _lcd_drv *dev_lcd_finddrv(u16 id)
 struct list_head DevLcdRoot = {&DevLcdRoot, &DevLcdRoot};	
 /**
  *@brief:      dev_lcd_register
- *@details:    ×¢²áLCDÉè±¸
+ *@details:    æ³¨å†ŒLCDè®¾å¤‡
  *@param[in]   
  *@param[out]  
  *@retval:     
@@ -158,7 +158,7 @@ s32 dev_lcd_register(const DevLcd *dev)
 	wjq_log(LOG_INFO, "[register] lcd :%s, base on:%s!\r\n", dev->pnode.name, dev->buslcd);
 
 	/*
-		ÏÈÒª²éÑ¯µ±Ç°£¬·ÀÖ¹ÖØÃû
+		å…ˆè¦æŸ¥è¯¢å½“å‰ï¼Œé˜²æ­¢é‡å
 	*/
 	listp = DevLcdRoot.next;
 	while(1) {
@@ -180,20 +180,20 @@ s32 dev_lcd_register(const DevLcd *dev)
 	}
 
 	/* 
-		ÉêÇëÒ»¸ö½Úµã¿Õ¼ä 
+		ç”³è¯·ä¸€ä¸ªèŠ‚ç‚¹ç©ºé—´ 
 	*/
 	plcdnode = (DevLcdNode *)wjq_malloc(sizeof(DevLcdNode));
 	list_add(&(plcdnode->list), &DevLcdRoot);
 	
-	/*¸´ÖÆÉè±¸ĞÅÏ¢*/
+	/*å¤åˆ¶è®¾å¤‡ä¿¡æ¯*/
 	memcpy((u8 *)&plcdnode->dev, (u8 *)dev, sizeof(DevLcd));
 	plcdnode->gd = -1;
 
-	/* ³õÊ¼»¯ */
+	/* åˆå§‹åŒ– */
 	if (dev->id == NULL) {
 		LCD_DEBUG(LOG_DEBUG, "prob LCD id\r\n");
 
-		/*ÕÒµ½Çı¶¯¸ú¹æ¸ñºó£¬³õÊ¼»¯*/
+		/*æ‰¾åˆ°é©±åŠ¨è·Ÿè§„æ ¼åï¼Œåˆå§‹åŒ–*/
 		u8 j = 0;
 
 		while(1) {
@@ -215,7 +215,7 @@ s32 dev_lcd_register(const DevLcd *dev)
 		LCD_DEBUG(LOG_DEBUG, "find lcd drv, id:%04x...", dev->id);
 		plcdnode->drv = dev_lcd_finddrv(dev->id);
 		if (plcdnode->drv != NULL) {
-			/*ÕÒµ½Çı¶¯¸ú¹æ¸ñºó£¬³õÊ¼»¯*/
+			/*æ‰¾åˆ°é©±åŠ¨è·Ÿè§„æ ¼åï¼Œåˆå§‹åŒ–*/
 			LCD_DEBUG(LOG_DEBUG, "suc!\r\n");
 			ret = plcdnode->drv->init(plcdnode);
 		} else {
@@ -233,7 +233,7 @@ s32 dev_lcd_register(const DevLcd *dev)
 		
 		dev_lcd_setdir(plcdnode, W_LCD, L2R_U2D);
 		
-		plcdnode->drv->onoff((plcdnode),1);//´ò¿ªÏÔÊ¾
+		plcdnode->drv->onoff((plcdnode),1);//æ‰“å¼€æ˜¾ç¤º
 		
 		plcdnode->drv->color_fill(plcdnode, 0, plcdnode->width, 0, plcdnode->height, BLUE);
 		plcdnode->drv->update(plcdnode);
@@ -251,9 +251,9 @@ s32 dev_lcd_register(const DevLcd *dev)
 
 /**
  *@brief:      dev_lcd_open
- *@details:    ´ò¿ªLCD
+ *@details:    æ‰“å¼€LCD
  *@param[in]   char *name  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     DevLcd
  */
 DevLcdNode *dev_lcd_open(char *name)
@@ -293,9 +293,9 @@ DevLcdNode *dev_lcd_open(char *name)
 
 /**
  *@brief:      dev_lcd_close
- *@details:    ¹Ø±ÕLCD
+ *@details:    å…³é—­LCD
  *@param[in]   DevLcd *dev  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_lcd_close(DevLcdNode *node)
@@ -307,10 +307,10 @@ s32 dev_lcd_close(DevLcdNode *node)
 	}
 }
 /*
-×ø±ê-1 ÊÇ×ø±êÔ­µãµÄ±ä»¯£¬
-ÔÚAPP²ã£¬Ô­µãÊÇ£¨1£¬1£©£¬ÕâÑù¸ü·ûºÏÆ½³£ÈË¡£
+åæ ‡-1 æ˜¯åæ ‡åŸç‚¹çš„å˜åŒ–ï¼Œ
+åœ¨APPå±‚ï¼ŒåŸç‚¹æ˜¯ï¼ˆ1ï¼Œ1ï¼‰ï¼Œè¿™æ ·æ›´ç¬¦åˆå¹³å¸¸äººã€‚
 
-µ½Çı¶¯¾Í»»Îª(0,0)£¬ÎŞÂÛ³ÌĞò»¹ÊÇ¿ØÖÆÆ÷ÏÔ´æ£¬¶¼ÊÇ´Ó£¨0£¬0£©¿ªÊ¼
+åˆ°é©±åŠ¨å°±æ¢ä¸º(0,0)ï¼Œæ— è®ºç¨‹åºè¿˜æ˜¯æ§åˆ¶å™¨æ˜¾å­˜ï¼Œéƒ½æ˜¯ä»ï¼ˆ0ï¼Œ0ï¼‰å¼€å§‹
 
 */
 s32 dev_lcd_drawpoint(DevLcdNode *lcd, u16 x, u16 y, u16 color)
@@ -368,10 +368,10 @@ s32 dev_lcd_update(DevLcdNode *lcd)
 }
 /**
  *@brief:      dev_lcd_setdir
- *@details:    ÉèÖÃºáÆÁ»òÊúÆÁ£¬É¨Ãè·½Ïò
- *@param[in]   u8 dir       0 ÊúÆÁ1ºáÆÁ
-               u8 scan_dir  ²Î¿¼ºê¶¨ÒåL2R_U2D       
- *@param[out]  ÎŞ
+ *@details:    è®¾ç½®æ¨ªå±æˆ–ç«–å±ï¼Œæ‰«ææ–¹å‘
+ *@param[in]   u8 dir       0 ç«–å±1æ¨ªå±
+               u8 scan_dir  å‚è€ƒå®å®šä¹‰L2R_U2D       
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_lcd_setdir(DevLcdNode *node, u8 dir, u8 scan_dir)
@@ -381,7 +381,7 @@ s32 dev_lcd_setdir(DevLcdNode *node, u8 dir, u8 scan_dir)
 
 	if (node == NULL) return -1;
 
-	//ÇĞ»»ÆÁÄ»·½Ïò	
+	//åˆ‡æ¢å±å¹•æ–¹å‘	
 	if (dir != node->dir) {
 		
 		node->dir = node->dir^0x01;
@@ -391,10 +391,10 @@ s32 dev_lcd_setdir(DevLcdNode *node, u8 dir, u8 scan_dir)
 		LCD_DEBUG(LOG_DEBUG, "set dir w:%d, h:%d\r\n", node->width, node->height);
 	}
 	
-	//ºáÆÁ£¬É¨Ãè·½ÏòÓ³Éä×ª»»
+	//æ¨ªå±ï¼Œæ‰«ææ–¹å‘æ˜ å°„è½¬æ¢
 	if(node->dir == W_LCD) {
 		/*
-			ºáÆÁ	 ÊúÆÁ
+			æ¨ªå±	 ç«–å±
 			LR----UD
 			RL----DU
 			UD----RL
@@ -426,20 +426,20 @@ s32 dev_lcd_setdir(DevLcdNode *node, u8 dir, u8 scan_dir)
 
 /* 
 
-´Ótslib¿½±´Ò»Ğ©ÏÔÊ¾º¯Êıµ½ÕâÀï
-ÕâĞ©º¯Êı¿ÉÒÔ¹éÎªGUI
+ä»tslibæ‹·è´ä¸€äº›æ˜¾ç¤ºå‡½æ•°åˆ°è¿™é‡Œ
+è¿™äº›å‡½æ•°å¯ä»¥å½’ä¸ºGUI
 */
 #include "font.h"
 
 /**
  *@brief:      line
- *@details:    »­Ò»ÌõÏß
+ *@details:    ç”»ä¸€æ¡çº¿
  *@param[in]   int x1           
                int y1           
                int x2           
                int y2           
                unsigned colidx  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 void line (DevLcdNode *lcd, int x1, int y1, int x2, int y2, unsigned colidx)
@@ -483,11 +483,11 @@ void line (DevLcdNode *lcd, int x1, int y1, int x2, int y2, unsigned colidx)
 
 /**
  *@brief:     put_cross
- *@details:   »­Ê®×Ö
+ *@details:   ç”»åå­—
  *@param[in]  int x            
               int y            
               unsigned colidx  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 void put_cross(DevLcdNode *lcd, int x, int y, unsigned colidx)
@@ -511,12 +511,12 @@ void put_cross(DevLcdNode *lcd, int x, int y, unsigned colidx)
 }
 /**
  *@brief:      put_char
- *@details:    ÏÔÊ¾Ò»¸öÓ¢ÎÄ
+ *@details:    æ˜¾ç¤ºä¸€ä¸ªè‹±æ–‡
  *@param[in]   int x       
                int y       
                int c       
                int colidx  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 void put_char(DevLcdNode *lcd, int x, int y, int c, int colidx)
@@ -538,12 +538,12 @@ void put_char(DevLcdNode *lcd, int x, int y, int c, int colidx)
 }
 /**
  *@brief:      put_string
- *@details:    ÏÔÊ¾Ò»¸ö×Ö·û´®
+ *@details:    æ˜¾ç¤ºä¸€ä¸ªå­—ç¬¦ä¸²
  *@param[in]   int x            
                int y            
                char *s          
                unsigned colidx  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 void put_string(DevLcdNode *lcd, int x, int y, char *s, unsigned colidx)
@@ -557,12 +557,12 @@ void put_string(DevLcdNode *lcd, int x, int y, char *s, unsigned colidx)
 }
 /**
  *@brief:      put_string_center
- *@details:    ¾ÓÖĞÏÔÊ¾Ò»¸ö×Ö·û´®
+ *@details:    å±…ä¸­æ˜¾ç¤ºä¸€ä¸ªå­—ç¬¦ä¸²
  *@param[in]   int x            
                int y            
                char *s          
                unsigned colidx  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 void put_string_center(DevLcdNode *lcd, int x, int y, char *s, unsigned colidx)
@@ -577,13 +577,13 @@ void put_string_center(DevLcdNode *lcd, int x, int y, char *s, unsigned colidx)
 
 /**
  *@brief:      rect
- *@details:    »­Ò»¸ö¾ØĞÎ¿ò
+ *@details:    ç”»ä¸€ä¸ªçŸ©å½¢æ¡†
  *@param[in]   int x1           
                int y1           
                int x2           
                int y2           
                unsigned colidx  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 void rect (DevLcdNode *lcd, int x1, int y1, int x2, int y2, unsigned colidx)
@@ -598,57 +598,57 @@ void rect (DevLcdNode *lcd, int x1, int y1, int x2, int y2, unsigned colidx)
 
 /**
  *@brief:      dev_lcd_put_string
- *@details:    ÏÔÊ¾×Ö·û´®£¬Ö§³ÖÖĞÎÄ
- *@param[in]   ÎŞ
- *@param[out]  ÎŞ
+ *@details:    æ˜¾ç¤ºå­—ç¬¦ä¸²ï¼Œæ”¯æŒä¸­æ–‡
+ *@param[in]   æ— 
+ *@param[out]  æ— 
  *@retval:     	
  */
 s32 dev_lcd_put_string(DevLcdNode *lcd, char *font, int x, int y, char *s, unsigned colidx)
 {
 	u16 slen;
 	u16 xlen,ylen;
-	u16 *framebuff;//Ñùµã»º³å£¬°´ÕÕL2R_U2D¸ñÊ½Ìî³ä
-	u8 *dotbuf;//×Ö·ûµãÕó»º³å
+	u16 *framebuff;//æ ·ç‚¹ç¼“å†²ï¼ŒæŒ‰ç…§L2R_U2Dæ ¼å¼å¡«å……
+	u8 *dotbuf;//å­—ç¬¦ç‚¹é˜µç¼“å†²
 	s32 res;
 	u16 sidx;
 	u16 i,j;
-	u32 xbase;//ÏÔÊ¾ÔÚxÖáÆ«ÒÆÁ¿
+	u32 xbase;//æ˜¾ç¤ºåœ¨xè½´åç§»é‡
 	u16 fontw,fonth;
 	
 	if (lcd == NULL) return -1;
 	
-	/* Í¨¹ıË¢Ò»Õû¿é£¬Ìá¸ßÏÔÊ¾ËÙ¶È */
+	/* é€šè¿‡åˆ·ä¸€æ•´å—ï¼Œæé«˜æ˜¾ç¤ºé€Ÿåº¦ */
 	slen = strlen(s);
 	//uart_printf("str len:%d\r\n", slen);
 
 	font_get_hw(font, &fonth, &fontw);
 	/*
-		¸ù¾İ×Ö·û´®³¤¶È¼ÆËãË¢ĞÂÇøÓò³¤¿í
+		æ ¹æ®å­—ç¬¦ä¸²é•¿åº¦è®¡ç®—åˆ·æ–°åŒºåŸŸé•¿å®½
 	*/
 	xlen = slen*fontw;
 	ylen = fonth;
 
-	framebuff = (u16*)wjq_malloc(xlen*ylen*sizeof(u16));//Ñùµã»º³å
-	dotbuf = (u8*)wjq_malloc(32);//Òª¸ÄÎª¸ù¾İ×Ö¿âÀàĞÍÉêÇë
+	framebuff = (u16*)wjq_malloc(xlen*ylen*sizeof(u16));//æ ·ç‚¹ç¼“å†²
+	dotbuf = (u8*)wjq_malloc(32);//è¦æ”¹ä¸ºæ ¹æ®å­—åº“ç±»å‹ç”³è¯·
 	sidx = 0;
 
-	/*»ñÈ¡µãÕó£¬²¢×ª»¯ÎªLCDÏñËØ*/
+	/*è·å–ç‚¹é˜µï¼Œå¹¶è½¬åŒ–ä¸ºLCDåƒç´ */
 	while(1) {
-		//Ó¢ÎÄ×ÖÄ¸
+		//è‹±æ–‡å­—æ¯
 		if (*(s+sidx) < 0x81) {
 			//uart_printf("eng\r\n");
 			u8 ch;
-			/*»ñÈ¡µãÕó*/
+			/*è·å–ç‚¹é˜µ*/
 			ch = *(s+sidx);
 			
 			res = font_get_asc(font, &ch, dotbuf);
 			//PrintFormat(dotbuf, 16);
-			/*ascÊÇºá¿â*/
+			/*ascæ˜¯æ¨ªåº“*/
 			for (j=0;j<fonth;j++) {
 
-				xbase = xlen*j + sidx*fontw;//µ±Ç°×Ö·ûXÖáÆ«ÒÆÁ¿
+				xbase = xlen*j + sidx*fontw;//å½“å‰å­—ç¬¦Xè½´åç§»é‡
 				for (i=0;i<fontw;i++) {
-					/*ÔİÊ±Ö»´¦Àí6*12£¬8*16µÄASC£¬Ã¿Ò»ÁĞ1¸ö×Ö½Ú*/
+					/*æš‚æ—¶åªå¤„ç†6*12ï¼Œ8*16çš„ASCï¼Œæ¯ä¸€åˆ—1ä¸ªå­—èŠ‚*/
 					if ((dotbuf[j*1+i/8]&(0x80>>(i%8)))!= 0) {
 						//uart_printf("* ");
 						framebuff[xbase + i] = colidx;
@@ -661,16 +661,16 @@ s32 dev_lcd_put_string(DevLcdNode *lcd, char *font, int x, int y, char *s, unsig
 			}	
 			
 			sidx++;
-		}		else {//ºº×Ö
+		}		else {//æ±‰å­—
 			//uart_printf("ch\r\n");
-			res = font_get_hz(font, s+sidx, dotbuf);//´ÓSD¿¨¶ÁÈ¡Ò»¸ö1616ºº×ÖµÄµãÕóÒª1ms
+			res = font_get_hz(font, s+sidx, dotbuf);//ä»SDå¡è¯»å–ä¸€ä¸ª1616æ±‰å­—çš„ç‚¹é˜µè¦1ms
 			//PrintFormat(dotbuf, 32);
 
-			/*½ö½öÖ§³Ö×İ¿â£¬È¡Ä£·½Ê½2,16*16*/
+			/*ä»…ä»…æ”¯æŒçºµåº“ï¼Œå–æ¨¡æ–¹å¼2,16*16*/
 			for (j=0; j<fonth; j++) {
-				xbase = xlen*j + sidx*fontw;//µ±Ç°×Ö·ûXÖáÆ«ÒÆÁ¿
-				for (i=0;i<(fontw*2);i++) {//ºº×ÓÊÇASCÁ½±¶¿í
-					/*ÔİÊ±Ö»×ö1212£¬1616£¬Ã¿Ò»ÁĞ2¸ö×Ö½ÚÊı¾İ*/
+				xbase = xlen*j + sidx*fontw;//å½“å‰å­—ç¬¦Xè½´åç§»é‡
+				for (i=0;i<(fontw*2);i++) {//æ±‰å­æ˜¯ASCä¸¤å€å®½
+					/*æš‚æ—¶åªåš1212ï¼Œ1616ï¼Œæ¯ä¸€åˆ—2ä¸ªå­—èŠ‚æ•°æ®*/
 					if ((dotbuf[i*2+j/8]&(0x80>>(j%8)))!= 0) {
 						//uart_printf("* ");
 						framebuff[xbase + i] = colidx;
@@ -693,15 +693,15 @@ s32 dev_lcd_put_string(DevLcdNode *lcd, char *font, int x, int y, char *s, unsig
 
 
 	if ( y + ylen > lcd->height) {
-		/*ÏÔÊ¾³¬³öÆÁÄ»*/
-		ylen = lcd->height - y+1;//¼ÙÉèheight = 240,y = 240, Ò²¾ÍÒâÎ¶×ÅÖ»ÏÔÊ¾Ò»ĞĞ
+		/*æ˜¾ç¤ºè¶…å‡ºå±å¹•*/
+		ylen = lcd->height - y+1;//å‡è®¾height = 240,y = 240, ä¹Ÿå°±æ„å‘³ç€åªæ˜¾ç¤ºä¸€è¡Œ
 	}
 	
 	if (x + xlen >= lcd->width) {
-		/*ÏÔÊ¾³¬³öÆÁÄ»¿í¶È*/
+		/*æ˜¾ç¤ºè¶…å‡ºå±å¹•å®½åº¦*/
 		i = lcd->width - x + 1;
 		
-		/*µ÷ÕûÊı¾İ*/
+		/*è°ƒæ•´æ•°æ®*/
 		j = 1;
 		while(1) {
 			if (j >= ylen) break;
@@ -721,36 +721,36 @@ s32 dev_lcd_put_string(DevLcdNode *lcd, char *font, int x, int y, char *s, unsig
 extern void Delay(__IO uint32_t nTime);
 
 #if 1
-typedef struct tagBITMAPFILEHEADER  //ÎÄ¼şÍ·  14B  
+typedef struct tagBITMAPFILEHEADER  //æ–‡ä»¶å¤´  14B  
 { 
     u16  bfType;   //0x424d, "BM"
-    u32  bfSize;   //ÎÄ¼ş´óĞ¡£¬°üº¬ÎÄ¼şÍ·
-    u16  bfReserved1;   //±£Áô×Ö½Ú
-    u16  bfReserved2;   //±£Áô×Ö½Ú
-    u32  bfOffBits;   	//´ÓÎÄ¼şÍ·µ½Êµ¼ÊÎ»Í¼Êı¾İµÄÆ«ÒÆ
+    u32  bfSize;   //æ–‡ä»¶å¤§å°ï¼ŒåŒ…å«æ–‡ä»¶å¤´
+    u16  bfReserved1;   //ä¿ç•™å­—èŠ‚
+    u16  bfReserved2;   //ä¿ç•™å­—èŠ‚
+    u32  bfOffBits;   	//ä»æ–‡ä»¶å¤´åˆ°å®é™…ä½å›¾æ•°æ®çš„åç§»
 } BITMAPFILEHEADER; 
 
-typedef struct tagBITMAPINFOHEADER  //Î»Í¼ĞÅÏ¢Í·
+typedef struct tagBITMAPINFOHEADER  //ä½å›¾ä¿¡æ¯å¤´
 { 
-    u32 biSize;   //±¾½á¹¹³¤¶È£¬Ò²¼´ÊÇ40
-    s32 biWidth;  //Í¼Ïñ¿í¶È   
-    s32 biHeight; //Í¼Ïñ¸ß¶È    
+    u32 biSize;   //æœ¬ç»“æ„é•¿åº¦ï¼Œä¹Ÿå³æ˜¯40
+    s32 biWidth;  //å›¾åƒå®½åº¦   
+    s32 biHeight; //å›¾åƒé«˜åº¦    
     u16 biPlanes; //1  
-    u16 biBitCount;//1ºÚ°×¶şÉ«Í¼£¬4 16Î»É«£¬8 256É«£¬24 Õæ²ÊÉ« 
-    u32 biCompression;   //ÊÇ·ñÑ¹Ëõ
-    u32 biSizeImage;   //Êµ¼ÊÎ»Í¼Êı¾İ×Ö½ÚÊı
-    s32 biXPelsPerMeter;  //Ä¿±êÉè±¸Ë®Æ½·Ö±æÂÊ 
-    s32 biYPelsPerMeter;   //Ä¿±êÉè±¸´¹Ö±·Ö±æÂÊ
-    u32 biClrUsed;  //Í¼ÏñÊµ¼ÊÓÃµ½ÑÕÉ«Êı£¬ÈçÎª0£¬ÔòÓÃµ½µÄÑÕÉ«ÊıÎª2µÄbiBitCount´Î·½
-    u32 biClrImportant;  //Ö¸¶¨±¾Í¼ÏóÖĞÖØÒªµÄÑÕÉ«Êı£¬Èç¹û¸ÃÖµÎªÁã£¬ÔòÈÏÎªËùÓĞµÄÑÕÉ«¶¼ÊÇÖØÒªµÄ
+    u16 biBitCount;//1é»‘ç™½äºŒè‰²å›¾ï¼Œ4 16ä½è‰²ï¼Œ8 256è‰²ï¼Œ24 çœŸå½©è‰² 
+    u32 biCompression;   //æ˜¯å¦å‹ç¼©
+    u32 biSizeImage;   //å®é™…ä½å›¾æ•°æ®å­—èŠ‚æ•°
+    s32 biXPelsPerMeter;  //ç›®æ ‡è®¾å¤‡æ°´å¹³åˆ†è¾¨ç‡ 
+    s32 biYPelsPerMeter;   //ç›®æ ‡è®¾å¤‡å‚ç›´åˆ†è¾¨ç‡
+    u32 biClrUsed;  //å›¾åƒå®é™…ç”¨åˆ°é¢œè‰²æ•°ï¼Œå¦‚ä¸º0ï¼Œåˆ™ç”¨åˆ°çš„é¢œè‰²æ•°ä¸º2çš„biBitCountæ¬¡æ–¹
+    u32 biClrImportant;  //æŒ‡å®šæœ¬å›¾è±¡ä¸­é‡è¦çš„é¢œè‰²æ•°ï¼Œå¦‚æœè¯¥å€¼ä¸ºé›¶ï¼Œåˆ™è®¤ä¸ºæ‰€æœ‰çš„é¢œè‰²éƒ½æ˜¯é‡è¦çš„
 } BITMAPINFOHEADER;
 
-/*µ÷É«°åÃ¿¸öÔªËØ*/
+/*è°ƒè‰²æ¿æ¯ä¸ªå…ƒç´ */
 typedef struct tagRGBQUAD
 { 
-	u8    rgbBlue; //À¶É«·ÖÁ¿  
-	u8    rgbGreen; //ÂÌÉ«·ÖÁ¿    
-	u8    rgbRed;   //ºìÉ«·ÖÁ¿  
+	u8    rgbBlue; //è“è‰²åˆ†é‡  
+	u8    rgbGreen; //ç»¿è‰²åˆ†é‡    
+	u8    rgbRed;   //çº¢è‰²åˆ†é‡  
 	u8    rgbReserved;    
 } RGBQUAD; 
 
@@ -759,22 +759,22 @@ typedef struct tagRGBQUAD
 
 /*
 
-	4ÖÖÍ¼Æ¬£¬Ë¢ÆÁÊ±¼ä£¬Í¼Æ¬±£´æÔÚSD¿¨
+	4ç§å›¾ç‰‡ï¼Œåˆ·å±æ—¶é—´ï¼Œå›¾ç‰‡ä¿å­˜åœ¨SDå¡
 
-			FSMC	¶ÁÊı¾İ		SPI£¨ÆäÖĞ£¬½«U16²ğÎªU8£¬»¨10ms£©
+			FSMC	è¯»æ•°æ®		SPIï¼ˆå…¶ä¸­ï¼Œå°†U16æ‹†ä¸ºU8ï¼ŒèŠ±10msï¼‰
 	1bit	53ms 	30  	316
 	4bit	74	 	50		340
 	8bit	79	 	51		344
 	24bit	111	 	91		378
 
 
-	ÒªÌáËÙ£¬»¹¿ÉÒÔÓĞÏÂÃæ·½·¨£º
-	ÉêÇëË«»º³å£¬ÓÃDMA£¬Æô¶¯DMAºó£¬²»µÈ´«ÊäÍê³É£¬
-	¾Í³öÀ´×¼±¸ÏÂÒ»°üÊı¾İ£¬·¢ËÍÏÂÒ»°üÇ°£¬²éÑ¯ÉÏÒ»°üÊÇ·ñ·¢ËÍÍê³É¡£
-	ÕâÑù£¬Ô­À´µÄÊ±¼ä£º
-		Êı¾İ×¼±¸Ê±¼ä+Êı¾İ´«ÊäÊ±¼ä
-	ÏÖÔÚÊ±¼ä±äÎª£º
-		Êı¾İ×¼±¸Ê±¼ä/Êı¾İ´«ÊäÊ±¼ä£¬Á½Õß½Ï³¤µÄÎªĞèÒªÊ±¼ä¡£
+	è¦æé€Ÿï¼Œè¿˜å¯ä»¥æœ‰ä¸‹é¢æ–¹æ³•ï¼š
+	ç”³è¯·åŒç¼“å†²ï¼Œç”¨DMAï¼Œå¯åŠ¨DMAåï¼Œä¸ç­‰ä¼ è¾“å®Œæˆï¼Œ
+	å°±å‡ºæ¥å‡†å¤‡ä¸‹ä¸€åŒ…æ•°æ®ï¼Œå‘é€ä¸‹ä¸€åŒ…å‰ï¼ŒæŸ¥è¯¢ä¸Šä¸€åŒ…æ˜¯å¦å‘é€å®Œæˆã€‚
+	è¿™æ ·ï¼ŒåŸæ¥çš„æ—¶é—´ï¼š
+		æ•°æ®å‡†å¤‡æ—¶é—´+æ•°æ®ä¼ è¾“æ—¶é—´
+	ç°åœ¨æ—¶é—´å˜ä¸ºï¼š
+		æ•°æ®å‡†å¤‡æ—¶é—´/æ•°æ®ä¼ è¾“æ—¶é—´ï¼Œä¸¤è€…è¾ƒé•¿çš„ä¸ºéœ€è¦æ—¶é—´ã€‚
 */
 s32 dev_lcd_show_bmp(DevLcdNode *lcd, u16 x, u16 y, u16 xlen, u16 ylen, s8 *BmpFileName)
 {
@@ -797,7 +797,7 @@ s32 dev_lcd_show_bmp(DevLcdNode *lcd, u16 x, u16 y, u16 xlen, u16 ylen, s8 *BmpF
 	u8 c;
 	u16 *pcc;
 	u8 *pdata;
-	u8 linecnt = 20;//Ò»´Î¶Á¶àĞĞ£¬¼Ó¿ìËÙ¶È
+	u8 linecnt = 20;//ä¸€æ¬¡è¯»å¤šè¡Œï¼ŒåŠ å¿«é€Ÿåº¦
 	u8 l;
 	
 	wjq_log(LOG_DEBUG, "bmp open file:%s\r\n", BmpFileName);
@@ -848,20 +848,20 @@ s32 dev_lcd_show_bmp(DevLcdNode *lcd, u16 x, u16 y, u16 xlen, u16 ylen, s8 *BmpF
 	wjq_log(LOG_DEBUG, "bi.biClrUsed:%d\r\n", bi.biClrUsed);
 	wjq_log(LOG_DEBUG, "bi.biClrImportant:%d\r\n", bi.biClrImportant);
 
-	/*8¸öÏñËØÕ¼ÓÃÒ»¸ö×Ö½Ú£¬²»×ãÒ»¸ö×Ö½Ú²¹×ãÒ»¸ö×Ö½Ú*/
-	/*µ¥É«Í¼Æ¬ËÄ×Ö½Ú¶ÔÆë*/
+	/*8ä¸ªåƒç´ å ç”¨ä¸€ä¸ªå­—èŠ‚ï¼Œä¸è¶³ä¸€ä¸ªå­—èŠ‚è¡¥è¶³ä¸€ä¸ªå­—èŠ‚*/
+	/*å•è‰²å›¾ç‰‡å››å­—èŠ‚å¯¹é½*/
 	LineBytes = WIDTHBYTES(bi.biWidth * bi.biBitCount);
     ImgSize   = (unsigned long) LineBytes  * bi.biHeight;
 
     wjq_log(LOG_DEBUG, "bmp w:%d,h:%d, bitcount:%d, linebytes:%d\r\n", bi.biWidth, bi.biHeight, bi.biBitCount, LineBytes);
 	
 	if(bi.biClrUsed!=0)
-		NumColors=(unsigned long)bi.biClrUsed;//Èç¹û bi.biClrUsed ²»ÎªÁã£¬¾ÍÊÇ±¾Í¼ÏóÊµ¼ÊÓÃµ½µÄÑÕÉ«
+		NumColors=(unsigned long)bi.biClrUsed;//å¦‚æœ bi.biClrUsed ä¸ä¸ºé›¶ï¼Œå°±æ˜¯æœ¬å›¾è±¡å®é™…ç”¨åˆ°çš„é¢œè‰²
 	else {
 	    switch(bi.biBitCount)
 	    {
 	    case 1:
-	        NumColors=2;//ºÚ°×ÆÁÓÃµ½Á½¸öµ÷É«°å£¬Ò»¸öÊÇºÚÒ»¸öÊÇ°×
+	        NumColors=2;//é»‘ç™½å±ç”¨åˆ°ä¸¤ä¸ªè°ƒè‰²æ¿ï¼Œä¸€ä¸ªæ˜¯é»‘ä¸€ä¸ªæ˜¯ç™½
 	        break;
 	        
 	    case 4:
@@ -882,7 +882,7 @@ s32 dev_lcd_show_bmp(DevLcdNode *lcd, u16 x, u16 y, u16 xlen, u16 ylen, s8 *BmpF
 	    }
 	}
 
-	/* ¶Áµ÷É«°å */
+	/* è¯»è°ƒè‰²æ¿ */
 	if (NumColors != 0) {
 		palatte = wjq_malloc(4*NumColors);
 		rlen = vfs_read(bmpfd, (void *)palatte, 4*NumColors);
@@ -901,7 +901,7 @@ s32 dev_lcd_show_bmp(DevLcdNode *lcd, u16 x, u16 y, u16 xlen, u16 ylen, s8 *BmpF
     {
     case 1:
 		pcc = wjq_malloc(xlen*sizeof(u16));
-		//Í¼Æ¬È¡Ä£:ºáÏò,×ó¸ßÓÒµÍ
+		//å›¾ç‰‡å–æ¨¡:æ¨ªå‘,å·¦é«˜å³ä½
 		for (j=0; j<ylen;) {
         	if(j+linecnt >= ylen)
 				linecnt = ylen-j;
@@ -913,13 +913,13 @@ s32 dev_lcd_show_bmp(DevLcdNode *lcd, u16 x, u16 y, u16 xlen, u16 ylen, s8 *BmpF
 			l = 0;
 			while (l < linecnt) {
 				k = l*LineBytes;
-				#if 0//²»ÓÃ³ı·¨£¬ ²âÊÔ
+				#if 0//ä¸ç”¨é™¤æ³•ï¼Œ æµ‹è¯•
 				i = 0;				
 				while(1)
 	            {
 					/*
-            		Ò»¸ö×Ö½Ú8¸öÏñËØ£¬¸ßÎ»ÔÚÇ°
-            		µ÷É«°åÓĞ256ÖÖÑÕÉ«
+            		ä¸€ä¸ªå­—èŠ‚8ä¸ªåƒç´ ï¼Œé«˜ä½åœ¨å‰
+            		è°ƒè‰²æ¿æœ‰256ç§é¢œè‰²
 					*/
 		            c = pdata[k];
 					
@@ -945,8 +945,8 @@ s32 dev_lcd_show_bmp(DevLcdNode *lcd, u16 x, u16 y, u16 xlen, u16 ylen, s8 *BmpF
 				#else
 				for (i=0; i<xlen; i++) {
 		        	/*
-		        		Ò»¸ö×Ö½Ú8¸öÏñËØ£¬¸ßÎ»ÔÚÇ°
-		        		µ÷É«°åÓĞ256ÖÖÑÕÉ«
+		        		ä¸€ä¸ªå­—èŠ‚8ä¸ªåƒç´ ï¼Œé«˜ä½åœ¨å‰
+		        		è°ƒè‰²æ¿æœ‰256ç§é¢œè‰²
 					*/
 		            c = pdata[k+(i/8)]&(0x80>>(i%8));
 		            
@@ -969,7 +969,7 @@ s32 dev_lcd_show_bmp(DevLcdNode *lcd, u16 x, u16 y, u16 xlen, u16 ylen, s8 *BmpF
         
     case 4:
 		pcc = wjq_malloc(xlen*sizeof(u16));
-		//Í¼Æ¬È¡Ä£:ºáÏò,×ó¸ßÓÒµÍs
+		//å›¾ç‰‡å–æ¨¡:æ¨ªå‘,å·¦é«˜å³ä½s
 		for (j=0; j<ylen;) {
         	if (j+linecnt >= ylen)
 				linecnt = ylen-j;
@@ -982,11 +982,11 @@ s32 dev_lcd_show_bmp(DevLcdNode *lcd, u16 x, u16 y, u16 xlen, u16 ylen, s8 *BmpF
 			while(l < linecnt) {
 				k = l*LineBytes;
 
-				#if 0//²»ÓÃ³ı·¨,²âÊÔ
+				#if 0//ä¸ç”¨é™¤æ³•,æµ‹è¯•
 				i = 0;
 				while(1)
 	            {
-					/*4¸öbit 1¸öÏñËØ£¬Òª½øĞĞ¶ÔU16µÄ×ª»»
+					/*4ä¸ªbit 1ä¸ªåƒç´ ï¼Œè¦è¿›è¡Œå¯¹U16çš„è½¬æ¢
 					rgb565
 					#define BLUE         	 0x001F  
 					#define GREEN         	 0x07E0
@@ -1021,7 +1021,7 @@ s32 dev_lcd_show_bmp(DevLcdNode *lcd, u16 x, u16 y, u16 xlen, u16 ylen, s8 *BmpF
 	            }
 				#else
 				for (i=0; i < xlen; i++) {
-									/*4¸öbit 1¸öÏñËØ£¬Òª½øĞĞ¶ÔU16µÄ×ª»»
+									/*4ä¸ªbit 1ä¸ªåƒç´ ï¼Œè¦è¿›è¡Œå¯¹U16çš„è½¬æ¢
 					rgb565
 	#define BLUE			 0x001F  
 	#define GREEN			 0x07E0
@@ -1055,7 +1055,7 @@ s32 dev_lcd_show_bmp(DevLcdNode *lcd, u16 x, u16 y, u16 xlen, u16 ylen, s8 *BmpF
 
     case 8:
 		pcc = wjq_malloc(xlen*sizeof(u16));	
-		//Í¼Æ¬È¡Ä£:ºáÏò,×ó¸ßÓÒµÍ
+		//å›¾ç‰‡å–æ¨¡:æ¨ªå‘,å·¦é«˜å³ä½
 		for (j=0; j<ylen;) {
         	if (j+linecnt >= ylen) linecnt = ylen-j;
 			
@@ -1069,7 +1069,7 @@ s32 dev_lcd_show_bmp(DevLcdNode *lcd, u16 x, u16 y, u16 xlen, u16 ylen, s8 *BmpF
 				k = l*LineBytes;
 				
             	for (i=0; i < xlen; i++) {
-					/*1¸ö×Ö½Ú1¸öÏñËØ£¬Òª½øĞĞ¶ÔU16µÄ×ª»»
+					/*1ä¸ªå­—èŠ‚1ä¸ªåƒç´ ï¼Œè¦è¿›è¡Œå¯¹U16çš„è½¬æ¢
 					rgb565
 					#define BLUE         	 0x001F  
 					#define GREEN         	 0x07E0
@@ -1100,9 +1100,9 @@ s32 dev_lcd_show_bmp(DevLcdNode *lcd, u16 x, u16 y, u16 xlen, u16 ylen, s8 *BmpF
 
 		break;
 		
-    case 24://65KÕæ²ÊÉ«		
+    case 24://65KçœŸå½©è‰²		
 		pcc = (u16 *)pdata;
-		//Í¼Æ¬È¡Ä£:ºáÏò,×ó¸ßÓÒµÍ
+		//å›¾ç‰‡å–æ¨¡:æ¨ªå‘,å·¦é«˜å³ä½
         for (j=0; j<ylen;) {
 			if(j+linecnt >= ylen)
 				linecnt = ylen-j;
@@ -1117,7 +1117,7 @@ s32 dev_lcd_show_bmp(DevLcdNode *lcd, u16 x, u16 y, u16 xlen, u16 ylen, s8 *BmpF
 				k = l*LineBytes;
 				
             	for (i=0; i < xlen; i++) {
-	            	/*3¸ö×Ö½Ú1¸öÏñËØ£¬Òª½øĞĞ¶ÔU16µÄ×ª»»
+	            	/*3ä¸ªå­—èŠ‚1ä¸ªåƒç´ ï¼Œè¦è¿›è¡Œå¯¹U16çš„è½¬æ¢
 						rgb565
 						#define BLUE         	 0x001F  
 						#define GREEN         	 0x07E0
@@ -1161,9 +1161,9 @@ s32 dev_lcd_show_bmp(DevLcdNode *lcd, u16 x, u16 y, u16 xlen, u16 ylen, s8 *BmpF
 #endif
 /**
  *@brief:      dev_lcd_test
- *@details:    LCD²âÊÔº¯Êı
+ *@details:    LCDæµ‹è¯•å‡½æ•°
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 void dev_lcd_test(void)
@@ -1173,7 +1173,7 @@ void dev_lcd_test(void)
 	DevLcdNode *LcdOledI2C = NULL;
 	DevLcdNode *LcdTft = NULL;
 
-	/*  ´ò¿ªÈı¸öÉè±¸ */
+	/*  æ‰“å¼€ä¸‰ä¸ªè®¾å¤‡ */
 	LcdCog = dev_lcd_open("spicoglcd");
 	if (LcdCog==NULL)
 		wjq_log(LOG_FUN, "open cog lcd err\r\n");
@@ -1190,13 +1190,13 @@ void dev_lcd_test(void)
 	if (LcdOledI2C==NULL)
 		wjq_log(LOG_FUN, "open oled i2c lcd err\r\n");
 	
-	/*´ò¿ª±³¹â*/
+	/*æ‰“å¼€èƒŒå…‰*/
 	dev_lcd_backlight(LcdCog, 1);
 	dev_lcd_backlight(LcdOled, 1);
 	dev_lcd_backlight(LcdOledI2C, 1);
 	dev_lcd_backlight(LcdTft, 1);
 
-	#if 0/*²»Ö§³Öºº×ÖÊ±*/
+	#if 0/*ä¸æ”¯æŒæ±‰å­—æ—¶*/
 	put_string(LcdCog, 5, 5, "spi cog lcd", BLACK);
 	put_string(LcdOled, 5, 5, "vspi oled lcd", BLACK);
 	put_string(LcdOledI2C, 5, 5, "i2c oled lcd", BLACK);
@@ -1204,25 +1204,25 @@ void dev_lcd_test(void)
 	#endif
 
 	#if 1
-	dev_lcd_put_string(LcdOled, "songti12", 10,1, "ABC-abc£¬", BLACK);
-	dev_lcd_put_string(LcdOled, "siyuan16", 1, 13, "ÕâÊÇoled lcd", BLACK);
+	dev_lcd_put_string(LcdOled, "songti12", 10,1, "ABC-abcï¼Œ", BLACK);
+	dev_lcd_put_string(LcdOled, "siyuan16", 1, 13, "è¿™æ˜¯oled lcd", BLACK);
 	dev_lcd_put_string(LcdOled, "songti12", 10,30, "www.wujique.com", BLACK);
-	dev_lcd_put_string(LcdOled, "siyuan16", 1, 47, "Îİ¼¹È¸¹¤×÷ÊÒ", BLACK);
+	dev_lcd_put_string(LcdOled, "siyuan16", 1, 47, "å±‹è„Šé›€å·¥ä½œå®¤", BLACK);
 	dev_lcd_update(LcdOled);
-	dev_lcd_put_string(LcdCog, "songti12", 10,1, "ABC-abc£¬", BLACK);
-	dev_lcd_put_string(LcdCog, "siyuan16", 1, 13, "ÕâÊÇcog lcd", BLACK);
+	dev_lcd_put_string(LcdCog, "songti12", 10,1, "ABC-abcï¼Œ", BLACK);
+	dev_lcd_put_string(LcdCog, "siyuan16", 1, 13, "è¿™æ˜¯cog lcd", BLACK);
 	dev_lcd_put_string(LcdCog, "songti12", 10,30, "www.wujique.com", BLACK);
-	dev_lcd_put_string(LcdCog, "siyuan16", 1, 47, "Îİ¼¹È¸¹¤×÷ÊÒ", BLACK);
+	dev_lcd_put_string(LcdCog, "siyuan16", 1, 47, "å±‹è„Šé›€å·¥ä½œå®¤", BLACK);
 	dev_lcd_update(LcdCog);
-	dev_lcd_put_string(LcdTft, "songti12", 20,30, "ABC-abc£¬", RED);
-	dev_lcd_put_string(LcdTft, "siyuan16", 20,60, "ÕâÊÇtft lcd", RED);
+	dev_lcd_put_string(LcdTft, "songti12", 20,30, "ABC-abcï¼Œ", RED);
+	dev_lcd_put_string(LcdTft, "siyuan16", 20,60, "è¿™æ˜¯tft lcd", RED);
 	dev_lcd_put_string(LcdTft, "songti12", 20,100, "www.wujique.com", RED);
-	dev_lcd_put_string(LcdTft, "siyuan16", 20,150, "Îİ¼¹È¸¹¤×÷ÊÒ", RED);
+	dev_lcd_put_string(LcdTft, "siyuan16", 20,150, "å±‹è„Šé›€å·¥ä½œå®¤", RED);
 	dev_lcd_update(LcdTft);
-	dev_lcd_put_string(LcdOledI2C, "songti12", 10,1, "ABC-abc£¬", BLACK);
-	dev_lcd_put_string(LcdOledI2C, "siyuan16", 1,13, "ÕâÊÇLcdOledI2C", BLACK);
+	dev_lcd_put_string(LcdOledI2C, "songti12", 10,1, "ABC-abcï¼Œ", BLACK);
+	dev_lcd_put_string(LcdOledI2C, "siyuan16", 1,13, "è¿™æ˜¯LcdOledI2C", BLACK);
 	dev_lcd_put_string(LcdOledI2C, "songti12", 10,30, "www.wujique.com", BLACK);
-	dev_lcd_put_string(LcdOledI2C, "siyuan16", 1,47, "Îİ¼¹È¸¹¤×÷ÊÒ", BLACK);
+	dev_lcd_put_string(LcdOledI2C, "siyuan16", 1,47, "å±‹è„Šé›€å·¥ä½œå®¤", BLACK);
 	dev_lcd_update(LcdOledI2C);
 	#endif
 	
@@ -1243,26 +1243,26 @@ void dev_i2coledlcd_test(void)
 		wjq_log(LOG_FUN, "open oled i2c lcd err\r\n");
 	else
 		wjq_log(LOG_FUN, "open oled i2c lcd suc\r\n");
-	/*´ò¿ª±³¹â*/
+	/*æ‰“å¼€èƒŒå…‰*/
 	dev_lcd_backlight(LcdOledI2C, 1);
 
-	dev_lcd_put_string(LcdOledI2C, "songti12", 10,1, "ABC-abc£¬", BLACK);
-	dev_lcd_put_string(LcdOledI2C, "siyuan16", 1,13, "ÕâÊÇLcdOledI2C", BLACK);
+	dev_lcd_put_string(LcdOledI2C, "songti12", 10,1, "ABC-abcï¼Œ", BLACK);
+	dev_lcd_put_string(LcdOledI2C, "siyuan16", 1,13, "è¿™æ˜¯LcdOledI2C", BLACK);
 	dev_lcd_put_string(LcdOledI2C, "songti12", 10,30, "www.wujique.com", BLACK);
-	dev_lcd_put_string(LcdOledI2C, "siyuan16", 1,47, "Îİ¼¹È¸¹¤×÷ÊÒ", BLACK);
+	dev_lcd_put_string(LcdOledI2C, "siyuan16", 1,47, "å±‹è„Šé›€å·¥ä½œå®¤", BLACK);
 	dev_lcd_update(LcdOledI2C);
 
 	LcdOledI2C = dev_lcd_open("i2coledlcd2");
 	if (LcdOledI2C==NULL)
 		wjq_log(LOG_FUN, "open oled i2c2 lcd err\r\n");
 	
-	/*´ò¿ª±³¹â*/
+	/*æ‰“å¼€èƒŒå…‰*/
 	dev_lcd_backlight(LcdOledI2C, 1);
 	while(1) {
-		dev_lcd_put_string(LcdOledI2C, "songti12", 10,1, "ABC-abc£¬", BLACK);
-		dev_lcd_put_string(LcdOledI2C, "siyuan16", 1,13, "ÕâÊÇLcdOledI2C", BLACK);
+		dev_lcd_put_string(LcdOledI2C, "songti12", 10,1, "ABC-abcï¼Œ", BLACK);
+		dev_lcd_put_string(LcdOledI2C, "siyuan16", 1,13, "è¿™æ˜¯LcdOledI2C", BLACK);
 		dev_lcd_put_string(LcdOledI2C, "songti12", 10,30, "www.wujique.com", BLACK);
-		dev_lcd_put_string(LcdOledI2C, "siyuan16", 1,47, "Îİ¼¹È¸¹¤×÷ÊÒ", BLACK);
+		dev_lcd_put_string(LcdOledI2C, "siyuan16", 1,47, "å±‹è„Šé›€å·¥ä½œå®¤", BLACK);
 		dev_lcd_update(LcdOledI2C);
 		Delay(1000);
 		dev_lcd_color_fill(LcdOledI2C, 1, 1000, 1, 1000, WHITE);

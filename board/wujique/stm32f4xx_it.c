@@ -195,7 +195,7 @@ void SysTick_Handler(void)
   //wjq_log(LOG_DEBUG, "DebugMon_Handler\r\n");
   Time_Update();
   /*
-	freertosµÄ½Ó¿Ú·ÅÔÚÕâÀï
+	freertosçš„æ¥å£æ”¾åœ¨è¿™é‡Œ
   */
   xPortSysTickHandler();
 
@@ -275,19 +275,19 @@ void DMA2_Stream3_IRQHandler(void)
 
 void DMA1_Stream4_IRQHandler(void)
 {
-	if(DMA_GetITStatus(DMA1_Stream4,DMA_IT_TCIF4)==SET)		// ÅĞ¶ÏÊÇ·ñÍê³É´«Êä
+	if(DMA_GetITStatus(DMA1_Stream4,DMA_IT_TCIF4)==SET)		// åˆ¤æ–­æ˜¯å¦å®Œæˆä¼ è¾“
 	{ 
-		DMA_ClearITPendingBit(DMA1_Stream4,DMA_IT_TCIF4);	//	Çå³ıÏàÓ¦µÄ±êÖ¾Î»
+		DMA_ClearITPendingBit(DMA1_Stream4,DMA_IT_TCIF4);	//	æ¸…é™¤ç›¸åº”çš„æ ‡å¿—ä½
 		mcu_i2s_dma_process();		
 	} 
 
 }
 void DMA1_Stream3_IRQHandler(void)
 {  
-	if(DMA_GetITStatus(DMA1_Stream3,DMA_IT_TCIF3)==SET) //DMA1_Stream3,´«ÊäÍê³É±êÖ¾
+	if(DMA_GetITStatus(DMA1_Stream3,DMA_IT_TCIF3)==SET) //DMA1_Stream3,ä¼ è¾“å®Œæˆæ ‡å¿—
 	{ 
-		DMA_ClearITPendingBit(DMA1_Stream3, DMA_IT_TCIF3);	//Çå³ı´«ÊäÍê³ÉÖĞ¶Ï
-		mcu_i2sext_dma_process();	//Ö´ĞĞ»Øµ÷º¯Êı,¶ÁÈ¡Êı¾İµÈ²Ù×÷ÔÚÕâÀïÃæ´¦Àí  
+		DMA_ClearITPendingBit(DMA1_Stream3, DMA_IT_TCIF3);	//æ¸…é™¤ä¼ è¾“å®Œæˆä¸­æ–­
+		mcu_i2sext_dma_process();	//æ‰§è¡Œå›è°ƒå‡½æ•°,è¯»å–æ•°æ®ç­‰æ“ä½œåœ¨è¿™é‡Œé¢å¤„ç†  
 	}
 }
 
@@ -404,7 +404,7 @@ void CAN1_RX0_IRQHandler(void)
 	mcu_can1_rx0_IRQ();
 }
 /*
-	ÉãÏñÍ·Ö¡ÖĞ¶Ï
+	æ‘„åƒå¤´å¸§ä¸­æ–­
 */
 void DCMI_IRQHandler(void)
 {

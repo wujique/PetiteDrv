@@ -1,14 +1,14 @@
 /**
  * @file            emenu.c
- * @brief           ¼òÒ×²Ëµ¥Ä£¿é
+ * @brief           ç®€æ˜“èœå•æ¨¡å—
  * @author          wujique
- * @date            2018Äê3ÔÂ10ÈÕ ĞÇÆÚÁù
- * @version         ³õ¸å
- * @par             °æÈ¨ËùÓĞ (C), 2013-2023
+ * @date            2018å¹´3æœˆ10æ—¥ æ˜ŸæœŸå…­
+ * @version         åˆç¨¿
+ * @par             ç‰ˆæƒæ‰€æœ‰ (C), 2013-2023
  * @par History:
- * 1.ÈÕ    ÆÚ:        2018Äê3ÔÂ10ÈÕ ĞÇÆÚÁù
- *   ×÷    Õß:         wujiqueÎİ¼¹È¸¹¤×÷ÊÒ
- *   ĞŞ¸ÄÄÚÈİ:   ´´½¨ÎÄ¼ş
+ * 1.æ—¥    æœŸ:        2018å¹´3æœˆ10æ—¥ æ˜ŸæœŸå…­
+ *   ä½œ    è€…:         wujiqueå±‹è„Šé›€å·¥ä½œå®¤
+ *   ä¿®æ”¹å†…å®¹:   åˆ›å»ºæ–‡ä»¶
 */
 #include "mcu.h"
 #include "petite_config.h"
@@ -32,7 +32,7 @@
 extern u16 PenColor;
 extern u16 BackColor;
 
-/*°´¼ü¶¨Òå*/
+/*æŒ‰é”®å®šä¹‰*/
 #define EMENU_KEYU_0	'0'
 #define EMENU_KEYU_1	'1'
 #define EMENU_KEYU_2	'2'
@@ -52,7 +52,7 @@ extern u16 BackColor;
 #define EMENU_KEYU_UP	EMENU_KEYU_STAR
 #define EMENU_KEYU_DOWM EMENU_KEYU_HASH
 
-/*°´¼ü×ª»»±í*/
+/*æŒ‰é”®è½¬æ¢è¡¨*/
 const u8 emunu_key_chg[17]=
 {
 	0, EMENU_KEYU_1,EMENU_KEYU_2,EMENU_KEYU_3,EMENU_KEYU_F,
@@ -60,7 +60,7 @@ const u8 emunu_key_chg[17]=
 	EMENU_KEYU_7,EMENU_KEYU_8,EMENU_KEYU_9,EMENU_KEYU_ESC,
 	EMENU_KEYU_STAR,EMENU_KEYU_0,EMENU_KEYU_HASH,EMENU_KEYU_ENTER
 };
-/*  need fix Èç¹ûÃ»ÓĞ°´¼ü£¬Ö»ÓĞ´¥ÆÁ£¬ÈçºÎÖ§³Ö£¿*/	
+/*  need fix å¦‚æœæ²¡æœ‰æŒ‰é”®ï¼Œåªæœ‰è§¦å±ï¼Œå¦‚ä½•æ”¯æŒï¼Ÿ*/	
 u8 emenu_get_key(void)
 {
 	u8 key;
@@ -80,23 +80,23 @@ u8 emenu_get_key(void)
 
 /**
  *@brief:      emenu_check_list
- *@details:    ¼ì²â²Ëµ¥ÁĞ±í
+ *@details:    æ£€æµ‹èœå•åˆ—è¡¨
  *@param[in]   MENU *p  
                u16 len  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 emenu_check_list(MENU *list, u16 len)
 {
 	u16 i = 0;
 	s32 err = 0;;
-	MenuLel now_lel = MENU_L_0;//µ±Ç°²Ëµ¥µÈ¼¶
+	MenuLel now_lel = MENU_L_0;//å½“å‰èœå•ç­‰çº§
 	MENU *p = list;
 	
 	while(1) {
 		if (i>= len) return err;
 
-		/*²Ëµ¥µÈ¼¶²»ÄÜÌø¼¶*/
+		/*èœå•ç­‰çº§ä¸èƒ½è·³çº§*/
 		if ((p->l != now_lel)
 			&&(p->l != (now_lel-1))
 			&&(p->l != (now_lel+1))
@@ -104,7 +104,7 @@ s32 emenu_check_list(MENU *list, u16 len)
 			EMENU_DEBUG(LOG_DEBUG,"level err!\r\n");
 			return err;
 		}
-		/*¹¦ÄÜ²Ëµ¥º¯Êı²»ÄÜÎª¿Õ*/
+		/*åŠŸèƒ½èœå•å‡½æ•°ä¸èƒ½ä¸ºç©º*/
 		if (p->type == MENU_TYPE_FUN) {
 		
 		}
@@ -114,55 +114,55 @@ s32 emenu_check_list(MENU *list, u16 len)
 	}
 }
 /**
- * @brief  ²Ëµ¥³ÌĞò¿ØÖÆ
+ * @brief  èœå•ç¨‹åºæ§åˆ¶
 */
 
 typedef struct _strMenuCtrl
 {
-	MENU *fa;	//¸¸²Ëµ¥£¬Ò²¾ÍÊÇµ±Ç°ÏÔÊ¾µÄ²Ëµ¥
-	MENU *dis;	//ÏÔÊ¾ÆğÊ¼
-	MENU *sel;	//µ±Ç°Ñ¡ÖĞµÄ²Ëµ¥
-	u8 d;		//¼ÇÂ¼dis¸úSELµÄÍ¬¼¶Æ«ÒÆ£¬²»ÓÃÃ¿´ÎÈ¥ÕÒ
+	MENU *fa;	//çˆ¶èœå•ï¼Œä¹Ÿå°±æ˜¯å½“å‰æ˜¾ç¤ºçš„èœå•
+	MENU *dis;	//æ˜¾ç¤ºèµ·å§‹
+	MENU *sel;	//å½“å‰é€‰ä¸­çš„èœå•
+	u8 d;		//è®°å½•disè·ŸSELçš„åŒçº§åç§»ï¼Œä¸ç”¨æ¯æ¬¡å»æ‰¾
 	
-	u8 lang;	//ÓïÑÔÖ¸ÕëÆ«ÒÆÁ¿
+	u8 lang;	//è¯­è¨€æŒ‡é’ˆåç§»é‡
 	
-	/*	LCD¸ú×ÖÌå¹æ¸ñ	*/
+	/*	LCDè·Ÿå­—ä½“è§„æ ¼	*/
 	u16 lcdh;
 	u16 lcdw;
 	char *font;
 	u16 fonth;
 	u16 fontw;
 
-	/*	ÏÔÊ¾¿ØÖÆ */
-	u8 spaced;//ĞĞ¼ä¸ô
-	u8 line;//Ò»ÆÁÄÜÏÔÊ¾µÄĞĞÊı
+	/*	æ˜¾ç¤ºæ§åˆ¶ */
+	u8 spaced;//è¡Œé—´éš”
+	u8 line;//ä¸€å±èƒ½æ˜¾ç¤ºçš„è¡Œæ•°
 } MenuCtrl;
 
 MenuCtrl menu_ctrl;
 
 /*
-	¼ÇÂ¼dis¸úsel¡¢d£¬ÒÔ±ã·µ»Ø
+	è®°å½•disè·Ÿselã€dï¼Œä»¥ä¾¿è¿”å›
 */
 MENU *emenu_stack[2*MENU_L_MAX];
 u8 d_rec[MENU_L_MAX];
-/* ²éÕÒ¸¸½Úµã */
+/* æŸ¥æ‰¾çˆ¶èŠ‚ç‚¹ */
 MENU *emenu_find_fa(MENU *fp)
 {
 	MENU *p;
 	p = fp;
 
-	/*¸ù½ÚµãÃ»¸¸Ç×*/
+	/*æ ¹èŠ‚ç‚¹æ²¡çˆ¶äº²*/
 	if (p->l == MENU_L_0) return NULL;
 	
 	while(1) {
 		p--;
 		if (p->l == ((menu_ctrl.fa->l)-1)) {
-			/*ÕÒµ½¸¸½Úµã*/
+			/*æ‰¾åˆ°çˆ¶èŠ‚ç‚¹*/
 			return p;	
 		}
 	}
 }
-/* ²éÕÒÏÂÒ»¸ö²Ëµ¥ */
+/* æŸ¥æ‰¾ä¸‹ä¸€ä¸ªèœå• */
 MENU *emunu_find_next(MENU *fp, u8 mode)
 {
 	MENU *p;
@@ -174,11 +174,11 @@ MENU *emunu_find_next(MENU *fp, u8 mode)
 		else
 			p--;
 		
-		/*²Ëµ¥µÈ¼¶±È¸¸½ÚµãµÍÒ»¼¶£¨´ó1£©*/
+		/*èœå•ç­‰çº§æ¯”çˆ¶èŠ‚ç‚¹ä½ä¸€çº§ï¼ˆå¤§1ï¼‰*/
 		if (p->l == ((menu_ctrl.fa->l)+1)) {
 			return p;	
 		} else if(p->l == (menu_ctrl.fa->l)) {
-			/*¸ú¸¸²Ëµ¥µÈ¼¶Ò»ÖÂ£¬ËµÃ÷Ã»×Ó²Ëµ¥ÁË*/	
+			/*è·Ÿçˆ¶èœå•ç­‰çº§ä¸€è‡´ï¼Œè¯´æ˜æ²¡å­èœå•äº†*/	
 			return 0;
 		} else if(p->l == MENU_L_0) {
 			EMENU_DEBUG(LOG_DEBUG,"menu end\r\n");
@@ -205,44 +205,44 @@ s32 emenu_display(DevLcdNode *lcd)
 	u8 menu_num = 0;
 	u16 lang;
 	u8 col2_dis_num;
-	/*¼ÆËã²»Í¬ÓïÑÔÏÔÊ¾ÄÚÈİµÄÆ«ÒÆ*/
+	/*è®¡ç®—ä¸åŒè¯­è¨€æ˜¾ç¤ºå†…å®¹çš„åç§»*/
 	lang = menu_ctrl.lang*MENU_LANG_BUF_SIZE;
 	
 	//EMENU_DEBUG(LOG_DEBUG,"emenu display:%s\r\n", menu_ctrl.fa->cha + lang);
 	
 	dev_lcd_color_fill(lcd, 1, menu_ctrl.lcdw, 1, menu_ctrl.lcdh, BackColor);
 	
-	/*¶¥ĞĞ¾ÓÖĞÏÔÊ¾¸¸²Ëµ¥*/
-	disx = (menu_ctrl.lcdw - strlen(menu_ctrl.fa->cha)*menu_ctrl.fontw)/2;//¾ÓÖĞÏÔÊ¾
+	/*é¡¶è¡Œå±…ä¸­æ˜¾ç¤ºçˆ¶èœå•*/
+	disx = (menu_ctrl.lcdw - strlen(menu_ctrl.fa->cha)*menu_ctrl.fontw)/2;//å±…ä¸­æ˜¾ç¤º
 	dev_lcd_put_string(lcd, menu_ctrl.font, disx, disy, menu_ctrl.fa->cha + lang, PenColor);
 	
 	
-	/* ÏÔÊ¾×Ó²Ëµ¥*/
+	/* æ˜¾ç¤ºå­èœå•*/
 	switch(menu_ctrl.fa->type)
 	{
 		case MENU_TYPE_LIST:
-			disy += menu_ctrl.fonth + menu_ctrl.spaced;//ÕâĞ©²ÎÊıÒª¸ù¾İÑ¡ÔñµÄ×ÖÌåÑ¡Ôñ
+			disy += menu_ctrl.fonth + menu_ctrl.spaced;//è¿™äº›å‚æ•°è¦æ ¹æ®é€‰æ‹©çš„å­—ä½“é€‰æ‹©
 
 			/* 
-				´Ó¸¸½ÚµãºóÒ»¸ö½Úµã¿ªÊ¼·ÖÎö£¬ÒÔ±ãÍ³¼Æ×Ó½ÚµãÊıÁ¿
-				ÔÚ²Ëµ¥Ç°ÃæÏÔÊ¾ĞòºÅ
+				ä»çˆ¶èŠ‚ç‚¹åä¸€ä¸ªèŠ‚ç‚¹å¼€å§‹åˆ†æï¼Œä»¥ä¾¿ç»Ÿè®¡å­èŠ‚ç‚¹æ•°é‡
+				åœ¨èœå•å‰é¢æ˜¾ç¤ºåºå·
 			*/
 			
 			p =  menu_ctrl.fa +1;
 			while(1) {
-				/*²Ëµ¥µÈ¼¶±È¸¸½ÚµãµÍÒ»¼¶£¨´ó1£©*/
+				/*èœå•ç­‰çº§æ¯”çˆ¶èŠ‚ç‚¹ä½ä¸€çº§ï¼ˆå¤§1ï¼‰*/
 				if (p->l == ((menu_ctrl.fa->l)+1)) {
 					menu_num++;
-					/*¿ªÊ¼ÏÔÊ¾£¬Ö®Ç°µÄ²Ëµ¥²»ÏÔÊ¾*/
+					/*å¼€å§‹æ˜¾ç¤ºï¼Œä¹‹å‰çš„èœå•ä¸æ˜¾ç¤º*/
 					if (p>=menu_ctrl.dis) {
-						//ÏÔÊ¾12µÄ×Ö·û£¬´Ó1£¬¿ªÊ¼£¬Ö»Òªµ½dot11¾Í¿ÉÒÔÏÔÊ¾ÍêÁË¡£
+						//æ˜¾ç¤º12çš„å­—ç¬¦ï¼Œä»1ï¼Œå¼€å§‹ï¼Œåªè¦åˆ°dot11å°±å¯ä»¥æ˜¾ç¤ºå®Œäº†ã€‚
 						if(disy + menu_ctrl.fonth-1 > menu_ctrl.lcdh) {
 							EMENU_DEBUG(LOG_DEBUG,"over the lcd\r\n");
 							break;
 						}
 						
 						memset(disbuf,0,sizeof(disbuf));
-						/*²Ëµ¥±»Ñ¡ÖĞ£¬¼ÓÉÏĞ§¹û*/
+						/*èœå•è¢«é€‰ä¸­ï¼ŒåŠ ä¸Šæ•ˆæœ*/
 						if (p == menu_ctrl.sel) {	
 							sprintf(disbuf, ">%d.", menu_num);
 						} else {
@@ -252,28 +252,28 @@ s32 emenu_display(DevLcdNode *lcd)
 						
 						dev_lcd_put_string(lcd, menu_ctrl.font, 1, disy, disbuf, PenColor);
 
-						disy += (menu_ctrl.fonth + menu_ctrl.spaced);//Ã¿ĞĞ¼ä¸ô
+						disy += (menu_ctrl.fonth + menu_ctrl.spaced);//æ¯è¡Œé—´éš”
 					}
 				}else if (p->l == (menu_ctrl.fa->l)) {
-					/*¸ú¸¸²Ëµ¥µÈ¼¶Ò»ÖÂ£¬ËµÃ÷Ã»×Ó²Ëµ¥ÁË*/	
+					/*è·Ÿçˆ¶èœå•ç­‰çº§ä¸€è‡´ï¼Œè¯´æ˜æ²¡å­èœå•äº†*/	
 					break;
 				} else if(p->l == MENU_L_0) {
-					/* Ä©Î²½Úµã*/
+					/* æœ«å°¾èŠ‚ç‚¹*/
 					EMENU_DEBUG(LOG_DEBUG, "menu end\r\n");
 					break;
 				} else {
-					/*±Èµ±Ç°¸¸½ÚµãµÍÁ½¼¶£¬ËµÃ÷ÊÇËï²Ëµ¥*/
+					/*æ¯”å½“å‰çˆ¶èŠ‚ç‚¹ä½ä¸¤çº§ï¼Œè¯´æ˜æ˜¯å­™èœå•*/
 				}
 				p++;
 			}
 			break;
 			
 		case MENU_TYPE_KEY_2COL:
-			/*	Êı×Ö¼üÖ»ÓĞ0-9£¬Òò´ËË«ÁĞ²Ëµ¥×î¶àÏÔÊ¾8¸ö²Ëµ¥Ò»Ò³£¬ÓÃ1-8°´¼üÑ¡Ôñ   			*/
+			/*	æ•°å­—é”®åªæœ‰0-9ï¼Œå› æ­¤åŒåˆ—èœå•æœ€å¤šæ˜¾ç¤º8ä¸ªèœå•ä¸€é¡µï¼Œç”¨1-8æŒ‰é”®é€‰æ‹©   			*/
 			col2_dis_num = (menu_ctrl.line-1)*2;
 			if(col2_dis_num > 8) col2_dis_num = 8;
 			
-			p = menu_ctrl.dis;//Ö±½Ó´ÓÏÔÊ¾½Úµã¿ªÊ¼·ÖÎö£¬²»ÓÃÍ³¼Æ×Ó½ÚµãÊıÁ¿
+			p = menu_ctrl.dis;//ç›´æ¥ä»æ˜¾ç¤ºèŠ‚ç‚¹å¼€å§‹åˆ†æï¼Œä¸ç”¨ç»Ÿè®¡å­èŠ‚ç‚¹æ•°é‡
 			
 			disy += menu_ctrl.fonth + menu_ctrl.spaced;
 		
@@ -284,7 +284,7 @@ s32 emenu_display(DevLcdNode *lcd)
 					menu_num++;
 					
 					if (menu_num > col2_dis_num) break;
-					/*´¦ÀíÏÔÊ¾Î»ÖÃ*/
+					/*å¤„ç†æ˜¾ç¤ºä½ç½®*/
 					if (menu_num  == (col2_dis_num/2+1)) {
 						disy = menu_ctrl.fonth + menu_ctrl.spaced + 1;
 						discol++;
@@ -294,7 +294,7 @@ s32 emenu_display(DevLcdNode *lcd)
 						}
 					}
 
-					menu_ctrl.sel = p;//selÖ¸ÏòÏÔÊ¾µÄ×îºóÒ»¸ö²Ëµ¥
+					menu_ctrl.sel = p;//selæŒ‡å‘æ˜¾ç¤ºçš„æœ€åä¸€ä¸ªèœå•
 					menu_ctrl.d++;
 					
 					memset(disbuf,0,sizeof(disbuf));
@@ -305,14 +305,14 @@ s32 emenu_display(DevLcdNode *lcd)
 
 					disy += (menu_ctrl.fonth + menu_ctrl.spaced);
 				}else if (p->l == (menu_ctrl.fa->l)) {
-					/*¸ú¸¸²Ëµ¥µÈ¼¶Ò»ÖÂ£¬ËµÃ÷Ã»×Ó²Ëµ¥ÁË*/	
+					/*è·Ÿçˆ¶èœå•ç­‰çº§ä¸€è‡´ï¼Œè¯´æ˜æ²¡å­èœå•äº†*/	
 					break;
 				} else if (p->l == MENU_L_0) {
-					/* Ä©Î²½Úµã*/
+					/* æœ«å°¾èŠ‚ç‚¹*/
 					EMENU_DEBUG(LOG_DEBUG,"menu end\r\n");
 					break;
 				} else {
-					/*±Èµ±Ç°¸¸½ÚµãµÍÁ½¼¶£¬ËµÃ÷ÊÇËï²Ëµ¥*/
+					/*æ¯”å½“å‰çˆ¶èŠ‚ç‚¹ä½ä¸¤çº§ï¼Œè¯´æ˜æ˜¯å­™èœå•*/
 				}
 				p++;
 			}
@@ -332,9 +332,9 @@ s32 emenu_display(DevLcdNode *lcd)
 }
 /**
  *@brief:      emenu_deal_key_list
- *@details:    ÁĞ±í²Ëµ¥°´¼ü´¦Àí
+ *@details:    åˆ—è¡¨èœå•æŒ‰é”®å¤„ç†
  *@param[in]   u8 key  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 emenu_deal_key_list(u8 key)
@@ -349,7 +349,7 @@ s32 emenu_deal_key_list(u8 key)
 			if (menup!=0) {
 				menu_ctrl.sel = menup;	
 				EMENU_DEBUG(LOG_DEBUG,"%");
-				//Èç¹ûÒ»ÆÁÄÜÏÔÊ¾5ĞĞ£¬¶¥ĞĞÊÇÏÔÊ¾ÄÚÈİ£¬4ĞĞ²Ëµ¥£¬¼ä¾àÎª3£¬Òò´Ë-2
+				//å¦‚æœä¸€å±èƒ½æ˜¾ç¤º5è¡Œï¼Œé¡¶è¡Œæ˜¯æ˜¾ç¤ºå†…å®¹ï¼Œ4è¡Œèœå•ï¼Œé—´è·ä¸º3ï¼Œå› æ­¤-2
 				if (menu_ctrl.d>= menu_ctrl.line-2) {
 					menup = emunu_find_next(menu_ctrl.dis, 1);
 					if(menup!=0) {
@@ -359,7 +359,7 @@ s32 emenu_deal_key_list(u8 key)
 					menu_ctrl.d++;
 				}
 			} else {
-				/*ÒÑ¾­ÊÇ×îºóÒ»¸ö²Ëµ¥£¬´ÓÍ·¿ªÊ¼ÏÔÊ¾µÚÒ»¸ö²Ëµ¥	*/
+				/*å·²ç»æ˜¯æœ€åä¸€ä¸ªèœå•ï¼Œä»å¤´å¼€å§‹æ˜¾ç¤ºç¬¬ä¸€ä¸ªèœå•	*/
 				menu_ctrl.sel = menu_ctrl.fa+1;
 				menu_ctrl.dis = menu_ctrl.sel;
 				menu_ctrl.d = 0;
@@ -378,7 +378,7 @@ s32 emenu_deal_key_list(u8 key)
 					menu_ctrl.d--;
 				}
 			} else {
-				/*µÚÒ»¸ö½Úµã£¬ÄÇÃ´·­µ½×îºóÒ»¸ö½Úµã*/
+				/*ç¬¬ä¸€ä¸ªèŠ‚ç‚¹ï¼Œé‚£ä¹ˆç¿»åˆ°æœ€åä¸€ä¸ªèŠ‚ç‚¹*/
 				while(1) {
 					menup = emunu_find_next(menu_ctrl.sel, 1);
 					if (menup!=0) {
@@ -390,11 +390,11 @@ s32 emenu_deal_key_list(u8 key)
 								menu_ctrl.dis = menup;	
 							}
 						} else {
-							/*ÏÔÊ¾²Ëµ¥²»±ä£¬Ö»ÊÇÒÆ¶¯ÁËÑ¡Ôñ*/
+							/*æ˜¾ç¤ºèœå•ä¸å˜ï¼Œåªæ˜¯ç§»åŠ¨äº†é€‰æ‹©*/
 							menu_ctrl.d++;
 						}
 					} else {
-						/*ÒÑ¾­ÊÇ×îºóÒ»¸ö²Ëµ¥£¬´ÓÍ·¿ªÊ¼ÏÔÊ¾µÚÒ»¸ö²Ëµ¥	*/
+						/*å·²ç»æ˜¯æœ€åä¸€ä¸ªèœå•ï¼Œä»å¤´å¼€å§‹æ˜¾ç¤ºç¬¬ä¸€ä¸ªèœå•	*/
 						break;
 					}
 				}
@@ -402,11 +402,11 @@ s32 emenu_deal_key_list(u8 key)
 			break;
 			
 		case EMENU_KEYU_ENTER://enter
-			/*±£Ö¤×Ó²Ëµ¥ÓĞĞ§*/
+			/*ä¿è¯å­èœå•æœ‰æ•ˆ*/
 			if (menu_ctrl.sel->l == (menu_ctrl.fa->l)+1) {
 				if (menu_ctrl.sel->type == MENU_TYPE_FUN) {
 					if (menu_ctrl.sel->fun != NULL) {
-						/*Ö´ĞĞÕæÊµ²âÊÔº¯Êı*/
+						/*æ‰§è¡ŒçœŸå®æµ‹è¯•å‡½æ•°*/
 						menu_ctrl.sel->fun();
 					}
 				} else {
@@ -417,7 +417,7 @@ s32 emenu_deal_key_list(u8 key)
 					emenu_stack[(menu_ctrl.fa->l)*2+1] = menu_ctrl.dis;
 					
 					d_rec[menu_ctrl.fa->l] = menu_ctrl.d;
-					/* ½øÈëÏÂ¼¶²Ëµ¥ */
+					/* è¿›å…¥ä¸‹çº§èœå• */
 					menu_ctrl.fa = 	menu_ctrl.sel;
 					menu_ctrl.sel = menu_ctrl.fa+1;
 					menu_ctrl.dis = menu_ctrl.sel;
@@ -474,7 +474,7 @@ s32 emenu_deal_key_2col(u8 key)
 				
 				u8 col2_dis_num;
 				/*
-					Êı×Ö¼üÖ»ÓĞ0-9£¬Òò´ËË«ÁĞ²Ëµ¥×î¶àÏÔÊ¾8¸ö²Ëµ¥Ò»Ò³£¬ÓÃ1-8°´¼üÑ¡Ôñ
+					æ•°å­—é”®åªæœ‰0-9ï¼Œå› æ­¤åŒåˆ—èœå•æœ€å¤šæ˜¾ç¤º8ä¸ªèœå•ä¸€é¡µï¼Œç”¨1-8æŒ‰é”®é€‰æ‹©
 				*/
 				col2_dis_num = (menu_ctrl.line-1)*2;
 				if (col2_dis_num > 8) col2_dis_num = 8;
@@ -522,7 +522,7 @@ s32 emenu_deal_key_2col(u8 key)
 				if (menup->l == (menu_ctrl.fa->l)+1) {
 					if (menup->type == MENU_TYPE_FUN) {
 						if (menup->fun != NULL) {
-							/*Ö´ĞĞÕæÊµ²âÊÔº¯Êı*/
+							/*æ‰§è¡ŒçœŸå®æµ‹è¯•å‡½æ•°*/
 							menup->fun();
 						}
 					} else {
@@ -533,7 +533,7 @@ s32 emenu_deal_key_2col(u8 key)
 						emenu_stack[(menu_ctrl.fa->l)*2+1] = menu_ctrl.dis;
 						d_rec[menu_ctrl.fa->l] = menu_ctrl.d;
 						
-						/* ½øÈëÏÂ¼¶²Ëµ¥ */
+						/* è¿›å…¥ä¸‹çº§èœå• */
 						menu_ctrl.fa = 	menup;
 						menu_ctrl.sel = menu_ctrl.fa+1;
 						menu_ctrl.dis = menu_ctrl.sel;
@@ -554,10 +554,10 @@ s32 emenu_deal_key_2col(u8 key)
 }
 /**
  *@brief:      emenu_run
- *@details:    ÔËĞĞÒ»¸ö²Ëµ¥
- *@param[in]   MENU *p  ²Ëµ¥Ê×Ö¸Õë  
-               u16 len  ²Ëµ¥³¤¶È
- *@param[out]  ÎŞ
+ *@details:    è¿è¡Œä¸€ä¸ªèœå•
+ *@param[in]   MENU *p  èœå•é¦–æŒ‡é’ˆ  
+               u16 len  èœå•é•¿åº¦
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 emenu_run(DevLcdNode *lcd, MENU *p, u16 len, char *font, u8 spaced, u8 lang)
@@ -583,13 +583,13 @@ s32 emenu_run(DevLcdNode *lcd, MENU *p, u16 len, char *font, u8 spaced, u8 lang)
 	
 	menu_ctrl.spaced = spaced;
 	
-	menu_ctrl.lang = lang;//ÓïÑÔÑ¡Ôñ
+	menu_ctrl.lang = lang;//è¯­è¨€é€‰æ‹©
 	
-	menu_ctrl.fa = p;//³õÊ¼»¯£¬ÏÔÊ¾¸ù²Ëµ¥£¬Ò²¾ÍÊÇÎ¨Ò»MENU_L_0²Ëµ¥
-	menu_ctrl.sel = p+1;//µÚ¶ş¸ö²Ëµ¥¿Ï¶¨ÊÇµÚÒ»¸öMENU_L_1
+	menu_ctrl.fa = p;//åˆå§‹åŒ–ï¼Œæ˜¾ç¤ºæ ¹èœå•ï¼Œä¹Ÿå°±æ˜¯å”¯ä¸€MENU_L_0èœå•
+	menu_ctrl.sel = p+1;//ç¬¬äºŒä¸ªèœå•è‚¯å®šæ˜¯ç¬¬ä¸€ä¸ªMENU_L_1
 	menu_ctrl.dis = menu_ctrl.sel;
 	menu_ctrl.d = 0;
-	menu_ctrl.line = (menu_ctrl.lcdh+1)/(menu_ctrl.fonth + menu_ctrl.spaced);//+1£¬ÒòÎª×îºóÒ»ĞĞ¿ÉÒÔ²»Òª¼ä¾à£¬
+	menu_ctrl.line = (menu_ctrl.lcdh+1)/(menu_ctrl.fonth + menu_ctrl.spaced);//+1ï¼Œå› ä¸ºæœ€åä¸€è¡Œå¯ä»¥ä¸è¦é—´è·ï¼Œ
 	
 	EMENU_DEBUG(LOG_DEBUG, "line:%d\r\n", menu_ctrl.line);
 	

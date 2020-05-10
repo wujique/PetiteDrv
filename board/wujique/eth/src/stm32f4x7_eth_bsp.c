@@ -103,8 +103,8 @@ void ETH_BSP_Config(void)
 
 	  /* Get Ethernet link status*/
   /* 
-  	’‚¿Ô“™øº¬«ºÊ»›≤ªÕ¨µƒPHY,LAN8720 « 0X04£¨ πŸ∑Ωµƒ «0X01
-  	ºƒ¥Ê∆˜‘≠¿¥ «PHY_SR£¨‘› ±∏ƒŒ™PHY_BSR
+  	ËøôÈáåË¶ÅËÄÉËôëÂÖºÂÆπ‰∏çÂêåÁöÑPHY,LAN8720ÊòØ 0X04Ôºå ÂÆòÊñπÁöÑÊòØ0X01
+  	ÂØÑÂ≠òÂô®ÂéüÊù•ÊòØPHY_SRÔºåÊöÇÊó∂Êîπ‰∏∫PHY_BSR
    */
 	tmp = ETH_ReadPHYRegister(ETH_PHY_ADRESS, PHY_BSR);
 	ETH_DEBUG(LOG_DEBUG, "PHY_BSR: %02x\r\n", tmp);
@@ -119,7 +119,7 @@ void ETH_BSP_Config(void)
   	ETH_DEBUG(LOG_DEBUG, "phy ETH_LINK_FLAG no!!!!\r\n");	
   }
 
-  /* wujique F407 √ª”– π”√INTπ¶ƒ‹ */
+  /* wujique F407 Ê≤°Êúâ‰ΩøÁî®INTÂäüËÉΩ */
 	#if 0
   /* Configure the PHY to generate an interrupt on change of link status */
   Eth_Link_PHYITConfig(ETH_PHY_ADRESS);
@@ -155,29 +155,29 @@ static void ETH_MACDMA_Config(void)
 
   /* Fill ETH_InitStructure parametrs */
   /*------------------------   MAC   -----------------------------------*/
-  /* ø™∆ÙÕ¯¬Á◊‘  ”¶π¶ƒ‹£¨ÀŸ∂»∫Õπ§◊˜ƒ£ ΩŒﬁ–Ë≈‰÷√ */
+  /* ÂºÄÂêØÁΩëÁªúËá™ÈÄÇÂ∫îÂäüËÉΩÔºåÈÄüÂ∫¶ÂíåÂ∑•‰ΩúÊ®°ÂºèÊó†ÈúÄÈÖçÁΩÆ */
   ETH_InitStructure.ETH_AutoNegotiation = ETH_AutoNegotiation_Enable;
   
   ETH_InitStructure.ETH_Speed = ETH_Speed_10M;
   ETH_InitStructure.ETH_Mode = ETH_Mode_FullDuplex;
-	/* πÿ±’∑¥¿° */
+	/* ÂÖ≥Èó≠ÂèçÈ¶à */
   ETH_InitStructure.ETH_LoopbackMode = ETH_LoopbackMode_Disable;
-	/* πÿ±’÷ÿ¥´π¶ƒ‹ */
+	/* ÂÖ≥Èó≠Èáç‰º†ÂäüËÉΩ */
   ETH_InitStructure.ETH_RetryTransmission = ETH_RetryTransmission_Disable;
-	/* πÿ±’◊‘∂Ø»•≥˝PDA/CRCπ¶ƒ‹ */
+	/* ÂÖ≥Èó≠Ëá™Âä®ÂéªÈô§PDA/CRCÂäüËÉΩ */
   ETH_InitStructure.ETH_AutomaticPadCRCStrip = ETH_AutomaticPadCRCStrip_Disable;
-	/* πÿ±’Ω” ’À˘”–µƒ÷° */
+	/* ÂÖ≥Èó≠Êé•Êî∂ÊâÄÊúâÁöÑÂ∏ß */
   ETH_InitStructure.ETH_ReceiveAll = ETH_ReceiveAll_Disable;
-	/* ‘ –ÌΩ” ’À˘”–π„≤•÷° */
+	/* ÂÖÅËÆ∏Êé•Êî∂ÊâÄÊúâÂπøÊí≠Â∏ß */
   ETH_InitStructure.ETH_BroadcastFramesReception = ETH_BroadcastFramesReception_Enable;
-	/* πÿ±’ªÏ∫œƒ£ Ωµƒµÿ÷∑π˝¬À */
+	/* ÂÖ≥Èó≠Ê∑∑ÂêàÊ®°ÂºèÁöÑÂú∞ÂùÄËøáÊª§ */
   ETH_InitStructure.ETH_PromiscuousMode = ETH_PromiscuousMode_Disable;
-	/* ∂‘”⁄◊È≤•µÿ÷∑ π”√ÕÍ√¿µÿ÷∑π˝¬À */
+	/* ÂØπ‰∫éÁªÑÊí≠Âú∞ÂùÄ‰ΩøÁî®ÂÆåÁæéÂú∞ÂùÄËøáÊª§ */
   ETH_InitStructure.ETH_MulticastFramesFilter = ETH_MulticastFramesFilter_Perfect;
-	/* ∂‘µ•≤•µÿ÷∑ π”√ÕÍ√¿µÿ÷∑π˝¬À */
+	/* ÂØπÂçïÊí≠Âú∞ÂùÄ‰ΩøÁî®ÂÆåÁæéÂú∞ÂùÄËøáÊª§ */
   ETH_InitStructure.ETH_UnicastFramesFilter = ETH_UnicastFramesFilter_Perfect;
 #ifdef CHECKSUM_BY_HARDWARE
-  /* ø™∆Ùipv4∫ÕTCP/UDP/ICMPµƒ÷°–£—È∫Õ–∂‘ÿ */
+  /* ÂºÄÂêØipv4ÂíåTCP/UDP/ICMPÁöÑÂ∏ßÊ†°È™åÂíåÂç∏ËΩΩ */
   ETH_InitStructure.ETH_ChecksumOffload = ETH_ChecksumOffload_Enable;
 #endif
 
@@ -216,7 +216,7 @@ void ETH_GPIO_Config(void)
   RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA | RCC_AHB1Periph_GPIOC |
                          RCC_AHB1Periph_GPIOD | RCC_AHB1Periph_GPIOG , ENABLE);
 
-  /* Enable SYSCFG clock  RMII–Ë“™ πƒ‹SYSCFG ±÷”*/
+  /* Enable SYSCFG clock  RMIIÈúÄË¶Å‰ΩøËÉΩSYSCFGÊó∂Èíü*/
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
 
   /* RMII Media interface selection --------------------------------------*/
@@ -237,7 +237,7 @@ void ETH_GPIO_Config(void)
         ETH_RMII_TXD0 -------> PG13
         ETH_RMII_TXD1 -------> PG14
 
-        ETH_RESET-------> PD3----2.0∏ƒŒ™PC0
+        ETH_RESET-------> PD3----2.0Êîπ‰∏∫PC0
                                                   */
 		
   /* Configure PA1, PA2 and PA7 */
@@ -271,7 +271,7 @@ void ETH_GPIO_Config(void)
   /* Configure PD3 reset */
 	#if 0
   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;
-  GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_OUT; 	//  ‰≥ˆƒ£ Ω
+  GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_OUT; 	// ËæìÂá∫Ê®°Âºè
   GPIO_Init(GPIOD, &GPIO_InitStructure);
 	
 	GPIO_ResetBits(GPIOD,GPIO_Pin_3);
@@ -281,7 +281,7 @@ void ETH_GPIO_Config(void)
      	#endif
 			
 	  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;
-  GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_OUT; 	//  ‰≥ˆƒ£ Ω
+  GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_OUT; 	// ËæìÂá∫Ê®°Âºè
   GPIO_Init(GPIOC, &GPIO_InitStructure);
 	
 	GPIO_ResetBits(GPIOC,GPIO_Pin_0);
@@ -358,8 +358,8 @@ void Eth_Link_EXTIConfig(void)
   /* Enable and set the EXTI interrupt to priority 1*/
 
     NVIC_InitStructure.NVIC_IRQChannel = EXTI15_10_IRQn;	
-    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;//«¿’º”≈œ»º∂
-    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;      //œÏ”¶”≈œ»º∂
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;//Êä¢Âç†‰ºòÂÖàÁ∫ß
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;      //ÂìçÂ∫î‰ºòÂÖàÁ∫ß
     NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
     NVIC_Init(&NVIC_InitStructure);
 }

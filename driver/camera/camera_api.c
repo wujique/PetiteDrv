@@ -48,12 +48,12 @@
 extern void Delay(__IO uint32_t nTime);
 /*
 
-	ÉãÏñÍ·°üº¬camera_api¡¢drv_xxxx£¨ÉãÏñÍ·Çı¶¯£©
-	»ùÓÚmcu_dcmiºÍsccb(i2c)Çı¶¯
-	Í¨³£Ê¹ÓÃDMA´«ÊäÄ£Ê½
+	æ‘„åƒå¤´åŒ…å«camera_apiã€drv_xxxxï¼ˆæ‘„åƒå¤´é©±åŠ¨ï¼‰
+	åŸºäºmcu_dcmiå’Œsccb(i2c)é©±åŠ¨
+	é€šå¸¸ä½¿ç”¨DMAä¼ è¾“æ¨¡å¼
 */
 /* Image Formats 
-Í¼Æ¬¸ñÊ½ÀàĞÍ×Ö·û´®*/
+å›¾ç‰‡æ ¼å¼ç±»å‹å­—ç¬¦ä¸²*/
 const uint8_t *ImageForematArray[] =
 {
   (uint8_t*)"BMP QQVGA Format    ",
@@ -72,14 +72,14 @@ OV2640_IDTypeDef  OV2640_Camera_ID;
 s32 CameraGd = -2;
 /**
  *@brief:	   dev_camera_config
- *@details:    ÅäÖÃÉãÏñÍ·
- *@param[in]   Format Í¼Ïñ¸ñÊ½
-			   Dst0 Êı¾İÄ¿±êµØÖ·0£¬
-			   Dst1 Êı¾İÄ¿±êµØÖ·1£¬
-			   			   Ê¹ÓÃÁ½¸öBUFµÄPIPPOP»º³åÄ£Ê½£¬
-			   			   Èç¹ûÊÇÖ±½Ó·¢ËÍµ½LCD£¬µØÖ·1Îªnull
-		       size buff³¤¶È£¬µ¥Î»word(u32)
- *@param[out]  ÎŞ
+ *@details:    é…ç½®æ‘„åƒå¤´
+ *@param[in]   Format å›¾åƒæ ¼å¼
+			   Dst0 æ•°æ®ç›®æ ‡åœ°å€0ï¼Œ
+			   Dst1 æ•°æ®ç›®æ ‡åœ°å€1ï¼Œ
+			   			   ä½¿ç”¨ä¸¤ä¸ªBUFçš„PIPPOPç¼“å†²æ¨¡å¼ï¼Œ
+			   			   å¦‚æœæ˜¯ç›´æ¥å‘é€åˆ°LCDï¼Œåœ°å€1ä¸ºnull
+		       size buffé•¿åº¦ï¼Œå•ä½word(u32)
+ *@param[out]  æ— 
  *@retval:	   
  */
 void dev_camera_config(ImageFormat_TypeDef Format, u32 Dst0, u32 Dst1, u32 size)
@@ -98,9 +98,9 @@ void dev_camera_config(ImageFormat_TypeDef Format, u32 Dst0, u32 Dst1, u32 size)
 }
 /**
  *@brief:	   dev_camera_fresh
- *@details:    Æô¶¯ÉãÏñÍ·Êı¾İ´«Êä
+ *@details:    å¯åŠ¨æ‘„åƒå¤´æ•°æ®ä¼ è¾“
  *@param[in]   
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:	   
  */
 s32 dev_camera_fresh(void)
@@ -112,9 +112,9 @@ s32 dev_camera_fresh(void)
 }
 /**
  *@brief:	   dev_camera_stop
- *@details:    Í£Ö¹ÉãÏñÍ·Êı¾İ´«Êä
+ *@details:    åœæ­¢æ‘„åƒå¤´æ•°æ®ä¼ è¾“
  *@param[in]   
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:	   
  */
 s32 dev_camera_stop(void)
@@ -125,15 +125,15 @@ s32 dev_camera_stop(void)
 }
 /**
  *@brief:	   dev_camera_init
- *@details:    ³õÊ¼»¯ÉãÏñÍ·
+ *@details:    åˆå§‹åŒ–æ‘„åƒå¤´
  *@param[in]   
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:	   
  */
 s32 dev_camera_init(void)
 {
 	#ifdef SYS_USE_CAMERA
-	/* ÉãÏñÍ·½Ó¿Ú³õÊ¼»¯£¬°üº¬£ºMCOSÊ±ÖÓ£¬DCMI½Ó¿Ú£¬PWDNºÍRESETÒı½Å£¬SCCB(I2C)Òı½Å*/
+	/* æ‘„åƒå¤´æ¥å£åˆå§‹åŒ–ï¼ŒåŒ…å«ï¼šMCOSæ—¶é’Ÿï¼ŒDCMIæ¥å£ï¼ŒPWDNå’ŒRESETå¼•è„šï¼ŒSCCB(I2C)å¼•è„š*/
 	/* camera xclk use the MCO1 */
 	MCO1_Init();
 	DCMI_PWDN_RESET_Init();
@@ -164,9 +164,9 @@ s32 dev_camera_init(void)
 }
 /**
  *@brief:	   dev_camera_open
- *@details:    ´ò¿ªÉãÏñÍ·
+ *@details:    æ‰“å¼€æ‘„åƒå¤´
  *@param[in]   
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:	   
  */
 s32 dev_camera_open(void)
@@ -179,9 +179,9 @@ s32 dev_camera_open(void)
 }
 /**
  *@brief:	   dev_camera_close
- *@details:    ¹Ø±ÕÉãÏñÍ·
+ *@details:    å…³é—­æ‘„åƒå¤´
  *@param[in]   
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:	   
  */
 s32 dev_camera_close(void)
@@ -198,12 +198,12 @@ s32 dev_camera_close(void)
 u16 *camera_buf0;
 u16 *camera_buf1;
 
-#define LCD_BUF_SIZE 320*2*2//Ò»´Î´«Êä2ĞĞÊı¾İ£¬Ò»¸öÏñËØ2¸ö×Ö½Ú
+#define LCD_BUF_SIZE 320*2*2//ä¸€æ¬¡ä¼ è¾“2è¡Œæ•°æ®ï¼Œä¸€ä¸ªåƒç´ 2ä¸ªå­—èŠ‚
 u16 DmaCnt;
 
 #define CAMERA_USE_RAM2LCD	1
 /*
-	Æô¶¯ÉãÏñÍ·DMA´«Êä£¬Í¼ÏñÏÔÊ¾µ½ÖÆ¶¨µÄLCDÉÏ
+	å¯åŠ¨æ‘„åƒå¤´DMAä¼ è¾“ï¼Œå›¾åƒæ˜¾ç¤ºåˆ°åˆ¶å®šçš„LCDä¸Š
 */
 s32 dev_camera_show(DevLcdNode *lcd)
 {
@@ -211,25 +211,25 @@ s32 dev_camera_show(DevLcdNode *lcd)
   	s32 ret;
 	volatile u8 sta;
 
-	/* Ñ¡ÔñÍ¼Æ¬¸ñÊ½ */
+	/* é€‰æ‹©å›¾ç‰‡æ ¼å¼ */
 	ImageFormat = (ImageFormat_TypeDef)BMP_QVGA;
 	wjq_log(LOG_DEBUG, " Image selected: %s", ImageForematArray[ImageFormat]);
 
 	#ifndef CAMERA_USE_RAM2LCD
-	/*Ö±½ÓÍ¶µ½LCD*/
+	/*ç›´æ¥æŠ•åˆ°LCD*/
 	dev_camera_config(ImageFormat, FSMC_LCD_ADDRESS, NULL, 1);
 	#else
-	/*·Åµ½buf*/
+	/*æ”¾åˆ°buf*/
 	camera_buf0 = (u16 *)wjq_malloc(LCD_BUF_SIZE);
 	camera_buf1 = (u16 *)wjq_malloc(LCD_BUF_SIZE);
-	/*³ı4µÄÔ­Òò£ºLCD_BUF_SIZEÊÇu8£¬DMAÊı¾İÔ´ÊÇu32£¬Ä¿±êÊı¾İÊÇu16*/
+	/*é™¤4çš„åŸå› ï¼šLCD_BUF_SIZEæ˜¯u8ï¼ŒDMAæ•°æ®æºæ˜¯u32ï¼Œç›®æ ‡æ•°æ®æ˜¯u16*/
 	dev_camera_config(ImageFormat, (u32)camera_buf0, (u32)camera_buf1, LCD_BUF_SIZE/4);
 	#endif
 
 	if(ImageFormat == BMP_QQVGA){
 		/*  
-			ÉèÖÃÏÔÊ¾ÇøÓò£¬ÓÃµÄ¾ÍÊÇÉèÖÃÏÔÊ¾Ö¸ÕëµÄÖ¸Áî£¬Í¨³£ÎÒÃÇÖ»ÊÇÉèÖÃÆğÊ¼£¬
-			Ã»ÓĞÉèÖÃ½áÊø
+			è®¾ç½®æ˜¾ç¤ºåŒºåŸŸï¼Œç”¨çš„å°±æ˜¯è®¾ç½®æ˜¾ç¤ºæŒ‡é’ˆçš„æŒ‡ä»¤ï¼Œé€šå¸¸æˆ‘ä»¬åªæ˜¯è®¾ç½®èµ·å§‹ï¼Œ
+			æ²¡æœ‰è®¾ç½®ç»“æŸ
 		*/
 		/* LCD Display window */
 		dev_lcd_setdir(lcd, W_LCD, L2R_U2D);
@@ -261,7 +261,7 @@ s32 dev_camera_show(DevLcdNode *lcd)
 			DmaCnt++;
 		}
 		#endif
-		/*Ò»¶¨ÒªÏÈ¼ì²âÊı¾İÔÙ¼ì²âÖ¡Íê³É£¬×îºóÒ»´ÎÁ½¸öÖĞ¶Ï²î²»¶àÍ¬Ê±À´*/
+		/*ä¸€å®šè¦å…ˆæ£€æµ‹æ•°æ®å†æ£€æµ‹å¸§å®Œæˆï¼Œæœ€åä¸€æ¬¡ä¸¤ä¸ªä¸­æ–­å·®ä¸å¤šåŒæ—¶æ¥*/
 		if(DCMI_FLAG_FRAME == (sta&DCMI_FLAG_FRAME))
 		{
 			wjq_log(LOG_DEBUG, "-f-%d- ", DmaCnt);

@@ -28,10 +28,10 @@ static int sort_by_y(const void* a, const void *b)
 
 /*
 
-	Ğ£×¼Ê±»ñÈ¡Ñùµã£¬
-	Ñ¹Á¦²»Îª0ºó¿ªÊ¼²ÉÑù£¬±£´æÇ°Ãæ128¸ö£¬
-	Ñ¹Á¦Îª0ºóÍË³ö¡£
-	Ñ¹Á¦ÖµÓ¦¸ÃÌî¶àÉÙ£¿
+	æ ¡å‡†æ—¶è·å–æ ·ç‚¹ï¼Œ
+	å‹åŠ›ä¸ä¸º0åå¼€å§‹é‡‡æ ·ï¼Œä¿å­˜å‰é¢128ä¸ªï¼Œ
+	å‹åŠ›ä¸º0åé€€å‡ºã€‚
+	å‹åŠ›å€¼åº”è¯¥å¡«å¤šå°‘ï¼Ÿ
 
 */
 int getxy(struct tsdev *ts, int *x, int *y)
@@ -43,7 +43,7 @@ int getxy(struct tsdev *ts, int *x, int *y)
 	int index, middle;
 	int ret;
 	
-	/*Ğ£×¼µÄÊ±ºòÖ±½ÓÊ¹ÓÃraw¶Á£¬Ò²¾ÍÊÇÃ»ÓĞ¾­¹ı´¦ÀíµÄÔ­Ê¼Êı¾İ*/
+	/*æ ¡å‡†çš„æ—¶å€™ç›´æ¥ä½¿ç”¨rawè¯»ï¼Œä¹Ÿå°±æ˜¯æ²¡æœ‰ç»è¿‡å¤„ç†çš„åŸå§‹æ•°æ®*/
 	samp[0].pressure = 0;
 	
 	do {
@@ -84,11 +84,11 @@ int getxy(struct tsdev *ts, int *x, int *y)
 			}
 			
 			if (index < MAX_SAMPLES-1)
-				index++;// ¶Áµ½Êı¾İÁË²ÅÔö¼ÓË÷Òı
+				index++;// è¯»åˆ°æ•°æ®äº†æ‰å¢åŠ ç´¢å¼•
 		}
 		/*
-			ÒÆÖ²µ½STM32Ê±£¬ÕâÓĞ¸öBUG£¬STM32 µÄts_read_raw£¬ÓĞ¿ÉÄÜ¶Á²»µ½Êı¾İ£¬×ª»»ËÙ¶È²»¹»¿ì
-			ĞŞ¸ÄÎª£¬Èç¹û¶Á²»µ½Êı¾İ£¬µÈ.
+			ç§»æ¤åˆ°STM32æ—¶ï¼Œè¿™æœ‰ä¸ªBUGï¼ŒSTM32 çš„ts_read_rawï¼Œæœ‰å¯èƒ½è¯»ä¸åˆ°æ•°æ®ï¼Œè½¬æ¢é€Ÿåº¦ä¸å¤Ÿå¿«
+			ä¿®æ”¹ä¸ºï¼Œå¦‚æœè¯»ä¸åˆ°æ•°æ®ï¼Œç­‰.
 		*/
 	} while (1);
 
@@ -116,7 +116,7 @@ int getxy(struct tsdev *ts, int *x, int *y)
 	middle = index/2;
 	if (x) 
 	{
-		/*   Ê¹ÓÃqsort ¶ÔÊı¾İÅÅĞò*/
+		/*   ä½¿ç”¨qsort å¯¹æ•°æ®æ’åº*/
 		qsort(samp, index, sizeof(struct ts_sample), sort_by_x);
 		if (index & 1)
 			*x = samp[middle].x;

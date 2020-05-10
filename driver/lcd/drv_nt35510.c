@@ -2,9 +2,9 @@
 /*
 
 	https://item.taobao.com/item.htm?spm=a1z09.2.0.0.5b272e8dwhV16d&id=530740333497&_u=m24vq7f2b27
-	È«¶¯µç×Ó
-	È«ĞÂ4.0´ç TFTÒº¾§ÆÁ´¥ÃşÆÁÄ£¿é IPSÈ«ÊÓ½Ç ³¬¸ßÇå800X480 ´øµ×°å
-	60¿éÇ®
+	å…¨åŠ¨ç”µå­
+	å…¨æ–°4.0å¯¸ TFTæ¶²æ™¶å±è§¦æ‘¸å±æ¨¡å— IPSå…¨è§†è§’ è¶…é«˜æ¸…800X480 å¸¦åº•æ¿
+	60å—é’±
 
 */
 
@@ -72,16 +72,16 @@ void drv_NT35510_lcd_bl(DevLcdNode *lcd, u8 sta)
 	
 /**
  *@brief:      drv_NT35510_scan_dir
- *@details:    ÉèÖÃÏÔ´æÉ¨Ãè·½Ïò£¬ ±¾º¯ÊıÎªÊúÆÁ½Ç¶È
+ *@details:    è®¾ç½®æ˜¾å­˜æ‰«ææ–¹å‘ï¼Œ æœ¬å‡½æ•°ä¸ºç«–å±è§’åº¦
  *@param[in]   u8 dir  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     static
  */
 static void drv_NT35510_scan_dir(DevLcdNode *lcd, u8 dir)
 {
 	u16 regval=0;
 
-	/*ÉèÖÃ´Ó×ó±ßµ½ÓÒ±ß»¹ÊÇÓÒ±ßµ½×ó±ß*/
+	/*è®¾ç½®ä»å·¦è¾¹åˆ°å³è¾¹è¿˜æ˜¯å³è¾¹åˆ°å·¦è¾¹*/
 	switch(dir)
 	{
 		case R2L_U2D:
@@ -92,7 +92,7 @@ static void drv_NT35510_scan_dir(DevLcdNode *lcd, u8 dir)
 			break;	 
 	}
 
-	/*ÉèÖÃ´ÓÉÏµ½ÏÂ»¹ÊÇ´ÓÏÂµ½ÉÏ*/
+	/*è®¾ç½®ä»ä¸Šåˆ°ä¸‹è¿˜æ˜¯ä»ä¸‹åˆ°ä¸Š*/
 	switch(dir)
 	{
 		case L2R_D2U:
@@ -104,9 +104,9 @@ static void drv_NT35510_scan_dir(DevLcdNode *lcd, u8 dir)
 	}
 
 	/*
-		ÉèÖÃÏÈ×óÓÒ»¹ÊÇÏÈÉÏÏÂ Reverse Mode
-		Èç¹ûÉèÖÃÎª1£¬LCD¿ØÖÆÆ÷ÒÑ¾­½«ĞĞ¸úÁĞ¶Ôµ÷ÁË£¬
-		Òò´ËĞèÒªÔÚÏÔÊ¾ÖĞ½øĞĞµ÷Õû
+		è®¾ç½®å…ˆå·¦å³è¿˜æ˜¯å…ˆä¸Šä¸‹ Reverse Mode
+		å¦‚æœè®¾ç½®ä¸º1ï¼ŒLCDæ§åˆ¶å™¨å·²ç»å°†è¡Œè·Ÿåˆ—å¯¹è°ƒäº†ï¼Œ
+		å› æ­¤éœ€è¦åœ¨æ˜¾ç¤ºä¸­è¿›è¡Œè°ƒæ•´
 	*/
 	switch(dir)
 	{
@@ -118,10 +118,10 @@ static void drv_NT35510_scan_dir(DevLcdNode *lcd, u8 dir)
 			break;	 
 	}
 	/*
-		»¹¿ÉÒÔÉèÖÃRGB»¹ÊÇGBR
-		»¹¿ÉÒÔÉèÖÃµ÷×ªÉÏÏÂ
+		è¿˜å¯ä»¥è®¾ç½®RGBè¿˜æ˜¯GBR
+		è¿˜å¯ä»¥è®¾ç½®è°ƒè½¬ä¸Šä¸‹
 	*/	
-	//regval|=(1<<3);//1:GBR,0:RGB ²»Í¬Çı¶¯ICÓĞ²îÒì
+	//regval|=(1<<3);//1:GBR,0:RGB ä¸åŒé©±åŠ¨ICæœ‰å·®å¼‚
 
 	DevLcdBusNode * node;
 	node = bus_lcd_open(lcd->dev.buslcd);
@@ -137,12 +137,12 @@ static void drv_NT35510_scan_dir(DevLcdNode *lcd, u8 dir)
 
 /**
  *@brief:      drv_NT35510_set_cp_addr
- *@details:    ÉèÖÃ¿ØÖÆÆ÷µÄĞĞÁĞµØÖ··¶Î§
+ *@details:    è®¾ç½®æ§åˆ¶å™¨çš„è¡Œåˆ—åœ°å€èŒƒå›´
  *@param[in]   u16 sc  
                u16 ec  
                u16 sp  
                u16 ep  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 drv_NT35510_set_cp_addr(DevLcdNode *lcd, u16 sc, u16 ec, u16 sp, u16 ep)
@@ -190,9 +190,9 @@ s32 drv_NT35510_set_cp_addr(DevLcdNode *lcd, u16 sc, u16 ec, u16 sp, u16 ep)
 }
 /**
  *@brief:      drv_NT35510_display_onoff
- *@details:    ÏÔÊ¾»ò¹Ø±Õ
+ *@details:    æ˜¾ç¤ºæˆ–å…³é—­
  *@param[in]   u8 sta  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     static
  */
 static s32 drv_NT35510_display_onoff(DevLcdNode *lcd, u8 sta)
@@ -396,9 +396,9 @@ NT35510_Init_CMD NT35510_Init_List[]={
 
 /**
  *@brief:      drv_NT35510_init
- *@details:    ³õÊ¼»¯FSMC£¬²¢ÇÒ¶ÁÈ¡NT35510µÄÉè±¸ID
+ *@details:    åˆå§‹åŒ–FSMCï¼Œå¹¶ä¸”è¯»å–NT35510çš„è®¾å¤‡ID
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 drv_NT35510_init(DevLcdNode *lcd)
@@ -419,7 +419,7 @@ s32 drv_NT35510_init(DevLcdNode *lcd)
 	bus_lcd_rst(node, 1);
 	Delay(50);
 
-	/*  ³õÊ¼»¯ ¶ÁID */
+	/*  åˆå§‹åŒ– è¯»ID */
 	bus_lcd_write_cmd(node, (0xF000));
 	bus_lcd_write_data(node, "\x55", 1);
 	bus_lcd_write_cmd(node, (0xF001));
@@ -471,15 +471,15 @@ s32 drv_NT35510_init(DevLcdNode *lcd)
 }
 /**
  *@brief:      drv_NT35510_xy2cp
- *@details:    ½«xy×ø±ê×ª»»ÎªCP×ø±ê
- *@param[in]   ÎŞ
- *@param[out]  ÎŞ
+ *@details:    å°†xyåæ ‡è½¬æ¢ä¸ºCPåæ ‡
+ *@param[in]   æ— 
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 drv_NT35510_xy2cp(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey, u16 *sc, u16 *ec, u16 *sp, u16 *ep)
 {
 	/*
-		ÏÔÊ¾XYÖá·¶Î§
+		æ˜¾ç¤ºXYè½´èŒƒå›´
 	*/
 	if(sx >= lcd->width)
 		sx = lcd->width-1;
@@ -493,9 +493,9 @@ s32 drv_NT35510_xy2cp(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey, u16 *sc, 
 	if(ey >= lcd->height)
 		ey = lcd->height-1;
 	/*
-		XYÖá£¬ÊµÎï½Ç¶ÈÀ´¿´£¬·½ÏòÈ¡¾öÓÚºáÆÁ»¹ÊÇÊúÆÁ
-		CPÖá£¬ÊÇ¿ØÖÆÆ÷ÏÔ´æ½Ç¶È£¬
-		XYÖáµÄÓ³Éä¹ØÏµÈ¡¾öÓÚÉ¨Ãè·½Ïò
+		XYè½´ï¼Œå®ç‰©è§’åº¦æ¥çœ‹ï¼Œæ–¹å‘å–å†³äºæ¨ªå±è¿˜æ˜¯ç«–å±
+		CPè½´ï¼Œæ˜¯æ§åˆ¶å™¨æ˜¾å­˜è§’åº¦ï¼Œ
+		XYè½´çš„æ˜ å°„å…³ç³»å–å†³äºæ‰«ææ–¹å‘
 	*/
 	if(
 		(((lcd->scandir&LRUD_BIT_MASK) == LRUD_BIT_MASK)
@@ -520,11 +520,11 @@ s32 drv_NT35510_xy2cp(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey, u16 *sc, 
 }
 /**
  *@brief:      drv_NT35510_drawpoint
- *@details:    »­µã
+ *@details:    ç”»ç‚¹
  *@param[in]   u16 x      
                u16 y      
                u16 color  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     static
  */
 static s32 drv_NT35510_drawpoint(DevLcdNode *lcd, u16 x, u16 y, u16 color)
@@ -546,13 +546,13 @@ static s32 drv_NT35510_drawpoint(DevLcdNode *lcd, u16 x, u16 y, u16 color)
 }
 /**
  *@brief:      drv_NT35510_color_fill
- *@details:    ½«Ò»¿éÇøÓòÉè¶¨ÎªÄ³ÖÖÑÕÉ«
+ *@details:    å°†ä¸€å—åŒºåŸŸè®¾å®šä¸ºæŸç§é¢œè‰²
  *@param[in]   u16 sx     
                u16 sy     
                u16 ex     
                u16 ey     
                u16 color  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 drv_NT35510_color_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 color)
@@ -565,8 +565,8 @@ s32 drv_NT35510_color_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 colo
 	drv_NT35510_xy2cp(lcd, sx, ex, sy, ey, &hsa,&hea,&vsa,&vea);
 	drv_NT35510_set_cp_addr(lcd, hsa, hea, vsa, vea);
 
-	width = hea - hsa + 1;//µÃµ½Ìî³äµÄ¿í¶È
-	height = vea - vsa + 1;//¸ß¶È
+	width = hea - hsa + 1;//å¾—åˆ°å¡«å……çš„å®½åº¦
+	height = vea - vsa + 1;//é«˜åº¦
 	
 	//uart_printf("ili9325 width:%d, height:%d\r\n", width, height);
 	
@@ -586,13 +586,13 @@ s32 drv_NT35510_color_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 colo
 
 /**
  *@brief:      drv_NT35510_color_fill
- *@details:    Ìî³ä¾ØĞÎÇøÓò
+ *@details:    å¡«å……çŸ©å½¢åŒºåŸŸ
  *@param[in]   u16 sx      
                u16 sy      
                u16 ex      
                u16 ey      
-               u16 *color  Ã¿Ò»¸öµãµÄÑÕÉ«Êı¾İ
- *@param[out]  ÎŞ
+               u16 *color  æ¯ä¸€ä¸ªç‚¹çš„é¢œè‰²æ•°æ®
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 drv_NT35510_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)

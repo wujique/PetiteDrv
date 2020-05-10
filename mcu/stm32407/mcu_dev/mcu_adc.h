@@ -2,7 +2,7 @@
 #define __MCU_ADC_H__
 
 
-/*������ʹ���жϷ�ʽ*/
+/*定义则使用中断方式*/
 #define MCU_ADC_IRQ 1
 
 

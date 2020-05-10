@@ -82,7 +82,7 @@
 #define HOST_SOF_PORT                      GPIOA
 #define HOST_SOF_SIGNAL                    GPIO_Pin_8
 #else //WUJIQUE
-/* ���̸���ûʹ��
+/* 例程根本没使用
 #define HOST_OVRCURR_PORT                  GPIOD
 #define HOST_OVRCURR_LINE                  GPIO_Pin_3
 #define HOST_OVRCURR_PORT_SOURCE           GPIO_PortSourceGPIOD
@@ -182,7 +182,7 @@ void USB_OTG_BSP_Init(USB_OTG_CORE_HANDLE *pdev)
   GPIO_PinAFConfig(GPIOA,GPIO_PinSource11,GPIO_AF_OTG1_FS) ; 
   GPIO_PinAFConfig(GPIOA,GPIO_PinSource12,GPIO_AF_OTG1_FS) ;
   
-  /* Configure  VBUS Pin  wujique mask  ��ʹ��VBUS*/
+  /* Configure  VBUS Pin  wujique mask  不使用VBUS*/
   #if 0
   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9;
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
@@ -402,7 +402,7 @@ void USB_OTG_BSP_DriveVBUS(USB_OTG_CORE_HANDLE *pdev, uint8_t state)
 	  #if 0
 	    GPIO_SetBits(HOST_POWERSW_PORT, HOST_POWERSW_VBUS);
 	  #else
-		/*�ݼ�ȸ�޸ģ���ʼ���������ѹ������Ϊ����*/
+		/*屋脊雀修改，初始，不输出电压，设置为输入*/
 		RCC_AHB1PeriphClockCmd( HOST_POWERSW_PORT_RCC , ENABLE);  
 
 		GPIO_InitStructure.GPIO_Pin = HOST_POWERSW_VBUS;
@@ -481,7 +481,7 @@ void  USB_OTG_BSP_ConfigVBUS(USB_OTG_CORE_HANDLE *pdev)
   GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL ;
   GPIO_Init(HOST_POWERSW_PORT,&GPIO_InitStructure);
   #else
-  /*�ݼ�ȸ�޸ģ���ʼ���������ѹ������Ϊ����*/
+  /*屋脊雀修改，初始，不输出电压，设置为输入*/
   RCC_AHB1PeriphClockCmd( HOST_POWERSW_PORT_RCC , ENABLE);  
   
   GPIO_InitStructure.GPIO_Pin = HOST_POWERSW_VBUS;

@@ -1,25 +1,25 @@
 /**
  * @file            mcu_io.c
- * @brief           adcÇı¶¯
+ * @brief           adcé©±åŠ¨
  * @author          wujique
- * @date            2017Äê12ÔÂ8ÈÕ ĞÇÆÚÎå
- * @version         ³õ¸å
- * @par             °æÈ¨ËùÓĞ (C), 2013-2023
+ * @date            2017å¹´12æœˆ8æ—¥ æ˜ŸæœŸäº”
+ * @version         åˆç¨¿
+ * @par             ç‰ˆæƒæ‰€æœ‰ (C), 2013-2023
  * @par History:
- * 1.ÈÕ    ÆÚ:        2017Äê12ÔÂ8ÈÕ ĞÇÆÚÎå
- *   ×÷    Õß:         wujique
- *   ĞŞ¸ÄÄÚÈİ:   ´´½¨ÎÄ¼ş
-       	1 Ô´Âë¹éÎİ¼¹È¸¹¤×÷ÊÒËùÓĞ¡£
-		2 ¿ÉÒÔÓÃÓÚµÄÆäËûÉÌÒµÓÃÍ¾£¨ÅäÌ×¿ª·¢°åÏúÊÛ³ıÍâ£©£¬²»ĞëÊÚÈ¨¡£
-		3 Îİ¼¹È¸¹¤×÷ÊÒ²»¶Ô´úÂë¹¦ÄÜ×öÈÎºÎ±£Ö¤£¬ÇëÊ¹ÓÃÕß×ÔĞĞ²âÊÔ£¬ºó¹û×Ô¸º¡£
-		4 ¿ÉËæÒâĞŞ¸ÄÔ´Âë²¢·Ö·¢£¬µ«²»¿ÉÖ±½ÓÏúÊÛ±¾´úÂë»ñÀû£¬²¢ÇÒÇë±£ÁôWUJIQUE°æÈ¨ËµÃ÷¡£
-		5 Èç·¢ÏÖBUG»òÓĞÓÅ»¯£¬»¶Ó­·¢²¼¸üĞÂ¡£ÇëÁªÏµ£ºcode@wujique.com
-		6 Ê¹ÓÃ±¾Ô´ÂëÔòÏàµ±ÓÚÈÏÍ¬±¾°æÈ¨ËµÃ÷¡£
-		7 ÈçÇÖ·¸ÄãµÄÈ¨Àû£¬ÇëÁªÏµ£ºcode@wujique.com
-		8 Ò»ÇĞ½âÊÍÈ¨¹éÎİ¼¹È¸¹¤×÷ÊÒËùÓĞ¡£
+ * 1.æ—¥    æœŸ:        2017å¹´12æœˆ8æ—¥ æ˜ŸæœŸäº”
+ *   ä½œ    è€…:         wujique
+ *   ä¿®æ”¹å†…å®¹:   åˆ›å»ºæ–‡ä»¶
+       	1 æºç å½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
+		2 å¯ä»¥ç”¨äºçš„å…¶ä»–å•†ä¸šç”¨é€”ï¼ˆé…å¥—å¼€å‘æ¿é”€å”®é™¤å¤–ï¼‰ï¼Œä¸é¡»æˆæƒã€‚
+		3 å±‹è„Šé›€å·¥ä½œå®¤ä¸å¯¹ä»£ç åŠŸèƒ½åšä»»ä½•ä¿è¯ï¼Œè¯·ä½¿ç”¨è€…è‡ªè¡Œæµ‹è¯•ï¼Œåæœè‡ªè´Ÿã€‚
+		4 å¯éšæ„ä¿®æ”¹æºç å¹¶åˆ†å‘ï¼Œä½†ä¸å¯ç›´æ¥é”€å”®æœ¬ä»£ç è·åˆ©ï¼Œå¹¶ä¸”è¯·ä¿ç•™WUJIQUEç‰ˆæƒè¯´æ˜ã€‚
+		5 å¦‚å‘ç°BUGæˆ–æœ‰ä¼˜åŒ–ï¼Œæ¬¢è¿å‘å¸ƒæ›´æ–°ã€‚è¯·è”ç³»ï¼šcode@wujique.com
+		6 ä½¿ç”¨æœ¬æºç åˆ™ç›¸å½“äºè®¤åŒæœ¬ç‰ˆæƒè¯´æ˜ã€‚
+		7 å¦‚ä¾µçŠ¯ä½ çš„æƒåˆ©ï¼Œè¯·è”ç³»ï¼šcode@wujique.com
+		8 ä¸€åˆ‡è§£é‡Šæƒå½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
 */
 /*
-	·â×°IO²Ù×÷£¬ÒÔ±ãÒÆÖ²µ½ÆäËûĞ¾Æ¬
+	å°è£…IOæ“ä½œï¼Œä»¥ä¾¿ç§»æ¤åˆ°å…¶ä»–èŠ¯ç‰‡
 */
 #include "mcu.h"
 #include "mcu_timer.h"
@@ -30,7 +30,7 @@ const GPIO_TypeDef *Stm32PortList[MCU_PORT_MAX] = {NULL, GPIOA,  GPIOB, GPIOC, G
 									GPIOI, GPIOJ, GPIOK};
 
 /*
-	³õÊ¼»¯ËùÓĞIOµÄÊ±ÖÓ
+	åˆå§‹åŒ–æ‰€æœ‰IOçš„æ—¶é’Ÿ
 */
 void mcu_io_init(void)
 {
@@ -82,13 +82,13 @@ s32 mcu_io_config_timer(MCU_PORT port, MCU_IO pin, McuTimerNum timer)
 
 	pinsource = math_log2(pin);
 	/*need fix*/
-	GPIO_PinAFConfig((GPIO_TypeDef *)Stm32PortList[port], pinsource, GPIO_AF); //---¹Ü½Å¸´ÓÃÎª TIM4¹¦ÄÜ
+	GPIO_PinAFConfig((GPIO_TypeDef *)Stm32PortList[port], pinsource, GPIO_AF); //---ç®¡è„šå¤ç”¨ä¸º TIM4åŠŸèƒ½
 	
     GPIO_InitStructure.GPIO_Pin = pin; 
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF; //---¸´ÓÃ¹¦ÄÜ
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz; //---ËÙ¶È 50MHz
-    GPIO_InitStructure.GPIO_OType = GPIO_OType_PP; //---ÍÆÍì¸´ÓÃÊä³ö
-    GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP; //---ÉÏÀ­
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF; //---å¤ç”¨åŠŸèƒ½
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz; //---é€Ÿåº¦ 50MHz
+    GPIO_InitStructure.GPIO_OType = GPIO_OType_PP; //---æ¨æŒ½å¤ç”¨è¾“å‡º
+    GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP; //---ä¸Šæ‹‰
     GPIO_Init((GPIO_TypeDef *)Stm32PortList[port], &GPIO_InitStructure);
 }
 
@@ -97,13 +97,13 @@ s32 mcu_io_config_dac(MCU_PORT port, MCU_IO pin)
 	GPIO_InitTypeDef GPIO_InitStructure;
 	
 	GPIO_InitStructure.GPIO_Pin = pin;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AN;//---Ä£ÄâÄ£Ê½
-    GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;//---ÏÂÀ­
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AN;//---æ¨¡æ‹Ÿæ¨¡å¼
+    GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;//---ä¸‹æ‹‰
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_Init((GPIO_TypeDef *)Stm32PortList[port], &GPIO_InitStructure);//---³õÊ¼»¯ GPIO
+    GPIO_Init((GPIO_TypeDef *)Stm32PortList[port], &GPIO_InitStructure);//---åˆå§‹åŒ– GPIO
 }
 /*
-	½«IO¿ÚÅäÖÃÎªÊäÈë£¬ ÉÏÀ­
+	å°†IOå£é…ç½®ä¸ºè¾“å…¥ï¼Œ ä¸Šæ‹‰
 */
 void mcu_io_config_in(MCU_PORT port, MCU_IO pin)
 {
@@ -113,11 +113,11 @@ void mcu_io_config_in(MCU_PORT port, MCU_IO pin)
 		return;
 	
     GPIO_InitStructure.GPIO_Pin = pin;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;//ÊäÈëÄ£Ê½  
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;//è¾“å…¥æ¨¡å¼  
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;//100MHz
     //GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
     GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
-    GPIO_Init((GPIO_TypeDef *)Stm32PortList[port], &GPIO_InitStructure);//³õÊ¼»¯  	
+    GPIO_Init((GPIO_TypeDef *)Stm32PortList[port], &GPIO_InitStructure);//åˆå§‹åŒ–  	
 }
 
 
@@ -129,11 +129,11 @@ void mcu_io_config_out(MCU_PORT port, MCU_IO pin)
 		return;
 	
 	GPIO_InitStructure.GPIO_Pin = pin;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;//ÆÕÍ¨Êä³öÄ£Ê½	
-	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;//ÍÆÍìÊä³ö
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;//æ™®é€šè¾“å‡ºæ¨¡å¼	
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;//æ¨æŒ½è¾“å‡º
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;//100MHz
 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
-	GPIO_Init((GPIO_TypeDef *)Stm32PortList[port], &GPIO_InitStructure);//³õÊ¼»¯
+	GPIO_Init((GPIO_TypeDef *)Stm32PortList[port], &GPIO_InitStructure);//åˆå§‹åŒ–
 }
 
 void mcu_io_output_setbit(MCU_PORT port, MCU_IO pin)

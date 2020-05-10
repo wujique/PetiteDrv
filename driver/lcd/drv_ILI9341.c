@@ -1,27 +1,27 @@
 /**
  * @file            dev_ILI9341.c
- * @brief           TFT LCD Çı¶¯Ğ¾Æ¬ILI6341Çı¶¯³ÌĞò
+ * @brief           TFT LCD é©±åŠ¨èŠ¯ç‰‡ILI6341é©±åŠ¨ç¨‹åº
  * @author          wujique
- * @date            2017Äê11ÔÂ8ÈÕ ĞÇÆÚÈı
- * @version         ³õ¸å
- * @par             °æÈ¨ËùÓĞ (C), 2013-2023
+ * @date            2017å¹´11æœˆ8æ—¥ æ˜ŸæœŸä¸‰
+ * @version         åˆç¨¿
+ * @par             ç‰ˆæƒæ‰€æœ‰ (C), 2013-2023
  * @par History:
- * 1.ÈÕ    ÆÚ:        2017Äê11ÔÂ8ÈÕ ĞÇÆÚÈı
- *   ×÷    Õß:         wujique
- *   ĞŞ¸ÄÄÚÈİ:   ´´½¨ÎÄ¼ş
-       	1 Ô´Âë¹éÎİ¼¹È¸¹¤×÷ÊÒËùÓĞ¡£
-		2 ¿ÉÒÔÓÃÓÚµÄÆäËûÉÌÒµÓÃÍ¾£¨ÅäÌ×¿ª·¢°åÏúÊÛ³ıÍâ£©£¬²»ĞëÊÚÈ¨¡£
-		3 Îİ¼¹È¸¹¤×÷ÊÒ²»¶Ô´úÂë¹¦ÄÜ×öÈÎºÎ±£Ö¤£¬ÇëÊ¹ÓÃÕß×ÔĞĞ²âÊÔ£¬ºó¹û×Ô¸º¡£
-		4 ¿ÉËæÒâĞŞ¸ÄÔ´Âë²¢·Ö·¢£¬µ«²»¿ÉÖ±½ÓÏúÊÛ±¾´úÂë»ñÀû£¬²¢ÇÒÇë±£ÁôWUJIQUE°æÈ¨ËµÃ÷¡£
-		5 Èç·¢ÏÖBUG»òÓĞÓÅ»¯£¬»¶Ó­·¢²¼¸üĞÂ¡£ÇëÁªÏµ£ºcode@wujique.com
-		6 Ê¹ÓÃ±¾Ô´ÂëÔòÏàµ±ÓÚÈÏÍ¬±¾°æÈ¨ËµÃ÷¡£
-		7 ÈçÇÖ·¸ÄãµÄÈ¨Àû£¬ÇëÁªÏµ£ºcode@wujique.com
-		8 Ò»ÇĞ½âÊÍÈ¨¹éÎİ¼¹È¸¹¤×÷ÊÒËùÓĞ¡£
+ * 1.æ—¥    æœŸ:        2017å¹´11æœˆ8æ—¥ æ˜ŸæœŸä¸‰
+ *   ä½œ    è€…:         wujique
+ *   ä¿®æ”¹å†…å®¹:   åˆ›å»ºæ–‡ä»¶
+       	1 æºç å½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
+		2 å¯ä»¥ç”¨äºçš„å…¶ä»–å•†ä¸šç”¨é€”ï¼ˆé…å¥—å¼€å‘æ¿é”€å”®é™¤å¤–ï¼‰ï¼Œä¸é¡»æˆæƒã€‚
+		3 å±‹è„Šé›€å·¥ä½œå®¤ä¸å¯¹ä»£ç åŠŸèƒ½åšä»»ä½•ä¿è¯ï¼Œè¯·ä½¿ç”¨è€…è‡ªè¡Œæµ‹è¯•ï¼Œåæœè‡ªè´Ÿã€‚
+		4 å¯éšæ„ä¿®æ”¹æºç å¹¶åˆ†å‘ï¼Œä½†ä¸å¯ç›´æ¥é”€å”®æœ¬ä»£ç è·åˆ©ï¼Œå¹¶ä¸”è¯·ä¿ç•™WUJIQUEç‰ˆæƒè¯´æ˜ã€‚
+		5 å¦‚å‘ç°BUGæˆ–æœ‰ä¼˜åŒ–ï¼Œæ¬¢è¿å‘å¸ƒæ›´æ–°ã€‚è¯·è”ç³»ï¼šcode@wujique.com
+		6 ä½¿ç”¨æœ¬æºç åˆ™ç›¸å½“äºè®¤åŒæœ¬ç‰ˆæƒè¯´æ˜ã€‚
+		7 å¦‚ä¾µçŠ¯ä½ çš„æƒåˆ©ï¼Œè¯·è”ç³»ï¼šcode@wujique.com
+		8 ä¸€åˆ‡è§£é‡Šæƒå½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
 */
 #include "mcu.h"
 #include "petite_config.h"
 
-/*	9341Çı¶¯*/
+/*	9341é©±åŠ¨*/
 #if( LCD_DRIVER_9341 == 1 )
 
 #include "alloc.h"
@@ -43,7 +43,7 @@ extern void Delay(__IO uint32_t nTime);
 
 
 
-/*9341ÃüÁî¶¨Òå*/
+/*9341å‘½ä»¤å®šä¹‰*/
 #define ILI9341_CMD_WRAM 0x2c
 #define ILI9341_CMD_SETX 0x2a
 #define ILI9341_CMD_SETY 0x2b
@@ -62,7 +62,7 @@ s32 drv_ILI9341_update(DevLcdNode *lcd);
 
 /*
 
-	¶¨ÒåÒ»¸öTFT LCD£¬Ê¹ÓÃILI9341Çı¶¯ICµÄÉè±¸
+	å®šä¹‰ä¸€ä¸ªTFT LCDï¼Œä½¿ç”¨ILI9341é©±åŠ¨ICçš„è®¾å¤‡
 
 */
 _lcd_drv TftLcdILI9341Drv = {
@@ -92,16 +92,16 @@ void drv_ILI9341_lcd_bl(DevLcdNode *lcd, u8 sta)
 	
 /**
  *@brief:      drv_ILI9341_scan_dir
- *@details:    ÉèÖÃÏÔ´æÉ¨Ãè·½Ïò£¬ ±¾º¯ÊıÎªÊúÆÁ½Ç¶È
+ *@details:    è®¾ç½®æ˜¾å­˜æ‰«ææ–¹å‘ï¼Œ æœ¬å‡½æ•°ä¸ºç«–å±è§’åº¦
  *@param[in]   u8 dir  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     static
  */
 static void drv_ILI9341_scan_dir(DevLcdNode *lcd, u8 dir)
 {
 	u16 regval=0;
 
-	/*ÉèÖÃ´Ó×ó±ßµ½ÓÒ±ß»¹ÊÇÓÒ±ßµ½×ó±ß*/
+	/*è®¾ç½®ä»å·¦è¾¹åˆ°å³è¾¹è¿˜æ˜¯å³è¾¹åˆ°å·¦è¾¹*/
 	switch(dir)
 	{
 		case R2L_U2D:
@@ -112,7 +112,7 @@ static void drv_ILI9341_scan_dir(DevLcdNode *lcd, u8 dir)
 			break;	 
 	}
 
-	/*ÉèÖÃ´ÓÉÏµ½ÏÂ»¹ÊÇ´ÓÏÂµ½ÉÏ*/
+	/*è®¾ç½®ä»ä¸Šåˆ°ä¸‹è¿˜æ˜¯ä»ä¸‹åˆ°ä¸Š*/
 	switch(dir)
 	{
 		case L2R_D2U:
@@ -124,9 +124,9 @@ static void drv_ILI9341_scan_dir(DevLcdNode *lcd, u8 dir)
 	}
 
 	/*
-		ÉèÖÃÏÈ×óÓÒ»¹ÊÇÏÈÉÏÏÂ Reverse Mode
-		Èç¹ûÉèÖÃÎª1£¬LCD¿ØÖÆÆ÷ÒÑ¾­½«ĞĞ¸úÁĞ¶Ôµ÷ÁË£¬
-		Òò´ËĞèÒªÔÚÏÔÊ¾ÖĞ½øĞĞµ÷Õû
+		è®¾ç½®å…ˆå·¦å³è¿˜æ˜¯å…ˆä¸Šä¸‹ Reverse Mode
+		å¦‚æœè®¾ç½®ä¸º1ï¼ŒLCDæ§åˆ¶å™¨å·²ç»å°†è¡Œè·Ÿåˆ—å¯¹è°ƒäº†ï¼Œ
+		å› æ­¤éœ€è¦åœ¨æ˜¾ç¤ºä¸­è¿›è¡Œè°ƒæ•´
 	*/
 	switch(dir)
 	{
@@ -138,10 +138,10 @@ static void drv_ILI9341_scan_dir(DevLcdNode *lcd, u8 dir)
 			break;	 
 	}
 	/*
-		»¹¿ÉÒÔÉèÖÃRGB»¹ÊÇGBR
-		»¹¿ÉÒÔÉèÖÃµ÷×ªÉÏÏÂ
+		è¿˜å¯ä»¥è®¾ç½®RGBè¿˜æ˜¯GBR
+		è¿˜å¯ä»¥è®¾ç½®è°ƒè½¬ä¸Šä¸‹
 	*/	
-	regval|=(1<<3);//0:GBR,1:RGB  ¸úR61408Ïà·´
+	regval|=(1<<3);//0:GBR,1:RGB  è·ŸR61408ç›¸å
 
 	DevLcdBusNode * node;
 	node = bus_lcd_open(lcd->dev.buslcd);
@@ -156,12 +156,12 @@ static void drv_ILI9341_scan_dir(DevLcdNode *lcd, u8 dir)
 
 /**
  *@brief:      drv_ILI9341_set_cp_addr
- *@details:    ÉèÖÃ¿ØÖÆÆ÷µÄĞĞÁĞµØÖ··¶Î§
+ *@details:    è®¾ç½®æ§åˆ¶å™¨çš„è¡Œåˆ—åœ°å€èŒƒå›´
  *@param[in]   u16 sc  
                u16 ec  
                u16 sp  
                u16 ep  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 drv_ILI9341_set_cp_addr(DevLcdNode *lcd, u16 sc, u16 ec, u16 sp, u16 ep)
@@ -195,9 +195,9 @@ s32 drv_ILI9341_set_cp_addr(DevLcdNode *lcd, u16 sc, u16 ec, u16 sp, u16 ep)
 
 /**
  *@brief:      drv_ILI9341_display_onoff
- *@details:    ÏÔÊ¾»ò¹Ø±Õ
+ *@details:    æ˜¾ç¤ºæˆ–å…³é—­
  *@param[in]   u8 sta  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     static
  */
 static s32 drv_ILI9341_display_onoff(DevLcdNode *lcd, u8 sta)
@@ -217,9 +217,9 @@ static s32 drv_ILI9341_display_onoff(DevLcdNode *lcd, u8 sta)
 
 /**
  *@brief:      drv_ILI9341_init
- *@details:    ³õÊ¼»¯FSMC£¬²¢ÇÒ¶ÁÈ¡ILI9341µÄÉè±¸ID
+ *@details:    åˆå§‹åŒ–FSMCï¼Œå¹¶ä¸”è¯»å–ILI9341çš„è®¾å¤‡ID
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 drv_ILI9341_init(DevLcdNode *lcd)
@@ -238,7 +238,7 @@ s32 drv_ILI9341_init(DevLcdNode *lcd)
 	Delay(50);
 
 	bus_lcd_write_cmd(node, (0x00d3));
-	/*¶Á4¸ö×Ö½Ú£¬µÚÒ»¸ö×Ö½ÚÊÇdummy read£¬ µÚ¶ş×Ö½ÚÊÇ0x00£¬ µÚÈı×Ö½ÚÊÇ93£¬µÚËÄ×Ö½ÚÊÇ41*/
+	/*è¯»4ä¸ªå­—èŠ‚ï¼Œç¬¬ä¸€ä¸ªå­—èŠ‚æ˜¯dummy readï¼Œ ç¬¬äºŒå­—èŠ‚æ˜¯0x00ï¼Œ ç¬¬ä¸‰å­—èŠ‚æ˜¯93ï¼Œç¬¬å››å­—èŠ‚æ˜¯41*/
 	bus_lcd_read_data(node, (u8*)tmp, 4);
 	
 	data = tmp[2]; 
@@ -369,15 +369,15 @@ s32 drv_ILI9341_init(DevLcdNode *lcd)
 }
 /**
  *@brief:      drv_ILI9341_xy2cp
- *@details:    ½«xy×ø±ê×ª»»ÎªCP×ø±ê
- *@param[in]   ÎŞ
- *@param[out]  ÎŞ
+ *@details:    å°†xyåæ ‡è½¬æ¢ä¸ºCPåæ ‡
+ *@param[in]   æ— 
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 drv_ILI9341_xy2cp(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey, u16 *sc, u16 *ec, u16 *sp, u16 *ep)
 {
 	/*
-		ÏÔÊ¾XYÖá·¶Î§
+		æ˜¾ç¤ºXYè½´èŒƒå›´
 	*/
 	if(sx >= lcd->width)
 		sx = lcd->width-1;
@@ -391,9 +391,9 @@ s32 drv_ILI9341_xy2cp(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey, u16 *sc, 
 	if(ey >= lcd->height)
 		ey = lcd->height-1;
 	/*
-		XYÖá£¬ÊµÎï½Ç¶ÈÀ´¿´£¬·½ÏòÈ¡¾öÓÚºáÆÁ»¹ÊÇÊúÆÁ
-		CPÖá£¬ÊÇ¿ØÖÆÆ÷ÏÔ´æ½Ç¶È£¬
-		XYÖáµÄÓ³Éä¹ØÏµÈ¡¾öÓÚÉ¨Ãè·½Ïò
+		XYè½´ï¼Œå®ç‰©è§’åº¦æ¥çœ‹ï¼Œæ–¹å‘å–å†³äºæ¨ªå±è¿˜æ˜¯ç«–å±
+		CPè½´ï¼Œæ˜¯æ§åˆ¶å™¨æ˜¾å­˜è§’åº¦ï¼Œ
+		XYè½´çš„æ˜ å°„å…³ç³»å–å†³äºæ‰«ææ–¹å‘
 	*/
 	if(
 		(((lcd->scandir&LRUD_BIT_MASK) == LRUD_BIT_MASK)
@@ -420,11 +420,11 @@ s32 drv_ILI9341_xy2cp(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey, u16 *sc, 
 }
 /**
  *@brief:      drv_ILI9341_drawpoint
- *@details:    »­µã
+ *@details:    ç”»ç‚¹
  *@param[in]   u16 x      
                u16 y      
                u16 color  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     static
  */
 static s32 drv_ILI9341_drawpoint(DevLcdNode *lcd, u16 x, u16 y, u16 color)
@@ -446,13 +446,13 @@ static s32 drv_ILI9341_drawpoint(DevLcdNode *lcd, u16 x, u16 y, u16 color)
 }
 /**
  *@brief:      drv_ILI9341_color_fill
- *@details:    ½«Ò»¿éÇøÓòÉè¶¨ÎªÄ³ÖÖÑÕÉ«
+ *@details:    å°†ä¸€å—åŒºåŸŸè®¾å®šä¸ºæŸç§é¢œè‰²
  *@param[in]   u16 sx     
                u16 sy     
                u16 ex     
                u16 ey     
                u16 color  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 drv_ILI9341_color_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 color)
@@ -467,8 +467,8 @@ s32 drv_ILI9341_color_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 colo
 	
 	drv_ILI9341_set_cp_addr(lcd, sc, ec, sp, ep);
 
-	width=(ec+1)-sc;//µÃµ½Ìî³äµÄ¿í¶È +1ÊÇÒòÎª×ø±ê´Ó0¿ªÊ¼
-	height=(ep+1)-sp;//¸ß¶È
+	width=(ec+1)-sc;//å¾—åˆ°å¡«å……çš„å®½åº¦ +1æ˜¯å› ä¸ºåæ ‡ä»0å¼€å§‹
+	height=(ep+1)-sp;//é«˜åº¦
 	
 	//uart_printf("ili9341 width:%d, height:%d\r\n", width, height);
 
@@ -519,8 +519,8 @@ s32 drv_ILI9341_color_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 colo
 	drv_ILI9341_xy2cp(lcd, sx, ex, sy, ey, &hsa,&hea,&vsa,&vea);
 	drv_ILI9341_set_cp_addr(lcd, hsa, hea, vsa, vea);
 
-	width = hea - hsa + 1;//µÃµ½Ìî³äµÄ¿í¶È
-	height = vea - vsa + 1;//¸ß¶È
+	width = hea - hsa + 1;//å¾—åˆ°å¡«å……çš„å®½åº¦
+	height = vea - vsa + 1;//é«˜åº¦
 	
 	//uart_printf("ili9325 width:%d, height:%d\r\n", width, height);
 	
@@ -541,13 +541,13 @@ s32 drv_ILI9341_color_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 colo
 
 /**
  *@brief:      drv_ILI9341_color_fill
- *@details:    Ìî³ä¾ØĞÎÇøÓò
+ *@details:    å¡«å……çŸ©å½¢åŒºåŸŸ
  *@param[in]   u16 sx      
                u16 sy      
                u16 ex      
                u16 ey      
-               u16 *color  Ã¿Ò»¸öµãµÄÑÕÉ«Êı¾İ
- *@param[out]  ÎŞ
+               u16 *color  æ¯ä¸€ä¸ªç‚¹çš„é¢œè‰²æ•°æ®
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 drv_ILI9341_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
@@ -604,9 +604,9 @@ s32 drv_ILI9341_update(DevLcdNode *lcd)
 
 #if( LCD_DRIVER_9341_8BIT == 1 )
 
-/*	¶¨ÒåÒ»¸öTFT LCD£¬Ê¹ÓÃILI9341Çı¶¯ICµÄÉè±¸
-	µ«ÊÇÕâ¸öÇı¶¯Ê¹ÓÃµÄÊÇSPI»òÕßI2C£¬8Î»½Ó¿Ú£¬
-	Ïà¶Ô8080 16Î»½Ó¿Ú£¬ĞèÒªÌØÊâ´¦Àí */
+/*	å®šä¹‰ä¸€ä¸ªTFT LCDï¼Œä½¿ç”¨ILI9341é©±åŠ¨ICçš„è®¾å¤‡
+	ä½†æ˜¯è¿™ä¸ªé©±åŠ¨ä½¿ç”¨çš„æ˜¯SPIæˆ–è€…I2Cï¼Œ8ä½æ¥å£ï¼Œ
+	ç›¸å¯¹8080 16ä½æ¥å£ï¼Œéœ€è¦ç‰¹æ®Šå¤„ç† */
 
 s32 drv_ILI9341_8_init(DevLcdNode *lcd);
 static s32 drv_ILI9341_8_drawpoint(DevLcdNode *lcd, u16 x, u16 y, u16 color);
@@ -636,16 +636,16 @@ _lcd_drv TftLcdILI9341_8_Drv = {
 	
 /**
  *@brief:      drv_ILI9341_scan_dir
- *@details:    ÉèÖÃÏÔ´æÉ¨Ãè·½Ïò£¬ ±¾º¯ÊıÎªÊúÆÁ½Ç¶È
+ *@details:    è®¾ç½®æ˜¾å­˜æ‰«ææ–¹å‘ï¼Œ æœ¬å‡½æ•°ä¸ºç«–å±è§’åº¦
  *@param[in]   u8 dir  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     static
  */
 static void drv_ILI9341_8_scan_dir(DevLcdNode *lcd, u8 dir)
 {
 	u16 regval=0;
 
-	/*ÉèÖÃ´Ó×ó±ßµ½ÓÒ±ß»¹ÊÇÓÒ±ßµ½×ó±ß*/
+	/*è®¾ç½®ä»å·¦è¾¹åˆ°å³è¾¹è¿˜æ˜¯å³è¾¹åˆ°å·¦è¾¹*/
 	switch(dir)
 	{
 		case R2L_U2D:
@@ -656,7 +656,7 @@ static void drv_ILI9341_8_scan_dir(DevLcdNode *lcd, u8 dir)
 			break;	 
 	}
 
-	/*ÉèÖÃ´ÓÉÏµ½ÏÂ»¹ÊÇ´ÓÏÂµ½ÉÏ*/
+	/*è®¾ç½®ä»ä¸Šåˆ°ä¸‹è¿˜æ˜¯ä»ä¸‹åˆ°ä¸Š*/
 	switch(dir)
 	{
 		case L2R_D2U:
@@ -668,9 +668,9 @@ static void drv_ILI9341_8_scan_dir(DevLcdNode *lcd, u8 dir)
 	}
 
 	/*
-		ÉèÖÃÏÈ×óÓÒ»¹ÊÇÏÈÉÏÏÂ Reverse Mode
-		Èç¹ûÉèÖÃÎª1£¬LCD¿ØÖÆÆ÷ÒÑ¾­½«ĞĞ¸úÁĞ¶Ôµ÷ÁË£¬
-		Òò´ËĞèÒªÔÚÏÔÊ¾ÖĞ½øĞĞµ÷Õû
+		è®¾ç½®å…ˆå·¦å³è¿˜æ˜¯å…ˆä¸Šä¸‹ Reverse Mode
+		å¦‚æœè®¾ç½®ä¸º1ï¼ŒLCDæ§åˆ¶å™¨å·²ç»å°†è¡Œè·Ÿåˆ—å¯¹è°ƒäº†ï¼Œ
+		å› æ­¤éœ€è¦åœ¨æ˜¾ç¤ºä¸­è¿›è¡Œè°ƒæ•´
 	*/
 	switch(dir)
 	{
@@ -682,10 +682,10 @@ static void drv_ILI9341_8_scan_dir(DevLcdNode *lcd, u8 dir)
 			break;	 
 	}
 	/*
-		»¹¿ÉÒÔÉèÖÃRGB»¹ÊÇGBR
-		»¹¿ÉÒÔÉèÖÃµ÷×ªÉÏÏÂ
+		è¿˜å¯ä»¥è®¾ç½®RGBè¿˜æ˜¯GBR
+		è¿˜å¯ä»¥è®¾ç½®è°ƒè½¬ä¸Šä¸‹
 	*/	
-	regval|=(1<<3);//0:GBR,1:RGB  ¸úR61408Ïà·´
+	regval|=(1<<3);//0:GBR,1:RGB  è·ŸR61408ç›¸å
 
 	DevLcdBusNode * node;
 	node = bus_lcd_open(lcd->dev.buslcd);
@@ -700,12 +700,12 @@ static void drv_ILI9341_8_scan_dir(DevLcdNode *lcd, u8 dir)
 
 /**
  *@brief:      drv_ILI9341_set_cp_addr
- *@details:    ÉèÖÃ¿ØÖÆÆ÷µÄĞĞÁĞµØÖ··¶Î§
+ *@details:    è®¾ç½®æ§åˆ¶å™¨çš„è¡Œåˆ—åœ°å€èŒƒå›´
  *@param[in]   u16 sc  
                u16 ec  
                u16 sp  
                u16 ep  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 drv_ILI9341_8_set_cp_addr(DevLcdNode *lcd, u16 sc, u16 ec, u16 sp, u16 ep)
@@ -741,9 +741,9 @@ s32 drv_ILI9341_8_set_cp_addr(DevLcdNode *lcd, u16 sc, u16 ec, u16 sp, u16 ep)
 
 /**
  *@brief:      drv_ILI9341_init
- *@details:    ³õÊ¼»¯FSMC£¬²¢ÇÒ¶ÁÈ¡ILI9341µÄÉè±¸ID
+ *@details:    åˆå§‹åŒ–FSMCï¼Œå¹¶ä¸”è¯»å–ILI9341çš„è®¾å¤‡ID
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 drv_ILI9341_8_init(DevLcdNode *lcd)
@@ -762,7 +762,7 @@ s32 drv_ILI9341_8_init(DevLcdNode *lcd)
 	Delay(50);
 
 	bus_lcd_write_cmd(node, (0xd3));
-	/*¶Á4¸ö×Ö½Ú£¬µÚÒ»¸ö×Ö½ÚÊÇdummy read£¬ µÚ¶ş×Ö½ÚÊÇ0x00£¬ µÚÈı×Ö½ÚÊÇ93£¬µÚËÄ×Ö½ÚÊÇ41*/
+	/*è¯»4ä¸ªå­—èŠ‚ï¼Œç¬¬ä¸€ä¸ªå­—èŠ‚æ˜¯dummy readï¼Œ ç¬¬äºŒå­—èŠ‚æ˜¯0x00ï¼Œ ç¬¬ä¸‰å­—èŠ‚æ˜¯93ï¼Œç¬¬å››å­—èŠ‚æ˜¯41*/
 	bus_lcd_read_data(node, (u8*)tmp, 4);
 
 	ILI9341_DEBUG(LOG_DEBUG, "read reg:%02x, %02x,%02x,%02x,\r\n", tmp[0], tmp[1], tmp[2], tmp[3]);
@@ -885,11 +885,11 @@ s32 drv_ILI9341_8_init(DevLcdNode *lcd)
 
 /**
  *@brief:      drv_ILI9341_drawpoint
- *@details:    »­µã
+ *@details:    ç”»ç‚¹
  *@param[in]   u16 x      
                u16 y      
                u16 color  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     static
  */
 static s32 drv_ILI9341_8_drawpoint(DevLcdNode *lcd, u16 x, u16 y, u16 color)
@@ -912,13 +912,13 @@ static s32 drv_ILI9341_8_drawpoint(DevLcdNode *lcd, u16 x, u16 y, u16 color)
 }
 /**
  *@brief:      drv_ILI9341_color_fill
- *@details:    ½«Ò»¿éÇøÓòÉè¶¨ÎªÄ³ÖÖÑÕÉ«
+ *@details:    å°†ä¸€å—åŒºåŸŸè®¾å®šä¸ºæŸç§é¢œè‰²
  *@param[in]   u16 sx     
                u16 sy     
                u16 ex     
                u16 ey     
                u16 color  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 drv_ILI9341_8_color_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 color)
@@ -936,8 +936,8 @@ s32 drv_ILI9341_8_color_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 co
 	
 	drv_ILI9341_8_set_cp_addr(lcd, sc, ec, sp, ep);
 
-	width=(ec+1)-sc;//µÃµ½Ìî³äµÄ¿í¶È +1ÊÇÒòÎª×ø±ê´Ó0¿ªÊ¼
-	height=(ep+1)-sp;//¸ß¶È
+	width=(ec+1)-sc;//å¾—åˆ°å¡«å……çš„å®½åº¦ +1æ˜¯å› ä¸ºåæ ‡ä»0å¼€å§‹
+	height=(ep+1)-sp;//é«˜åº¦
 	
 	wjq_log(LOG_DEBUG, "ili9341 width:%d, height:%d\r\n", width, height);
 
@@ -968,13 +968,13 @@ s32 drv_ILI9341_8_color_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 co
 
 /**
  *@brief:      drv_ILI9341_color_fill
- *@details:    Ìî³ä¾ØĞÎÇøÓò
+ *@details:    å¡«å……çŸ©å½¢åŒºåŸŸ
  *@param[in]   u16 sx      
                u16 sy      
                u16 ex      
                u16 ey      
-               u16 *color  Ã¿Ò»¸öµãµÄÑÕÉ«Êı¾İ
- *@param[out]  ÎŞ
+               u16 *color  æ¯ä¸€ä¸ªç‚¹çš„é¢œè‰²æ•°æ®
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 drv_ILI9341_8_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
@@ -1037,7 +1037,7 @@ s32 drv_ILI9341_8_flush(DevLcdNode *lcd, u16 *color, u32 len)
 	DevLcdBusNode * node;
 	node = bus_lcd_open(lcd->dev.buslcd);
 
-	/*ÏÔÊ¾320*240Í¼Æ¬£¬±¾´¦Êı¾İ×ª»»´ó¸ÅĞèÒª10msÊ±¼ä*/
+	/*æ˜¾ç¤º320*240å›¾ç‰‡ï¼Œæœ¬å¤„æ•°æ®è½¬æ¢å¤§æ¦‚éœ€è¦10msæ—¶é—´*/
 	tmp = (u8 *)wjq_malloc(len*2);
 	i = 0;
 	while(1)

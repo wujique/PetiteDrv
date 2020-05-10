@@ -1,26 +1,26 @@
 /**
  * @file            dev_IL3820.c
- * @brief           TFT LCD Çı¶¯Ğ¾Æ¬IL3820Çı¶¯³ÌĞò
+ * @brief           TFT LCD é©±åŠ¨èŠ¯ç‰‡IL3820é©±åŠ¨ç¨‹åº
  * @author          wujique
- * @date            2017Äê11ÔÂ8ÈÕ ĞÇÆÚÎå
- * @version         ³õ¸å
- * @par             °æÈ¨ËùÓĞ (C), 2013-2023
+ * @date            2017å¹´11æœˆ8æ—¥ æ˜ŸæœŸäº”
+ * @version         åˆç¨¿
+ * @par             ç‰ˆæƒæ‰€æœ‰ (C), 2013-2023
  * @par History:
- * 1.ÈÕ    ÆÚ:        2017Äê81ÔÂ8ÈÕ ĞÇÆÚÎå
- *   ×÷    Õß:         wujique
- *   ĞŞ¸ÄÄÚÈİ:   ´´½¨ÎÄ¼ş
-       	1 Ô´Âë¹éÎİ¼¹È¸¹¤×÷ÊÒËùÓĞ¡£
-		2 ¿ÉÒÔÓÃÓÚµÄÆäËûÉÌÒµÓÃÍ¾£¨ÅäÌ×¿ª·¢°åÏúÊÛ³ıÍâ£©£¬²»ĞëÊÚÈ¨¡£
-		3 Îİ¼¹È¸¹¤×÷ÊÒ²»¶Ô´úÂë¹¦ÄÜ×öÈÎºÎ±£Ö¤£¬ÇëÊ¹ÓÃÕß×ÔĞĞ²âÊÔ£¬ºó¹û×Ô¸º¡£
-		4 ¿ÉËæÒâĞŞ¸ÄÔ´Âë²¢·Ö·¢£¬µ«²»¿ÉÖ±½ÓÏúÊÛ±¾´úÂë»ñÀû£¬²¢ÇÒÇë±£ÁôWUJIQUE°æÈ¨ËµÃ÷¡£
-		5 Èç·¢ÏÖBUG»òÓĞÓÅ»¯£¬»¶Ó­·¢²¼¸üĞÂ¡£ÇëÁªÏµ£ºcode@wujique.com
-		6 Ê¹ÓÃ±¾Ô´ÂëÔòÏàµ±ÓÚÈÏÍ¬±¾°æÈ¨ËµÃ÷¡£
-		7 ÈçÇÖ·¸ÄãµÄÈ¨Àû£¬ÇëÁªÏµ£ºcode@wujique.com
-		8 Ò»ÇĞ½âÊÍÈ¨¹éÎİ¼¹È¸¹¤×÷ÊÒËùÓĞ¡£
+ * 1.æ—¥    æœŸ:        2017å¹´81æœˆ8æ—¥ æ˜ŸæœŸäº”
+ *   ä½œ    è€…:         wujique
+ *   ä¿®æ”¹å†…å®¹:   åˆ›å»ºæ–‡ä»¶
+       	1 æºç å½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
+		2 å¯ä»¥ç”¨äºçš„å…¶ä»–å•†ä¸šç”¨é€”ï¼ˆé…å¥—å¼€å‘æ¿é”€å”®é™¤å¤–ï¼‰ï¼Œä¸é¡»æˆæƒã€‚
+		3 å±‹è„Šé›€å·¥ä½œå®¤ä¸å¯¹ä»£ç åŠŸèƒ½åšä»»ä½•ä¿è¯ï¼Œè¯·ä½¿ç”¨è€…è‡ªè¡Œæµ‹è¯•ï¼Œåæœè‡ªè´Ÿã€‚
+		4 å¯éšæ„ä¿®æ”¹æºç å¹¶åˆ†å‘ï¼Œä½†ä¸å¯ç›´æ¥é”€å”®æœ¬ä»£ç è·åˆ©ï¼Œå¹¶ä¸”è¯·ä¿ç•™WUJIQUEç‰ˆæƒè¯´æ˜ã€‚
+		5 å¦‚å‘ç°BUGæˆ–æœ‰ä¼˜åŒ–ï¼Œæ¬¢è¿å‘å¸ƒæ›´æ–°ã€‚è¯·è”ç³»ï¼šcode@wujique.com
+		6 ä½¿ç”¨æœ¬æºç åˆ™ç›¸å½“äºè®¤åŒæœ¬ç‰ˆæƒè¯´æ˜ã€‚
+		7 å¦‚ä¾µçŠ¯ä½ çš„æƒåˆ©ï¼Œè¯·è”ç³»ï¼šcode@wujique.com
+		8 ä¸€åˆ‡è§£é‡Šæƒå½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
 */
 
 /*
-	3820 ´óÁ¬¼ÑÏÔ GDEH154D27
+	3820 å¤§è¿ä½³æ˜¾ GDEH154D27
 */
 #include "mcu.h"
 #include "petite_config.h"
@@ -45,27 +45,27 @@ extern void Delay(__IO uint32_t nTime);
 
 /*
 
-	µç×ÓÖ½µÄÏÔ´æÉ¨Ãè·½Ïò£º
-	gram[0], ÊÇÊúÆÁÊ±×óÏÂ½Ç½ÇºáÏò8¸öµã¡£
-	ÕâÊÇ×öĞ©color fillºÍfillº¯ÊıÒª¿¼ÂÇµÄ¡£
+	ç”µå­çº¸çš„æ˜¾å­˜æ‰«ææ–¹å‘ï¼š
+	gram[0], æ˜¯ç«–å±æ—¶å·¦ä¸‹è§’è§’æ¨ªå‘8ä¸ªç‚¹ã€‚
+	è¿™æ˜¯åšäº›color fillå’Œfillå‡½æ•°è¦è€ƒè™‘çš„ã€‚
 
-	ÀıÈç´óÁ¬¼ÑÏÔµÄ1.54´ç 200*200ÏñËØµÄ
-	Ò»¸öpage¾ÍÊÇÊúÆÁµÄÒ»ĞĞXÖá·½ÏòµÄµã¡£
-	µÚ1¸öpageÊÇÊúÆÁ¿¿½üÅÅÏßµÄÒ»ĞĞ¡£
-	Ò²¾ÍÊÇËµ£¬Ò»¸öpageÓĞ 200/8 ¸ö×Ö½Ú£¬
-	LCD×Ü¹²ÓĞ200page¡£
+	ä¾‹å¦‚å¤§è¿ä½³æ˜¾çš„1.54å¯¸ 200*200åƒç´ çš„
+	ä¸€ä¸ªpageå°±æ˜¯ç«–å±çš„ä¸€è¡ŒXè½´æ–¹å‘çš„ç‚¹ã€‚
+	ç¬¬1ä¸ªpageæ˜¯ç«–å±é è¿‘æ’çº¿çš„ä¸€è¡Œã€‚
+	ä¹Ÿå°±æ˜¯è¯´ï¼Œä¸€ä¸ªpageæœ‰ 200/8 ä¸ªå­—èŠ‚ï¼Œ
+	LCDæ€»å…±æœ‰200pageã€‚
 
-	ÎÒÃÇ¶¨Òå×ø±ê(0,0)£¬ ÊÇpage199µÄµÚ1¸ö×Ö½ÚµÚ8¸öbit¡£
+	æˆ‘ä»¬å®šä¹‰åæ ‡(0,0)ï¼Œ æ˜¯page199çš„ç¬¬1ä¸ªå­—èŠ‚ç¬¬8ä¸ªbitã€‚
 
 */
 #define IL3820_PAGE_SIZE ((lcd->dev.width+7)/8)
 
 struct _epaper3820_drv_data
 {
-	/*ÏÔ´æ£¬Í¨¹ı¶¯Ì¬ÉêÇë£¬¸ù¾İÆÁÄ»´óĞ¡ÉêÇë*/
+	/*æ˜¾å­˜ï¼Œé€šè¿‡åŠ¨æ€ç”³è¯·ï¼Œæ ¹æ®å±å¹•å¤§å°ç”³è¯·*/
 	u8 *bgram;
 
-	/*Ë¢ĞÂÇøÓò*/
+	/*åˆ·æ–°åŒºåŸŸ*/
 	u16 sx;
 	u16 ex;
 	u16 sy;
@@ -88,7 +88,7 @@ s32 drv_IL3820_flush(DevLcdNode *lcd, u16 *color, u32 len);
 s32 drv_IL3820_update(DevLcdNode *lcd);
 
 
-/*	¶¨ÒåÒ»¸öTFT LCD£¬Ê¹ÓÃIL3820Çı¶¯ICµÄÉè±¸*/
+/*	å®šä¹‰ä¸€ä¸ªTFT LCDï¼Œä½¿ç”¨IL3820é©±åŠ¨ICçš„è®¾å¤‡*/
 _lcd_drv TftLcdIL3820Drv = {
 							.id = 0X3820,
 
@@ -106,9 +106,9 @@ _lcd_drv TftLcdIL3820Drv = {
 
 
 /*
-	IL3820, Ã¿¸ö×Ö½ÚµÄSPIÍ¨ĞÅ¶¼ĞèÒªCSÏÂ½µÑØ
-	ÎªÁË²»Ó°ÏìLCD BUS£¬¶ÔCSµÄ²Ù×÷·ÅÔÚÇı¶¯ÖĞ£¬
-	ÊôÓÚÒ»ÖÖÌØÊâÇé¿ö
+	IL3820, æ¯ä¸ªå­—èŠ‚çš„SPIé€šä¿¡éƒ½éœ€è¦CSä¸‹é™æ²¿
+	ä¸ºäº†ä¸å½±å“LCD BUSï¼Œå¯¹CSçš„æ“ä½œæ”¾åœ¨é©±åŠ¨ä¸­ï¼Œ
+	å±äºä¸€ç§ç‰¹æ®Šæƒ…å†µ
 
 	mcu_spi_cs
 */
@@ -130,7 +130,7 @@ s32 drv_il3820_write_data(DevLcdBusNode *node, u8 *data, u32 len)
 
 
 /*
-	Ä«Ë®ÆÁÃ»ÓĞ±³¹â£¬ÓĞÇ°ÖÃ¹âÔ´
+	å¢¨æ°´å±æ²¡æœ‰èƒŒå…‰ï¼Œæœ‰å‰ç½®å…‰æº
 */
 void drv_IL3820_lcd_bl(DevLcdNode *lcd, u8 sta)
 {
@@ -144,9 +144,9 @@ void drv_IL3820_lcd_bl(DevLcdNode *lcd, u8 sta)
 	
 /**
  *@brief:      drv_IL3820_scan_dir
- *@details:    ÉèÖÃÏÔ´æÉ¨Ãè·½Ïò£¬ ±¾º¯ÊıÎªÊúÆÁ½Ç¶È
+ *@details:    è®¾ç½®æ˜¾å­˜æ‰«ææ–¹å‘ï¼Œ æœ¬å‡½æ•°ä¸ºç«–å±è§’åº¦
  *@param[in]   u8 dir  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     static
  */
 static void drv_IL3820_scan_dir(DevLcdNode *lcd, u8 dir)
@@ -156,12 +156,12 @@ static void drv_IL3820_scan_dir(DevLcdNode *lcd, u8 dir)
 
 /**
  *@brief:      drv_IL3820_set_cp_addr
- *@details:    ÉèÖÃ¿ØÖÆÆ÷µÄĞĞÁĞµØÖ··¶Î§
+ *@details:    è®¾ç½®æ§åˆ¶å™¨çš„è¡Œåˆ—åœ°å€èŒƒå›´
  *@param[in]   u16 sc  
                u16 ec  
                u16 sp  
                u16 ep  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 drv_IL3820_set_cp_addr(DevLcdNode *lcd, u16 sc, u16 ec, u16 sp, u16 ep)
@@ -170,13 +170,13 @@ s32 drv_IL3820_set_cp_addr(DevLcdNode *lcd, u16 sc, u16 ec, u16 sp, u16 ep)
 }
 /**
  *@brief:      drv_IL3820_refresh_gram
- *@details:       Ë¢ĞÂÖ¸¶¨ÇøÓòµ½ÆÁÄ»ÉÏ
-                  ×ø±êÊÇºáÆÁÄ£Ê½×ø±ê
+ *@details:       åˆ·æ–°æŒ‡å®šåŒºåŸŸåˆ°å±å¹•ä¸Š
+                  åæ ‡æ˜¯æ¨ªå±æ¨¡å¼åæ ‡
  *@param[in]   u16 sc  
                u16 ec  
                u16 sp  
                u16 ep  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     static
  */
 static s32 drv_IL3820_refresh_gram(DevLcdNode *lcd, u16 sc, u16 ec, u16 sp, u16 ep)
@@ -195,8 +195,8 @@ static s32 drv_IL3820_refresh_gram(DevLcdNode *lcd, u16 sc, u16 ec, u16 sp, u16 
 
 	wjq_log(LOG_DEBUG, "drv_IL3820_refresh_gram: %d, %d, %d, %d\r\n ", sc, ec, sp, ep);
 
-	/*×¢Òâ£¬ÒªÓÃdevÖĞµÄwºÍh£¬ÒòÎªgram¸úºáÆÁÊúÆÁµ÷»»Ã»¹ØÏµ£¬
-	Ö»ºÍ¶¨ÒåÒ»ÖÂ*/
+	/*æ³¨æ„ï¼Œè¦ç”¨devä¸­çš„wå’Œhï¼Œå› ä¸ºgramè·Ÿæ¨ªå±ç«–å±è°ƒæ¢æ²¡å…³ç³»ï¼Œ
+	åªå’Œå®šä¹‰ä¸€è‡´*/
 	gramsize = lcd->dev.height * IL3820_PAGE_SIZE;
 	//wjq_log(LOG_DEBUG, "gram size: %d\r\n ", gramsize);
 
@@ -227,9 +227,9 @@ static s32 drv_IL3820_refresh_gram(DevLcdNode *lcd, u16 sc, u16 ec, u16 sp, u16 
 
 /**
  *@brief:      drv_IL91874_display_onoff
- *@details:    ÏÔÊ¾»ò¹Ø±Õ
+ *@details:    æ˜¾ç¤ºæˆ–å…³é—­
  *@param[in]   u8 sta  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     static
  */
 static s32 drv_IL3820_display_onoff(DevLcdNode *lcd, u8 sta)
@@ -270,7 +270,7 @@ void EPD_select_LUT(DevLcdBusNode *node, const unsigned char * wave_data)
  *@brief:      drv_IL3820_init
  *@details:   
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 drv_IL3820_init(DevLcdNode *lcd)
@@ -363,19 +363,19 @@ s32 drv_IL3820_init(DevLcdNode *lcd)
 	
 	Delay(200); 
 
-	/* LUT ÉèÖÃ */
+	/* LUT è®¾ç½® */
 	EPD_select_LUT(node, LUT_DATA); 
 
 	bus_lcd_close(node);
 	
-	/*ÉêÇëÏÔ´æ£¬ÓÀ²»ÊÍ·Å*/
+	/*ç”³è¯·æ˜¾å­˜ï¼Œæ°¸ä¸é‡Šæ”¾*/
 	lcd->pri = (void *)wjq_malloc(sizeof(struct _epaper3820_drv_data));
 	memset((char*)lcd->pri, 0x00, sizeof(struct _epaper3820_drv_data));
 
 	struct _epaper3820_drv_data *p;
 	u16 gramsize;
 
-	/*ÈıÉ«µç×ÓÖ½£¬ÒªÁ½¸ö»º³å*/
+	/*ä¸‰è‰²ç”µå­çº¸ï¼Œè¦ä¸¤ä¸ªç¼“å†²*/
 	p = (struct _epaper3820_drv_data *)lcd->pri;
 
 	gramsize = lcd->dev.height * IL3820_PAGE_SIZE;
@@ -389,9 +389,9 @@ s32 drv_IL3820_init(DevLcdNode *lcd)
 }
 /**
  *@brief:      drv_IL3820_xy2cp
- *@details:    ½«xy×ø±ê×ª»»ÎªCP×ø±ê
- *@param[in]   ÎŞ
- *@param[out]  ÎŞ
+ *@details:    å°†xyåæ ‡è½¬æ¢ä¸ºCPåæ ‡
+ *@param[in]   æ— 
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 drv_IL3820_xy2cp(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey, u16 *sc, u16 *ec, u16 *sp, u16 *ep)
@@ -401,11 +401,11 @@ s32 drv_IL3820_xy2cp(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey, u16 *sc, u
 }
 /**
  *@brief:      drv_IL3820_drawpoint
- *@details:    »­µã
+ *@details:    ç”»ç‚¹
  *@param[in]   u16 x      
                u16 y      
                u16 color  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     static
  */
 static s32 drv_IL3820_drawpoint(DevLcdNode *lcd, u16 x, u16 y, u16 color)
@@ -415,13 +415,13 @@ static s32 drv_IL3820_drawpoint(DevLcdNode *lcd, u16 x, u16 y, u16 color)
 }
 /**
  *@brief:      drv_IL3820_color_fill
- *@details:    ½«Ò»¿éÇøÓòÉè¶¨ÎªÄ³ÖÖÑÕÉ«
+ *@details:    å°†ä¸€å—åŒºåŸŸè®¾å®šä¸ºæŸç§é¢œè‰²
  *@param[in]   u16 sx     
                u16 sy     
                u16 ex     
                u16 ey     
                u16 color  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 drv_IL3820_color_fill(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey, u16 color)
@@ -437,7 +437,7 @@ s32 drv_IL3820_color_fill(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey, u16 c
 
 	drvdata = (struct _epaper3820_drv_data *)lcd->pri;
 
-	/*·ÀÖ¹×ø±êÒç³ö*/
+	/*é˜²æ­¢åæ ‡æº¢å‡º*/
 	if(sy >= lcd->height)
 	{
 		sy = lcd->height-1;
@@ -459,7 +459,7 @@ s32 drv_IL3820_color_fill(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey, u16 c
 	}
 
 	#if 0
-	/*Çó³ö±»¸Ä¶¯µÄpageºÍcloum*/
+	/*æ±‚å‡ºè¢«æ”¹åŠ¨çš„pageå’Œcloum*/
 	if(lcd->dir == H_LCD)
 	{
 		sp = sy;
@@ -469,7 +469,7 @@ s32 drv_IL3820_color_fill(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey, u16 c
 		ec = ex;
 			
 	}
-	else//Èç¹ûÊÇÊúÆÁ£¬XYÖá¸úÏÔ´æµÄÓ³ÉäÒª¶Ôµ÷
+	else//å¦‚æœæ˜¯ç«–å±ï¼ŒXYè½´è·Ÿæ˜¾å­˜çš„æ˜ å°„è¦å¯¹è°ƒ
 	{
 		sp = sx;
 		ep = ex;
@@ -491,16 +491,16 @@ s32 drv_IL3820_color_fill(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey, u16 c
 				xtmp = i;
 				ytmp = j;
 			}
-			else//Èç¹ûÊÇÊúÆÁ£¬XYÖá¸úÏÔ´æµÄÓ³ÉäÒª¶Ôµ÷
+			else//å¦‚æœæ˜¯ç«–å±ï¼ŒXYè½´è·Ÿæ˜¾å­˜çš„æ˜ å°„è¦å¯¹è°ƒ
 			{
-				/* ²»Í¬µÄËã·¨£¬Ïàµ±ÓÚ²»Í¬µÄÉ¨Ãè·½Ê½*/
+				/* ä¸åŒçš„ç®—æ³•ï¼Œç›¸å½“äºä¸åŒçš„æ‰«ææ–¹å¼*/
 				xtmp = lcd->dev.width- 1 - j;
 				ytmp = i;
 			}
 
-			/*´ÓÊúÆÁµÄ½Ç¶ÈËã³öpageºÍcolum*/
-			page =  lcd->dev.height - 1 - ytmp; //Ò³µØÖ·
-			colum = xtmp/8;//ÁĞµØÖ·
+			/*ä»ç«–å±çš„è§’åº¦ç®—å‡ºpageå’Œcolum*/
+			page =  lcd->dev.height - 1 - ytmp; //é¡µåœ°å€
+			colum = xtmp/8;//åˆ—åœ°å€
 		
 			
 			if(color != BLACK)
@@ -517,8 +517,8 @@ s32 drv_IL3820_color_fill(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey, u16 c
 	}
 
 	/*
-		Ö»Ë¢ĞÂĞèÒªË¢ĞÂµÄÇøÓò
-		×ø±ê·¶Î§ÊÇºáÆÁÄ£Ê½
+		åªåˆ·æ–°éœ€è¦åˆ·æ–°çš„åŒºåŸŸ
+		åæ ‡èŒƒå›´æ˜¯æ¨ªå±æ¨¡å¼
 	*/
 	//drv_IL3820_refresh_gram(lcd, sc, ec, sp, ep);
 	wjq_log(LOG_DEBUG, " drv_IL91874_color_fill finish\r\n ");
@@ -527,13 +527,13 @@ s32 drv_IL3820_color_fill(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey, u16 c
 
 /**
  *@brief:      drv_IL3820_fill
- *@details:    Ìî³ä¾ØĞÎÇøÓò
+ *@details:    å¡«å……çŸ©å½¢åŒºåŸŸ
  *@param[in]   u16 sx      
                u16 sy      
                u16 ex      
                u16 ey      
-               u16 *color  Ã¿Ò»¸öµãµÄÑÕÉ«Êı¾İ
- *@param[out]  ÎŞ
+               u16 *color  æ¯ä¸€ä¸ªç‚¹çš„é¢œè‰²æ•°æ®
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 drv_IL3820_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
@@ -552,11 +552,11 @@ s32 drv_IL3820_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
 	
 	drvdata = (struct _epaper3820_drv_data *)lcd->pri;
 
-	/*xlen¸úylenÊÇÓÃÀ´È¡Êı¾İµÄ£¬²»ÊÇÌîLCD*/
-	xlen = ex-sx+1;//È«°üº¬
+	/*xlenè·Ÿylenæ˜¯ç”¨æ¥å–æ•°æ®çš„ï¼Œä¸æ˜¯å¡«LCD*/
+	xlen = ex-sx+1;//å…¨åŒ…å«
 	ylen = ey-sy+1;
 
-	/*·ÀÖ¹×ø±êÒç³ö*/
+	/*é˜²æ­¢åæ ‡æº¢å‡º*/
 	if(sy >= lcd->height)
 	{
 		sy = lcd->height-1;
@@ -577,7 +577,7 @@ s32 drv_IL3820_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
 	}
 
 	#if 0
-	/*Çó³ö±»¸Ä¶¯µÄpageºÍcloum*/
+	/*æ±‚å‡ºè¢«æ”¹åŠ¨çš„pageå’Œcloum*/
 	if(lcd->dir == H_LCD)
 	{
 		sp = sy;
@@ -587,7 +587,7 @@ s32 drv_IL3820_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
 		ec = ex;
 			
 	}
-	else//Èç¹ûÊÇÊúÆÁ£¬XYÖá¸úÏÔ´æµÄÓ³ÉäÒª¶Ôµ÷
+	else//å¦‚æœæ˜¯ç«–å±ï¼ŒXYè½´è·Ÿæ˜¾å­˜çš„æ˜ å°„è¦å¯¹è°ƒ
 	{
 		sp = sx;
 		ep = ex;
@@ -605,7 +605,7 @@ s32 drv_IL3820_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
 		
 		for(i=sx;i<=ex;i++)
 		{
-			/*Èç¹ûÊÇWºáÆÁ£¬¾Í½«×ø±ê×ªÎªÊúÆÁµÄ×ø±ê¡£*/
+			/*å¦‚æœæ˜¯Wæ¨ªå±ï¼Œå°±å°†åæ ‡è½¬ä¸ºç«–å±çš„åæ ‡ã€‚*/
 			if(lcd->dir == H_LCD)
 			{
 				xtmp = i;
@@ -617,9 +617,9 @@ s32 drv_IL3820_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
 				ytmp = i;
 			}
 
-			/*´ÓÊúÆÁµÄ½Ç¶ÈËã³öpageºÍcolum*/
-			page =  lcd->dev.height - ytmp; //Ò³µØÖ·
-			colum = xtmp/8;//ÁĞµØÖ·
+			/*ä»ç«–å±çš„è§’åº¦ç®—å‡ºpageå’Œcolum*/
+			page =  lcd->dev.height - ytmp; //é¡µåœ°å€
+			colum = xtmp/8;//åˆ—åœ°å€
 			
 			cdata = *(color+index+i-sx);
 
@@ -637,8 +637,8 @@ s32 drv_IL3820_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
 	}
 
 	/*
-		Ö»Ë¢ĞÂĞèÒªË¢ĞÂµÄÇøÓò
-		×ø±ê·¶Î§ÊÇºáÆÁÄ£Ê½
+		åªåˆ·æ–°éœ€è¦åˆ·æ–°çš„åŒºåŸŸ
+		åæ ‡èŒƒå›´æ˜¯æ¨ªå±æ¨¡å¼
 	*/
 	//drv_IL3820_refresh_gram(lcd, sc,ec,sp,ep);
 			

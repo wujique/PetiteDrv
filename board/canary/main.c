@@ -47,21 +47,21 @@
 RCC_ClocksTypeDef RCC_Clocks;
 
 /*
-	cpu³õÊ¼»¯
+	cpuåˆå§‹åŒ–
 */
 s32 board_mcu_preinit(void)
 {
 	/* Set the Vector Table base address at 0x08000000 */
 	NVIC_SetVectorTable(NVIC_VectTab_FLASH, 0x00);
 	/*
-		ÖĞ¶ÏÓÅÏÈ¼¶·Ö×é
+		ä¸­æ–­ä¼˜å…ˆçº§åˆ†ç»„
 	*/	
 	/* 2 bit for pre-emption priority, 2 bits for subpriority */
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
 	  
 	RCC_GetClocksFreq(&RCC_Clocks);
 		
-	/*IO¸ú´®¿ÚÊÇµ÷ÊÔĞÅÏ¢µÄÒÀÀµ£¬ËùÒÔ×îÔç³õÊ¼»¯*/
+	/*IOè·Ÿä¸²å£æ˜¯è°ƒè¯•ä¿¡æ¯çš„ä¾èµ–ï¼Œæ‰€ä»¥æœ€æ—©åˆå§‹åŒ–*/
 	mcu_io_init();
 	mcu_uart_init();
 	mcu_uart_open(PC_PORT);
@@ -100,7 +100,7 @@ int main(void)
 
 	board_mcu_preinit();
  
-	/*Ìø×ªµ½petite app*/
+	/*è·³è½¬åˆ°petite app*/
 	petite_app();
 
 	while(1);

@@ -1,14 +1,14 @@
 /**
  * @file                wujique_stm407.c
- * @brief           �ݼ�ȸSTM32F407������Ӳ�����Գ���
+ * @brief           屋脊雀STM32F407开发板硬件测试程序
  * @author          wujique
- * @date            2018��1��29�� ����һ
- * @version         ����
- * @par             ��Ȩ���� (C), 2013-2023
+ * @date            2018年1月29日 星期一
+ * @version         初稿
+ * @par             版权所有 (C), 2013-2023
  * @par History:
- * 1.��    ��:        2018��1��29�� ����һ
- *   ��    ��:         wujique
- *   �޸�����:   �����ļ�
+ * 1.日    期:        2018年1月29日 星期一
+ *   作    者:         wujique
+ *   修改内容:   创建文件
 */
 #include "mcu.h"
 #include "board_sysconf.h"
@@ -37,7 +37,7 @@ s32 wjq_test_showstr(char *s)
 	wjq_log(LOG_DEBUG, "test:%s", s);
 	dev_lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, BackColor);
 	
-	/*���о�����ʾ���˵�*/
+	/*顶行居中显示父菜单*/
 	dev_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, s, PenColor);
 	dev_lcd_update(WJQTestLcd);
 	wjq_wait_key(0);
@@ -59,7 +59,7 @@ s32 test_tp_calibrate(void)
 	DevLcdNode *lcd;
 
 	dev_lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
-	/*���о�����ʾ���˵�*/
+	/*顶行居中显示父菜单*/
 	dev_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
 	dev_lcd_update(WJQTestLcd);
 	lcd = dev_lcd_open("tftlcd");
@@ -88,7 +88,7 @@ s32 test_tp_test(void)
 	DevLcdNode *lcd;
 
 	dev_lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
-	/*���о�����ʾ���˵�*/
+	/*顶行居中显示父菜单*/
 	dev_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
 	dev_lcd_update(WJQTestLcd);
 	lcd = dev_lcd_open("tftlcd");
@@ -153,390 +153,390 @@ s32 test_tp_test(void)
 
 const MENU WJQTestList[]=
 {
-	MENU_L_0,//�˵��ȼ�
-	"���Գ���",//����
-	"test",	//Ӣ��
-	MENU_TYPE_KEY_2COL,//�˵�����
-	NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+	MENU_L_0,//菜单等级
+	"测试程序",//中文
+	"test",	//英文
+	MENU_TYPE_KEY_2COL,//菜单类型
+	NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 
-		MENU_L_1,//�˵��ȼ�
-		"LCD",//����
-		"LCD",	//Ӣ��
-		MENU_TYPE_LIST,//�˵�����
-		NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+		MENU_L_1,//菜单等级
+		"LCD",//中文
+		"LCD",	//英文
+		MENU_TYPE_LIST,//菜单类型
+		NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 			/*
-			MENU_L_2,//�˵��ȼ�
-			"VSPI OLED",//����
-			"VSPI OLED",	//Ӣ��
-			MENU_TYPE_FUN,//�˵�����
-			test_vspi_oled_display,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+			MENU_L_2,//菜单等级
+			"VSPI OLED",//中文
+			"VSPI OLED",	//英文
+			MENU_TYPE_FUN,//菜单类型
+			test_vspi_oled_display,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 			*/
-			MENU_L_2,//�˵��ȼ�
-			"I2C OLED",//����
-			"I2C OLED",	//Ӣ��
-			MENU_TYPE_FUN,//�˵�����
-			wjq_test,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+			MENU_L_2,//菜单等级
+			"I2C OLED",//中文
+			"I2C OLED",	//英文
+			MENU_TYPE_FUN,//菜单类型
+			wjq_test,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 			/*
-			MENU_L_2,//�˵��ȼ�
-			"SPI COG",//����
-			"SPI COG",	//Ӣ��
-			MENU_TYPE_FUN,//�˵�����
-			test_spi_cog_display,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+			MENU_L_2,//菜单等级
+			"SPI COG",//中文
+			"SPI COG",	//英文
+			MENU_TYPE_FUN,//菜单类型
+			test_spi_cog_display,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 			*/
-			MENU_L_2,//�˵��ȼ�
-			"SPI tft",//����
-			"SPI tft",	//Ӣ��
-			MENU_TYPE_FUN,//�˵�����
-			//test_lcd_spi_128128,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+			MENU_L_2,//菜单等级
+			"SPI tft",//中文
+			"SPI tft",	//英文
+			MENU_TYPE_FUN,//菜单类型
+			//test_lcd_spi_128128,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 			wjq_test,
 			
-			MENU_L_2,//�˵��ȼ�
-			"tft",//����
-			"tft",	//Ӣ��
-			MENU_TYPE_FUN,//�˵�����
-			wjq_test,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+			MENU_L_2,//菜单等级
+			"tft",//中文
+			"tft",	//英文
+			MENU_TYPE_FUN,//菜单类型
+			wjq_test,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 	
-			MENU_L_2,//�˵��ȼ�
-			"ͼƬ����",//����
-			"test BMP",	//Ӣ��
-			MENU_TYPE_FUN,//�˵�����
-			wjq_test,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+			MENU_L_2,//菜单等级
+			"图片测试",//中文
+			"test BMP",	//英文
+			MENU_TYPE_FUN,//菜单类型
+			wjq_test,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 			
-			MENU_L_2,//�˵��ȼ�
-			"�ֿ����",//����
-			"test Font",	//Ӣ��
-			MENU_TYPE_FUN,//�˵�����
-			wjq_test,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+			MENU_L_2,//菜单等级
+			"字库测试",//中文
+			"test Font",	//英文
+			MENU_TYPE_FUN,//菜单类型
+			wjq_test,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 
-		MENU_L_1,//�˵��ȼ�
-		"����",//����
-		"sound",	//Ӣ��
-		MENU_TYPE_LIST,//�˵�����
-		NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
-			MENU_L_2,//�˵��ȼ�
-			"������",//����
-			"buzzer",	//Ӣ��
-			MENU_TYPE_FUN,//�˵�����
-			wjq_test,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+		MENU_L_1,//菜单等级
+		"声音",//中文
+		"sound",	//英文
+		MENU_TYPE_LIST,//菜单类型
+		NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
+			MENU_L_2,//菜单等级
+			"蜂鸣器",//中文
+			"buzzer",	//英文
+			MENU_TYPE_FUN,//菜单类型
+			wjq_test,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 
-			MENU_L_2,//�˵��ȼ�
-			"DAC����",//����
-			"DAC music",	//Ӣ��
-			MENU_TYPE_FUN,//�˵�����
-			wjq_test,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+			MENU_L_2,//菜单等级
+			"DAC音乐",//中文
+			"DAC music",	//英文
+			MENU_TYPE_FUN,//菜单类型
+			wjq_test,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 
-			MENU_L_2,//�˵��ȼ�
-			"����",//����
-			"FM",	//Ӣ��
-			MENU_TYPE_FUN,//�˵�����
-			wjq_test,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+			MENU_L_2,//菜单等级
+			"收音",//中文
+			"FM",	//英文
+			MENU_TYPE_FUN,//菜单类型
+			wjq_test,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 
-			MENU_L_2,//�˵��ȼ�
-			"I2S����",//����
-			"I2S Music",	//Ӣ��
-			MENU_TYPE_FUN,//�˵�����
-			wjq_test,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+			MENU_L_2,//菜单等级
+			"I2S音乐",//中文
+			"I2S Music",	//英文
+			MENU_TYPE_FUN,//菜单类型
+			wjq_test,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 
-			MENU_L_2,//�˵��ȼ�
-			"¼��",//����
-			"rec",	//Ӣ��
-			MENU_TYPE_FUN,//�˵�����
-			wjq_test,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+			MENU_L_2,//菜单等级
+			"录音",//中文
+			"rec",	//英文
+			MENU_TYPE_FUN,//菜单类型
+			wjq_test,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 
-		MENU_L_1,//�˵��ȼ�
-		"������",//����
-		"tp",	//Ӣ��
-		MENU_TYPE_LIST,//�˵�����
-		NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+		MENU_L_1,//菜单等级
+		"触摸屏",//中文
+		"tp",	//英文
+		MENU_TYPE_LIST,//菜单类型
+		NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 			
-			MENU_L_2,//�˵��ȼ�
-			"У׼",//����
-			"calibrate",	//Ӣ��
-			MENU_TYPE_FUN,//�˵�����
-			test_tp_calibrate,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+			MENU_L_2,//菜单等级
+			"校准",//中文
+			"calibrate",	//英文
+			MENU_TYPE_FUN,//菜单类型
+			test_tp_calibrate,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 
-			MENU_L_2,//�˵��ȼ�
-			"����",//����
-			"test",	//Ӣ��
-			MENU_TYPE_FUN,//�˵�����
-			test_tp_test,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+			MENU_L_2,//菜单等级
+			"测试",//中文
+			"test",	//英文
+			MENU_TYPE_FUN,//菜单类型
+			test_tp_test,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 			
-		MENU_L_1,//�˵��ȼ�
-		"����",//����
-		"KEY",	//Ӣ��
-		MENU_TYPE_LIST,//�˵�����
-		NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
-			MENU_L_2,//�˵��ȼ�
-			"���İ尴��",//����
-			"core KEY",	//Ӣ��
-			MENU_TYPE_FUN,//�˵�����
-			wjq_test,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+		MENU_L_1,//菜单等级
+		"按键",//中文
+		"KEY",	//英文
+		MENU_TYPE_LIST,//菜单类型
+		NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
+			MENU_L_2,//菜单等级
+			"核心板按键",//中文
+			"core KEY",	//英文
+			MENU_TYPE_FUN,//菜单类型
+			wjq_test,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 			
-			/*��������*/
-			MENU_L_2,//�˵��ȼ�
-			"��������",//����
-			"touch key",	//Ӣ��
-			MENU_TYPE_FUN,//�˵�����
-			wjq_test,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+			/*触摸按键*/
+			MENU_L_2,//菜单等级
+			"触摸按键",//中文
+			"touch key",	//英文
+			MENU_TYPE_FUN,//菜单类型
+			wjq_test,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 
-			/*���Բ��⣬�������Գ����Ҫʹ�þ��󰴼�*/
-			MENU_L_2,//�˵��ȼ�
-			"���󰴼�",//����
-			"keypad",	//Ӣ��
-			MENU_TYPE_FUN,//�˵�����
-			wjq_test,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+			/*可以不测，本来测试程序就要使用矩阵按键*/
+			MENU_L_2,//菜单等级
+			"矩阵按键",//中文
+			"keypad",	//英文
+			MENU_TYPE_FUN,//菜单类型
+			wjq_test,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 		
-		MENU_L_1,//�˵��ȼ�
-		"����",//����
-		"camera",	//Ӣ��
-		MENU_TYPE_FUN,//�˵�����
-		wjq_test,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+		MENU_L_1,//菜单等级
+		"摄像",//中文
+		"camera",	//英文
+		MENU_TYPE_FUN,//菜单类型
+		wjq_test,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 		
-		MENU_L_1,//�˵��ȼ�
-		"SPI FLASH",//����
-		"SPI FLASH",	//Ӣ��
-		MENU_TYPE_LIST,//�˵�����
-		NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
-			MENU_L_2,//�˵��ȼ�
-			"���İ�FLASH",//����
-			"core FLASH",	//Ӣ��
-			MENU_TYPE_FUN,//�˵�����
-			wjq_test,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+		MENU_L_1,//菜单等级
+		"SPI FLASH",//中文
+		"SPI FLASH",	//英文
+		MENU_TYPE_LIST,//菜单类型
+		NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
+			MENU_L_2,//菜单等级
+			"核心板FLASH",//中文
+			"core FLASH",	//英文
+			MENU_TYPE_FUN,//菜单类型
+			wjq_test,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 			
-			MENU_L_2,//�˵��ȼ�
-			"�װ� FLASH",//����
-			"board FLASH",	//Ӣ��
-			MENU_TYPE_FUN,//�˵�����
-			wjq_test,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+			MENU_L_2,//菜单等级
+			"底板 FLASH",//中文
+			"board FLASH",	//英文
+			MENU_TYPE_FUN,//菜单类型
+			wjq_test,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 			
-		MENU_L_1,//�˵��ȼ�
-		"ͨ��",//����
-		"con",	//Ӣ��
-		MENU_TYPE_LIST,//�˵�����
-		NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+		MENU_L_1,//菜单等级
+		"通信",//中文
+		"con",	//英文
+		MENU_TYPE_LIST,//菜单类型
+		NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 
-			MENU_L_2,//�˵��ȼ�
-			"485",//����
-			"485",	//Ӣ��
-			MENU_TYPE_LIST,//�˵�����
-			NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
-				MENU_L_3,//�˵��ȼ�
-				"485 ����",//����
-				"485 rec",	//Ӣ��
-				MENU_TYPE_FUN,//�˵�����
-				wjq_test,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
-				MENU_L_3,//�˵��ȼ�
-				"485 ����",//����
-				"485 snd",	//Ӣ��
-				MENU_TYPE_FUN,//�˵�����
-				wjq_test,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+			MENU_L_2,//菜单等级
+			"485",//中文
+			"485",	//英文
+			MENU_TYPE_LIST,//菜单类型
+			NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
+				MENU_L_3,//菜单等级
+				"485 接收",//中文
+				"485 rec",	//英文
+				MENU_TYPE_FUN,//菜单类型
+				wjq_test,//菜单函数，功能菜单才会执行，有子菜单的不会执行
+				MENU_L_3,//菜单等级
+				"485 发送",//中文
+				"485 snd",	//英文
+				MENU_TYPE_FUN,//菜单类型
+				wjq_test,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 			
-			MENU_L_2,//�˵��ȼ�
-			"CAN",//����
-			"CAN",	//Ӣ��
-			MENU_TYPE_LIST,//�˵�����
-			NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
-				MENU_L_3,//�˵��ȼ�
-				"CAN ����",//����
-				"CAN rec",	//Ӣ��
-				MENU_TYPE_FUN,//�˵�����
-				wjq_test,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+			MENU_L_2,//菜单等级
+			"CAN",//中文
+			"CAN",	//英文
+			MENU_TYPE_LIST,//菜单类型
+			NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
+				MENU_L_3,//菜单等级
+				"CAN 接收",//中文
+				"CAN rec",	//英文
+				MENU_TYPE_FUN,//菜单类型
+				wjq_test,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 				
-				MENU_L_3,//�˵��ȼ�
-				"CAN ����",//����
-				"CAN snd",	//Ӣ��
-				MENU_TYPE_FUN,//�˵�����
-				wjq_test,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+				MENU_L_3,//菜单等级
+				"CAN 发送",//中文
+				"CAN snd",	//英文
+				MENU_TYPE_FUN,//菜单类型
+				wjq_test,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 			
 		
 		
-			MENU_L_2,//�˵��ȼ�
-			"����",//����
-			"uart",	//Ӣ��
-			MENU_TYPE_FUN,//�˵�����
-			wjq_test,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+			MENU_L_2,//菜单等级
+			"串口",//中文
+			"uart",	//英文
+			MENU_TYPE_FUN,//菜单类型
+			wjq_test,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 
-			MENU_L_2,//�˵��ȼ�
-			"����",//����
-			"eth",	//Ӣ��
-			MENU_TYPE_LIST,//�˵�����
-			NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+			MENU_L_2,//菜单等级
+			"网络",//中文
+			"eth",	//英文
+			MENU_TYPE_LIST,//菜单类型
+			NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 
-			MENU_L_2,//�˵��ȼ�
-			"OTG",//����
-			"OTG",	//Ӣ��
-			MENU_TYPE_LIST,//�˵�����
-			NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
-				MENU_L_3,//�˵��ȼ�
-				"HOST",//����
-				"HOST",	//Ӣ��
-				MENU_TYPE_LIST,//�˵�����
-				NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
-				MENU_L_3,//�˵��ȼ�
-				"Device",//����
-				"Device",	//Ӣ��
-				MENU_TYPE_LIST,//�˵�����
-				NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
-		MENU_L_1,//�˵��ȼ�
-		"ģ��",//����
-		"mod",	//Ӣ��
-		MENU_TYPE_LIST,//�˵�����
-		NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+			MENU_L_2,//菜单等级
+			"OTG",//中文
+			"OTG",	//英文
+			MENU_TYPE_LIST,//菜单类型
+			NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
+				MENU_L_3,//菜单等级
+				"HOST",//中文
+				"HOST",	//英文
+				MENU_TYPE_LIST,//菜单类型
+				NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
+				MENU_L_3,//菜单等级
+				"Device",//中文
+				"Device",	//英文
+				MENU_TYPE_LIST,//菜单类型
+				NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
+		MENU_L_1,//菜单等级
+		"模块",//中文
+		"mod",	//英文
+		MENU_TYPE_LIST,//菜单类型
+		NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 		
-			/*�����ӿڲ���*/
-			MENU_L_2,//�˵��ȼ�
-			"RF24L01",//����
-			"RF24L01",	//Ӣ��
-			MENU_TYPE_LIST,//�˵�����
-			NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+			/*外扩接口测试*/
+			MENU_L_2,//菜单等级
+			"RF24L01",//中文
+			"RF24L01",	//英文
+			MENU_TYPE_LIST,//菜单类型
+			NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 
-			MENU_L_2,//�˵��ȼ�
-			"MPU6050",//����
-			"MPU6050",	//Ӣ��
-			MENU_TYPE_LIST,//�˵�����
-			NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+			MENU_L_2,//菜单等级
+			"MPU6050",//中文
+			"MPU6050",	//英文
+			MENU_TYPE_LIST,//菜单类型
+			NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 
-			/*�ô�������8266ģ��*/
-			MENU_L_2,//�˵��ȼ�
-			"wifi",//����
-			"wifi",	//Ӣ��
-			MENU_TYPE_FUN,//�˵�����
-			wjq_test,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+			/*用串口外扩8266模块*/
+			MENU_L_2,//菜单等级
+			"wifi",//中文
+			"wifi",	//英文
+			MENU_TYPE_FUN,//菜单类型
+			wjq_test,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 		
 
-		MENU_L_1,//�˵��ȼ�
-		"test",//����
-		"test",	//Ӣ��
-		MENU_TYPE_LIST,//�˵�����
-		NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+		MENU_L_1,//菜单等级
+		"test",//中文
+		"test",	//英文
+		MENU_TYPE_LIST,//菜单类型
+		NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 		
-		MENU_L_1,//�˵��ȼ�
-		"test1",//����
-		"test1",	//Ӣ��
-		MENU_TYPE_LIST,//�˵�����
-		NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+		MENU_L_1,//菜单等级
+		"test1",//中文
+		"test1",	//英文
+		MENU_TYPE_LIST,//菜单类型
+		NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 
-		MENU_L_1,//�˵��ȼ�
-		"test2",//����
-		"test2",	//Ӣ��
-		MENU_TYPE_LIST,//�˵�����
-		NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+		MENU_L_1,//菜单等级
+		"test2",//中文
+		"test2",	//英文
+		MENU_TYPE_LIST,//菜单类型
+		NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 
-		MENU_L_1,//�˵��ȼ�
-		"test3",//����
-		"test3",	//Ӣ��
-		MENU_TYPE_LIST,//�˵�����
-		NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+		MENU_L_1,//菜单等级
+		"test3",//中文
+		"test3",	//英文
+		MENU_TYPE_LIST,//菜单类型
+		NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 
-		MENU_L_1,//�˵��ȼ�
-		"test4",//����
-		"test4",	//Ӣ��
-		MENU_TYPE_LIST,//�˵�����
-		NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+		MENU_L_1,//菜单等级
+		"test4",//中文
+		"test4",	//英文
+		MENU_TYPE_LIST,//菜单类型
+		NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 
-		MENU_L_1,//�˵��ȼ�
-		"test5",//����
-		"test5",	//Ӣ��
-		MENU_TYPE_LIST,//�˵�����
-		NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+		MENU_L_1,//菜单等级
+		"test5",//中文
+		"test5",	//英文
+		MENU_TYPE_LIST,//菜单类型
+		NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 
-		MENU_L_1,//�˵��ȼ�
-		"test6",//����
-		"test6",	//Ӣ��
-		MENU_TYPE_LIST,//�˵�����
-		NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+		MENU_L_1,//菜单等级
+		"test6",//中文
+		"test6",	//英文
+		MENU_TYPE_LIST,//菜单类型
+		NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 
-		MENU_L_1,//�˵��ȼ�
-		"test7",//����
-		"test7",	//Ӣ��
-		MENU_TYPE_LIST,//�˵�����
-		NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+		MENU_L_1,//菜单等级
+		"test7",//中文
+		"test7",	//英文
+		MENU_TYPE_LIST,//菜单类型
+		NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 
-		MENU_L_1,//�˵��ȼ�
-		"test8",//����
-		"test8",	//Ӣ��
-		MENU_TYPE_LIST,//�˵�����
-		NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+		MENU_L_1,//菜单等级
+		"test8",//中文
+		"test8",	//英文
+		MENU_TYPE_LIST,//菜单类型
+		NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 
-		MENU_L_1,//�˵��ȼ�
-		"test9",//����
-		"test9",	//Ӣ��
-		MENU_TYPE_LIST,//�˵�����
-		NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+		MENU_L_1,//菜单等级
+		"test9",//中文
+		"test9",	//英文
+		MENU_TYPE_LIST,//菜单类型
+		NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 
-		MENU_L_1,//�˵��ȼ�
-		"test10",//����
-		"test10",	//Ӣ��
-		MENU_TYPE_LIST,//�˵�����
-		NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+		MENU_L_1,//菜单等级
+		"test10",//中文
+		"test10",	//英文
+		MENU_TYPE_LIST,//菜单类型
+		NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 		
-			MENU_L_2,//�˵��ȼ�
-			"t10-1",//����
-			"t10-1",	//Ӣ��
-			MENU_TYPE_LIST,//�˵�����
-			NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
-			MENU_L_2,//�˵��ȼ�
-			"t10-2",//����
-			"t10-2",	//Ӣ��
-			MENU_TYPE_LIST,//�˵�����
-			NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
-			MENU_L_2,//�˵��ȼ�
-			"t10-3",//����
-			"t10-3",	//Ӣ��
-			MENU_TYPE_LIST,//�˵�����
-			NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
-			MENU_L_2,//�˵��ȼ�
-			"t10-4",//����
-			"t10-4",	//Ӣ��
-			MENU_TYPE_LIST,//�˵�����
-			NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
-			MENU_L_2,//�˵��ȼ�
-			"t10-5",//����
-			"t10-5",	//Ӣ��
-			MENU_TYPE_LIST,//�˵�����
-			NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
-			MENU_L_2,//�˵��ȼ�
-			"t10-6",//����
-			"t10-6",	//Ӣ��
-			MENU_TYPE_LIST,//�˵�����
-			NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
-			MENU_L_2,//�˵��ȼ�
-			"t10-7",//����
-			"t10-7",	//Ӣ��
-			MENU_TYPE_LIST,//�˵�����
-			NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
-			MENU_L_2,//�˵��ȼ�
-			"t10-8",//����
-			"t10-8",	//Ӣ��
-			MENU_TYPE_LIST,//�˵�����
-			NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
-			MENU_L_2,//�˵��ȼ�
-			"t10-9",//����
-			"t10-9",	//Ӣ��
-			MENU_TYPE_LIST,//�˵�����
-			NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
-			MENU_L_2,//�˵��ȼ�
-			"t10-10",//����
-			"t10-10",	//Ӣ��
-			MENU_TYPE_LIST,//�˵�����
-			NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
-			MENU_L_2,//�˵��ȼ�
-			"t10-11",//����
-			"t10-11",	//Ӣ��
-			MENU_TYPE_LIST,//�˵�����
-			NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
-			MENU_L_2,//�˵��ȼ�
-			"t10-12",//����
-			"t10-12",	//Ӣ��
-			MENU_TYPE_LIST,//�˵�����
-			NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+			MENU_L_2,//菜单等级
+			"t10-1",//中文
+			"t10-1",	//英文
+			MENU_TYPE_LIST,//菜单类型
+			NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
+			MENU_L_2,//菜单等级
+			"t10-2",//中文
+			"t10-2",	//英文
+			MENU_TYPE_LIST,//菜单类型
+			NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
+			MENU_L_2,//菜单等级
+			"t10-3",//中文
+			"t10-3",	//英文
+			MENU_TYPE_LIST,//菜单类型
+			NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
+			MENU_L_2,//菜单等级
+			"t10-4",//中文
+			"t10-4",	//英文
+			MENU_TYPE_LIST,//菜单类型
+			NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
+			MENU_L_2,//菜单等级
+			"t10-5",//中文
+			"t10-5",	//英文
+			MENU_TYPE_LIST,//菜单类型
+			NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
+			MENU_L_2,//菜单等级
+			"t10-6",//中文
+			"t10-6",	//英文
+			MENU_TYPE_LIST,//菜单类型
+			NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
+			MENU_L_2,//菜单等级
+			"t10-7",//中文
+			"t10-7",	//英文
+			MENU_TYPE_LIST,//菜单类型
+			NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
+			MENU_L_2,//菜单等级
+			"t10-8",//中文
+			"t10-8",	//英文
+			MENU_TYPE_LIST,//菜单类型
+			NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
+			MENU_L_2,//菜单等级
+			"t10-9",//中文
+			"t10-9",	//英文
+			MENU_TYPE_LIST,//菜单类型
+			NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
+			MENU_L_2,//菜单等级
+			"t10-10",//中文
+			"t10-10",	//英文
+			MENU_TYPE_LIST,//菜单类型
+			NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
+			MENU_L_2,//菜单等级
+			"t10-11",//中文
+			"t10-11",	//英文
+			MENU_TYPE_LIST,//菜单类型
+			NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
+			MENU_L_2,//菜单等级
+			"t10-12",//中文
+			"t10-12",	//英文
+			MENU_TYPE_LIST,//菜单类型
+			NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 	
-	/*���Ĳ˵��ǽ����˵���������*/			
-	MENU_L_0,//�˵��ȼ�
-	"END",//����
-	"END",	//Ӣ��
-	MENU_TYPE_NULL,//�˵�����
-	NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+	/*最后的菜单是结束菜单，无意义*/			
+	MENU_L_0,//菜单等级
+	"END",//中文
+	"END",	//英文
+	MENU_TYPE_NULL,//菜单类型
+	NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 };
 
 
@@ -554,13 +554,13 @@ void albatross_750_test(void)
 	//dev_keypad_open();
 	//emenu_run(WJQTestLcd, (MENU *)&WJQTestList[0], sizeof(WJQTestList)/sizeof(MENU), TEST_FONG, 1, MENU_LANG_ENG);	
 
-	/*�򿪱���*/
+	/*打开背光*/
 	dev_lcd_backlight(WJQTestLcd, 1);
 
 	//dev_lcd_put_string(WJQTestLcd, "songti12", 10,1, "ABC-abc", BLACK);
-	//dev_lcd_put_string(WJQTestLcd, "siyuan16", 1,13, "����LcdOledI2C", BLACK);
+	//dev_lcd_put_string(WJQTestLcd, "siyuan16", 1,13, "这是LcdOledI2C", BLACK);
 	//dev_lcd_put_string(WJQTestLcd, "songti12", 10,30, "www.wujique.com", BLACK);
-	//dev_lcd_put_string(WJQTestLcd, "siyuan16", 1,47, "�ݼ�ȸ������", BLACK);
+	//dev_lcd_put_string(WJQTestLcd, "siyuan16", 1,47, "屋脊雀工作室", BLACK);
 	
 	dev_lcd_put_string(WJQTestLcd, "songti12", 10,1, "ABC-abc", BLACK);
 	//dev_lcd_put_string(WJQTestLcd, "siyuan16", 1,13, "LcdOledI2C", BLACK);

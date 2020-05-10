@@ -6,8 +6,8 @@
 
 #include "dev_keypad.h"
 /*
-	¾ØÕó°´¼üÓ²¼ş¶¨Òå
-	rowÊä³ö£¬·ÅÇ°Ãæ
+	çŸ©é˜µæŒ‰é”®ç¡¬ä»¶å®šä¹‰
+	rowè¾“å‡ºï¼Œæ”¾å‰é¢
 */
 KeyPadIO KeyPadIOList[KEY_PAD_ROW_NUM+KEY_PAD_COL_NUM]=
 		{
@@ -25,7 +25,7 @@ KeyPadIO KeyPadIOList[KEY_PAD_ROW_NUM+KEY_PAD_COL_NUM]=
 
 
 /*
-	°å¼¶³õÊ¼»¯
+	æ¿çº§åˆå§‹åŒ–
 */
 s32 board_init(void)
 {

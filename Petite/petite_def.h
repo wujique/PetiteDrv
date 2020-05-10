@@ -4,7 +4,7 @@
 #include "petite_config.h"
 
 
-/*Éè±¸ÀàÐÍ¶¨Òå*/
+/*è®¾å¤‡ç±»åž‹å®šä¹‰*/
 typedef enum{
 	DEV_NULL = 0,
 	BUS_LCD_SPI,
@@ -12,12 +12,12 @@ typedef enum{
 	BUS_LCD_8080,
 	BUS_LCD_MAX,
 
-	BUS_I2C_H = 0x11,//Ó²¼þSPI¿ØÖÆÆ÷
-	BUS_I2C_V = 0x12,//IOÄ£ÄâSPI
+	BUS_I2C_H = 0x11,//ç¡¬ä»¶SPIæŽ§åˆ¶å™¨
+	BUS_I2C_V = 0x12,//IOæ¨¡æ‹ŸSPI
 
-	BUS_SPI_H = 0x21,//Ó²¼þSPI¿ØÖÆÆ÷
-	BUS_SPI_V = 0x22,//IOÄ£ÄâSPI
-	BUS_SPI_CH = 0x23,//spi Í¨µÀ
+	BUS_SPI_H = 0x21,//ç¡¬ä»¶SPIæŽ§åˆ¶å™¨
+	BUS_SPI_V = 0x22,//IOæ¨¡æ‹ŸSPI
+	BUS_SPI_CH = 0x23,//spi é€šé“
 
 	DEV_SPIFLASH = 0x31,
 	DEV_LCD = 0x32,

@@ -1,29 +1,29 @@
 /**
  * @file            dev_touchkey.c
- * @brief           ´¥Ãş°´¼üÇı¶¯³ÌĞò
+ * @brief           è§¦æ‘¸æŒ‰é”®é©±åŠ¨ç¨‹åº
  * @author          wujique
- * @date            2017Äê11ÔÂ7ÈÕ ĞÇÆÚ¶ş
- * @version         ³õ¸å
- * @par             °æÈ¨ËùÓĞ (C), 2013-2023
+ * @date            2017å¹´11æœˆ7æ—¥ æ˜ŸæœŸäºŒ
+ * @version         åˆç¨¿
+ * @par             ç‰ˆæƒæ‰€æœ‰ (C), 2013-2023
  * @par History:
- * 1.ÈÕ    ÆÚ:        2017Äê11ÔÂ7ÈÕ ĞÇÆÚ¶ş
- *   ×÷    Õß:      Îİ¼¹È¸¹¤×÷ÊÒ
- *   ĞŞ¸ÄÄÚÈİ:   ´´½¨ÎÄ¼ş
-   		1 Ô´Âë¹éÎİ¼¹È¸¹¤×÷ÊÒËùÓĞ¡£
-		2 ¿ÉÒÔÓÃÓÚµÄÆäËûÉÌÒµÓÃÍ¾£¨ÅäÌ×¿ª·¢°åÏúÊÛ³ıÍâ£©£¬²»ĞëÊÚÈ¨¡£
-		3 Îİ¼¹È¸¹¤×÷ÊÒ²»¶Ô´úÂë¹¦ÄÜ×öÈÎºÎ±£Ö¤£¬ÇëÊ¹ÓÃÕß×ÔĞĞ²âÊÔ£¬ºó¹û×Ô¸º¡£
-		4 ¿ÉËæÒâĞŞ¸ÄÔ´Âë²¢·Ö·¢£¬µ«²»¿ÉÖ±½ÓÏúÊÛ±¾´úÂë»ñÀû£¬²¢ÇÒÇë±£ÁôWUJIQUE°æÈ¨ËµÃ÷¡£
-		5 Èç·¢ÏÖBUG»òÓĞÓÅ»¯£¬»¶Ó­·¢²¼¸üĞÂ¡£ÇëÁªÏµ£ºcode@wujique.com
-		6 Ê¹ÓÃ±¾Ô´ÂëÔòÏàµ±ÓÚÈÏÍ¬±¾°æÈ¨ËµÃ÷¡£
-		7 ÈçÇÖ·¸ÄãµÄÈ¨Àû£¬ÇëÁªÏµ£ºcode@wujique.com
-		8 Ò»ÇĞ½âÊÍÈ¨¹éÎİ¼¹È¸¹¤×÷ÊÒËùÓĞ¡£
+ * 1.æ—¥    æœŸ:        2017å¹´11æœˆ7æ—¥ æ˜ŸæœŸäºŒ
+ *   ä½œ    è€…:      å±‹è„Šé›€å·¥ä½œå®¤
+ *   ä¿®æ”¹å†…å®¹:   åˆ›å»ºæ–‡ä»¶
+   		1 æºç å½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
+		2 å¯ä»¥ç”¨äºçš„å…¶ä»–å•†ä¸šç”¨é€”ï¼ˆé…å¥—å¼€å‘æ¿é”€å”®é™¤å¤–ï¼‰ï¼Œä¸é¡»æˆæƒã€‚
+		3 å±‹è„Šé›€å·¥ä½œå®¤ä¸å¯¹ä»£ç åŠŸèƒ½åšä»»ä½•ä¿è¯ï¼Œè¯·ä½¿ç”¨è€…è‡ªè¡Œæµ‹è¯•ï¼Œåæœè‡ªè´Ÿã€‚
+		4 å¯éšæ„ä¿®æ”¹æºç å¹¶åˆ†å‘ï¼Œä½†ä¸å¯ç›´æ¥é”€å”®æœ¬ä»£ç è·åˆ©ï¼Œå¹¶ä¸”è¯·ä¿ç•™WUJIQUEç‰ˆæƒè¯´æ˜ã€‚
+		5 å¦‚å‘ç°BUGæˆ–æœ‰ä¼˜åŒ–ï¼Œæ¬¢è¿å‘å¸ƒæ›´æ–°ã€‚è¯·è”ç³»ï¼šcode@wujique.com
+		6 ä½¿ç”¨æœ¬æºç åˆ™ç›¸å½“äºè®¤åŒæœ¬ç‰ˆæƒè¯´æ˜ã€‚
+		7 å¦‚ä¾µçŠ¯ä½ çš„æƒåˆ©ï¼Œè¯·è”ç³»ï¼šcode@wujique.com
+		8 ä¸€åˆ‡è§£é‡Šæƒå½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
 */
 /*
-	µçÈİ´¥Ãş°´¼üÁ÷³Ì
-	1 IO¿ÚÊä³ö¸ßµçÆ½£¬¶Ô´¥ÃşÍ­²­³äµç¡£
-	2 ÉèÖÃ¶¨Ê±Æ÷ÊäÈë²¶»ñ¡£
-	3 ²éÑ¯£¬µÃµ½²¶»ñÖµ¡£
-	4 ´¦Àí²¶»ñÖµ£¨ÓëÀúÊ·ÖµÒ»Æğ×ö·ÖÎö£©£¬µÃµ½´¥Ãş×´Ì¬£¬ÈçÓĞ´¥ÃşÔòÌîÈë´¥Ãş°´¼ü»º³åÇø¡£
+	ç”µå®¹è§¦æ‘¸æŒ‰é”®æµç¨‹
+	1 IOå£è¾“å‡ºé«˜ç”µå¹³ï¼Œå¯¹è§¦æ‘¸é“œç®”å……ç”µã€‚
+	2 è®¾ç½®å®šæ—¶å™¨è¾“å…¥æ•è·ã€‚
+	3 æŸ¥è¯¢ï¼Œå¾—åˆ°æ•è·å€¼ã€‚
+	4 å¤„ç†æ•è·å€¼ï¼ˆä¸å†å²å€¼ä¸€èµ·åšåˆ†æï¼‰ï¼Œå¾—åˆ°è§¦æ‘¸çŠ¶æ€ï¼Œå¦‚æœ‰è§¦æ‘¸åˆ™å¡«å…¥è§¦æ‘¸æŒ‰é”®ç¼“å†²åŒºã€‚
 		
 */
 
@@ -43,12 +43,12 @@
 #endif
 
 
-#define DEV_TOUCHKEY_GATE (50)//È·ÈÏ×´Ì¬±ä»¯µÄÃÅÏŞÖµ£¬¸ù¾İÓ²¼şĞÔÄÜµ÷½Ú±¾²ÎÊıµ½ºÏÊÊÁéÃô¶È¼´¿É¡£
-#define DEV_TOUCHKEY_DATA_NUM (50)//Ò»ÂÖÎÈ¶¨×´Ì¬ĞèÒªµÄÊ±¼äÁ÷¸öÊı£¬¿ÉÒÔÍ¨¹ıĞŞ¸ÄÕâ¸öµ÷½Ú´¥ÃşÉ¨ÃèÊ±¼ä
-static u16 TouchKeyLastCap = 0;//×îºóÒ»´ÎÎÈ¶¨µÄCAPÆ½¾ùÖµ
+#define DEV_TOUCHKEY_GATE (50)//ç¡®è®¤çŠ¶æ€å˜åŒ–çš„é—¨é™å€¼ï¼Œæ ¹æ®ç¡¬ä»¶æ€§èƒ½è°ƒèŠ‚æœ¬å‚æ•°åˆ°åˆé€‚çµæ•åº¦å³å¯ã€‚
+#define DEV_TOUCHKEY_DATA_NUM (50)//ä¸€è½®ç¨³å®šçŠ¶æ€éœ€è¦çš„æ—¶é—´æµä¸ªæ•°ï¼Œå¯ä»¥é€šè¿‡ä¿®æ”¹è¿™ä¸ªè°ƒèŠ‚è§¦æ‘¸æ‰«ææ—¶é—´
+static u16 TouchKeyLastCap = 0;//æœ€åä¸€æ¬¡ç¨³å®šçš„CAPå¹³å‡å€¼
 
 #define DEV_TOUCHKEY_BUF_SIZE (16)
-static u8 TouchKeyBuf[DEV_TOUCHKEY_BUF_SIZE];//´¥Ãş°´¼ü»º³åÇø£¬´¦ÀíµÃµ½Ê±¼äºó¾Í½«Ê±¼ä·Åµ½Õâ¸ö»º³åÇø
+static u8 TouchKeyBuf[DEV_TOUCHKEY_BUF_SIZE];//è§¦æ‘¸æŒ‰é”®ç¼“å†²åŒºï¼Œå¤„ç†å¾—åˆ°æ—¶é—´åå°±å°†æ—¶é—´æ”¾åˆ°è¿™ä¸ªç¼“å†²åŒº
 static u8 TouchKeyWrite = 0;
 static u8 TouchKeyRead = 0;
 
@@ -56,9 +56,9 @@ s32 TouchKeyGd = -2;
 
 /**
  *@brief:      dev_touchkey_resetpad
- *@details:    ¸´Î»´¥Ãş°´¼ü£¨Êä³ö¸ßµçÆ½³äµç£©
+ *@details:    å¤ä½è§¦æ‘¸æŒ‰é”®ï¼ˆè¾“å‡ºé«˜ç”µå¹³å……ç”µï¼‰
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 static s32 dev_touchkey_resetpad(void)
@@ -70,9 +70,9 @@ static s32 dev_touchkey_resetpad(void)
 }
 /**
  *@brief:      dev_touchkey_iocap
- *@details:    IOÉèÖÃÎª¶¨Ê±Æ÷²¶»ñ¹¦ÄÜ
+ *@details:    IOè®¾ç½®ä¸ºå®šæ—¶å™¨æ•è·åŠŸèƒ½
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     static
  */
 static s32 dev_touchkey_iocap(void)
@@ -103,10 +103,10 @@ s32 dev_touchkey_close(void)
 }
 /**
  *@brief:      dev_touchkey_read
- *@details:    ¶ÁÉè±¸£¬»ñÈ¡´¥ÃşÊÂ¼ş
+ *@details:    è¯»è®¾å¤‡ï¼Œè·å–è§¦æ‘¸äº‹ä»¶
  *@param[in]   u8 *buf    
                u32 count  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_touchkey_read(u8 *buf, u32 count)
@@ -142,22 +142,22 @@ s32 dev_touchkey_write(void)
 
 /**
  *@brief:      dev_touchkey_scan
- *@details:    É¨Ãè´¥Ãş²¶»ñµÄÊı¾İÁ÷
+ *@details:    æ‰«æè§¦æ‘¸æ•è·çš„æ•°æ®æµ
  *@param[in]   u32  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:                  	
  */
 static s32 dev_touchkey_scan(u32 cap)
 {
-	static u16 average = 0;//Æ½¾ùÖµ
-	static u8 cap_cnt = 0;//ÓĞĞ§²¶»ñ¼ÆÊı
-	static u8 last_dire = DEV_TOUCHKEY_IDLE;//ÉÏÒ»¸öÖµµÄ·½Ïò£¬1Îª±ä´ó,´¥Ãş£»2Îª±äĞ¡£¬ËÉ¿ª
+	static u16 average = 0;//å¹³å‡å€¼
+	static u8 cap_cnt = 0;//æœ‰æ•ˆæ•è·è®¡æ•°
+	static u8 last_dire = DEV_TOUCHKEY_IDLE;//ä¸Šä¸€ä¸ªå€¼çš„æ–¹å‘ï¼Œ1ä¸ºå˜å¤§,è§¦æ‘¸ï¼›2ä¸ºå˜å°ï¼Œæ¾å¼€
 	static u8 last_chg = NULL;
 	
 	TOUCHKEY_DEBUG(LOG_DEBUG, "--%08x-%04x-", cap, TouchKeyLastCap);
 	if(cap > TouchKeyLastCap + DEV_TOUCHKEY_GATE)
 	{
-		/*ÓëÉÏÒ»´Î±ä»¯µÄÆ½¾ùÖµ±È½Ï£¬ ´ó£¬½øÈë*/
+		/*ä¸ä¸Šä¸€æ¬¡å˜åŒ–çš„å¹³å‡å€¼æ¯”è¾ƒï¼Œ å¤§ï¼Œè¿›å…¥*/
 		if(last_dire != DEV_TOUCHKEY_TOUCH)
 		{
 			cap_cnt = 0;
@@ -198,7 +198,7 @@ static s32 dev_touchkey_scan(u32 cap)
 		else
 		{
 			TOUCHKEY_DEBUG(LOG_DEBUG, "\r\n-------------------chg\r\n");
-			if(last_chg != last_dire)//·ÀÖ¹ÖØ¸´ÉÏ±¨
+			if(last_chg != last_dire)//é˜²æ­¢é‡å¤ä¸ŠæŠ¥
 			{
 				TOUCHKEY_DEBUG(LOG_DEBUG, "\r\n--------report\r\n");
 				TouchKeyBuf[TouchKeyWrite++] = last_dire;
@@ -209,7 +209,7 @@ static s32 dev_touchkey_scan(u32 cap)
 			last_chg = last_dire;
 			
 		}
-		/*±£´æĞÂµÄÆ½¾ùÖµ*/
+		/*ä¿å­˜æ–°çš„å¹³å‡å€¼*/
 		TouchKeyLastCap = average/DEV_TOUCHKEY_DATA_NUM;
 		cap_cnt = 0;
 		average = 0;
@@ -218,9 +218,9 @@ static s32 dev_touchkey_scan(u32 cap)
 }
 /**
  *@brief:      dev_touchkey_task
- *@details:    ´¥Ãş°´¼üÏß³Ì£¬³£×¤ÈÎÎñ
+ *@details:    è§¦æ‘¸æŒ‰é”®çº¿ç¨‹ï¼Œå¸¸é©»ä»»åŠ¡
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_touchkey_task(void)
@@ -233,13 +233,13 @@ s32 dev_touchkey_task(void)
 
 	TOUCHKEY_DEBUG(LOG_DEBUG, "\r\ndev_touchkey_task\r\n");
 	
-	//IOÊä³ö1£¬¶ÔµçÈİ³äµç
+	//IOè¾“å‡º1ï¼Œå¯¹ç”µå®¹å……ç”µ
 	dev_touchkey_resetpad();
-	//ÑÓÊ±Ò»µã£¬³äµç
+	//å»¶æ—¶ä¸€ç‚¹ï¼Œå……ç”µ
 	for(i=0;i++;i<0x12345);
-	//½«IO¿ÚÉèÖÃÎª¶¨Ê±È¥ÊäÈë²¶»ñÍ¨µÀ
+	//å°†IOå£è®¾ç½®ä¸ºå®šæ—¶å»è¾“å…¥æ•è·é€šé“
 	dev_touchkey_iocap();
-	//¿ª¶¨Ê±Æ÷²¶»ñ£¬Èç¹ûÔ¤·ÖÆµ8£¬Ò»¸ö¶¨Ê±Æ÷¼ÆÊıÊÇ100ns×óÓÒ £¬Õâ¸öÖµÒªÍ¨¹ıµ÷ÊÔ£¬
+	//å¼€å®šæ—¶å™¨æ•è·ï¼Œå¦‚æœé¢„åˆ†é¢‘8ï¼Œä¸€ä¸ªå®šæ—¶å™¨è®¡æ•°æ˜¯100nså·¦å³ ï¼Œè¿™ä¸ªå€¼è¦é€šè¿‡è°ƒè¯•ï¼Œ
 	mcu_timer_cap_init(MCU_TIMER_2, MCU_TIMER_100NS, MCU_TIMER_CH4, MCU_TIMER_CAP_FALLING);
 	mcu_timer_start(MCU_TIMER_2);
 	cap = mcu_timer_get_cap(MCU_TIMER_2, MCU_TIMER_CH4);
@@ -252,9 +252,9 @@ s32 dev_touchkey_task(void)
 
 /**
  *@brief:      dev_touchkey_test
- *@details:    ´¥Ãş°´¼ü²âÊÔ³ÌĞò
- *@param[in]   ÎŞ
- *@param[out]  ÎŞ
+ *@details:    è§¦æ‘¸æŒ‰é”®æµ‹è¯•ç¨‹åº
+ *@param[in]   æ— 
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_touchkey_test(void)

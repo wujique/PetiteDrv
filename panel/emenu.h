@@ -6,25 +6,25 @@
 typedef enum{
 	MENU_TYPE_NULL = 0,
 /*
-���ܲ˵������ܲ˵�û���Ӳ˵�����ִ�еĺ�������ʵ�ʹ���
+功能菜单，功能菜单没有子菜单，在执行的函数就是实际功能
 */
 	MENU_TYPE_FUN,
 /*
-//<�б��˵�> �˵�����ʾ�ڶ������¼��˵�ͨ���б���ʽ��ʾ���·�
-ͨ�����°���ѡ���Ӳ˵�, ͨ��ȷ�ϼ�ѡ�������һ���˵�
+//<列表菜单> 菜单名显示在顶部，下级菜单通过列表形式显示在下方
+通过上下按键选择子菜单, 通过确认键选择进入下一级菜单
 */
 	MENU_TYPE_LIST,
 /*
-//<�춥�˵�> �����˵���ͳ�Ʋ˵���ʾ�ڶ�����ͨ������ѡ�񱾼��˵���
-�¼��˵�ͨ���б���ʽ��ʾ���·���ͨ������ѡ���Ӳ˵�
-ֻ�е�һ���˵�������Ϊ�춥�˵����춥�˵�����һ����һ�����б��˵�
+//<天顶菜单> 本级菜单与统计菜单显示在顶部，通过左右选择本级菜单，
+下级菜单通过列表形式显示在下方，通过上下选择子菜单
+只有第一级菜单才能做为天顶菜单，天顶菜单的下一级，一般是列表菜单
 */
 	MENU_TYPE_B,
 /*
-//<�����˵�> �����˵�����ʾ�ڶ������Ӳ˵�����ʽ��ʾ���·���ͨ������ѡ�����˵�
-  �������ڷ�ҳ�Ӳ˵� 
-  MENU_TYPE_KEY_1COL ���� MENU_TYPE_KEY_2COL˫��
-  ˫�в˵�ͨ�����ְ���ѡ��ͨ�����ּ���ֻ��10��������һ��ֻʹ��1-8
+//<按键菜单> 本级菜单名显示在顶部，子菜单行列式显示在下方，通过按键选择进入菜单
+  上下用于翻页子菜单 
+  MENU_TYPE_KEY_1COL 单列 MENU_TYPE_KEY_2COL双列
+  双列菜单通过数字按键选择，通常数字键盘只有10个按键，一般只使用1-8
 */
 	MENU_TYPE_KEY_1COL,
 	MENU_TYPE_KEY_2COL
@@ -45,15 +45,15 @@ typedef enum{
 
 #define MENU_LANG_BUF_SIZE 16
 /**
- * @brief  �˵�����
+ * @brief  菜单对象
 */
 typedef struct _strMenu
 {
-    MenuLel l;     ///<�˵��ȼ�
-    char cha[MENU_LANG_BUF_SIZE];   ///����
-    char eng[MENU_LANG_BUF_SIZE];   ///Ӣ��
+    MenuLel l;     ///<菜单等级
+    char cha[MENU_LANG_BUF_SIZE];   ///中文
+    char eng[MENU_LANG_BUF_SIZE];   ///英文
     MenuType type;  ///
-    s32 (*fun)(void);  ///���Ժ���
+    s32 (*fun)(void);  ///测试函数
 
 } MENU;
 

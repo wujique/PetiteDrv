@@ -15,9 +15,9 @@
 
 /**
  *@brief:      ts_input_read
- *@details:    ¶Á´¥ÃşÆÁÑùµãÊı¾İ
+ *@details:    è¯»è§¦æ‘¸å±æ ·ç‚¹æ•°æ®
  *@param[in]                          
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     static
  */
 static int ts_input_read(struct ts_sample *samp, int nr)
@@ -45,11 +45,11 @@ struct tslib_linear TslibLinear;
 
 /**
  *@brief:      linear_read
- *@details:    Ğ£×¼
+ *@details:    æ ¡å‡†
  *@param[in]   struct tslib_module_info *info  
                struct ts_sample *samp          
                int nr                          
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     static
  */
 static int linear_read(struct ts_sample *samp, int nr)
@@ -59,12 +59,12 @@ static int linear_read(struct ts_sample *samp, int nr)
 	int ret;
 	int xtemp,ytemp;
 
-	// ´ÓÏÂÒ»²ã¶ÁÈ¡Ñùµã
+	// ä»ä¸‹ä¸€å±‚è¯»å–æ ·ç‚¹
 	ret =  ts_input_read(samp, nr);
-	//¶Áµ½ret¸öÑùµã
+	//è¯»åˆ°retä¸ªæ ·ç‚¹
 	if (ret >= 0) 
 	{
-		int nr;//ÖØĞÂÉêÇëÒ»¸önr±äÁ¿?ÓĞ±ØÒªÒ²½ĞnrÂğ£¿ÈÃÈËÎó½â
+		int nr;//é‡æ–°ç”³è¯·ä¸€ä¸ªnrå˜é‡?æœ‰å¿…è¦ä¹Ÿå«nrå—ï¼Ÿè®©äººè¯¯è§£
 
 		for (nr = 0; nr < ret; nr++, samp++) 
 		{
@@ -81,7 +81,7 @@ static int linear_read(struct ts_sample *samp, int nr)
 			samp->pressure = ((samp->pressure + lin->p_offset)
 						 * lin->p_mult) / lin->p_div;
 
-			/*XYÖá¶Ôµ÷*/
+			/*XYè½´å¯¹è°ƒ*/
 			if (lin->swap_xy) 
 			{
 				int tmp = samp->x;
@@ -105,14 +105,14 @@ static int mod_linear_init(void)
 
 	lin = &TslibLinear;
 
-	/*  ÏÂÃæËÄ¸öÊı¾İ²»»áĞŞ¸Ä£¿  */
+	/*  ä¸‹é¢å››ä¸ªæ•°æ®ä¸ä¼šä¿®æ”¹ï¼Ÿ  */
 	lin->p_offset = 0;
 	lin->p_mult   = 1;
 	lin->p_div    = 1;
 	lin->swap_xy  = 0;
 
 	/*
-	 ÒÔÏÂÄÚÈİ¾ÍÊÇ»ñÈ¡ÏµÍ³µÄĞ£×¼Êı¾İ
+	 ä»¥ä¸‹å†…å®¹å°±æ˜¯è·å–ç³»ç»Ÿçš„æ ¡å‡†æ•°æ®
 	 */
 	lin->a[0] = TsCalSet.a[0];
 	lin->a[1] = TsCalSet.a[1];
@@ -136,8 +136,8 @@ static int mod_linear_init(void)
 struct tslib_variance 
 {
 	int delta;
-    struct ts_sample last;	//ÉÏÒ»¸öÑùµã
-    struct ts_sample noise;//ÔëÉù£¨¿ÉÒÉ£©
+    struct ts_sample last;	//ä¸Šä¸€ä¸ªæ ·ç‚¹
+    struct ts_sample noise;//å™ªå£°ï¼ˆå¯ç–‘ï¼‰
 	unsigned int flags;
 };
 
@@ -149,12 +149,12 @@ static int sqr (int x)
 }
 /**
  *@brief:      variance_read
- *@details:    ÂË²¨Ëã·¨²å¼ş
- 				´¦Àí·Éµã
+ *@details:    æ»¤æ³¢ç®—æ³•æ’ä»¶
+ 				å¤„ç†é£ç‚¹
  *@param[in]   struct tslib_module_info *info  
                struct ts_sample *samp          
                int nr                          
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     static
  */
 static int variance_read(struct ts_sample *samp, int nr)
@@ -167,25 +167,25 @@ static int variance_read(struct ts_sample *samp, int nr)
 	while (count < nr) 
 	{
 		/*
-			Èç¹ûN+1¡¢N+2Á½¸öµã¸úNµãµÄ¾àÀë³¬³ö·§Öµ£¬Ôò¿ÉÄÜÊÇ¿ìËÙÒÆ¶¯£¬
-			ÕâÊ±»á½«VAR_SUBMITNOISE±êÊ¶ÖÃÆğ£¬
-			ÖÃÕâ¸ö±êÊ¶ÊÇÎªÁËÏÂÒ»¸öÑ­»·ÅĞ¶ÏN+1¸úN+2Ö®¼äÊÇ·ñÒ²³¬³ö·§Öµ£¬
+			å¦‚æœN+1ã€N+2ä¸¤ä¸ªç‚¹è·ŸNç‚¹çš„è·ç¦»è¶…å‡ºé˜€å€¼ï¼Œåˆ™å¯èƒ½æ˜¯å¿«é€Ÿç§»åŠ¨ï¼Œ
+			è¿™æ—¶ä¼šå°†VAR_SUBMITNOISEæ ‡è¯†ç½®èµ·ï¼Œ
+			ç½®è¿™ä¸ªæ ‡è¯†æ˜¯ä¸ºäº†ä¸‹ä¸€ä¸ªå¾ªç¯åˆ¤æ–­N+1è·ŸN+2ä¹‹é—´æ˜¯å¦ä¹Ÿè¶…å‡ºé˜€å€¼ï¼Œ
 		*/
 		if (var->flags & VAR_SUBMITNOISE) 
 		{
-			cur = var->noise;////²»ÖØĞÂ»ñÈ¡ĞÂÑùµã£¬¶øÊÇ½«noiseÖĞµÄÑùµã×÷Îªµ±Ç°Ñùµã
+			cur = var->noise;////ä¸é‡æ–°è·å–æ–°æ ·ç‚¹ï¼Œè€Œæ˜¯å°†noiseä¸­çš„æ ·ç‚¹ä½œä¸ºå½“å‰æ ·ç‚¹
 			var->flags &= ~VAR_SUBMITNOISE;
 		} 
 		else 
 		{
 			/*  
-			¶ÁÈ¡Ò»¸öĞÂÑùµã
+			è¯»å–ä¸€ä¸ªæ–°æ ·ç‚¹
 			*/
 			if (linear_read(&cur, 1) < 1)
 				return count;
 		}
 
-		if (cur.pressure == 0)//ÑùµãÑ¹Á¦ÖµÎª0, 
+		if (cur.pressure == 0)//æ ·ç‚¹å‹åŠ›å€¼ä¸º0, 
 		{
 			/* Flush the queue immediately when the pen is just
 			 * released, otherwise the previous layer will
@@ -194,11 +194,11 @@ static int variance_read(struct ts_sample *samp, int nr)
 			 */
 			if (var->flags & VAR_PENDOWN) 
 			{
-				/*ÉÏÒ»µãpressure²»Îª0£¬»á½«VAR_PENDOWN ±êÊ¶ÖÃÆğ£¬
-				Õâ´ÎÑ¹Á¦Îª0£¬ËµÃ÷¿ÉÄÜÊÇÌá±Ê£¬¿ÉÄÜ¶øÒÑ£¬Ò²¿ÉÄÜÊÇ¸öÔëÉùÑùµã
-				ÏÈ±£´æµ½noise*/
+				/*ä¸Šä¸€ç‚¹pressureä¸ä¸º0ï¼Œä¼šå°†VAR_PENDOWN æ ‡è¯†ç½®èµ·ï¼Œ
+				è¿™æ¬¡å‹åŠ›ä¸º0ï¼Œè¯´æ˜å¯èƒ½æ˜¯æç¬”ï¼Œå¯èƒ½è€Œå·²ï¼Œä¹Ÿå¯èƒ½æ˜¯ä¸ªå™ªå£°æ ·ç‚¹
+				å…ˆä¿å­˜åˆ°noise*/
 				var->flags |= VAR_SUBMITNOISE;
-				var->noise = cur;//ÏÈ½«Ñùµã±£´æµ½noise
+				var->noise = cur;//å…ˆå°†æ ·ç‚¹ä¿å­˜åˆ°noise
 			}
 			/* Reset the state machine on pen up events. */
 			var->flags &= ~(VAR_PENDOWN | VAR_NOISEVALID | VAR_LASTVALID);
@@ -223,8 +223,8 @@ static int variance_read(struct ts_sample *samp, int nr)
 				/* 
 				Do we suspect the previous sample was a noise? 
 				
-				ÉÏÒ»¸öÑùµãÈç¹ûÒ²³¬³öãĞÖµ£¬¾Í»á½«VAR_NOISEVALIDÖÃÎ»£¬
-				Õâ´ÎµÄÑùµãÓÖ³¬³öãĞÖµ£¬ÄÇÃ´¾Í¿ÉÒÔÈÏÎªÊÇ¿ìËÙÒÆ¶¯
+				ä¸Šä¸€ä¸ªæ ·ç‚¹å¦‚æœä¹Ÿè¶…å‡ºé˜ˆå€¼ï¼Œå°±ä¼šå°†VAR_NOISEVALIDç½®ä½ï¼Œ
+				è¿™æ¬¡çš„æ ·ç‚¹åˆè¶…å‡ºé˜ˆå€¼ï¼Œé‚£ä¹ˆå°±å¯ä»¥è®¤ä¸ºæ˜¯å¿«é€Ÿç§»åŠ¨
 				*/
 				if (var->flags & VAR_NOISEVALID) {
 					//uart_printf("q-");	
@@ -234,7 +234,7 @@ static int variance_read(struct ts_sample *samp, int nr)
 					var->flags = (var->flags & ~VAR_NOISEVALID) |
 									VAR_SUBMITNOISE;
 				} else{
-					/*µÚÒ»´Î³¬³öãĞÖµ£¬ÖÃÎ»±êÖ¾*/
+					/*ç¬¬ä¸€æ¬¡è¶…å‡ºé˜ˆå€¼ï¼Œç½®ä½æ ‡å¿—*/
 					var->flags |= VAR_NOISEVALID;
 				}
 				/* The pen jumped too far, maybe it's a noise ... */
@@ -341,12 +341,12 @@ static void average (struct tslib_dejitter *djt, struct ts_sample *samp)
 }
 /**
  *@brief:      dejitter_read
- *@details:    ´¥ÃşÆÁÈ¥ÔëËã·¨²å¼ş
- 			   £¨¾ùÖµÆ½»¬ÂË²¨£©
+ *@details:    è§¦æ‘¸å±å»å™ªç®—æ³•æ’ä»¶
+ 			   ï¼ˆå‡å€¼å¹³æ»‘æ»¤æ³¢ï¼‰
  *@param[in]   struct tslib_module_info *info  
                struct ts_sample *samp          
                int nr                          
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     static
  */
 static int dejitter_read(struct ts_sample *samp, int nr)
@@ -400,8 +400,8 @@ static int dejitter_read(struct ts_sample *samp, int nr)
 		}
 		count++;
 		/*
-		ÇÉÃîµÄ´¦Àí»·ĞÎ»º³åË÷ÒıÑ­»·ÎÊÌâ£¬²»¹ıÖ»ÓĞµ±»º³å¸öÊıÊÇ2µÄN´Î·½ÊÇ²Å¿ÉÒÔÕâÑù£¬
-		ÕâÖÖ·½·¨µÄ¸ù±¾Ô­ÀíÊÇÍ¨¹ıÓë²Ù×÷Çåµô½øÎ»¡£
+		å·§å¦™çš„å¤„ç†ç¯å½¢ç¼“å†²ç´¢å¼•å¾ªç¯é—®é¢˜ï¼Œä¸è¿‡åªæœ‰å½“ç¼“å†²ä¸ªæ•°æ˜¯2çš„Næ¬¡æ–¹æ˜¯æ‰å¯ä»¥è¿™æ ·ï¼Œ
+		è¿™ç§æ–¹æ³•çš„æ ¹æœ¬åŸç†æ˜¯é€šè¿‡ä¸æ“ä½œæ¸…æ‰è¿›ä½ã€‚
 		*/
 		djt->head = (djt->head + 1) & (NR_SAMPHISTLEN - 1);
 	}
@@ -428,13 +428,13 @@ static int mod_dejitter_init(void)
 	return 1;
 }
 
-/*---------------------------------¶ÔÍâ½Ó¿Ú-----------------------------------------------*/
+/*---------------------------------å¯¹å¤–æ¥å£-----------------------------------------------*/
 /**
  *@brief:      ts_open
- *@details:    ´ò¿ªÒ»¸öTSÉè±¸
+ *@details:    æ‰“å¼€ä¸€ä¸ªTSè®¾å¤‡
  *@param[in]   const char *name  
                int nonblock      
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     struct
 
  */
@@ -462,7 +462,7 @@ int ts_config(struct tsdev *ts)
 }
 
 /*
-	Ö±½Ó¶ÁÑùµã½Ó¿Ú£¬Ñùµã²»¾­¹ıTSLIB´¦Àí
+	ç›´æ¥è¯»æ ·ç‚¹æ¥å£ï¼Œæ ·ç‚¹ä¸ç»è¿‡TSLIBå¤„ç†
 */
 int ts_read_raw(struct tsdev *ts, struct ts_sample *samp, int nr)
 {
@@ -471,7 +471,7 @@ int ts_read_raw(struct tsdev *ts, struct ts_sample *samp, int nr)
 	return result;
 }
 /*
-	ÉèÖÃĞ£×¼²ÎÊı
+	è®¾ç½®æ ¡å‡†å‚æ•°
 */
 int ts_set_cal(calibration *CalSet)
 {

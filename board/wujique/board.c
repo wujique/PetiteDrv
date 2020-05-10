@@ -6,8 +6,8 @@
 #include "vfs.h"
 #include "drv_keypad.h"
 /*
-	¾ØÕó°´¼üÓ²¼ş¶¨Òå
-	rowÊä³ö£¬·ÅÇ°Ãæ
+	çŸ©é˜µæŒ‰é”®ç¡¬ä»¶å®šä¹‰
+	rowè¾“å‡ºï¼Œæ”¾å‰é¢
 */
 KeyPadIO KeyPadIOList[KEY_PAD_ROW_NUM+KEY_PAD_COL_NUM]=
 		{
@@ -40,7 +40,7 @@ const VFSDIR USBFatFs=
 };
 
 /*
-	°å¼¶³õÊ¼»¯
+	æ¿çº§åˆå§‹åŒ–
 */
 s32 board_init(void)
 {
@@ -76,7 +76,7 @@ s32 board_init(void)
 	//sys_spiffs_mount_coreflash();
 	//sys_lfs_mount();
 	//lfs_test();
-	/* USB ÈÎÎñÓĞ³¤ÑÓÊ±£¬ºóĞøÒª´¦Àí need fix*/
+	/* USB ä»»åŠ¡æœ‰é•¿å»¶æ—¶ï¼Œåç»­è¦å¤„ç† need fix*/
 	//usb_task_create();
 	//vfs_mount(&USBFatFs);
 	
@@ -90,7 +90,7 @@ s32 board_init(void)
 }
 
 /*
-	µÍÓÅÏÈ¼¶ÂÖÑµÈÎÎñ
+	ä½ä¼˜å…ˆçº§è½®è®­ä»»åŠ¡
 */
 void board_low_task(void)
 {

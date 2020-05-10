@@ -1,7 +1,7 @@
 #ifndef __DEV_KEYPAD_H__
 #define __DEV_KEYPAD_H__
 
-/*键值中标识通断的位*/
+/*閿�间腑鏍囪瘑閫氭柇鐨勪綅*/
 #define KEYPAD_PR_MASK (0x80)
 
 typedef struct _str_keypad_io

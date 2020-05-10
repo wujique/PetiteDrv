@@ -1,14 +1,14 @@
 /**
  * @file                wujique_log.h
- * @brief           µ÷ÊÔÐÅÏ¢Í·ÎÄ¼þ
+ * @brief           è°ƒè¯•ä¿¡æ¯å¤´æ–‡ä»¶
  * @author          wujique
- * @date            2018Äê4ÔÂ12ÈÕ ÐÇÆÚËÄ
- * @version         ³õ¸å
- * @par             °æÈ¨ËùÓÐ (C), 2013-2023
+ * @date            2018å¹´4æœˆ12æ—¥ æ˜ŸæœŸå››
+ * @version         åˆç¨¿
+ * @par             ç‰ˆæƒæ‰€æœ‰ (C), 2013-2023
  * @par History:
- * 1.ÈÕ    ÆÚ:        2018Äê4ÔÂ12ÈÕ ÐÇÆÚËÄ
- *   ×÷    Õß:         wujique
- *   ÐÞ¸ÄÄÚÈÝ:   ´´½¨ÎÄ¼þ
+ * 1.æ—¥    æœŸ:        2018å¹´4æœˆ12æ—¥ æ˜ŸæœŸå››
+ *   ä½œ    è€…:         wujique
+ *   ä¿®æ”¹å†…å®¹:   åˆ›å»ºæ–‡ä»¶
 */
 #ifndef _WUJIQUE_LOG_H_
 #define _WUJIQUE_LOG_H_
@@ -18,10 +18,10 @@
 typedef enum
 {
 	LOG_DISABLE = 0,
-	LOG_ERR,	//´íÎó
-	LOG_FUN,	//¹¦ÄÜ£¨ÓÃLOGÊä³öËãÒ»¸ö¹¦ÄÜ£©
-	LOG_INFO,	//ÐÅÏ¢£¬ÀýÈçÉè±¸³õÊ¼»¯µÈÐÅÏ¢
-	LOG_DEBUG,	//µ÷ÊÔ£¬ÕýÊ½³ÌÐòÍ¨³£ÆÁ±Î
+	LOG_ERR,	//é”™è¯¯
+	LOG_FUN,	//åŠŸèƒ½ï¼ˆç”¨LOGè¾“å‡ºç®—ä¸€ä¸ªåŠŸèƒ½ï¼‰
+	LOG_INFO,	//ä¿¡æ¯ï¼Œä¾‹å¦‚è®¾å¤‡åˆå§‹åŒ–ç­‰ä¿¡æ¯
+	LOG_DEBUG,	//è°ƒè¯•ï¼Œæ­£å¼ç¨‹åºé€šå¸¸å±è”½
 }LOG_L;
 
 extern void wjq_log(LOG_L l, s8 *fmt,...);

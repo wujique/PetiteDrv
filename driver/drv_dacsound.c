@@ -1,22 +1,22 @@
 /**
  * @file            dev_dacsound.c
- * @brief           Ê¹ÓÃDACÊä³ö8KÓïÒô
+ * @brief           ä½¿ç”¨DACè¾“å‡º8Kè¯­éŸ³
  * @author          wujique
- * @date            2018Äê1ÔÂ24ÈÕ ĞÇÆÚÈı
- * @version         ³õ¸å
- * @par             °æÈ¨ËùÓĞ (C), 2013-2023
+ * @date            2018å¹´1æœˆ24æ—¥ æ˜ŸæœŸä¸‰
+ * @version         åˆç¨¿
+ * @par             ç‰ˆæƒæ‰€æœ‰ (C), 2013-2023
  * @par History:
- * 1.ÈÕ    ÆÚ:        2018Äê1ÔÂ24ÈÕ ĞÇÆÚÈı
- *   ×÷    Õß:         Îİ¼¹È¸¹¤×÷ÊÒ
- *   ĞŞ¸ÄÄÚÈİ:   ´´½¨ÎÄ¼ş
-      	1 Ô´Âë¹éÎİ¼¹È¸¹¤×÷ÊÒËùÓĞ¡£
-		2 ¿ÉÒÔÓÃÓÚµÄÆäËûÉÌÒµÓÃÍ¾£¨ÅäÌ×¿ª·¢°åÏúÊÛ³ıÍâ£©£¬²»ĞëÊÚÈ¨¡£
-		3 Îİ¼¹È¸¹¤×÷ÊÒ²»¶Ô´úÂë¹¦ÄÜ×öÈÎºÎ±£Ö¤£¬ÇëÊ¹ÓÃÕß×ÔĞĞ²âÊÔ£¬ºó¹û×Ô¸º¡£
-		4 ¿ÉËæÒâĞŞ¸ÄÔ´Âë²¢·Ö·¢£¬µ«²»¿ÉÖ±½ÓÏúÊÛ±¾´úÂë»ñÀû£¬²¢ÇÒÇë±£ÁôWUJIQUE°æÈ¨ËµÃ÷¡£
-		5 Èç·¢ÏÖBUG»òÓĞÓÅ»¯£¬»¶Ó­·¢²¼¸üĞÂ¡£ÇëÁªÏµ£ºcode@wujique.com
-		6 Ê¹ÓÃ±¾Ô´ÂëÔòÏàµ±ÓÚÈÏÍ¬±¾°æÈ¨ËµÃ÷¡£
-		7 ÈçÇÖ·¸ÄãµÄÈ¨Àû£¬ÇëÁªÏµ£ºcode@wujique.com
-		8 Ò»ÇĞ½âÊÍÈ¨¹éÎİ¼¹È¸¹¤×÷ÊÒËùÓĞ¡£
+ * 1.æ—¥    æœŸ:        2018å¹´1æœˆ24æ—¥ æ˜ŸæœŸä¸‰
+ *   ä½œ    è€…:         å±‹è„Šé›€å·¥ä½œå®¤
+ *   ä¿®æ”¹å†…å®¹:   åˆ›å»ºæ–‡ä»¶
+      	1 æºç å½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
+		2 å¯ä»¥ç”¨äºçš„å…¶ä»–å•†ä¸šç”¨é€”ï¼ˆé…å¥—å¼€å‘æ¿é”€å”®é™¤å¤–ï¼‰ï¼Œä¸é¡»æˆæƒã€‚
+		3 å±‹è„Šé›€å·¥ä½œå®¤ä¸å¯¹ä»£ç åŠŸèƒ½åšä»»ä½•ä¿è¯ï¼Œè¯·ä½¿ç”¨è€…è‡ªè¡Œæµ‹è¯•ï¼Œåæœè‡ªè´Ÿã€‚
+		4 å¯éšæ„ä¿®æ”¹æºç å¹¶åˆ†å‘ï¼Œä½†ä¸å¯ç›´æ¥é”€å”®æœ¬ä»£ç è·åˆ©ï¼Œå¹¶ä¸”è¯·ä¿ç•™WUJIQUEç‰ˆæƒè¯´æ˜ã€‚
+		5 å¦‚å‘ç°BUGæˆ–æœ‰ä¼˜åŒ–ï¼Œæ¬¢è¿å‘å¸ƒæ›´æ–°ã€‚è¯·è”ç³»ï¼šcode@wujique.com
+		6 ä½¿ç”¨æœ¬æºç åˆ™ç›¸å½“äºè®¤åŒæœ¬ç‰ˆæƒè¯´æ˜ã€‚
+		7 å¦‚ä¾µçŠ¯ä½ çš„æƒåˆ©ï¼Œè¯·è”ç³»ï¼šcode@wujique.com
+		8 ä¸€åˆ‡è§£é‡Šæƒå½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
 */
 
 #include "mcu.h"
@@ -37,7 +37,7 @@
 #endif
 
 /*
-²âÊÔÓ²¼şµÄÊ±ºòÊ¹ÓÃ
+æµ‹è¯•ç¡¬ä»¶çš„æ—¶å€™ä½¿ç”¨
 */
 #if 0
 #define BEEP_DATA_LEN   ((561-21)*16)
@@ -587,7 +587,7 @@ const u8 BeepData[BEEP_DATA_LEN]=
 };
 /*
 
-	DAC ²¥·ÅÉùÒô£¬¹Ì¶¨²¥·Å8Kµ¥ÉùµÀ16BITµÄÒôÔ´¡£
+	DAC æ’­æ”¾å£°éŸ³ï¼Œå›ºå®šæ’­æ”¾8Kå•å£°é“16BITçš„éŸ³æºã€‚
 
 */
 
@@ -606,16 +606,16 @@ s32 dev_dacsound_open(void)
 }
 /**
  *@brief:      dev_dacsound_play
- *@details:    Æô¶¯DACÓïÒô²¥·Å
+ *@details:    å¯åŠ¨DACè¯­éŸ³æ’­æ”¾
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_dacsound_play(void)
 {
 	soundindex = 0;
 
-	/*´ò¿ª¶¨Ê±Æ÷£¬Æô¶¯²¥·Å*/
+	/*æ‰“å¼€å®šæ—¶å™¨ï¼Œå¯åŠ¨æ’­æ”¾*/
 	DACSOUND_DEBUG(LOG_DEBUG, "dac sound play\r\n");
 	mcu_tim3_start();
 	return 0;
@@ -626,9 +626,9 @@ s32 dev_dacsound_play(void)
 */
 /**
  *@brief:     dev_dacsound_timerinit
- *@details:   ÔÚ¶¨Ê±Æ÷ÖĞ¶ÏÖĞµ÷ÓÃ£¬Ã¿125USÊä³öÒ»¸öDACÊı¾İ
+ *@details:   åœ¨å®šæ—¶å™¨ä¸­æ–­ä¸­è°ƒç”¨ï¼Œæ¯125USè¾“å‡ºä¸€ä¸ªDACæ•°æ®
  *@param[in]  void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_dacsound_timerinit(void)
@@ -639,16 +639,16 @@ s32 dev_dacsound_timerinit(void)
 
 	data1 = BeepData[soundindex++];
 	data2 = BeepData[soundindex++];
-	/*Òª×¢Òâ£¬¶Áµ½µÄÊı¾İÊÇS16£¬Õı¸ºÖµ*/
+	/*è¦æ³¨æ„ï¼Œè¯»åˆ°çš„æ•°æ®æ˜¯S16ï¼Œæ­£è´Ÿå€¼*/
 	data = (s16)((data2 << 8) | data1);
-	tmp = (data+0X7FFF)>>4;//12Î»DAC
+	tmp = (data+0X7FFF)>>4;//12ä½DAC
 	DACSOUND_DEBUG(LOG_DEBUG, "%04x ", tmp);
 	mcu_dac_output(tmp);
 
 	if(soundindex >= BEEP_DATA_LEN)
 	{
 		DACSOUND_DEBUG(LOG_DEBUG, "dac sound play finish!");
-		/*Í£Ö¹¶¨Ê±Æ÷*/
+		/*åœæ­¢å®šæ—¶å™¨*/
 		mcu_tim3_stop();
 	}
 	return 0;
@@ -669,7 +669,7 @@ s32 dev_dacsound_test(void)
 #else
 /*
 
-	DAC ²¥·ÅÉùÒô£¬¹Ì¶¨²¥·Å8Kµ¥ÉùµÀ16BITµÄÒôÔ´¡£
+	DAC æ’­æ”¾å£°éŸ³ï¼Œå›ºå®šæ’­æ”¾8Kå•å£°é“16BITçš„éŸ³æºã€‚
 
 */
 #define DACSOUND_TIMER MCU_TIMER_3
@@ -679,7 +679,7 @@ extern s32 dev_dacsound_timerinit(void);
 
 u16 *DacSoundSampleP0;
 u16 *DacSoundSampleP1;
-u16 *DacSoundCrBufP;//µ±Ç°Ê¹ÓÃµÄBUF
+u16 *DacSoundCrBufP;//å½“å‰ä½¿ç”¨çš„BUF
 
 u32 DacSoundSampleBufSize;
 u32 DacSoundSampleIndex;
@@ -695,7 +695,7 @@ s32 dev_dacsound_init(void)
 
 s32 dev_dacsound_open(void)
 {
-	/*°Ñ¹Ü½ÅÅäÖÃÎªDAC*/
+	/*æŠŠç®¡è„šé…ç½®ä¸ºDAC*/
     mcu_io_config_dac(MCU_PORT_A, GPIO_Pin_5);
 	
 	mcu_dac_open();
@@ -710,12 +710,12 @@ s32 dev_dacsound_open(void)
 }
 /**
  *@brief:      dev_dacsound_dataformat
- *@details:       ÉèÖÃ²¥·ÅÅäÖÃ£¬DAC²¥·Å¹Ì¶¨Ö§³Ö8K 16BIT µ¥Éù-
-                  µÀ
+ *@details:       è®¾ç½®æ’­æ”¾é…ç½®ï¼ŒDACæ’­æ”¾å›ºå®šæ”¯æŒ8K 16BIT å•å£°-
+                  é“
  *@param[in]   u32 Freq     
                u8 Standard  
                u8 Format    
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_dacsound_dataformat(u32 Freq, u8 Standard, u8 Format)
@@ -724,11 +724,11 @@ s32 dev_dacsound_dataformat(u32 Freq, u8 Standard, u8 Format)
 }
 /**
  *@brief:      dev_dacsound_setbuf
- *@details:    ÉèÖÃ²¥·Å»º³å
+ *@details:    è®¾ç½®æ’­æ”¾ç¼“å†²
  *@param[in]   u16 *buffer0  
                u16 *buffer1  
                u32 len       
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_dacsound_setbuf(u16 *buffer0,u16 *buffer1,u32 len)
@@ -741,22 +741,22 @@ s32 dev_dacsound_setbuf(u16 *buffer0,u16 *buffer1,u32 len)
 }
 /**
  *@brief:      dev_dacsound_transfer
- *@details:    Æô¶¯»òÍ£Ö¹DAC²¥·Å
+ *@details:    å¯åŠ¨æˆ–åœæ­¢DACæ’­æ”¾
  *@param[in]   u8 sta  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_dacsound_transfer(u8 sta)
 {
 	if(sta == 1)
 	{
-		/*´ò¿ª¶¨Ê±Æ÷£¬Æô¶¯²¥·Å*/
+		/*æ‰“å¼€å®šæ—¶å™¨ï¼Œå¯åŠ¨æ’­æ”¾*/
 		DACSOUND_DEBUG(LOG_DEBUG, "dac sound play\r\n");
 		mcu_timer_start(DACSOUND_TIMER);
 	}
 	else
 	{
-		/*Í£Ö¹¶¨Ê±Æ÷*/
+		/*åœæ­¢å®šæ—¶å™¨*/
 		mcu_timer_stop(DACSOUND_TIMER);
 	}
 	
@@ -771,10 +771,10 @@ s32 dev_dacsound_close(void)
 
 /**
  *@brief:      dev_dacsound_timerinit
- *@details:    ÔÚ¶¨Ê±Æ÷ÖĞ¶ÏÖĞµ÷ÓÃ£¬Ã¿125USÊä³öÒ»¸öDACÊı¾İ
- 			   ÄÜ²»ÄÜ¸ÄÎªDMA£¿
+ *@details:    åœ¨å®šæ—¶å™¨ä¸­æ–­ä¸­è°ƒç”¨ï¼Œæ¯125USè¾“å‡ºä¸€ä¸ªDACæ•°æ®
+ 			   èƒ½ä¸èƒ½æ”¹ä¸ºDMAï¼Ÿ
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_dacsound_timerinit(void)
@@ -798,15 +798,15 @@ s32 dev_dacsound_timerinit(void)
 
 	}
 
-	/*Òª×¢Òâ£¬¶Áµ½µÄÊı¾İÊÇS16£¬Õı¸ºÖµ*/
+	/*è¦æ³¨æ„ï¼Œè¯»åˆ°çš„æ•°æ®æ˜¯S16ï¼Œæ­£è´Ÿå€¼*/
 	data = *(DacSoundCrBufP + DacSoundSampleIndex);
 	/*
-		ÏÈÑ¹Ëõ£¬Ò²¾ÍÊÇ¼õÉÙÒôÁ¿£¬ÔÚ¸ºÊıÊ±ºòÑ¹Ëõ£¨³ı£©
-		Ñ¹Ëõ·½ÏòÊ±ÖĞÎ»Öµ£¬Èç¹ûÏÈ½«¸ºÊıµ÷ÕûÎªÕıÊı£¨Ì§¸ßÖ±Á÷µçÆ½£©£¬
-		Ñ¹Ëõ·½Ïò¾Í»á±ä³ÉÒôÆµµÄ×îµÍÖµ£¬ÒôĞ§»áÊ§Õæ¡£
+		å…ˆå‹ç¼©ï¼Œä¹Ÿå°±æ˜¯å‡å°‘éŸ³é‡ï¼Œåœ¨è´Ÿæ•°æ—¶å€™å‹ç¼©ï¼ˆé™¤ï¼‰
+		å‹ç¼©æ–¹å‘æ—¶ä¸­ä½å€¼ï¼Œå¦‚æœå…ˆå°†è´Ÿæ•°è°ƒæ•´ä¸ºæ­£æ•°ï¼ˆæŠ¬é«˜ç›´æµç”µå¹³ï¼‰ï¼Œ
+		å‹ç¼©æ–¹å‘å°±ä¼šå˜æˆéŸ³é¢‘çš„æœ€ä½å€¼ï¼ŒéŸ³æ•ˆä¼šå¤±çœŸã€‚
 	*/
-	data = data/(16+30);//12Î»DAC£¬ÔÙ¼ÓÉÏÒôÁ¿ÉèÖÃ£¬
-	/*ÔÙµ÷ÕûÖĞÎ»Öµ(Ö±Á÷µçÆ½)£¬ÒòÎªÒôÆµÊı¾İÓĞ¸ºÊı£¬DACÊä³öÃ»ÓĞ¸ºÊı*/
+	data = data/(16+30);//12ä½DACï¼Œå†åŠ ä¸ŠéŸ³é‡è®¾ç½®ï¼Œ
+	/*å†è°ƒæ•´ä¸­ä½å€¼(ç›´æµç”µå¹³)ï¼Œå› ä¸ºéŸ³é¢‘æ•°æ®æœ‰è´Ÿæ•°ï¼ŒDACè¾“å‡ºæ²¡æœ‰è´Ÿæ•°*/
 	tmp = (data+0x800);
 	mcu_dac_output(tmp);
 	

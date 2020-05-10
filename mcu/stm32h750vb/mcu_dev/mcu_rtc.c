@@ -1,14 +1,14 @@
 /**
  * @file            mcu_rtc.c
- * @brief           stm32Æ¬ÉÏRTCÇı¶¯
+ * @brief           stm32ç‰‡ä¸ŠRTCé©±åŠ¨
  * @author          wujique
- * @date            2018Äê1ÔÂ24ÈÕ ĞÇÆÚÈı
- * @version         ³õ¸å
- * @par             °æÈ¨ËùÓĞ (C), 2013-2023
+ * @date            2018å¹´1æœˆ24æ—¥ æ˜ŸæœŸä¸‰
+ * @version         åˆç¨¿
+ * @par             ç‰ˆæƒæ‰€æœ‰ (C), 2013-2023
  * @par History:
- * 1.ÈÕ    ÆÚ:        2018Äê1ÔÂ24ÈÕ ĞÇÆÚÈı
- *   ×÷    Õß:         wujique
- *   ĞŞ¸ÄÄÚÈİ:   ´´½¨ÎÄ¼ş
+ * 1.æ—¥    æœŸ:        2018å¹´1æœˆ24æ—¥ æ˜ŸæœŸä¸‰
+ *   ä½œ    è€…:         wujique
+ *   ä¿®æ”¹å†…å®¹:   åˆ›å»ºæ–‡ä»¶
 */
 #include <stdarg.h>
 #include <stdio.h>
@@ -18,9 +18,9 @@
 
 /**
  *@brief:      mcu_rtc_init
- *@details:    ¸´Î»Ê±³õÊ¼»¯RTC
+ *@details:    å¤ä½æ—¶åˆå§‹åŒ–RTC
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 mcu_rtc_init(void)
@@ -37,11 +37,11 @@ u8 RTC_Set(u32 sec)
 }	  
 /**
  *@brief:      mcu_rtc_set_time
- *@details:    ÉèÖÃÊ±¼ä
+ *@details:    è®¾ç½®æ—¶é—´
  *@param[in]   u8 hours    
                u8 minutes  
                u8 seconds  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 mcu_rtc_set_time(u8 hours, u8 minutes, u8 seconds)
@@ -51,12 +51,12 @@ s32 mcu_rtc_set_time(u8 hours, u8 minutes, u8 seconds)
 }		
 /**
  *@brief:      mcu_rtc_set_date
- *@details:    ÉèÖÃÈÕÆÚ
+ *@details:    è®¾ç½®æ—¥æœŸ
  *@param[in]   u8 year     
                u8 weekday  
                u8 month    
                u8 date     
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 mcu_rtc_set_date(u8 year, u8 weekday, u8 month, u8 date)
@@ -67,9 +67,9 @@ s32 mcu_rtc_set_date(u8 year, u8 weekday, u8 month, u8 date)
 
 /**
  *@brief:      mcu_rtc_get_date
- *@details:    ¶ÁÈ¡ÈÕÆÚ
+ *@details:    è¯»å–æ—¥æœŸ
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 mcu_rtc_get_date(void)
@@ -80,9 +80,9 @@ s32 mcu_rtc_get_date(void)
 }
 /**
  *@brief:      mcu_rtc_get_time
- *@details:    ¶ÁÈ¡Ê±¼ä
+ *@details:    è¯»å–æ—¶é—´
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 mcu_rtc_get_time(void)
@@ -92,7 +92,7 @@ s32 mcu_rtc_get_time(void)
 }
 /*
 
-	»ñÈ¡UTCÊ±¼ä
+	è·å–UTCæ—¶é—´
 
 */
 time_t mcu_rtc_get_utc_time()
@@ -110,7 +110,7 @@ struct tm* gmtime (const time_t *timep)
 }
 /*
 
-	½«UTCÊ±¼ä×ª»¯Îªµ±µØÊ±¼ä
+	å°†UTCæ—¶é—´è½¬åŒ–ä¸ºå½“åœ°æ—¶é—´
 
 */
 struct tm* localtime (const time_t *timep)

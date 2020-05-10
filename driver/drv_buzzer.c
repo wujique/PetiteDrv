@@ -1,22 +1,22 @@
 /**
  * @file            dev_buzzer.c
- * @brief           PWM·äÃùÆ÷Çı¶¯
+ * @brief           PWMèœ‚é¸£å™¨é©±åŠ¨
  * @author          test
- * @date            2017Äê10ÔÂ25ÈÕ ĞÇÆÚÈı
- * @version         ³õ¸å
+ * @date            2017å¹´10æœˆ25æ—¥ æ˜ŸæœŸä¸‰
+ * @version         åˆç¨¿
  * @par             
  * @par History:
- * 1.ÈÕ    ÆÚ:      2017Äê10ÔÂ25ÈÕ ĞÇÆÚÈı
- *   ×÷    Õß:      Îİ¼¹È¸¹¤×÷ÊÒ
- *   ĞŞ¸ÄÄÚÈİ:      ´´½¨ÎÄ¼ş
-  		1 Ô´Âë¹éÎİ¼¹È¸¹¤×÷ÊÒËùÓĞ¡£
-		2 ¿ÉÒÔÓÃÓÚµÄÆäËûÉÌÒµÓÃÍ¾£¨ÅäÌ×¿ª·¢°åÏúÊÛ³ıÍâ£©£¬²»ĞëÊÚÈ¨¡£
-		3 Îİ¼¹È¸¹¤×÷ÊÒ²»¶Ô´úÂë¹¦ÄÜ×öÈÎºÎ±£Ö¤£¬ÇëÊ¹ÓÃÕß×ÔĞĞ²âÊÔ£¬ºó¹û×Ô¸º¡£
-		4 ¿ÉËæÒâĞŞ¸ÄÔ´Âë²¢·Ö·¢£¬µ«²»¿ÉÖ±½ÓÏúÊÛ±¾´úÂë»ñÀû£¬²¢ÇÒÇë±£ÁôWUJIQUE°æÈ¨ËµÃ÷¡£
-		5 Èç·¢ÏÖBUG»òÓĞÓÅ»¯£¬»¶Ó­·¢²¼¸üĞÂ¡£ÇëÁªÏµ£ºcode@wujique.com
-		6 Ê¹ÓÃ±¾Ô´ÂëÔòÏàµ±ÓÚÈÏÍ¬±¾°æÈ¨ËµÃ÷¡£
-		7 ÈçÇÖ·¸ÄãµÄÈ¨Àû£¬ÇëÁªÏµ£ºcode@wujique.com
-		8 Ò»ÇĞ½âÊÍÈ¨¹éÎİ¼¹È¸¹¤×÷ÊÒËùÓĞ¡£
+ * 1.æ—¥    æœŸ:      2017å¹´10æœˆ25æ—¥ æ˜ŸæœŸä¸‰
+ *   ä½œ    è€…:      å±‹è„Šé›€å·¥ä½œå®¤
+ *   ä¿®æ”¹å†…å®¹:      åˆ›å»ºæ–‡ä»¶
+  		1 æºç å½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
+		2 å¯ä»¥ç”¨äºçš„å…¶ä»–å•†ä¸šç”¨é€”ï¼ˆé…å¥—å¼€å‘æ¿é”€å”®é™¤å¤–ï¼‰ï¼Œä¸é¡»æˆæƒã€‚
+		3 å±‹è„Šé›€å·¥ä½œå®¤ä¸å¯¹ä»£ç åŠŸèƒ½åšä»»ä½•ä¿è¯ï¼Œè¯·ä½¿ç”¨è€…è‡ªè¡Œæµ‹è¯•ï¼Œåæœè‡ªè´Ÿã€‚
+		4 å¯éšæ„ä¿®æ”¹æºç å¹¶åˆ†å‘ï¼Œä½†ä¸å¯ç›´æ¥é”€å”®æœ¬ä»£ç è·åˆ©ï¼Œå¹¶ä¸”è¯·ä¿ç•™WUJIQUEç‰ˆæƒè¯´æ˜ã€‚
+		5 å¦‚å‘ç°BUGæˆ–æœ‰ä¼˜åŒ–ï¼Œæ¬¢è¿å‘å¸ƒæ›´æ–°ã€‚è¯·è”ç³»ï¼šcode@wujique.com
+		6 ä½¿ç”¨æœ¬æºç åˆ™ç›¸å½“äºè®¤åŒæœ¬ç‰ˆæƒè¯´æ˜ã€‚
+		7 å¦‚ä¾µçŠ¯ä½ çš„æƒåˆ©ï¼Œè¯·è”ç³»ï¼šcode@wujique.com
+		8 ä¸€åˆ‡è§£é‡Šæƒå½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
 */
 #include "mcu.h"
 #include "petite_config.h"
@@ -26,16 +26,16 @@
 #include "mcu_io.h"
 /**
  *@brief:      dev_buzzer_init
- *@details:    ³õÊ¼»¯·äÃùÆ÷
+ *@details:    åˆå§‹åŒ–èœ‚é¸£å™¨
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_buzzer_init(void)
 {
 	wjq_log(LOG_INFO, "init buzzer\r\n");
 	/*
-		ÓÃ»§´ÓÊÖ²á¿ÉÒÔÖªµÀ¹Ü½ÅºÍ¶¨Ê±Æ÷Í¨µÀµÄ¹ØÏµ
+		ç”¨æˆ·ä»æ‰‹å†Œå¯ä»¥çŸ¥é“ç®¡è„šå’Œå®šæ—¶å™¨é€šé“çš„å…³ç³»
 	*/
 	mcu_io_config_timer(MCU_PORT_D, MCU_IO_13, MCU_TIMER_4);
 	mcu_timer_pwm_init(MCU_TIMER_4, MCU_TIMER_1US, 250, 50, MCU_TIMER_CH2);
@@ -43,9 +43,9 @@ s32 dev_buzzer_init(void)
 }
 /**
  *@brief:      dev_buzzer_open
- *@details:    ´ò¿ª·äÃùÆ÷
+ *@details:    æ‰“å¼€èœ‚é¸£å™¨
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_buzzer_open(void)
@@ -53,25 +53,25 @@ s32 dev_buzzer_open(void)
 	wjq_log(LOG_INFO, "open buzzer\r\n");
 	
 	mcu_io_config_timer(MCU_PORT_D, MCU_IO_13, MCU_TIMER_4);
-    //---Ê¹ÄÜ TIM4 
+    //---ä½¿èƒ½ TIM4 
 	mcu_timer_start(MCU_TIMER_4);
 	
 	return 0;
 }
 /**
  *@brief:      dev_buzzer_close
- *@details:    ¹Ø±Õ·äÃùÆ÷
+ *@details:    å…³é—­èœ‚é¸£å™¨
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_buzzer_close(void)
 {
 	wjq_log(LOG_INFO, "close buzzer\r\n");
-    mcu_timer_stop(MCU_TIMER_4); //---¹Ø±Õ¶¨Ê±Æ÷ TIM4 
+    mcu_timer_stop(MCU_TIMER_4); //---å…³é—­å®šæ—¶å™¨ TIM4 
 
 
-	/*¹Ø±Õ·äÃùÆ÷Ê±£¬Òª½«IO¸ÄÎªÆÕÍ¨IO£¬²¢ÇÒÊä³öµÍµçÆ½£¬·ñÔò·äÃùÆ÷»áÔì³É´óµçÁ÷*/
+	/*å…³é—­èœ‚é¸£å™¨æ—¶ï¼Œè¦å°†IOæ”¹ä¸ºæ™®é€šIOï¼Œå¹¶ä¸”è¾“å‡ºä½ç”µå¹³ï¼Œå¦åˆ™èœ‚é¸£å™¨ä¼šé€ æˆå¤§ç”µæµ*/
 	mcu_io_config_out(MCU_PORT_D, MCU_IO_13);
 	mcu_io_output_resetbit(MCU_PORT_D, MCU_IO_13);
 	
@@ -79,9 +79,9 @@ s32 dev_buzzer_close(void)
 }
 /**
  *@brief:      dev_buzzer_test
- *@details:    ²âÊÔ·äÃùÆ÷
+ *@details:    æµ‹è¯•èœ‚é¸£å™¨
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 void dev_buzzer_test(void)

@@ -1,22 +1,22 @@
 /**
  * @file            dev_wm8978.c
- * @brief           wm8978Çı¶¯
+ * @brief           wm8978é©±åŠ¨
  * @author          wujique
- * @date            2017Äê11ÔÂ16ÈÕ ĞÇÆÚËÄ
- * @version         ³õ¸å
- * @par             °æÈ¨ËùÓĞ (C), 2013-2023
+ * @date            2017å¹´11æœˆ16æ—¥ æ˜ŸæœŸå››
+ * @version         åˆç¨¿
+ * @par             ç‰ˆæƒæ‰€æœ‰ (C), 2013-2023
  * @par History:
- * 1.ÈÕ    ÆÚ:        2017Äê11ÔÂ16ÈÕ ĞÇÆÚËÄ
- *   ×÷    Õß:         wujique
- *   ĞŞ¸ÄÄÚÈİ:   ´´½¨ÎÄ¼ş
-       	1 Ô´Âë¹éÎİ¼¹È¸¹¤×÷ÊÒËùÓĞ¡£
-		2 ¿ÉÒÔÓÃÓÚµÄÆäËûÉÌÒµÓÃÍ¾£¨ÅäÌ×¿ª·¢°åÏúÊÛ³ıÍâ£©£¬²»ĞëÊÚÈ¨¡£
-		3 Îİ¼¹È¸¹¤×÷ÊÒ²»¶Ô´úÂë¹¦ÄÜ×öÈÎºÎ±£Ö¤£¬ÇëÊ¹ÓÃÕß×ÔĞĞ²âÊÔ£¬ºó¹û×Ô¸º¡£
-		4 ¿ÉËæÒâĞŞ¸ÄÔ´Âë²¢·Ö·¢£¬µ«²»¿ÉÖ±½ÓÏúÊÛ±¾´úÂë»ñÀû£¬²¢ÇÒÇë±£ÁôWUJIQUE°æÈ¨ËµÃ÷¡£
-		5 Èç·¢ÏÖBUG»òÓĞÓÅ»¯£¬»¶Ó­·¢²¼¸üĞÂ¡£ÇëÁªÏµ£ºcode@wujique.com
-		6 Ê¹ÓÃ±¾Ô´ÂëÔòÏàµ±ÓÚÈÏÍ¬±¾°æÈ¨ËµÃ÷¡£
-		7 ÈçÇÖ·¸ÄãµÄÈ¨Àû£¬ÇëÁªÏµ£ºcode@wujique.com
-		8 Ò»ÇĞ½âÊÍÈ¨¹éÎİ¼¹È¸¹¤×÷ÊÒËùÓĞ¡£
+ * 1.æ—¥    æœŸ:        2017å¹´11æœˆ16æ—¥ æ˜ŸæœŸå››
+ *   ä½œ    è€…:         wujique
+ *   ä¿®æ”¹å†…å®¹:   åˆ›å»ºæ–‡ä»¶
+       	1 æºç å½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
+		2 å¯ä»¥ç”¨äºçš„å…¶ä»–å•†ä¸šç”¨é€”ï¼ˆé…å¥—å¼€å‘æ¿é”€å”®é™¤å¤–ï¼‰ï¼Œä¸é¡»æˆæƒã€‚
+		3 å±‹è„Šé›€å·¥ä½œå®¤ä¸å¯¹ä»£ç åŠŸèƒ½åšä»»ä½•ä¿è¯ï¼Œè¯·ä½¿ç”¨è€…è‡ªè¡Œæµ‹è¯•ï¼Œåæœè‡ªè´Ÿã€‚
+		4 å¯éšæ„ä¿®æ”¹æºç å¹¶åˆ†å‘ï¼Œä½†ä¸å¯ç›´æ¥é”€å”®æœ¬ä»£ç è·åˆ©ï¼Œå¹¶ä¸”è¯·ä¿ç•™WUJIQUEç‰ˆæƒè¯´æ˜ã€‚
+		5 å¦‚å‘ç°BUGæˆ–æœ‰ä¼˜åŒ–ï¼Œæ¬¢è¿å‘å¸ƒæ›´æ–°ã€‚è¯·è”ç³»ï¼šcode@wujique.com
+		6 ä½¿ç”¨æœ¬æºç åˆ™ç›¸å½“äºè®¤åŒæœ¬ç‰ˆæƒè¯´æ˜ã€‚
+		7 å¦‚ä¾µçŠ¯ä½ çš„æƒåˆ©ï¼Œè¯·è”ç³»ï¼šcode@wujique.com
+		8 ä¸€åˆ‡è§£é‡Šæƒå½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
 */
 #include "mcu.h"
 #include "petite_config.h"
@@ -28,8 +28,8 @@
 #include "drv_wm8978.h"  
 
 /*
-	wm8978Í¨¹ıI2C½Ó¿Ú¿ØÖÆ£¬µ«ÊÇÖ»ÄÜĞ´£¬²»ÄÜ¶Á
-	ÀûÓÃÄÚ´æ¼ÇÂ¼Ğ´µ½WM8978¼Ä´æÆ÷µÄÖµ
+	wm8978é€šè¿‡I2Cæ¥å£æ§åˆ¶ï¼Œä½†æ˜¯åªèƒ½å†™ï¼Œä¸èƒ½è¯»
+	åˆ©ç”¨å†…å­˜è®°å½•å†™åˆ°WM8978å¯„å­˜å™¨çš„å€¼
 
 */
 #define DEV_WM8978_I2CBUS "VI2C1"
@@ -48,10 +48,10 @@ static u16 WM8978RegVaule[] = {
 
 /**
  *@brief:      dev_wm8978_writereg
- *@details:    Ğ´WM8978¼Ä´æÆ÷
- *@param[in]   u8 reg     ¼Ä´æÆ÷
-               u16 vaule  ÊıÖµ£¬µÍ¾ÅÎ»ÎªÓĞĞ§Öµ
- *@param[out]  ÎŞ
+ *@details:    å†™WM8978å¯„å­˜å™¨
+ *@param[in]   u8 reg     å¯„å­˜å™¨
+               u16 vaule  æ•°å€¼ï¼Œä½ä¹ä½ä¸ºæœ‰æ•ˆå€¼
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_wm8978_writereg(u8 reg, u16 vaule)
@@ -77,10 +77,10 @@ s32 dev_wm8978_writereg(u8 reg, u16 vaule)
 }
 /**
  *@brief:      dev_wm8978_readreg
- *@details:    ¶Á»Øµ±Ç°WM8978¼Ä´æÆ÷Éè¶¨Öµ
+ *@details:    è¯»å›å½“å‰WM8978å¯„å­˜å™¨è®¾å®šå€¼
  *@param[in]   u8 addr    
                u16 *data  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_wm8978_readreg(u8 addr, u16 *data)
@@ -90,10 +90,10 @@ s32 dev_wm8978_readreg(u8 addr, u16 *data)
 }
 /**
  *@brief:      dev_wm8978_set_dataformat
- *@details:    ÉèÖÃI2S¸ñÊ½
+ *@details:    è®¾ç½®I2Sæ ¼å¼
  *@param[in]   u8 Standard  
                u8 Format    
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_wm8978_set_dataformat(u8 Standard, u8 Format)
@@ -101,15 +101,15 @@ s32 dev_wm8978_set_dataformat(u8 Standard, u8 Format)
 	u16 RegValue = 0;
 	RegValue  = Standard<<3;	
 	RegValue |= Format<<5;
-	dev_wm8978_writereg(4, RegValue);	// ÉèÖÃIIS½Ó¿ÚÎª I2S Phillips ¸ñÊ½£¬Êı¾İ³¤¶È16Î»	
+	dev_wm8978_writereg(4, RegValue);	// è®¾ç½®IISæ¥å£ä¸º I2S Phillips æ ¼å¼ï¼Œæ•°æ®é•¿åº¦16ä½	
 	return 0;
 }
 
 /**
  *@brief:      dev_wm8978_set_phone_vol
- *@details:    ÉèÖÃ¶ú»úÒôÁ¿
+ *@details:    è®¾ç½®è€³æœºéŸ³é‡
  *@param[in]   u8 volume  0-63
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_wm8978_set_phone_vol(u8 volume)
@@ -124,9 +124,9 @@ s32 dev_wm8978_set_phone_vol(u8 volume)
 
 /**
  *@brief:      dev_wm8978_set_spk_vol
- *@details:    ÉèÖÃÀ®°ÈÒôÁ¿
+ *@details:    è®¾ç½®å–‡å­éŸ³é‡
  *@param[in]   u8 volume  0-63
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_wm8978_set_spk_vol(u8 volume)
@@ -140,9 +140,9 @@ s32 dev_wm8978_set_spk_vol(u8 volume)
 
 /**
  *@brief:      dev_wm8978_set_mic_gain
- *@details:    ÉèÖÃÂó¿Ë·çÔöÒæ
+ *@details:    è®¾ç½®éº¦å…‹é£å¢ç›Š
  *@param[in]   u8 gain   0-63
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_wm8978_set_mic_gain(u8 gain)
@@ -156,9 +156,9 @@ s32 dev_wm8978_set_mic_gain(u8 gain)
 }
 /**
  *@brief:      dev_wm8978_set_line_gain
- *@details:    ÉèÖÃÏßĞÔÊäÈëÔöÒæ
+ *@details:    è®¾ç½®çº¿æ€§è¾“å…¥å¢ç›Š
  *@param[in]   u8 gain  0-7
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_wm8978_set_line_gain(u8 gain)
@@ -181,9 +181,9 @@ s32 dev_wm8978_set_line_gain(u8 gain)
 }
 /**
  *@brief:      dev_wm8978_set_aux_gain
- *@details:    ÉèÖÃAUXÊäÈëÔöÒæ
+ *@details:    è®¾ç½®AUXè¾“å…¥å¢ç›Š
  *@param[in]   u8 gain  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_wm8978_set_aux_gain(u8 gain)
@@ -202,10 +202,10 @@ s32 dev_wm8978_set_aux_gain(u8 gain)
 }
 /**
  *@brief:      dev_wm8978_inout
- *@details:    ÅäÖÃWM8978ÊäÈëÊä³öÍ¨µÀ
+ *@details:    é…ç½®WM8978è¾“å…¥è¾“å‡ºé€šé“
  *@param[in]   u16 In   
                u16 Out  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_wm8978_inout(u8 In, u8 Out)
@@ -283,7 +283,7 @@ s32 dev_wm8978_inout(u8 In, u8 Out)
 	dev_wm8978_writereg(44, RegValue);	
 
 	if (In & WM8978_INPUT_ADC){
-		RegValue = (1 << 3) | (0 << 8) | (4 << 0);/* ½ûÖ¹ADC¸ßÍ¨ÂË²¨Æ÷, ÉèÖÃ½ØÖÁÆµÂÊ */
+		RegValue = (1 << 3) | (0 << 8) | (4 << 0);/* ç¦æ­¢ADCé«˜é€šæ»¤æ³¢å™¨, è®¾ç½®æˆªè‡³é¢‘ç‡ */
 	}
 	else{
 		RegValue = 0;
@@ -300,40 +300,40 @@ s32 dev_wm8978_inout(u8 In, u8 Out)
 		dev_wm8978_writereg(30, RegValue);	
 	}
 
-	RegValue = 0;		/* ½ûÖ¹×Ô¶¯ÔöÒæ¿ØÖÆ */
+	RegValue = 0;		/* ç¦æ­¢è‡ªåŠ¨å¢ç›Šæ§åˆ¶ */
 	dev_wm8978_writereg(32, RegValue);
 	dev_wm8978_writereg(33, RegValue);
 	dev_wm8978_writereg(34, RegValue);
 
 
-	RegValue = (3 << 1) | (7 << 0);		/* ½ûÖ¹×Ô¶¯ÔöÒæ¿ØÖÆ */
+	RegValue = (3 << 1) | (7 << 0);		/* ç¦æ­¢è‡ªåŠ¨å¢ç›Šæ§åˆ¶ */
 	dev_wm8978_writereg(35, RegValue);
 
 	RegValue = 0;
 	if ((In & WM8978_INPUT_LMIC) || (In & WM8978_INPUT_RMIC))
 	{
-		RegValue |= (1 << 8);	/* MICÔöÒæÈ¡+20dB */
+		RegValue |= (1 << 8);	/* MICå¢ç›Šå–+20dB */
 	}
 	if (In & WM8978_INPUT_AUX)
 	{
-		RegValue |= (3 << 0);	/* AuxÔöÒæ¹Ì¶¨È¡3£¬ÓÃ»§¿ÉÒÔ×ÔĞĞµ÷Õû */
+		RegValue |= (3 << 0);	/* Auxå¢ç›Šå›ºå®šå–3ï¼Œç”¨æˆ·å¯ä»¥è‡ªè¡Œè°ƒæ•´ */
 	}
 	if (In & WM8978_INPUT_LINE)
 	{
-		RegValue |= (3 << 4);	/* LineÔöÒæ¹Ì¶¨È¡3£¬ÓÃ»§¿ÉÒÔ×ÔĞĞµ÷Õû */
+		RegValue |= (3 << 4);	/* Lineå¢ç›Šå›ºå®šå–3ï¼Œç”¨æˆ·å¯ä»¥è‡ªè¡Œè°ƒæ•´ */
 	}
-	dev_wm8978_writereg(47, RegValue);	/* Ğ´×óÉùµÀÊäÈëÔöÒæ¿ØÖÆ¼Ä´æÆ÷ */
-	dev_wm8978_writereg(48, RegValue);	/* Ğ´ÓÒÉùµÀÊäÈëÔöÒæ¿ØÖÆ¼Ä´æÆ÷ */
+	dev_wm8978_writereg(47, RegValue);	/* å†™å·¦å£°é“è¾“å…¥å¢ç›Šæ§åˆ¶å¯„å­˜å™¨ */
+	dev_wm8978_writereg(48, RegValue);	/* å†™å³å£°é“è¾“å…¥å¢ç›Šæ§åˆ¶å¯„å­˜å™¨ */
 
 	RegValue = 0xFF;
-	dev_wm8978_writereg(15, RegValue);	/* Ñ¡Ôñ0dB£¬ÏÈ»º´æ×óÉùµÀ */
+	dev_wm8978_writereg(15, RegValue);	/* é€‰æ‹©0dBï¼Œå…ˆç¼“å­˜å·¦å£°é“ */
 	RegValue = 0x1FF;
-	dev_wm8978_writereg(16, RegValue);	/* Í¬²½¸üĞÂ×óÓÒÉùµÀ */
+	dev_wm8978_writereg(16, RegValue);	/* åŒæ­¥æ›´æ–°å·¦å³å£°é“ */
 
 	RegValue = 0;
 	if (Out & WM8978_OUTPUT_SPK)
 	{
-		RegValue |= (1 << 4);	/* ROUT2 ·´Ïà, ÓÃÓÚÇı¶¯ÑïÉùÆ÷ */
+		RegValue |= (1 << 4);	/* ROUT2 åç›¸, ç”¨äºé©±åŠ¨æ‰¬å£°å™¨ */
 	}
 	if (In & WM8978_INPUT_AUX)
 	{
@@ -346,10 +346,10 @@ s32 dev_wm8978_inout(u8 In, u8 Out)
 		RegValue |= ((1 << 6) | (1 << 5));
 	}
 	if (Out & WM8978_OUTPUT_SPK){
-		RegValue |=  ((1 << 2) | (1 << 1));	/* SPK 1.5xÔöÒæ,  ÈÈ±£»¤Ê¹ÄÜ */
+		RegValue |=  ((1 << 2) | (1 << 1));	/* SPK 1.5xå¢ç›Š,  çƒ­ä¿æŠ¤ä½¿èƒ½ */
 	}
 	if (Out & WM8978_OUTPUT_LINE){
-		RegValue |=  ((1 << 4) | (1 << 3));	/* BOOT3  BOOT4  1.5xÔöÒæ */
+		RegValue |=  ((1 << 4) | (1 << 3));	/* BOOT3  BOOT4  1.5xå¢ç›Š */
 	}
 	dev_wm8978_writereg(49, RegValue);
 
@@ -398,26 +398,26 @@ s32 dev_wm8978_inout(u8 In, u8 Out)
 
 /**
  *@brief:      dev_wm8978_init
- *@details:    ³õÊ¼»¯wm8978ÅäÖÃ
+ *@details:    åˆå§‹åŒ–wm8978é…ç½®
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 static s32 dev_wm8978_setting_init(void)
 {
 	s32 ret = -1;
 
-	ret = dev_wm8978_writereg(0,0x00);	// ¸´Î»WM8978
-	if(ret == -1)		// ¸´Î»Ê§°Ü
+	ret = dev_wm8978_writereg(0,0x00);	// å¤ä½WM8978
+	if(ret == -1)		// å¤ä½å¤±è´¥
 		return ret;
 	
 	dev_wm8978_writereg(1,0x1B);	
 	
 	dev_wm8978_writereg(2,0x1B0);
-	dev_wm8978_writereg(3, 0x000C);	// Ê¹ÄÜ×óÓÒÉùµÀ»ìºÏ
-	dev_wm8978_writereg(6, 0x0000);	// ÓÉ´¦ÀíÆ÷Ìá¹©Ê±ÖÓĞÅºÅ
-	dev_wm8978_writereg(43, 0x0010);	// ÉèÖÃROUT2·´Ïà,Çı¶¯ÑïÉùÆ÷Ëù±ØĞë
-	dev_wm8978_writereg(49, 0x0006);	// ÑïÉùÆ÷ 1.5x ÔöÒæ, ¿ªÆôÈÈ±£»¤
+	dev_wm8978_writereg(3, 0x000C);	// ä½¿èƒ½å·¦å³å£°é“æ··åˆ
+	dev_wm8978_writereg(6, 0x0000);	// ç”±å¤„ç†å™¨æä¾›æ—¶é’Ÿä¿¡å·
+	dev_wm8978_writereg(43, 0x0010);	// è®¾ç½®ROUT2åç›¸,é©±åŠ¨æ‰¬å£°å™¨æ‰€å¿…é¡»
+	dev_wm8978_writereg(49, 0x0006);	// æ‰¬å£°å™¨ 1.5x å¢ç›Š, å¼€å¯çƒ­ä¿æŠ¤
 
 	dev_wm8978_inout(WM8978_INPUT_NULL,
 						WM8978_OUTPUT_NULL);
@@ -430,22 +430,22 @@ static s32 dev_wm8978_setting_init(void)
 }
 /**
  *@brief:      dev_wm8978_init
- *@details:    ³õÊ¼»¯WM8978Ğ¾Æ¬
+ *@details:    åˆå§‹åŒ–WM8978èŠ¯ç‰‡
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_wm8978_init(void)
 {
-	mcu_i2s_init();//³õÊ¼»¯I2S½Ó¿Ú
-	dev_wm8978_setting_init();//ÅäÖÃWM8978³õÊ¼»¯×´Ì¬
+	mcu_i2s_init();//åˆå§‹åŒ–I2Sæ¥å£
+	dev_wm8978_setting_init();//é…ç½®WM8978åˆå§‹åŒ–çŠ¶æ€
 	return 0;
 }
 /**
  *@brief:      dev_wm8978_open
- *@details:       ´ò¿ªWM8978£¬ÅäÖÃÄ¬ÈÏÊäÈëÊä³öÍ¨µÀ
+ *@details:       æ‰“å¼€WM8978ï¼Œé…ç½®é»˜è®¤è¾“å…¥è¾“å‡ºé€šé“
  *@param[in]  void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_wm8978_open(void)
@@ -456,11 +456,11 @@ s32 dev_wm8978_open(void)
 }
 /**
  *@brief:      dev_wm8978_dataformat
- *@details:    ÅäÖÃWM8978¸úI2S¿ØÖÆÆ÷µÄÊı¾İ¸ñÊ½
+ *@details:    é…ç½®WM8978è·ŸI2Sæ§åˆ¶å™¨çš„æ•°æ®æ ¼å¼
  *@param[in]   u32 Freq     
                u8 Standard  
                u8 Format    
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_wm8978_dataformat(u32 Freq, u8 Standard, u8 Format)
@@ -515,9 +515,9 @@ s32 dev_wm8978_dataformat(u32 Freq, u8 Standard, u8 Format)
 }
 /**
  *@brief:      dev_wm8978_transfer
- *@details:    Æô¶¯¡¢Í£Ö¹I2SÊı¾İ´«Êä
+ *@details:    å¯åŠ¨ã€åœæ­¢I2Sæ•°æ®ä¼ è¾“
  *@param[in]   u8 onoff  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_wm8978_transfer(u8 onoff)
@@ -535,9 +535,9 @@ s32 dev_wm8978_transfer(u8 onoff)
 
 #if 0
 /*   
-	½ö½ö²âÊÔÊ¹ÓÃ£¬ºóĞø¸ÄÎª¶¯Ì¬ÉêÇë 
+	ä»…ä»…æµ‹è¯•ä½¿ç”¨ï¼Œåç»­æ”¹ä¸ºåŠ¨æ€ç”³è¯· 
 */
-volatile u8 SoundBufIndex=0xff;//Ë«»º³åË÷Òı£¬È¡Öµ0ºÍ1£¬¶¼Ìî³äºó¸³Öµ0XFF
+volatile u8 SoundBufIndex=0xff;//åŒç¼“å†²ç´¢å¼•ï¼Œå–å€¼0å’Œ1ï¼Œéƒ½å¡«å……åèµ‹å€¼0XFF
 
 #define I2S_DMA_BUFF_SIZE (4096*4)
 uint16_t I2sDmaBuf[2][I2S_DMA_BUFF_SIZE];
@@ -545,10 +545,10 @@ uint16_t I2sDmaBuf[2][I2S_DMA_BUFF_SIZE];
 extern const u8 AUDIO_SAMPLE[291632];
 /**
  *@brief:      fun_sound_set_free_buf
- *@details:    ÉèÖÃ¿ÕÏĞ»º³åË÷Òı
+ *@details:    è®¾ç½®ç©ºé—²ç¼“å†²ç´¢å¼•
  		
  *@param[in]   u8 *index  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 fun_sound_set_free_buf(u8 index)
@@ -558,9 +558,9 @@ s32 fun_sound_set_free_buf(u8 index)
 }
 /**
  *@brief:      fun_sound_get_buff_index
- *@details:    ²éÑ¯µ±Ç°ĞèÒªÌî³äµÄBUF
+ *@details:    æŸ¥è¯¢å½“å‰éœ€è¦å¡«å……çš„BUF
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 static s32 fun_sound_get_buff_index(void)
@@ -574,9 +574,9 @@ static s32 fun_sound_get_buff_index(void)
 
 /**
  *@brief:      dev_wm8978_test
- *@details:    WM8978²âÊÔ³ÌĞò£¬²¥·ÅÄÚÇ¶µÄWAVÊı¾İ
+ *@details:    WM8978æµ‹è¯•ç¨‹åºï¼Œæ’­æ”¾å†…åµŒçš„WAVæ•°æ®
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_wm8978_test(void)

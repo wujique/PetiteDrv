@@ -1,24 +1,24 @@
 /**
  * @file            dev_rs485.c
- * @brief           485Í¨ĞÅÇı¶¯
+ * @brief           485é€šä¿¡é©±åŠ¨
  * @author          wujique
- * @date            2017Äê12ÔÂ8ÈÕ ĞÇÆÚÎå
- * @version         ³õ¸å
- * @par             °æÈ¨ËùÓĞ (C), 2013-2023
+ * @date            2017å¹´12æœˆ8æ—¥ æ˜ŸæœŸäº”
+ * @version         åˆç¨¿
+ * @par             ç‰ˆæƒæ‰€æœ‰ (C), 2013-2023
  * @par History:
- * 1.ÈÕ    ÆÚ:        2017Äê12ÔÂ8ÈÕ ĞÇÆÚÎå
- *   ×÷    Õß:         wujique
- *   ĞŞ¸ÄÄÚÈİ:   		´´½¨ÎÄ¼ş
- 					485Çı¶¯»ùÓÚ´®¿ÚÇı¶¯
- 		°æÈ¨ËµÃ÷£º
-		1 Ô´Âë¹éÎİ¼¹È¸¹¤×÷ÊÒËùÓĞ¡£
-		2 ¿ÉÒÔÓÃÓÚµÄÆäËûÉÌÒµÓÃÍ¾£¨ÅäÌ×¿ª·¢°åÏúÊÛ³ıÍâ£©£¬²»ĞëÊÚÈ¨¡£
-		3 Îİ¼¹È¸¹¤×÷ÊÒ²»¶Ô´úÂë¹¦ÄÜ×öÈÎºÎ±£Ö¤£¬ÇëÊ¹ÓÃÕß×ÔĞĞ²âÊÔ£¬ºó¹û×Ô¸º¡£
-		4 ¿ÉËæÒâĞŞ¸ÄÔ´Âë²¢·Ö·¢£¬µ«²»¿ÉÖ±½ÓÏúÊÛ±¾´úÂë»ñÀû£¬²¢ÇÒÇë±£ÁôWUJIQUE°æÈ¨ËµÃ÷¡£
-		5 Èç·¢ÏÖBUG»òÓĞÓÅ»¯£¬»¶Ó­·¢²¼¸üĞÂ¡£ÇëÁªÏµ£ºcode@wujique.com
-		6 Ê¹ÓÃ±¾Ô´ÂëÔòÏàµ±ÓÚÈÏÍ¬±¾°æÈ¨ËµÃ÷¡£
-		7 ÈçÇÖ·¸ÄãµÄÈ¨Àû£¬ÇëÁªÏµ£ºcode@wujique.com
-		8 Ò»ÇĞ½âÊÍÈ¨¹éÎİ¼¹È¸¹¤×÷ÊÒËùÓĞ¡£
+ * 1.æ—¥    æœŸ:        2017å¹´12æœˆ8æ—¥ æ˜ŸæœŸäº”
+ *   ä½œ    è€…:         wujique
+ *   ä¿®æ”¹å†…å®¹:   		åˆ›å»ºæ–‡ä»¶
+ 					485é©±åŠ¨åŸºäºä¸²å£é©±åŠ¨
+ 		ç‰ˆæƒè¯´æ˜ï¼š
+		1 æºç å½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
+		2 å¯ä»¥ç”¨äºçš„å…¶ä»–å•†ä¸šç”¨é€”ï¼ˆé…å¥—å¼€å‘æ¿é”€å”®é™¤å¤–ï¼‰ï¼Œä¸é¡»æˆæƒã€‚
+		3 å±‹è„Šé›€å·¥ä½œå®¤ä¸å¯¹ä»£ç åŠŸèƒ½åšä»»ä½•ä¿è¯ï¼Œè¯·ä½¿ç”¨è€…è‡ªè¡Œæµ‹è¯•ï¼Œåæœè‡ªè´Ÿã€‚
+		4 å¯éšæ„ä¿®æ”¹æºç å¹¶åˆ†å‘ï¼Œä½†ä¸å¯ç›´æ¥é”€å”®æœ¬ä»£ç è·åˆ©ï¼Œå¹¶ä¸”è¯·ä¿ç•™WUJIQUEç‰ˆæƒè¯´æ˜ã€‚
+		5 å¦‚å‘ç°BUGæˆ–æœ‰ä¼˜åŒ–ï¼Œæ¬¢è¿å‘å¸ƒæ›´æ–°ã€‚è¯·è”ç³»ï¼šcode@wujique.com
+		6 ä½¿ç”¨æœ¬æºç åˆ™ç›¸å½“äºè®¤åŒæœ¬ç‰ˆæƒè¯´æ˜ã€‚
+		7 å¦‚ä¾µçŠ¯ä½ çš„æƒåˆ©ï¼Œè¯·è”ç³»ï¼šcode@wujique.com
+		8 ä¸€åˆ‡è§£é‡Šæƒå½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
 */
 #include "mcu.h"
 #include "petite_config.h"
@@ -28,30 +28,30 @@
 #include "mcu_uart.h"
 #include "log.h"
 
-/*rs485Ê¹ÓÃ´®¿Ú1*/
+/*rs485ä½¿ç”¨ä¸²å£1*/
 #define DEV_RS485_UART MCU_UART_1
 s32 RS485Gd = -2;
 /**
  *@brief:      dev_rs485_init
- *@details:    ³õÊ¼»¯485Éè±¸
+ *@details:    åˆå§‹åŒ–485è®¾å¤‡
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_rs485_init(void)
 {
 	#ifdef SYS_USE_RS485
 	GPIO_InitTypeDef GPIO_InitStructure;
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOG,ENABLE); //Ê¹ÄÜ PGÊ±ÖÓ
-	//PG8 ÍÆÍìÊä³ö£¬ 485 Ä£Ê½¿ØÖÆ
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOG,ENABLE); //ä½¿èƒ½ PGæ—¶é’Ÿ
+	//PG8 æ¨æŒ½è¾“å‡ºï¼Œ 485 æ¨¡å¼æ§åˆ¶
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_8; //GPIOG8
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;//Êä³ö
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz; //ËÙ¶È 100MHz
-	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP; //ÍÆÍìÊä³ö
-	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP; //ÉÏÀ­
-	GPIO_Init(GPIOG, &GPIO_InitStructure); //³õÊ¼»¯ PG8	
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;//è¾“å‡º
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz; //é€Ÿåº¦ 100MHz
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP; //æ¨æŒ½è¾“å‡º
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP; //ä¸Šæ‹‰
+	GPIO_Init(GPIOG, &GPIO_InitStructure); //åˆå§‹åŒ– PG8	
 
-	//³õÊ¼»¯ÉèÖÃÎª½ÓÊÕÄ£Ê½
+	//åˆå§‹åŒ–è®¾ç½®ä¸ºæ¥æ”¶æ¨¡å¼
 	GPIO_ResetBits(GPIOG, GPIO_Pin_8);
 
 	RS485Gd = -1;
@@ -62,9 +62,9 @@ s32 dev_rs485_init(void)
 }
 /**
  *@brief:      dev_rs485_open
- *@details:    ´ò¿ªRS485Éè±¸
+ *@details:    æ‰“å¼€RS485è®¾å¤‡
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_rs485_open(void)
@@ -79,9 +79,9 @@ s32 dev_rs485_open(void)
 }
 /**
  *@brief:      dev_rs485_close
- *@details:    ¹Ø±ÕRS485Éè±¸
+ *@details:    å…³é—­RS485è®¾å¤‡
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_rs485_close(void)
@@ -95,10 +95,10 @@ s32 dev_rs485_close(void)
 
 /**
  *@brief:      dev_rs485_read
- *@details:    RS485½ÓÊÕÊı¾İ
+ *@details:    RS485æ¥æ”¶æ•°æ®
  *@param[in]   u8 *buf  
                s32 len  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_rs485_read(u8 *buf, s32 len)
@@ -113,10 +113,10 @@ s32 dev_rs485_read(u8 *buf, s32 len)
 }
 /**
  *@brief:      dev_rs485_write
- *@details:    rs485·¢ËÍÊı¾İ
+ *@details:    rs485å‘é€æ•°æ®
  *@param[in]   u8 *buf  
                s32 len  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_rs485_write(u8 *buf, s32 len)
@@ -125,9 +125,9 @@ s32 dev_rs485_write(u8 *buf, s32 len)
 	
 	if(RS485Gd!= 0)
 		return -1;
-	GPIO_SetBits(GPIOG, GPIO_Pin_8);//ÉèÖÃÎª·¢ËÍÄ£Ê½
+	GPIO_SetBits(GPIOG, GPIO_Pin_8);//è®¾ç½®ä¸ºå‘é€æ¨¡å¼
 	res = mcu_uart_write(DEV_RS485_UART, buf, len);
-	GPIO_ResetBits(GPIOG, GPIO_Pin_8);//·¢ËÍ½áÊøºóÉèÖÃÎª½ÓÊÕÄ£Ê½
+	GPIO_ResetBits(GPIOG, GPIO_Pin_8);//å‘é€ç»“æŸåè®¾ç½®ä¸ºæ¥æ”¶æ¨¡å¼
 
 	return res;
 }
@@ -135,7 +135,7 @@ s32 dev_rs485_write(u8 *buf, s32 len)
  *@brief:      dev_rs485_ioctl
  *@details:    IOCTL
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_rs485_ioctl(void)
@@ -150,9 +150,9 @@ extern void Delay(__IO uint32_t nTime);
 
 /**
  *@brief:      dev_rs485_test
- *@details:    RS485²âÊÔ³ÌĞò
+ *@details:    RS485æµ‹è¯•ç¨‹åº
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_rs485_test(u8 mode)
@@ -163,7 +163,7 @@ s32 dev_rs485_test(u8 mode)
 	
 	dev_rs485_open();
 
-	if(mode == 1)// ·¢ËÍ¶Ë²âÊÔ
+	if(mode == 1)// å‘é€ç«¯æµ‹è¯•
 	{
 		while(1)
 		{
@@ -172,7 +172,7 @@ s32 dev_rs485_test(u8 mode)
 			wjq_log(LOG_FUN, "dev rs485 write:%d\r\n", res);
 		}
 	}
-	else//½ÓÊÕ¶Ë²âÊÔ
+	else//æ¥æ”¶ç«¯æµ‹è¯•
 	{
 		while(1)
 		{

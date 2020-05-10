@@ -8,15 +8,15 @@
 
 /*
 
-	8266 µ×²ãÇı¶¯£¬¸ºÔğ¸ú´®¿ÚµÈÓ²¼şÍ¨ĞÅ
+	8266 åº•å±‚é©±åŠ¨ï¼Œè´Ÿè´£è·Ÿä¸²å£ç­‰ç¡¬ä»¶é€šä¿¡
 
-	Ä£¿éÊ¹ÓÃ°²ĞÅ¿É8266Ä£¿éESP-01/01S
+	æ¨¡å—ä½¿ç”¨å®‰ä¿¡å¯8266æ¨¡å—ESP-01/01S
 	VCC/GND
 	TXD/TXD
-	EN  Ê¹ÄÜ£¬¸ßµçÆ½ÓĞĞ§ -----------PF5
-	RST ¸´Î»£¬µÍµçÆ½ÓĞĞ§      ----------PF4
-	IO0 Æô¶¯Ê±À­µÍ£¬½øÈëÏÂÔØÄ£Ê½---------PA11
-	IO2 ÇëÀ­¸ß				------------PA12
+	EN  ä½¿èƒ½ï¼Œé«˜ç”µå¹³æœ‰æ•ˆ -----------PF5
+	RST å¤ä½ï¼Œä½ç”µå¹³æœ‰æ•ˆ      ----------PF4
+	IO0 å¯åŠ¨æ—¶æ‹‰ä½ï¼Œè¿›å…¥ä¸‹è½½æ¨¡å¼---------PA11
+	IO2 è¯·æ‹‰é«˜				------------PA12
 */	
 #define DEV_8266_UART MCU_UART_1
 
@@ -34,9 +34,9 @@ s32 dev_8266_close(void)
 }
 /**
  *@brief:      dev_8266_init
- *@details:       ³õÊ¼»¯8266ÓÃµ½µÄIO
+ *@details:       åˆå§‹åŒ–8266ç”¨åˆ°çš„IO
  *@param[in]  void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_8266_init(void)
@@ -46,19 +46,19 @@ s32 dev_8266_init(void)
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOF,ENABLE);
 
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4|GPIO_Pin_5; //GPIOG8
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;//Êä³ö
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz; //ËÙ¶È 100MHz
-	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP; //ÍÆÍìÊä³ö
-	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP; //ÉÏÀ­
-	GPIO_Init(GPIOF, &GPIO_InitStructure); //³õÊ¼»¯ PG8	
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;//è¾“å‡º
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz; //é€Ÿåº¦ 100MHz
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP; //æ¨æŒ½è¾“å‡º
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP; //ä¸Šæ‹‰
+	GPIO_Init(GPIOF, &GPIO_InitStructure); //åˆå§‹åŒ– PG8	
 
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA,ENABLE);
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11|GPIO_Pin_12; //GPIOG8
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;//Êä³ö
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz; //ËÙ¶È 100MHz
-	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP; //ÍÆÍìÊä³ö
-	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP; //ÉÏÀ­
-	GPIO_Init(GPIOA, &GPIO_InitStructure); //³õÊ¼»¯ PG8
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;//è¾“å‡º
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz; //é€Ÿåº¦ 100MHz
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP; //æ¨æŒ½è¾“å‡º
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP; //ä¸Šæ‹‰
+	GPIO_Init(GPIOA, &GPIO_InitStructure); //åˆå§‹åŒ– PG8
 	
 	GPIO_SetBits(GPIOA, GPIO_Pin_11|GPIO_Pin_12);
 	GPIO_SetBits(GPIOF, GPIO_Pin_4);
@@ -99,9 +99,9 @@ s32 dev_8266_write(u8 *buf, s32 len)
 
 /**
  *@brief:      dev_8266_test
- *@details:    ²âÊÔ¸ú8266µÄÍ¨ĞÅ
+ *@details:    æµ‹è¯•è·Ÿ8266çš„é€šä¿¡
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_8266_test(void)

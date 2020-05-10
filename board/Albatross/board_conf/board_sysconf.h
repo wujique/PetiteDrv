@@ -1,14 +1,14 @@
 /**
  * @file                wujique_sysconf.h
- * @brief           ÏµÍ³ÅäÖÃ
+ * @brief           ç³»ç»Ÿé…ç½®
  * @author          wujique
- * @date            2018Äê3ÔÂ30ÈÕ ÐÇÆÚÎå
- * @version         ³õ¸å
- * @par             °æÈ¨ËùÓÐ (C), 2013-2023
+ * @date            2018å¹´3æœˆ30æ—¥ æ˜ŸæœŸäº”
+ * @version         åˆç¨¿
+ * @par             ç‰ˆæƒæ‰€æœ‰ (C), 2013-2023
  * @par History:
- * 1.ÈÕ    ÆÚ:        2018Äê3ÔÂ30ÈÕ ÐÇÆÚÎå
- *   ×÷    Õß:         wujique
- *   ÐÞ¸ÄÄÚÈÝ:   ´´½¨ÎÄ¼þ
+ * 1.æ—¥    æœŸ:        2018å¹´3æœˆ30æ—¥ æ˜ŸæœŸäº”
+ *   ä½œ    è€…:         wujique
+ *   ä¿®æ”¹å†…å®¹:   åˆ›å»ºæ–‡ä»¶
 */
 #ifndef __BOARD_SYSCONF__
 #define __BOARD_SYSCONF__
@@ -16,29 +16,29 @@
 #define PC_PORT  MCU_UART_4 
 
 /* 
-	±¾ÎÄ¼þ¶¨Òå°åÉè±¸Çé¿ö¡£
-	ÊÇ¶Ôboard_sysconf.cµÄ²¹³ä0	
+	æœ¬æ–‡ä»¶å®šä¹‰æ¿è®¾å¤‡æƒ…å†µã€‚
+	æ˜¯å¯¹board_sysconf.cçš„è¡¥å……0	
 */
 
 /*-----------------------------------------------------------*/
-/*	Ñ¡Ôñ´¥ÃþÆÁ¼ì²â·½°¸: Ê¹ÓÃ´¥ÃþIC »ò     ÄÚ²¿ADC×ª»»*/
+/*	é€‰æ‹©è§¦æ‘¸å±æ£€æµ‹æ–¹æ¡ˆ: ä½¿ç”¨è§¦æ‘¸IC æˆ–     å†…éƒ¨ADCè½¬æ¢*/
 #define SYS_USE_TS_IC_CASE		1
 //#define SYS_USE_TS_ADC_CASE 	0
 
-/*´¥ÃþÆÁ¼ì²â·½°¸£ºxpt2046 ·½°¸ºÍADC·½°¸Ö»ÄÜÑ¡Ò»ÖÖ*/
+/*è§¦æ‘¸å±æ£€æµ‹æ–¹æ¡ˆï¼šxpt2046 æ–¹æ¡ˆå’ŒADCæ–¹æ¡ˆåªèƒ½é€‰ä¸€ç§*/
 #if defined(SYS_USE_TS_IC_CASE) && defined(SYS_USE_TS_ADC_CASE)
  #error "please just select one touch device!"
 #endif
 
-/*	¶¨Òåxpt 2046Ê¹ÓÃ Ä£ÄâSPI1_ch1
-	·ÖÆµÉèÖÃÎª0      */
+/*	å®šä¹‰xpt 2046ä½¿ç”¨ æ¨¡æ‹ŸSPI1_ch1
+	åˆ†é¢‘è®¾ç½®ä¸º0      */
 #define SYS_USE_VSPI1	1	
 #define XPT2046_SPI "VSPI1_CH1"
 #define XPT2046_SPI_KHZ	  (2000)
 
 #if 0
-/*	Èç¹ûÊ¹ÓÃÓ²¼þSPI3_CH4,
-	·ÖÆµ²»ÄÜÉèÖÃÌ«¿ì*/
+/*	å¦‚æžœä½¿ç”¨ç¡¬ä»¶SPI3_CH4,
+	åˆ†é¢‘ä¸èƒ½è®¾ç½®å¤ªå¿«*/
 //#define XPT2046_SPI "SPI3_CH4"
 //#define XPT2046_SPI_PRE	SPI_BaudRatePrescaler_8
 #endif
@@ -54,14 +54,14 @@
 
 #define SYS_FS_NUM 0
 
-#define VFS_SD_DIR	"mtd0"//sd¿¨ÎÄ¼þÏµÍ³¹ÒÔØvfsÖÐµÄÄ¿Â¼Ãû
-#define SYS_FS_FATFS_SD "1:/"//sd¿¨Ä¿Â¼Ãû£¬ Õâ¸öÃû×Ö¸údiso.cÖÐµÄÐòºÅÓÐ¹ØÏµ
+#define VFS_SD_DIR	"mtd0"//sdå¡æ–‡ä»¶ç³»ç»ŸæŒ‚è½½vfsä¸­çš„ç›®å½•å
+#define SYS_FS_FATFS_SD "1:/"//sdå¡ç›®å½•åï¼Œ è¿™ä¸ªåå­—è·Ÿdiso.cä¸­çš„åºå·æœ‰å…³ç³»
 
 #define VFS_USB_DIR	"mtd1"//USB
 #define SYS_FS_FATFS_USB "2:/"
 /*-----------------------------------------------------------*/
 
-/*	×ÖÌåÀàÐÍ¶¨Òå */
+/*	å­—ä½“ç±»åž‹å®šä¹‰ */
 #define FONT_LIST_MAX 4	
 extern struct fbcon_font_desc *FontList[FONT_LIST_MAX];
 

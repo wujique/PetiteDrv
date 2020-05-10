@@ -28,8 +28,8 @@
 
 /*
 
-	UBOOT»·¾³±äÁ¿£¬ÔÚSTM32ÖĞÓÃÀ´±£´æÒ»Ğ©ÏµÍ³²ÎÊı
-	ÔİÊ±²»ÊµÏÖ£¬
+	UBOOTç¯å¢ƒå˜é‡ï¼Œåœ¨STM32ä¸­ç”¨æ¥ä¿å­˜ä¸€äº›ç³»ç»Ÿå‚æ•°
+	æš‚æ—¶ä¸å®ç°ï¼Œ
 
 */
 
@@ -54,7 +54,7 @@ static uchar env_get_char_init (int index);
 
 /*
 
-	Ä¬ÈÏ»·¾³±äÁ¿
+	é»˜è®¤ç¯å¢ƒå˜é‡
 
 */
 const uchar default_environment[CONFIG_ENV_SIZE-8] = {

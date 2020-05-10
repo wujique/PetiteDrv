@@ -1,22 +1,22 @@
 /**
  * @file            dev_lcdbus.c
- * @brief           ¶Ô¸÷ÖÖLCD½Ó¿Ú·â×°
+ * @brief           å¯¹å„ç§LCDæŽ¥å£å°è£…
  * @author          wujique
- * @date            2018Äê4ÔÂ18ÈÕ ÐÇÆÚÈý
- * @version         ³õ¸å
- * @par             °æÈ¨ËùÓÐ (C), 2013-2023
+ * @date            2018å¹´4æœˆ18æ—¥ æ˜ŸæœŸä¸‰
+ * @version         åˆç¨¿
+ * @par             ç‰ˆæƒæ‰€æœ‰ (C), 2013-2023
  * @par History:
- * 1.ÈÕ    ÆÚ:        2018Äê4ÔÂ18ÈÕ ÐÇÆÚÈý
- *   ×÷    Õß:         wujique
- *   ÐÞ¸ÄÄÚÈÝ:   ´´½¨ÎÄ¼þ
-	1 Ô´Âë¹éÎÝ¼¹È¸¹¤×÷ÊÒËùÓÐ¡£
-	2 ¿ÉÒÔÓÃÓÚµÄÆäËûÉÌÒµÓÃÍ¾£¨ÅäÌ×¿ª·¢°åÏúÊÛ³ýÍâ£©£¬²»ÐëÊÚÈ¨¡£
-	3 ÎÝ¼¹È¸¹¤×÷ÊÒ²»¶Ô´úÂë¹¦ÄÜ×öÈÎºÎ±£Ö¤£¬ÇëÊ¹ÓÃÕß×ÔÐÐ²âÊÔ£¬ºó¹û×Ô¸º¡£
-	4 ¿ÉËæÒâÐÞ¸ÄÔ´Âë²¢·Ö·¢£¬µ«²»¿ÉÖ±½ÓÏúÊÛ±¾´úÂë»ñÀû£¬²¢ÇÒÇë±£ÁôWUJIQUE°æÈ¨ËµÃ÷¡£
-	5 Èç·¢ÏÖBUG»òÓÐÓÅ»¯£¬»¶Ó­·¢²¼¸üÐÂ¡£ÇëÁªÏµ£ºcode@wujique.com
-	6 Ê¹ÓÃ±¾Ô´ÂëÔòÏàµ±ÓÚÈÏÍ¬±¾°æÈ¨ËµÃ÷¡£
-	7 ÈçÇÖ·¸ÄãµÄÈ¨Àû£¬ÇëÁªÏµ£ºcode@wujique.com
-	8 Ò»ÇÐ½âÊÍÈ¨¹éÎÝ¼¹È¸¹¤×÷ÊÒËùÓÐ¡£
+ * 1.æ—¥    æœŸ:        2018å¹´4æœˆ18æ—¥ æ˜ŸæœŸä¸‰
+ *   ä½œ    è€…:         wujique
+ *   ä¿®æ”¹å†…å®¹:   åˆ›å»ºæ–‡ä»¶
+	1 æºç å½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
+	2 å¯ä»¥ç”¨äºŽçš„å…¶ä»–å•†ä¸šç”¨é€”ï¼ˆé…å¥—å¼€å‘æ¿é”€å”®é™¤å¤–ï¼‰ï¼Œä¸é¡»æŽˆæƒã€‚
+	3 å±‹è„Šé›€å·¥ä½œå®¤ä¸å¯¹ä»£ç åŠŸèƒ½åšä»»ä½•ä¿è¯ï¼Œè¯·ä½¿ç”¨è€…è‡ªè¡Œæµ‹è¯•ï¼ŒåŽæžœè‡ªè´Ÿã€‚
+	4 å¯éšæ„ä¿®æ”¹æºç å¹¶åˆ†å‘ï¼Œä½†ä¸å¯ç›´æŽ¥é”€å”®æœ¬ä»£ç èŽ·åˆ©ï¼Œå¹¶ä¸”è¯·ä¿ç•™WUJIQUEç‰ˆæƒè¯´æ˜Žã€‚
+	5 å¦‚å‘çŽ°BUGæˆ–æœ‰ä¼˜åŒ–ï¼Œæ¬¢è¿Žå‘å¸ƒæ›´æ–°ã€‚è¯·è”ç³»ï¼šcode@wujique.com
+	6 ä½¿ç”¨æœ¬æºç åˆ™ç›¸å½“äºŽè®¤åŒæœ¬ç‰ˆæƒè¯´æ˜Žã€‚
+	7 å¦‚ä¾µçŠ¯ä½ çš„æƒåˆ©ï¼Œè¯·è”ç³»ï¼šcode@wujique.com
+	8 ä¸€åˆ‡è§£é‡Šæƒå½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
 */
 #include <stdarg.h>
 #include <stdio.h>
@@ -34,18 +34,18 @@
 #include "mcu_fsmc.h"
 
 /*
-	Ò»¸öLCD½Ó¿Ú
-	³ýÁËÍ¨ÐÅµÄ½Ó¿Ú
-	»¹ÓÐÆäËû²»ÊôÓÚÍ¨ÐÅ½Ó¿ÚµÄÐÅºÅ
+	ä¸€ä¸ªLCDæŽ¥å£
+	é™¤äº†é€šä¿¡çš„æŽ¥å£
+	è¿˜æœ‰å…¶ä»–ä¸å±žäºŽé€šä¿¡æŽ¥å£çš„ä¿¡å·
 */
 
-/*LCD ×ÜÏßÉè±¸½Úµã¸ù½Úµã*/
+/*LCD æ€»çº¿è®¾å¤‡èŠ‚ç‚¹æ ¹èŠ‚ç‚¹*/
 struct list_head DevBusLcdRoot = {&DevBusLcdRoot, &DevBusLcdRoot};	
 /**
  *@brief:      bus_lcd_IO_init
- *@details:    ³õÊ¼»¯lcd½Ó¿ÚIO
+ *@details:    åˆå§‹åŒ–lcdæŽ¥å£IO
  *@param[in]   const DevLcdBus *dev  
- *@param[out]  ÎÞ
+ *@param[out]  æ— 
  *@retval:     
  */
 static void bus_lcd_IO_init(const DevLcdBus *dev) 
@@ -53,7 +53,7 @@ static void bus_lcd_IO_init(const DevLcdBus *dev)
 
 	if (dev->pnode.type == BUS_LCD_I2C) return;
 
-	/* ³õÊ¼»¯¹Ü½Å */
+	/* åˆå§‹åŒ–ç®¡è„š */
 	if (dev->A0port != NULL) {
 		mcu_io_config_out(dev->A0port,dev->A0pin);
 		mcu_io_output_setbit(dev->A0port,dev->A0pin);
@@ -110,7 +110,7 @@ s32 bus_lcd_rst(DevLcdBusNode *node, u8 sta)
  */
 DevLcdBusNode *bus_lcd_open(char *name)
 {
-	/*ÕÒÉè±¸*/
+	/*æ‰¾è®¾å¤‡*/
 	DevLcdBusNode *node;
 	struct list_head *listp;
 
@@ -146,7 +146,7 @@ DevLcdBusNode *bus_lcd_open(char *name)
 			} else if (node->dev.pnode.type == BUS_LCD_I2C) {
 				node->basenode = bus_i2c_open(node->dev.basebus);
 			} else if (node->dev.pnode.type == BUS_LCD_8080) {
-				/*8080ÌØÊâ´¦Àí*/
+				/*8080ç‰¹æ®Šå¤„ç†*/
 				node->basenode = (void *)1;
 			}
 			
@@ -182,7 +182,7 @@ s32 bus_lcd_close(DevLcdBusNode *node)
 	}else if(node->dev.pnode.type == BUS_LCD_I2C){
 		bus_i2c_close((DevI2cNode *)node->basenode);	
 	}else if(node->dev.pnode.type == BUS_LCD_8080){
-		/*8080ÌØÊâ´¦Àí*/
+		/*8080ç‰¹æ®Šå¤„ç†*/
 		node->basenode = NULL;
 	}
 	
@@ -201,7 +201,7 @@ s32 bus_lcd_close(DevLcdBusNode *node)
  */
 s32 bus_lcd_write_data(DevLcdBusNode *node, u8 *data, u32 len)
 {
-	/*Ö±½Ó¶¨Òå256×Ö½Ú£¬¿ÉÄÜÓÐBUG£¬Òª¸ù¾Ýlen¶¯Ì¬ÉêÇë*/
+	/*ç›´æŽ¥å®šä¹‰256å­—èŠ‚ï¼Œå¯èƒ½æœ‰BUGï¼Œè¦æ ¹æ®lenåŠ¨æ€ç”³è¯·*/
 	u8 tmp[256];
 	u32 i;
 
@@ -269,7 +269,7 @@ s32 bus_lcd_w_data(DevLcdBusNode *node, u16 color, u32 len)
 	return 0;
 }
 
-#if 0//FSMC³¢ÊÔDMA
+#if 0//FSMCå°è¯•DMA
 #define FSMC_LCD_ADDRESS      0x6C010000
 
 void bus_lcd_fsmc_dma_init(u32 MemoryAddr,	u32 len)
@@ -310,16 +310,16 @@ void bus_lcd_fsmc_dma_init(u32 MemoryAddr,	u32 len)
 
 
 /**
- *@brief:     ·Ç×èÈû·½Ê½·¢ËÍÊý¾Ý
+ *@brief:     éžé˜»å¡žæ–¹å¼å‘é€æ•°æ®
  *@details:   
  *@param[in]    
  *@param[out]  
  *@retval:     
- 			²âÊÔ8080·Ç×èÈû·¢ËÍ£¬¶ÔË¢Í¼ÐÔÄÜÌáÉý²»´ó£¬ÔÝ²»ÆôÓÃ¡£
+ 			æµ‹è¯•8080éžé˜»å¡žå‘é€ï¼Œå¯¹åˆ·å›¾æ€§èƒ½æå‡ä¸å¤§ï¼Œæš‚ä¸å¯ç”¨ã€‚
  */
 s32 bus_lcd_flush_data(DevLcdBusNode *node, u8 *data, u32 len)
 {
-	/*Ö±½Ó¶¨Òå256×Ö½Ú£¬¿ÉÄÜÓÐBUG£¬Òª¸ù¾Ýlen¶¯Ì¬ÉêÇë*/
+	/*ç›´æŽ¥å®šä¹‰256å­—èŠ‚ï¼Œå¯èƒ½æœ‰BUGï¼Œè¦æ ¹æ®lenåŠ¨æ€ç”³è¯·*/
 	u8 tmp[256];
 	u32 i;
 
@@ -362,7 +362,7 @@ s32 bus_lcd_flush_data(DevLcdBusNode *node, u8 *data, u32 len)
 	return 0;
 }
 /**
- *@brief:  µÈ´ýflushÊý¾ÝÍê³É   
+ *@brief:  ç­‰å¾…flushæ•°æ®å®Œæˆ   
  *@details:   
  *@param[in]    
  *@param[out]  
@@ -490,9 +490,9 @@ s32 bus_lcd_write_cmd(DevLcdBusNode *node, u16 cmd)
 }
 /**
  *@brief:      dev_lcdbus_register
- *@details:    ×¢²áLCD½Ó¿Ú
+ *@details:    æ³¨å†ŒLCDæŽ¥å£
  *@param[in]   void  
- *@param[out]  ÎÞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_lcdbus_register(const DevLcdBus *dev)
@@ -502,7 +502,7 @@ s32 dev_lcdbus_register(const DevLcdBus *dev)
 
 	wjq_log(LOG_INFO, "[register] lcd bus :%s, base on:%s!\r\n", dev->pnode.name, dev->basebus);
 
-	/*	ÏÈÒª²éÑ¯µ±Ç°£¬·ÀÖ¹ÖØÃû 	*/
+	/*	å…ˆè¦æŸ¥è¯¢å½“å‰ï¼Œé˜²æ­¢é‡å 	*/
 	listp = DevBusLcdRoot.next;
 	while(1) {
 		if (listp == &DevBusLcdRoot) break;
@@ -517,18 +517,18 @@ s32 dev_lcdbus_register(const DevLcdBus *dev)
 		listp = listp->next;
 	}
 
-	/* ÉêÇëÒ»¸ö½Úµã¿Õ¼ä    	*/
+	/* ç”³è¯·ä¸€ä¸ªèŠ‚ç‚¹ç©ºé—´    	*/
 	p = (DevLcdBusNode *)wjq_malloc(sizeof(DevLcdBusNode));
 	list_add(&(p->list), &DevBusLcdRoot);
-	/*¸´ÖÆÉè±¸ÐÅÏ¢*/
+	/*å¤åˆ¶è®¾å¤‡ä¿¡æ¯*/
 	memcpy((u8 *)&p->dev, (u8 *)dev, sizeof(DevLcdBus));
 	p->gd = -1;
 
-	/*³õÊ¼»¯*/
+	/*åˆå§‹åŒ–*/
 	bus_lcd_IO_init(dev);
 
 	if(dev->pnode.type == BUS_LCD_8080){
-		//³õÊ¼FSMC
+		//åˆå§‹FSMC
 		mcu_fsmc_lcd_Init();
 	}
 	return 0;

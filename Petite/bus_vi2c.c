@@ -1,22 +1,22 @@
 /**
  * @file            mcu_i2c.c
- * @brief           IOÄ£ÄâI2C
+ * @brief           IOæ¨¡æ‹ŸI2C
  * @author          test
- * @date            2019Äê03ÔÂ26ÈÕ ĞÇÆÚÒ»
- * @version         ³õ¸å
- * @par             °æÈ¨ËùÓĞ (C), 2013-2023
+ * @date            2019å¹´03æœˆ26æ—¥ æ˜ŸæœŸä¸€
+ * @version         åˆç¨¿
+ * @par             ç‰ˆæƒæ‰€æœ‰ (C), 2013-2023
  * @par History:
- * 1.ÈÕ    ÆÚ:     
- *   ×÷    Õß:      Îİ¼¹È¸¹¤×÷ÊÒ
- *   ĞŞ¸ÄÄÚÈİ:      ´´½¨ÎÄ¼ş
-    	1 Ô´Âë¹éÎİ¼¹È¸¹¤×÷ÊÒËùÓĞ¡£
-		2 ¿ÉÒÔÓÃÓÚµÄÆäËûÉÌÒµÓÃÍ¾£¨ÅäÌ×¿ª·¢°åÏúÊÛ³ıÍâ£©£¬²»ĞëÊÚÈ¨¡£
-		3 Îİ¼¹È¸¹¤×÷ÊÒ²»¶Ô´úÂë¹¦ÄÜ×öÈÎºÎ±£Ö¤£¬ÇëÊ¹ÓÃÕß×ÔĞĞ²âÊÔ£¬ºó¹û×Ô¸º¡£
-		4 ¿ÉËæÒâĞŞ¸ÄÔ´Âë²¢·Ö·¢£¬µ«²»¿ÉÖ±½ÓÏúÊÛ±¾´úÂë»ñÀû£¬²¢ÇÒÇë±£ÁôWUJIQUE°æÈ¨ËµÃ÷¡£
-		5 Èç·¢ÏÖBUG»òÓĞÓÅ»¯£¬»¶Ó­·¢²¼¸üĞÂ¡£ÇëÁªÏµ£ºcode@wujique.com
-		6 Ê¹ÓÃ±¾Ô´ÂëÔòÏàµ±ÓÚÈÏÍ¬±¾°æÈ¨ËµÃ÷¡£
-		7 ÈçÇÖ·¸ÄãµÄÈ¨Àû£¬ÇëÁªÏµ£ºcode@wujique.com
-		8 Ò»ÇĞ½âÊÍÈ¨¹éÎİ¼¹È¸¹¤×÷ÊÒËùÓĞ¡£
+ * 1.æ—¥    æœŸ:     
+ *   ä½œ    è€…:      å±‹è„Šé›€å·¥ä½œå®¤
+ *   ä¿®æ”¹å†…å®¹:      åˆ›å»ºæ–‡ä»¶
+    	1 æºç å½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
+		2 å¯ä»¥ç”¨äºçš„å…¶ä»–å•†ä¸šç”¨é€”ï¼ˆé…å¥—å¼€å‘æ¿é”€å”®é™¤å¤–ï¼‰ï¼Œä¸é¡»æˆæƒã€‚
+		3 å±‹è„Šé›€å·¥ä½œå®¤ä¸å¯¹ä»£ç åŠŸèƒ½åšä»»ä½•ä¿è¯ï¼Œè¯·ä½¿ç”¨è€…è‡ªè¡Œæµ‹è¯•ï¼Œåæœè‡ªè´Ÿã€‚
+		4 å¯éšæ„ä¿®æ”¹æºç å¹¶åˆ†å‘ï¼Œä½†ä¸å¯ç›´æ¥é”€å”®æœ¬ä»£ç è·åˆ©ï¼Œå¹¶ä¸”è¯·ä¿ç•™WUJIQUEç‰ˆæƒè¯´æ˜ã€‚
+		5 å¦‚å‘ç°BUGæˆ–æœ‰ä¼˜åŒ–ï¼Œæ¬¢è¿å‘å¸ƒæ›´æ–°ã€‚è¯·è”ç³»ï¼šcode@wujique.com
+		6 ä½¿ç”¨æœ¬æºç åˆ™ç›¸å½“äºè®¤åŒæœ¬ç‰ˆæƒè¯´æ˜ã€‚
+		7 å¦‚ä¾µçŠ¯ä½ çš„æƒåˆ©ï¼Œè¯·è”ç³»ï¼šcode@wujique.com
+		8 ä¸€åˆ‡è§£é‡Šæƒå½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
 */
 
 #include "mcu.h"
@@ -28,14 +28,14 @@
 
 /**
  *@brief:      mcu_i2c_delay
- *@details:    I2CĞÅºÅÑÓÊ±º¯Êı
+ *@details:    I2Cä¿¡å·å»¶æ—¶å‡½æ•°
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     static
  */
 static void bus_vi2c_delay(void)
 {
-    //Delay(1);//ÑÓÊ±£¬I2CÊ±ÖÓ
+    //Delay(1);//å»¶æ—¶ï¼ŒI2Cæ—¶é’Ÿ
     volatile u32 i = 1;
 
     for(;i>0;i--);
@@ -43,9 +43,9 @@ static void bus_vi2c_delay(void)
 
 /**
  *@brief:      mcu_vi2c_sda_input
- *@details:    ½«I2C sda IOÉèÖÃÎªÊäÈë
+ *@details:    å°†I2C sda IOè®¾ç½®ä¸ºè¾“å…¥
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 void bus_vi2c_sda_input(DevI2c *dev)
@@ -54,9 +54,9 @@ void bus_vi2c_sda_input(DevI2c *dev)
 }
 /**
  *@brief:      mcu_i2c_sda_output
- *@details:       ½«I2C sda IOÉèÖÃÎªÊä³ö
+ *@details:       å°†I2C sda IOè®¾ç½®ä¸ºè¾“å‡º
  *@param[in]  void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 void bus_vi2c_sda_output(DevI2c *dev)
@@ -65,9 +65,9 @@ void bus_vi2c_sda_output(DevI2c *dev)
 }
 /**
  *@brief:      mcu_i2c_readsda
- *@details:    ¶ÁSDAÊı¾İ
+ *@details:    è¯»SDAæ•°æ®
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     static
  */
 static s32 bus_vi2c_readsda(DevI2c *dev)
@@ -80,9 +80,9 @@ static s32 bus_vi2c_readsda(DevI2c *dev)
 }
 /**
  *@brief:      mcu_vi2c_sda
- *@details:       SDAÊä³ö¸ßµÍµçÆ½
+ *@details:       SDAè¾“å‡ºé«˜ä½ç”µå¹³
  *@param[in]  u8 sta  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     static
  */
 static void bus_vi2c_sda(DevI2c *dev, u8 sta)
@@ -98,9 +98,9 @@ static void bus_vi2c_sda(DevI2c *dev, u8 sta)
 
 /**
  *@brief:      mcu_i2c_scl
- *@details:    Ê±ÖÓSCLÊä³ö¸ßµÍµçÆ½
+ *@details:    æ—¶é’ŸSCLè¾“å‡ºé«˜ä½ç”µå¹³
  *@param[in]   u8 sta  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     static
  */
 static void bus_vi2c_scl(DevI2c *dev, u8 sta)
@@ -114,9 +114,9 @@ static void bus_vi2c_scl(DevI2c *dev, u8 sta)
 }
 /**
  *@brief:      mcu_i2c_start
- *@details:    ·¢ËÍstartÊ±Ğò
+ *@details:    å‘é€startæ—¶åº
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     static
  */
 static void bus_vi2c_start(DevI2c *dev)
@@ -134,9 +134,9 @@ static void bus_vi2c_start(DevI2c *dev)
 }
 /**
  *@brief:      mcu_i2c_stop
- *@details:    ·¢ËÍI2C STOPÊ±Ğò
+ *@details:    å‘é€I2C STOPæ—¶åº
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     static
  */
 static void bus_vi2c_stop(DevI2c *dev)
@@ -156,16 +156,16 @@ static void bus_vi2c_stop(DevI2c *dev)
 
 /**
  *@brief:      mcu_i2c_wait_ack
- *@details:       µÈ´ıACKĞÅºÅ
+ *@details:       ç­‰å¾…ACKä¿¡å·
  *@param[in]  void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     static
  */
 static s32 bus_vi2c_wait_ack(DevI2c *dev)
 {
     u8 time_out = 0;
     
-    //sda×ªÊäÈë
+    //sdaè½¬è¾“å…¥
     bus_vi2c_sda_input(dev);
     bus_vi2c_sda(dev, MCU_IO_STA_1);
     bus_vi2c_delay();
@@ -192,9 +192,9 @@ static s32 bus_vi2c_wait_ack(DevI2c *dev)
 }
 /**
  *@brief:      mcu_i2c_ack
- *@details:       ·¢ËÍACKĞÅºÅ
+ *@details:       å‘é€ACKä¿¡å·
  *@param[in]  void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     static
  */
 static void bus_vi2c_ack(DevI2c *dev)
@@ -212,9 +212,9 @@ static void bus_vi2c_ack(DevI2c *dev)
 }
 /**
  *@brief:      mcu_i2c_writebyte
- *@details:       I2C×ÜÏßĞ´Ò»¸ö×Ö½ÚÊı¾İ
+ *@details:       I2Cæ€»çº¿å†™ä¸€ä¸ªå­—èŠ‚æ•°æ®
  *@param[in]  u8 data  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     static
  */
 static s32 bus_vi2c_writebyte(DevI2c *dev, u8 data)
@@ -248,9 +248,9 @@ static s32 bus_vi2c_writebyte(DevI2c *dev, u8 data)
 }
 /**
  *@brief:      mcu_i2c_readbyte
- *@details:       I2C×ÜÏß¶ÁÒ»¸ö×Ö½ÚÊı¾İ
+ *@details:       I2Cæ€»çº¿è¯»ä¸€ä¸ªå­—èŠ‚æ•°æ®
  *@param[in]  void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     static
  */
 static u8 bus_vi2c_readbyte(DevI2c *dev)
@@ -285,7 +285,7 @@ static u8 bus_vi2c_readbyte(DevI2c *dev)
 
 s32 bus_vi2c_init(DevI2c * dev)
 {
-	/*³õÊ¼»¯IO¿Ú×´Ì¬*/
+	/*åˆå§‹åŒ–IOå£çŠ¶æ€*/
 	mcu_io_config_out(dev->sclport, dev->sclpin);
 	mcu_io_config_out(dev->sdaport, dev->sdapin);
 
@@ -295,13 +295,13 @@ s32 bus_vi2c_init(DevI2c * dev)
 }
 /**
  *@brief:      mcu_i2c_transfer
- *@details:    ÖĞ¼äÎŞÖØĞÂ¿ªÊ¼Î»µÄ´«ÊäÁ÷³Ì
- *@param[in]   DevI2cNode * node  I2C½Úµã
- 			   u8 addr   7Î»µØÖ·
-               u8 rw    0 Ğ´£¬1 ¶Á    
+ *@details:    ä¸­é—´æ— é‡æ–°å¼€å§‹ä½çš„ä¼ è¾“æµç¨‹
+ *@param[in]   DevI2cNode * node  I2CèŠ‚ç‚¹
+ 			   u8 addr   7ä½åœ°å€
+               u8 rw    0 å†™ï¼Œ1 è¯»    
                u8* data  
-               s32 datalen ·¢ËÍÊı¾İ³¤¶È
- *@param[out]  ÎŞ
+               s32 datalen å‘é€æ•°æ®é•¿åº¦
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 bus_vi2c_transfer(DevI2cNode *node, u8 addr, u8 rw, u8* data, s32 datalen)
@@ -311,7 +311,7 @@ s32 bus_vi2c_transfer(DevI2cNode *node, u8 addr, u8 rw, u8* data, s32 datalen)
 	DevI2c *dev;
 	s32 res;
 	
-    #if 0//²âÊÔIO¿ÚÊÇ·ñÁ¬Í¨
+    #if 0//æµ‹è¯•IOå£æ˜¯å¦è¿é€š
     while(1)
     {
         uart_printf("test \r\n");
@@ -329,10 +329,10 @@ s32 bus_vi2c_transfer(DevI2cNode *node, u8 addr, u8 rw, u8* data, s32 datalen)
 	dev = &node->dev;
 	
 	//I2C_DEBUG(LOG_DEBUG, "i2c trf %s\r\n", dev->name);
-    //·¢ËÍÆğÊ¼
+    //å‘é€èµ·å§‹
     bus_vi2c_start(dev);
-    //·¢ËÍµØÖ·+¶ÁĞ´±êÖ¾
-    //´¦ÀíADDR
+    //å‘é€åœ°å€+è¯»å†™æ ‡å¿—
+    //å¤„ç†ADDR
     if (rw == MCU_I2C_MODE_W) {
         addr = ((addr<<1)&0xfe);
         //uart_printf("write\r\n");
@@ -348,7 +348,7 @@ s32 bus_vi2c_transfer(DevI2cNode *node, u8 addr, u8 rw, u8* data, s32 datalen)
 	
     i = 0;
 
-    //Êı¾İ´«Êä
+    //æ•°æ®ä¼ è¾“
     if (rw == MCU_I2C_MODE_W) {
 	    while(i < datalen) {
             ch = *(data+i);
@@ -368,7 +368,7 @@ s32 bus_vi2c_transfer(DevI2cNode *node, u8 addr, u8 rw, u8* data, s32 datalen)
 	    }
     }
 
-    //·¢ËÍ½áÊø
+    //å‘é€ç»“æŸ
     bus_vi2c_stop(dev);
     return 0;
 }

@@ -1,23 +1,23 @@
 /**
  * @file            bus_spi.c
- * @brief           SPI×ÜÏß¹ÜÀí
+ * @brief           SPIæ€»çº¿ç®¡ç†
  * @author          test
- * @date            2019Äê03ÔÂ26ÈÕ ÐÇÆÚËÄ
- * @version         ³õ¸å
+ * @date            2019å¹´03æœˆ26æ—¥ æ˜ŸæœŸå››
+ * @version         åˆç¨¿
  * @par             
  * @par History:
- * 1.ÈÕ    ÆÚ:      
- *   ×÷    Õß:      test
- *   ÐÞ¸ÄÄÚÈÝ:      ´´½¨ÎÄ¼þ
-		°æÈ¨ËµÃ÷£º
-		1 Ô´Âë¹éÎÝ¼¹È¸¹¤×÷ÊÒËùÓÐ¡£
-		2 ¿ÉÒÔÓÃÓÚµÄÆäËûÉÌÒµÓÃÍ¾£¨ÅäÌ×¿ª·¢°åÏúÊÛ³ýÍâ£©£¬²»ÐëÊÚÈ¨¡£
-		3 ÎÝ¼¹È¸¹¤×÷ÊÒ²»¶Ô´úÂë¹¦ÄÜ×öÈÎºÎ±£Ö¤£¬ÇëÊ¹ÓÃÕß×ÔÐÐ²âÊÔ£¬ºó¹û×Ô¸º¡£
-		4 ¿ÉËæÒâÐÞ¸ÄÔ´Âë²¢·Ö·¢£¬µ«²»¿ÉÖ±½ÓÏúÊÛ±¾´úÂë»ñÀû£¬²¢ÇÒ±£Áô°æÈ¨ËµÃ÷¡£
-		5 Èç·¢ÏÖBUG»òÓÐÓÅ»¯£¬»¶Ó­·¢²¼¸üÐÂ¡£ÇëÁªÏµ£ºcode@wujique.com
-		6 Ê¹ÓÃ±¾Ô´ÂëÔòÏàµ±ÓÚÈÏÍ¬±¾°æÈ¨ËµÃ÷¡£
-		7 ÈçÇÖ·¸ÄãµÄÈ¨Àû£¬ÇëÁªÏµ£ºcode@wujique.com
-		8 Ò»ÇÐ½âÊÍÈ¨¹éÎÝ¼¹È¸¹¤×÷ÊÒËùÓÐ¡£
+ * 1.æ—¥    æœŸ:      
+ *   ä½œ    è€…:      test
+ *   ä¿®æ”¹å†…å®¹:      åˆ›å»ºæ–‡ä»¶
+		ç‰ˆæƒè¯´æ˜Žï¼š
+		1 æºç å½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
+		2 å¯ä»¥ç”¨äºŽçš„å…¶ä»–å•†ä¸šç”¨é€”ï¼ˆé…å¥—å¼€å‘æ¿é”€å”®é™¤å¤–ï¼‰ï¼Œä¸é¡»æŽˆæƒã€‚
+		3 å±‹è„Šé›€å·¥ä½œå®¤ä¸å¯¹ä»£ç åŠŸèƒ½åšä»»ä½•ä¿è¯ï¼Œè¯·ä½¿ç”¨è€…è‡ªè¡Œæµ‹è¯•ï¼ŒåŽæžœè‡ªè´Ÿã€‚
+		4 å¯éšæ„ä¿®æ”¹æºç å¹¶åˆ†å‘ï¼Œä½†ä¸å¯ç›´æŽ¥é”€å”®æœ¬ä»£ç èŽ·åˆ©ï¼Œå¹¶ä¸”ä¿ç•™ç‰ˆæƒè¯´æ˜Žã€‚
+		5 å¦‚å‘çŽ°BUGæˆ–æœ‰ä¼˜åŒ–ï¼Œæ¬¢è¿Žå‘å¸ƒæ›´æ–°ã€‚è¯·è”ç³»ï¼šcode@wujique.com
+		6 ä½¿ç”¨æœ¬æºç åˆ™ç›¸å½“äºŽè®¤åŒæœ¬ç‰ˆæƒè¯´æ˜Žã€‚
+		7 å¦‚ä¾µçŠ¯ä½ çš„æƒåˆ©ï¼Œè¯·è”ç³»ï¼šcode@wujique.com
+		8 ä¸€åˆ‡è§£é‡Šæƒå½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
 */
 #include "mcu.h"
 #include "mcu_io.h"
@@ -36,9 +36,9 @@
 
 /**
  *@brief:      mcu_vspi_init
- *@details:    ³õÊ¼»¯ÐéÄâSPI
+ *@details:    åˆå§‹åŒ–è™šæ‹ŸSPI
  *@param[in]   void  
- *@param[out]  ÎÞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 bus_vspi_init(const DevSpi *dev)
@@ -62,9 +62,9 @@ s32 bus_vspi_init(const DevSpi *dev)
 
 /**
  *@brief:      vspi_delay
- *@details:    ÐéÄâSPIÊ±ÖÓÑÓÊ±
+ *@details:    è™šæ‹ŸSPIæ—¶é’Ÿå»¶æ—¶
  *@param[in]   u32 delay  
- *@param[out]  ÎÞ
+ *@param[out]  æ— 
  *@retval:     
  */
 void vspi_delay(u32 delay)
@@ -81,11 +81,11 @@ u32 VspiDelay = 0;
 
 /**
  *@brief:      mcu_vspi_open
- *@details:    ´ò¿ªÐéÄâSPI
+ *@details:    æ‰“å¼€è™šæ‹ŸSPI
  *@param[in]   SPI_DEV dev    
                SPI_MODE mode  
                u16 pre        
- *@param[out]  ÎÞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 bus_vspi_open(DevSpiNode *node, SPI_MODE mode, u16 KHz)
@@ -99,8 +99,8 @@ s32 bus_vspi_open(DevSpiNode *node, SPI_MODE mode, u16 KHz)
 	}
 	
 	//VSPI_DEBUG(LOG_DEBUG, "vo-");
-	/* ¸ù¾Ý´«ÈëµÄ²ÎÊýKHz£¬×ª»»Îª³ÌÐòÑÓÊ±²ÎÊý
-	   µ±Ç°¹Ì¶¨Îª2
+	/* æ ¹æ®ä¼ å…¥çš„å‚æ•°KHzï¼Œè½¬æ¢ä¸ºç¨‹åºå»¶æ—¶å‚æ•°
+	   å½“å‰å›ºå®šä¸º2
 	*/
 	node->clk = 1;
 	
@@ -110,9 +110,9 @@ s32 bus_vspi_open(DevSpiNode *node, SPI_MODE mode, u16 KHz)
 }
 /**
  *@brief:      mcu_vspi_close
- *@details:    ¹Ø±ÕÐéÄâSPI
+ *@details:    å…³é—­è™šæ‹ŸSPI
  *@param[in]   SPI_DEV dev  
- *@param[out]  ÎÞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 bus_vspi_close(DevSpiNode *node)
@@ -125,15 +125,15 @@ s32 bus_vspi_close(DevSpiNode *node)
 }
 /**
  *@brief:      mcu_vspi_transfer
- *@details:       ÐéÄâSPIÍ¨ÐÅ
+ *@details:       è™šæ‹ŸSPIé€šä¿¡
  *@param[in]   SPI_DEV dev  
                u8 *snd      
                u8 *rsv      
                s32 len      
- *@param[out]  ÎÞ
+ *@param[out]  æ— 
  *@retval:     
 
- 		node->clk = 0, CLKÊ±ÖÓ1.5M 2018.06.02
+ 		node->clk = 0, CLKæ—¶é’Ÿ1.5M 2018.06.02
  */
 s32 bus_vspi_transfer(DevSpiNode *node, u8 *snd, u8 *rsv, s32 len)
 {

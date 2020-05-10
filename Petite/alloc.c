@@ -17,17 +17,17 @@
 #include "alloc.h"
 
 /*
-ʹ�ñ���������Ķ���Ϊ�ڴ�أ�ע�⣬ֱ��ʹ��malloc�������C��ĺ�����ʹ�õľ��Ƕ�
-	��
-Ҫ��ֹ��ͻ
+使用编译器定义的堆作为内存池，注意，直接使用malloc，会调用C库的函数，使用的就是堆
+	，
+要防止冲突
 */
-//#define ALLOC_USE_HEAP	//�ö����ڴ��
-#define ALLOC_USE_ARRAY //�ö�����������ڴ��
+//#define ALLOC_USE_HEAP	//用堆做内存池
+#define ALLOC_USE_ARRAY //用定义的数组做内存池
 
 /* 
-�ڴ���䷽��ѡ��
-_ALLOC_BEST_FIT_ ����Ӧ��
-_ALLOC_FIRST_FIT_ �״���Ӧ��
+内存分配方法选择，
+_ALLOC_BEST_FIT_ 最适应法
+_ALLOC_FIRST_FIT_ 首次适应法
 */
 #define _ALLOC_BEST_FIT_	
 //#define _ALLOC_FIRST_FIT_
@@ -38,11 +38,11 @@ _ALLOC_FIRST_FIT_ �״���Ӧ��
 
 #ifdef ALLOC_USE_ARRAY
 
-/*��ͬ�������õĺ겻һ������������������ο�core_m4.h*/
+/*不同编译器用的宏不一样，各编译器定义请参考core_m4.h*/
 #ifdef __GNUC__
 __attribute((aligned(4))) char AllocArray[AllocArraySize];
 #else
-__align(4) //��֤�ڴ�����ֽڶ���
+__align(4) //保证内存池四字节对齐
 char AllocArray[AllocArraySize];
 #endif
 
@@ -57,11 +57,11 @@ char AllocArray[AllocArraySize];
  * pointers are 16-byte aligned.
  */
 /*
-	���ڴ���䷽��������Ľṹ������������ṹ�塣
-	��ÿһ������ڴ��ͷ������һ����
-	����ṹ��size��¼�˱����ڴ�Ĵ�С,
-	ptr�����ӵ���һ������ڴ档
-	�����ڴ�ʱ����һ������ڴ��и���Ҫ���ڴ��ȥ��
+	本内存分配方法最基本的结构就是下面这个结构体。
+	在每一块空闲内存的头部都有一个，
+	这个结构体size记录了本块内存的大小,
+	ptr则连接到下一块空闲内存。
+	分配内存时，从一块空闲内存切割需要的内存出去。
 
 */
 typedef struct ALLOC_HDR
@@ -69,7 +69,7 @@ typedef struct ALLOC_HDR
 	struct 
 	{
 		struct ALLOC_HDR*ptr;
-		unsigned int size;									/*�����ڴ�����*/
+		unsigned int size;									/*本快内存容量*/
 	} s;
 
 
@@ -78,7 +78,7 @@ unsigned int pad;
 } ALLOC_HDR;
 
 
-static ALLOC_HDR base; /*�����ڴ�����ͷ���*/
+static ALLOC_HDR base; /*空闲内存链表头结点*/
 static ALLOC_HDR*freep = NULL;
 
 
@@ -89,35 +89,35 @@ void wjq_free_t(void*ap)
 {
 	ALLOC_HDR*bp, *p;
 
-	/* ��õ��ж��ǲ���Ӧ���ж��ڶѷ�Χ�ڣ�*/
+	/* 最好的判断是不是应该判断在堆范围内？*/
 	if(ap==NULL)
 		return;
 
-	/* ���������ap�ǿ�ʹ���ڴ��ָ�룬��ǰ��һ���ṹ��λ�ã�
-		Ҳ���������bp�����Ǽ�¼�ڴ���Ϣ��λ��*/
+	/* 函数传入的ap是可使用内存的指针，往前退一个结构体位置，
+		也就是下面的bp，才是记录内存信息的位置*/
 	bp = (ALLOC_HDR*)ap-1;											/* point to block header */
 
 	AllocCnt -= bp->s.size;
 
 	/*
-	  �ҵ���Ҫ�ͷŵ��ڴ��ǰ����п�
-	  ��ʵ���ǱȽ��ڴ��λ�õĵ�ַ��С
+	  找到需要释放的内存的前后空闲块
+	  其实就是比较内存块位置的地址大小
 	*/
 	for(p = freep; ! ((bp>p)&&(bp<p->s.ptr)); p = p->s.ptr)
 	{
 		if((p>=p->s.ptr)&&((bp>p)||(bp<p->s.ptr)))
 		{
 			/*
-				��һ���飬
-				p>=p->s.ptr ������ʼ��ַָ�������һ���ַָ��
-				bp>p Ҫ�ͷŵĿ飬��ַ����P
-				bp<p->s.ptr Ҫ�ͷŵĿ飬��ַС����һ��
+				当一个块，
+				p>=p->s.ptr 本身起始地址指针大于下一块地址指针
+				bp>p 要释放的块，地址大于P
+				bp<p->s.ptr 要释放的块，地址小于下一块
 			*/
 			break;		/* freed block at start or end of arena */
 		}
 	}
 
-	/*�ж��Ƿ��ܸ�һ����ϲ����ܺϲ��ͺϲ������ܺϲ���������������*/
+	/*判断是否能跟一个块合并，能合并就合并，不能合并就用链表连起来*/
 	if((bp+bp->s.size)==p->s.ptr)
 	{
 		bp->s.size += p->s.ptr->s.size;
@@ -128,7 +128,7 @@ void wjq_free_t(void*ap)
 		bp->s.ptr = p->s.ptr;
 	}
 
-	/*ͬ����������һ��Ĺ�ϵ*/
+	/*同样处理跟后一块的关系*/
 	if((p+p->s.size)==bp)
 	{
 		p->s.size += bp->s.size;
@@ -166,14 +166,14 @@ void*wjq_malloc_t(unsigned nbytes)
     ALLOC_HDR *bprevp;
 #endif
 
-	/*����Ҫ������ڴ����*/
+	/*计算要申请的内存块数*/
 	nunits = ((nbytes+sizeof(ALLOC_HDR)-1) / sizeof(ALLOC_HDR))+1;
 
 	AllocCnt += nunits;
 	//wjq_log(LOG_DEBUG, "AllocCnt:%d\r\n", AllocCnt*sizeof(ALLOC_HDR));
 
-	/*��һ��ʹ��malloc���ڴ�����û�н���
-	  ��ʼ������*/
+	/*第一次使用malloc，内存链表没有建立
+	  初始化链表*/
 	if((prevp = freep)==NULL)
 	{
 		p = (ALLOC_HDR*)
@@ -184,10 +184,10 @@ void*wjq_malloc_t(unsigned nbytes)
 		base.s.size = 0;
 		prevp = freep =&base;
 
-		/*������ʼ����ֻ��һ����п�*/
+		/*经过初始化后，只有一块空闲块*/
 	}
 
-	/*��ѯ���������Һ��ʿ�*/
+	/*查询链表，查找合适块*/
 	for(p = prevp->s.ptr; ; prevp = p, p = p->s.ptr)
 	{
 
@@ -196,13 +196,13 @@ void*wjq_malloc_t(unsigned nbytes)
 			prevp->s.ptr = p->s.ptr;
 			freep = prevp;
 
-			/*���ؿ����ڴ�ָ����û���
-			�����ڴ�Ҫ��ȥ�ڴ������ṹ��*/
+			/*返回可用内存指针给用户，
+			可用内存要出去内存块管理结构体*/
 			return (void*) (p+1);
 		}
 		else if(p->s.size > nunits)
 		{
-			#ifdef _ALLOC_BEST_FIT_/*���ʺϷ�*/
+			#ifdef _ALLOC_BEST_FIT_/*最适合法*/
 			if(bp == NULL)
             {
                 bp = p;
@@ -214,19 +214,19 @@ void*wjq_malloc_t(unsigned nbytes)
                 bprevp = prevp;
                 bp = p;                
             }
-			#else/*�״���Ӧ��*/
+			#else/*首次适应法*/
 			p->s.size -= nunits;
 			p += p->s.size;
 			p->s.size = nunits;
 
 			freep = prevp;
-			/*���ؿ����ڴ�ָ����û���
-			�����ڴ�Ҫ��ȥ�ڴ������ṹ��*/
+			/*返回可用内存指针给用户，
+			可用内存要出去内存块管理结构体*/
 			return (void*) (p+1);
 			#endif
 		}
 
-		/*����ʧ��*/
+		/*分配失败*/
 		if(p==freep)
 		{
 			#ifdef _ALLOC_BEST_FIT_
@@ -236,16 +236,16 @@ void*wjq_malloc_t(unsigned nbytes)
                 p = bp;
                 
                 p->s.size -= nunits;
-                p += p->s.size;     //P ָ�򽫷����ȥ�Ŀռ�
-                p->s.size = nunits; //��¼����Ĵ�С�����ﲻ������ptr�ˣ���Ϊ�������ȥ��
+                p += p->s.size;     //P 指向将分配出去的空间
+                p->s.size = nunits; //记录分配的大小，这里不用设置ptr了，因为被分配出去了
 
-                return (void *)(p + 1); //��ȥͷ�ṹ���������������ڴ�    
+                return (void *)(p + 1); //减去头结构体才是真正分配的内存    
             }
 			#endif
 			
 			while(1)
 			{
-				/*����Ƕ��ʽ��˵��û�л��������ڴ棬��ˣ��������ڴ����ʧ��*/
+				/*对于嵌入式来说，没有机制整理内存，因此，不允许内存分配失败*/
 				wjq_log(LOG_ERR, "\r\n\r\n----wujique malloc err!!---------\r\n\r\n");
 				
 				while(1);
@@ -257,7 +257,7 @@ void*wjq_malloc_t(unsigned nbytes)
 }
 
 /*
-	���η�װ�������Ҫ�����⣬��_m��׺�ĺ�����ʵ�֡�
+	二次封装，如果需要做互斥，在_m后缀的函数内实现。
 */
 void*wjq_malloc_m(unsigned nbytes)
 {
@@ -315,23 +315,23 @@ void *wjq_realloc(void *ap, unsigned int newsize)
 		wjq_free(ap);
 		return NULL;
 	}
-	/*����Ҫ������ڴ����*/
+	/*计算要申请的内存块数*/
 	nunits = ((newsize + sizeof(ALLOC_HDR)-1) / sizeof(ALLOC_HDR))+1;
 
-	/* ���������ap�ǿ�ʹ���ڴ��ָ�룬��ǰ��һ���ṹ��λ�ã�
-		Ҳ���������bp�����Ǽ�¼�ڴ���Ϣ��λ��*/
+	/* 函数传入的ap是可使用内存的指针，往前退一个结构体位置，
+		也就是下面的bp，才是记录内存信息的位置*/
 	bp = (ALLOC_HDR*)ap-1;											/* point to block header */
 	if(nunits <= bp->s.size)
 	{
 		/*
-		�µ�����������ԭ���Ĵ���ʱ������
-		�˷ѵ��ڴ档
+		新的申请数不比原来的大，暂时不处理
+		浪费点内存。
 		*/
 		return ap;
 	}
 	
 	#if 1
-	/*������ζ�ֱ�������ڴ�Ȼ�󿽱�����*/
+	/*无论如何都直接申请内存然后拷贝数据*/
 	bp = wjq_malloc_t(newsize);
 	memcpy(bp, ap, newsize);
 	wjq_free(ap);
@@ -339,18 +339,18 @@ void *wjq_realloc(void *ap, unsigned int newsize)
 	return bp;
 	#else
 	/*
-	  �ҵ���Ҫ�ͷŵ��ڴ��ǰ����п�
-	  ��ʵ���ǱȽ��ڴ��λ�õĵ�ַ��С
+	  找到需要释放的内存的前后空闲块
+	  其实就是比较内存块位置的地址大小
 	*/
 	for(p = freep; ! ((bp>p)&&(bp<p->s.ptr)); p = p->s.ptr)
 	{
 		if((p>=p->s.ptr)&&((bp>p)||(bp<p->s.ptr)))
 		{
 			/*
-				��һ���飬
-				p>=p->s.ptr ������ʼ��ַָ�������һ���ַָ��
-				bp>p Ҫ�ͷŵĿ飬��ַ����P
-				bp<p->s.ptr Ҫ�ͷŵĿ飬��ַС����һ��
+				当一个块，
+				p>=p->s.ptr 本身起始地址指针大于下一块地址指针
+				bp>p 要释放的块，地址大于P
+				bp<p->s.ptr 要释放的块，地址小于下一块
 			*/
 			break;		/* freed block at start or end of arena */
 		}
@@ -359,18 +359,18 @@ void *wjq_realloc(void *ap, unsigned int newsize)
 	/**/
 	if((bp + bp->s.size) == p->s.ptr)
 	{
-		/*���ӵ��ڴ��*/
+		/*增加的内存块*/
 		aunits = (nunits - bp->s.size);
 		if( aunits == p->s.ptr->s.size)
 		{	
-			/*�ոպ����*/
+			/*刚刚好相等*/
 			p->s.ptr = p->s.ptr->s.ptr;
 			bp->s.size = nunits;
 			return ap;
 		}
 		else if(aunits < p->s.ptr->s.size)
 		{
-			np = p->s.ptr + aunits;//�и�aunits�ֳ�ȥ��np����ʣ�¿�ĵ�ַ
+			np = p->s.ptr + aunits;//切割aunits分出去，np就是剩下块的地址
 			np->s.ptr = p->s.ptr->s.ptr;
 			np->s.size = p->s.ptr->s.size - aunits;
 				
@@ -382,7 +382,7 @@ void *wjq_realloc(void *ap, unsigned int newsize)
 		
 	}
 	
-	/*��Ҫ���������ڴ�*/
+	/*需要重新申请内存*/
 	bp = wjq_malloc_t(newsize);
 	memcpy(bp, ap, newsize);
 	wjq_free(ap);
@@ -399,7 +399,7 @@ void wjq_malloc_test(void)
 	p = (char*)
 	wjq_malloc(1024);
 
-	/*��ӡָ�룬�����ǲ���4�ֽڶ���*/
+	/*打印指针，看看是不是4字节对齐*/
 	wjq_log(LOG_FUN, "pointer :%08x\r\n", p);
 
 	memset(p, 0xf0, 1024);

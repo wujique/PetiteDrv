@@ -2,21 +2,21 @@
  * @file            
  * @brief           
  * @author          wujique
- * @date            2019Äê3ÔÂ2ÈÕ ÐÇÆÚÎå
- * @version         ³õ¸å
- * @par             °æÈ¨ËùÓÐ (C), 2013-2023
+ * @date            2019å¹´3æœˆ2æ—¥ æ˜ŸæœŸäº”
+ * @version         åˆç¨¿
+ * @par             ç‰ˆæƒæ‰€æœ‰ (C), 2013-2023
  * @par History:
- * 1.ÈÕ    ÆÚ:        
- *   ×÷    Õß:       ÎÝ¼¹È¸¹¤×÷ÊÒ
- *   ÐÞ¸ÄÄÚÈÝ:   ´´½¨ÎÄ¼þ
- 	1 Ô´Âë¹éÎÝ¼¹È¸¹¤×÷ÊÒËùÓÐ¡£
-	2 ¿ÉÒÔÓÃÓÚµÄÆäËûÉÌÒµÓÃÍ¾£¨ÅäÌ×¿ª·¢°åÏúÊÛ³ýÍâ£©£¬²»ÐëÊÚÈ¨¡£
-	3 ÎÝ¼¹È¸¹¤×÷ÊÒ²»¶Ô´úÂë¹¦ÄÜ×öÈÎºÎ±£Ö¤£¬ÇëÊ¹ÓÃÕß×ÔÐÐ²âÊÔ£¬ºó¹û×Ô¸º¡£
-	4 ¿ÉËæÒâÐÞ¸ÄÔ´Âë²¢·Ö·¢£¬µ«²»¿ÉÖ±½ÓÏúÊÛ±¾´úÂë»ñÀû£¬²¢ÇÒÇë±£ÁôWUJIQUE°æÈ¨ËµÃ÷¡£
-	5 Èç·¢ÏÖBUG»òÓÐÓÅ»¯£¬»¶Ó­·¢²¼¸üÐÂ¡£ÇëÁªÏµ£ºcode@wujique.com
-	6 Ê¹ÓÃ±¾Ô´ÂëÔòÏàµ±ÓÚÈÏÍ¬±¾°æÈ¨ËµÃ÷¡£
-	7 ÈçÇÖ·¸ÄãµÄÈ¨Àû£¬ÇëÁªÏµ£ºcode@wujique.com
-	8 Ò»ÇÐ½âÊÍÈ¨¹éÎÝ¼¹È¸¹¤×÷ÊÒËùÓÐ¡£
+ * 1.æ—¥    æœŸ:        
+ *   ä½œ    è€…:       å±‹è„Šé›€å·¥ä½œå®¤
+ *   ä¿®æ”¹å†…å®¹:   åˆ›å»ºæ–‡ä»¶
+ 	1 æºç å½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
+	2 å¯ä»¥ç”¨äºŽçš„å…¶ä»–å•†ä¸šç”¨é€”ï¼ˆé…å¥—å¼€å‘æ¿é”€å”®é™¤å¤–ï¼‰ï¼Œä¸é¡»æŽˆæƒã€‚
+	3 å±‹è„Šé›€å·¥ä½œå®¤ä¸å¯¹ä»£ç åŠŸèƒ½åšä»»ä½•ä¿è¯ï¼Œè¯·ä½¿ç”¨è€…è‡ªè¡Œæµ‹è¯•ï¼ŒåŽæžœè‡ªè´Ÿã€‚
+	4 å¯éšæ„ä¿®æ”¹æºç å¹¶åˆ†å‘ï¼Œä½†ä¸å¯ç›´æŽ¥é”€å”®æœ¬ä»£ç èŽ·åˆ©ï¼Œå¹¶ä¸”è¯·ä¿ç•™WUJIQUEç‰ˆæƒè¯´æ˜Žã€‚
+	5 å¦‚å‘çŽ°BUGæˆ–æœ‰ä¼˜åŒ–ï¼Œæ¬¢è¿Žå‘å¸ƒæ›´æ–°ã€‚è¯·è”ç³»ï¼šcode@wujique.com
+	6 ä½¿ç”¨æœ¬æºç åˆ™ç›¸å½“äºŽè®¤åŒæœ¬ç‰ˆæƒè¯´æ˜Žã€‚
+	7 å¦‚ä¾µçŠ¯ä½ çš„æƒåˆ©ï¼Œè¯·è”ç³»ï¼šcode@wujique.com
+	8 ä¸€åˆ‡è§£é‡Šæƒå½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
 */
 #include "mcu.h"
 #include "petite_config.h"
@@ -31,28 +31,28 @@
 #include "ff.h"
 #endif
 /*
-	±¾´úÂëÍê³É¶È10%
+	æœ¬ä»£ç å®Œæˆåº¦10%
 	
-	vfsµÄÄ¿µÄÊÇ¶ÔÉÏ²ãÆÁ±ÎfsµÄ¾ßÌåÊµÏÖ¡£
-	ÀýÈç£¬¶Á×Ö¿â£¬ÓÐ¿ÉÄÜÊÇfatfs¹ÜÀíµÄSD¿¨£¬Ò²ÓÐ¿ÉÄÜÊÇlittlefs¹ÜÀíµÄSPI FLASH£¬ÉõÖÁÊÇÃ»ÓÐfsµÄspi FLASH(ÓÃconstfs½Ó¿Ú)¡£
-	Î±Á÷³Ì£º
-	0.Í¨¹ýºê¶¨Òå£¬¾ö¶¨Ö§³ÖÊ²Ã´ÎÄ¼þÏµÍ³£¬²¢½«Ïà¹Ø½Ó¿Ú×¢²áµ½vfs
-	1.ÉÏµçÊ±£¬½«Ò»¸öFS×¢²áµ½VFS£º×¢²áÄÚÈÝ°üÀ¨FSÀàÐÍ£¬FSÅÌ·û£¬FSÓ²ÅÌÐÅÏ¢£¬ FSÓ²ÅÌ²Ù×÷½Ó¿Ú¡£
-	2.vfsÍ¨¹ýFSÀàÐÍ¾ö¶¨µ÷ÓÃÄÄÖÖÎÄ¼þÏµÍ³µÄÇý¶¯½Ó¿Ú£¬²¢½«Ó²ÅÌÐÅÏ¢´«Èë½Ó¿Ú¡£
-	3.ÎÄ¼þÏµÍ³ÊÇÍâ²¿Ä£¿é£¬ÎÞ·¨±£Ö¤ÖØÈë£¬ºÜ¿ÉÄÜÐèÒªÔÚvfs²ã¾Í¹ÜÀíÖØÈëÎÊÌâ¡£
+	vfsçš„ç›®çš„æ˜¯å¯¹ä¸Šå±‚å±è”½fsçš„å…·ä½“å®žçŽ°ã€‚
+	ä¾‹å¦‚ï¼Œè¯»å­—åº“ï¼Œæœ‰å¯èƒ½æ˜¯fatfsç®¡ç†çš„SDå¡ï¼Œä¹Ÿæœ‰å¯èƒ½æ˜¯littlefsç®¡ç†çš„SPI FLASHï¼Œç”šè‡³æ˜¯æ²¡æœ‰fsçš„spi FLASH(ç”¨constfsæŽ¥å£)ã€‚
+	ä¼ªæµç¨‹ï¼š
+	0.é€šè¿‡å®å®šä¹‰ï¼Œå†³å®šæ”¯æŒä»€ä¹ˆæ–‡ä»¶ç³»ç»Ÿï¼Œå¹¶å°†ç›¸å…³æŽ¥å£æ³¨å†Œåˆ°vfs
+	1.ä¸Šç”µæ—¶ï¼Œå°†ä¸€ä¸ªFSæ³¨å†Œåˆ°VFSï¼šæ³¨å†Œå†…å®¹åŒ…æ‹¬FSç±»åž‹ï¼ŒFSç›˜ç¬¦ï¼ŒFSç¡¬ç›˜ä¿¡æ¯ï¼Œ FSç¡¬ç›˜æ“ä½œæŽ¥å£ã€‚
+	2.vfsé€šè¿‡FSç±»åž‹å†³å®šè°ƒç”¨å“ªç§æ–‡ä»¶ç³»ç»Ÿçš„é©±åŠ¨æŽ¥å£ï¼Œå¹¶å°†ç¡¬ç›˜ä¿¡æ¯ä¼ å…¥æŽ¥å£ã€‚
+	3.æ–‡ä»¶ç³»ç»Ÿæ˜¯å¤–éƒ¨æ¨¡å—ï¼Œæ— æ³•ä¿è¯é‡å…¥ï¼Œå¾ˆå¯èƒ½éœ€è¦åœ¨vfså±‚å°±ç®¡ç†é‡å…¥é—®é¢˜ã€‚
 
 							{
-								spiffsÎÄ¼þÏµÍ³½Ó¿Ú
+								spiffsæ–‡ä»¶ç³»ç»ŸæŽ¥å£
 							}
 							{
-								littlefsÎÄ¼þÏµÍ³½Ó¿Ú
+								littlefsæ–‡ä»¶ç³»ç»ŸæŽ¥å£
 							}
 							{
-								fatfsÎÄ¼þÏµÍ³½Ó¿Ú
+								fatfsæ–‡ä»¶ç³»ç»ŸæŽ¥å£
 							}
-			   ------Çý¶¯	
+			   ------é©±åŠ¨	
 app-----VFS ----|
-			   ------Éè±¸
+			   ------è®¾å¤‡
 							{
 								mtd0 
 								fatfs
@@ -60,7 +60,7 @@ app-----VFS ----|
 								XXXX
 							}	
 							{	
-								//uÅÌ
+								//uç›˜
 								mtd1
 								fatfs
 								XXX,
@@ -69,12 +69,12 @@ app-----VFS ----|
 							{
 								mtd2
 								littlefs
-								//Ó²ÅÌÐÅÏ¢ºÍÓ²ÅÌ½Ó¿Ú£¬ÊÇÌá¹©¸øÎÄ¼þÏµÍ³Ê¹ÓÃµÄ£¬
-								²»Í¬µÄÎÄ¼þÏµÍ³¶ÔÐÅÏ¢µÄÒªÇó»áÓÐÐ©Ðí²îÒì
+								//ç¡¬ç›˜ä¿¡æ¯å’Œç¡¬ç›˜æŽ¥å£ï¼Œæ˜¯æä¾›ç»™æ–‡ä»¶ç³»ç»Ÿä½¿ç”¨çš„ï¼Œ
+								ä¸åŒçš„æ–‡ä»¶ç³»ç»Ÿå¯¹ä¿¡æ¯çš„è¦æ±‚ä¼šæœ‰äº›è®¸å·®å¼‚
 								spi flash
-								spi flash½Ó¿Ú
+								spi flashæŽ¥å£
 							}
-							¡¢¡¢¡¢
+							ã€ã€ã€
 */
 //#define Test_VFS 
 
@@ -85,7 +85,7 @@ app-----VFS ----|
 #endif
 
 /*
-	²Ù×÷²»Í¬ÎÄ¼þÏµÍ³, mountÊ±ÐèÒªµÄÊý¾Ý
+	æ“ä½œä¸åŒæ–‡ä»¶ç³»ç»Ÿ, mountæ—¶éœ€è¦çš„æ•°æ®
 */
 union _uFileSysPra
 {
@@ -96,8 +96,8 @@ union _uFileSysPra
 	u8 NA;
 };
 /*
-	²Ù×÷ÎÄ¼þÊ±²»Í¬µÄÎÄ¼þÏµÍ³ÐèÒªµÄÊý¾Ý½á¹¹ÓÐ²îÒì£¬
-	ÓÃunion ¶¨Òå
+	æ“ä½œæ–‡ä»¶æ—¶ä¸åŒçš„æ–‡ä»¶ç³»ç»Ÿéœ€è¦çš„æ•°æ®ç»“æž„æœ‰å·®å¼‚ï¼Œ
+	ç”¨union å®šä¹‰
 */
 union _uFilePra
 {
@@ -108,7 +108,7 @@ union _uFilePra
 };
 	
 /*
-	ÎÄ¼þÏµÍ³½Úµã
+	æ–‡ä»¶ç³»ç»ŸèŠ‚ç‚¹
 */
 typedef struct _strVfsNode
 {
@@ -116,7 +116,7 @@ typedef struct _strVfsNode
 	union _uFileSysPra pra;
 }FsNode;
 /*
-	ÁÐ±í£¬
+	åˆ—è¡¨ï¼Œ
 */
 FsNode VfsNodeList[SYS_FS_NUM+1];
 
@@ -125,13 +125,13 @@ FsNode VfsNodeList[SYS_FS_NUM+1];
 typedef struct _strFileNode
 {
 	union _uFilePra pra;
-	FsNode *fsnode;//¼ÇÂ¼ÎÄ¼þÊôÓÚÄÄ¸öÎÄ¼þÏµÍ³
+	FsNode *fsnode;//è®°å½•æ–‡ä»¶å±žäºŽå“ªä¸ªæ–‡ä»¶ç³»ç»Ÿ
 }FileNode;
 
 
 /*
-**Description:      ½«Ò»¸öÊäÈëµÄ×Ö·û´®ÎÄ¼þÂ·¾¶£¬ÇÐ¸î³É1¼¶Ä¿Â¼¸úÎÄ¼þÃû£¬
-                    ¶þ¼¶Ä¿Â¼·ÅÔÚÎÄ¼þÃûÖÐ
+**Description:      å°†ä¸€ä¸ªè¾“å…¥çš„å­—ç¬¦ä¸²æ–‡ä»¶è·¯å¾„ï¼Œåˆ‡å‰²æˆ1çº§ç›®å½•è·Ÿæ–‡ä»¶åï¼Œ
+                    äºŒçº§ç›®å½•æ”¾åœ¨æ–‡ä»¶åä¸­
 **Input parameters:  
 **Output parameters: 
 **                   
@@ -141,8 +141,8 @@ typedef struct _strFileNode
 static s32 vfs_get_dir_name(const u8 *lpPath, u8 *lpDir, u8 *lpName)
 {
     int index;
-    u8 dir[VFS_DIR_LEN];//Ä¿Â¼£¬Ö»ÅÐ¶ÏµÚÒ»²ã
-    u8 name[VFS_NAME_LEN];//ÎÄ¼þÃû
+    u8 dir[VFS_DIR_LEN];//ç›®å½•ï¼Œåªåˆ¤æ–­ç¬¬ä¸€å±‚
+    u8 name[VFS_NAME_LEN];//æ–‡ä»¶å
     u8 name_index;    
     u8 str_len;
     u8 flag = 0;
@@ -156,17 +156,17 @@ static s32 vfs_get_dir_name(const u8 *lpPath, u8 *lpDir, u8 *lpName)
     {
         
         if(*(lpPath+index) == '/'
-            && flag == 0)//·Ö¸ô·û
+            && flag == 0)//åˆ†éš”ç¬¦
         {
             str_len = strlen(name);
             if( str_len > VFS_DIR_LEN)
             {
-                VfsDebug(LOG_DEBUG, "Ä¿Â¼ÃûÌ«³¤\r\n");
+                VfsDebug(LOG_DEBUG, "ç›®å½•åå¤ªé•¿\r\n");
                 return -1;
             }
             else if(str_len > 0)
             {
-                strcpy(dir, name);//Ö»ÄÜ±£´æÒ»¼¶Â·¾¶
+                strcpy(dir, name);//åªèƒ½ä¿å­˜ä¸€çº§è·¯å¾„
                 name_index = 0;
                 memset(name, 0, sizeof(name)); 
                 flag = 1;
@@ -178,9 +178,9 @@ static s32 vfs_get_dir_name(const u8 *lpPath, u8 *lpDir, u8 *lpName)
             name[name_index++] = *(lpPath+index);
             if(name_index >= VFS_NAME_LEN)
             {
-                VfsDebug(LOG_DEBUG, "ÎÄ¼þÃûÌ«³¤\r\n");
+                VfsDebug(LOG_DEBUG, "æ–‡ä»¶åå¤ªé•¿\r\n");
                 return -1;
-                break;//ÎÄ¼þÃûÌ«³¤£¬´íÎó£¬ÍË³ö
+                break;//æ–‡ä»¶åå¤ªé•¿ï¼Œé”™è¯¯ï¼Œé€€å‡º
             }
         }
 
@@ -199,7 +199,7 @@ static s32 vfs_get_dir_name(const u8 *lpPath, u8 *lpDir, u8 *lpName)
 }
 
 /*
-**Description:      ³õÊ¼»¯ÐéÄâÎÄ¼þÏµÍ³ÁÐ±í     
+**Description:      åˆå§‹åŒ–è™šæ‹Ÿæ–‡ä»¶ç³»ç»Ÿåˆ—è¡¨     
 **Input parameters:  
 **Output parameters: 
 **                   
@@ -219,7 +219,7 @@ void vfs_init(void)
 	
 }
 /*
-**Description:      ¹ÒÒ»¸ömtdµ½rootÁ´±íÉÏ     
+**Description:      æŒ‚ä¸€ä¸ªmtdåˆ°rooté“¾è¡¨ä¸Š     
 **Input parameters:  
 **Output parameters: 
 **                   
@@ -230,7 +230,7 @@ int vfs_mount(const VFSDIR *Mtd)
 {
 	u8 i = 0;
 	
-    VfsDebug(LOG_DEBUG, "mount %s µ½ / \r\n", Mtd->name);
+    VfsDebug(LOG_DEBUG, "mount %s åˆ° / \r\n", Mtd->name);
 
     while(1)
 	{
@@ -244,7 +244,7 @@ int vfs_mount(const VFSDIR *Mtd)
 		{
 			VfsNodeList[i].Mtd = Mtd;
 
-			/*¸ù¾Ý ÎÄ¼þÏµÍ³ÀàÐÍµ÷ÓÃ¶ÔÓ¦µÄ³õÊ¼»¯*/
+			/*æ ¹æ® æ–‡ä»¶ç³»ç»Ÿç±»åž‹è°ƒç”¨å¯¹åº”çš„åˆå§‹åŒ–*/
 			switch(VfsNodeList[i].Mtd->type)
 			{
 				case FS_TYPE_FATFS:
@@ -291,7 +291,7 @@ int vfs_mount(const VFSDIR *Mtd)
 }
 
 /*
-**Description:      ²éÑ¯ÎÄ¼þÏµÍ³£¬·µ»ØÄ¿Â¼½á¹¹Ö¸Õë     
+**Description:      æŸ¥è¯¢æ–‡ä»¶ç³»ç»Ÿï¼Œè¿”å›žç›®å½•ç»“æž„æŒ‡é’ˆ     
 **Input parameters:  
 **Output parameters: 
 **                   
@@ -316,7 +316,7 @@ static FsNode *vfs_find_dir(u8* dirname)
 		{
 			if(0 == strcmp(VfsNodeList[i].Mtd->vfsdir, dirname))
         	{
-            	VfsDebug(LOG_DEBUG, "ÕÒµ½¶ÔÓ¦Ä¿Â¼ %s\r\n", dirname);
+            	VfsDebug(LOG_DEBUG, "æ‰¾åˆ°å¯¹åº”ç›®å½• %s\r\n", dirname);
         	    return &VfsNodeList[i];
        		}	
 		}

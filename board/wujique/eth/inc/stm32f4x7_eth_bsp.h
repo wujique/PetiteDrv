@@ -56,7 +56,7 @@
 
 #define ETH_PHY_ADRESS				LAN8720A_PHY_ADDRESS
 /* Specific defines for EXTI line, used to manage Ethernet link status */
-/* wujiue F407 ≤ª π”√÷–∂œ*/
+/* wujiue F407 ‰∏ç‰ΩøÁî®‰∏≠Êñ≠*/
 #define ETH_LINK_EXTI_LINE             EXTI_Line14
 #define ETH_LINK_EXTI_PORT_SOURCE      EXTI_PortSourceGPIOB
 #define ETH_LINK_EXTI_PIN_SOURCE       EXTI_PinSource14

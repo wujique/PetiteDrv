@@ -1,22 +1,22 @@
 /**
  * @file            dev_touchscreen.c
- * @brief           ËÄÏßµç×èÆÁ½Ó¿Ú+ÄÚÖÃADC¼ì²â·½°¸Çı¶¯
+ * @brief           å››çº¿ç”µé˜»å±æ¥å£+å†…ç½®ADCæ£€æµ‹æ–¹æ¡ˆé©±åŠ¨
  * @author          wujique
- * @date            2018Äê4ÔÂ15ÈÕ ĞÇÆÚÈÕ
- * @version         ³õ¸å
- * @par             °æÈ¨ËùÓĞ (C), 2013-2023
+ * @date            2018å¹´4æœˆ15æ—¥ æ˜ŸæœŸæ—¥
+ * @version         åˆç¨¿
+ * @par             ç‰ˆæƒæ‰€æœ‰ (C), 2013-2023
  * @par History:
- * 1.ÈÕ    ÆÚ:        2018Äê4ÔÂ15ÈÕ ĞÇÆÚÈÕ
- *   ×÷    Õß:         wujique
- *   ĞŞ¸ÄÄÚÈİ:   ´´½¨ÎÄ¼ş
-       	1 Ô´Âë¹éÎİ¼¹È¸¹¤×÷ÊÒËùÓĞ¡£
-		2 ¿ÉÒÔÓÃÓÚµÄÆäËûÉÌÒµÓÃÍ¾£¨ÅäÌ×¿ª·¢°åÏúÊÛ³ıÍâ£©£¬²»ĞëÊÚÈ¨¡£
-		3 Îİ¼¹È¸¹¤×÷ÊÒ²»¶Ô´úÂë¹¦ÄÜ×öÈÎºÎ±£Ö¤£¬ÇëÊ¹ÓÃÕß×ÔĞĞ²âÊÔ£¬ºó¹û×Ô¸º¡£
-		4 ¿ÉËæÒâĞŞ¸ÄÔ´Âë²¢·Ö·¢£¬µ«²»¿ÉÖ±½ÓÏúÊÛ±¾´úÂë»ñÀû£¬²¢ÇÒÇë±£ÁôWUJIQUE°æÈ¨ËµÃ÷¡£
-		5 Èç·¢ÏÖBUG»òÓĞÓÅ»¯£¬»¶Ó­·¢²¼¸üĞÂ¡£ÇëÁªÏµ£ºcode@wujique.com
-		6 Ê¹ÓÃ±¾Ô´ÂëÔòÏàµ±ÓÚÈÏÍ¬±¾°æÈ¨ËµÃ÷¡£
-		7 ÈçÇÖ·¸ÄãµÄÈ¨Àû£¬ÇëÁªÏµ£ºcode@wujique.com
-		8 Ò»ÇĞ½âÊÍÈ¨¹éÎİ¼¹È¸¹¤×÷ÊÒËùÓĞ¡£
+ * 1.æ—¥    æœŸ:        2018å¹´4æœˆ15æ—¥ æ˜ŸæœŸæ—¥
+ *   ä½œ    è€…:         wujique
+ *   ä¿®æ”¹å†…å®¹:   åˆ›å»ºæ–‡ä»¶
+       	1 æºç å½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
+		2 å¯ä»¥ç”¨äºçš„å…¶ä»–å•†ä¸šç”¨é€”ï¼ˆé…å¥—å¼€å‘æ¿é”€å”®é™¤å¤–ï¼‰ï¼Œä¸é¡»æˆæƒã€‚
+		3 å±‹è„Šé›€å·¥ä½œå®¤ä¸å¯¹ä»£ç åŠŸèƒ½åšä»»ä½•ä¿è¯ï¼Œè¯·ä½¿ç”¨è€…è‡ªè¡Œæµ‹è¯•ï¼Œåæœè‡ªè´Ÿã€‚
+		4 å¯éšæ„ä¿®æ”¹æºç å¹¶åˆ†å‘ï¼Œä½†ä¸å¯ç›´æ¥é”€å”®æœ¬ä»£ç è·åˆ©ï¼Œå¹¶ä¸”è¯·ä¿ç•™WUJIQUEç‰ˆæƒè¯´æ˜ã€‚
+		5 å¦‚å‘ç°BUGæˆ–æœ‰ä¼˜åŒ–ï¼Œæ¬¢è¿å‘å¸ƒæ›´æ–°ã€‚è¯·è”ç³»ï¼šcode@wujique.com
+		6 ä½¿ç”¨æœ¬æºç åˆ™ç›¸å½“äºè®¤åŒæœ¬ç‰ˆæƒè¯´æ˜ã€‚
+		7 å¦‚ä¾µçŠ¯ä½ çš„æƒåˆ©ï¼Œè¯·è”ç³»ï¼šcode@wujique.com
+		8 ä¸€åˆ‡è§£é‡Šæƒå½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
 */
 
 #include "mcu.h"
@@ -41,16 +41,16 @@
 s32 dev_ts_adc_init(void);
 s32 dev_ts_adc_open(void);
 
-/*  ´¥ÃşÆÁ½Ó¿Ú£º
-	¶Ô²»Í¬µÄ´¥Ãş¼ì²â·½°¸·â×°ÎªÍ³Ò»½Ó¿Ú¡£
-	·½°¸¿ÉÒÔÊÇ£º
-		²»Í¬µÄ´¥Ãş¿ØÖÆIC£¬
-		»òÕßÊÇADC×ª»»¡£
-	²»Í¬µÄ·½°¸¶¼½«ÑùµãĞ´Èë»º³å¡£tslibÔò´Ó»º³å¶ÁÈ¡Êı¾İ¡£
+/*  è§¦æ‘¸å±æ¥å£ï¼š
+	å¯¹ä¸åŒçš„è§¦æ‘¸æ£€æµ‹æ–¹æ¡ˆå°è£…ä¸ºç»Ÿä¸€æ¥å£ã€‚
+	æ–¹æ¡ˆå¯ä»¥æ˜¯ï¼š
+		ä¸åŒçš„è§¦æ‘¸æ§åˆ¶ICï¼Œ
+		æˆ–è€…æ˜¯ADCè½¬æ¢ã€‚
+	ä¸åŒçš„æ–¹æ¡ˆéƒ½å°†æ ·ç‚¹å†™å…¥ç¼“å†²ã€‚tslibåˆ™ä»ç¼“å†²è¯»å–æ•°æ®ã€‚
 	*/
 s32 TpSgd = -2;
-#define  DEV_TP_QUE_MAX (250)//¶ÓÁĞ³¤¶È, ²»Òª¸ÄĞ¡
-struct ts_sample DevTpSampleQue[DEV_TP_QUE_MAX];//É¨ÃèµÃµ½ÎÈ¶¨µÄµãµÄ¶ÓÁĞ
+#define  DEV_TP_QUE_MAX (250)//é˜Ÿåˆ—é•¿åº¦, ä¸è¦æ”¹å°
+struct ts_sample DevTpSampleQue[DEV_TP_QUE_MAX];//æ‰«æå¾—åˆ°ç¨³å®šçš„ç‚¹çš„é˜Ÿåˆ—
 volatile u16 TpQueWindex = 0;
 volatile u16 TpQueRindex = 0;
 
@@ -58,7 +58,7 @@ volatile u16 TpQueRindex = 0;
  *@brief:      dev_touchscreen_init
  *@details:    
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_touchscreen_init(void)
@@ -75,14 +75,14 @@ s32 dev_touchscreen_init(void)
 }
 /**
  *@brief:      dev_touchscreen_open
- *@details:    ´ò¿ª´¥ÃşÆÁ£¬Æô¶¯ADC×ª»»Á÷³Ì
+ *@details:    æ‰“å¼€è§¦æ‘¸å±ï¼Œå¯åŠ¨ADCè½¬æ¢æµç¨‹
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_touchscreen_open(void)
 {
-	/*Æô¶¯×ª»»*/
+	/*å¯åŠ¨è½¬æ¢*/
 
 	TpSgd = 0;
 	
@@ -110,10 +110,10 @@ s32 dev_touchscreen_close(void)
 }
 /**
  *@brief:      dev_touchscreen_read
- *@details:    ¶Á´¥ÃşÆÁ²ÉÑùÔ­Ê¼Ñùµã£¬Ó¦ÓÃ²ã»òÕßtslibµ÷ÓÃ
+ *@details:    è¯»è§¦æ‘¸å±é‡‡æ ·åŸå§‹æ ·ç‚¹ï¼Œåº”ç”¨å±‚æˆ–è€…tslibè°ƒç”¨
  *@param[in]   struct ts_sample *samp  
                int nr                  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_touchscreen_read(struct ts_sample *samp, int nr)
@@ -143,10 +143,10 @@ s32 dev_touchscreen_read(struct ts_sample *samp, int nr)
 }
 /**
  *@brief:      dev_touchscreen_write
- *@details:    ½«ÑùµãĞ´Èë»º³å£¬µ×²ãµ÷ÓÃ
+ *@details:    å°†æ ·ç‚¹å†™å…¥ç¼“å†²ï¼Œåº•å±‚è°ƒç”¨
  *@param[in]   struct ts_sample *samp  
                int nr                  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_touchscreen_write(struct ts_sample *samp, int nr)
@@ -161,7 +161,7 @@ s32 dev_touchscreen_write(struct ts_sample *samp, int nr)
 			break;	
 		p = samp+index;
 		
-		DevTpSampleQue[TpQueWindex].pressure = p->pressure;//Ñ¹Á¦Òª¸ãÇå³şÔõÃ´¼ÆËã
+		DevTpSampleQue[TpQueWindex].pressure = p->pressure;//å‹åŠ›è¦ææ¸…æ¥šæ€ä¹ˆè®¡ç®—
 		DevTpSampleQue[TpQueWindex].x = p->x;
 		DevTpSampleQue[TpQueWindex].y = p->y;
 		TpQueWindex++;
@@ -182,7 +182,7 @@ s32 dev_touchscreen_ioctrl(void)
 }
 /*
 
-	adc×ª»»·½°¸
+	adcè½¬æ¢æ–¹æ¡ˆ
 
 */
 
@@ -211,12 +211,12 @@ s32 dev_touchscreen_ioctrl(void)
 #define TP_ADC_USE_TIMER MCU_TIMER_7
 
 /*
-²âÁ¿µ½µÄÑ¹Á¦µçÑ¹ãĞÖµ£¬Ğ¡ÓÚPENdown£¬ÈÏÎªÊÇÏÂ±Ê£¬
-´óÓÚpenupÈÏÎªÊÇÆğ±Ê£¬Á½ÕßÖ®¼ä²»´¦Àí
-Õâ¸öÖµ¸úÑ¹Á¦²»Ò»Ñù£¬
-ÉÏËÍµÄÑùµãÑ¹Á¦×îĞ¡ÊÇ0£¬Ò²¾ÍÊÇÆğ±Êºó£¬
-×î´óÊÇµçÑ¹ãĞÖµÎª0µÄÊ±ºò£¨¿ÉÄÜ´ï²»µ½£©£¬
-Í¨¹ı¼ÆËã×ª»»£¬Ò²¾ÍÊÇ0-400£»0Æğ±Ê£¬400£¬µçÑ¹Ñ¹Á¦Îª0
+æµ‹é‡åˆ°çš„å‹åŠ›ç”µå‹é˜ˆå€¼ï¼Œå°äºPENdownï¼Œè®¤ä¸ºæ˜¯ä¸‹ç¬”ï¼Œ
+å¤§äºpenupè®¤ä¸ºæ˜¯èµ·ç¬”ï¼Œä¸¤è€…ä¹‹é—´ä¸å¤„ç†
+è¿™ä¸ªå€¼è·Ÿå‹åŠ›ä¸ä¸€æ ·ï¼Œ
+ä¸Šé€çš„æ ·ç‚¹å‹åŠ›æœ€å°æ˜¯0ï¼Œä¹Ÿå°±æ˜¯èµ·ç¬”åï¼Œ
+æœ€å¤§æ˜¯ç”µå‹é˜ˆå€¼ä¸º0çš„æ—¶å€™ï¼ˆå¯èƒ½è¾¾ä¸åˆ°ï¼‰ï¼Œ
+é€šè¿‡è®¡ç®—è½¬æ¢ï¼Œä¹Ÿå°±æ˜¯0-400ï¼›0èµ·ç¬”ï¼Œ400ï¼Œç”µå‹å‹åŠ›ä¸º0
 */
 #define DEV_TP_PENDOWN_GATE (400)
 #define DEV_TP_PENUP_GATE	 (2000)
@@ -228,7 +228,7 @@ void dev_ts_adc_tr(void);
 s32 dev_ts_adc_task(u16 dac_value);
 
 /*
-	¶¨Ê±£¬µ¥Î»10us
+	å®šæ—¶ï¼Œå•ä½10us
 */
 static s32 dev_ts_adc_timerrun(u32 time)
 {
@@ -266,7 +266,7 @@ s32 dev_ts_adc_open(void)
 		return -1;
 	/* wjq bug
 	
-	ÒªÇå¶¨Ê±Æ÷¸úADCÖĞ¶Ï±êÖ¾	
+	è¦æ¸…å®šæ—¶å™¨è·ŸADCä¸­æ–­æ ‡å¿—	
 	*/
 	DEV_TP_PRESS_SCAN;
 	mcu_adc_start_conv(ADC_Channel_9);
@@ -280,9 +280,9 @@ s32 dev_ts_adc_close(void)
 }
 /**
  *@brief:      dev_touchscreen_tr
- *@details:    ÖØĞÂ¿ªÊ¼Ò»´Î¼ì²âÁ÷³Ì
+ *@details:    é‡æ–°å¼€å§‹ä¸€æ¬¡æ£€æµ‹æµç¨‹
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 void dev_ts_adc_tr(void)
@@ -299,9 +299,9 @@ void dev_ts_adc_tr(void)
 
 /**
  *@brief:      dev_touchscreen_task
- *@details:    ´¥ÃşÆÁADC×ª»»Á÷³Ì
+ *@details:    è§¦æ‘¸å±ADCè½¬æ¢æµç¨‹
  *@param[in]   u16 adc_value  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_ts_adc_task(u16 dac_value)
@@ -314,7 +314,7 @@ s32 dev_ts_adc_task(u16 dac_value)
 	if(TsAdcGd != 0)
 		return -1;
 	
-	if(TouchScreenStep == 0)//Ñ¹Á¦¼ì²âµÚÒ»²½ADC×ª»»½áÊø
+	if(TouchScreenStep == 0)//å‹åŠ›æ£€æµ‹ç¬¬ä¸€æ­¥ADCè½¬æ¢ç»“æŸ
 	{	
 		pre_y = dac_value;
 		TouchScreenStep	= 1;
@@ -331,13 +331,13 @@ s32 dev_ts_adc_task(u16 dac_value)
 			DEV_TP_SCAN_X;
 			dev_ts_adc_timerrun(2);
 		}
-		else if(pre_x + DEV_TP_PENUP_GATE < pre_y)//Ã»Ñ¹Á¦£¬²»½øĞĞXYÖá¼ì²â
+		else if(pre_x + DEV_TP_PENUP_GATE < pre_y)//æ²¡å‹åŠ›ï¼Œä¸è¿›è¡ŒXYè½´æ£€æµ‹
 		{
-			/* Æğ±ÊÖ»ÉÏËÍÒ»µã»º³å*/
+			/* èµ·ç¬”åªä¸Šé€ä¸€ç‚¹ç¼“å†²*/
 			if(pendownup == 0)
 			{
 				pendownup = 1;
-				tss.pressure = 0;//Ñ¹Á¦Òª¸ãÇå³şÔõÃ´¼ÆËã
+				tss.pressure = 0;//å‹åŠ›è¦ææ¸…æ¥šæ€ä¹ˆè®¡ç®—
 				tss.x = 0xffff;
 				tss.y = 0xffff;
 				dev_touchscreen_write(&tss,1);
@@ -346,12 +346,12 @@ s32 dev_ts_adc_task(u16 dac_value)
 			TouchScreenStep	= 0;
 
 			DEV_TP_PRESS_SCAN;
-			//´ò¿ªÒ»¸ö¶¨Ê±Æ÷£¬¶¨Ê±Ê±¼äµ½ÁË²Å½øĞĞÑ¹Á¦¼ì²â
+			//æ‰“å¼€ä¸€ä¸ªå®šæ—¶å™¨ï¼Œå®šæ—¶æ—¶é—´åˆ°äº†æ‰è¿›è¡Œå‹åŠ›æ£€æµ‹
 			dev_ts_adc_timerrun(100);
 		}
 		else
 		{
-			/*ÉÏÏÂ±ÊµÄ¹ı¶É£¬¶ªÆú*/
+			/*ä¸Šä¸‹ç¬”çš„è¿‡æ¸¡ï¼Œä¸¢å¼ƒ*/
 			TouchScreenStep	= 0;
 
 			DEV_TP_PRESS_SCAN;
@@ -368,9 +368,9 @@ s32 dev_ts_adc_task(u16 dac_value)
 
 		dev_ts_adc_timerrun(2);
 	}
-	else if(TouchScreenStep == 3)//Ò»ÂÖ½áÊø£¬ÖØÆôÆô¶¯Ñ¹Á¦¼ì²â
+	else if(TouchScreenStep == 3)//ä¸€è½®ç»“æŸï¼Œé‡å¯å¯åŠ¨å‹åŠ›æ£€æµ‹
 	{
-		tss.pressure = DEV_TP_PENDOWN_GATE-(pre_y - pre_x);//Ñ¹Á¦Òª¸ãÇå³şÔõÃ´¼ÆËã
+		tss.pressure = DEV_TP_PENDOWN_GATE-(pre_y - pre_x);//å‹åŠ›è¦ææ¸…æ¥šæ€ä¹ˆè®¡ç®—
 		tss.x = sample_x;
 		tss.y = dac_value;
 		dev_touchscreen_write(&tss,1);
@@ -382,7 +382,7 @@ s32 dev_ts_adc_task(u16 dac_value)
 		
 		dev_ts_adc_timerrun(2);
 	}
-	else//Òì³££¬Æô¶¯Ñ¹Á¦¼ì²â
+	else//å¼‚å¸¸ï¼Œå¯åŠ¨å‹åŠ›æ£€æµ‹
 	{
 		TouchScreenStep	= 0;
 		DEV_TP_PRESS_SCAN;
@@ -395,18 +395,18 @@ s32 dev_ts_adc_task(u16 dac_value)
 
 /**
  *@brief:      dev_touchscreen_test
- *@details:       ´¥ÃşÆÁ²ÉÑù²âÊÔ
+ *@details:       è§¦æ‘¸å±é‡‡æ ·æµ‹è¯•
  *@param[in]  void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_touchscreen_test(void)
 {
-	/*ÂÖÑ¯£¬²»Ê¹ÓÃÖĞ¶Ï °ÑMCU_ADC_IRQÆÁ±Î*/
+	/*è½®è¯¢ï¼Œä¸ä½¿ç”¨ä¸­æ–­ æŠŠMCU_ADC_IRQå±è”½*/
 #ifndef MCU_ADC_IRQ
 	u16 adc_y_value;
 	u16 adc_x_value;
-	u16 pre;//Ñ¹Á¦²î
+	u16 pre;//å‹åŠ›å·®
 
 	dev_touchscreen_init();
 	dev_touchscreen_open();
@@ -414,7 +414,7 @@ s32 dev_touchscreen_test(void)
 	while(1)
 	{
 		Delay(1000);
-		/*  ¼ì²âÑ¹Á¦ */
+		/*  æ£€æµ‹å‹åŠ› */
 		DEV_TP_PRESS_SCAN;
 		adc_y_value = mcu_adc_get_conv(ADC_Channel_9);
 		adc_x_value = mcu_adc_get_conv(ADC_Channel_8);
@@ -422,14 +422,14 @@ s32 dev_touchscreen_test(void)
 		TS_DEBUG(LOG_FUN,"touch pre:%d, %d, %d\r\n", adc_x_value, adc_y_value, pre);	
 
 
-		if(adc_x_value + 200 > adc_y_value)//200Îª²âÊÔ·§ÃÅ£¬Êµ¼ÊÖĞÒªµ÷ÊÔ
+		if(adc_x_value + 200 > adc_y_value)//200ä¸ºæµ‹è¯•é˜€é—¨ï¼Œå®é™…ä¸­è¦è°ƒè¯•
 		{
-			/* ¼ì²âXÖá*/
+			/* æ£€æµ‹Xè½´*/
 			DEV_TP_SCAN_X;
 			adc_x_value = mcu_adc_get_conv(ADC_Channel_9);
 			//uart_printf("ADC_Channel_8:%d\r\n", adc_x_value);
 			
-			/* ¼ì²âYÖá*/
+			/* æ£€æµ‹Yè½´*/
 			DEV_TP_SCAN_Y;
 			adc_y_value = mcu_adc_get_conv(ADC_Channel_8);
 			//uart_printf("ADC_Channel_8:%d\r\n", adc_y_value);
@@ -439,10 +439,10 @@ s32 dev_touchscreen_test(void)
 		}
 
 	}
-#else//ÖĞ¶ÏÄ£Ê½Ö´ĞĞ´¥ÃşÆÁ¼ì²âÁ÷³Ì
+#else//ä¸­æ–­æ¨¡å¼æ‰§è¡Œè§¦æ‘¸å±æ£€æµ‹æµç¨‹
 	struct ts_sample s;
 	s32 ret;
-	u8 pensta = 1;//Ã»½Ó´¥
+	u8 pensta = 1;//æ²¡æ¥è§¦
 	
 	dev_touchscreen_init();
 	dev_touchscreen_open();

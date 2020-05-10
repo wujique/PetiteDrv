@@ -11,19 +11,19 @@
 
 
 /*
-	¶Á²Ù×÷£¬ÏÈÅĞ¶ÏÊÇ·ñÔÚcacheÖĞ
+	è¯»æ“ä½œï¼Œå…ˆåˆ¤æ–­æ˜¯å¦åœ¨cacheä¸­
 	
 	lfs
 
 	rcache
     pcache
     
-    block Òª¶ÁµÄ¿éºÅ
-    off	ÔÚ¿éÖĞµÄÆ«ÒÆ£¬Ïàµ±ÓÚÆğÊ¼µØÖ·£¬
-    	³ÌĞòºÃÏñÃ»ÅĞ¶Ïoff³¬³öblock
+    block è¦è¯»çš„å—å·
+    off	åœ¨å—ä¸­çš„åç§»ï¼Œç›¸å½“äºèµ·å§‹åœ°å€ï¼Œ
+    	ç¨‹åºå¥½åƒæ²¡åˆ¤æ–­offè¶…å‡ºblock
     	
-    buffer ¶Áµ½Êı¾İ±£´æ»º³å
-    size  ¶ÁÊı¾İ³¤¶È
+    buffer è¯»åˆ°æ•°æ®ä¿å­˜ç¼“å†²
+    size  è¯»æ•°æ®é•¿åº¦
 */
 static int lfs_cache_read(lfs_t *lfs, lfs_cache_t *rcache,
         const lfs_cache_t *pcache, lfs_block_t block,
@@ -38,7 +38,7 @@ static int lfs_cache_read(lfs_t *lfs, lfs_cache_t *rcache,
 			&& ( (off >= pcache->off) 
 				&& (off < (pcache->off + lfs->cfg->prog_size)) ) ) 
         {
-            /*Òª¶ÁµÄÊı¾İÔÚpcacheÖĞ*/
+            /*è¦è¯»çš„æ•°æ®åœ¨pcacheä¸­*/
             lfs_size_t diff = lfs_min(size,
                     lfs->cfg->prog_size - (off-pcache->off));
             memcpy(data, &pcache->buffer[off-pcache->off], diff);
@@ -68,12 +68,12 @@ static int lfs_cache_read(lfs_t *lfs, lfs_cache_t *rcache,
 			&& size >= lfs->cfg->read_size) 
 		{
 			/*
-				¶ÁµØÖ·¸ú¶Ápage´óĞ¡¶ÔÆë
-				ÇÒ¶Á³¤¶È´óÓÚµÈÓÚÒ»¸ö¶Ápage
+				è¯»åœ°å€è·Ÿè¯»pageå¤§å°å¯¹é½
+				ä¸”è¯»é•¿åº¦å¤§äºç­‰äºä¸€ä¸ªè¯»page
 			*/
-            /*diff£¬¾­¹ı¼ÆËã£¬ÊÇ¶ÁpageµÄÕûÊı±¶*/
+            /*diffï¼Œç»è¿‡è®¡ç®—ï¼Œæ˜¯è¯»pageçš„æ•´æ•°å€*/
             lfs_size_t diff = size - (size % lfs->cfg->read_size);
-			/* µ÷ÓÃ¶ÁFLASHº¯Êı¶ÁÊı¾İ */	
+			/* è°ƒç”¨è¯»FLASHå‡½æ•°è¯»æ•°æ® */	
 			int err = lfs->cfg->read(lfs->cfg, block, off, data, diff);
             if (err) 
 			{
@@ -88,8 +88,8 @@ static int lfs_cache_read(lfs_t *lfs, lfs_cache_t *rcache,
 
         // load to cache, first condition can no longer fail
         /*
-        	²»ÔÚ cacheÖĞ£¬Ò²²»ÊÇÒ»Ò³Ò»Ò³¶Á
-			Ë÷ĞÔ¾Í½«Õâ¸öÒ³ÏÈ¶Áµ½ cacheÖĞ
+        	ä¸åœ¨ cacheä¸­ï¼Œä¹Ÿä¸æ˜¯ä¸€é¡µä¸€é¡µè¯»
+			ç´¢æ€§å°±å°†è¿™ä¸ªé¡µå…ˆè¯»åˆ° cacheä¸­
 		*/
         rcache->block = block;
         rcache->off = off - (off % lfs->cfg->read_size);
@@ -148,7 +148,7 @@ static int lfs_cache_crc(lfs_t *lfs, lfs_cache_t *rcache,
     return 0;
 }
 /*
-	¶ªÆúcache
+	ä¸¢å¼ƒcache
 */
 static inline void lfs_cache_drop(lfs_t *lfs, lfs_cache_t *rcache) 
 {
@@ -158,7 +158,7 @@ static inline void lfs_cache_drop(lfs_t *lfs, lfs_cache_t *rcache)
     rcache->block = 0xffffffff;
 }
 /*
-	ÖØÖÃcache
+	é‡ç½®cache
 */
 static inline void lfs_cache_zero(lfs_t *lfs, lfs_cache_t *pcache) 
 {
@@ -512,7 +512,7 @@ static int lfs_dir_alloc(lfs_t *lfs, lfs_dir_t *dir)
     return 0;
 }
 /*
-	»ñÈ¡Ä¿Â¼
+	è·å–ç›®å½•
 */
 static int lfs_dir_fetch(lfs_t *lfs,
         lfs_dir_t *dir, const lfs_block_t pair[2]) 
@@ -586,7 +586,7 @@ struct lfs_region {
     lfs_size_t newlen;
 };
 /*
-	µÇ¼ÇÄ¿Â¼
+	ç™»è®°ç›®å½•
 */
 static int lfs_dir_commit(lfs_t *lfs, lfs_dir_t *dir,
         const struct lfs_region *regions, int count) {
@@ -878,8 +878,8 @@ static int lfs_dir_next(lfs_t *lfs, lfs_dir_t *dir, lfs_entry_t *entry) {
     return 0;
 }
 /*
-	¸ù¾İpath  ÕÒÄ¿Â¼
-	pathÎªÊ²Ã´ÒªÓÃ¶ş¼¶Ö¸Õë£¿
+	æ ¹æ®path  æ‰¾ç›®å½•
+	pathä¸ºä»€ä¹ˆè¦ç”¨äºŒçº§æŒ‡é’ˆï¼Ÿ
 */
 static int lfs_dir_find(lfs_t *lfs, lfs_dir_t *dir,
         lfs_entry_t *entry, const char **path) 
@@ -2198,7 +2198,7 @@ cleanup:
     return LFS_ERR_NOMEM;
 }
 /*
-	¸ñÊ½»¯ÎÄ¼şÏµÍ³
+	æ ¼å¼åŒ–æ–‡ä»¶ç³»ç»Ÿ
 */
 int lfs_format(lfs_t *lfs, const struct lfs_config *cfg) 
 {
@@ -2209,10 +2209,10 @@ int lfs_format(lfs_t *lfs, const struct lfs_config *cfg)
     }
 
     /* create free lookahead 
-		lookahead£¬ÀàËÆ»¬¶¯´°£¬ÔÚËùÓĞ¿éÉÏÌøÔ¾»¬¶¯
-		ÓÃÀ´²éÑ¯¿ÕÏĞ¿é¡£
-		Ïà¶ÔÓÚ½¨Á¢ËùÓĞ¿é¿ÕÏĞ±íÀ´Ëµ£¬»áÂıÒ»µã£¬
-		µ«ÊÇRAMĞèÇóÉÙºÜ¶à¡£
+		lookaheadï¼Œç±»ä¼¼æ»‘åŠ¨çª—ï¼Œåœ¨æ‰€æœ‰å—ä¸Šè·³è·ƒæ»‘åŠ¨
+		ç”¨æ¥æŸ¥è¯¢ç©ºé—²å—ã€‚
+		ç›¸å¯¹äºå»ºç«‹æ‰€æœ‰å—ç©ºé—²è¡¨æ¥è¯´ï¼Œä¼šæ…¢ä¸€ç‚¹ï¼Œ
+		ä½†æ˜¯RAMéœ€æ±‚å°‘å¾ˆå¤šã€‚
 	*/
     memset(lfs->free.buffer, 0, lfs->cfg->lookahead/8);
     lfs->free.off = 0;
@@ -2221,8 +2221,8 @@ int lfs_format(lfs_t *lfs, const struct lfs_config *cfg)
     lfs_alloc_ack(lfs);
 
     /* create superblock dir
-		¸ø³¬¼¶¿é·ÖÅä¿é£¨ÔªÊı¾İ¿é¶Ô£©
-		±Ø¶¨·ÖÅäµ½block 0 ºÍ block 1
+		ç»™è¶…çº§å—åˆ†é…å—ï¼ˆå…ƒæ•°æ®å—å¯¹ï¼‰
+		å¿…å®šåˆ†é…åˆ°block 0 å’Œ block 1
     */
     lfs_dir_t superdir;
     err = lfs_dir_alloc(lfs, &superdir);
@@ -2239,9 +2239,9 @@ int lfs_format(lfs_t *lfs, const struct lfs_config *cfg)
         goto cleanup;
     }
 	/*
-		½«rootÄ¿Â¼µÇ¼Çµ½dirÁ´±íÖĞ
-		ÓÉÓÚrootÊÇµÚÒ»¸ö´´½¨µÄÄ¿Â¼£¬
-		Òò´Ë£¬±Ø¶¨µÇ¼ÇÔÚ³¬¼¶¿é
+		å°†rootç›®å½•ç™»è®°åˆ°diré“¾è¡¨ä¸­
+		ç”±äºrootæ˜¯ç¬¬ä¸€ä¸ªåˆ›å»ºçš„ç›®å½•ï¼Œ
+		å› æ­¤ï¼Œå¿…å®šç™»è®°åœ¨è¶…çº§å—
 		*/
     err = lfs_dir_commit(lfs, &root, NULL, 0);
     if (err) 
@@ -2303,9 +2303,9 @@ cleanup:
     return err;
 }
 /*
-	¹ÒÔØlfsÎÄ¼şÏµÍ³
-	¹ı³Ì£º
-		´Óblock 0 ºÍblock 1ÕÒÒ»¸ödir
+	æŒ‚è½½lfsæ–‡ä»¶ç³»ç»Ÿ
+	è¿‡ç¨‹ï¼š
+		ä»block 0 å’Œblock 1æ‰¾ä¸€ä¸ªdir
 */
 int lfs_mount(lfs_t *lfs, const struct lfs_config *cfg) 
 {
@@ -2324,7 +2324,7 @@ int lfs_mount(lfs_t *lfs, const struct lfs_config *cfg)
     // load superblock
     lfs_dir_t dir;
     lfs_superblock_t superblock;
-	/* ´Óblock 0 ºÍ block 1 ÕÒÄ¿Â¼*/
+	/* ä»block 0 å’Œ block 1 æ‰¾ç›®å½•*/
     err = lfs_dir_fetch(lfs, &dir, (const lfs_block_t[2]){0, 1});
     if (err && err != LFS_ERR_CORRUPT) 
 	{
@@ -2334,7 +2334,7 @@ int lfs_mount(lfs_t *lfs, const struct lfs_config *cfg)
     if (!err) 
 	{
 		/*
-			¶Á³¬¼¶¿é£¬µÃµ½bootÄ¿Â¼¿é
+			è¯»è¶…çº§å—ï¼Œå¾—åˆ°bootç›®å½•å—
 		*/
         err = lfs_bd_read(lfs, dir.pair[0], sizeof(dir.d),
                 &superblock.d, sizeof(superblock.d));
@@ -2605,7 +2605,7 @@ static int lfs_relocate(lfs_t *lfs,
 }
 /*
 
-	»ØÊÕ¹Â¶ù
+	å›æ”¶å­¤å„¿
 
 */
 int lfs_deorphan(lfs_t *lfs) {

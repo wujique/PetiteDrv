@@ -1,22 +1,22 @@
 /**
  * @file            dev_tea5767.c
- * @brief           ÊÕÒô»úĞ¾Æ¬ tea5765 Çı¶¯
+ * @brief           æ”¶éŸ³æœºèŠ¯ç‰‡ tea5765 é©±åŠ¨
  * @author          test
- * @date            2017Äê10ÔÂ31ÈÕ ĞÇÆÚ¶ş
- * @version         ³õ¸å
- * @par             °æÈ¨ËùÓĞ (C), 2013-2023
+ * @date            2017å¹´10æœˆ31æ—¥ æ˜ŸæœŸäºŒ
+ * @version         åˆç¨¿
+ * @par             ç‰ˆæƒæ‰€æœ‰ (C), 2013-2023
  * @par History:
- * 1.ÈÕ    ÆÚ:      2017Äê10ÔÂ31ÈÕ ĞÇÆÚ¶ş
- *   ×÷    Õß:         Îİ¼¹È¸¹¤×÷ÊÒ
- *   ĞŞ¸ÄÄÚÈİ:      ´´½¨ÎÄ¼ş
-     	1 Ô´Âë¹éÎİ¼¹È¸¹¤×÷ÊÒËùÓĞ¡£
-		2 ¿ÉÒÔÓÃÓÚµÄÆäËûÉÌÒµÓÃÍ¾£¨ÅäÌ×¿ª·¢°åÏúÊÛ³ıÍâ£©£¬²»ĞëÊÚÈ¨¡£
-		3 Îİ¼¹È¸¹¤×÷ÊÒ²»¶Ô´úÂë¹¦ÄÜ×öÈÎºÎ±£Ö¤£¬ÇëÊ¹ÓÃÕß×ÔĞĞ²âÊÔ£¬ºó¹û×Ô¸º¡£
-		4 ¿ÉËæÒâĞŞ¸ÄÔ´Âë²¢·Ö·¢£¬µ«²»¿ÉÖ±½ÓÏúÊÛ±¾´úÂë»ñÀû£¬²¢ÇÒÇë±£ÁôWUJIQUE°æÈ¨ËµÃ÷¡£
-		5 Èç·¢ÏÖBUG»òÓĞÓÅ»¯£¬»¶Ó­·¢²¼¸üĞÂ¡£ÇëÁªÏµ£ºcode@wujique.com
-		6 Ê¹ÓÃ±¾Ô´ÂëÔòÏàµ±ÓÚÈÏÍ¬±¾°æÈ¨ËµÃ÷¡£
-		7 ÈçÇÖ·¸ÄãµÄÈ¨Àû£¬ÇëÁªÏµ£ºcode@wujique.com
-		8 Ò»ÇĞ½âÊÍÈ¨¹éÎİ¼¹È¸¹¤×÷ÊÒËùÓĞ¡£
+ * 1.æ—¥    æœŸ:      2017å¹´10æœˆ31æ—¥ æ˜ŸæœŸäºŒ
+ *   ä½œ    è€…:         å±‹è„Šé›€å·¥ä½œå®¤
+ *   ä¿®æ”¹å†…å®¹:      åˆ›å»ºæ–‡ä»¶
+     	1 æºç å½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
+		2 å¯ä»¥ç”¨äºçš„å…¶ä»–å•†ä¸šç”¨é€”ï¼ˆé…å¥—å¼€å‘æ¿é”€å”®é™¤å¤–ï¼‰ï¼Œä¸é¡»æˆæƒã€‚
+		3 å±‹è„Šé›€å·¥ä½œå®¤ä¸å¯¹ä»£ç åŠŸèƒ½åšä»»ä½•ä¿è¯ï¼Œè¯·ä½¿ç”¨è€…è‡ªè¡Œæµ‹è¯•ï¼Œåæœè‡ªè´Ÿã€‚
+		4 å¯éšæ„ä¿®æ”¹æºç å¹¶åˆ†å‘ï¼Œä½†ä¸å¯ç›´æ¥é”€å”®æœ¬ä»£ç è·åˆ©ï¼Œå¹¶ä¸”è¯·ä¿ç•™WUJIQUEç‰ˆæƒè¯´æ˜ã€‚
+		5 å¦‚å‘ç°BUGæˆ–æœ‰ä¼˜åŒ–ï¼Œæ¬¢è¿å‘å¸ƒæ›´æ–°ã€‚è¯·è”ç³»ï¼šcode@wujique.com
+		6 ä½¿ç”¨æœ¬æºç åˆ™ç›¸å½“äºè®¤åŒæœ¬ç‰ˆæƒè¯´æ˜ã€‚
+		7 å¦‚ä¾µçŠ¯ä½ çš„æƒåˆ©ï¼Œè¯·è”ç³»ï¼šcode@wujique.com
+		8 ä¸€åˆ‡è§£é‡Šæƒå½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
 */
 #include "mcu.h"
 #include "petite_config.h"
@@ -38,22 +38,22 @@ extern void Delay(__IO uint32_t nTime);
 #endif
 
 #define DEV_TEA5767_I2CBUS "VI2C1"
-#define DEV_TEA5767_I2CC_ADDR 0x60//110 0000b, 7Î»µØÖ·Ä£Ê½£¬ÔÚI2CÇı¶¯ÖĞ»á½øĞĞ×óÒÆ
+#define DEV_TEA5767_I2CC_ADDR 0x60//110 0000b, 7ä½åœ°å€æ¨¡å¼ï¼Œåœ¨I2Cé©±åŠ¨ä¸­ä¼šè¿›è¡Œå·¦ç§»
 
 #define TEA5767_MAX_FREQ 108000
 #define TEA5767_MIN_FREQ 87500
 
-unsigned int Tea5767MaxPll=0x339b;    //108MHzÊ±µÄpll,
-unsigned int Tea5767MinPll=0x299d;    //87.5MHzÊ±µÄpll.
+unsigned int Tea5767MaxPll=0x339b;    //108MHzæ—¶çš„pll,
+unsigned int Tea5767MinPll=0x299d;    //87.5MHzæ—¶çš„pll.
 
 unsigned int Tea5767Fre;
 unsigned int Tea5767Pll;
 
-//tea5767½øĞĞI2CÍ¨ĞÅµÄÊ±ºò£¬Ã¿´Î¶¼ÊÇ½«5¸ö×Ö½ÚÒ»Æğ¶Á³öÀ´¡£
+//tea5767è¿›è¡ŒI2Cé€šä¿¡çš„æ—¶å€™ï¼Œæ¯æ¬¡éƒ½æ˜¯å°†5ä¸ªå­—èŠ‚ä¸€èµ·è¯»å‡ºæ¥ã€‚
 u8 tea5767_readbuf[5];
-//³õÊ¼»¯ÒªĞ´ÈëTEA5767µÄÊı¾İ£¬¼û<TEA5767HNµÍ¹¦ºÄÁ¢ÌåÉùÊÕÒô»ú½ÓÊÕÆ÷>
+//åˆå§‹åŒ–è¦å†™å…¥TEA5767çš„æ•°æ®ï¼Œè§<TEA5767HNä½åŠŸè€—ç«‹ä½“å£°æ”¶éŸ³æœºæ¥æ”¶å™¨>
 u8 tea5767_writebuf[5]={0x2a,0xb6,0x51,0x11,0x40};
-u8 tea5767_initbuf[5]={0xaa,0xb6,0x51,0x11,0x40};//¾²Òô£¬ÉÏµç³õÊ¼»¯
+u8 tea5767_initbuf[5]={0xaa,0xb6,0x51,0x11,0x40};//é™éŸ³ï¼Œä¸Šç”µåˆå§‹åŒ–
 
 
 static s32 dev_tea5767_readreg(u8* data)
@@ -76,9 +76,9 @@ static s32 dev_tea5767_writereg(u8* data)
 
 /**
  *@brief:      dev_tea5767_fre2pll
- *@details:    ½«ÆµÂÊÖµ×ªÎªPLL
+ *@details:    å°†é¢‘ç‡å€¼è½¬ä¸ºPLL
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 static u32 dev_tea5767_fre2pll(u8 hlsi, u32 fre)
@@ -93,9 +93,9 @@ static u32 dev_tea5767_fre2pll(u8 hlsi, u32 fre)
 }
 /**
  *@brief:      dev_tea5767_pll2fre
- *@details:    ½«PLL×ª»»ÎªÆµÂÊ
+ *@details:    å°†PLLè½¬æ¢ä¸ºé¢‘ç‡
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 static u32 dev_tea5767_pll2fre(u8 hlsi, u32 pll)
@@ -108,9 +108,9 @@ static u32 dev_tea5767_pll2fre(u8 hlsi, u32 pll)
 }
 /**
  *@brief:      dev_tea5767_getfre
- *@details:    ´Ó¶ÁÈ¡µ½µÄ×´Ì¬ÖµÖĞ¼ÆËãFMÆµÂÊ
+ *@details:    ä»è¯»å–åˆ°çš„çŠ¶æ€å€¼ä¸­è®¡ç®—FMé¢‘ç‡
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 static void dev_tea5767_getfre(void)
@@ -129,9 +129,9 @@ static void dev_tea5767_getfre(void)
 
 /**
  *@brief:      dev_tea5767_setfre
- *@details:    Ö±½ÓÉèÖÃtea5767µ½Ö¸¶¨ÆµÂÊ
+ *@details:    ç›´æ¥è®¾ç½®tea5767åˆ°æŒ‡å®šé¢‘ç‡
  *@param[in]   unsigned long fre  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 void dev_tea5767_setfre(unsigned long fre)
@@ -153,9 +153,9 @@ void dev_tea5767_setfre(unsigned long fre)
 
 /**
  *@brief:      dev_tea5767_set_ssl
- *@details:    ÉèÖÃËÑË÷Í£Ö¹¼¶±ğ
- *@param[in]   u8 level  0 ÔÊĞíËÑË÷£¬1 µÍ¼¶±ğ£¬2 ÖĞ¼¶±ğ£¬3 ¸ß¼¶±ğ
- *@param[out]  ÎŞ
+ *@details:    è®¾ç½®æœç´¢åœæ­¢çº§åˆ«
+ *@param[in]   u8 level  0 å…è®¸æœç´¢ï¼Œ1 ä½çº§åˆ«ï¼Œ2 ä¸­çº§åˆ«ï¼Œ3 é«˜çº§åˆ«
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_tea5767_set_ssl(u8 level)
@@ -173,9 +173,9 @@ s32 dev_tea5767_set_ssl(u8 level)
 }
 /**
  *@brief:      dev_tea5767_auto_search
- *@details:    Ğ¾Æ¬×Ô¶¯ËÑÌ¨
- *@param[in]   u8 mode  mode=1,ÆµÂÊÔö¼ÓËÑÌ¨; mode=0:ÆµÂÊ¼õĞ¡ËÑÌ¨
- *@param[out]  ÎŞ
+ *@details:    èŠ¯ç‰‡è‡ªåŠ¨æœå°
+ *@param[in]   u8 mode  mode=1,é¢‘ç‡å¢åŠ æœå°; mode=0:é¢‘ç‡å‡å°æœå°
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_tea5767_auto_search(u8 mode)
@@ -205,20 +205,20 @@ s32 dev_tea5767_auto_search(u8 mode)
 		TEA5767_DEBUG(LOG_DEBUG, "Tea5767Fre:%d\r\n", Tea5767Fre);
 	    Tea5767Pll = dev_tea5767_fre2pll(1, Tea5767Fre);
 
-		tea5767_writebuf[0]=Tea5767Pll/256+0x40;//¼Ó0x40ÊÇ½«SMÖÃÎª1 Îª×Ô¶¯ËÑË÷Ä£Ê½
+		tea5767_writebuf[0]=Tea5767Pll/256+0x40;//åŠ 0x40æ˜¯å°†SMç½®ä¸º1 ä¸ºè‡ªåŠ¨æœç´¢æ¨¡å¼
 		tea5767_writebuf[1]=Tea5767Pll%256;   
 
 		dev_tea5767_writereg(tea5767_writebuf);
 	    while(1){
 	        dev_tea5767_readreg(tea5767_readbuf);
-			//ËÑÌ¨³É¹¦±êÖ¾
+			//æœå°æˆåŠŸæ ‡å¿—
 	        if(0x80 == (tea5767_readbuf[0]&0x80)){
 				dev_tea5767_getfre();
 				if_counter = tea5767_readbuf[2]&0x7f;
 				if((0x31 < if_counter) && (0x3e > if_counter)){         
 					adc = (tea5767_readbuf[3]>>4);
 					TEA5767_DEBUG(LOG_DEBUG, "fre:%d, adc:%d\r\n", Tea5767Fre, adc);
-					//±È½Ïleve µçÆ½È·ÈÏÊÇ·ñÊÕµ½Ì¨ Êµ¼Ê²âÊÔÊ¹ÓÃ´ËÊı ²»»áÂ©Ì¨
+					//æ¯”è¾ƒleve ç”µå¹³ç¡®è®¤æ˜¯å¦æ”¶åˆ°å° å®é™…æµ‹è¯•ä½¿ç”¨æ­¤æ•° ä¸ä¼šæ¼å°
 					if( adc >= 8){
 						TEA5767_DEBUG(LOG_DEBUG, "fre: \r\n", Tea5767Fre);
 						return 0;
@@ -227,7 +227,7 @@ s32 dev_tea5767_auto_search(u8 mode)
 	            flag = 1;
 	        }
 
-			if(0x60 == (tea5767_readbuf[0]&0x60)){//µ½´ïÆµÂÊ¼«ÏŞ
+			if(0x60 == (tea5767_readbuf[0]&0x60)){//åˆ°è¾¾é¢‘ç‡æé™
 				TEA5767_DEBUG(LOG_DEBUG, "tea5767  search fail!\r\n");
 				
 				if(mode)
@@ -247,9 +247,9 @@ s32 dev_tea5767_auto_search(u8 mode)
 } 
 /**
  *@brief:      dev_tea5767_search
- *@details:    ³ÌĞòËÑÌ¨ ²½½ø100KHZ
+ *@details:    ç¨‹åºæœå° æ­¥è¿›100KHZ
  *@param[in]   u8 mode  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_tea5767_search(u8 mode)
@@ -298,9 +298,9 @@ s32 dev_tea5767_search(u8 mode)
 }
 /**
  *@brief:      dev_tea5767_init
- *@details:    ³õÊ¼»¯TEA5767Éè±¸
+ *@details:    åˆå§‹åŒ–TEA5767è®¾å¤‡
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_tea5767_init(void)
@@ -311,9 +311,9 @@ s32 dev_tea5767_init(void)
 }
 /**
  *@brief:      dev_tea5767_open
- *@details:    ´ò¿ª5767Éè±¸
+ *@details:    æ‰“å¼€5767è®¾å¤‡
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_tea5767_open(void)
@@ -324,9 +324,9 @@ s32 dev_tea5767_open(void)
 }
 /**
  *@brief:      dev_tea5767_close
- *@details:    ¹Ø±Õ5767Éè±¸
+ *@details:    å…³é—­5767è®¾å¤‡
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_tea5767_close(void)
@@ -337,9 +337,9 @@ s32 dev_tea5767_close(void)
 
 /**
  *@brief:      dev_tea5767_test
- *@details:       ²âÊÔTEA5767Éè±¸
+ *@details:       æµ‹è¯•TEA5767è®¾å¤‡
  *@param[in]  void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_tea5767_test(void)

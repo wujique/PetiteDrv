@@ -87,9 +87,9 @@ static __inline__ int abortboot(int bootdelay)
 
 /**
  *@brief:      cli_main_loop
- *@details:    cli¹¦ÄÜÖ÷º¯Êı
+ *@details:    cliåŠŸèƒ½ä¸»å‡½æ•°
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 void cli_main_loop (void* p)
@@ -208,16 +208,16 @@ static int hist_add_idx = 0;
 static int hist_cur = -1;
 unsigned hist_num = 0;
 char* hist_list[HIST_MAX];
-/* wujique mask ¸ÄÎªmalloc*/
+/* wujique mask æ”¹ä¸ºmalloc*/
 #include "alloc.h"
 //char hist_lines[HIST_MAX][HIST_SIZE];//5k 
 
 #define add_idx_minus_one() ((hist_add_idx == 0) ? hist_max : hist_add_idx-1)
 /**
  *@brief:      hist_init
- *@details:    ³õÊ¼»¯hist
+ *@details:    åˆå§‹åŒ–hist
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     static
  */
 static void hist_init(void)
@@ -408,7 +408,7 @@ static int cread_line(const char *const prompt, char *buf, unsigned int *len)
 		}
 #endif
 		/*
-			´Ó´®¿Ú¶ÁÈ¡Ò»¸ö×Ö½Ú£¬×¢Òâ£¬ÕâÀïÊÇËÀµÈµÄ
+			ä»ä¸²å£è¯»å–ä¸€ä¸ªå­—èŠ‚ï¼Œæ³¨æ„ï¼Œè¿™é‡Œæ˜¯æ­»ç­‰çš„
 		*/
 		ichar = getcmd_getch();
 		
@@ -1104,9 +1104,9 @@ void cli_main_loop_test (void* p)
 
 /**
  *@brief:      fun_cmd_init
- *@details:    ³õÊ¼»¯ÃüÁîĞĞ£¬½¨Á¢ÃüÁîĞĞÈÎÎñ
+ *@details:    åˆå§‹åŒ–å‘½ä»¤è¡Œï¼Œå»ºç«‹å‘½ä»¤è¡Œä»»åŠ¡
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 fun_cmd_init(void)

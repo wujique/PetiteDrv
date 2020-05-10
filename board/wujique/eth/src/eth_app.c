@@ -88,9 +88,9 @@ int eth_app(void)
 s32 EthGd = -2;
 /**
  *@brief:      eth_app_init
- *@details:    ³õÊ¼»¯echoserver
+ *@details:    åˆå§‹åŒ–echoserver
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 eth_app_init(void)

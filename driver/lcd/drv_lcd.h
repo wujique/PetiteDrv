@@ -8,20 +8,20 @@
 
 typedef struct _strDevLcdNode DevLcdNode;
 /*
-	LCDÇı¶¯¶¨Òå
+	LCDé©±åŠ¨å®šä¹‰
 */
 typedef struct  
 {	
 	u16 id;
-	/*³õÊ¼»¯*/
+	/*åˆå§‹åŒ–*/
 	s32 (*init)(DevLcdNode *lcd);
 	/*
-		draw_point¡¢color_fill¡¢fill
+		draw_pointã€color_fillã€fill
 	*/
 	s32 (*draw_point)(DevLcdNode *lcd, u16 x, u16 y, u16 color);
 	s32 (*color_fill)(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey, u16 color);
 	s32 (*fill)(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color);
-	/*prepare_displayÖ¸¶¨ÏÔÊ¾ÇøÓòºó£¬ÓÃflush½«Êı¾İ³ÖĞø¸üĞÂµ½LCD*/
+	/*prepare_displayæŒ‡å®šæ˜¾ç¤ºåŒºåŸŸåï¼Œç”¨flushå°†æ•°æ®æŒç»­æ›´æ–°åˆ°LCD*/
 	s32 (*prepare_display)(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey);
 	s32 (*flush)(DevLcdNode *lcd, u16 *color, u32 len);
 	
@@ -30,47 +30,47 @@ typedef struct
 	void (*backlight)(DevLcdNode *lcd, u8 sta);
 
 	/*
-		updateÅäºÏdraw_point/color_fill/fillÊ¹ÓÃ£¬Èç¹ûÊÇÃ»ÓĞgramµÄ£¬Ïàµ±ÓÚ¿Õ²Ù×÷¡£
+		updateé…åˆdraw_point/color_fill/fillä½¿ç”¨ï¼Œå¦‚æœæ˜¯æ²¡æœ‰gramçš„ï¼Œç›¸å½“äºç©ºæ“ä½œã€‚
 	*/
 	s32 (*update)(DevLcdNode *lcd);
 }_lcd_drv; 
 
 
 /*
-	Éè±¸¶¨Òå
-	°üº¬¹ÒÔØ·½Ê½¶¨Òå
-	Ò²¾ÍÊÇËµÃ÷ÓĞÒ»Ê²Ã´IDµÄÉè±¸¹ÒÔØÊ²Ã´µØ·½
-	ÀıÈç¶¨ÒåÒ»¸öCOG LCD¹ÒÔØÔÚSPI3ÉÏ
-	ÓÃÊ²Ã´Çı¶¯£¿LCD¾ßÌå²ÎÊıÊÇÊ²Ã´£¿Í¨¹ıIDÆ¥Åä
-	Í¬Ò»¸öÀàĞÍµÄLCD£¬Çı¶¯ÏàÍ¬£¬Ö»ÊÇÏñËØ´óĞ¡²»Ò»Ñù£¬ÈçºÎ´¦Àí£¿
-	¿ÉÒÔÖØÉúÒ»¸öÇı¶¯½á¹¹Ìå£¬º¯ÊıÒ»Ñù£¬ID²»Ò»Ñù¡£
+	è®¾å¤‡å®šä¹‰
+	åŒ…å«æŒ‚è½½æ–¹å¼å®šä¹‰
+	ä¹Ÿå°±æ˜¯è¯´æ˜æœ‰ä¸€ä»€ä¹ˆIDçš„è®¾å¤‡æŒ‚è½½ä»€ä¹ˆåœ°æ–¹
+	ä¾‹å¦‚å®šä¹‰ä¸€ä¸ªCOG LCDæŒ‚è½½åœ¨SPI3ä¸Š
+	ç”¨ä»€ä¹ˆé©±åŠ¨ï¼ŸLCDå…·ä½“å‚æ•°æ˜¯ä»€ä¹ˆï¼Ÿé€šè¿‡IDåŒ¹é…
+	åŒä¸€ä¸ªç±»å‹çš„LCDï¼Œé©±åŠ¨ç›¸åŒï¼Œåªæ˜¯åƒç´ å¤§å°ä¸ä¸€æ ·ï¼Œå¦‚ä½•å¤„ç†ï¼Ÿ
+	å¯ä»¥é‡ç”Ÿä¸€ä¸ªé©±åŠ¨ç»“æ„ä½“ï¼Œå‡½æ•°ä¸€æ ·ï¼ŒIDä¸ä¸€æ ·ã€‚
 */
 typedef struct
 {
 	PetiteNode pnode;
 	
-	char buslcd[DEV_NAME_SIZE]; //¹ÒÔÚÄÇÌõLCD×ÜÏßÉÏ
+	char buslcd[DEV_NAME_SIZE]; //æŒ‚åœ¨é‚£æ¡LCDæ€»çº¿ä¸Š
 	u16 id;
-	u16 width;	//LCD ¿í¶È   ÊúÆÁ
-	u16 height;	//LCD ¸ß¶È    ÊúÆÁ
+	u16 width;	//LCD å®½åº¦   ç«–å±
+	u16 height;	//LCD é«˜åº¦    ç«–å±
 }DevLcd;
-/* Éè±¸½Úµã*/
+/* è®¾å¤‡èŠ‚ç‚¹*/
 struct _strDevLcdNode
 {
-	s32 gd;//¾ä±ú£¬¿ØÖÆÊÇ·ñ¿ÉÒÔ´ò¿ª
+	s32 gd;//å¥æŸ„ï¼Œæ§åˆ¶æ˜¯å¦å¯ä»¥æ‰“å¼€
 	
 	DevLcd	dev;
 
-	/* LCDÇı¶¯ */
+	/* LCDé©±åŠ¨ */
 	_lcd_drv *drv;
 
-	/*Çı¶¯ĞèÒªµÄ±äÁ¿*/
-	u8  dir;	//ºáÆÁ»¹ÊÇÊúÆÁ¿ØÖÆ£º0£¬ÊúÆÁ£»1£¬ºáÆÁ¡£	
-	u8  scandir;//É¨Ãè·½Ïò
-	u16 width;	//LCD ¿í¶È 
-	u16 height;	//LCD ¸ß¶È
+	/*é©±åŠ¨éœ€è¦çš„å˜é‡*/
+	u8  dir;	//æ¨ªå±è¿˜æ˜¯ç«–å±æ§åˆ¶ï¼š0ï¼Œç«–å±ï¼›1ï¼Œæ¨ªå±ã€‚	
+	u8  scandir;//æ‰«ææ–¹å‘
+	u16 width;	//LCD å®½åº¦ 
+	u16 height;	//LCD é«˜åº¦
 
-	void *pri;//Ë½ÓĞÊı¾İ£¬ºÚ°×ÆÁ¸úOLEDÆÁÔÚ³õÊ¼»¯µÄÊ±ºò»á¿ª±ÙÏÔ´æ
+	void *pri;//ç§æœ‰æ•°æ®ï¼Œé»‘ç™½å±è·ŸOLEDå±åœ¨åˆå§‹åŒ–çš„æ—¶å€™ä¼šå¼€è¾Ÿæ˜¾å­˜
 
 	DevLcdBusNode *busnode;
 
@@ -78,32 +78,32 @@ struct _strDevLcdNode
 };
 
 
-#define H_LCD 0//ÊúÆÁ
-#define W_LCD 1//ºáÆÁ
+#define H_LCD 0//ç«–å±
+#define W_LCD 1//æ¨ªå±
 
-//É¨Ãè·½Ïò¶¨Òå
-//BIT 0 ±êÊ¶LR£¬1 R-L£¬0 L-R
-//BIT 1 ±êÊ¶UD£¬1 D-U£¬0 U-D
-//BIT 2 ±êÊ¶LR/UD£¬1 DU-LR£¬0 LR-DU
+//æ‰«ææ–¹å‘å®šä¹‰
+//BIT 0 æ ‡è¯†LRï¼Œ1 R-Lï¼Œ0 L-R
+//BIT 1 æ ‡è¯†UDï¼Œ1 D-Uï¼Œ0 U-D
+//BIT 2 æ ‡è¯†LR/UDï¼Œ1 DU-LRï¼Œ0 LR-DU
 #define LR_BIT_MASK 0X01
 #define UD_BIT_MASK 0X02
 #define LRUD_BIT_MASK 0X04
 
-#define L2R_U2D  (0) //´Ó×óµ½ÓÒ,´ÓÉÏµ½ÏÂ
-#define L2R_D2U  (0 + UD_BIT_MASK)//´Ó×óµ½ÓÒ,´ÓÏÂµ½ÉÏ
-#define R2L_U2D  (0 + LR_BIT_MASK) //´ÓÓÒµ½×ó,´ÓÉÏµ½ÏÂ
-#define R2L_D2U  (0 + UD_BIT_MASK + LR_BIT_MASK) //´ÓÓÒµ½×ó,´ÓÏÂµ½ÉÏ
+#define L2R_U2D  (0) //ä»å·¦åˆ°å³,ä»ä¸Šåˆ°ä¸‹
+#define L2R_D2U  (0 + UD_BIT_MASK)//ä»å·¦åˆ°å³,ä»ä¸‹åˆ°ä¸Š
+#define R2L_U2D  (0 + LR_BIT_MASK) //ä»å³åˆ°å·¦,ä»ä¸Šåˆ°ä¸‹
+#define R2L_D2U  (0 + UD_BIT_MASK + LR_BIT_MASK) //ä»å³åˆ°å·¦,ä»ä¸‹åˆ°ä¸Š
 
-#define U2D_L2R  (LRUD_BIT_MASK)//´ÓÉÏµ½ÏÂ,´Ó×óµ½ÓÒ
-#define U2D_R2L  (LRUD_BIT_MASK + LR_BIT_MASK) //´ÓÉÏµ½ÏÂ,´ÓÓÒµ½×ó
-#define D2U_L2R  (LRUD_BIT_MASK + UD_BIT_MASK) //´ÓÏÂµ½ÉÏ,´Ó×óµ½ÓÒ
-#define D2U_R2L  (LRUD_BIT_MASK + UD_BIT_MASK+ LR_BIT_MASK) //´ÓÏÂµ½ÉÏ,´ÓÓÒµ½×ó	 
+#define U2D_L2R  (LRUD_BIT_MASK)//ä»ä¸Šåˆ°ä¸‹,ä»å·¦åˆ°å³
+#define U2D_R2L  (LRUD_BIT_MASK + LR_BIT_MASK) //ä»ä¸Šåˆ°ä¸‹,ä»å³åˆ°å·¦
+#define D2U_L2R  (LRUD_BIT_MASK + UD_BIT_MASK) //ä»ä¸‹åˆ°ä¸Š,ä»å·¦åˆ°å³
+#define D2U_R2L  (LRUD_BIT_MASK + UD_BIT_MASK+ LR_BIT_MASK) //ä»ä¸‹åˆ°ä¸Š,ä»å³åˆ°å·¦	 
 
-//»­±ÊÑÕÉ«
+//ç”»ç¬”é¢œè‰²
 /*
-	¶ÔÓÚºÚ°×ÆÁ
-	WHITE¾ÍÊÇ²»ÏÔÊ¾£¬Çå¿Õ
-	BLACK¾ÍÊÇÏÔÊ¾
+	å¯¹äºé»‘ç™½å±
+	WHITEå°±æ˜¯ä¸æ˜¾ç¤ºï¼Œæ¸…ç©º
+	BLACKå°±æ˜¯æ˜¾ç¤º
 */
 #define WHITE         	 0xFFFF
 #define BLACK         	 0x0000	  
@@ -118,17 +118,17 @@ struct _strDevLcdNode
 #define MAGENTA       	 0xF81F
 #define CYAN          	 0x7FFF
 #define YELLOW        	 0xFFE0
-#define BROWN 			 0XBC40 //×ØÉ«
-#define BRRED 			 0XFC07 //×ØºìÉ«
-#define GRAY  			 0X8430 //»ÒÉ«
-#define DARKBLUE      	 0X01CF	//ÉîÀ¶É«
-#define LIGHTBLUE      	 0X7D7C	//Ç³À¶É«  
-#define GRAYBLUE       	 0X5458 //»ÒÀ¶É«
-#define LIGHTGREEN     	 0X841F //Ç³ÂÌÉ«
-#define LIGHTGRAY      0XEF5B //Ç³»ÒÉ«(PANNEL)
-#define LGRAY 			 0XC618 //Ç³»ÒÉ«(PANNEL),´°Ìå±³¾°É«
-#define LGRAYBLUE        0XA651 //Ç³»ÒÀ¶É«(ÖĞ¼ä²ãÑÕÉ«)
-#define LBBLUE           0X2B12 //Ç³×ØÀ¶É«(Ñ¡ÔñÌõÄ¿µÄ·´É«)
+#define BROWN 			 0XBC40 //æ£•è‰²
+#define BRRED 			 0XFC07 //æ£•çº¢è‰²
+#define GRAY  			 0X8430 //ç°è‰²
+#define DARKBLUE      	 0X01CF	//æ·±è“è‰²
+#define LIGHTBLUE      	 0X7D7C	//æµ…è“è‰²  
+#define GRAYBLUE       	 0X5458 //ç°è“è‰²
+#define LIGHTGREEN     	 0X841F //æµ…ç»¿è‰²
+#define LIGHTGRAY      0XEF5B //æµ…ç°è‰²(PANNEL)
+#define LGRAY 			 0XC618 //æµ…ç°è‰²(PANNEL),çª—ä½“èƒŒæ™¯è‰²
+#define LGRAYBLUE        0XA651 //æµ…ç°è“è‰²(ä¸­é—´å±‚é¢œè‰²)
+#define LBBLUE           0X2B12 //æµ…æ£•è“è‰²(é€‰æ‹©æ¡ç›®çš„åè‰²)
 
 extern s32 dev_lcd_register(const DevLcd *dev);
 extern DevLcdNode *dev_lcd_open(char *name);

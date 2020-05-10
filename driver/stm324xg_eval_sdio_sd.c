@@ -364,8 +364,8 @@ static uint32_t CSD_Tab[4], CID_Tab[4], RCA = 0;
 static uint8_t SDSTATUS_Tab[16];
 __IO uint32_t StopCondition = 0;
 __IO SD_Error TransferError = SD_OK;
-__IO uint32_t TransferEnd = 0;//sdioÖĞ¶ÏÖĞ»á¸³Öµ0x01;
-__IO uint32_t DMAEndOfTransfer = 0;//DMAÖĞ¶ÏÖĞ»á¸³Öµ0x01;
+__IO uint32_t TransferEnd = 0;//sdioä¸­æ–­ä¸­ä¼šèµ‹å€¼0x01;
+__IO uint32_t DMAEndOfTransfer = 0;//DMAä¸­æ–­ä¸­ä¼šèµ‹å€¼0x01;
 SD_CardInfo SDCardInfo;
 
 SDIO_InitTypeDef SDIO_InitStructure;
@@ -3146,7 +3146,7 @@ DRESULT SD_disk_ioctl (
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
 
 /*
-    wujique,½«¹Ù·½Àı³ÌÖĞµÄmain.cÄÚµÄ²âÊÔ³ÌĞòÒÆÖ²µ½´Ë´¦
+    wujique,å°†å®˜æ–¹ä¾‹ç¨‹ä¸­çš„main.cå†…çš„æµ‹è¯•ç¨‹åºç§»æ¤åˆ°æ­¤å¤„
 */
 
 
@@ -3511,14 +3511,14 @@ uint8_t vfs_explore_disk (char* path , uint8_t recu_level)
 	if (res == FR_OK) 
 	{
 		wjq_log(LOG_INFO, "open dir ok\r\n");
-		while(1)//ÕâÀï¿ÉÄÜÒªÅĞ¶ÏÓ²¼şÊÇ·ñ¶Ï¿ª
+		while(1)//è¿™é‡Œå¯èƒ½è¦åˆ¤æ–­ç¡¬ä»¶æ˜¯å¦æ–­å¼€
 		{
 			res = f_readdir(&dir, &fno);
 			if (res != FR_OK || fno.fname[0] == 0) 
 			{
 				break;
 			}
-			if (fno.fname[0] == '.')//Òş²ØÎÄ¼ş
+			if (fno.fname[0] == '.')//éšè—æ–‡ä»¶
 			{
 				continue;
 			}
@@ -3595,10 +3595,10 @@ s32 fun_mount_sd(void)
 
 /**
  *@brief:      tf_file_test
- *@details:    ²âÊÔSD¿¨ÎÄ¼şÏµÍ³£¬½øĞĞ²âÊÔÇ°ĞèÒª¹ÒÔØTF¿¨
+ *@details:    æµ‹è¯•SDå¡æ–‡ä»¶ç³»ç»Ÿï¼Œè¿›è¡Œæµ‹è¯•å‰éœ€è¦æŒ‚è½½TFå¡
                   
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 
@@ -3610,7 +3610,7 @@ s32 tf_file_test(void)
 	u32 len;
 	
 	fres=f_open(&TfCardTestFile,(const TCHAR*)"1:tfcard_test.txt", FA_OPEN_ALWAYS | FA_WRITE); 
-	if(fres != FR_OK)			//ÎÄ¼ş´´½¨Ê§°Ü
+	if(fres != FR_OK)			//æ–‡ä»¶åˆ›å»ºå¤±è´¥
 	{
 		wjq_log(LOG_FUN, "create rec file err:%d!\r\n", fres);
 		

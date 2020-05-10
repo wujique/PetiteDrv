@@ -1,14 +1,14 @@
 /**
  * @file            mcu_rtc.c
- * @brief           stm32Æ¬ÉÏRTCÇı¶¯
+ * @brief           stm32ç‰‡ä¸ŠRTCé©±åŠ¨
  * @author          wujique
- * @date            2018Äê1ÔÂ24ÈÕ ĞÇÆÚÈı
- * @version         ³õ¸å
- * @par             °æÈ¨ËùÓĞ (C), 2013-2023
+ * @date            2018å¹´1æœˆ24æ—¥ æ˜ŸæœŸä¸‰
+ * @version         åˆç¨¿
+ * @par             ç‰ˆæƒæ‰€æœ‰ (C), 2013-2023
  * @par History:
- * 1.ÈÕ    ÆÚ:        2018Äê1ÔÂ24ÈÕ ĞÇÆÚÈı
- *   ×÷    Õß:         wujique
- *   ĞŞ¸ÄÄÚÈİ:   ´´½¨ÎÄ¼ş
+ * 1.æ—¥    æœŸ:        2018å¹´1æœˆ24æ—¥ æ˜ŸæœŸä¸‰
+ *   ä½œ    è€…:         wujique
+ *   ä¿®æ”¹å†…å®¹:   åˆ›å»ºæ–‡ä»¶
 */
 #include "mcu.h"
 #include "log.h"
@@ -16,9 +16,9 @@
 
 /**
  *@brief:      mcu_rtc_init
- *@details:    ¸´Î»Ê±³õÊ¼»¯RTC
+ *@details:    å¤ä½æ—¶åˆå§‹åŒ–RTC
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 mcu_rtc_init(void)
@@ -27,16 +27,16 @@ s32 mcu_rtc_init(void)
 	volatile u32 cnt = 0; 
 	
   	RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR|RCC_APB1Periph_BKP, ENABLE);
-	/*²Ù×÷RTC¼Ä´æÆ÷£¬ĞèÒªÊ¹ÄÜ±¸·İÇø*/
+	/*æ“ä½œRTCå¯„å­˜å™¨ï¼Œéœ€è¦ä½¿èƒ½å¤‡ä»½åŒº*/
 	PWR_BackupAccessCmd(ENABLE); 
 	
 	if(BKP_ReadBackupRegister(BKP_DR1)!=0x55aa)	
 	{
 		wjq_log(LOG_DEBUG, " init rtc\r\n");
 		BKP_DeInit();
-		/*¿ªÆôLSEÊ±ÖÓ*/
+		/*å¼€å¯LSEæ—¶é’Ÿ*/
 		RCC_LSEConfig(RCC_LSE_ON);
-		/*µÈ´ıRCC LSEÊ±ÖÓ¾ÍĞ÷*/
+		/*ç­‰å¾…RCC LSEæ—¶é’Ÿå°±ç»ª*/
 		while (RCC_GetFlagStatus(RCC_FLAG_LSERDY) == RESET)	
 		{
 			cnt++;
@@ -49,18 +49,18 @@ s32 mcu_rtc_init(void)
 			
 		RCC_RTCCLKConfig(RCC_RTCCLKSource_LSE);
 		RCC_RTCCLKCmd(ENABLE);
-		RTC_WaitForLastTask();	//µÈ´ı×î½üÒ»´Î¶ÔRTC¼Ä´æÆ÷µÄĞ´²Ù×÷Íê³É
-		RTC_WaitForSynchro();		//µÈ´ıRTC¼Ä´æÆ÷Í¬²½	
+		RTC_WaitForLastTask();	//ç­‰å¾…æœ€è¿‘ä¸€æ¬¡å¯¹RTCå¯„å­˜å™¨çš„å†™æ“ä½œå®Œæˆ
+		RTC_WaitForSynchro();		//ç­‰å¾…RTCå¯„å­˜å™¨åŒæ­¥	
 	
-    	RTC_EnterConfigMode();/// ÔÊĞíÅäÖÃ	
-		RTC_SetPrescaler(32767); //ÉèÖÃRTCÔ¤·ÖÆµµÄÖµ
-		RTC_WaitForLastTask();	//µÈ´ı×î½üÒ»´Î¶ÔRTC¼Ä´æÆ÷µÄĞ´²Ù×÷Íê³É
+    	RTC_EnterConfigMode();/// å…è®¸é…ç½®	
+		RTC_SetPrescaler(32767); //è®¾ç½®RTCé¢„åˆ†é¢‘çš„å€¼
+		RTC_WaitForLastTask();	//ç­‰å¾…æœ€è¿‘ä¸€æ¬¡å¯¹RTCå¯„å­˜å™¨çš„å†™æ“ä½œå®Œæˆ
 		
-		RTC_SetCounter(1000);	//ÉèÖÃRTC¼ÆÊıÆ÷µÄÖµ
+		RTC_SetCounter(1000);	//è®¾ç½®RTCè®¡æ•°å™¨çš„å€¼
 		
-		RTC_ExitConfigMode(); //ÍË³öÅäÖÃÄ£Ê½	
+		RTC_ExitConfigMode(); //é€€å‡ºé…ç½®æ¨¡å¼	
 	 
-		BKP_WriteBackupRegister(BKP_DR1,0x55aa);	//±ê¼ÇÒÑ¾­³õÊ¼»¯¹ıÁË
+		BKP_WriteBackupRegister(BKP_DR1,0x55aa);	//æ ‡è®°å·²ç»åˆå§‹åŒ–è¿‡äº†
 	} 
 
 	wjq_log(LOG_INFO, " init rtc finish\r\n");	
@@ -69,19 +69,19 @@ s32 mcu_rtc_init(void)
 
 u8 RTC_Set(u32 sec)
 {
-	RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR | RCC_APB1Periph_BKP, ENABLE);	//Ê¹ÄÜPWRºÍBKPÍâÉèÊ±ÖÓ  
-	PWR_BackupAccessCmd(ENABLE);	//Ê¹ÄÜRTCºÍºó±¸¼Ä´æÆ÷·ÃÎÊ 
-	RTC_SetCounter(sec);	//ÉèÖÃRTC¼ÆÊıÆ÷µÄÖµ
-	RTC_WaitForLastTask();	//µÈ´ı×î½üÒ»´Î¶ÔRTC¼Ä´æÆ÷µÄĞ´²Ù×÷Íê³É  	
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR | RCC_APB1Periph_BKP, ENABLE);	//ä½¿èƒ½PWRå’ŒBKPå¤–è®¾æ—¶é’Ÿ  
+	PWR_BackupAccessCmd(ENABLE);	//ä½¿èƒ½RTCå’Œåå¤‡å¯„å­˜å™¨è®¿é—® 
+	RTC_SetCounter(sec);	//è®¾ç½®RTCè®¡æ•°å™¨çš„å€¼
+	RTC_WaitForLastTask();	//ç­‰å¾…æœ€è¿‘ä¸€æ¬¡å¯¹RTCå¯„å­˜å™¨çš„å†™æ“ä½œå®Œæˆ  	
 	return 0;	    
 }	  
 /**
  *@brief:      mcu_rtc_set_time
- *@details:    ÉèÖÃÊ±¼ä
+ *@details:    è®¾ç½®æ—¶é—´
  *@param[in]   u8 hours    
                u8 minutes  
                u8 seconds  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 mcu_rtc_set_time(u8 hours, u8 minutes, u8 seconds)
@@ -91,12 +91,12 @@ s32 mcu_rtc_set_time(u8 hours, u8 minutes, u8 seconds)
 }		
 /**
  *@brief:      mcu_rtc_set_date
- *@details:    ÉèÖÃÈÕÆÚ
+ *@details:    è®¾ç½®æ—¥æœŸ
  *@param[in]   u8 year     
                u8 weekday  
                u8 month    
                u8 date     
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 mcu_rtc_set_date(u8 year, u8 weekday, u8 month, u8 date)
@@ -107,9 +107,9 @@ s32 mcu_rtc_set_date(u8 year, u8 weekday, u8 month, u8 date)
 
 /**
  *@brief:      mcu_rtc_get_date
- *@details:    ¶ÁÈ¡ÈÕÆÚ
+ *@details:    è¯»å–æ—¥æœŸ
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 mcu_rtc_get_date(void)
@@ -120,9 +120,9 @@ s32 mcu_rtc_get_date(void)
 }
 /**
  *@brief:      mcu_rtc_get_time
- *@details:    ¶ÁÈ¡Ê±¼ä
+ *@details:    è¯»å–æ—¶é—´
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 mcu_rtc_get_time(void)
@@ -132,7 +132,7 @@ s32 mcu_rtc_get_time(void)
 }
 /*
 
-	»ñÈ¡UTCÊ±¼ä
+	è·å–UTCæ—¶é—´
 
 */
 time_t mcu_rtc_get_utc_time()
@@ -150,7 +150,7 @@ struct tm* gmtime (const time_t *timep)
 }
 /*
 
-	½«UTCÊ±¼ä×ª»¯Îªµ±µØÊ±¼ä
+	å°†UTCæ—¶é—´è½¬åŒ–ä¸ºå½“åœ°æ—¶é—´
 
 */
 struct tm* localtime (const time_t *timep)

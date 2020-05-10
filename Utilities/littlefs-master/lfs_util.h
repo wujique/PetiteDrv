@@ -164,8 +164,8 @@ static inline uint32_t lfs_tole32(uint32_t a) {
 void lfs_crc(uint32_t *crc, const void *buffer, size_t size);
 
 /*
-	lfsÄÚ´æ·ÖÅä£¬Ä¬ÈÏÊ¹ÓÃc¿âµÄ·ÖÅä¡£
-	ÎÒÃÇµÄ¹¤³ÌÓĞ×Ô¼ºµÄÄÚ´æ·ÖÅä
+	lfså†…å­˜åˆ†é…ï¼Œé»˜è®¤ä½¿ç”¨cåº“çš„åˆ†é…ã€‚
+	æˆ‘ä»¬çš„å·¥ç¨‹æœ‰è‡ªå·±çš„å†…å­˜åˆ†é…
 */
 #include "alloc.h"
 

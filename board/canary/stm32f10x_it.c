@@ -168,7 +168,7 @@ void SysTick_Handler(void)
 {
 	Time_Update();
 	/*
-	  freertosµÄ½Ó¿Ú·ÅÔÚÕâÀï
+	  freertosçš„æ¥å£æ”¾åœ¨è¿™é‡Œ
 	*/
 #ifdef SYS_USE_RTOS
 	xPortSysTickHandler();
@@ -195,7 +195,7 @@ void SysTick_Handler(void)
 /**
   * @}
   */ 
-/*--------------´®¿ÚÖĞ¶Ï---------------*/
+/*--------------ä¸²å£ä¸­æ–­---------------*/
 extern void mcu_uart1_IRQhandler(void);
 extern void mcu_uart2_IRQhandler(void);
 extern void mcu_uart3_IRQhandler(void);

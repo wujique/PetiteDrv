@@ -5,16 +5,16 @@
 #include "petite_def.h"
 
 
-/*LCD ×ÜÏß¶¨Òå */
+/*LCD æ€»çº¿å®šä¹‰ */
 typedef struct
 {
 	PetiteNode pnode;
 	
-	/*ÒÀÀµ×ÜÏßÃû×Ö*/
+	/*ä¾èµ–æ€»çº¿åå­—*/
 	char basebus[DEV_NAME_SIZE];
 
-	/*	3¸ùÏß£ºA0-ÃüÁîÊı¾İ£¬rst-¸´Î»£¬bl-±³¹â
-		I2C×ÜÏßµÄLCD²»ĞèÒªÕâÈı¸ùÏß    	*/
+	/*	3æ ¹çº¿ï¼šA0-å‘½ä»¤æ•°æ®ï¼Œrst-å¤ä½ï¼Œbl-èƒŒå…‰
+		I2Cæ€»çº¿çš„LCDä¸éœ€è¦è¿™ä¸‰æ ¹çº¿    	*/
 
 	MCU_PORT A0port;
 	u16 A0pin;
@@ -25,11 +25,11 @@ typedef struct
 	MCU_PORT blport;
 	u16 blpin;
 
-	/* µç×ÓÖ½ 91874 ĞèÒªÒ»¸öbusy×´Ì¬½Å*/
+	/* ç”µå­çº¸ 91874 éœ€è¦ä¸€ä¸ªbusyçŠ¶æ€è„š*/
 	MCU_PORT staport;
 	u16 stapin;
 }DevLcdBus;
-/* Éè±¸½Úµã¶¨Òå */
+/* è®¾å¤‡èŠ‚ç‚¹å®šä¹‰ */
 typedef struct
 {
 	

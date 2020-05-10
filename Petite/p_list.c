@@ -3,7 +3,7 @@
 #include "p_list.h"
 
 /*
-²âÊÔºêoffsetof¹¦ÄÜ£º»ñÈ¡½á¹¹Ìå³ÉÔ±ÔÚ½á¹¹ÌåÖĞµÄÆ«ÒÆ
+æµ‹è¯•å®offsetofåŠŸèƒ½ï¼šè·å–ç»“æ„ä½“æˆå‘˜åœ¨ç»“æ„ä½“ä¸­çš„åç§»
 
 struct test  
 {  
@@ -20,13 +20,13 @@ void list_test_offsetof(void)
 {
 	    struct test temp;  
   
-        wjq_log(LOG_FUN, "&temp = %p\r\n", &temp);          // tempµÄÆğÊ¼µØÖ·  
-        wjq_log(LOG_FUN, "&(temp.k) = %p\r\n", &(temp.k));      // temp.kµÄµØÖ·  
-        wjq_log(LOG_FUN, "&(((struct test *)0)->k) = %ld\r\n", (size_t)&((struct test *)0)->k);       //kÔÚtempÖĞµÄÆ«ÒÆÁ¿  
+        wjq_log(LOG_FUN, "&temp = %p\r\n", &temp);          // tempçš„èµ·å§‹åœ°å€  
+        wjq_log(LOG_FUN, "&(temp.k) = %p\r\n", &(temp.k));      // temp.kçš„åœ°å€  
+        wjq_log(LOG_FUN, "&(((struct test *)0)->k) = %ld\r\n", (size_t)&((struct test *)0)->k);       //kåœ¨tempä¸­çš„åç§»é‡  
   		while(1);
 }
 */
-/*¶¨Òå²¢³õÊ¼»¯Ò»¸öÁ´±íÍ·£¬¿ÕÁ´±í*/
+/*å®šä¹‰å¹¶åˆå§‹åŒ–ä¸€ä¸ªé“¾è¡¨å¤´ï¼Œç©ºé“¾è¡¨*/
 struct list_head TestList={&TestList, &TestList};
 
 struct test  

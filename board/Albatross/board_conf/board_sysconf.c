@@ -1,14 +1,14 @@
 /**
  * @file            wujique_sysconf.c
- * @brief           ÏµÍ³¹ÜÀí
+ * @brief           ç³»ç»Ÿç®¡ç†
  * @author          wujique
- * @date            2018Äê4ÔÂ9ÈÕ ĞÇÆÚÒ»
- * @version         ³õ¸å
- * @par             °æÈ¨ËùÓĞ (C), 2013-2023
+ * @date            2018å¹´4æœˆ9æ—¥ æ˜ŸæœŸä¸€
+ * @version         åˆç¨¿
+ * @par             ç‰ˆæƒæ‰€æœ‰ (C), 2013-2023
  * @par History:
- * 1.ÈÕ    ÆÚ:        2018Äê4ÔÂ9ÈÕ ĞÇÆÚÒ»
- *   ×÷    Õß:         wujique
- *   ĞŞ¸ÄÄÚÈİ:   ´´½¨ÎÄ¼ş
+ * 1.æ—¥    æœŸ:        2018å¹´4æœˆ9æ—¥ æ˜ŸæœŸä¸€
+ *   ä½œ    è€…:         wujique
+ *   ä¿®æ”¹å†…å®¹:   åˆ›å»ºæ–‡ä»¶
 */
 #include "mcu.h"
 #include "board_sysconf.h"
@@ -34,7 +34,7 @@ const DevI2c DevVi2c1={
 		};
 
 /*
-	I2C½Ó¿ÚµÄLCD×ÜÏß
+	I2Cæ¥å£çš„LCDæ€»çº¿
 */
 const DevLcdBus BusLcdI2C1={
 	.pnode={
@@ -44,7 +44,7 @@ const DevLcdBus BusLcdI2C1={
 			
 	.basebus = "VI2C1",
 
-	/*I2C½Ó¿ÚµÄLCD×ÜÏß£¬²»ĞèÒªÆäËûIO*/
+	/*I2Cæ¥å£çš„LCDæ€»çº¿ï¼Œä¸éœ€è¦å…¶ä»–IO*/
 	.A0port = MCU_PORT_NULL,
 	.A0pin = NULL,
 
@@ -57,7 +57,7 @@ const DevLcdBus BusLcdI2C1={
 	.staport = MCU_PORT_NULL, 
 	.stapin = NULL,
 };
-/*I2C½Ó¿ÚµÄ OLED*/
+/*I2Cæ¥å£çš„ OLED*/
 const DevLcd DevLcdOled1={
 	.pnode={
 				.name = "i2coledlcd",
@@ -71,15 +71,15 @@ const DevLcd DevLcdOled1={
 };
 
 /*
-	ÏµÍ³Éè±¸×¢²á
-	Í¨¹ıËõ½øÇø·Ö²ã¼¶ºÍÒÀÀµ¹ØÏµ¡£
-	ºóĞø¿ÉÒÔ¿¼ÂÇÊµÏÖ¿É¼û×Ö·û±íÊ¾µÄÉè±¸Ê÷
+	ç³»ç»Ÿè®¾å¤‡æ³¨å†Œ
+	é€šè¿‡ç¼©è¿›åŒºåˆ†å±‚çº§å’Œä¾èµ–å…³ç³»ã€‚
+	åç»­å¯ä»¥è€ƒè™‘å®ç°å¯è§å­—ç¬¦è¡¨ç¤ºçš„è®¾å¤‡æ ‘
 */
 s32 petite_dev_register(void)
 {
 	wjq_log(LOG_DEBUG, "[register] petite_dev_register!\r\n");
 
-	/*×¢²áI2C×ÜÏß*/
+	/*æ³¨å†ŒI2Cæ€»çº¿*/
 	bus_i2c_register(&DevVi2c1);
 			dev_lcdbus_register(&BusLcdI2C1);
 					dev_lcd_register(&DevLcdOled1);
@@ -89,8 +89,8 @@ s32 petite_dev_register(void)
 
 /*
 
-	ºº×Ö×Ö¿âÖ»Ê¹ÓÃ¶à¹úÎÄ×ÖµãÕó×Ö¿âÉú³ÉÆ÷Éú³ÉµÄµãÕó×Ö¿â£¬
-	Ê¹ÓÃÄ£Ê½¶şÉú³É£¬Ò²¾ÍÊÇ×İ¿â¡£
+	æ±‰å­—å­—åº“åªä½¿ç”¨å¤šå›½æ–‡å­—ç‚¹é˜µå­—åº“ç”Ÿæˆå™¨ç”Ÿæˆçš„ç‚¹é˜µå­—åº“ï¼Œ
+	ä½¿ç”¨æ¨¡å¼äºŒç”Ÿæˆï¼Œä¹Ÿå°±æ˜¯çºµåº“ã€‚
 
 */
 struct fbcon_font_desc font_songti_16x16 = {

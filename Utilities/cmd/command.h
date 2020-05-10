@@ -2,7 +2,7 @@
 #ifndef __COMMAND_H_
 #define __COMMAND_H_
 
-/*°üº¬ÏµÍ³Æ½Ì¨µÄ¶¨Òå£¬Ö÷ÒªÊÇ±äÁ¿ÀàĞÍ*/
+/*åŒ…å«ç³»ç»Ÿå¹³å°çš„å®šä¹‰ï¼Œä¸»è¦æ˜¯å˜é‡ç±»å‹*/
 #include "mcu.h"
 
 #define printf cmd_uart_printf
@@ -33,7 +33,7 @@
 #define CONFIG_AUTO_COMPLETE	1
 
 /*
-	cmd¶¨Òå
+	cmdå®šä¹‰
 */
 struct cmd_tbl_s {
 	char	*name;		/* Command Name			*/
@@ -58,10 +58,10 @@ typedef struct cmd_tbl_s	cmd_tbl_t;
 extern cmd_tbl_t  *__u_boot_cmd_start;
 extern cmd_tbl_t  *__u_boot_cmd_end;
 /*
-	½«ÃüÁî½á¹¹Ìå¶¨Òåµ½Ö¸¶¨FLASHÎ»ÖÃ£¬²¢ÇÒÁ¬Ğø·ÅÖÃ£¬
-	²»Í¬µÄ±àÒëÆ÷¶¨Òå²»Ò»Ñù
+	å°†å‘½ä»¤ç»“æ„ä½“å®šä¹‰åˆ°æŒ‡å®šFLASHä½ç½®ï¼Œå¹¶ä¸”è¿ç»­æ”¾ç½®ï¼Œ
+	ä¸åŒçš„ç¼–è¯‘å™¨å®šä¹‰ä¸ä¸€æ ·
 */ 
-/*  IAR¶¨Òå£¬ÒªÔÚlinkÎÄ¼şÄÚ¶¨Òå.cmd¶Î*/
+/*  IARå®šä¹‰ï¼Œè¦åœ¨linkæ–‡ä»¶å†…å®šä¹‰.cmdæ®µ*/
 #if 0
 #define REGISTER_CMD(name,maxargs,rep,cmd,usage,help) \
       __root  const cmd_tbl_t cmd_##name @ ".cmd" =  {#name, maxargs, rep, cmd, usage,help}

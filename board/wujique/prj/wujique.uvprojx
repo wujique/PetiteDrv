@@ -333,7 +333,7 @@
             <v6WtE>0</v6WtE>
             <v6Rtti>0</v6Rtti>
             <VariousControls>
-              <MiscControls></MiscControls>
+              <MiscControls>--locale=english</MiscControls>
               <Define></Define>
               <Undefine></Undefine>
               <IncludePath>..\..\..\app;..\..\wujique;..\usb\inc;..\eth\inc;..\..\..\driver;..\..\..\driver\lcd;..\..\..\driver\cdev;..\..\..\mcu\stm32407\mcu_dev;..\..\..\mcu\stm32407\StLib\STM32F4xx_StdPeriph_Driver\inc;..\..\..\panel;..\..\..\Petite;..\..\..\Utilities\FreeRTOS\Source\include;..\..\..\mcu\stm32407\StLib\STM32_USB_OTG_Driver\inc;..\..\..\mcu\stm32407\StLib\STM32_USB_HOST_Library\Core\inc;..\..\..\mcu\stm32407\StLib\STM32_USB_HOST_Library\Class\MSC\inc;..\..\..\mcu\stm32407\StLib\STM32_USB_Device_Library\Core\inc;..\..\..\mcu\stm32407\StLib\STM32_USB_Device_Library\Class\msc\inc;..\..\..\Utilities\fat_fs\src;..\eth\inc;..\..\..\mcu\stm32407\StLib\STM32F4x7_ETH_Driver\inc;..\..\..\Utilities\lwip-1.4.1\port\STM32F4x7\Standalone;..\..\..\Utilities\lwip-1.4.1\src\include\ipv4;..\..\..\Utilities\lwip-1.4.1\src\include;..\..\..\Utilities\lwip-1.4.1\src\include\netif;..\..\..\Utilities\lwip-1.4.1\src\include\lwip;..\..\..\Utilities\lwip-1.4.1\port\STM32F4x7;..\..\..\Utilities\tslib;..\..\..\Utilities\cmd;..\..\..\Utilities\spiffs-0.3.7\src;..\..\..\Utilities\littlefs-master;..\usb\inc;..\..\..\mcu\stm32407;..\..\..\Utilities\font;..\..\..\driver\camera;..\..\..\mcu\stm32407\StLib\core;..\rtos</IncludePath>

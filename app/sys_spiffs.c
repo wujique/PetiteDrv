@@ -13,10 +13,10 @@ static s32_t core_spiflash_spiffs_read(u32_t addr, u32_t size, u8_t *dst);
 static s32_t core_spiflash_spiffs_write(u32_t addr, u32_t size, u8_t *src);
 static s32_t core_spiflash_spiffs_erase(u32_t addr, u32_t size);
 
-/*ÎÄ¼şÏµÍ³½á¹¹Ìå*/
+/*æ–‡ä»¶ç³»ç»Ÿç»“æ„ä½“*/
 static spiffs fs;
 
-/*Ò³¶¨Òå*/
+/*é¡µå®šä¹‰*/
 #define LOG_PAGE_SIZE		256
 
 static u8_t spiffs_work_buf[LOG_PAGE_SIZE*2];
@@ -24,25 +24,25 @@ static u8_t spiffs_fds[32*4];
 static u8_t spiffs_cache_buf[(LOG_PAGE_SIZE+32)*4];
 
 /*
-	ÎÄ¼şÏµÍ³ÅäÖÃ
+	æ–‡ä»¶ç³»ç»Ÿé…ç½®
 	
-	#define SPIFFS_SINGLETON (0) Õâ¸öºêÅäÖÃÎª0£¬Ò²¾ÍÊÇÖ§³Ö¶à¸öspiffs
+	#define SPIFFS_SINGLETON (0) è¿™ä¸ªå®é…ç½®ä¸º0ï¼Œä¹Ÿå°±æ˜¯æ”¯æŒå¤šä¸ªspiffs
 */
 spiffs_config cfg=
 	{	
-		/* ·ÖÅä¸øSPIFFSµÄ¿Õ¼ä ÒªÊÇÂß¼­ÉÈÇøµÄÕûÊı±¶*/
+		/* åˆ†é…ç»™SPIFFSçš„ç©ºé—´ è¦æ˜¯é€»è¾‘æ‰‡åŒºçš„æ•´æ•°å€*/
 		.phys_size = 1024*4*4*128,
-		/* ÆğÊ¼µØÖ· */
+		/* èµ·å§‹åœ°å€ */
 		.phys_addr = 0,
 		/*
-			ÎïÀíÉÈÇø£¬Ò²¾ÍÊÇÒ»´Î²Á³ıµÄ´óĞ¡£¬Òª¸úhal_erase_fº¯Êı²Á³ıµÄÒ»ÖÂ
+			ç‰©ç†æ‰‡åŒºï¼Œä¹Ÿå°±æ˜¯ä¸€æ¬¡æ“¦é™¤çš„å¤§å°ï¼Œè¦è·Ÿhal_erase_få‡½æ•°æ“¦é™¤çš„ä¸€è‡´
 		*/
 		.phys_erase_block = 1024*4, 
-		/* Âß¼­ÉÈÇø£¬±ØĞëÊÇÎïÀíÉÈÇøµÄÕûÊı±¶
-			×îºÃÊÇ: log_block_size/log_page_size = £¨32-512£©
+		/* é€»è¾‘æ‰‡åŒºï¼Œå¿…é¡»æ˜¯ç‰©ç†æ‰‡åŒºçš„æ•´æ•°å€
+			æœ€å¥½æ˜¯: log_block_size/log_page_size = ï¼ˆ32-512ï¼‰
 		*/
 		.log_block_size = 1024*4*4,
-		/*Âß¼­Ò³£¬Í¨³£ÊÇ256*/
+		/*é€»è¾‘é¡µï¼Œé€šå¸¸æ˜¯256*/
 		.log_page_size = LOG_PAGE_SIZE, 
 		
 		.hal_read_f = core_spiflash_spiffs_read,
@@ -52,12 +52,12 @@ spiffs_config cfg=
 	};
 /*
 
-	¶ÔSPI FLASHº¯Êı½øĞĞ¶ş´Î·â×°
+	å¯¹SPI FLASHå‡½æ•°è¿›è¡ŒäºŒæ¬¡å°è£…
 
 	*/
 /**
  *@brief:     
- *@details:  ¶ÁFLASHÊı¾İ 
+ *@details:  è¯»FLASHæ•°æ® 
  *@param[in]    
  *@param[out]  
  *@retval:     
@@ -79,7 +79,7 @@ static s32_t core_spiflash_spiffs_read(u32_t addr, u32_t size, u8_t *dst)
 }
 /**
  *@brief:     
- *@details: Ğ´FLASHÊı¾İ  
+ *@details: å†™FLASHæ•°æ®  
  *@param[in]    
  *@param[out]  
  *@retval:     
@@ -100,9 +100,9 @@ static s32_t core_spiflash_spiffs_write(u32_t addr, u32_t size, u8_t *src)
 }
 /**
  *@brief:     
- *@details:  ²Á³ı
- 			 SPIFFS»á°´ÕÕspiffs_configÖĞ.phys_erase_blockÖµ½øĞĞ²Ù×÷
- 			 ËùÒÔ²»ÓÃ¹ØĞÄsize
+ *@details:  æ“¦é™¤
+ 			 SPIFFSä¼šæŒ‰ç…§spiffs_configä¸­.phys_erase_blockå€¼è¿›è¡Œæ“ä½œ
+ 			 æ‰€ä»¥ä¸ç”¨å…³å¿ƒsize
  *@param[in]    
  *@param[out]  
  *@retval:     
@@ -123,7 +123,7 @@ static s32_t core_spiflash_spiffs_erase(u32_t addr, u32_t size)
 
 /**
  *@brief:     
- *@details: ¸ñÊ½»¯ÎÄ¼şÏµÍ³
+ *@details: æ ¼å¼åŒ–æ–‡ä»¶ç³»ç»Ÿ
  *@param[in]    
  *@param[out]  
  *@retval:     
@@ -133,7 +133,7 @@ void sys_spiffs_format(void)
 
 	wjq_log(LOG_INFO, ">---format spiffs coreflash\r\n");
 
-	/* ¸ñÊ½»¯Ö®Ç°ÒªÏÈunmount */
+	/* æ ¼å¼åŒ–ä¹‹å‰è¦å…ˆunmount */
 	SPIFFS_unmount(&fs);
 			
 	SPIFFS_format(&fs);
@@ -154,7 +154,7 @@ void sys_spiffs_format(void)
 
 /**
  *@brief:     
- *@details: ¹ÒÔØspiffsÎÄ¼şÏµÍ³
+ *@details: æŒ‚è½½spiffsæ–‡ä»¶ç³»ç»Ÿ
  *@param[in]    
  *@param[out]  
  *@retval:     
@@ -178,7 +178,7 @@ void sys_spiffs_mount_coreflash(void)
  }
 /**
  *@brief:     
- *@details: ÁĞ³öÎÄ¼şÏµÍ³ÎÄ¼ş
+ *@details: åˆ—å‡ºæ–‡ä»¶ç³»ç»Ÿæ–‡ä»¶
  *@param[in]    
  *@param[out]  
  *@retval:     

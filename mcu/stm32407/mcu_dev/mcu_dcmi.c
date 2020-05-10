@@ -102,7 +102,7 @@ void BUS_DCMI_Config(u16 pck, u16 vs, u16 hs)
 	DCMI_InitStructure.DCMI_ExtendedDataMode = DCMI_ExtendedDataMode_8b;
 	DCMI_Init(&DCMI_InitStructure);
 	
-	/* DCMI Ö¡ÖÐ¶Ï */
+	/* DCMI å¸§ä¸­æ–­ */
 	DCMI_ITConfig(DCMI_IT_FRAME, ENABLE);
 	NVIC_InitStructure.NVIC_IRQChannel = DCMI_IRQn;
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=1;
@@ -111,9 +111,9 @@ void BUS_DCMI_Config(u16 pck, u16 vs, u16 hs)
 	NVIC_Init(&NVIC_InitStructure);
 }
 /*
-	ÅäÖÃDCMI»º³å
-	Èç¹ûBufferSize == 1 £¬¾ÍÊÇÄ¿±êµØÖ·²»±ä
-	Èç¹ûMemory1BaseAddr == MULL£¬Ê¹ÓÃµ¥»º³å£¬·ñÔòÊ¹ÓÃË«»º³åÄ£Ê½¡£
+	é…ç½®DCMIç¼“å†²
+	å¦‚æžœBufferSize == 1 ï¼Œå°±æ˜¯ç›®æ ‡åœ°å€ä¸å˜
+	å¦‚æžœMemory1BaseAddr == MULLï¼Œä½¿ç”¨å•ç¼“å†²ï¼Œå¦åˆ™ä½¿ç”¨åŒç¼“å†²æ¨¡å¼ã€‚
 */
 void BUS_DCMI_DMA_Init(u32 Memory0BaseAddr, u32 Memory1BaseAddr, u32 BufferSize)
 {
@@ -137,7 +137,7 @@ void BUS_DCMI_DMA_Init(u32 Memory0BaseAddr, u32 Memory1BaseAddr, u32 BufferSize)
 	if(BufferSize == 1)
 		DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Disable;	
 	else
-		DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;	//´æ´¢Æ÷ÔöÁ¿Ä£Ê½
+		DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;	//å­˜å‚¨å™¨å¢žé‡æ¨¡å¼
 		
 	DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Word;
 	DMA_InitStructure.DMA_MemoryDataSize = DMA_MemoryDataSize_HalfWord;
@@ -153,16 +153,16 @@ void BUS_DCMI_DMA_Init(u32 Memory0BaseAddr, u32 Memory1BaseAddr, u32 BufferSize)
 
 	if(Memory1BaseAddr != NULL)
   	{	
-	    DMA_DoubleBufferModeConfig(DMA2_Stream1,(uint32_t)Memory0BaseAddr, DMA_Memory_0);	//	ÅäÖÃ»º³åÇø0
-		DMA_DoubleBufferModeConfig(DMA2_Stream1,(uint32_t)Memory1BaseAddr, DMA_Memory_1);	//	ÅäÖÃ»º³åÇø1
-		DMA_DoubleBufferModeCmd(DMA2_Stream1,ENABLE);										//	¿ªÆôË«»º³åÄ£Ê½
-		DMA_ITConfig(DMA2_Stream1,DMA_IT_TC,ENABLE);	//¿ªÆô´«ÊäÍê³ÉÖÐ¶Ï
+	    DMA_DoubleBufferModeConfig(DMA2_Stream1,(uint32_t)Memory0BaseAddr, DMA_Memory_0);	//	é…ç½®ç¼“å†²åŒº0
+		DMA_DoubleBufferModeConfig(DMA2_Stream1,(uint32_t)Memory1BaseAddr, DMA_Memory_1);	//	é…ç½®ç¼“å†²åŒº1
+		DMA_DoubleBufferModeCmd(DMA2_Stream1,ENABLE);										//	å¼€å¯åŒç¼“å†²æ¨¡å¼
+		DMA_ITConfig(DMA2_Stream1,DMA_IT_TC,ENABLE);	//å¼€å¯ä¼ è¾“å®Œæˆä¸­æ–­
 		
 		NVIC_InitStructure.NVIC_IRQChannel = DMA2_Stream1_IRQn;
-		NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=1;//ÇÀÕ¼ÓÅÏÈ¼¶0
-		NVIC_InitStructure.NVIC_IRQChannelSubPriority =0;		//×ÓÓÅÏÈ¼¶0
-		NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;			//IRQÍ¨µÀÊ¹ÄÜ
-		NVIC_Init(&NVIC_InitStructure);	//¸ù¾ÝÖ¸¶¨µÄ²ÎÊý³õÊ¼»¯VIC¼Ä´æÆ÷¡¢
+		NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=1;//æŠ¢å ä¼˜å…ˆçº§0
+		NVIC_InitStructure.NVIC_IRQChannelSubPriority =0;		//å­ä¼˜å…ˆçº§0
+		NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;			//IRQé€šé“ä½¿èƒ½
+		NVIC_Init(&NVIC_InitStructure);	//æ ¹æ®æŒ‡å®šçš„å‚æ•°åˆå§‹åŒ–VICå¯„å­˜å™¨ã€
 
 	}
 }
@@ -221,7 +221,7 @@ void MCO1_Init(void)
 static u8 DcmiFlag = 0;
 
 /*
-	dcmiÖ¡ÖÐ¶Ï·þÎñº¯Êý
+	dcmiå¸§ä¸­æ–­æœåŠ¡å‡½æ•°
 */
 s32 mcu_dcmi_frame_process(void)
 {
@@ -229,15 +229,15 @@ s32 mcu_dcmi_frame_process(void)
 	return 0;
 }
 /*
-	dcmi dma´«ÊäÍê³ÉÖÐ¶Ï£¨Ò»¸öbufÂú£©
+	dcmi dmaä¼ è¾“å®Œæˆä¸­æ–­ï¼ˆä¸€ä¸ªbufæ»¡ï¼‰
 */
 s32 mcu_dcmi_dma_process(void)
 {
-	if(DMA2_Stream1->CR&(1<<19))//DMAÊ¹ÓÃbuf1,¶ÁÈ¡buf0
+	if(DMA2_Stream1->CR&(1<<19))//DMAä½¿ç”¨buf1,è¯»å–buf0
 	{ 
  		DcmiFlag |= DCMI_FLAG_BUF0;
 	}
-	else 					//DMAÊ¹ÓÃbuf0,¶ÁÈ¡buf1
+	else 					//DMAä½¿ç”¨buf0,è¯»å–buf1
 	{
 		DcmiFlag |= DCMI_FLAG_BUF1;
 	}
@@ -245,7 +245,7 @@ s32 mcu_dcmi_dma_process(void)
 	return 0;
 }
 /*
-	»ñÈ¡dcmi´«Êä×´Ì¬
+	èŽ·å–dcmiä¼ è¾“çŠ¶æ€
 */
 s32 mcu_dcmi_get_sta(u8 *sta)
 {

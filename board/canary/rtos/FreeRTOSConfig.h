@@ -52,10 +52,10 @@
 #define configUSE_IDLE_HOOK				0
 #define configUSE_TICK_HOOK				0
 #define configCPU_CLOCK_HZ				( SystemCoreClock )
-#define configTICK_RATE_HZ				( ( TickType_t ) 1000 )//ÏµÍ³ÆµÂÊ£¬1Khz£¬Ò²¾ÍÊÇ1MSµ÷¶ÈÒ»´Î
-#define configMAX_PRIORITIES			( 5 )//5¸öÓÅÏÈ¼¶
+#define configTICK_RATE_HZ				( ( TickType_t ) 1000 )//ç³»ç»Ÿé¢‘ç‡ï¼Œ1Khzï¼Œä¹Ÿå°±æ˜¯1MSè°ƒåº¦ä¸€æ¬¡
+#define configMAX_PRIORITIES			( 5 )//5ä¸ªä¼˜å…ˆçº§
 #define configMINIMAL_STACK_SIZE		( ( unsigned short ) 130 )
-#define configTOTAL_HEAP_SIZE			( ( size_t ) ( 10 * 1024 ) )//¶Ñ£¬Ê¹ÓÃFreeRtosµÄÄÚ´æ·ÖÅä·½°¸²Å»áÓÃµ½
+#define configTOTAL_HEAP_SIZE			( ( size_t ) ( 10 * 1024 ) )//å †ï¼Œä½¿ç”¨FreeRtosçš„å†…å­˜åˆ†é…æ–¹æ¡ˆæ‰ä¼šç”¨åˆ°
 #define configMAX_TASK_NAME_LEN			( 10 )
 #define configUSE_TRACE_FACILITY		1
 #define configUSE_16_BIT_TICKS			0

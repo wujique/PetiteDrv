@@ -1,22 +1,22 @@
 /**
  * @file            mcu_i2c.c
- * @brief           IOÄ£ÄâI2C
+ * @brief           IOæ¨¡æ‹ŸI2C
  * @author          test
- * @date            2019Äê03ÔÂ30ÈÕ ĞÇÆÚÒ»
- * @version         ³õ¸å
- * @par             °æÈ¨ËùÓĞ (C), 2013-2023
+ * @date            2019å¹´03æœˆ30æ—¥ æ˜ŸæœŸä¸€
+ * @version         åˆç¨¿
+ * @par             ç‰ˆæƒæ‰€æœ‰ (C), 2013-2023
  * @par History:
- * 1.ÈÕ    ÆÚ:      
- *   ×÷    Õß:      Îİ¼¹È¸¹¤×÷ÊÒ
- *   ĞŞ¸ÄÄÚÈİ:      ´´½¨ÎÄ¼ş
-    	1 Ô´Âë¹éÎİ¼¹È¸¹¤×÷ÊÒËùÓĞ¡£
-		2 ¿ÉÒÔÓÃÓÚµÄÆäËûÉÌÒµÓÃÍ¾£¨ÅäÌ×¿ª·¢°åÏúÊÛ³ıÍâ£©£¬²»ĞëÊÚÈ¨¡£
-		3 Îİ¼¹È¸¹¤×÷ÊÒ²»¶Ô´úÂë¹¦ÄÜ×öÈÎºÎ±£Ö¤£¬ÇëÊ¹ÓÃÕß×ÔĞĞ²âÊÔ£¬ºó¹û×Ô¸º¡£
-		4 ¿ÉËæÒâĞŞ¸ÄÔ´Âë²¢·Ö·¢£¬µ«²»¿ÉÖ±½ÓÏúÊÛ±¾´úÂë»ñÀû£¬²¢ÇÒÇë±£ÁôWUJIQUE°æÈ¨ËµÃ÷¡£
-		5 Èç·¢ÏÖBUG»òÓĞÓÅ»¯£¬»¶Ó­·¢²¼¸üĞÂ¡£ÇëÁªÏµ£ºcode@wujique.com
-		6 Ê¹ÓÃ±¾Ô´ÂëÔòÏàµ±ÓÚÈÏÍ¬±¾°æÈ¨ËµÃ÷¡£
-		7 ÈçÇÖ·¸ÄãµÄÈ¨Àû£¬ÇëÁªÏµ£ºcode@wujique.com
-		8 Ò»ÇĞ½âÊÍÈ¨¹éÎİ¼¹È¸¹¤×÷ÊÒËùÓĞ¡£
+ * 1.æ—¥    æœŸ:      
+ *   ä½œ    è€…:      å±‹è„Šé›€å·¥ä½œå®¤
+ *   ä¿®æ”¹å†…å®¹:      åˆ›å»ºæ–‡ä»¶
+    	1 æºç å½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
+		2 å¯ä»¥ç”¨äºçš„å…¶ä»–å•†ä¸šç”¨é€”ï¼ˆé…å¥—å¼€å‘æ¿é”€å”®é™¤å¤–ï¼‰ï¼Œä¸é¡»æˆæƒã€‚
+		3 å±‹è„Šé›€å·¥ä½œå®¤ä¸å¯¹ä»£ç åŠŸèƒ½åšä»»ä½•ä¿è¯ï¼Œè¯·ä½¿ç”¨è€…è‡ªè¡Œæµ‹è¯•ï¼Œåæœè‡ªè´Ÿã€‚
+		4 å¯éšæ„ä¿®æ”¹æºç å¹¶åˆ†å‘ï¼Œä½†ä¸å¯ç›´æ¥é”€å”®æœ¬ä»£ç è·åˆ©ï¼Œå¹¶ä¸”è¯·ä¿ç•™WUJIQUEç‰ˆæƒè¯´æ˜ã€‚
+		5 å¦‚å‘ç°BUGæˆ–æœ‰ä¼˜åŒ–ï¼Œæ¬¢è¿å‘å¸ƒæ›´æ–°ã€‚è¯·è”ç³»ï¼šcode@wujique.com
+		6 ä½¿ç”¨æœ¬æºç åˆ™ç›¸å½“äºè®¤åŒæœ¬ç‰ˆæƒè¯´æ˜ã€‚
+		7 å¦‚ä¾µçŠ¯ä½ çš„æƒåˆ©ï¼Œè¯·è”ç³»ï¼šcode@wujique.com
+		8 ä¸€åˆ‡è§£é‡Šæƒå½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
 */
 
 #include "mcu.h"
@@ -26,14 +26,14 @@
 #include "bus_vi2c.h"
 #include "alloc.h"
 
-/*	I2CÄ£¿éÎ¬»¤Ò»¸öÁ´±í£¬¼ÇÂ¼ÓĞµ±Ç°³õÊ¼»¯µÄI2C¿ØÖÆÆ÷*/
+/*	I2Cæ¨¡å—ç»´æŠ¤ä¸€ä¸ªé“¾è¡¨ï¼Œè®°å½•æœ‰å½“å‰åˆå§‹åŒ–çš„I2Cæ§åˆ¶å™¨*/
 struct list_head DevI2cGdRoot = {&DevI2cGdRoot, &DevI2cGdRoot};
 
 /**
  *@brief:      bus_i2c_register
- *@details:    ³õÊ¼»¯I2C½Ó¿Ú£¬ Ïàµ±ÓÚ×¢²áÒ»¸öI2CÉè±¸
- *@param[in]   const DevI2c * dev I2CÉè±¸ĞÅÏ¢
- *@param[out]  ÎŞ
+ *@details:    åˆå§‹åŒ–I2Cæ¥å£ï¼Œ ç›¸å½“äºæ³¨å†Œä¸€ä¸ªI2Cè®¾å¤‡
+ *@param[in]   const DevI2c * dev I2Cè®¾å¤‡ä¿¡æ¯
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 bus_i2c_register(const DevI2c * dev)
@@ -44,7 +44,7 @@ s32 bus_i2c_register(const DevI2c * dev)
 	
 	wjq_log(LOG_INFO, "[register] i2c:%s!\r\n", dev->pnode.name);
 
-	/*	ÏÈÒª²éÑ¯µ±Ç°I2C¿ØÖÆÆ÷£¬·ÀÖ¹ÖØÃû	*/
+	/*	å…ˆè¦æŸ¥è¯¢å½“å‰I2Cæ§åˆ¶å™¨ï¼Œé˜²æ­¢é‡å	*/
 	listp = DevI2cGdRoot.next;
 	while(1) {
 		if (listp == &DevI2cGdRoot) break;
@@ -60,11 +60,11 @@ s32 bus_i2c_register(const DevI2c * dev)
 		listp = listp->next;
 	}
 
-	/* ÉêÇëÒ»¸ö½Úµã¿Õ¼ä   ²¢²åÈëÁ´±í     	*/
+	/* ç”³è¯·ä¸€ä¸ªèŠ‚ç‚¹ç©ºé—´   å¹¶æ’å…¥é“¾è¡¨     	*/
 	p = (DevI2cNode *) wjq_malloc(sizeof(DevI2cNode));
 	list_add(&(p->list), &DevI2cGdRoot);
 	
-	/*	³õÊ¼»¯Éè±¸½Úµã 	*/
+	/*	åˆå§‹åŒ–è®¾å¤‡èŠ‚ç‚¹ 	*/
 	memcpy((u8 *)&p->dev, (u8 *)dev, sizeof(DevI2c));
 	p->gd = -1;
 
@@ -77,10 +77,10 @@ s32 bus_i2c_register(const DevI2c * dev)
 }
 /**
  *@brief:      bus_i2c_open
- *@details:    ¸ù¾İÃû×Ö´ò¿ªÒ»¸öi2c½Ó¿Ú
+ *@details:    æ ¹æ®åå­—æ‰“å¼€ä¸€ä¸ªi2cæ¥å£
  *@param[in]   void  
- *@param[out]  ÎŞ
- *@retval:     ·µ»ØÉè±¸½Úµã
+ *@param[out]  æ— 
+ *@retval:     è¿”å›è®¾å¤‡èŠ‚ç‚¹
  */
 DevI2cNode *bus_i2c_open(char *name)
 {
@@ -118,10 +118,10 @@ DevI2cNode *bus_i2c_open(char *name)
 }
 /**
  *@brief:      mcu_i2c_close
- *@details:    ¹Ø±ÕI2C½Úµã
+ *@details:    å…³é—­I2CèŠ‚ç‚¹
  *@param[in]   DevI2cNode *node 
- *@param[out]  ÎŞ
- *@retval:     -1 ¹Ø±ÕÊ§°Ü£»0 ¹Ø±Õ³É¹¦
+ *@param[out]  æ— 
+ *@retval:     -1 å…³é—­å¤±è´¥ï¼›0 å…³é—­æˆåŠŸ
  */
 s32 bus_i2c_close(DevI2cNode *node)
 {
@@ -136,13 +136,13 @@ s32 bus_i2c_close(DevI2cNode *node)
 
 /**
  *@brief:      mcu_i2c_transfer
- *@details:    ÖĞ¼äÎŞÖØĞÂ¿ªÊ¼Î»µÄ´«ÊäÁ÷³Ì
- *@param[in]   DevI2cNode * node  I2C½Úµã
- 			   u8 addr   7Î»µØÖ·
-               u8 rw    0 Ğ´£¬1 ¶Á    
+ *@details:    ä¸­é—´æ— é‡æ–°å¼€å§‹ä½çš„ä¼ è¾“æµç¨‹
+ *@param[in]   DevI2cNode * node  I2CèŠ‚ç‚¹
+ 			   u8 addr   7ä½åœ°å€
+               u8 rw    0 å†™ï¼Œ1 è¯»    
                u8* data  
-               s32 datalen ·¢ËÍÊı¾İ³¤¶È
- *@param[out]  ÎŞ
+               s32 datalen å‘é€æ•°æ®é•¿åº¦
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 bus_i2c_transfer(DevI2cNode *node, u8 addr, u8 rw, u8* data, s32 datalen)

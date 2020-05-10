@@ -35,8 +35,8 @@
 #include "mcu.h"
 
 /* Exported constants --------------------------------------------------------*/
-#define DCMI_DR_ADDRESS       0x50050028//DMA传输DCMI的地址
-#define FSMC_LCD_ADDRESS      0x6C010000//DMA传输目的地址       LCD 地址
+#define DCMI_DR_ADDRESS       0x50050028//DMA浼犺緭DCMI鐨勫湴鍧�
+#define FSMC_LCD_ADDRESS      0x6C010000//DMA浼犺緭鐩殑鍦板潃       LCD 鍦板潃
 #define NOKEY                 0
 #define SEL                   1
 #define UP                    2

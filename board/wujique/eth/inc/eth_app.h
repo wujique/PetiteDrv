@@ -76,7 +76,7 @@
 #define GW_ADDR3   1
 
 /* MII and RMII mode selection, for STM324xG-EVAL Board(MB786) RevB ***********/
-/* wujique F407硬件使用RMII接口*/
+/* wujique F407纭欢浣跨敤RMII鎺ュ彛*/
 #define RMII_MODE  // User have to provide the 50 MHz clock by soldering a 50 MHz
                      // oscillator (ref SM7745HEV-50.0M or equivalent) on the U3
                      // footprint located under CN3 and also removing jumper on JP5. 

@@ -36,7 +36,7 @@ void serial_putc (const char c)
 }
 /*
 
-	检测串口是否有数据
+	妫�娴嬩覆鍙ｆ槸鍚︽湁鏁版嵁
 
 */
 int serial_tstc(void)

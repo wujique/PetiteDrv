@@ -1,23 +1,23 @@
 /**
  * @file            bus_spi.c
- * @brief           SPI×ÜÏß¹ÜÀí
+ * @brief           SPIæ€»çº¿ç®¡ç†
  * @author          test
- * @date            2019Äê03ÔÂ26ÈÕ ĞÇÆÚËÄ
- * @version         ³õ¸å
+ * @date            2019å¹´03æœˆ26æ—¥ æ˜ŸæœŸå››
+ * @version         åˆç¨¿
  * @par             
  * @par History:
- * 1.ÈÕ    ÆÚ:      
- *   ×÷    Õß:      test
- *   ĞŞ¸ÄÄÚÈİ:      ´´½¨ÎÄ¼ş
-		°æÈ¨ËµÃ÷£º
-		1 Ô´Âë¹éÎİ¼¹È¸¹¤×÷ÊÒËùÓĞ¡£
-		2 ¿ÉÒÔÓÃÓÚµÄÆäËûÉÌÒµÓÃÍ¾£¨ÅäÌ×¿ª·¢°åÏúÊÛ³ıÍâ£©£¬²»ĞëÊÚÈ¨¡£
-		3 Îİ¼¹È¸¹¤×÷ÊÒ²»¶Ô´úÂë¹¦ÄÜ×öÈÎºÎ±£Ö¤£¬ÇëÊ¹ÓÃÕß×ÔĞĞ²âÊÔ£¬ºó¹û×Ô¸º¡£
-		4 ¿ÉËæÒâĞŞ¸ÄÔ´Âë²¢·Ö·¢£¬µ«²»¿ÉÖ±½ÓÏúÊÛ±¾´úÂë»ñÀû£¬²¢ÇÒ±£Áô°æÈ¨ËµÃ÷¡£
-		5 Èç·¢ÏÖBUG»òÓĞÓÅ»¯£¬»¶Ó­·¢²¼¸üĞÂ¡£ÇëÁªÏµ£ºcode@wujique.com
-		6 Ê¹ÓÃ±¾Ô´ÂëÔòÏàµ±ÓÚÈÏÍ¬±¾°æÈ¨ËµÃ÷¡£
-		7 ÈçÇÖ·¸ÄãµÄÈ¨Àû£¬ÇëÁªÏµ£ºcode@wujique.com
-		8 Ò»ÇĞ½âÊÍÈ¨¹éÎİ¼¹È¸¹¤×÷ÊÒËùÓĞ¡£
+ * 1.æ—¥    æœŸ:      
+ *   ä½œ    è€…:      test
+ *   ä¿®æ”¹å†…å®¹:      åˆ›å»ºæ–‡ä»¶
+		ç‰ˆæƒè¯´æ˜ï¼š
+		1 æºç å½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
+		2 å¯ä»¥ç”¨äºçš„å…¶ä»–å•†ä¸šç”¨é€”ï¼ˆé…å¥—å¼€å‘æ¿é”€å”®é™¤å¤–ï¼‰ï¼Œä¸é¡»æˆæƒã€‚
+		3 å±‹è„Šé›€å·¥ä½œå®¤ä¸å¯¹ä»£ç åŠŸèƒ½åšä»»ä½•ä¿è¯ï¼Œè¯·ä½¿ç”¨è€…è‡ªè¡Œæµ‹è¯•ï¼Œåæœè‡ªè´Ÿã€‚
+		4 å¯éšæ„ä¿®æ”¹æºç å¹¶åˆ†å‘ï¼Œä½†ä¸å¯ç›´æ¥é”€å”®æœ¬ä»£ç è·åˆ©ï¼Œå¹¶ä¸”ä¿ç•™ç‰ˆæƒè¯´æ˜ã€‚
+		5 å¦‚å‘ç°BUGæˆ–æœ‰ä¼˜åŒ–ï¼Œæ¬¢è¿å‘å¸ƒæ›´æ–°ã€‚è¯·è”ç³»ï¼šcode@wujique.com
+		6 ä½¿ç”¨æœ¬æºç åˆ™ç›¸å½“äºè®¤åŒæœ¬ç‰ˆæƒè¯´æ˜ã€‚
+		7 å¦‚ä¾µçŠ¯ä½ çš„æƒåˆ©ï¼Œè¯·è”ç³»ï¼šcode@wujique.com
+		8 ä¸€åˆ‡è§£é‡Šæƒå½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
 */
 #include "mcu.h"
 #include "log.h"
@@ -37,14 +37,14 @@
 #endif
 
 /*
-	ËùÓĞSPIÍ³Ò»¶ÔÍâ½Ó¿Ú
+	æ‰€æœ‰SPIç»Ÿä¸€å¯¹å¤–æ¥å£
 */
 struct list_head DevSpiRoot = {&DevSpiRoot, &DevSpiRoot};
 /**
  *@brief:      mcu_spi_register
- *@details:    ×¢²áSPI¿ØÖÆÆ÷Éè±¸
+ *@details:    æ³¨å†ŒSPIæ§åˆ¶å™¨è®¾å¤‡
  *@param[in]   DevSpi *dev      
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 bus_spi_register(const DevSpi *dev)
@@ -56,7 +56,7 @@ s32 bus_spi_register(const DevSpi *dev)
 	wjq_log(LOG_INFO, "[register] spi :%s!\r\n", dev->pnode.name);
 
 	/*
-		ÏÈÒª²éÑ¯µ±Ç°£¬·ÀÖ¹ÖØÃû
+		å…ˆè¦æŸ¥è¯¢å½“å‰ï¼Œé˜²æ­¢é‡å
 	*/
 	listp = DevSpiRoot.next;
 	while(1) {
@@ -73,14 +73,14 @@ s32 bus_spi_register(const DevSpi *dev)
 	}
 
 	/* 
-		ÉêÇëÒ»¸ö½Úµã¿Õ¼ä 
+		ç”³è¯·ä¸€ä¸ªèŠ‚ç‚¹ç©ºé—´ 
 	*/
 	p = (DevSpiNode *)wjq_malloc(sizeof(DevSpiNode));
 	list_add(&(p->list), &DevSpiRoot);
 
 	memcpy((u8 *)&p->dev, (u8 *)dev, sizeof(DevSpi));
 	
-	/*³õÊ¼»¯*/
+	/*åˆå§‹åŒ–*/
 	if (dev->pnode.type == BUS_SPI_V)
 		bus_vspi_init(dev);
 	else if (dev->pnode.type == BUS_SPI_H)
@@ -94,9 +94,9 @@ s32 bus_spi_register(const DevSpi *dev)
 struct list_head DevSpiChRoot = {&DevSpiChRoot, &DevSpiChRoot};
 /**
  *@brief:      mcu_spich_register
- *@details:    ×¢²áSPIÍ¨µÀ
+ *@details:    æ³¨å†ŒSPIé€šé“
  *@param[in]   DevSpiCh *dev     
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 bus_spich_register(const DevSpiCh *dev)
@@ -108,7 +108,7 @@ s32 bus_spich_register(const DevSpiCh *dev)
 	wjq_log(LOG_INFO, "[register] spi ch :%s!\r\n", dev->pnode.name);
 
 	/*
-		ÏÈÒª²éÑ¯µ±Ç°£¬·ÀÖ¹ÖØÃû
+		å…ˆè¦æŸ¥è¯¢å½“å‰ï¼Œé˜²æ­¢é‡å
 	*/
 	listp = DevSpiChRoot.next;
 	while(1) {
@@ -124,7 +124,7 @@ s32 bus_spich_register(const DevSpiCh *dev)
 		listp = listp->next;
 	}
 
-	/* Ñ°ÕÒSPI¿ØÖÆÆ÷*/
+	/* å¯»æ‰¾SPIæ§åˆ¶å™¨*/
 	listp = DevSpiRoot.next;
 	while(1) {
 		if (listp == &DevSpiRoot) {
@@ -141,14 +141,14 @@ s32 bus_spich_register(const DevSpiCh *dev)
 		
 		listp = listp->next;
 	}
-	/* ÉêÇëÒ»¸ö½Úµã¿Õ¼ä 	*/
+	/* ç”³è¯·ä¸€ä¸ªèŠ‚ç‚¹ç©ºé—´ 	*/
 	p = (DevSpiChNode *)wjq_malloc(sizeof(DevSpiChNode));
 	list_add(&(p->list), &DevSpiChRoot);
 	memcpy((u8 *)&p->dev, (u8 *)dev, sizeof(DevSpiCh));
 	p->gd = -1;
 	p->spi = p_spi;
 
-	/* ³õÊ¼»¯¹Ü½Å */
+	/* åˆå§‹åŒ–ç®¡è„š */
 	mcu_io_config_out(dev->csport,dev->cspin);
 	mcu_io_output_setbit(dev->csport,dev->cspin);
 
@@ -158,13 +158,13 @@ s32 bus_spich_register(const DevSpiCh *dev)
 
 /**
  *@brief:      mcu_spi_open
- *@details:    ´ò¿ªSPIÍ¨µÀ
+ *@details:    æ‰“å¼€SPIé€šé“
  *@param[in]   DevSpiChNode * node
-               u8 mode      Ä£Ê½
-               u16 pre      Ô¤·ÖÆµ
- *@param[out]  ÎŞ
+               u8 mode      æ¨¡å¼
+               u16 pre      é¢„åˆ†é¢‘
+ *@param[out]  æ— 
  *@retval:     
- 			   ´ò¿ªÒ»´ÎSPI£¬ÔÚF407ÉÏ´ó¸ÅÒª2us
+ 			   æ‰“å¼€ä¸€æ¬¡SPIï¼Œåœ¨F407ä¸Šå¤§æ¦‚è¦2us
  */
 DevSpiChNode *bus_spich_open(char *name, SPI_MODE mode, u16 KHz)
 {
@@ -200,7 +200,7 @@ DevSpiChNode *bus_spich_open(char *name, SPI_MODE mode, u16 KHz)
 			//BUSSPI_DEBUG(LOG_INFO, "spi ch open err:using!\r\n");
 			node = NULL;
 		} else {
-			/*´ò¿ªSPI¿ØÖÆÆ÷*/
+			/*æ‰“å¼€SPIæ§åˆ¶å™¨*/
 			if (node->spi->dev.pnode.type == BUS_SPI_H) {
 				res = mcu_hspi_open(node->spi, mode, KHz);	
 			} else if(node->spi->dev.pnode.type == BUS_SPI_V) {
@@ -224,9 +224,9 @@ DevSpiChNode *bus_spich_open(char *name, SPI_MODE mode, u16 KHz)
 }
 /**
  *@brief:      mcu_spi_close
- *@details:    ¹Ø±ÕSPI Í¨µÀ
+ *@details:    å…³é—­SPI é€šé“
  *@param[in]   DevSpiChNode * node  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 bus_spich_close(DevSpiChNode * node)
@@ -236,7 +236,7 @@ s32 bus_spich_close(DevSpiChNode * node)
 	}else
 		bus_vspi_close(node->spi);
 	
-	/*À­¸ßCS*/
+	/*æ‹‰é«˜CS*/
 	mcu_io_output_setbit(node->dev.csport, node->dev.cspin);
 	node->gd = -1;
  
@@ -244,12 +244,12 @@ s32 bus_spich_close(DevSpiChNode * node)
 }
 /**
  *@brief:      mcu_spi_transfer
- *@details:    SPI ´«Êä
+ *@details:    SPI ä¼ è¾“
  *@param[in]   DevSpiChNode * node
  			   u8 *snd  
                u8 *rsv  
                s32 len  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 bus_spich_transfer(DevSpiChNode * node, u8 *snd, u8 *rsv, s32 len)
@@ -267,10 +267,10 @@ s32 bus_spich_transfer(DevSpiChNode * node, u8 *snd, u8 *rsv, s32 len)
 }
 /**
  *@brief:      mcu_spi_cs
- *@details:    ²Ù¿Ø¶ÔÓ¦SPIµÄCS
+ *@details:    æ“æ§å¯¹åº”SPIçš„CS
  *@param[in]   DevSpiChNode * node  
-               u8 sta   1 ¸ßµçÆ½£¬0 µÍµçÆ½     
- *@param[out]  ÎŞ
+               u8 sta   1 é«˜ç”µå¹³ï¼Œ0 ä½ç”µå¹³     
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 bus_spich_cs(DevSpiChNode * node, u8 sta)
@@ -301,17 +301,17 @@ void spi_example(void)
 	u8 src[16];
 	u8 rsv[16];
 	
-	/*´ò¿ªSPIÍ¨µÀ*/
+	/*æ‰“å¼€SPIé€šé“*/
 	spichnode = mcu_spi_open("VSPI1_CH1", SPI_MODE_1, 4);
 	if(spichnode == NULL)
 	{
 		while(1);
 	}
-	/*¶Á10¸öÊı¾İ*/
+	/*è¯»10ä¸ªæ•°æ®*/
 	mcu_spi_transfer(spichnode, NULL, rsv, 10);
-	/*Ğ´10¸öÊı¾İ*/
+	/*å†™10ä¸ªæ•°æ®*/
 	mcu_spi_transfer(spichnode, src, NULL, 10);
-	/*¶ÁĞ´10¸öÊı¾İ*/
+	/*è¯»å†™10ä¸ªæ•°æ®*/
 	mcu_spi_transfer(spichnode, src, rsv, 10);
 
 	mcu_spi_close(spichnode);

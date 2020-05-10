@@ -11,13 +11,13 @@
 #ifndef _VIDEO_FONT_H
 #define _VIDEO_FONT_H
 
-/* github ÉÏÓĞÒ»¸ö DisplayCore, ¼Æ»®²Î¿¼ËüÀ´×ö×Ö¿â¹ÜÀí */
+/* github ä¸Šæœ‰ä¸€ä¸ª DisplayCore, è®¡åˆ’å‚è€ƒå®ƒæ¥åšå­—åº“ç®¡ç† */
 struct fbcon_font_desc 
 {
-    char *name;//×Ö¿âÃû³Æ
-	char *path;//×Ö¿âÂ·¾¶
-    u16 width, height;//×Ö¿â¿í¶ÈÓë¸ß¶È
-	u16 size;//Ã¿¸ö×Ö·û×Ö½ÚÊı
+    char *name;//å­—åº“åç§°
+	char *path;//å­—åº“è·¯å¾„
+    u16 width, height;//å­—åº“å®½åº¦ä¸é«˜åº¦
+	u16 size;//æ¯ä¸ªå­—ç¬¦å­—èŠ‚æ•°
 };
 
 extern struct fbcon_font_desc font_vga_8x8;

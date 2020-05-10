@@ -1,30 +1,30 @@
 /**
  * @file            soundplay.c
- * @brief           ÉùÒô²¥·Å¹¦ÄÜ
+ * @brief           å£°éŸ³æ’­æ”¾åŠŸèƒ½
  * @author          wujique
- * @date            2018Äê1ÔÂ6ÈÕ ĞÇÆÚÁù
- * @version         ³õ¸å
- * @par             °æÈ¨ËùÓĞ (C), 2013-2023
+ * @date            2018å¹´1æœˆ6æ—¥ æ˜ŸæœŸå…­
+ * @version         åˆç¨¿
+ * @par             ç‰ˆæƒæ‰€æœ‰ (C), 2013-2023
  * @par History:
- * 1.ÈÕ    ÆÚ:        2018Äê1ÔÂ6ÈÕ ĞÇÆÚÁù
- *   ×÷    Õß:         wujique
- *   ĞŞ¸ÄÄÚÈİ:   ´´½¨ÎÄ¼ş
-        1 Ô´Âë¹éÎİ¼¹È¸¹¤×÷ÊÒËùÓĞ¡£
-		2 ¿ÉÒÔÓÃÓÚµÄÆäËûÉÌÒµÓÃÍ¾£¨ÅäÌ×¿ª·¢°åÏúÊÛ³ıÍâ£©£¬²»ĞëÊÚÈ¨¡£
-		3 Îİ¼¹È¸¹¤×÷ÊÒ²»¶Ô´úÂë¹¦ÄÜ×öÈÎºÎ±£Ö¤£¬ÇëÊ¹ÓÃÕß×ÔĞĞ²âÊÔ£¬ºó¹û×Ô¸º¡£
-		4 ¿ÉËæÒâĞŞ¸ÄÔ´Âë²¢·Ö·¢£¬µ«²»¿ÉÖ±½ÓÏúÊÛ±¾´úÂë»ñÀû£¬²¢ÇÒÇë±£ÁôWUJIQUE°æÈ¨ËµÃ÷¡£
-		5 Èç·¢ÏÖBUG»òÓĞÓÅ»¯£¬»¶Ó­·¢²¼¸üĞÂ¡£ÇëÁªÏµ£ºcode@wujique.com
-		6 Ê¹ÓÃ±¾Ô´ÂëÔòÏàµ±ÓÚÈÏÍ¬±¾°æÈ¨ËµÃ÷¡£
-		7 ÈçÇÖ·¸ÄãµÄÈ¨Àû£¬ÇëÁªÏµ£ºcode@wujique.com
-		8 Ò»ÇĞ½âÊÍÈ¨¹éÎİ¼¹È¸¹¤×÷ÊÒËùÓĞ¡£
+ * 1.æ—¥    æœŸ:        2018å¹´1æœˆ6æ—¥ æ˜ŸæœŸå…­
+ *   ä½œ    è€…:         wujique
+ *   ä¿®æ”¹å†…å®¹:   åˆ›å»ºæ–‡ä»¶
+        1 æºç å½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
+		2 å¯ä»¥ç”¨äºçš„å…¶ä»–å•†ä¸šç”¨é€”ï¼ˆé…å¥—å¼€å‘æ¿é”€å”®é™¤å¤–ï¼‰ï¼Œä¸é¡»æˆæƒã€‚
+		3 å±‹è„Šé›€å·¥ä½œå®¤ä¸å¯¹ä»£ç åŠŸèƒ½åšä»»ä½•ä¿è¯ï¼Œè¯·ä½¿ç”¨è€…è‡ªè¡Œæµ‹è¯•ï¼Œåæœè‡ªè´Ÿã€‚
+		4 å¯éšæ„ä¿®æ”¹æºç å¹¶åˆ†å‘ï¼Œä½†ä¸å¯ç›´æ¥é”€å”®æœ¬ä»£ç è·åˆ©ï¼Œå¹¶ä¸”è¯·ä¿ç•™WUJIQUEç‰ˆæƒè¯´æ˜ã€‚
+		5 å¦‚å‘ç°BUGæˆ–æœ‰ä¼˜åŒ–ï¼Œæ¬¢è¿å‘å¸ƒæ›´æ–°ã€‚è¯·è”ç³»ï¼šcode@wujique.com
+		6 ä½¿ç”¨æœ¬æºç åˆ™ç›¸å½“äºè®¤åŒæœ¬ç‰ˆæƒè¯´æ˜ã€‚
+		7 å¦‚ä¾µçŠ¯ä½ çš„æƒåˆ©ï¼Œè¯·è”ç³»ï¼šcode@wujique.com
+		8 ä¸€åˆ‡è§£é‡Šæƒå½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
 */
 /*
 
-	±¾º¯Êı¹¦ÄÜÊÇ£¬Ìá¹©½Ó¿Ú£¬²¥·ÅÖ¸¶¨Â·¾¶ÏÂµÄÉùÒôÎÄ¼ş£¬Í¨¹ıÖ¸¶¨µÄÉè±¸Êä³ö
+	æœ¬å‡½æ•°åŠŸèƒ½æ˜¯ï¼Œæä¾›æ¥å£ï¼Œæ’­æ”¾æŒ‡å®šè·¯å¾„ä¸‹çš„å£°éŸ³æ–‡ä»¶ï¼Œé€šè¿‡æŒ‡å®šçš„è®¾å¤‡è¾“å‡º
 
-	±¸×¢£º
-		1 ÔİÊ±Ö»×ö16BIT WAVÎÄ¼ş²¥·Å
-		2 µ¥ÉùµÀÍ¨¹ıÊı¾İÌî³ä×ö³ÉË«ÉùµÀ
+	å¤‡æ³¨ï¼š
+		1 æš‚æ—¶åªåš16BIT WAVæ–‡ä»¶æ’­æ”¾
+		2 å•å£°é“é€šè¿‡æ•°æ®å¡«å……åšæˆåŒå£°é“
 
 */
 #include "mcu.h"
@@ -49,42 +49,42 @@
 #define SOUND_DEBUG(a, ...)
 #endif
 
-/*wav ÎÄ¼ş½á¹¹*/
+/*wav æ–‡ä»¶ç»“æ„*/
 typedef struct _TWavHeader 
 {          
-	/*RIFF¿é*/
-    int rId;    //±êÖ¾·û£¨RIFF£©  0x46464952
-    int rLen;   //Êı¾İ´óĞ¡,°üÀ¨Êı¾İÍ·µÄ´óĞ¡ºÍÒôÆµÎÄ¼şµÄ´óĞ¡   (ÎÄ¼ş×Ü´óĞ¡-8)      
-    int wId;    //¸ñÊ½ÀàĞÍ£¨"WAVE"£©   0x45564157
+	/*RIFFå—*/
+    int rId;    //æ ‡å¿—ç¬¦ï¼ˆRIFFï¼‰  0x46464952
+    int rLen;   //æ•°æ®å¤§å°,åŒ…æ‹¬æ•°æ®å¤´çš„å¤§å°å’ŒéŸ³é¢‘æ–‡ä»¶çš„å¤§å°   (æ–‡ä»¶æ€»å¤§å°-8)      
+    int wId;    //æ ¼å¼ç±»å‹ï¼ˆ"WAVE"ï¼‰   0x45564157
     
     /*Format Chunk*/
-    int fId;    //"fmt " ´øÒ»¸ö¿Õ¸ñ 0X20746D66     
+    int fId;    //"fmt " å¸¦ä¸€ä¸ªç©ºæ ¼ 0X20746D66     
     int fLen;   //Sizeof(WAVEFORMATEX)          
-    short wFormatTag;       //±àÂë¸ñÊ½£¬°üÀ¨ 1 WAVE_FORMAT_PCM£¬WAVEFORMAT_ADPCMµÈ         
-    short nChannels;        //ÉùµÀÊı£¬µ¥ÉùµÀÎª1£¬Ë«ÉùµÀÎª2         
-    int nSamplesPerSec;   //²ÉÑùÆµÂÊ         
-    int nAvgBytesPerSec;  //Ã¿ÃëµÄÊı¾İÁ¿         
-    short nBlockAlign;      //¿é¶ÔÆë          
-    short wBitsPerSample;   //WAVEÎÄ¼şµÄ²ÉÑù´óĞ¡         
-    int dId;              //"data"     ÓĞ¿ÉÄÜÊÇFACT¿é     
-    int wSampleLength;    //ÒôÆµÊı¾İµÄ´óĞ¡ 
-    /*½ô¸úºóÃæ¿ÉÄÜÓĞÒ»¸öfact ¿é£¬¸úÑ¹ËõÓĞ¹Ø£¬Èç¹ûÃ»ÓĞ£¬¾ÍÊÇdata¿é*/
+    short wFormatTag;       //ç¼–ç æ ¼å¼ï¼ŒåŒ…æ‹¬ 1 WAVE_FORMAT_PCMï¼ŒWAVEFORMAT_ADPCMç­‰         
+    short nChannels;        //å£°é“æ•°ï¼Œå•å£°é“ä¸º1ï¼ŒåŒå£°é“ä¸º2         
+    int nSamplesPerSec;   //é‡‡æ ·é¢‘ç‡         
+    int nAvgBytesPerSec;  //æ¯ç§’çš„æ•°æ®é‡         
+    short nBlockAlign;      //å—å¯¹é½          
+    short wBitsPerSample;   //WAVEæ–‡ä»¶çš„é‡‡æ ·å¤§å°         
+    int dId;              //"data"     æœ‰å¯èƒ½æ˜¯FACTå—     
+    int wSampleLength;    //éŸ³é¢‘æ•°æ®çš„å¤§å° 
+    /*ç´§è·Ÿåé¢å¯èƒ½æœ‰ä¸€ä¸ªfact å—ï¼Œè·Ÿå‹ç¼©æœ‰å…³ï¼Œå¦‚æœæ²¡æœ‰ï¼Œå°±æ˜¯dataå—*/
 }TWavHeader;
 
 
 TWavHeader *wav_header;	
-int SoundFileFd;//ÉùÒôÎÄ¼ş
+int SoundFileFd;//å£°éŸ³æ–‡ä»¶
 
 /*
-²¥·ÅSD¿¨µÄÒôÀÖ£¬Ö»Òª2*4K»º³å
-²¥·ÅUÅÌÖĞµÄÒôÀÖ£¬È´Òª2*8K
+æ’­æ”¾SDå¡çš„éŸ³ä¹ï¼Œåªè¦2*4Kç¼“å†²
+æ’­æ”¾Uç›˜ä¸­çš„éŸ³ä¹ï¼Œå´è¦2*8K
 */
 #define I2S_DMA_BUFF_SIZE1   (1024*4)
 #define DAC_SOUND_BUFF_SIZE2 (1024*1)
 
-u32 SoundBufSize = I2S_DMA_BUFF_SIZE1;//²ÉÑùÆµÂÊĞ¡£¬¾Í¿ªĞ¡Ò»µã»º³å¡£
+u32 SoundBufSize = I2S_DMA_BUFF_SIZE1;//é‡‡æ ·é¢‘ç‡å°ï¼Œå°±å¼€å°ä¸€ç‚¹ç¼“å†²ã€‚
 
-volatile u8 SoundBufIndex=0xff;//Ë«»º³åË÷Òı£¬È¡Öµ0ºÍ1£¬¶¼Ìî³äºó¸³Öµ0XFF
+volatile u8 SoundBufIndex=0xff;//åŒç¼“å†²ç´¢å¼•ï¼Œå–å€¼0å’Œ1ï¼Œéƒ½å¡«å……åèµ‹å€¼0XFF
 u16 *SoundBufP[2];
 
 volatile SOUND_State SoundSta = SOUND_IDLE;
@@ -96,10 +96,10 @@ SOUND_DEV_TYPE SoundDevType = SOUND_DEV_NULL;
 s32 fun_sound_stop(void);
 /**
  *@brief:      fun_sound_set_free_buf
- *@details:    ÉèÖÃ¿ÕÏĞ»º³åË÷Òı
- 			   Õâ¸öº¯ÊıÌá¹©¸øI2S»òÕßDAC SOUNDÄ£¿éµ÷ÓÃ
+ *@details:    è®¾ç½®ç©ºé—²ç¼“å†²ç´¢å¼•
+ 			   è¿™ä¸ªå‡½æ•°æä¾›ç»™I2Sæˆ–è€…DAC SOUNDæ¨¡å—è°ƒç”¨
  *@param[in]   u8 *index  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 fun_sound_set_free_buf(u8 index)
@@ -109,9 +109,9 @@ s32 fun_sound_set_free_buf(u8 index)
 }
 /**
  *@brief:      fun_sound_get_buff_index
- *@details:    ²éÑ¯µ±Ç°ĞèÒªÌî³äµÄBUF
+ *@details:    æŸ¥è¯¢å½“å‰éœ€è¦å¡«å……çš„BUF
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 static s32 fun_sound_get_buff_index(void)
@@ -124,8 +124,8 @@ static s32 fun_sound_get_buff_index(void)
 }
 /*
 
-	µ¥ÉùµÀÊı¾İÊ¹ÓÃWM8978²¥·ÅÒª¾­¹ı´¦Àí£¬
-	Ôì³ÉË«ÉùµÀ
+	å•å£°é“æ•°æ®ä½¿ç”¨WM8978æ’­æ”¾è¦ç»è¿‡å¤„ç†ï¼Œ
+	é€ æˆåŒå£°é“
 
 */
 static s32 fun_sound_deal_1ch_data(u8 *p)
@@ -156,10 +156,10 @@ static s32 fun_sound_deal_1ch_data(u8 *p)
 
 /**
  *@brief:      fun_sound_play
- *@details:    Í¨¹ıÖ¸¶¨Éè±¸²¥·ÅÖ¸¶¨ÉùÒô
+ *@details:    é€šè¿‡æŒ‡å®šè®¾å¤‡æ’­æ”¾æŒ‡å®šå£°éŸ³
  *@param[in]   char *name  
                char *dev   
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 int fun_sound_play(char *name, char *dev)
@@ -168,8 +168,8 @@ int fun_sound_play(char *name, char *dev)
 
 	SoundSta = SOUND_BUSY;
 	/*
-		´ò¿ªÎÄ¼şÊÇ·ñĞèÒª¹Ø±Õ£¿
-		Í¬Ê±´ò¿ªºÜ¶àÎÄ¼şÊÂ·¢ºó»áÄÚ´æĞ¹Â©¡£
+		æ‰“å¼€æ–‡ä»¶æ˜¯å¦éœ€è¦å…³é—­ï¼Ÿ
+		åŒæ—¶æ‰“å¼€å¾ˆå¤šæ–‡ä»¶äº‹å‘åä¼šå†…å­˜æ³„æ¼ã€‚
 	*/
 	SoundFileFd = vfs_open(name, O_RDONLY);
 	if(SoundFileFd == NULL)
@@ -207,17 +207,17 @@ int fun_sound_play(char *name, char *dev)
 	
 	SOUND_DEBUG(LOG_DEBUG, "---%x\r\n", wav_header->rId);
 	SOUND_DEBUG(LOG_DEBUG, "---%x\r\n", wav_header->rLen);
-	SOUND_DEBUG(LOG_DEBUG, "---%x\r\n", wav_header->wId);//µÈÓÚWAVE(0X45564157)£¬¾ÍËµÃ÷ÊÇwave¸ñÊ½
+	SOUND_DEBUG(LOG_DEBUG, "---%x\r\n", wav_header->wId);//ç­‰äºWAVE(0X45564157)ï¼Œå°±è¯´æ˜æ˜¯waveæ ¼å¼
 	SOUND_DEBUG(LOG_DEBUG, "---%x\r\n", wav_header->fId);
 	SOUND_DEBUG(LOG_DEBUG, "---%x\r\n", wav_header->fLen);
-	SOUND_DEBUG(LOG_DEBUG, "---wave ¸ñÊ½ %x\r\n", wav_header->wFormatTag);
-	SOUND_DEBUG(LOG_DEBUG, "---ÉùµÀ      %x\r\n", wav_header->nChannels);
-	SOUND_DEBUG(LOG_DEBUG, "---²ÉÑùÆµÂÊ  %d\r\n", wav_header->nSamplesPerSec);
-	SOUND_DEBUG(LOG_DEBUG, "---Ã¿ÃëÊı¾İÁ¿ %d\r\n", wav_header->nAvgBytesPerSec);
-	SOUND_DEBUG(LOG_DEBUG, "---Ñùµã×Ö½ÚÊı %d\r\n", wav_header->nBlockAlign);
-	SOUND_DEBUG(LOG_DEBUG, "---Î»¿í :    %d bit\r\n", wav_header->wBitsPerSample);
+	SOUND_DEBUG(LOG_DEBUG, "---wave æ ¼å¼ %x\r\n", wav_header->wFormatTag);
+	SOUND_DEBUG(LOG_DEBUG, "---å£°é“      %x\r\n", wav_header->nChannels);
+	SOUND_DEBUG(LOG_DEBUG, "---é‡‡æ ·é¢‘ç‡  %d\r\n", wav_header->nSamplesPerSec);
+	SOUND_DEBUG(LOG_DEBUG, "---æ¯ç§’æ•°æ®é‡ %d\r\n", wav_header->nAvgBytesPerSec);
+	SOUND_DEBUG(LOG_DEBUG, "---æ ·ç‚¹å­—èŠ‚æ•° %d\r\n", wav_header->nBlockAlign);
+	SOUND_DEBUG(LOG_DEBUG, "---ä½å®½ :    %d bit\r\n", wav_header->wBitsPerSample);
 	SOUND_DEBUG(LOG_DEBUG, "---data =    %x\r\n", wav_header->dId);
-	SOUND_DEBUG(LOG_DEBUG, "---Êı¾İ³¤¶È: %x\r\n", wav_header->wSampleLength);
+	SOUND_DEBUG(LOG_DEBUG, "---æ•°æ®é•¿åº¦: %x\r\n", wav_header->wSampleLength);
 
 	if(wav_header->nSamplesPerSec <= I2S_AudioFreq_16k)
 	{
@@ -250,7 +250,7 @@ int fun_sound_play(char *name, char *dev)
 	}
 		
 
-	/*¸ù¾İÎÄ¼şÄÚÈİÉèÖÃ²ÉÑùÆµÂÊ¸úÑùµã¸ñÊ½*/
+	/*æ ¹æ®æ–‡ä»¶å†…å®¹è®¾ç½®é‡‡æ ·é¢‘ç‡è·Ÿæ ·ç‚¹æ ¼å¼*/
 	u8 format;
 	if(wav_header->wBitsPerSample == 16)
 	{
@@ -265,7 +265,7 @@ int fun_sound_play(char *name, char *dev)
 		format =	WM8978_I2S_Data_32b; 	
 	}
 
-	/*´ò¿ªÖ¸¶¨Éè±¸*/
+	/*æ‰“å¼€æŒ‡å®šè®¾å¤‡*/
 	if(0 == strcmp(dev, "wm8978"))
 	{
 
@@ -275,7 +275,7 @@ int fun_sound_play(char *name, char *dev)
 
 	u32 rlen;
 
-	/*ÒôÔ´µ¥ÉùµÀ£¬Éè±¸Ë«ÉùµÀ£¬¶ÔÊı¾İ¸´ÖÆÒ»·İµ½ÁíÍâÒ»¸öÉùµÀ*/
+	/*éŸ³æºå•å£°é“ï¼Œè®¾å¤‡åŒå£°é“ï¼Œå¯¹æ•°æ®å¤åˆ¶ä¸€ä»½åˆ°å¦å¤–ä¸€ä¸ªå£°é“*/
 	if((wav_header->nChannels == 1) && (SoundDevType == SOUND_DEV_2CH))
 	{
 		rlen = SoundBufSize;
@@ -303,7 +303,7 @@ int fun_sound_play(char *name, char *dev)
 		dev_wm8978_dataformat(wav_header->nSamplesPerSec, WM8978_I2S_Phillips, format);
 		mcu_i2s_dma_init(SoundBufP[0], SoundBufP[1], SoundBufSize);
 		SoundDevType = SOUND_DEV_2CH;
-		dev_wm8978_transfer(1);//Æô¶¯I2S´«Êä
+		dev_wm8978_transfer(1);//å¯åŠ¨I2Sä¼ è¾“
 	}
 	else if(0 == strcmp(dev, "dacsound"))
 	{
@@ -322,10 +322,10 @@ int fun_sound_play(char *name, char *dev)
 
 /**
  *@brief:      fun_sound_task
- *@details:    ÉùÒô²¥·ÅÂÖÑ¯ÈÎÎñ£¬Ö´ĞĞ¼ä¸ô²»¿ÉÒÔÌ«¾Ã£¬-
-               ·ñÔòÉùÒô»áÓĞÔÓÒô£¬Ò²¾ÍÊÇ¶ÏĞø
+ *@details:    å£°éŸ³æ’­æ”¾è½®è¯¢ä»»åŠ¡ï¼Œæ‰§è¡Œé—´éš”ä¸å¯ä»¥å¤ªä¹…ï¼Œ-
+               å¦åˆ™å£°éŸ³ä¼šæœ‰æ‚éŸ³ï¼Œä¹Ÿå°±æ˜¯æ–­ç»­
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 void fun_sound_task(void)
@@ -343,7 +343,7 @@ void fun_sound_task(void)
 	buf_index = fun_sound_get_buff_index();
 	if(0xff != buf_index)
 	{
-		if(SoundSta == SOUND_PAUSE)//ÔİÍ£
+		if(SoundSta == SOUND_PAUSE)//æš‚åœ
 		{
 			for(i=0;i<SoundBufSize;i++)
 			{
@@ -371,8 +371,8 @@ void fun_sound_task(void)
 
 
 			/*
-				uÅÌÓĞBUG£¬ÓĞÊ±ºò¶Áµ½µÄÊı¾İ³¤¶È²»¶Ô
-				ÎÈ½¡µÄ×ö·¨ÊÇÓÃÒÑ¾­²¥·ÅµÄ³¤¶È¸úÒôÔ´³¤¶È±È½Ï¡£
+				uç›˜æœ‰BUGï¼Œæœ‰æ—¶å€™è¯»åˆ°çš„æ•°æ®é•¿åº¦ä¸å¯¹
+				ç¨³å¥çš„åšæ³•æ˜¯ç”¨å·²ç»æ’­æ”¾çš„é•¿åº¦è·ŸéŸ³æºé•¿åº¦æ¯”è¾ƒã€‚
 			*/
 			if(len < rlen)
 			{
@@ -387,9 +387,9 @@ void fun_sound_task(void)
 }
 /**
  *@brief:      fun_sound_get_sta
- *@details:    ²éÑ¯ÒôÀÖ²¥·Å×´Ì¬
+ *@details:    æŸ¥è¯¢éŸ³ä¹æ’­æ”¾çŠ¶æ€
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 SOUND_State fun_sound_get_sta(void)
@@ -399,9 +399,9 @@ SOUND_State fun_sound_get_sta(void)
 }
 /**
  *@brief:      fun_sound_stop
- *@details:    Í£Ö¹ÒôÀÖ²¥·Å
+ *@details:    åœæ­¢éŸ³ä¹æ’­æ”¾
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 fun_sound_stop(void)
@@ -432,9 +432,9 @@ s32 fun_sound_stop(void)
 }
 /**
  *@brief:      fun_sound_pause
- *@details:    ÔİÍ£²¥·Å
+ *@details:    æš‚åœæ’­æ”¾
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 fun_sound_pause(void)
@@ -447,9 +447,9 @@ s32 fun_sound_pause(void)
 }
 /**
  *@brief:      fun_sound_resume
- *@details:    »Ö¸´²¥·Å
+ *@details:    æ¢å¤æ’­æ”¾
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 fun_sound_resume(void)
@@ -462,9 +462,9 @@ s32 fun_sound_resume(void)
 }
 /**
  *@brief:      fun_sound_setvol
- *@details:    ÉèÖÃÒôÁ¿
+ *@details:    è®¾ç½®éŸ³é‡
  *@param[in]   u8 vol  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 fun_sound_setvol(u8 vol)
@@ -474,9 +474,9 @@ s32 fun_sound_setvol(u8 vol)
 
 /**
  *@brief:      fun_sound_test
- *@details:    ²âÊÔ²¥·Å
+ *@details:    æµ‹è¯•æ’­æ”¾
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 void fun_sound_test(void)
@@ -486,43 +486,43 @@ void fun_sound_test(void)
 
 }
 /*
-²âÊÔÒôÔ´Ãû³Æ
+æµ‹è¯•éŸ³æºåç§°
 mono_16bit_8k.wav
 mono_16bit_44k.wav
 stereo_16bit_32k.wav
-Ê®ËÍºì¾ü.wav
+åé€çº¢å†›.wav
 
 */
 
 /*
 
-	Í¨¹ıI2SÀûÓÃWM8978Â¼Òô
-	¸ú²¥·ÅÒ»Ñù£¬Í¨¹ıË«»º³åDMAÂ¼Òô¡£
-	ĞèÒª×¢ÒâµÄÒ»µãÊÇ£¬Â¼ÒôÊôÓÚI2S_EXIT£¬²»²úÉúÊ±ÖÓ£¬ĞèÒªI2S²ÅÄÜ²úÉúÍ¨ĞÅÊ±ÖÓ¡£
-	Ò²¾ÍÊÇËµÒª²¥Òô²ÅÄÜÂ¼Òô¡£
-	ËùÒÔÂ¼ÒôÊ±£¬Ò²ÒªÅäÖÃI2S²¥·Å£¬ÎÒÃÇÖ»ÅäÖÃÒ»¸ö×Ö½ÚµÄDMA»º³å£¬ÒÔ±ãI2S²úÉúÍ¨ĞÅÊ±ÖÓ£¬
+	é€šè¿‡I2Såˆ©ç”¨WM8978å½•éŸ³
+	è·Ÿæ’­æ”¾ä¸€æ ·ï¼Œé€šè¿‡åŒç¼“å†²DMAå½•éŸ³ã€‚
+	éœ€è¦æ³¨æ„çš„ä¸€ç‚¹æ˜¯ï¼Œå½•éŸ³å±äºI2S_EXITï¼Œä¸äº§ç”Ÿæ—¶é’Ÿï¼Œéœ€è¦I2Sæ‰èƒ½äº§ç”Ÿé€šä¿¡æ—¶é’Ÿã€‚
+	ä¹Ÿå°±æ˜¯è¯´è¦æ’­éŸ³æ‰èƒ½å½•éŸ³ã€‚
+	æ‰€ä»¥å½•éŸ³æ—¶ï¼Œä¹Ÿè¦é…ç½®I2Sæ’­æ”¾ï¼Œæˆ‘ä»¬åªé…ç½®ä¸€ä¸ªå­—èŠ‚çš„DMAç¼“å†²ï¼Œä»¥ä¾¿I2Säº§ç”Ÿé€šä¿¡æ—¶é’Ÿï¼Œ
 	
 */
-/*---Â¼Òô¸ú²¥Òô»º³åÒª²î²»¶à£¬·ñÔò»á»¥Ïà¿¨¶Ù----*/
+/*---å½•éŸ³è·Ÿæ’­éŸ³ç¼“å†²è¦å·®ä¸å¤šï¼Œå¦åˆ™ä¼šäº’ç›¸å¡é¡¿----*/
 u32 SoundRecBufSize;
 u16 *SoundRecBufP[2];
-static u8 SoundRecBufIndex=0xff;//Ë«»º³åË÷Òı£¬È¡Öµ0ºÍ1£¬¶¼Ìî³äºó¸³Öµ0XFF
+static u8 SoundRecBufIndex=0xff;//åŒç¼“å†²ç´¢å¼•ï¼Œå–å€¼0å’Œ1ï¼Œéƒ½å¡«å……åèµ‹å€¼0XFF
 TWavHeader *recwav_header;	
-int SoundRecFileFd;//ÉùÒôÎÄ¼ş
+int SoundRecFileFd;//å£°éŸ³æ–‡ä»¶
 u32 RecWavSize = 0;
 u16 RecPlayTmp[8];
 s32 RecSta = 0;
 
 /*
-	Â¼ÒôÆµÂÊ£¬Èç¹û¿¼ÂÇ²¥Òô¸úÂ¼ÒôÒ»Æğ¹¤×÷£¬
-	ĞèÒª×ÛºÏ¿¼ÂÇÈçºÎÅäÖÃÂ¼ÒôÆµÂÊ
+	å½•éŸ³é¢‘ç‡ï¼Œå¦‚æœè€ƒè™‘æ’­éŸ³è·Ÿå½•éŸ³ä¸€èµ·å·¥ä½œï¼Œ
+	éœ€è¦ç»¼åˆè€ƒè™‘å¦‚ä½•é…ç½®å½•éŸ³é¢‘ç‡
 */
 #define SOUND_REC_FRE 32000
 /**
  *@brief:      fun_rec_set_free_buf
- *@details:    ÉèÖÃÂ¼Òô»º³åË÷Òı£¬ÔÚI2S exitÖĞ¶ÏÖĞÊ¹ÓÃ
+ *@details:    è®¾ç½®å½•éŸ³ç¼“å†²ç´¢å¼•ï¼Œåœ¨I2S exitä¸­æ–­ä¸­ä½¿ç”¨
  *@param[in]   u8 index  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 fun_rec_set_free_buf(u8 index)
@@ -532,9 +532,9 @@ s32 fun_rec_set_free_buf(u8 index)
 }
 /**
  *@brief:      fun_rec_get_buff_index
- *@details:    ²éÑ¯Â¼ÒôÂúµÄ»º³å£¬Âú¾ÍÒª¶Á×ß
+ *@details:    æŸ¥è¯¢å½•éŸ³æ»¡çš„ç¼“å†²ï¼Œæ»¡å°±è¦è¯»èµ°
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     static
  */
 static s32 fun_rec_get_buff_index(void)
@@ -547,9 +547,9 @@ static s32 fun_rec_get_buff_index(void)
 }
 /**
  *@brief:      fun_sound_rec
- *@details:    Æô¶¯Â¼Òô
+ *@details:    å¯åŠ¨å½•éŸ³
  *@param[in]   char *name  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 fun_sound_rec(char *name)
@@ -560,9 +560,9 @@ s32 fun_sound_rec(char *name)
 	RecWavSize = 0;
 	SoundRecBufSize = SoundBufSize;
 
-	/*  ´´½¨WAVÎÄ¼ş */
+	/*  åˆ›å»ºWAVæ–‡ä»¶ */
 	SoundRecFileFd = vfs_open(name, O_CREAT);
-	if(SoundRecFileFd == NULL)			//ÎÄ¼ş´´½¨Ê§°Ü
+	if(SoundRecFileFd == NULL)			//æ–‡ä»¶åˆ›å»ºå¤±è´¥
 	{
 		SOUND_DEBUG(LOG_DEBUG, "create rec file err!\r\n");
 		return -1;
@@ -576,13 +576,13 @@ s32 fun_sound_rec(char *name)
 	}
 	
 	recwav_header->rId=0X46464952;
-	recwav_header->rLen = 0;//Â¼Òô½áÊøºóÌî
+	recwav_header->rLen = 0;//å½•éŸ³ç»“æŸåå¡«
 	recwav_header->wId = 0X45564157;//wave
 	recwav_header->fId=0X20746D66;
 	recwav_header->fLen = 16;
 	recwav_header->wFormatTag = 0X01;
 	recwav_header->nChannels = 2;
-	recwav_header->nSamplesPerSec = SOUND_REC_FRE;//Õâ¸ö²ÉÑùÆµÂÊĞèÒªÌØÊâ´¦Àí£¬ÔİÊ±²»×ö¡£
+	recwav_header->nSamplesPerSec = SOUND_REC_FRE;//è¿™ä¸ªé‡‡æ ·é¢‘ç‡éœ€è¦ç‰¹æ®Šå¤„ç†ï¼Œæš‚æ—¶ä¸åšã€‚
 	recwav_header->nAvgBytesPerSec = (recwav_header->nSamplesPerSec)*(recwav_header->nChannels)*(16/8);
 	recwav_header->nBlockAlign = recwav_header->nChannels*(16/8);
 	recwav_header->wBitsPerSample = 16;
@@ -600,7 +600,7 @@ s32 fun_sound_rec(char *name)
 		SOUND_DEBUG(LOG_DEBUG, "create rec wav ok!\r\n");
 	}
 
-	/*  ²âÊÔÂ¼Òô     */
+	/*  æµ‹è¯•å½•éŸ³     */
 	SoundRecBufP[0] = (u16 *)wjq_malloc(SoundRecBufSize*2); 
 	SoundRecBufP[1] = (u16 *)wjq_malloc(SoundRecBufSize*2); 
 	
@@ -629,7 +629,7 @@ s32 fun_sound_rec(char *name)
 	
 	RecSta = 1;
 	
-	dev_wm8978_transfer(1);//Æô¶¯I2S´«Êä
+	dev_wm8978_transfer(1);//å¯åŠ¨I2Sä¼ è¾“
 	
 
 	SOUND_DEBUG(LOG_DEBUG, "rec--------------------\r\n");
@@ -638,9 +638,9 @@ s32 fun_sound_rec(char *name)
 }
 /**
  *@brief:      fun_rec_stop
- *@details:    Í£Ö¹Â¼Òô
+ *@details:    åœæ­¢å½•éŸ³
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 fun_rec_stop(void)
@@ -666,9 +666,9 @@ s32 fun_rec_stop(void)
 }
 /**
  *@brief:      fun_rec_task
- *@details:    Â¼ÒôÏß³Ì
+ *@details:    å½•éŸ³çº¿ç¨‹
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 void fun_rec_task(void)
@@ -700,9 +700,9 @@ void fun_rec_task(void)
 
 /**
  *@brief:      fun_rec_test
- *@details:    ¿ªÊ¼Â¼Òô
+ *@details:    å¼€å§‹å½•éŸ³
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 void fun_rec_test(void)

@@ -4,33 +4,33 @@
 extern s32 mcu_dac_init(void);
 /**
  *@brief:      mcu_dac_open
- *@details:    ´ò¿ªDAC¿ØÖÆÆ÷
+ *@details:    æ‰“å¼€DACæ§åˆ¶å™¨
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 extern s32 mcu_dac_open(void);
 /**
  *@brief:      mcu_dac_output
- *@details:    ÉèÖÃDACÊä³öÖµ
- *@param[in]   u16 vol£¬ µçÑ¹£¬µ¥Î»MV£¬0-Vref  
- *@param[out]  ÎŞ
+ *@details:    è®¾ç½®DACè¾“å‡ºå€¼
+ *@param[in]   u16 volï¼Œ ç”µå‹ï¼Œå•ä½MVï¼Œ0-Vref  
+ *@param[out]  æ— 
  *@retval:     
  */
 extern s32 mcu_dac_output_vol(u16 vol);
 /**
  *@brief:      mcu_dac_output
- *@details:    ½«Ò»¸öÊıÖµ×÷ÎªDACÖµÊä³ö
+ *@details:    å°†ä¸€ä¸ªæ•°å€¼ä½œä¸ºDACå€¼è¾“å‡º
  *@param[in]   u16 data  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 extern s32 mcu_dac_output(u16 data);
 /**
  *@brief:      mcu_dac_test
- *@details:    DAC²âÊÔ³ÌĞò
+ *@details:    DACæµ‹è¯•ç¨‹åº
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 extern s32 mcu_dac_test(void);

@@ -1,22 +1,22 @@
 /**
  * @file            mcu_dac.c
- * @brief           STM32Æ¬ÉÏDACÇı¶¯
+ * @brief           STM32ç‰‡ä¸ŠDACé©±åŠ¨
  * @author          test
- * @date            2017Äê11ÔÂ1ÈÕ ĞÇÆÚÈı
- * @version         ³õ¸å
- * @par             °æÈ¨ËùÓĞ (C), 2013-2023
+ * @date            2017å¹´11æœˆ1æ—¥ æ˜ŸæœŸä¸‰
+ * @version         åˆç¨¿
+ * @par             ç‰ˆæƒæ‰€æœ‰ (C), 2013-2023
  * @par History:
- * 1.ÈÕ    ÆÚ:        2017Äê11ÔÂ1ÈÕ ĞÇÆÚÈı
- *   ×÷    Õß:      Îİ¼¹È¸¹¤×÷ÊÒ
- *   ĞŞ¸ÄÄÚÈİ:      ´´½¨ÎÄ¼ş
-      	1 Ô´Âë¹éÎİ¼¹È¸¹¤×÷ÊÒËùÓĞ¡£
-		2 ¿ÉÒÔÓÃÓÚµÄÆäËûÉÌÒµÓÃÍ¾£¨ÅäÌ×¿ª·¢°åÏúÊÛ³ıÍâ£©£¬²»ĞëÊÚÈ¨¡£
-		3 Îİ¼¹È¸¹¤×÷ÊÒ²»¶Ô´úÂë¹¦ÄÜ×öÈÎºÎ±£Ö¤£¬ÇëÊ¹ÓÃÕß×ÔĞĞ²âÊÔ£¬ºó¹û×Ô¸º¡£
-		4 ¿ÉËæÒâĞŞ¸ÄÔ´Âë²¢·Ö·¢£¬µ«²»¿ÉÖ±½ÓÏúÊÛ±¾´úÂë»ñÀû£¬²¢ÇÒÇë±£ÁôWUJIQUE°æÈ¨ËµÃ÷¡£
-		5 Èç·¢ÏÖBUG»òÓĞÓÅ»¯£¬»¶Ó­·¢²¼¸üĞÂ¡£ÇëÁªÏµ£ºcode@wujique.com
-		6 Ê¹ÓÃ±¾Ô´ÂëÔòÏàµ±ÓÚÈÏÍ¬±¾°æÈ¨ËµÃ÷¡£
-		7 ÈçÇÖ·¸ÄãµÄÈ¨Àû£¬ÇëÁªÏµ£ºcode@wujique.com
-		8 Ò»ÇĞ½âÊÍÈ¨¹éÎİ¼¹È¸¹¤×÷ÊÒËùÓĞ¡£
+ * 1.æ—¥    æœŸ:        2017å¹´11æœˆ1æ—¥ æ˜ŸæœŸä¸‰
+ *   ä½œ    è€…:      å±‹è„Šé›€å·¥ä½œå®¤
+ *   ä¿®æ”¹å†…å®¹:      åˆ›å»ºæ–‡ä»¶
+      	1 æºç å½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
+		2 å¯ä»¥ç”¨äºçš„å…¶ä»–å•†ä¸šç”¨é€”ï¼ˆé…å¥—å¼€å‘æ¿é”€å”®é™¤å¤–ï¼‰ï¼Œä¸é¡»æˆæƒã€‚
+		3 å±‹è„Šé›€å·¥ä½œå®¤ä¸å¯¹ä»£ç åŠŸèƒ½åšä»»ä½•ä¿è¯ï¼Œè¯·ä½¿ç”¨è€…è‡ªè¡Œæµ‹è¯•ï¼Œåæœè‡ªè´Ÿã€‚
+		4 å¯éšæ„ä¿®æ”¹æºç å¹¶åˆ†å‘ï¼Œä½†ä¸å¯ç›´æ¥é”€å”®æœ¬ä»£ç è·åˆ©ï¼Œå¹¶ä¸”è¯·ä¿ç•™WUJIQUEç‰ˆæƒè¯´æ˜ã€‚
+		5 å¦‚å‘ç°BUGæˆ–æœ‰ä¼˜åŒ–ï¼Œæ¬¢è¿å‘å¸ƒæ›´æ–°ã€‚è¯·è”ç³»ï¼šcode@wujique.com
+		6 ä½¿ç”¨æœ¬æºç åˆ™ç›¸å½“äºè®¤åŒæœ¬ç‰ˆæƒè¯´æ˜ã€‚
+		7 å¦‚ä¾µçŠ¯ä½ çš„æƒåˆ©ï¼Œè¯·è”ç³»ï¼šcode@wujique.com
+		8 ä¸€åˆ‡è§£é‡Šæƒå½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
 */
 #include "stm32f4xx.h"
 #include "log.h"
@@ -37,34 +37,34 @@ s32 mcu_dac_init(void)
 }
 /**
  *@brief:      mcu_dac_open
- *@details:    ´ò¿ªDAC¿ØÖÆÆ÷
+ *@details:    æ‰“å¼€DACæ§åˆ¶å™¨
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 mcu_dac_open(void)
 {
     DAC_InitTypeDef DAC_InitType;
     
-    RCC_APB1PeriphClockCmd(RCC_APB1Periph_DAC, ENABLE);//----Ê¹ÄÜ DAC Ê±ÖÓ
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_DAC, ENABLE);//----ä½¿èƒ½ DAC æ—¶é’Ÿ
     
-    DAC_InitType.DAC_Trigger=DAC_Trigger_None;  //---²»Ê¹ÓÃ´¥·¢¹¦ÄÜ TEN1=0
-    DAC_InitType.DAC_WaveGeneration=DAC_WaveGeneration_None;   //---²»Ê¹ÓÃ²¨ĞÎ·¢Éú
+    DAC_InitType.DAC_Trigger=DAC_Trigger_None;  //---ä¸ä½¿ç”¨è§¦å‘åŠŸèƒ½ TEN1=0
+    DAC_InitType.DAC_WaveGeneration=DAC_WaveGeneration_None;   //---ä¸ä½¿ç”¨æ³¢å½¢å‘ç”Ÿ
     DAC_InitType.DAC_LFSRUnmask_TriangleAmplitude=DAC_LFSRUnmask_Bit0;
-    DAC_InitType.DAC_OutputBuffer=DAC_OutputBuffer_Enable ;        //---Êä³ö»º´æ¹Ø±Õ
-    //DAC_InitType.DAC_LFSRUnmask_TriangleAmplitude = DAC_TriangleAmplitude_4095; //ÔëÉùÉú³ÉÆ÷
-	DAC_Init(DAC_Channel_2,&DAC_InitType); //---³õÊ¼»¯ DAC Í¨µÀ 2    
+    DAC_InitType.DAC_OutputBuffer=DAC_OutputBuffer_Enable ;        //---è¾“å‡ºç¼“å­˜å…³é—­
+    //DAC_InitType.DAC_LFSRUnmask_TriangleAmplitude = DAC_TriangleAmplitude_4095; //å™ªå£°ç”Ÿæˆå™¨
+	DAC_Init(DAC_Channel_2,&DAC_InitType); //---åˆå§‹åŒ– DAC é€šé“ 2    
 
-	DAC_Cmd(DAC_Channel_2, ENABLE); //---Ê¹ÄÜ DAC Í¨µÀ 2
-    DAC_SetChannel2Data(DAC_Align_12b_R, 0); //---12 Î»ÓÒ¶ÔÆëÊı¾İ¸ñÊ½   Êä³ö0 
+	DAC_Cmd(DAC_Channel_2, ENABLE); //---ä½¿èƒ½ DAC é€šé“ 2
+    DAC_SetChannel2Data(DAC_Align_12b_R, 0); //---12 ä½å³å¯¹é½æ•°æ®æ ¼å¼   è¾“å‡º0 
 		
 		return 0;
 }
 /**
  *@brief:      mcu_dac_output
- *@details:    ÉèÖÃDACÊä³öÖµ
- *@param[in]   u16 vol£¬ µçÑ¹£¬µ¥Î»MV£¬0-Vref  
- *@param[out]  ÎŞ
+ *@details:    è®¾ç½®DACè¾“å‡ºå€¼
+ *@param[in]   u16 volï¼Œ ç”µå‹ï¼Œå•ä½MVï¼Œ0-Vref  
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 mcu_dac_output_vol(u16 vol)
@@ -76,27 +76,27 @@ s32 mcu_dac_output_vol(u16 vol)
 
     MCU_DAC_DEBUG(LOG_DEBUG, "\r\n---test dac data:%d-----\r\n", temp);
     
-    DAC_SetChannel2Data(DAC_Align_12b_R, temp);//12 Î»ÓÒ¶ÔÆëÊı¾İ¸ñÊ½
+    DAC_SetChannel2Data(DAC_Align_12b_R, temp);//12 ä½å³å¯¹é½æ•°æ®æ ¼å¼
 		return 0;
 }
 /**
  *@brief:      mcu_dac_output
- *@details:    ½«Ò»¸öÊıÖµ×÷ÎªDACÖµÊä³ö
+ *@details:    å°†ä¸€ä¸ªæ•°å€¼ä½œä¸ºDACå€¼è¾“å‡º
  *@param[in]   u16 data  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 void mcu_dac_output(u16 data)
 {
-    DAC_SetChannel2Data(DAC_Align_12b_R, data);//12 Î»ÓÒ¶ÔÆëÊı¾İ¸ñÊ½
+    DAC_SetChannel2Data(DAC_Align_12b_R, data);//12 ä½å³å¯¹é½æ•°æ®æ ¼å¼
 }
 
 
 /**
  *@brief:      mcu_dac_test
- *@details:    DAC²âÊÔ³ÌĞò
+ *@details:    DACæµ‹è¯•ç¨‹åº
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 mcu_dac_test(void)

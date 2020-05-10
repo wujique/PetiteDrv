@@ -242,7 +242,7 @@ void UART4_IRQHandler(void)
 {
   /* USER CODE BEGIN UART4_IRQn 0 */
   	//mcu_uart4_irq();
-	/* HAL¿âµÄÖĞ¶Ï´¦Àí¸´ÔÓ£¬ÆÁ±Î²»ÓÃ*/
+	/* HALåº“çš„ä¸­æ–­å¤„ç†å¤æ‚ï¼Œå±è”½ä¸ç”¨*/
 	return;
   /* USER CODE END UART4_IRQn 0 */
   HAL_UART_IRQHandler(&huart4);

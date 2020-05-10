@@ -1,23 +1,23 @@
 /**
  * @file            dev_keypad.c
- * @brief           ¾ØÕó°´¼üÉ¨Ãè
+ * @brief           çŸ©é˜µæŒ‰é”®æ‰«æ
  * @author          wujique
- * @date            2018Äê3ÔÂ10ÈÕ ĞÇÆÚÁù
- * @version         ³õ¸å
- * @par             °æÈ¨ËùÓĞ (C), 2013-2023
+ * @date            2018å¹´3æœˆ10æ—¥ æ˜ŸæœŸå…­
+ * @version         åˆç¨¿
+ * @par             ç‰ˆæƒæ‰€æœ‰ (C), 2013-2023
  * @par History:
- * 1.ÈÕ    ÆÚ:        2018Äê3ÔÂ10ÈÕ ĞÇÆÚÁù
- *   ×÷    Õß:         Îİ¼¹È¸¹¤×÷ÊÒ
- *   ĞŞ¸ÄÄÚÈİ:   ´´½¨ÎÄ¼ş
+ * 1.æ—¥    æœŸ:        2018å¹´3æœˆ10æ—¥ æ˜ŸæœŸå…­
+ *   ä½œ    è€…:         å±‹è„Šé›€å·¥ä½œå®¤
+ *   ä¿®æ”¹å†…å®¹:   åˆ›å»ºæ–‡ä»¶
 
-		°æÈ¨ËµÃ÷£º
-		1 Ô´Âë¹éÎİ¼¹È¸¹¤×÷ÊÒËùÓĞ¡£
-		2 ¿ÉÒÔÓÃÓÚµÄÆäËûÉÌÒµÓÃÍ¾£¨ÅäÌ×¿ª·¢°åÏúÊÛ³ıÍâ£©£¬²»ĞëÊÚÈ¨¡£
-		3 Îİ¼¹È¸¹¤×÷ÊÒ²»¶Ô´úÂë¹¦ÄÜ×öÈÎºÎ±£Ö¤£¬ÇëÊ¹ÓÃÕß×ÔĞĞ²âÊÔ£¬ºó¹û×Ô¸º¡£
-		4 ¿ÉËæÒâĞŞ¸ÄÔ´Âë²¢·Ö·¢£¬µ«²»¿ÉÖ±½ÓÏúÊÛ±¾´úÂë»ñÀû£¬²¢ÇÒ±£Áô°æÈ¨ËµÃ÷¡£
-		5 Èç·¢ÏÖBUG»òÓĞÓÅ»¯£¬»¶Ó­·¢²¼¸üĞÂ¡£ÇëÁªÏµ£ºcode@wujique.com
-		6 Ê¹ÓÃ±¾Ô´ÂëÔòÏàµ±ÓÚÈÏÍ¬±¾°æÈ¨ËµÃ÷¡£
-		7 ÈçÇÖ·¸ÄãµÄÈ¨Àû£¬ÇëÁªÏµ£ºcode@wujique.com
+		ç‰ˆæƒè¯´æ˜ï¼š
+		1 æºç å½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
+		2 å¯ä»¥ç”¨äºçš„å…¶ä»–å•†ä¸šç”¨é€”ï¼ˆé…å¥—å¼€å‘æ¿é”€å”®é™¤å¤–ï¼‰ï¼Œä¸é¡»æˆæƒã€‚
+		3 å±‹è„Šé›€å·¥ä½œå®¤ä¸å¯¹ä»£ç åŠŸèƒ½åšä»»ä½•ä¿è¯ï¼Œè¯·ä½¿ç”¨è€…è‡ªè¡Œæµ‹è¯•ï¼Œåæœè‡ªè´Ÿã€‚
+		4 å¯éšæ„ä¿®æ”¹æºç å¹¶åˆ†å‘ï¼Œä½†ä¸å¯ç›´æ¥é”€å”®æœ¬ä»£ç è·åˆ©ï¼Œå¹¶ä¸”ä¿ç•™ç‰ˆæƒè¯´æ˜ã€‚
+		5 å¦‚å‘ç°BUGæˆ–æœ‰ä¼˜åŒ–ï¼Œæ¬¢è¿å‘å¸ƒæ›´æ–°ã€‚è¯·è”ç³»ï¼šcode@wujique.com
+		6 ä½¿ç”¨æœ¬æºç åˆ™ç›¸å½“äºè®¤åŒæœ¬ç‰ˆæƒè¯´æ˜ã€‚
+		7 å¦‚ä¾µçŠ¯ä½ çš„æƒåˆ©ï¼Œè¯·è”ç³»ï¼šcode@wujique.com
 */
 #include "mcu.h"
 #include "petite_config.h"
@@ -27,7 +27,7 @@
 #include "log.h"
 #include "drv_keypad.h"
 
-/*need fix: Ö±½ÓexternÒıÓÃ²»·ûºÏ¹æ·¶*/
+/*need fix: ç›´æ¥externå¼•ç”¨ä¸ç¬¦åˆè§„èŒƒ*/
 extern KeyPadIO KeyPadIOList[KEY_PAD_ROW_NUM+KEY_PAD_COL_NUM];
 
 //#define DEV_KEYPAD_DEBUG
@@ -39,56 +39,56 @@ extern KeyPadIO KeyPadIOList[KEY_PAD_ROW_NUM+KEY_PAD_COL_NUM];
 
 /*
 
-	Ô­Ôò£º
-	É¨Ãè³ÌĞòÖ»Ìá¹©¼üÎ»£¬²»Ìá¹©¹¦ÄÜ
-	°´¼ü¶¨ÒåÊÇAPPµÄÊÂÇé£¬³¤°´¶Ì°´Á¬Ğø°´£¬Ò²ÊÇAPPµÄÊÂÇé¡£
-	4*4¾ØÕó°´¼ü£¬¼üÎ»¶¨Òå£¬×óÉÏ½ÇÎª1£¬´Ó×óµ½ÓÒ£¬´ÓÉÏµ½ÏÂ¡£
+	åŸåˆ™ï¼š
+	æ‰«æç¨‹åºåªæä¾›é”®ä½ï¼Œä¸æä¾›åŠŸèƒ½
+	æŒ‰é”®å®šä¹‰æ˜¯APPçš„äº‹æƒ…ï¼Œé•¿æŒ‰çŸ­æŒ‰è¿ç»­æŒ‰ï¼Œä¹Ÿæ˜¯APPçš„äº‹æƒ…ã€‚
+	4*4çŸ©é˜µæŒ‰é”®ï¼Œé”®ä½å®šä¹‰ï¼Œå·¦ä¸Šè§’ä¸º1ï¼Œä»å·¦åˆ°å³ï¼Œä»ä¸Šåˆ°ä¸‹ã€‚
 
-	É¨Ãè·½·¨£º
-	ĞĞÂÖÁ÷Êä³ö0£¬¶ÁÁĞIOµÄ×´Ì¬¡£
+	æ‰«ææ–¹æ³•ï¼š
+	è¡Œè½®æµè¾“å‡º0ï¼Œè¯»åˆ—IOçš„çŠ¶æ€ã€‚
 
-	¼üÖµ²Î¿¼¼üÅÌ£¬É¨ÃèºóÌî³äµ½»º³åµÄÊı¾İÊÇ°´¼üÎ»ÖÃÍ¨¶ÏĞÅÏ¢¡£
+	é”®å€¼å‚è€ƒé”®ç›˜ï¼Œæ‰«æåå¡«å……åˆ°ç¼“å†²çš„æ•°æ®æ˜¯æŒ‰é”®ä½ç½®é€šæ–­ä¿¡æ¯ã€‚
 
 */
-/*ÎŞ°´¼ü°´ÏÂÊ±£¬ÁĞIO×´Ì¬£¬Í¬Ê±Ò²±êÊ¶ÁĞ×´Ì¬ÄÄĞ©Î»ÓĞĞ§*/
+/*æ— æŒ‰é”®æŒ‰ä¸‹æ—¶ï¼Œåˆ—IOçŠ¶æ€ï¼ŒåŒæ—¶ä¹Ÿæ ‡è¯†åˆ—çŠ¶æ€å“ªäº›ä½æœ‰æ•ˆ*/
 #define KEYPAD_INIT_STA_MASK (0X0F)
 
 /*
-·À¶¶Ê±¼ä=·À¶¶´ÎÊı*scanº¯ÊıÖ´ĞĞ¼ä¸ô*KEY_PAD_ROW_NUM
-²»Í¬°´¼ü½¨Òé·À¶¶Ê±¼ä£º
-Õğ¶¯°´¼ü£º10ms
-¹ø×Ğ£º40ms-50ms
-»úĞµËø¶¨°´¼ü£º100ms
+é˜²æŠ–æ—¶é—´=é˜²æŠ–æ¬¡æ•°*scanå‡½æ•°æ‰§è¡Œé—´éš”*KEY_PAD_ROW_NUM
+ä¸åŒæŒ‰é”®å»ºè®®é˜²æŠ–æ—¶é—´ï¼š
+éœ‡åŠ¨æŒ‰é”®ï¼š10ms
+é”…ä»”ï¼š40ms-50ms
+æœºæ¢°é”å®šæŒ‰é”®ï¼š100ms
 */
-#define KEY_PAD_DEC_TIME (3)//·À¶¶É¨Ãè´ÎÊı
+#define KEY_PAD_DEC_TIME (3)//é˜²æŠ–æ‰«ææ¬¡æ•°
 /*
-	É¨Ãè¹ı³ÌÊ¹ÓÃµÄ±äÁ¿
+	æ‰«æè¿‡ç¨‹ä½¿ç”¨çš„å˜é‡
 */
 struct _strKeyPadCtrl
 {
-	u8 dec;//·À¶¶¼ÆÊı
-	u8 oldsta;//ÉÏÒ»´ÎµÄÎÈ¶¨×´Ì¬
+	u8 dec;//é˜²æŠ–è®¡æ•°
+	u8 oldsta;//ä¸Šä¸€æ¬¡çš„ç¨³å®šçŠ¶æ€
 	u8 newsta;
 };
 struct _strKeyPadCtrl KeyPadCtrl[KEY_PAD_ROW_NUM];
 
 
 /*
-	°´¼ü»º³å£¬É¨Ãèµ½µÄ°´¼üÎ»ÖÃ¼üÖµ£¬Ö»ËµÃ÷Î»ÖÃµÄÍ¨¶Ï£¬
-	×î¸ßÎ»Îª0±êÊ¶Í¨£¨°´ÏÂ£©£¬Îª1£¬Ôò±êÊ¶¶Ï¿ª¡£
+	æŒ‰é”®ç¼“å†²ï¼Œæ‰«æåˆ°çš„æŒ‰é”®ä½ç½®é”®å€¼ï¼Œåªè¯´æ˜ä½ç½®çš„é€šæ–­ï¼Œ
+	æœ€é«˜ä½ä¸º0æ ‡è¯†é€šï¼ˆæŒ‰ä¸‹ï¼‰ï¼Œä¸º1ï¼Œåˆ™æ ‡è¯†æ–­å¼€ã€‚
 */
 #define KEYPAD_BUFF_SIZE (32)
-static u8 KeyPadBuffW = 0;//Ğ´Ë÷Òı
-static u8 KeyPadBuffR = 0;//¶ÁË÷Òı
+static u8 KeyPadBuffW = 0;//å†™ç´¢å¼•
+static u8 KeyPadBuffR = 0;//è¯»ç´¢å¼•
 static u8 KeyPadBuff[KEYPAD_BUFF_SIZE];
 
-static s32 DevKeypadGd = -2;//Éè±¸¿ØÖÆ
+static s32 DevKeypadGd = -2;//è®¾å¤‡æ§åˆ¶
 
 /**
  *@brief:      dev_keypad_init
- *@details:    ³õÊ¼»¯¾ØÕó°´¼üIO¿Ú
+ *@details:    åˆå§‹åŒ–çŸ©é˜µæŒ‰é”®IOå£
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_keypad_init(void)
@@ -128,9 +128,9 @@ s32 dev_keypad_init(void)
 
 /**
  *@brief:      dev_keypad_open
- *@details:    ´ò¿ª°´¼ü£¬Ö»ÓĞ´ò¿ª°´¼ü£¬É¨Ãè²Å»á½øĞĞ
+ *@details:    æ‰“å¼€æŒ‰é”®ï¼Œåªæœ‰æ‰“å¼€æŒ‰é”®ï¼Œæ‰«ææ‰ä¼šè¿›è¡Œ
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_keypad_open(void)
@@ -145,11 +145,11 @@ s32 dev_keypad_open(void)
 }
 /**
  *@brief:      dev_keypad_read
- *@details:    ¶Á¼üÖµ
+ *@details:    è¯»é”®å€¼
  *@param[in]   u8 *key  
-               u8 len   ÆÚÍû¶Á¼üÖµÊıÁ¿   
- *@param[out]  ÎŞ
- *@retval:     ·µ»Ø¶Áµ½¼üÖµÊı
+               u8 len   æœŸæœ›è¯»é”®å€¼æ•°é‡   
+ *@param[out]  æ— 
+ *@retval:     è¿”å›è¯»åˆ°é”®å€¼æ•°
  */
 s32 dev_keypad_read(u8 *key, u8 len)
 {
@@ -175,9 +175,9 @@ s32 dev_keypad_read(u8 *key, u8 len)
 
 /**
  *@brief:      dev_keypad_scan
- *@details:    °´¼üÉ¨Ãè£¬ÔÚ¶¨Ê±Æ÷»òÕßÈÎÎñÖĞ¶¨Ê±Ö´ĞĞ
+ *@details:    æŒ‰é”®æ‰«æï¼Œåœ¨å®šæ—¶å™¨æˆ–è€…ä»»åŠ¡ä¸­å®šæ—¶æ‰§è¡Œ
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_keypad_scan(void)
@@ -190,7 +190,7 @@ s32 dev_keypad_scan(void)
 	
 	if(DevKeypadGd != 0) return -1;
 	
-	/*¶ÁÊäÈëµÄ×´Ì¬£¬Èç¹û²»ÊÇÁ¬ĞøIO£¬ÏÈÆ´³ÉÁ¬ĞøIO*/
+	/*è¯»è¾“å…¥çš„çŠ¶æ€ï¼Œå¦‚æœä¸æ˜¯è¿ç»­IOï¼Œå…ˆæ‹¼æˆè¿ç»­IO*/
 	#if 0
 	ColSta = mcu_io_input_readport(KeyPadIOList[0+KEY_PAD_ROW_NUM].port);
 	ColSta = (ColSta>>8)&KEYPAD_INIT_STA_MASK;
@@ -209,30 +209,30 @@ s32 dev_keypad_scan(void)
 	}
 	#endif
 
-	/*¼ÇÂ¼ĞÂ×´Ì¬£¬ĞÂ×´Ì¬±ØĞëÊÇÁ¬ĞøÎÈ¶¨£¬·ñÔòÖØĞÂ¼ÆÊı*/
+	/*è®°å½•æ–°çŠ¶æ€ï¼Œæ–°çŠ¶æ€å¿…é¡»æ˜¯è¿ç»­ç¨³å®šï¼Œå¦åˆ™é‡æ–°è®¡æ•°*/
 	if(ColSta != KeyPadCtrl[scanrow].newsta){
 		KeyPadCtrl[scanrow].newsta = ColSta;
 		KeyPadCtrl[scanrow].dec = 0;
 	}
 
-	/*ÈçĞÂ×´Ì¬Óë¾É×´Ì¬ÓĞ±ä»¯£¬½øĞĞÉ¨ÃèÅĞ¶Ï*/
+	/*å¦‚æ–°çŠ¶æ€ä¸æ—§çŠ¶æ€æœ‰å˜åŒ–ï¼Œè¿›è¡Œæ‰«æåˆ¤æ–­*/
 	if(ColSta != KeyPadCtrl[scanrow].oldsta){
 		KEYPAD_DEBUG(LOG_DEBUG, " chg--");
 		KeyPadCtrl[scanrow].dec++;
 		if(KeyPadCtrl[scanrow].dec >= KEY_PAD_DEC_TIME){
-			//´óÓÚ·À¶¶´ÎÊı
-			/*È·¶¨ÓĞ±ä»¯*/
+			//å¤§äºé˜²æŠ–æ¬¡æ•°
+			/*ç¡®å®šæœ‰å˜åŒ–*/
 			KeyPadCtrl[scanrow].dec = 0;
-			/*ĞÂ¾É¶Ô±È£¬ÕÒ³ö±ä»¯Î»*/
+			/*æ–°æ—§å¯¹æ¯”ï¼Œæ‰¾å‡ºå˜åŒ–ä½*/
 			chgbit = KeyPadCtrl[scanrow].oldsta^KeyPadCtrl[scanrow].newsta;
 			KEYPAD_DEBUG(LOG_DEBUG, "row:%d, chage bit:%02x\r\n",scanrow,chgbit);
 
-			/*¸ù¾İ±ä»¯µÄÎ»£¬Çó³ö±ä»¯µÄ°´¼üÎ»ÖÃ*/
+			/*æ ¹æ®å˜åŒ–çš„ä½ï¼Œæ±‚å‡ºå˜åŒ–çš„æŒ‰é”®ä½ç½®*/
 			u8 i;
 			for(i=0;i<KEY_PAD_COL_NUM;i++){
 				if((chgbit & (0x01<<i))!=0){
 					keyvalue = 	scanrow*KEY_PAD_COL_NUM+i;
-					/*Ìí¼ÓÍ¨¶Ï£¨°´ÏÂËÉ¿ª£©±êÖ¾*/
+					/*æ·»åŠ é€šæ–­ï¼ˆæŒ‰ä¸‹æ¾å¼€ï¼‰æ ‡å¿—*/
 					if((KeyPadCtrl[scanrow].newsta&(0x01<<i)) == 0){
 						KEYPAD_DEBUG(LOG_DEBUG, "press\r\n");
 					}else{
@@ -240,7 +240,7 @@ s32 dev_keypad_scan(void)
 						keyvalue += KEYPAD_PR_MASK;
 					}
 					/**/
-					KeyPadBuff[KeyPadBuffW] =keyvalue+1;//+1£¬µ÷Õûµ½1¿ªÊ¼£¬²»´Ó0¿ªÊ¼
+					KeyPadBuff[KeyPadBuffW] =keyvalue+1;//+1ï¼Œè°ƒæ•´åˆ°1å¼€å§‹ï¼Œä¸ä»0å¼€å§‹
 					KeyPadBuffW++;
 					if(KeyPadBuffW>=KEYPAD_BUFF_SIZE)KeyPadBuffW = 0;
 				}
@@ -251,7 +251,7 @@ s32 dev_keypad_scan(void)
 		}
 	}
 
-	/*½«ÏÂÒ»ĞĞµÄIOÊä³ö0*/
+	/*å°†ä¸‹ä¸€è¡Œçš„IOè¾“å‡º0*/
 	scanrow++;
 	if(scanrow >= KEY_PAD_ROW_NUM)scanrow = 0;
 
@@ -267,9 +267,9 @@ s32 dev_keypad_scan(void)
 }
 /**
  *@brief:      dev_keypad_test
- *@details:    ²âÊÔ
+ *@details:    æµ‹è¯•
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 dev_keypad_test(void)

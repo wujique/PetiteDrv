@@ -296,29 +296,29 @@ void SRAM_ReadBuffer(uint16_t* pBuffer, uint32_t ReadAddr, uint32_t NumHalfwordT
   }
 }
 /*
-	д�Ĵ���Ҫ����
-	*LcdReg = LCD_Reg; //д��Ҫд�ļĴ������
-	*LcdData = LCD_RegValue; //д������ 
+	写寄存器要两步
+	*LcdReg = LCD_Reg; //写入要写的寄存器序号
+	*LcdData = LCD_RegValue; //写入数据 
 
-	FSMC bank1��ַ0x6000 0000
-	���ĸ�����,ÿ������64M��ƫ�Ƶ�ַ�ֱ���
+	FSMC bank1地址0x6000 0000
+	分四个区域,每个区域64M，偏移地址分别是
 		0x000 0000
 		0X400 0000
 		0X800 0000
 		0XC00 0000
 
-	������8λ����16λλ����A0���豸A0��FSMC�ڲ��������Զ��Ե�ַ������һλ������
-	����������������ݵĹܽŽ��ڵ�ַ���ϣ������16λ�����ڲ�FSMC��Ե�ַ��������һλ��
-	��ˣ��������A15�ϣ��ڵ�ַ�Ͼ�Ӧ��ѡA16λ��
+	无论是8位还是16位位宽，A0接设备A0。FSMC内部控制器自动对地址做右移一位处理。
+	用来区分命令还是数据的管脚接在地址线上，如果是16位宽，内部FSMC会对地址进行右移一位。
+	因此，如果接在A15上，在地址上就应该选A16位。
 */
 volatile u16 *LcdReg = (u16*)0x6C000000;
 volatile u16 *LcdData = (u16*)0x6C010000;
 
 /**
  *@brief:      mcu_fsmc_lcd_Init
- *@details:    LCDʹ�õ�FSMC��ʼ��
+ *@details:    LCD使用的FSMC初始化
  *@param[in]   void  
- *@param[out]  ��
+ *@param[out]  无
  *@retval:     
  */
 void mcu_fsmc_lcd_Init(void)

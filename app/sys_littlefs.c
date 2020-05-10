@@ -11,8 +11,8 @@
 
 #define LFS_FLASH_NAME "board_spiflash"
 /*
-	flash ½Ó¿Ú,
-	ËùÓĞº¯ÊıÄ¬ÈÏ·µ»Ø0£¬Ò²¾ÍÊÇËµ£¬Ä¬ÈÏ²Ù×÷FLASH³É¹¦¡£
+	flash æ¥å£,
+	æ‰€æœ‰å‡½æ•°é»˜è®¤è¿”å›0ï¼Œä¹Ÿå°±æ˜¯è¯´ï¼Œé»˜è®¤æ“ä½œFLASHæˆåŠŸã€‚
 */
 
 // Read a region in a block. Negative error codes are propogated
@@ -122,7 +122,7 @@ void sys_lfs_mount(void)
 
 // entry point
 /*
-	²âÊÔ
+	æµ‹è¯•
 */
 int lfs_test(void) 
 {

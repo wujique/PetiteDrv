@@ -5,12 +5,12 @@
 #include "petite_def.h"
 
 
-/*	i2cÉè±¸¶¨Òå */
+/*	i2cè®¾å¤‡å®šä¹‰ */
 typedef struct
 {
 	PetiteNode pnode;
 
-	/*Éè±¸ĞèÒªµÄ×ÊÔ´£¬Ä£ÄâI2CÖ»ĞèÒªÁ½¸ùIO¿Ú*/
+	/*è®¾å¤‡éœ€è¦çš„èµ„æºï¼Œæ¨¡æ‹ŸI2Cåªéœ€è¦ä¸¤æ ¹IOå£*/
 	MCU_PORT sclport;
 	u16 sclpin;
 
@@ -18,7 +18,7 @@ typedef struct
 	u16 sdapin;
 }DevI2c;
 
-/*  Éè±¸½Úµã */
+/*  è®¾å¤‡èŠ‚ç‚¹ */
 typedef struct
 {
 	s32 gd;

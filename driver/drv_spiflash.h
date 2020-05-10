@@ -5,40 +5,40 @@
 #include "p_list.h"
 #include "bus_spi.h"
 
-/*SPI FLASH ĞÅÏ¢*/
+/*SPI FLASH ä¿¡æ¯*/
 typedef struct
 {
 	char *name;
 	u32 JID;
 	u32 MID;
-	/*ÈİÁ¿£¬¿éÊı£¬¿é´óĞ¡µÈĞÅÏ¢*/
-	u32 sectornum;//×Ü¿éÊı
-	u32 sectorsize;//¿é´óĞ¡
-	u32 structure;//×ÜÈİÁ¿
+	/*å®¹é‡ï¼Œå—æ•°ï¼Œå—å¤§å°ç­‰ä¿¡æ¯*/
+	u32 sectornum;//æ€»å—æ•°
+	u32 sectorsize;//å—å¤§å°
+	u32 structure;//æ€»å®¹é‡
 	
 }_strSpiFlash;
 
 
-/*SPI FLASHÉè±¸¶¨Òå*/
+/*SPI FLASHè®¾å¤‡å®šä¹‰*/
 typedef struct
 {
 	PetiteNode pnode;
 	
-	char *spich;//¹ÒÔØÔÚÄÄÌõSPIÍ¨µÀ
+	char *spich;//æŒ‚è½½åœ¨å“ªæ¡SPIé€šé“
 	
-	_strSpiFlash *pra;//Éè±¸ĞÅÏ¢
+	_strSpiFlash *pra;//è®¾å¤‡ä¿¡æ¯
 }DevSpiFlash;
 
-/*Éè±¸½Úµã¶¨Òå*/
+/*è®¾å¤‡èŠ‚ç‚¹å®šä¹‰*/
 typedef struct
 {
 	/**/
 	s32 gd;
-	/*Éè±¸ĞÅÏ¢*/
+	/*è®¾å¤‡ä¿¡æ¯*/
 	
 	DevSpiFlash dev;
 	
-	/*spi Í¨µÀ½Úµã*/
+	/*spi é€šé“èŠ‚ç‚¹*/
 	DevSpiChNode *spichnode;
 	
 	struct list_head list;

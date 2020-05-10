@@ -1,25 +1,25 @@
 /**
  * @file            dev_cog12864.c
- * @brief           COG LCDÇı¶¯
+ * @brief           COG LCDé©±åŠ¨
  * @author          wujique
- * @date            2018Äê1ÔÂ10ÈÕ ĞÇÆÚÈı
- * @version         ³õ¸å
- * @par             °æÈ¨ËùÓĞ (C), 2013-2023
+ * @date            2018å¹´1æœˆ10æ—¥ æ˜ŸæœŸä¸‰
+ * @version         åˆç¨¿
+ * @par             ç‰ˆæƒæ‰€æœ‰ (C), 2013-2023
  * @par History:
- * 1.ÈÕ    ÆÚ:        2018Äê1ÔÂ10ÈÕ ĞÇÆÚÈı
- *   ×÷    Õß:         Îİ¼¹È¸¹¤×÷ÊÒ
- *   ĞŞ¸ÄÄÚÈİ:   ´´½¨ÎÄ¼ş
-		°æÈ¨ËµÃ÷£º
-		1 Ô´Âë¹éÎİ¼¹È¸¹¤×÷ÊÒËùÓĞ¡£
-		2 ¿ÉÒÔÓÃÓÚµÄÆäËûÉÌÒµÓÃÍ¾£¨ÅäÌ×¿ª·¢°åÏúÊÛ³ıÍâ£©£¬²»ĞëÊÚÈ¨¡£
-		3 Îİ¼¹È¸¹¤×÷ÊÒ²»¶Ô´úÂë¹¦ÄÜ×öÈÎºÎ±£Ö¤£¬ÇëÊ¹ÓÃÕß×ÔĞĞ²âÊÔ£¬ºó¹û×Ô¸º¡£
-		4 ¿ÉËæÒâĞŞ¸ÄÔ´Âë²¢·Ö·¢£¬µ«²»¿ÉÖ±½ÓÏúÊÛ±¾´úÂë»ñÀû£¬²¢ÇÒ±£Áô°æÈ¨ËµÃ÷¡£
-		5 Èç·¢ÏÖBUG»òÓĞÓÅ»¯£¬»¶Ó­·¢²¼¸üĞÂ¡£ÇëÁªÏµ£ºcode@wujique.com
-		6 Ê¹ÓÃ±¾Ô´ÂëÔòÏàµ±ÓÚÈÏÍ¬±¾°æÈ¨ËµÃ÷¡£
-		7 ÈçÇÖ·¸ÄãµÄÈ¨Àû£¬ÇëÁªÏµ£ºcode@wujique.com
-		8 Ò»ÇĞ½âÊÍÈ¨¹éÎİ¼¹È¸¹¤×÷ÊÒËùÓĞ¡£
+ * 1.æ—¥    æœŸ:        2018å¹´1æœˆ10æ—¥ æ˜ŸæœŸä¸‰
+ *   ä½œ    è€…:         å±‹è„Šé›€å·¥ä½œå®¤
+ *   ä¿®æ”¹å†…å®¹:   åˆ›å»ºæ–‡ä»¶
+		ç‰ˆæƒè¯´æ˜ï¼š
+		1 æºç å½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
+		2 å¯ä»¥ç”¨äºçš„å…¶ä»–å•†ä¸šç”¨é€”ï¼ˆé…å¥—å¼€å‘æ¿é”€å”®é™¤å¤–ï¼‰ï¼Œä¸é¡»æˆæƒã€‚
+		3 å±‹è„Šé›€å·¥ä½œå®¤ä¸å¯¹ä»£ç åŠŸèƒ½åšä»»ä½•ä¿è¯ï¼Œè¯·ä½¿ç”¨è€…è‡ªè¡Œæµ‹è¯•ï¼Œåæœè‡ªè´Ÿã€‚
+		4 å¯éšæ„ä¿®æ”¹æºç å¹¶åˆ†å‘ï¼Œä½†ä¸å¯ç›´æ¥é”€å”®æœ¬ä»£ç è·åˆ©ï¼Œå¹¶ä¸”ä¿ç•™ç‰ˆæƒè¯´æ˜ã€‚
+		5 å¦‚å‘ç°BUGæˆ–æœ‰ä¼˜åŒ–ï¼Œæ¬¢è¿å‘å¸ƒæ›´æ–°ã€‚è¯·è”ç³»ï¼šcode@wujique.com
+		6 ä½¿ç”¨æœ¬æºç åˆ™ç›¸å½“äºè®¤åŒæœ¬ç‰ˆæƒè¯´æ˜ã€‚
+		7 å¦‚ä¾µçŠ¯ä½ çš„æƒåˆ©ï¼Œè¯·è”ç³»ï¼šcode@wujique.com
+		8 ä¸€åˆ‡è§£é‡Šæƒå½’å±‹è„Šé›€å·¥ä½œå®¤æ‰€æœ‰ã€‚
 */
-/*	COG LCD µÄÇı¶¯*/
+/*	COG LCD çš„é©±åŠ¨*/
 #include "mcu.h"
 #include "petite_config.h"
 
@@ -31,12 +31,12 @@
 #include "drv_lcd.h"
 #include "drv_str7565.h"
 
-/*	Çı¶¯Ê¹ÓÃµÄÊı¾İ½á¹¹£¬²»¶ÔÍâ*/
+/*	é©±åŠ¨ä½¿ç”¨çš„æ•°æ®ç»“æ„ï¼Œä¸å¯¹å¤–*/
 struct _cog_drv_data
 {
 	u8 gram[8][128];
 
-	/*Ë¢ĞÂÇøÓò*/
+	/*åˆ·æ–°åŒºåŸŸ*/
 	u16 sx;
 	u16 ex;
 	u16 sy;
@@ -60,7 +60,7 @@ s32 drv_ST7565_flush(DevLcdNode *lcd, u16 *color, u32 len);
 s32 drv_ST7565_update(DevLcdNode *lcd);
 
 
-/*	¶¨ÒåÒ»¸öTFT LCD£¬Ê¹ÓÃST7565Çı¶¯ICµÄÉè±¸*/
+/*	å®šä¹‰ä¸€ä¸ªTFT LCDï¼Œä½¿ç”¨ST7565é©±åŠ¨ICçš„è®¾å¤‡*/
 _lcd_drv CogLcdST7565Drv = {
 							.id = 0X7565,
 
@@ -87,9 +87,9 @@ void drv_ST7565_lcd_bl(DevLcdNode *lcd, u8 sta)
 	
 /**
  *@brief:      drv_ST7565_scan_dir
- *@details:    ÉèÖÃÏÔ´æÉ¨Ãè·½Ïò£¬ ±¾º¯ÊıÎªÊúÆÁ½Ç¶È
+ *@details:    è®¾ç½®æ˜¾å­˜æ‰«ææ–¹å‘ï¼Œ æœ¬å‡½æ•°ä¸ºç«–å±è§’åº¦
  *@param[in]   u8 dir  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     static
  */
 static void drv_ST7565_scan_dir(DevLcdNode *lcd, u8 dir)
@@ -99,12 +99,12 @@ static void drv_ST7565_scan_dir(DevLcdNode *lcd, u8 dir)
 
 /**
  *@brief:      drv_ST7565_set_cp_addr
- *@details:    ÉèÖÃ¿ØÖÆÆ÷µÄĞĞÁĞµØÖ··¶Î§
+ *@details:    è®¾ç½®æ§åˆ¶å™¨çš„è¡Œåˆ—åœ°å€èŒƒå›´
  *@param[in]   u16 sc  
                u16 ec  
                u16 sp  
                u16 ep  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 #if 0
@@ -115,13 +115,13 @@ static s32 drv_ST7565_set_cp_addr(DevLcd *lcd, u16 sc, u16 ec, u16 sp, u16 ep)
 #endif
 /**
  *@brief:      drv_ST7565_refresh_gram
- *@details:       Ë¢ĞÂÖ¸¶¨ÇøÓòµ½ÆÁÄ»ÉÏ
-                  ×ø±êÊÇºáÆÁÄ£Ê½×ø±ê
+ *@details:       åˆ·æ–°æŒ‡å®šåŒºåŸŸåˆ°å±å¹•ä¸Š
+                  åæ ‡æ˜¯æ¨ªå±æ¨¡å¼åæ ‡
  *@param[in]   u16 sc  
                u16 ec  
                u16 sp  
                u16 ep  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     static
  */
 static s32 drv_ST7565_refresh_gram(DevLcdNode *lcd, u16 sc, u16 ec, u16 sp, u16 ep)
@@ -137,9 +137,9 @@ static s32 drv_ST7565_refresh_gram(DevLcdNode *lcd, u16 sc, u16 ec, u16 sp, u16 
 	
     for(i=sp/8; i <= ep/8; i++)
     {
-        bus_lcd_write_cmd (node, 0xb0+i);    //ÉèÖÃÒ³µØÖ·£¨0~7£©
-        bus_lcd_write_cmd(node, ((sc>>4)&0x0f)+0x10);      //ÉèÖÃÏÔÊ¾Î»ÖÃ¡ªÁĞ¸ßµØÖ·
-        bus_lcd_write_cmd(node, sc&0x0f);      //ÉèÖÃÏÔÊ¾Î»ÖÃ¡ªÁĞµÍµØÖ·
+        bus_lcd_write_cmd (node, 0xb0+i);    //è®¾ç½®é¡µåœ°å€ï¼ˆ0~7ï¼‰
+        bus_lcd_write_cmd(node, ((sc>>4)&0x0f)+0x10);      //è®¾ç½®æ˜¾ç¤ºä½ç½®â€”åˆ—é«˜åœ°å€
+        bus_lcd_write_cmd(node, sc&0x0f);      //è®¾ç½®æ˜¾ç¤ºä½ç½®â€”åˆ—ä½åœ°å€
 
          bus_lcd_write_data(node, &(drvdata->gram[i][sc]), ec-sc+1);
 
@@ -151,9 +151,9 @@ static s32 drv_ST7565_refresh_gram(DevLcdNode *lcd, u16 sc, u16 ec, u16 sp, u16 
 
 /**
  *@brief:      drv_ST7565_display_onoff
- *@details:    ÏÔÊ¾»ò¹Ø±Õ
+ *@details:    æ˜¾ç¤ºæˆ–å…³é—­
  *@param[in]   u8 sta  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     static
  */
 static s32 drv_ST7565_display_onoff(DevLcdNode *lcd, u8 sta)
@@ -178,7 +178,7 @@ static s32 drv_ST7565_display_onoff(DevLcdNode *lcd, u8 sta)
  *@brief:      drv_ST7565_init
  *@details:    
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 drv_ST7565_init(DevLcdNode *lcd)
@@ -194,32 +194,32 @@ s32 drv_ST7565_init(DevLcdNode *lcd)
 	bus_lcd_rst(node, 1);
 	Delay(50);
 	
-	bus_lcd_write_cmd (node, 0xe2);//Èí¸´Î»
+	bus_lcd_write_cmd (node, 0xe2);//è½¯å¤ä½
 	Delay(50);
-	bus_lcd_write_cmd (node, 0x2c);//ÉıÑ¹²½Öè1
+	bus_lcd_write_cmd (node, 0x2c);//å‡å‹æ­¥éª¤1
 	Delay(50);
-	bus_lcd_write_cmd (node, 0x2e);//ÉıÑ¹²½Öè2
+	bus_lcd_write_cmd (node, 0x2e);//å‡å‹æ­¥éª¤2
 	Delay(50);
-	bus_lcd_write_cmd (node, 0x2f);//ÉıÑ¹²½Öè3
+	bus_lcd_write_cmd (node, 0x2f);//å‡å‹æ­¥éª¤3
 	Delay(50);
 	
-	bus_lcd_write_cmd (node, 0x24);//¶Ô±È¶È´Öµ÷£¬·¶Î§0X20£¬0X27
-	bus_lcd_write_cmd (node, 0x81);//¶Ô±È¶ÈÎ¢µ÷
-	bus_lcd_write_cmd (node, 0x25);//¶Ô±È¶ÈÎ¢µ÷Öµ 0x00-0x3f
+	bus_lcd_write_cmd (node, 0x24);//å¯¹æ¯”åº¦ç²—è°ƒï¼ŒèŒƒå›´0X20ï¼Œ0X27
+	bus_lcd_write_cmd (node, 0x81);//å¯¹æ¯”åº¦å¾®è°ƒ
+	bus_lcd_write_cmd (node, 0x25);//å¯¹æ¯”åº¦å¾®è°ƒå€¼ 0x00-0x3f
 	
-	bus_lcd_write_cmd (node, 0xa2);// Æ«Ñ¹±È
-	bus_lcd_write_cmd (node, 0xc8);//ĞĞÉ¨Ãè£¬´ÓÉÏµ½ÏÂ
-	bus_lcd_write_cmd (node, 0xa0);//ÁĞÉ¨Ãè£¬´Ó×óµ½ÓÒ
-	bus_lcd_write_cmd (node, 0x40);//ÆğÊ¼ĞĞ£¬µÚÒ»ĞĞ
-	bus_lcd_write_cmd (node, 0xaf);//¿ªÏÔÊ¾
+	bus_lcd_write_cmd (node, 0xa2);// åå‹æ¯”
+	bus_lcd_write_cmd (node, 0xc8);//è¡Œæ‰«æï¼Œä»ä¸Šåˆ°ä¸‹
+	bus_lcd_write_cmd (node, 0xa0);//åˆ—æ‰«æï¼Œä»å·¦åˆ°å³
+	bus_lcd_write_cmd (node, 0x40);//èµ·å§‹è¡Œï¼Œç¬¬ä¸€è¡Œ
+	bus_lcd_write_cmd (node, 0xaf);//å¼€æ˜¾ç¤º
 
 	bus_lcd_close(node);
 	
 	wjq_log(LOG_INFO, "drv_ST7565_init finish\r\n");
 
-	/*ÉêÇëÏÔ´æ£¬ÓÀ²»ÊÍ·Å*/
+	/*ç”³è¯·æ˜¾å­˜ï¼Œæ°¸ä¸é‡Šæ”¾*/
 	lcd->pri = (void *)wjq_malloc(sizeof(struct _cog_drv_data));
-	memset((char*)lcd->pri, 0x00, 128*8);//Òª¸ÄÎª¶¯Ì¬ÅĞ¶ÏÏÔ´æ´óĞ¡
+	memset((char*)lcd->pri, 0x00, 128*8);//è¦æ”¹ä¸ºåŠ¨æ€åˆ¤æ–­æ˜¾å­˜å¤§å°
 	
 	//drv_ST7565_refresh_gram(lcd, 0,127,0,63);
 
@@ -228,13 +228,13 @@ s32 drv_ST7565_init(DevLcdNode *lcd)
 
 /**
  *@brief:      drv_ST7565_xy2cp
- *@details:    ½«xy×ø±ê×ª»»ÎªCP×ø±ê
- 			   ¶ÔÓÚCOGºÚ°×ÆÁÀ´Ëµ£¬CP×ø±ê¾ÍÊÇºáÆÁ×ø±ê£¬
- 			   ×ªÊúÆÁºó£¬CP×ø±ê»¹ÊÇºáÆÁ×ø±ê£¬
- 			   Ò²¾ÍÊÇËµµ±ÊúÆÁÄ£Ê½£¬¾ÍĞèÒª½«XY×ø±ê×ªCP×ø±ê
- 			   ºáÆÁ²»ĞèÒª×ª»»
- *@param[in]   ÎŞ
- *@param[out]  ÎŞ
+ *@details:    å°†xyåæ ‡è½¬æ¢ä¸ºCPåæ ‡
+ 			   å¯¹äºCOGé»‘ç™½å±æ¥è¯´ï¼ŒCPåæ ‡å°±æ˜¯æ¨ªå±åæ ‡ï¼Œ
+ 			   è½¬ç«–å±åï¼ŒCPåæ ‡è¿˜æ˜¯æ¨ªå±åæ ‡ï¼Œ
+ 			   ä¹Ÿå°±æ˜¯è¯´å½“ç«–å±æ¨¡å¼ï¼Œå°±éœ€è¦å°†XYåæ ‡è½¬CPåæ ‡
+ 			   æ¨ªå±ä¸éœ€è¦è½¬æ¢
+ *@param[in]   æ— 
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 drv_ST7565_xy2cp(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey, u16 *sc, u16 *ec, u16 *sp, u16 *ep)
@@ -244,11 +244,11 @@ s32 drv_ST7565_xy2cp(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey, u16 *sc, u
 }
 /**
  *@brief:      drv_ST7565_drawpoint
- *@details:    »­µã
+ *@details:    ç”»ç‚¹
  *@param[in]   u16 x      
                u16 y      
                u16 color  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     static
  */
 static s32 drv_ST7565_drawpoint(DevLcdNode *lcd, u16 x, u16 y, u16 color)
@@ -272,14 +272,14 @@ static s32 drv_ST7565_drawpoint(DevLcdNode *lcd, u16 x, u16 y, u16 color)
 		xtmp = x;
 		ytmp = y;
 	}
-	else//Èç¹ûÊÇÊúÆÁ£¬XYÖá¸úÏÔ´æµÄÓ³ÉäÒª¶Ôµ÷
+	else//å¦‚æœæ˜¯ç«–å±ï¼ŒXYè½´è·Ÿæ˜¾å­˜çš„æ˜ å°„è¦å¯¹è°ƒ
 	{
 		xtmp = y;
 		ytmp = lcd->width-1-x;
 	}
 	
-	page = ytmp/8; //Ò³µØÖ·
-	colum = xtmp;//ÁĞµØÖ·
+	page = ytmp/8; //é¡µåœ°å€
+	colum = xtmp;//åˆ—åœ°å€
 	
 	if(color == BLACK)
 	{
@@ -290,7 +290,7 @@ static s32 drv_ST7565_drawpoint(DevLcdNode *lcd, u16 x, u16 y, u16 color)
 		drvdata->gram[page][colum] &= ~(0x01<<(ytmp%8));
 	}
 
-	/*Ğ§ÂÊ²»¸ß*/
+	/*æ•ˆç‡ä¸é«˜*/
 	node = bus_lcd_open(lcd->dev.buslcd);
     bus_lcd_write_cmd (node, 0xb0 + page );   
     bus_lcd_write_cmd (node, ((colum>>4)&0x0f)+0x10); 
@@ -301,13 +301,13 @@ static s32 drv_ST7565_drawpoint(DevLcdNode *lcd, u16 x, u16 y, u16 color)
 }
 /**
  *@brief:      drv_ST7565_color_fill
- *@details:    ½«Ò»¿éÇøÓòÉè¶¨ÎªÄ³ÖÖÑÕÉ«
+ *@details:    å°†ä¸€å—åŒºåŸŸè®¾å®šä¸ºæŸç§é¢œè‰²
  *@param[in]   u16 sx     
                u16 sy     
                u16 ex     
                u16 ey     
                u16 color  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 drv_ST7565_color_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 color)
@@ -323,7 +323,7 @@ s32 drv_ST7565_color_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 color
 
 	drvdata = (struct _cog_drv_data *)lcd->pri;
 
-	/*·ÀÖ¹×ø±êÒç³ö*/
+	/*é˜²æ­¢åæ ‡æº¢å‡º*/
 	if(sy >= lcd->height)
 	{
 		sy = lcd->height-1;
@@ -354,14 +354,14 @@ s32 drv_ST7565_color_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 color
 				xtmp = i;
 				ytmp = j;
 			}
-			else//Èç¹ûÊÇÊúÆÁ£¬XYÖá¸úÏÔ´æµÄÓ³ÉäÒª¶Ôµ÷
+			else//å¦‚æœæ˜¯ç«–å±ï¼ŒXYè½´è·Ÿæ˜¾å­˜çš„æ˜ å°„è¦å¯¹è°ƒ
 			{
 				xtmp = j;
 				ytmp = lcd->width-1-i;
 			}
 
-			page = ytmp/8; //Ò³µØÖ·
-			colum = xtmp;//ÁĞµØÖ·
+			page = ytmp/8; //é¡µåœ°å€
+			colum = xtmp;//åˆ—åœ°å€
 			
 			if(color == BLACK)
 			{
@@ -378,8 +378,8 @@ s32 drv_ST7565_color_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 color
 
 	#if 0
 	/*
-		Ö»Ë¢ĞÂĞèÒªË¢ĞÂµÄÇøÓò
-		×ø±ê·¶Î§ÊÇºáÆÁÄ£Ê½
+		åªåˆ·æ–°éœ€è¦åˆ·æ–°çš„åŒºåŸŸ
+		åæ ‡èŒƒå›´æ˜¯æ¨ªå±æ¨¡å¼
 	*/
 	if(lcd->dir == W_LCD)
 	{
@@ -397,13 +397,13 @@ s32 drv_ST7565_color_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 color
 
 /**
  *@brief:      drv_ST7565_color_fill
- *@details:    Ìî³ä¾ØĞÎÇøÓò
+ *@details:    å¡«å……çŸ©å½¢åŒºåŸŸ
  *@param[in]   u16 sx      
                u16 sy      
                u16 ex      
                u16 ey      
-               u16 *color  Ã¿Ò»¸öµãµÄÑÕÉ«Êı¾İ
- *@param[out]  ÎŞ
+               u16 *color  æ¯ä¸€ä¸ªç‚¹çš„é¢œè‰²æ•°æ®
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 drv_ST7565_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
@@ -420,11 +420,11 @@ s32 drv_ST7565_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
 
 	drvdata = (struct _cog_drv_data *)lcd->pri;
 
-	/*xlen¸úylenÊÇÓÃÀ´È¡Êı¾İµÄ£¬²»ÊÇÌîLCD*/
-	xlen = ex-sx+1;//È«°üº¬
+	/*xlenè·Ÿylenæ˜¯ç”¨æ¥å–æ•°æ®çš„ï¼Œä¸æ˜¯å¡«LCD*/
+	xlen = ex-sx+1;//å…¨åŒ…å«
 	ylen = ey-sy+1;
 
-	/*·ÀÖ¹×ø±êÒç³ö*/
+	/*é˜²æ­¢åæ ‡æº¢å‡º*/
 	if(sy >= lcd->height)
 	{
 		sy = lcd->height-1;
@@ -457,14 +457,14 @@ s32 drv_ST7565_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
 				xtmp = i;
 				ytmp = j;
 			}
-			else//Èç¹ûÊÇÊúÆÁ£¬XYÖá¸úÏÔ´æµÄÓ³ÉäÒª¶Ôµ÷
+			else//å¦‚æœæ˜¯ç«–å±ï¼ŒXYè½´è·Ÿæ˜¾å­˜çš„æ˜ å°„è¦å¯¹è°ƒ
 			{
 				xtmp = j;
 				ytmp = lcd->width-1-i;
 			}
 
-			page = ytmp/8; //Ò³µØÖ·
-			colum = xtmp;//ÁĞµØÖ·
+			page = ytmp/8; //é¡µåœ°å€
+			colum = xtmp;//åˆ—åœ°å€
 			
 			if(*(color+index+i-sx) == BLACK)
 			{
@@ -480,8 +480,8 @@ s32 drv_ST7565_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
 	}
 	#if 0
 	/*
-		Ö»Ë¢ĞÂĞèÒªË¢ĞÂµÄÇøÓò
-		×ø±ê·¶Î§ÊÇºáÆÁÄ£Ê½
+		åªåˆ·æ–°éœ€è¦åˆ·æ–°çš„åŒºåŸŸ
+		åæ ‡èŒƒå›´æ˜¯æ¨ªå±æ¨¡å¼
 	*/
 	if(lcd->dir == W_LCD)
 	{
@@ -559,7 +559,7 @@ s32 drv_ST7565_flush(DevLcdNode *lcd, u16 *color, u32 len)
 				xtmp = drvdata->disx;
 				ytmp = drvdata->disy;
 			}
-			else//Èç¹ûÊÇÊúÆÁ£¬XYÖá¸úÏÔ´æµÄÓ³ÉäÒª¶Ôµ÷
+			else//å¦‚æœæ˜¯ç«–å±ï¼ŒXYè½´è·Ÿæ˜¾å­˜çš„æ˜ å°„è¦å¯¹è°ƒ
 			{
 				xtmp = drvdata->disy;
 				ytmp = lcd->width-drvdata->disx;
@@ -567,8 +567,8 @@ s32 drv_ST7565_flush(DevLcdNode *lcd, u16 *color, u32 len)
 
 			//wjq_log(LOG_DEBUG, " %d, %d \r\n", xtmp,ytmp);
 			
-			page = ytmp/8; //Ò³µØÖ·
-			colum = xtmp;//ÁĞµØÖ·
+			page = ytmp/8; //é¡µåœ°å€
+			colum = xtmp;//åˆ—åœ°å€
 				
 			if(*(color+index) == BLACK)
 			{
@@ -597,8 +597,8 @@ s32 drv_ST7565_flush(DevLcdNode *lcd, u16 *color, u32 len)
 
 	#if 0
 	/*
-		Ö»Ë¢ĞÂĞèÒªË¢ĞÂµÄÇøÓò
-		×ø±ê·¶Î§ÊÇºáÆÁÄ£Ê½
+		åªåˆ·æ–°éœ€è¦åˆ·æ–°çš„åŒºåŸŸ
+		åæ ‡èŒƒå›´æ˜¯æ¨ªå±æ¨¡å¼
 	*/
 	if(lcd->dir == W_LCD)
 	{
@@ -616,7 +616,7 @@ s32 drv_ST7565_flush(DevLcdNode *lcd, u16 *color, u32 len)
 
 s32 drv_ST7565_update(DevLcdNode *lcd)
 {
-	/*Ë¢È«ÆÁ*/
+	/*åˆ·å…¨å±*/
 	drv_ST7565_refresh_gram(lcd, 0, lcd->dev.height-1, 0, lcd->dev.width-1);
 	return 0;	
 }
@@ -624,16 +624,16 @@ s32 drv_ST7565_update(DevLcdNode *lcd)
 #endif
 
 
-/*	OLED ¸ú COG LCD ²Ù×÷ÀàËÆ
-	½ö½ö³õÊ¼»¯²»Ò»Ñù
-	OLEDÓĞÁ½ÖÖÇı¶¯£¬SSD1315£¬SSD1615£¬Ò»ÑùµÄ¡£*/
+/*	OLED è·Ÿ COG LCD æ“ä½œç±»ä¼¼
+	ä»…ä»…åˆå§‹åŒ–ä¸ä¸€æ ·
+	OLEDæœ‰ä¸¤ç§é©±åŠ¨ï¼ŒSSD1315ï¼ŒSSD1615ï¼Œä¸€æ ·çš„ã€‚*/
 #if( LCD_DRIVER_SSD1615 == 1 )
 
 /**
  *@brief:	   drv_ssd1615_init
  *@details:    
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:	   
  */
 s32 drv_ssd1615_init(DevLcdNode *lcd)
@@ -657,8 +657,8 @@ s32 drv_ssd1615_init(DevLcdNode *lcd)
 	bus_lcd_write_cmd (node, 0x40);//--set start line address  Set Mapping RAM Display Start Line (0x00~0x3F)
 	bus_lcd_write_cmd (node, 0x81);//--set contrast control register
 	bus_lcd_write_cmd (node, 0xCF); // Set SEG Output Current Brightness
-	bus_lcd_write_cmd (node, 0xA1);//--Set SEG/Column Mapping	  0xa0×óÓÒ·´ÖÃ 0xa1Õı³£
-	bus_lcd_write_cmd (node, 0xC8);//Set COM/Row Scan Direction   0xc0ÉÏÏÂ·´ÖÃ 0xc8Õı³£
+	bus_lcd_write_cmd (node, 0xA1);//--Set SEG/Column Mapping	  0xa0å·¦å³åç½® 0xa1æ­£å¸¸
+	bus_lcd_write_cmd (node, 0xC8);//Set COM/Row Scan Direction   0xc0ä¸Šä¸‹åç½® 0xc8æ­£å¸¸
 	bus_lcd_write_cmd (node, 0xA6);//--set normal display
 	bus_lcd_write_cmd (node, 0xA8);//--set multiplex ratio(1 to 64)
 	bus_lcd_write_cmd (node, 0x3f);//--1/64 duty
@@ -685,7 +685,7 @@ s32 drv_ssd1615_init(DevLcdNode *lcd)
 	
 
 	lcd->pri = (void *)wjq_malloc(sizeof(struct _cog_drv_data));
-	memset((char*)lcd->pri, 0x00, 128*8);//Òª¸ÄÎª¶¯Ì¬ÅĞ¶ÏÏÔ´æ´óĞ¡
+	memset((char*)lcd->pri, 0x00, 128*8);//è¦æ”¹ä¸ºåŠ¨æ€åˆ¤æ–­æ˜¾å­˜å¤§å°
 	
 	wjq_log(LOG_INFO, "dev_ssd1615_init finish\r\n");
 	return 0;
@@ -693,10 +693,10 @@ s32 drv_ssd1615_init(DevLcdNode *lcd)
 
 /**
  *@brief:      drv_ssd1615_display_onoff
- *@details:    SSD1615´ò¿ª»ò¹Ø±ÕÏÔÊ¾
+ *@details:    SSD1615æ‰“å¼€æˆ–å…³é—­æ˜¾ç¤º
  *@param[in]   DevLcd *lcd  
                u8 sta       
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 drv_ssd1615_display_onoff(DevLcdNode *lcd, u8 sta)
@@ -707,13 +707,13 @@ s32 drv_ssd1615_display_onoff(DevLcdNode *lcd, u8 sta)
 
 	if(sta == 1)
 	{
-    	bus_lcd_write_cmd (node, 0X8D);  //SET DCDCÃüÁî
+    	bus_lcd_write_cmd (node, 0X8D);  //SET DCDCå‘½ä»¤
     	bus_lcd_write_cmd (node, 0X14);  //DCDC ON
     	bus_lcd_write_cmd (node, 0XAF);  //DISPLAY ON
 	}
 	else
 	{
-		bus_lcd_write_cmd (node, 0X8D);  //SET DCDCÃüÁî
+		bus_lcd_write_cmd (node, 0X8D);  //SET DCDCå‘½ä»¤
     	bus_lcd_write_cmd (node, 0X10);  //DCDC OFF
     	bus_lcd_write_cmd (node, 0XAE);  //DISPLAY OFF	
 	}

@@ -94,21 +94,21 @@ void MPU_Config(void)
 {
 	MPU_Region_InitTypeDef MPU_Initure;
 
-	HAL_MPU_Disable();	//ÅäÖÃMPUÖ®Ç°ÏÈ¹Ø±ÕMPU,ÅäÖÃÍê³ÉÒÔºóÔÚÊ¹ÄÜMPU	
-	//Íâ²¿SRAMÎªregion0£¬´óĞ¡Îª2MB£¬´ËÇøÓò¿É¶ÁĞ´
-	MPU_Initure.Enable=MPU_REGION_ENABLE;	    //Ê¹ÄÜregion
-	MPU_Initure.Number=MPU_REGION_NUMBER0;		//ÉèÖÃregion£¬Íâ²¿SRAMÊ¹ÓÃµÄregion0
-	MPU_Initure.BaseAddress=(0x60000000);	//region»ùµØÖ·
-	MPU_Initure.Size=MPU_REGION_SIZE_256MB;			//region´óĞ¡
+	HAL_MPU_Disable();	//é…ç½®MPUä¹‹å‰å…ˆå…³é—­MPU,é…ç½®å®Œæˆä»¥ååœ¨ä½¿èƒ½MPU	
+	//å¤–éƒ¨SRAMä¸ºregion0ï¼Œå¤§å°ä¸º2MBï¼Œæ­¤åŒºåŸŸå¯è¯»å†™
+	MPU_Initure.Enable=MPU_REGION_ENABLE;	    //ä½¿èƒ½region
+	MPU_Initure.Number=MPU_REGION_NUMBER0;		//è®¾ç½®regionï¼Œå¤–éƒ¨SRAMä½¿ç”¨çš„region0
+	MPU_Initure.BaseAddress=(0x60000000);	//regionåŸºåœ°å€
+	MPU_Initure.Size=MPU_REGION_SIZE_256MB;			//regionå¤§å°
 	MPU_Initure.SubRegionDisable=0X00;
 	MPU_Initure.TypeExtField=MPU_TEX_LEVEL0;
-	MPU_Initure.AccessPermission=MPU_REGION_FULL_ACCESS;	//´Ëregion¿É¶ÁĞ´
-	MPU_Initure.DisableExec=MPU_INSTRUCTION_ACCESS_ENABLE;	//ÔÊĞí¶ÁÈ¡´ËÇøÓòÖĞµÄÖ¸Áî
+	MPU_Initure.AccessPermission=MPU_REGION_FULL_ACCESS;	//æ­¤regionå¯è¯»å†™
+	MPU_Initure.DisableExec=MPU_INSTRUCTION_ACCESS_ENABLE;	//å…è®¸è¯»å–æ­¤åŒºåŸŸä¸­çš„æŒ‡ä»¤
 	MPU_Initure.IsShareable=MPU_ACCESS_SHAREABLE;
 	MPU_Initure.IsCacheable=MPU_ACCESS_NOT_CACHEABLE;
 	MPU_Initure.IsBufferable=MPU_ACCESS_NOT_BUFFERABLE;
 	HAL_MPU_ConfigRegion(&MPU_Initure);
-	HAL_MPU_Enable(MPU_PRIVILEGED_DEFAULT);     //¿ªÆôMPU
+	HAL_MPU_Enable(MPU_PRIVILEGED_DEFAULT);     //å¼€å¯MPU
 }
 
 /* USER CODE END 0 */
@@ -130,7 +130,7 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-/*  ±¾¹¤³ÌÊ¹ÓÃRTOS£¬systick»áÔÚRTOSÖĞ³õÊ¼»¯£¬HAL_InitÖĞ²»ÒªÔÙ³õÊ¼»¯*/
+/*  æœ¬å·¥ç¨‹ä½¿ç”¨RTOSï¼Œsystickä¼šåœ¨RTOSä¸­åˆå§‹åŒ–ï¼ŒHAL_Initä¸­ä¸è¦å†åˆå§‹åŒ–*/
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -155,7 +155,7 @@ int main(void)
 	wjq_log(LOG_INFO, "PCLK1_Frequency: %d Hz\r\n", clkhz);
 	clkhz = HAL_RCC_GetPCLK2Freq();
 	wjq_log(LOG_INFO, "PCLK2_Frequency: %d Hz\r\n", clkhz);
-	/* Èç¹ûÖØĞÂÓÃMX×Ô¶¯Éú³É´úÂë£¬ÇëÆÁ±Î´®¿Ú4³õÊ¼»¯*/
+	/* å¦‚æœé‡æ–°ç”¨MXè‡ªåŠ¨ç”Ÿæˆä»£ç ï¼Œè¯·å±è”½ä¸²å£4åˆå§‹åŒ–*/
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
@@ -170,7 +170,7 @@ int main(void)
   //MX_USB_OTG_FS_PCD_Init();
   /* USER CODE BEGIN 2 */
   
-	/*Ìø×ªµ½petite app*/
+	/*è·³è½¬åˆ°petite app*/
 	petite_app();
   
   /* USER CODE END 2 */

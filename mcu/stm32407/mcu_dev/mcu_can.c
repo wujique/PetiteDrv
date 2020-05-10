@@ -1,14 +1,14 @@
 /**
  * @file                mcu_can.c
- * @brief           can×ÜÏß¿ØÖÆÆ÷Çı¶¯
+ * @brief           canæ€»çº¿æ§åˆ¶å™¨é©±åŠ¨
  * @author          wujique
- * @date            2017Äê12ÔÂ8ÈÕ ĞÇÆÚÎå
- * @version         ³õ¸å
- * @par             °æÈ¨ËùÓĞ (C), 2013-2023
+ * @date            2017å¹´12æœˆ8æ—¥ æ˜ŸæœŸäº”
+ * @version         åˆç¨¿
+ * @par             ç‰ˆæƒæ‰€æœ‰ (C), 2013-2023
  * @par History:
- * 1.ÈÕ    ÆÚ:        2017Äê12ÔÂ8ÈÕ ĞÇÆÚÎå
- *   ×÷    Õß:         wujique
- *   ĞŞ¸ÄÄÚÈİ:   ´´½¨ÎÄ¼ş
+ * 1.æ—¥    æœŸ:        2017å¹´12æœˆ8æ—¥ æ˜ŸæœŸäº”
+ *   ä½œ    è€…:         wujique
+ *   ä¿®æ”¹å†…å®¹:   åˆ›å»ºæ–‡ä»¶
 */
 
 #include "stm32f4xx.h"
@@ -117,8 +117,8 @@ void NVIC_CAN_Config(void)
     NVIC_InitTypeDef NVIC_InitStructure;
 
     NVIC_InitStructure.NVIC_IRQChannel = CAN1_RX0_IRQn;	
-    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;//ÇÀÕ¼ÓÅÏÈ¼¶
-    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;      //ÏìÓ¦ÓÅÏÈ¼¶
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;//æŠ¢å ä¼˜å…ˆçº§
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;      //å“åº”ä¼˜å…ˆçº§
     NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
     NVIC_Init(&NVIC_InitStructure);
 }
@@ -146,9 +146,9 @@ void Init_RxMes(CanRxMsg *RxMessage)
 
 /**
  *@brief:      mcu_can1_rx0_IRQ
- *@details:    can×ÜÏßÖĞ¶Ï·şÎñ
+ *@details:    canæ€»çº¿ä¸­æ–­æœåŠ¡
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 void mcu_can1_rx0_IRQ(void)
@@ -162,9 +162,9 @@ extern void Delay(__IO uint32_t nTime);
 
 /**
  *@brief:      mcu_can_test
- *@details:    can×ÜÏß²âÊÔ³ÌĞò
+ *@details:    canæ€»çº¿æµ‹è¯•ç¨‹åº
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 int mcu_can_test(u8 mode)
@@ -178,7 +178,7 @@ int mcu_can_test(u8 mode)
   
   while(1)
   {
-	if(mode == 1)/* ²âÊÔ·¢ËÍ¶Ë£¬·¢ËÍºóµÈ´ı½ÓÊÕ¶ËÏìÓ¦ */
+	if(mode == 1)/* æµ‹è¯•å‘é€ç«¯ï¼Œå‘é€åç­‰å¾…æ¥æ”¶ç«¯å“åº” */
 	{
 		Delay(1000);
 		data++;
@@ -219,7 +219,7 @@ int mcu_can_test(u8 mode)
 	}
 	else
 	{
-		/*  ²âÊÔ½ÓÊÕ¶Ë£¬½ÓÊÕµ½Êı¾İºó·µ»Ø¸ø·¢ËÍ¶Ë */
+		/*  æµ‹è¯•æ¥æ”¶ç«¯ï¼Œæ¥æ”¶åˆ°æ•°æ®åè¿”å›ç»™å‘é€ç«¯ */
 		if(CanRxFlag == 1)
 		{
 			CanRxFlag = 0;

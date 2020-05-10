@@ -1,14 +1,14 @@
 /**
  * @file            wujique_sysconf.c
- * @brief           ϵͳ����
+ * @brief           系统管理
  * @author          wujique
- * @date            2018��4��9�� ����һ
- * @version         ����
- * @par             ��Ȩ���� (C), 2013-2023
+ * @date            2018年4月9日 星期一
+ * @version         初稿
+ * @par             版权所有 (C), 2013-2023
  * @par History:
- * 1.��    ��:        2018��4��9�� ����һ
- *   ��    ��:         wujique
- *   �޸�����:   �����ļ�
+ * 1.日    期:        2018年4月9日 星期一
+ *   作    者:         wujique
+ *   修改内容:   创建文件
 */
 #include "mcu.h"
 #include "board_sysconf.h"
@@ -22,15 +22,15 @@
 
 
 /*
-	���ļ���������ϵͳ����Щ�豸
+	本文件用于配置系统有哪些设备
 */
-/*---------------֮�£���SPI I2C LCD �ȳ���ıȽϺõ��豸�ͽӿڶ���----------------*/
+/*---------------之下，是SPI I2C LCD 等抽象的比较好的设备和接口定义----------------*/
 
 /*-------------------------------
-	I2C������
+	I2C控制器
 -------------------------------*/
 /*
-	IO��ģ���I2C1
+	IO口模拟的I2C1
 */
 const DevI2c DevVi2c1={
 		.pnode={
@@ -56,8 +56,8 @@ const DevI2c DevVi2c2={
 		.sdapin = MCU_IO_9,
 		};
 
-/*	Ӳ��I2C������
-	δ���� */
+/*	硬件I2C控制器
+	未测试 */
 const DevI2c DevI2C1={
 		.pnode={
 				.name = "I2C1",
@@ -70,11 +70,11 @@ const DevI2c DevI2C1={
 		.sdapin = MCU_IO_7,
 		};	
 /*----------------------
-	IO��ģ��SPI������
+	IO口模拟SPI控制器
 ------------------------*/
 /*
-	VSPI1, ���ϵ�LCD�ӿ��е�4��IOģ��SPI��
-	����XPT2046���������������ɶ���д��
+	VSPI1, 板上的LCD接口中的4根IO模拟SPI，
+	用于XPT2046方案触摸处理，可读可写。
 */					
 const DevSpi DevVSpi1IO={
 		.pnode={
@@ -93,7 +93,7 @@ const DevSpi DevVSpi1IO={
 	};
 
 /* 
-	�����ӿ��ϵ�Ӳ��SPI1���˴���IOģ��ʵ��
+	外扩接口上的硬件SPI1，此处用IO模拟实现
 */
 const DevSpi DevVSpi2IO={
 		.pnode={
@@ -113,9 +113,9 @@ const DevSpi DevVSpi2IO={
 
 
 /*
-	Ӳ��SPI��������SPI3
-	SPI������ʱ֧��SPI3��
-	����������������������޸�mcu_spi.c�е�Ӳ��SPI��������ʼ������
+	硬件SPI控制器：SPI3
+	SPI驱动暂时支持SPI3，
+	如果添加其他控制器，请修改mcu_spi.c中的硬件SPI控制器初始化代码
 */
 const DevSpi DevSpi3IO={
 		.pnode={
@@ -136,10 +136,10 @@ const DevSpi DevSpi3IO={
 	};
 
 /*------------------------ 
-	SPIͨ��
+	SPI通道
 -------------------------*/
 /*
-	����FLASH��
+	板上FLASH用
 */
 const DevSpiCh DevSpi3CH1={
 		.pnode={
@@ -156,9 +156,9 @@ const DevSpiCh DevSpi3CH1={
 
 #if 0
 /*
-	ģ��SPIͨ������CS
-	��������û��CS��LCD��Ļ��
-	VSPI3����ʵ�������ӿ�SPI����������IOģ��ġ�
+	模拟SPI通道，无CS
+	用来调试没有CS的LCD屏幕，
+	VSPI3，其实是外扩接口SPI附近的两个IO模拟的。
 */	
 const DevSpiCh DevVSpi3CH1={
 		.name = "VSPI3_CH1",
@@ -171,7 +171,7 @@ const DevSpiCh DevVSpi3CH1={
 #endif
 
 /*
-	ģ��SPIͨ��
+	模拟SPI通道
 */	
 const DevSpiCh DevVSpi2CH1={
 		.pnode={
@@ -186,7 +186,7 @@ const DevSpiCh DevVSpi2CH1={
 
 
 /* 
-	LCD�����еĴ������ӿ�, IOģ��SPI
+	LCD座子中的触摸屏接口, IO模拟SPI
 */
 const DevSpiCh DevVSpi1CH1={
 		.pnode={
@@ -202,7 +202,7 @@ const DevSpiCh DevVSpi1CH1={
 	};
 #if 0		
 /* 
-	SPI������������������ͬ�Ŀ�����
+	SPI彩屏，跟触摸屏用相同的控制器
 */		
 const DevSpiCh DevVSpi1CH2={
 		.name = "VSPI1_CH2",
@@ -214,15 +214,15 @@ const DevSpiCh DevVSpi1CH2={
 #endif
 
 /*-------------------------------------
-	LCDӲ���ӿ����߶���
-	LCDӲ���ӿڰ���һ������ͨ�Žӿ�basebus��A0�ܽţ���λ�ܽţ�����ܽš�
+	LCD硬件接口总线定义
+	LCD硬件接口包含一个基本通信接口basebus、A0管脚，复位管脚，背光管脚。
 ---------------------------------------*/
 #if 1
 /*
-	����LCD�ӿڣ�ʹ��������SPI����
-	�����ӿ��е�SPI�ӿ�
+	串行LCD接口，使用真正的SPI控制
+	外扩接口中的SPI接口
 
-	���ԣ� ��ʱ��ģ��SPIʵ��
+	测试， 暂时用模拟SPI实现
 */
 const DevLcdBus BusLcdSpi1={
 	.pnode={
@@ -246,7 +246,7 @@ const DevLcdBus BusLcdSpi1={
 };
 #else
 /*
-	������û��CS��MISO��1.33��LCD��
+	用来接没有CS和MISO的1.33寸LCD屏
 */
 const DevLcdBus BusLcdVSpi3={
 	.name = "BusLcdVSpi3",
@@ -265,7 +265,7 @@ const DevLcdBus BusLcdVSpi3={
 
 #endif 
 /*
-	I2C�ӿڵ�LCD����
+	I2C接口的LCD总线
 */
 const DevLcdBus BusLcdI2C1={
 	.pnode={
@@ -275,7 +275,7 @@ const DevLcdBus BusLcdI2C1={
 			
 	.basebus = "VI2C1",
 
-	/*I2C�ӿڵ�LCD���ߣ�����Ҫ����IO*/
+	/*I2C接口的LCD总线，不需要其他IO*/
 	.A0port = MCU_PORT_NULL,
 	.A0pin = NULL,
 
@@ -286,7 +286,7 @@ const DevLcdBus BusLcdI2C1={
 	.blpin = NULL,
 };
 /*
-	8080�ӿڵ�LCD����
+	8080接口的LCD总线
 */	
 const DevLcdBus BusLcd8080={
 	.pnode={
@@ -294,9 +294,9 @@ const DevLcdBus BusLcd8080={
 				.type = BUS_LCD_8080,
 			},
 	
-	.basebus = "8080",//��ʹ���ã�8080����ֱ��Ƕ����LCD BUS������
+	.basebus = "8080",//不使用用，8080操作直接嵌入在LCD BUS代码内
 
-	/* 8080 ����A0�ţ�����Ҳ�������AO */
+	/* 8080 不用A0脚，程序也不会操作AO */
 	.A0port = MCU_PORT_NULL,
 	.A0pin = NULL,
 
@@ -310,7 +310,7 @@ const DevLcdBus BusLcd8080={
 
 
 /*----------------------------
-	FLASH�豸����
+	FLASH设备定义
 -----------------------------*/
 const DevSpiFlash DevSpiFlashBoard={
 	.pnode={
@@ -323,11 +323,11 @@ const DevSpiFlash DevSpiFlashBoard={
 };
 
 /*--------------------------------
-	lcd�豸������
-	ָ��ϵͳ�ж��ٸ�LCD�豸�������ĸ�LCD�����ϡ�
+	lcd设备树定义
+	指明系统有多少个LCD设备，挂在哪个LCD总线上。
 ---------------------------------*/
 
-/*I2C�ӿڵ� OLED*/
+/*I2C接口的 OLED*/
 
 const DevLcd DevLcdOled1={
 	.pnode={
@@ -342,7 +342,7 @@ const DevLcd DevLcdOled1={
 	.height = 128
 	};
 
-/*SPI�ӿڵ� OLED*/
+/*SPI接口的 OLED*/
 /*
 DevLcd DevLcdSpiOled	=	{
 	.name = "spioledlcd", 	
@@ -351,7 +351,7 @@ DevLcd DevLcdSpiOled	=	{
 	.width = 64, 
 	.height = 128};
 */
-/*SPI�ӿڵ� COG LCD*/
+/*SPI接口的 COG LCD*/
 const DevLcd DevLcdCOG1	=	{
 	.pnode={
 				.name = "spicoglcd",
@@ -364,7 +364,7 @@ const DevLcd DevLcdCOG1	=	{
 	.height = 128,
 	};
 
-/*fsmc�ӿڵ� tft lcd*/
+/*fsmc接口的 tft lcd*/
 const DevLcd DevLcdtTFT	=	{
 	.pnode={
 				.name = "tftlcd",
@@ -378,31 +378,31 @@ const DevLcd DevLcdtTFT	=	{
 	};
 //const DevLcd DevLcdtTFT	=	{"tftlcd", 		"BusLcd8080", 	0x9325, 240, 320};
 //const DevLcd DevLcdtTFT	=	{"tftlcd", 		"BusLcd8080", 	0x9341, 240, 320};
-/*1408, 4.0���IPS��Ļ*/
+/*1408, 4.0寸的IPS屏幕*/
 //const DevLcd DevLcdtTFT	=	{"tftlcd", 		"BusLcd8080", 	0x1408, 480, 800};
-/*SPI�ӿڵ� tft lcd*/
+/*SPI接口的 tft lcd*/
 //const DevLcd DevLcdtTFT	=	{"spitftlcd", 		"BusLcdSpi3", 	0x9342, 240, 320};
 //const DevLcd DevLcdtTFT	=	{"spitftlcd", 		"BusLcdVSpi1CH2", 	0x9342, 240, 320};
-/*1.44�� �о�԰*/
+/*1.44寸 中景园*/
 //const DevLcd DevSpiLcdtTFT	=	{"spitftlcd",   "BusLcdSpi3", 	0x7735, 128, 128};
 
-/* 1.3�磬IPS���о�԰��ֻ��SCL&SDA��SPI�ӿ�LCD*/
+/* 1.3寸，IPS，中景园，只有SCL&SDA的SPI接口LCD*/
 //const DevLcd DevLcdVSPITFT =	{"vspitftlcd",		"BusLcdVSpi3",	0x7789, 240, 240};
 
-/* spi �ӿڵ���ɫīˮ�� */
+/* spi 接口的三色墨水屏 */
 //const DevLcd DevLcdSPIEPaper =	{"spiE-Paper",		"BusLcdSpi3",	0x9187, 176, 264};
-/* spi �ӿ� �ڰ�īˮ�� 1.54�� GDEH154D27*/
+/* spi 接口 黑白墨水屏 1.54寸 GDEH154D27*/
 //const DevLcd DevLcdSPIEPaper =	{"spiE-Paper",		"BusLcdSpi3",	0x3820, 200, 200};
 
 /*
-	ϵͳ�豸ע��
-	ͨ���������ֲ㼶��������ϵ��
-	�������Կ���ʵ�ֿɼ��ַ���ʾ���豸��
+	系统设备注册
+	通过缩进区分层级和依赖关系。
+	后续可以考虑实现可见字符表示的设备树
 */
 s32 sys_dev_register(void)
 {
 	wjq_log(LOG_INFO, "[----------register---------------]\r\n");
-	/*ע��I2C����*/
+	/*注册I2C总线*/
 	bus_i2c_register(&DevVi2c1);
 			dev_lcdbus_register(&BusLcdI2C1);
 					dev_lcd_register(&DevLcdOled1);
@@ -419,7 +419,7 @@ s32 sys_dev_register(void)
 					dev_lcd_register(&DevLcdCOG1);				
 					
 	bus_spi_register(&DevVSpi1IO);
-			bus_spich_register(&DevVSpi1CH1);//8080�ӿڵĴ�����
+			bus_spich_register(&DevVSpi1CH1);//8080接口的触摸屏
 	
 	dev_lcdbus_register(&BusLcd8080);
 			dev_lcd_register(&DevLcdtTFT);
@@ -430,19 +430,19 @@ s32 sys_dev_register(void)
 
 /*
 
-Ӳ���������ñ��뷨������LINUX���豸��
-ʵ��Ӧ���У��޸Ľӿ�IO�Ŀ�����Ӧ�ò���
-�޸�����Ŀ����Խϴ�
-������ݶ��LCD��������ʱ�򣬻����LCD��
-�ܶ�LCD�޷��Զ�ʶ�����ԣ�����Ӳ�������ļ���á�
+硬件参数配置表想法，类似LINUX的设备树
+实际应用中，修改接口IO的可能性应该不大，
+修改外设的可能性较大。
+例如兼容多个LCD，降本的时候，会替代LCD，
+很多LCD无法自动识别，所以，能用硬件配置文件最好。
 
-��ʽ��
-[�㼶]����:����
+格式：
+[层级]类型:名称
 	{
-		����
+		参数
 	}
 
-���磺	
+例如：	
 {
 	[0]cpu:stm32f407
 		{}
@@ -466,8 +466,8 @@ s32 sys_dev_register(void)
 
 /*
 
-	�����ֿ�ֻʹ�ö�����ֵ����ֿ����������ɵĵ����ֿ⣬
-	ʹ��ģʽ�����ɣ�Ҳ�����ݿ⡣
+	汉字字库只使用多国文字点阵字库生成器生成的点阵字库，
+	使用模式二生成，也就是纵库。
 
 */
 struct fbcon_font_desc font_songti_16x16 = {
