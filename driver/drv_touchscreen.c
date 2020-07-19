@@ -65,11 +65,11 @@ s32 dev_touchscreen_init(void)
 {
 	TpSgd = -1;
 
-	#ifdef SYS_USE_TS_ADC_CASE
+	#if (SYS_USE_TS_ADC_CASE == 1)
 	return dev_ts_adc_init();
 	#endif
 
-	#ifdef SYS_USE_TS_IC_CASE
+	#if (SYS_USE_TS_IC_CASE == 1)
 	return dev_xpt2046_init();
 	#endif	
 }
@@ -89,11 +89,11 @@ s32 dev_touchscreen_open(void)
 	TpQueWindex = TpQueWindex;
 	
 
-	#ifdef SYS_USE_TS_ADC_CASE
+	#if (SYS_USE_TS_ADC_CASE == 1)
 	return dev_ts_adc_open();
 	#endif
 
-	#ifdef SYS_USE_TS_IC_CASE
+	#if (SYS_USE_TS_IC_CASE == 1)
 	return dev_xpt2046_open();
 	#endif	
 
@@ -103,7 +103,7 @@ s32 dev_touchscreen_close(void)
 {
 	TpSgd = -1;
 	
-	#ifdef SYS_USE_TS_IC_CASE
+	#if (SYS_USE_TS_IC_CASE == 1)
 	return dev_xpt2046_close();
 	#endif	
 	
@@ -185,11 +185,7 @@ s32 dev_touchscreen_ioctrl(void)
 	adc转换方案
 
 */
-
-
-
-
-#ifdef SYS_USE_TS_ADC_CASE
+#if (SYS_USE_TS_ADC_CASE == 1)
 #include "mcu_adc.h"
 
 #define DEV_TP_S_PORT GPIOD

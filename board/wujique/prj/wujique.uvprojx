@@ -436,11 +436,6 @@
               <FilePath>..\..\..\driver\drv_dacsound.c</FilePath>
             </File>
             <File>
-              <FileName>drv_esp8266.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\driver\drv_esp8266.c</FilePath>
-            </File>
-            <File>
               <FileName>drv_key.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\driver\drv_key.c</FilePath>

@@ -22,8 +22,11 @@
 #include "petite_config.h"
 
 #include "log.h"
-#include "mcu_timer.h"
-#include "mcu_io.h"
+
+#include "drv_buzzer.h"
+
+DevBuzzer *pBuzzer;
+
 /**
  *@brief:      dev_buzzer_init
  *@details:    初始化蜂鸣器
@@ -31,14 +34,15 @@
  *@param[out]  无
  *@retval:     
  */
-s32 dev_buzzer_init(void)
+s32 dev_buzzer_init(DevBuzzer *Buzzer)
 {
 	wjq_log(LOG_INFO, "init buzzer\r\n");
+	pBuzzer = Buzzer;
 	/*
 		用户从手册可以知道管脚和定时器通道的关系
 	*/
-	mcu_io_config_timer(MCU_PORT_D, MCU_IO_13, MCU_TIMER_4);
-	mcu_timer_pwm_init(MCU_TIMER_4, MCU_TIMER_1US, 250, 50, MCU_TIMER_CH2);
+	mcu_io_config_timer(pBuzzer->Port, pBuzzer->Pio, pBuzzer->Timer);
+	mcu_timer_pwm_init(pBuzzer->Timer, MCU_TIMER_1US, 250, 50, pBuzzer->Ch);
 	return 0;
 }
 /**
@@ -52,9 +56,9 @@ s32 dev_buzzer_open(void)
 {
 	wjq_log(LOG_INFO, "open buzzer\r\n");
 	
-	mcu_io_config_timer(MCU_PORT_D, MCU_IO_13, MCU_TIMER_4);
+	mcu_io_config_timer(pBuzzer->Port, pBuzzer->Pio, pBuzzer->Timer);
     //---使能 TIM4 
-	mcu_timer_start(MCU_TIMER_4);
+	mcu_timer_start(pBuzzer->Timer);
 	
 	return 0;
 }
@@ -68,12 +72,11 @@ s32 dev_buzzer_open(void)
 s32 dev_buzzer_close(void)
 {
 	wjq_log(LOG_INFO, "close buzzer\r\n");
-    mcu_timer_stop(MCU_TIMER_4); //---关闭定时器 TIM4 
-
+    mcu_timer_stop(pBuzzer->Timer); //---关闭定时器 TIM4 
 
 	/*关闭蜂鸣器时，要将IO改为普通IO，并且输出低电平，否则蜂鸣器会造成大电流*/
-	mcu_io_config_out(MCU_PORT_D, MCU_IO_13);
-	mcu_io_output_resetbit(MCU_PORT_D, MCU_IO_13);
+	mcu_io_config_out(pBuzzer->Port, pBuzzer->Pio);
+	mcu_io_output_resetbit(pBuzzer->Port, pBuzzer->Pio);
 	
 	return 0;
 }

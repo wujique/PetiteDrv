@@ -567,14 +567,14 @@ s32 petite_dev_register(void)
 						dev_lcd_register(&DevLcdCOG1);
 			//mcu_spich_register(&DevSpi3CH4);
 	
-	#ifdef SYS_USE_VSPI1
+	#if (SYS_USE_VSPI1 == 1)
 	bus_spi_register(&DevVSpi1IO);
 			bus_spich_register(&DevVSpi1CH1);//8080接口的触摸屏
 			//mcu_spich_register(&DevVSpi1CH2);
 					//dev_lcdbus_register(&BusLcdVSpi1CH2);
 	#endif
 	
-	#ifdef SYS_USE_VSPI2
+	#if (SYS_USE_VSPI2 == 1)
 	bus_spi_register(&DevVspi2IO);
 			bus_spich_register(&DevVSpi2CH1);
 					dev_lcdbus_register(&BusLcdVSpi2CH1);

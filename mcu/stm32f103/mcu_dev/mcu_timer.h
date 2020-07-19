@@ -28,10 +28,11 @@ typedef enum
 	MCU_TIMER_100NS,
 	MCU_TIMER_DEF_MAX
 }McuTimerTickDef;
+	
 typedef enum
 {
-	MCU_TIMER_RE = 0,
-	MCU_TIMER_ONE,
+	MCU_TIMER_RE = 0,/*重复*/
+	MCU_TIMER_ONE,/*单次*/
 }McuTimerReType;
 	
 typedef enum

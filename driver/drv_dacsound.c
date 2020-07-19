@@ -27,6 +27,7 @@
 #include "log.h"
 #include "mcu_dac.h"
 #include "mcu_timer.h"
+#include "drv_dacsound.h"
 
 //#define DEV_DACSOUND_DEBUG
 
@@ -672,8 +673,6 @@ s32 dev_dacsound_test(void)
 	DAC 播放声音，固定播放8K单声道16BIT的音源。
 
 */
-#define DACSOUND_TIMER MCU_TIMER_3
-
 extern s32 fun_sound_set_free_buf(u8 index);
 extern s32 dev_dacsound_timerinit(void);
 
@@ -684,11 +683,15 @@ u16 *DacSoundCrBufP;//当前使用的BUF
 u32 DacSoundSampleBufSize;
 u32 DacSoundSampleIndex;
 
-s32 dev_dacsound_init(void)
-{
+DevDacSound *pDevDacSOUND;
 
-	mcu_io_config_out(MCU_PORT_A, MCU_IO_5);
-	mcu_io_output_resetbit(MCU_PORT_A, MCU_IO_5);
+
+s32 dev_dacsound_init(DevDacSound *DacSound)
+{
+	pDevDacSOUND = DacSound;
+	
+	mcu_io_config_out(pDevDacSOUND->Port, pDevDacSOUND->Pio);
+	mcu_io_output_resetbit(pDevDacSOUND->Port, pDevDacSOUND->Pio);
 
 	return 0;
 }
@@ -696,12 +699,12 @@ s32 dev_dacsound_init(void)
 s32 dev_dacsound_open(void)
 {
 	/*把管脚配置为DAC*/
-    mcu_io_config_dac(MCU_PORT_A, GPIO_Pin_5);
+    mcu_io_config_dac(pDevDacSOUND->Port, pDevDacSOUND->Pio);
 	
 	mcu_dac_open();
 	
-	mcu_timer_init(DACSOUND_TIMER);
-	mcu_timer_config(DACSOUND_TIMER, MCU_TIMER_1US, 125, dev_dacsound_timerinit, MCU_TIMER_RE);
+	mcu_timer_init(pDevDacSOUND->Timer);
+	mcu_timer_config(pDevDacSOUND->Timer, MCU_TIMER_1US, 125, dev_dacsound_timerinit, MCU_TIMER_RE);
 	
 	DacSoundSampleIndex = 0;
 	DacSoundCrBufP = DacSoundSampleP0;
@@ -752,12 +755,12 @@ s32 dev_dacsound_transfer(u8 sta)
 	{
 		/*打开定时器，启动播放*/
 		DACSOUND_DEBUG(LOG_DEBUG, "dac sound play\r\n");
-		mcu_timer_start(DACSOUND_TIMER);
+		mcu_timer_start(pDevDacSOUND->Timer);
 	}
 	else
 	{
 		/*停止定时器*/
-		mcu_timer_stop(DACSOUND_TIMER);
+		mcu_timer_stop(pDevDacSOUND->Timer);
 	}
 	
 	return 0;
@@ -765,7 +768,7 @@ s32 dev_dacsound_transfer(u8 sta)
 
 s32 dev_dacsound_close(void)
 {
-	dev_dacsound_init();
+	dev_dacsound_init(pDevDacSOUND);
 	return 0;
 }
 

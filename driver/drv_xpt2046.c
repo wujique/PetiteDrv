@@ -87,7 +87,7 @@ s32 dev_xpt2046_init(void)
 	DevXpt2046Gd = -1;
 	
 	wjq_log(LOG_INFO, ">-----------xpt2046 init!\r\n");
-	mcu_timer_init(MCU_TIMER_7);
+	mcu_timer_init(XPT2046_TIMER);
 	#else
 	wjq_log(LOG_INFO, ">-----------xpt2046 not init!\r\n");
 
@@ -111,8 +111,8 @@ s32 dev_xpt2046_open(void)
 
 	wjq_log(LOG_INFO, ">--------------xpt2046 open!\r\n");
 
-	mcu_timer_config(MCU_TIMER_7, MCU_TIMER_10US, 100, dev_xpt2046_task, MCU_TIMER_RE);
-	mcu_timer_start(MCU_TIMER_7);
+	mcu_timer_config(XPT2046_TIMER, MCU_TIMER_10US, 100, dev_xpt2046_task, MCU_TIMER_RE);
+	mcu_timer_start(XPT2046_TIMER);
 	DevXpt2046Gd = 0;
 	return 0;
 }
@@ -129,7 +129,7 @@ s32 dev_xpt2046_close(void)
 	if(DevXpt2046Gd != 0)
 		return -1;
 	
-	mcu_timer_stop(MCU_TIMER_7);
+	mcu_timer_stop(XPT2046_TIMER);
 	
 	DevXpt2046Gd = -1;
 	return 0;

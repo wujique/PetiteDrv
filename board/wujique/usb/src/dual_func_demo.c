@@ -820,7 +820,7 @@ s32 UsbGd = -2;
 
 s32 usb_app_init(void)
 {
-	#ifdef SYS_USE_USB
+	#if (SYS_USE_USB ==1)
   usb_Demo_Init();
   wjq_log(LOG_INFO, "\nSystem Information :\r\n");  
   wjq_log(LOG_INFO, "_________________________\r\n\r\n");  

@@ -37,7 +37,8 @@ extern void Delay(__IO uint32_t nTime);
 #define TEA5767_DEBUG(a, ...)
 #endif
 
-#define DEV_TEA5767_I2CBUS "VI2C1"
+
+char *Tea5767I2c;
 #define DEV_TEA5767_I2CC_ADDR 0x60//110 0000b, 7位地址模式，在I2C驱动中会进行左移
 
 #define TEA5767_MAX_FREQ 108000
@@ -59,7 +60,7 @@ u8 tea5767_initbuf[5]={0xaa,0xb6,0x51,0x11,0x40};//静音，上电初始化
 static s32 dev_tea5767_readreg(u8* data)
 {
 	DevI2cNode *dev;
-	dev = bus_i2c_open(DEV_TEA5767_I2CBUS);
+	dev = bus_i2c_open(Tea5767I2c);
 	bus_i2c_transfer(dev, DEV_TEA5767_I2CC_ADDR, MCU_I2C_MODE_R, data, 5);
 	bus_i2c_close(dev);	
 	return 0;
@@ -68,7 +69,7 @@ static s32 dev_tea5767_writereg(u8* data)
 {
 	DevI2cNode *dev;
 
-	dev = bus_i2c_open(DEV_TEA5767_I2CBUS);
+	dev = bus_i2c_open(Tea5767I2c);
     bus_i2c_transfer(dev, DEV_TEA5767_I2CC_ADDR, MCU_I2C_MODE_W, data, 5);
 	bus_i2c_close(dev);
 	return 0;	
@@ -303,9 +304,9 @@ s32 dev_tea5767_search(u8 mode)
  *@param[out]  无
  *@retval:     
  */
-s32 dev_tea5767_init(void)
+s32 dev_tea5767_init(char *I2cBusName)
 {
-
+	Tea5767I2c = I2cBusName;
 	dev_tea5767_writereg(tea5767_initbuf);
 	return 0;
 }

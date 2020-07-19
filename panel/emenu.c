@@ -21,7 +21,7 @@
 #include "drv_keypad.h"
 #include "drv_lcd.h"
 
-#define EMENU_DEBUG_EN
+//#define EMENU_DEBUG_EN
 
 #ifdef EMENU_DEBUG_EN
 #define EMENU_DEBUG	wjq_log 
@@ -68,7 +68,7 @@ u8 emenu_get_key(void)
 	
 	res = dev_keypad_read(&key, 1);
 	if (res == 1) {
-		EMENU_DEBUG(LOG_DEBUG,"key:%02x\r\n", key);
+		//EMENU_DEBUG(LOG_DEBUG,"key:%02x\r\n", key);
 		
 		if((key & KEYPAD_PR_MASK)!= KEYPAD_PR_MASK  ) {
 			return emunu_key_chg[key];

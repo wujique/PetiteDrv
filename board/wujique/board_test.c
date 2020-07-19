@@ -241,7 +241,7 @@ s32 test_lcd_spi_128128(void)
 						dev_lcd_update(lcd);
 						break;
 					case 3:
-						dev_lcd_show_bmp(lcd, 1, 1, 240, 240, "1:/pic/pic128.bmp");
+						dev_lcd_show_bmp(lcd, 1, 1, 240, 240, "mtd0/1:/pic/pic128.bmp");
 						break;
 					default:
 						break;
@@ -673,50 +673,6 @@ s32 test_uart(void)
 */
 s32 test_esp8266(void)
 {
-	u8 keyvalue;	
-	u8 buf[32];
-	u16 len;
-	u32 timeout = 0;
-	s32 res;
-	
-	dev_lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
-	dev_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
-	dev_lcd_update(WJQTestLcd);
-	dev_8266_open();
-
-	while(1)
-	{
-		res = dev_keypad_read(&keyvalue, 1);
-		if(res == 1)
-		{
-			if(keyvalue == 12)
-			{
-				break;
-			}
-		}
-		
-		Delay(500);
-		dev_8266_write("at\r\n", 4);
-		timeout = 0;
-		while(1)
-		{
-			Delay(50);
-			memset(buf, 0, sizeof(buf));
-			len = dev_8266_read(buf, sizeof(buf));
-			if(len != 0)
-			{
-				wjq_log(LOG_FUN, "%s", buf);
-			}
-			
-			timeout++;
-			if(timeout >= 100)
-			{
-				wjq_log(LOG_FUN, "timeout---\r\n");
-				break;
-			}
-		}
-	}
-
 	return 0;
 }
 
@@ -1291,10 +1247,14 @@ const MENU WJQTestList[]=
 	NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 };
 
-
+/*
+	测试程序，相当于一个APP线程
+	
+*/
 void wujique_stm407_test(void)
 {
-	wjq_log(LOG_DEBUG,"run app\r\n");
+	wjq_log(LOG_DEBUG,"\r\n\r\n\r\n---run board test\r\n\r\n\r\n\r\n");
+
 
 	//WJQTestLcd = dev_lcd_open("tftlcd");
 	WJQTestLcd = dev_lcd_open("i2coledlcd");
@@ -1312,27 +1272,6 @@ void wujique_stm407_test(void)
 	}
 }
 
-#include "FreeRtos.h"
-#include "frtos_task.h"
-
-TaskHandle_t  Wujique407TaskHandle;
-
-s32 wujique_407test_init(void)
-{
-	BaseType_t xReturn = pdPASS;
-	
-	xReturn = xTaskCreate(	(TaskFunction_t) wujique_stm407_test,
-					(const char *)"wujique 407 test task",		/*lint !e971 Unqualified char types are allowed for strings and single characters only. */
-					(const configSTACK_DEPTH_TYPE) Wujique407_TASK_STK_SIZE,
-					(void *) NULL,
-					(UBaseType_t) Wujique407_TASK_PRIO,
-					(TaskHandle_t *) &Wujique407TaskHandle );	
-	
-	if(xReturn != pdPASS)	
-		wjq_log(LOG_DEBUG, "xTaskCreate wujique_407test err!\r\n");	
-	
-	return 0;
-}
 
 /*
 

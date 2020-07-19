@@ -132,7 +132,7 @@ s32 dev_camera_stop(void)
  */
 s32 dev_camera_init(void)
 {
-	#ifdef SYS_USE_CAMERA
+	#if (SYS_USE_CAMERA == 1)
 	/* 摄像头接口初始化，包含：MCOS时钟，DCMI接口，PWDN和RESET引脚，SCCB(I2C)引脚*/
 	/* camera xclk use the MCO1 */
 	MCO1_Init();

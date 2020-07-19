@@ -40,7 +40,7 @@ s32 RS485Gd = -2;
  */
 s32 dev_rs485_init(void)
 {
-	#ifdef SYS_USE_RS485
+	#if (SYS_USE_RS485==1)
 	GPIO_InitTypeDef GPIO_InitStructure;
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOG,ENABLE); //使能 PG时钟
 	//PG8 推挽输出， 485 模式控制

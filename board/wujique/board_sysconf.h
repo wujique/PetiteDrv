@@ -24,10 +24,10 @@
 /*-----------------------------------------------------------*/
 /*	选择触摸屏检测方案: 使用触摸IC 或     内部ADC转换*/
 #define SYS_USE_TS_IC_CASE		1
-//#define SYS_USE_TS_ADC_CASE 	0
+#define SYS_USE_TS_ADC_CASE 	0
 
 /*触摸屏检测方案：xpt2046 方案和ADC方案只能选一种*/
-#if defined(SYS_USE_TS_IC_CASE) && defined(SYS_USE_TS_ADC_CASE)
+#if (SYS_USE_TS_IC_CASE == 1) && (SYS_USE_TS_ADC_CASE == 1)
  #error "please just select one touch device!"
 #endif
 
@@ -36,7 +36,7 @@
 #define SYS_USE_VSPI1	 1	
 #define XPT2046_SPI "VSPI1_CH1"
 #define XPT2046_SPI_KHZ	 2000
-
+#define XPT2046_TIMER MCU_TIMER_7
 #if 0
 /*	如果使用硬件SPI3_CH4,
 	分频不能设置太快*/
@@ -45,47 +45,48 @@
 #endif
 /*-----------------------------------------------------------*/
 /*	RS485跟外扩串口设备共用。*/
-//#define SYS_USE_RS485	1
-//#define SYS_USE_EXUART	1
-#define SYS_USE_USB	1
-#define SYS_USE_CAMERA  1
-#if (defined(SYS_USE_EXUART) && defined(SYS_USE_RS485))
- #error "please not define SYS_USE_EXUART & SYS_USE_RS485 sametime!(in wujique_sysconf.h file)"
+#define SYS_USE_RS485	0
+#define SYS_USE_EXUART	1
+#define SYS_USE_USB		0
+#define SYS_USE_CAMERA  0
+
+#if ((SYS_USE_EXUART == 1) && (SYS_USE_RS485 == 1))
+ #error "please not define SYS_USE_EXUART & SYS_USE_RS485 sametime!(in board_sysconf.h file)"
 #endif
 
-#if (defined(SYS_USE_EXUART) && defined(SYS_USE_USB))
- #error "please not define SYS_USE_EXUART & SYS_USE_USB sametime!(in wujique_sysconf.h file)"
+#if ((SYS_USE_EXUART == 1) && (SYS_USE_USB == 1))
+ #error "please not define SYS_USE_EXUART & SYS_USE_USB sametime!(in board_sysconf.h file)"
 #endif
 
-#if (defined(SYS_USE_EXUART) && defined(SYS_USE_CAMERA))
- #error "please not define SYS_USE_EXUART & SYS_USE_CAMERA sametime!(in wujique_sysconf.h file)"
+#if ((SYS_USE_EXUART == 1) && (SYS_USE_CAMERA == 1))
+ #error "please not define SYS_USE_EXUART & SYS_USE_CAMERA sametime!(in board_sysconf.h file)"
 #endif
 
-#if (defined(SYS_USE_RS485) && defined(SYS_USE_USB))
- #error "please not define SYS_USE_RS485 & SYS_USE_USB sametime!(in wujique_sysconf.h file)"
+#if ((SYS_USE_RS485 == 1) && (SYS_USE_USB == 1))
+ #error "please not define SYS_USE_RS485 & SYS_USE_USB sametime!(in board_sysconf.h file)"
 #endif
-#if (defined(SYS_USE_RS485) && defined(SYS_USE_CAMERA))
- #error "please not define SYS_USE_RS485 & SYS_USE_CAMERA sametime!(in wujique_sysconf.h file)"
+#if ((SYS_USE_RS485 == 1) && (SYS_USE_CAMERA == 1))
+ #error "please not define SYS_USE_RS485 & SYS_USE_CAMERA sametime!(in board_sysconf.h file)"
 #endif
 /*-----------------------------------------------------------*/
 /* 	对外扩接口进行功能定义   */
 
 /*	VSPI2 VI2C2 KEYPAD ,3者只能用一个*/
-//#define SYS_USE_VSPI2 1
-//#define SYS_USE_VI2C2	1
+#define SYS_USE_VSPI2   0
+#define SYS_USE_VI2C2	0
 #define SYS_USE_KEYPAD	1
 /*	虚拟SPI2，使用外扩IO，跟矩阵按键冲突，跟I2C2也共用*/
-#if (defined(SYS_USE_VSPI2) && defined(SYS_USE_KEYPAD))
+#if ((SYS_USE_VSPI2==1) && (SYS_USE_KEYPAD ==1))
  #error "please not define SYS_USE_VSPI2 & SYS_USE_KEYPAD sametime!(in wujique_sysconf.h file)"
 #endif
-#if (defined(SYS_USE_VI2C2) && defined(SYS_USE_KEYPAD))
+#if ((SYS_USE_VI2C2 == 1) && (SYS_USE_KEYPAD == 1))
  #error "please not define SYS_USE_VI2C2 & SYS_USE_KEYPAD sametime!(in wujique_sysconf.h file)"
 #endif
-#if (defined(SYS_USE_VSPI2) && defined(SYS_USE_VI2C2))
+#if ((SYS_USE_VSPI2 == 1) && (SYS_USE_VI2C2 == 1))
  #error "please not define SYS_USE_VSPI2 & SYS_USE_VI2C2 sametime!(in wujique_sysconf.h file)"
 #endif
 
-#ifdef SYS_USE_KEYPAD
+#if (SYS_USE_KEYPAD == 1)
 #define KEY_PAD_COL_NUM (4)//4列
 #define KEY_PAD_ROW_NUM (4)//4行	
 #endif
