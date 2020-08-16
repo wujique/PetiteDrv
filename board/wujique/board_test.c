@@ -28,7 +28,8 @@
 extern u16 PenColor;
 extern u16 BackColor;
 
-#define TEST_FONG "songti12"
+#define TEST_FONG "SYsongti_12"
+//#define TEST_FONG "SYsongti_16"
 
 DevLcdNode * WJQTestLcd;
 

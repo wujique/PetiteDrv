@@ -607,13 +607,16 @@ s32 dev_lcd_put_string(DevLcdNode *lcd, char *font, int x, int y, char *s, unsig
 {
 	u16 slen;
 	u16 xlen,ylen;
+	
 	u16 *framebuff;//样点缓冲，按照L2R_U2D格式填充
 	u8 *dotbuf;//字符点阵缓冲
+	
 	s32 res;
 	u16 sidx;
 	u16 i,j;
 	u32 xbase;//显示在x轴偏移量
 	u16 fontw,fonth;
+	char tmp;;
 	
 	if (lcd == NULL) return -1;
 	
@@ -622,9 +625,7 @@ s32 dev_lcd_put_string(DevLcdNode *lcd, char *font, int x, int y, char *s, unsig
 	//uart_printf("str len:%d\r\n", slen);
 
 	font_get_hw(font, &fonth, &fontw);
-	/*
-		根据字符串长度计算刷新区域长宽
-	*/
+	/*	根据字符串长度计算刷新区域长宽	*/
 	xlen = slen*fontw;
 	ylen = fonth;
 
@@ -634,61 +635,44 @@ s32 dev_lcd_put_string(DevLcdNode *lcd, char *font, int x, int y, char *s, unsig
 
 	/*获取点阵，并转化为LCD像素*/
 	while(1) {
-		//英文字母
-		if (*(s+sidx) < 0x81) {
-			//uart_printf("eng\r\n");
-			u8 ch;
-			/*获取点阵*/
-			ch = *(s+sidx);
-			
-			res = font_get_asc(font, &ch, dotbuf);
-			//PrintFormat(dotbuf, 16);
-			/*asc是横库*/
-			for (j=0;j<fonth;j++) {
-
-				xbase = xlen*j + sidx*fontw;//当前字符X轴偏移量
-				for (i=0;i<fontw;i++) {
-					/*暂时只处理6*12，8*16的ASC，每一列1个字节*/
-					if ((dotbuf[j*1+i/8]&(0x80>>(i%8)))!= 0) {
-						//uart_printf("* ");
-						framebuff[xbase + i] = colidx;
-					} else {
-						//uart_printf("- ");
-						framebuff[xbase + i] = BackColor;
-					}
-				}
-				//uart_printf("\r\n");
-			}	
-			
-			sidx++;
-		}		else {//汉字
-			//uart_printf("ch\r\n");
-			res = font_get_hz(font, s+sidx, dotbuf);//从SD卡读取一个1616汉字的点阵要1ms
-			//PrintFormat(dotbuf, 32);
-
-			/*仅仅支持纵库，取模方式2,16*16*/
-			for (j=0; j<fonth; j++) {
-				xbase = xlen*j + sidx*fontw;//当前字符X轴偏移量
-				for (i=0;i<(fontw*2);i++) {//汉子是ASC两倍宽
-					/*暂时只做1212，1616，每一列2个字节数据*/
-					if ((dotbuf[i*2+j/8]&(0x80>>(j%8)))!= 0) {
-						//uart_printf("* ");
-						framebuff[xbase + i] = colidx;
-					} else {
-						//uart_printf("- ");
-						framebuff[xbase + i] = BackColor;
-					}
-				}
-				//uart_printf("\r\n");
-			}	
-			
-			sidx+= 2;
-		}
 
 		if (sidx >= slen) {
 			//uart_printf("finish");
 			break;
 		}
+		
+		FontDot dot;
+		dot.dot = dotbuf;
+		
+		res = font_get_dotdata(font, s+sidx, &dot);	
+		
+		//PrintFormat(dotbuf, 32);
+		for (j=0; j<fonth; j++) {
+				
+			xbase = xlen*j + sidx*fontw;//当前字符X轴偏移量
+
+			for (i=0;i < dot.w ;i++) {
+				
+				if(dot.dt == FONT_V_H_U_D_L_R) {
+					tmp = dotbuf[i*2+j/8]&(0x80>>(j%8));
+				} else if(dot.dt == FONT_V_L_L_R_U_D) {
+					tmp = dotbuf[i+j/8*dot.w]&(0x01<<(j%8));
+				} else if(dot.dt == FONT_H_H_L_R_U_D) {
+					tmp = dotbuf[i/8 + j*((dot.w+7)/8)]&(0x80>>(i%8));
+				}
+				
+				if (tmp != 0) {
+					//uart_printf("* ");
+					framebuff[xbase + i] = colidx;
+				} else {
+					//uart_printf("- ");
+					framebuff[xbase + i] = BackColor;
+				}
+			}
+			//uart_printf("\r\n");
+		}	
+
+		sidx+= res;
 	}
 
 

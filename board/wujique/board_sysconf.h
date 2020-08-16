@@ -115,9 +115,6 @@
 #define VFS_USB_DIR	"mtd1"//USB
 #define SYS_FS_FATFS_USB "2:/"
 
-/*	字体类型定义 */
-#define FONT_LIST_MAX 4	
-extern struct fbcon_font_desc *FontList[FONT_LIST_MAX];
 
 /*--------------------------------------------------------------------------------*/
 /* 中断优先级统一管理          */
