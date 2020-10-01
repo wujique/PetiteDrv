@@ -103,14 +103,25 @@ function. */
 /* The highest interrupt priority that can be used by any interrupt service
 routine that makes calls to interrupt safe FreeRTOS API functions.  DO NOT CALL
 INTERRUPT SAFE FREERTOS API FUNCTIONS FROM ANY INTERRUPT THAT HAS A HIGHER
-PRIORITY THAN THIS! (higher priorities are lower numeric values. */
+PRIORITY THAN THIS! (higher priorities are lower numeric values. 
+	系统管理中断阈值
+	优先级高于这个值（数值小于这个值）的中断不受RTOS管理(关中断)
+	通常，尽量不要在中断调用系统接口
+	关闭了所有小于等于宏定义 configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY
+    所定义的中断优先级，这样临界段代码就不会被中断干扰到
+*/
 #define configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY	5
 
 /* Interrupt priorities used by the kernel port layer itself.  These are generic
-to all Cortex-M ports, and do not rely on any particular library functions. */
+to all Cortex-M ports, and do not rely on any particular library functions. 
+内核中断优先级
+用来设置PendSV 和滴答定时器的中断优先级
+*/
 #define configKERNEL_INTERRUPT_PRIORITY 		( configLIBRARY_LOWEST_INTERRUPT_PRIORITY << (8 - configPRIO_BITS) )
 /* !!!! configMAX_SYSCALL_INTERRUPT_PRIORITY must not be set to zero !!!!
-See http://www.FreeRTOS.org/RTOS-Cortex-M3-M4.html. */
+See http://www.FreeRTOS.org/RTOS-Cortex-M3-M4.html. 
+	FreeRtos关中断接口，只会将优先级低于本宏的中断关掉
+*/
 #define configMAX_SYSCALL_INTERRUPT_PRIORITY 	( configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY << (8 - configPRIO_BITS) )
 	
 /* Normal assert() semantics without relying on the provision of an assert.h

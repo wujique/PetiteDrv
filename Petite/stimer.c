@@ -67,4 +67,19 @@ uint32_t Stime_get_localtime(void)
 	return LocalTime;
 }
 
+uint32_t stime_get_passtime(uint32_t StrTime)
+{
+	uint32_t cur, pass;
+
+	/* 当前时间*/
+	cur = LocalTime;
+
+	if(cur >= StrTime)
+		pass = cur - StrTime;
+	else
+		pass = 0xffffffff - (StrTime - cur);	
+
+	return pass;
+}
+
 

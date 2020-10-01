@@ -96,10 +96,13 @@
 #define DEV_HTU21D_I2CBUS "VI2C2"
 #define DEV_PTHCHO_UART MCU_UART_1
 
-/*--------------------------------------------------------------------------------*/
-
+/*----------------------------------------------------
+	任务优先级，数字越小优先级越低
+	栈定义的是U32
+*/
+/*默认应用任务，比如测试程序，有死循环 */
 #define Wujique407_TASK_STK_SIZE (1024)
-#define Wujique407_TASK_PRIO	1
+#define Wujique407_TASK_PRIO	(1)
 
 #define START_TASK_STK_SIZE (512)
 #define START_TASK_PRIO	3//

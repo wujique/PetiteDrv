@@ -1,3 +1,10 @@
+/*
+	p_list.h 是从linux拷贝来的
+	这是一个经典的实现，
+	我的总结是：
+		1 提出共同点出来（重复的代码/流程），做成一个模块，。
+		2 看问题的角度决定代码流程。
+	*/
 #include "mcu.h"
 #include "log.h"
 #include "p_list.h"
@@ -63,7 +70,7 @@ void list_test(void)
 	
 	list_add(&(t1.list), &TestList);
 
-	p = list_entry(TestList.next,struct test,list);
+	p = list_entry(TestList.next,struct test, list);
 	
 	wjq_log(LOG_FUN, "name:%s\r\n", p->name);
 

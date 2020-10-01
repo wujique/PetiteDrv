@@ -24,18 +24,25 @@
 #include "log.h"
 #include "alloc.h"
 
+#include "p_kfifo.h"
 
-#define MCU_UART1_BUF_SIZE       1024
+/* 串口环形缓冲，后续改未linux的kfifo 
+当打开串口时再创建一个新的kfifo, 缓冲的大小由应用层配置 */
+#define MCU_UART1_BUF_SIZE       (1024*16)
 #define MCU_UART2_BUF_SIZE       1024
 /*调试信息串口*/
 #define MCU_UART3_BUF_SIZE       256
 
-#if 0
+struct _pkfifo Uart1Kfifo;
+
+
+#if 1
 /*串口缓冲 暂时通过定义数组，后续改为动态申请*/
 u8 McuUart1Buf[MCU_UART1_BUF_SIZE];
 u8 McuUart2Buf[MCU_UART2_BUF_SIZE];
-u8 McuUart3Buf[MCU_UART3_BUF_SIZE];
+//u8 McuUart3Buf[MCU_UART3_BUF_SIZE];
 #endif
+
 u8 McuUartLogBuf[MCU_UART3_BUF_SIZE];
 
 /*
@@ -109,8 +116,10 @@ s32 mcu_uart_open(McuUartNum comport)
 		McuUart[MCU_UART_1].OverFg = 0;
 		McuUart[MCU_UART_1].size = MCU_UART1_BUF_SIZE;
 		McuUart[MCU_UART_1].gd = 0;
-		McuUart[MCU_UART_1].Buf = (u8 *)wjq_malloc(MCU_UART1_BUF_SIZE);
+		//McuUart[MCU_UART_1].Buf = (u8 *)wjq_malloc(MCU_UART1_BUF_SIZE);
 
+		pkfifo_init(&Uart1Kfifo, McuUart1Buf, MCU_UART1_BUF_SIZE, 1);
+		
 		// 打开GPIO时钟
 		RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
 		// 打开串口时钟
@@ -373,17 +382,30 @@ s32 mcu_uart_set_baud (McuUartNum comport, s32 baud)
 s32 mcu_uart_read (McuUartNum comport, u8 *buf, s32 len)
 {
     s32 i;
-    
-    if(len <= 0) return(-1);
-    if(buf == NULL) return(-1);
-	if(comport >= MCU_UART_MAX)
-		return -1;
+    struct _pkfifo *pfifo;
+	int res;
 	
-	if(McuUart[comport].gd < 0)
-		return -1;
+    if (len <= 0) return(-1);
+    if (buf == NULL) return(-1);
+	if (comport >= MCU_UART_MAX) return -1;
+	
+	if(McuUart[comport].gd < 0) return -1;
 	
     i = 0;
 
+	if (comport == MCU_UART_1) {
+		pfifo = &Uart1Kfifo;
+		while(1) {
+			/* 要优化，不能一直用while循环 */
+			if(i >= len) break;
+			PKFIFO_OUT_1U8(res, pfifo, buf);
+			if(res == 0) break;
+			buf ++;
+			i ++;
+		}
+		return i;
+	}
+	
     //uart_printf("rec index:%d, %d\r\n", UartHead3, rec_end3);
     while(McuUart[comport].Head != McuUart[comport].End)
     {
@@ -476,7 +498,7 @@ void mcu_uart3_IRQhandler(void)
 			if(McuUart[MCU_UART_3].End >= McuUart[MCU_UART_3].size)
                 McuUart[MCU_UART_3].End = 0;
                 
-            if(McuUart[MCU_UART_3].End == McuUart[MCU_UART_3].Head)       // 串口接收缓冲溢出了
+            if(McuUart[MCU_UART_3].End == McuUart[MCU_UART_3].Head)// 串口接收缓冲溢出了
                 McuUart[MCU_UART_3].Head = 1;
         }
     }
@@ -598,7 +620,8 @@ void mcu_uart2_IRQhandler(void)
 void mcu_uart1_IRQhandler(void)
 {
 	unsigned short ch;
-
+	struct _pkfifo *pfifo;
+	
 	if(USART_GetITStatus(USART1, USART_IT_RXNE) != RESET)
 	{
 		USART_ClearITPendingBit(USART1, USART_IT_RXNE);
@@ -615,6 +638,9 @@ void mcu_uart1_IRQhandler(void)
 		{
 			ch = USART_ReceiveData(USART1);
 			//uart_printf("%02x", ch);
+			pfifo = &Uart1Kfifo;
+			PKFIFO_IN_1U8(pfifo, ch);
+			#if 0
 			*(McuUart[MCU_UART_1].Buf+McuUart[MCU_UART_1].End) = (unsigned char)(ch&0xff);
 			McuUart[MCU_UART_1].End++;
 			if(McuUart[MCU_UART_1].End >= McuUart[MCU_UART_1].size)
@@ -622,6 +648,7 @@ void mcu_uart1_IRQhandler(void)
 				
 			if(McuUart[MCU_UART_1].End == McuUart[MCU_UART_1].Head) 	  // 串口接收缓冲溢出了
 				McuUart[MCU_UART_1].Head = 1;
+			#endif
 		}
 	}
 	

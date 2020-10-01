@@ -665,6 +665,16 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\Petite\p_list.c</FilePath>
             </File>
+            <File>
+              <FileName>pfsm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Petite\pfsm.c</FilePath>
+            </File>
+            <File>
+              <FileName>p_kfifo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Petite\p_kfifo.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

@@ -24,6 +24,7 @@ typedef enum
 	LOG_DEBUG,	//调试，正式程序通常屏蔽
 }LOG_L;
 
+extern void uart_printf(s8 *fmt,...);
 extern void wjq_log(LOG_L l, s8 *fmt,...);
 extern void PrintFormat(u8 *wbuf, s32 wlen);
 
