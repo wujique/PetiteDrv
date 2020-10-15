@@ -28,4 +28,6 @@ extern void uart_printf(s8 *fmt,...);
 extern void wjq_log(LOG_L l, s8 *fmt,...);
 extern void PrintFormat(u8 *wbuf, s32 wlen);
 
+#define Uprintf uart_printf
+
 #endif

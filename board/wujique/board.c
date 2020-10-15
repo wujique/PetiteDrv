@@ -145,10 +145,10 @@ extern void wujique_stm407_test(void);
 /**/
 void board_app_task(void)
 {
-	wjq_log(LOG_DEBUG,"\r\nrun board app\r\n");
+	wjq_log(LOG_DEBUG, "[   board] run app task! 2020.10.15 \r\n");
 
 	wujique_stm407_test();
-	//at_wifi_test();
+	
 	while(1){}
 }
 /**/
