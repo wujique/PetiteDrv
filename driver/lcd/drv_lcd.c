@@ -872,12 +872,15 @@ int bmp_parse_read(struct _strBmpParse *pbmp, int sline, int linenum, u16 *pdata
 	u16 r,g,b;
 	u8 c;
 	char *pcc;
-
+	int rlen;
+	
 	pcc = wjq_malloc(pbmp->LineBytes*linenum);
 	
 	/* 读数据 */
 	vfs_lseek(pbmp->fd, pbmp->datashift + sline*pbmp->LineBytes, SEEK_SET);
-	vfs_read(pbmp->fd, (void *)pcc, pbmp->LineBytes*linenum);
+	rlen = vfs_read(pbmp->fd, (void *)pcc, pbmp->LineBytes*linenum);
+
+	if(rlen <= 0) return -1;
 	
 	switch(pbmp->bi.biBitCount)
 	{
@@ -1005,6 +1008,7 @@ int bmp_parse_read(struct _strBmpParse *pbmp, int sline, int linenum, u16 *pdata
 	删除bmp解析容器*/
 int bmp_parse_del(struct _strBmpParse *pbmp)
 {
+	vfs_close(pbmp->fd);
 	wjq_free(pbmp->palatte);
 	wjq_free(pbmp);
 
@@ -1046,7 +1050,9 @@ s32 dev_lcd_show_bmp(DevLcdNode *lcd, u16 x, u16 y, u16 xlen, u16 ylen, s8 *BmpF
 		if(j+linecnt >= ylen)
 			linecnt = ylen-j;
 		
-		bmp_parse_read(pbmpparse, j, linecnt, pdata);
+		res = bmp_parse_read(pbmpparse, j, linecnt, pdata);
+		if(res < 0) break;
+		
 		k = 0;
 		while(1) {
 			if(k >= linecnt) break;
