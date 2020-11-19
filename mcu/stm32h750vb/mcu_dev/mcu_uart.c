@@ -24,7 +24,7 @@
 #include "log.h"
 #include "alloc.h"
 #include "p_kfifo.h"
-#include "bus_uart.h"
+
 
 static BusUartNode *McuUart[MCU_UART_MAX];
 
@@ -140,19 +140,17 @@ static void mcu_MX_USART2_UART_Init(void)
  *@param[out]  无
  *@retval:     
  */
-s32 mcu_uart_init(McuUartNum comport)
+s32 mcu_uart_init(McuUartNum comport, BusUartNode *BusNode, const BusUartPra *Pra)
 {
-
-	if(comport >= MCU_UART_MAX)
-		return -1;
-
-	if(comport == MCU_UART_1) {
-	}else if(comport == MCU_UART_2)
-	{
+	if(comport == MCU_UART_2){
+		__HAL_RCC_USART2_CLK_ENABLE();
 		mcu_MX_USART2_UART_Init();
-
+		McuUart[MCU_UART_2] = BusNode;
 	} else if(comport == MCU_UART_4) {
+		__HAL_RCC_UART4_CLK_ENABLE();
 		mcu_MX_UART4_Init();
+		__HAL_UART_ENABLE_IT(&McuHuart4, UART_IT_RXNE);
+		McuUart[MCU_UART_4] = BusNode;
 	} else	{
 		/* 串口号不支持*/
 		return -1;
@@ -168,9 +166,6 @@ s32 mcu_uart_init(McuUartNum comport)
  */
 s32 mcu_uart_deinit (McuUartNum comport)
 {
-	if(comport >= MCU_UART_MAX)
-		return -1;
-
 	if(comport == MCU_UART_2) {
 		
 	} else if(comport == MCU_UART_4) {
@@ -215,14 +210,10 @@ s32 mcu_uart_send (McuUartNum comport, u8 *buf, s32 len)
 	u32 t;
 	u16 ch;
   
-	if (len <= 0) 
-		return(-1);
+	if (len <= 0) return(-1);
 		
-	if(buf == NULL) 
-		return(-1);
+	if(buf == NULL) return(-1);
 	
-	if(comport >= MCU_UART_MAX)	return -1;
-
 	if(comport == MCU_UART_2) {
 		HAL_UART_Transmit(&McuHuart2, buf, len, 100);	
 	}	else if(comport == MCU_UART_4)	{
@@ -231,5 +222,27 @@ s32 mcu_uart_send (McuUartNum comport, u8 *buf, s32 len)
 	
 	return(0);
 }
+
+/*
+	串口中断服务函数        */
+void mcu_uart4_irq(void)
+{
+	char ch;
+	struct _pkfifo *pfifo;
+
+	pfifo = &(McuUart[MCU_UART_4]->Kfifo);
+	/*  中断中仅仅处理了 UART_IT_RXNE，
+	更稳健的做法，是对所有中断进行处理 */
+	if((__HAL_UART_GET_IT(&McuHuart4, UART_IT_RXNE) != RESET) 
+		&& (__HAL_UART_GET_IT_SOURCE(&McuHuart4, UART_IT_RXNE) != RESET)) {
+		
+		ch = (uint8_t)(McuHuart4.Instance->RDR);	
+
+		PKFIFO_IN_1U8(pfifo, ch);
+		
+        __HAL_UART_CLEAR_IT(&McuHuart4, UART_IT_RXNE);
+    }	
+}
+
 
 
