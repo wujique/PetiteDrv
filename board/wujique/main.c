@@ -30,6 +30,7 @@
 #include "log.h"
 #include "stimer.h"
 #include "board_sysconf.h"
+#include "bus_uart.h"
 
 /** @addtogroup Template_Project
   * @{
@@ -63,10 +64,10 @@ s32 board_mcu_preinit(void)
 		
 	/*IO跟串口是调试信息的依赖，所以最早初始化*/
 	mcu_io_init();
-	mcu_uart_init();
-	mcu_uart_open(PC_PORT);
+	bus_uart_init();
+	log_init();
 	
-	wjq_log(LOG_INFO, "****************************************\r\n");
+	wjq_log(LOG_INFO, "\r\n\r\n\r\n****************************************\r\n");
 	wjq_log(LOG_INFO, "        Board wujique stm32f407\r\n");
 	wjq_log(LOG_INFO, "****************************************\r\n\r\n");
 	
@@ -74,12 +75,6 @@ s32 board_mcu_preinit(void)
 	wjq_log(LOG_INFO, "HCLK_Frequency:  %d Hz\r\n", RCC_Clocks.HCLK_Frequency);
 	wjq_log(LOG_INFO, "PCLK1_Frequency: %d Hz\r\n", RCC_Clocks.PCLK1_Frequency);
 	wjq_log(LOG_INFO, "PCLK2_Frequency: %d Hz\r\n", RCC_Clocks.PCLK2_Frequency);
-
-	#if 0//ndef SYS_USE_RTOS
-	/* SysTick end of count event */
-	wjq_log(LOG_DEBUG, "init systick no rtos\r\n");
-	SysTick_Config(RCC_Clocks.HCLK_Frequency / (1000/SYSTEMTICK_PERIOD_MS));
-	#endif
 
 	mcu_rtc_init();
 	return 0;

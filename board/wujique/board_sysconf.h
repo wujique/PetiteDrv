@@ -14,7 +14,7 @@
 #define __WUJIQUE_SYSCONF__
 
 /*定义调试信息输出串口号*/
-#define PC_PORT  MCU_UART_3 
+#define PC_PORT  "uart3" 
 
 /* 
 	本文件定义板设备情况。
@@ -94,7 +94,7 @@
 /*-----------------------------------------------------------*/
 
 #define DEV_HTU21D_I2CBUS "VI2C2"
-#define DEV_PTHCHO_UART MCU_UART_1
+#define DEV_PTHCHO_UART "uart1"
 
 /*----------------------------------------------------
 	任务优先级，数字越小优先级越低

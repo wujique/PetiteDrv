@@ -675,6 +675,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\Petite\p_kfifo.c</FilePath>
             </File>
+            <File>
+              <FileName>bus_uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Petite\bus_uart.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

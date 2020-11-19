@@ -4,6 +4,10 @@
 #include "console.h"
 #include "mcu.h"
 #include "board_sysconf.h"
+#include "bus_uart.h"
+
+extern BusUartNode *LogUartNode;
+
 
 int serial_getc (void)
 {
@@ -11,7 +15,7 @@ int serial_getc (void)
 
 	while(1)
 	{
-		ret = mcu_uart_read(PC_PORT, &ch, 1);
+		ret = bus_uart_read(LogUartNode, &ch, 1);
 		if(0 == ret)
 		{
 			Delay(1);
@@ -29,7 +33,7 @@ int serial_getc (void)
  */
 void serial_putc (const char c)
 {
-	mcu_uart_write(PC_PORT, (u8 *)&c, 1);
+	bus_uart_write(LogUartNode, (u8 *)&c, 1);
 	/* If \n, also do \r */
 	if (c == '\n')
 		serial_putc ('\r');

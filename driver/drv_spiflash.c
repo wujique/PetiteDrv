@@ -421,7 +421,7 @@ s32 dev_spiflash_register(const DevSpiFlash *dev)
 		node = list_entry(listp, DevSpiFlashNode, list);
 		
 		if (strcmp(dev->pnode.name, node->dev.pnode.name) == 0) {
-			wjq_log(LOG_INFO, "spi flash dev name err!\r\n");
+			wjq_log(LOG_INFO, "spi flash dev name repeat!\r\n");
 			return -1;
 		}
 		
@@ -429,9 +429,7 @@ s32 dev_spiflash_register(const DevSpiFlash *dev)
 	}
 
 	/* 
-		申请一个节点空间 
-		
-	*/
+		申请一个节点空间    	*/
 	node = (DevSpiFlashNode *)wjq_malloc(sizeof(DevSpiFlashNode));
 	list_add(&(node->list), &DevSpiFlashRoot);
 	memcpy((u8 *)&node->dev, (u8 *)dev, sizeof(DevSpiFlash));
@@ -442,10 +440,10 @@ s32 dev_spiflash_register(const DevSpiFlash *dev)
 
 	if (node->spichnode != NULL) {
 		JID = dev_spiflash_readJTD(node);
-		wjq_log(LOG_DEBUG, "%s jid:0x%x\r\n", dev->pnode.name, JID);
+		wjq_log(LOG_DEBUG, "            %s jid:0x%x\r\n", dev->pnode.name, JID);
 		
-		MID  = dev_spiflash_readMTD(node);
-		wjq_log(LOG_DEBUG, "%s mid:0x%x\r\n", dev->pnode.name, MID);
+		//MID  = dev_spiflash_readMTD(node);
+		//wjq_log(LOG_DEBUG, "%s mid:0x%x\r\n", dev->pnode.name, MID);
 		
 		/*根据JID查找设备信息*/
 		for (index = 0; index<(sizeof(SpiFlashPraList)/sizeof(_strSpiFlash));index++) {

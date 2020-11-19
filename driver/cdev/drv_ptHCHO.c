@@ -31,9 +31,17 @@
 
 s32 PtHCHOGd = -2;
 
+
+const static BusUartPra PtHCHOPortPra={
+	.BaudRate = 9600,
+	.bufsize = 512,
+	};
+	
+BusUartNode *PtHCHOUartNode;
+
+
 s32 dev_ptHCHO_init(void)
 {
-
 	PtHCHOGd = -1;
 	return 0;
 }
@@ -45,11 +53,10 @@ s32 dev_ptHCHO_open(void)
 	if(PtHCHOGd != -1)
 		return PtHCHOGd;
 
-	ret = mcu_uart_open(DEV_PTHCHO_UART);
-	if(ret != 0)
+	PtHCHOUartNode = bus_uart_open(DEV_PTHCHO_UART, &PtHCHOPortPra);
+	if(ret == 0)
 		return -1;
 	
-	mcu_uart_set_baud(DEV_PTHCHO_UART, 9600);
 	PtHCHOGd = 0;
 	
 	return 0;
@@ -74,7 +81,7 @@ s32 dev_ptHCHO_read(u8 *buf, s32 len)
 	if(PtHCHOGd != 0)
 		return PtHCHOGd;
 	
-	res = mcu_uart_read(DEV_PTHCHO_UART, buf, len);	
+	res = bus_uart_read(PtHCHOUartNode, buf, len);	
 	
 	return res;
 }
@@ -86,7 +93,7 @@ s32 dev_ptHCHO_write(u8 *buf, s32 len)
 	if(PtHCHOGd != 0)
 		return PtHCHOGd;
 	
-	res = mcu_uart_write(DEV_PTHCHO_UART, buf, len);
+	res = bus_uart_write(PtHCHOUartNode, buf, len);
 
 	return res;
 }
@@ -132,16 +139,13 @@ s32 dev_ptHCHO_test(void)
 		
 		timeout = 0;
 		len = 0;
-		while(1)
-		{
+		while(1) {
 			Delay(50);
 			memset(buf, 0, sizeof(buf));
 			len = dev_ptHCHO_read(buf, sizeof(buf));
-			if(len != 0)
-			{
+			if(len != 0) {
 				PrintFormat(buf, len);
-				if((buf[0] == 0x42) &&(buf[1] == 0x4d)&&(buf[2] == 0x08))
-				{
+				if((buf[0] == 0x42) &&(buf[1] == 0x4d)&&(buf[2] == 0x08)) {
 					value = (buf[6]<<8) +	buf[7];
 					wjq_log(LOG_FUN, ">-%s:%d", numNameInx[buf[3]],value/numKeysInx[buf[5]]);
 					wjq_log(LOG_FUN, ".");
@@ -150,8 +154,7 @@ s32 dev_ptHCHO_test(void)
 			}
 			
 			timeout++;
-			if(timeout >= 100)
-			{
+			if(timeout >= 100) {
 				wjq_log(LOG_FUN, "timeout---\r\n");
 				break;
 			}

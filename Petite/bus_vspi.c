@@ -44,7 +44,7 @@
 s32 bus_vspi_init(const DevSpi *dev)
 {
 
-	wjq_log(LOG_DEBUG, "vspi init:%s\r\n", dev->pnode.name);
+	//wjq_log(LOG_DEBUG, "vspi init:%s\r\n", dev->pnode.name);
 
 	mcu_io_config_out(dev->clkport, dev->clkpin);
 	mcu_io_output_setbit(dev->clkport,dev->clkpin);

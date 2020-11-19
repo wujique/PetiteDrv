@@ -29,7 +29,7 @@
 #include "log.h"
 
 /*rs485使用串口1*/
-#define DEV_RS485_UART MCU_UART_1
+#define DEV_RS485_UART "uart1"
 s32 RS485Gd = -2;
 /**
  *@brief:      dev_rs485_init
@@ -38,7 +38,7 @@ s32 RS485Gd = -2;
  *@param[out]  无
  *@retval:     
  */
-s32 dev_rs485_init(void)
+s32 drv_rs485_init(void)
 {
 	#if (SYS_USE_RS485==1)
 	GPIO_InitTypeDef GPIO_InitStructure;
@@ -67,12 +67,12 @@ s32 dev_rs485_init(void)
  *@param[out]  无
  *@retval:     
  */
-s32 dev_rs485_open(void)
+s32 drv_rs485_open(void)
 {
 	if(RS485Gd!= -1)
 		return -1;
 	
-	mcu_uart_open(DEV_RS485_UART);
+	bus_uart_open(DEV_RS485_UART);
 	mcu_uart_set_baud(DEV_RS485_UART, 9600);	
 	RS485Gd = 0;
 	return 0;
@@ -84,12 +84,12 @@ s32 dev_rs485_open(void)
  *@param[out]  无
  *@retval:     
  */
-s32 dev_rs485_close(void)
+s32 drv_rs485_close(void)
 {
 	if(RS485Gd!= 0)
 		return -1;
 	
-	mcu_uart_close(DEV_RS485_UART);
+	bus_uart_close(DEV_RS485_UART);
 	return 0;
 }
 

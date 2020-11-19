@@ -17,7 +17,7 @@
 #define PANEL_FONT_MODULE	1
 
 /* dev */
-#define DRV_RS485_MODULE 		1
+#define DRV_RS485_MODULE 		0
 #define DRV_KEYPAD_MODULE 		1
 #define DRV_SPI_FLASH_MODULE 	1
 #define DRV_WM8978_MODULE   	1
@@ -42,9 +42,6 @@
 #define LCD_DRIVER_3820			0
 #define LCD_DRIVER_NT35510		1
 #define LCD_DRIVER_R61408		1
-
-/* 是否使用RTOS */
-#define SYS_USE_RTOS 1
 
 /* 文件系统 */
 #define SYS_USE_VFS		1

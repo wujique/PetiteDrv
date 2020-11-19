@@ -2,7 +2,7 @@
 
 #include "board_sysconf.h"
 #include "log.h"
-
+#include "bus_uart.h"
 #include "vfs.h"
 #include "drv_keypad.h"
 #include "drv_buzzer.h"
@@ -64,11 +64,7 @@ DevDacSound BoardDacSound={
 /* TEA5767 挂在vi2c1上*/
 #define DEV_TEA5767_I2CBUS "VI2C1"
 
-
-
-/*
-
-	8266 底层驱动，负责跟串口等硬件通信
+/*	8266 底层驱动，负责跟串口等硬件通信
 
 	模块使用安信可8266模块ESP-01/01S
 	VCC/GND
@@ -76,9 +72,15 @@ DevDacSound BoardDacSound={
 	EN  使能，高电平有效 -----------PF5
 	RST 复位，低电平有效      ----------PF4
 	IO0 启动时拉低，进入下载模式---------PA11
-	IO2 请拉高				------------PA12
-*/	
-#define DEV_8266_UART MCU_UART_1
+	IO2 请拉高				------------PA12 */	
+#define DEV_8266_UART "uart1"
+
+const static BusUartPra Esp8266PortPra={
+	.BaudRate = 115200,
+	.bufsize = 512,
+	};
+	
+BusUartNode *Esp8266UartNode;
 
 s32 bsp_exuart_wifi_init(void)
 {
@@ -110,10 +112,8 @@ s32 bsp_exuart_wifi_init(void)
 	GPIO_SetBits(GPIOF, GPIO_Pin_4);
 	GPIO_SetBits(GPIOF, GPIO_Pin_5);
 	
-	mcu_uart_open(DEV_8266_UART);
-	mcu_uart_set_baud(DEV_8266_UART, 115200);
+	Esp8266UartNode = bus_uart_open(DEV_8266_UART, &Esp8266PortPra);
 
-	
 	return 0;
 }
 
@@ -121,7 +121,7 @@ s32 bsp_exuart_wifi_read(u8 *buf, s32 len)
 {
 	s32 res;
 	
-	res = mcu_uart_read(DEV_8266_UART, buf, len);	
+	res = bus_uart_read(Esp8266UartNode, buf, len);	
 	
 	return res;
 }
@@ -130,7 +130,7 @@ s32 bsp_exuart_wifi_write(u8 *buf, s32 len)
 {
 	s32 res;
 	
-	res = mcu_uart_write(DEV_8266_UART, buf, len);
+	res = bus_uart_write(Esp8266UartNode, buf, len);
 
 	return res;
 }
@@ -147,8 +147,10 @@ void board_app_task(void)
 {
 	wjq_log(LOG_DEBUG, "[   board] run app task! 2020.10.15 \r\n");
 
-	wujique_stm407_test();
+	//spi_example();
+	bus_uart_test();
 	
+	wujique_stm407_test();
 	while(1){}
 }
 /**/
@@ -176,47 +178,44 @@ s32 board_init(void)
 {
 	wjq_log(LOG_DEBUG, "[   board] wujique other dev init!***\r\n");
 
-	/* 通过注册总线的驱动 */
+	/* 注册总线的驱动 ：I2C/SPI/BUS LCD...*/
 	petite_dev_register();
 
-	/* 以下是为归纳到总线系统的去驱动 */
+	/* 以下是未归纳到总线系统的去驱动 
+		要将这些驱动改为字符驱动架构 
+		*/
 	#if (SYS_USE_KEYPAD == 1)
 	dev_keypad_init();
 	#endif
-	
 	#if (SYS_USE_EXUART == 1)
 	bsp_exuart_wifi_init();
-
 	#endif
-	
 	dev_buzzer_init(&BoardBuzzer);
-	dev_tea5767_init(DEV_TEA5767_I2CBUS);
-	dev_dacsound_init(&BoardDacSound);
-
-	/* need fix*/
 	dev_key_init();
-	dev_wm8978_init();/* 要实现一个声卡框架 */
-	dev_rs485_init();
+	//dev_rs485_init();
 	dev_touchscreen_init();
 	dev_touchkey_init();
-	dev_camera_init();
-
 	mcu_adc_temprate_init();
 	//dev_htu21d_init();
 	//dev_ptHCHO_init();
 	//dev_srf05_test();
-
+	/* 摄像头不归入字符设备 */
+	dev_camera_init();
+	/* 要实现一个声卡框架 
+		兼容多种声音播放方式 */
+	dev_tea5767_init(DEV_TEA5767_I2CBUS);
+	dev_dacsound_init(&BoardDacSound);
+	dev_wm8978_init();
+	/* 初始化文件系统 */
 	vfs_init();
 	vfs_mount(&SdFatFs);
-
 	//sys_spiffs_mount_coreflash();
 	//sys_lfs_mount();
 	//lfs_test();
-	
 	/* USB 任务有长延时，后续要处理 need fix*/
 	//usb_task_create();
 	//vfs_mount(&USBFatFs);
-
+	/*---------------------------------------*/
 	/* 创建目标板应用程序 */
 	board_app_init();
 	//eth_app_init();

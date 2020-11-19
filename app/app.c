@@ -23,53 +23,6 @@
 /* Private functions ---------------------------------------------------------*/
 
 TaskHandle_t  StartTaskHandle;
-void start_task(void *pvParameters);
-
-/**
-  * @brief  Main program
-  * @param  None
-  * @retval None
-  */
-int petite_app(void)
-{
-	BaseType_t xReturn = pdPASS;/* 定义一个创建信息返回值，默认为pdPASS */
-	
-	/*           http://www.network-science.de/ascii/   */
-	wjq_log(LOG_INFO,"\r\n*********************************************************\r\n");
-	wjq_log(LOG_INFO,"*   ___     _   _ _          ___                        \r\n");       
-	wjq_log(LOG_INFO,"*  / _ \\___| |_(_) |_ ___   /   \\_ ____   __             \r\n");
-	wjq_log(LOG_INFO,"* / /_)/ _ \\ __| | __/ _ \\ / /\\ / '__\\ \\ / /             \r\n");
-	wjq_log(LOG_INFO,"*/ ___/  __/ |_| | ||  __// /_//| |   \\ V /              \r\n");
-	wjq_log(LOG_INFO,"*\\/    \\___|\\__|_|\\__\\___/___,' |_|    \\_/www.wujique.com\r\n");
-	wjq_log(LOG_INFO,"*********************************************************\r\n\r\n");
-
-  /* Infinite loop */
-	#ifdef SYS_USE_RTOS
-	wjq_log(LOG_INFO,"ccreate start task!\r\n");
-	xReturn = xTaskCreate(	(TaskFunction_t) start_task,
-					(const char *)"StartTask",
-					(const configSTACK_DEPTH_TYPE)START_TASK_STK_SIZE,
-					(void *) NULL,
-					(UBaseType_t) START_TASK_PRIO,
-					(TaskHandle_t *) &StartTaskHandle );
-	
-	if(pdPASS == xReturn){
-		wjq_log(LOG_INFO,"[    _app] freertos Scheduler\r\n");
-		vTaskStartScheduler();
-	}else{
-		wjq_log(LOG_INFO,"[    _app] xTaskCreate fail\r\n");
-	}
-	
-	#else
-	void *p;
-	wjq_log(LOG_INFO,"run start task(no rtos)\r\n");
-	start_task(p);
-	#endif
-
-	wjq_log(LOG_INFO,"while(1) err!\r\n");
-	while(1);
-  
-}
 
 extern s32 board_init(void);
 /**
@@ -91,6 +44,48 @@ void start_task(void *pvParameters)
 		board_low_task();
 	}
 }
+
+/**
+  * @brief  Main program
+  * @param  None
+  * @retval None
+  */
+int petite_app(void)
+{
+	BaseType_t xReturn = pdPASS;/* 定义一个创建信息返回值，默认为pdPASS */
+	
+	/*           http://www.network-science.de/ascii/   */
+	wjq_log(LOG_INFO,"\r\n*********************************************************\r\n");
+	wjq_log(LOG_INFO,"*   ___     _   _ _          ___                        \r\n");       
+	wjq_log(LOG_INFO,"*  / _ \\___| |_(_) |_ ___   /   \\_ ____   __             \r\n");
+	wjq_log(LOG_INFO,"* / /_)/ _ \\ __| | __/ _ \\ / /\\ / '__\\ \\ / /             \r\n");
+	wjq_log(LOG_INFO,"*/ ___/  __/ |_| | ||  __// /_//| |   \\ V /              \r\n");
+	wjq_log(LOG_INFO,"*\\/    \\___|\\__|_|\\__\\___/___,' |_|    \\_/www.wujique.com\r\n");
+	wjq_log(LOG_INFO,"*********************************************************\r\n\r\n");
+
+  /* Infinite loop 
+	尽快启动RTOS， 进入start_task再做其他设备初始化 */
+	wjq_log(LOG_INFO,"ccreate start task!\r\n");
+	xReturn = xTaskCreate(	(TaskFunction_t) start_task,
+					(const char *)"StartTask",
+					(const configSTACK_DEPTH_TYPE)START_TASK_STK_SIZE,
+					(void *) NULL,
+					(UBaseType_t) START_TASK_PRIO,
+					(TaskHandle_t *) &StartTaskHandle );
+	
+	if(pdPASS == xReturn){
+		wjq_log(LOG_INFO,"[    _app] freertos Scheduler\r\n");
+		vTaskStartScheduler();
+	}else{
+		wjq_log(LOG_INFO,"[    _app] xTaskCreate fail\r\n");
+	}
+	
+	wjq_log(LOG_INFO,"while(1) err!\r\n");
+	while(1);
+  
+}
+
+
 
 /**
   * @}

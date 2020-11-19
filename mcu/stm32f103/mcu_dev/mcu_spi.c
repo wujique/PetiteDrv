@@ -177,8 +177,7 @@ s32 mcu_hspi_transfer(DevSpiNode *node, u8 *snd, u8 *rsv, s32 len)
     u16 ch;
 	SPI_TypeDef* SPIC;
 	
-	if(node == NULL)
-		return -1;
+	if(node == NULL) return -1;
 
 	if(node->gd != 0) {
 		SPI_DEBUG(LOG_DEBUG, "spi dev no open\r\n");

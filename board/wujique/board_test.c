@@ -562,6 +562,7 @@ s32 test_camera(void)
 	dev_lcd_update(lcd);
 	return 0;
 }
+
 s32 test_rs485_rec(void)
 {
 	u8 keyvalue;
@@ -572,20 +573,17 @@ s32 test_rs485_rec(void)
 	dev_lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
 	dev_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
 	dev_lcd_update(WJQTestLcd);
-	dev_rs485_open();
+	//dev_rs485_open();
 
-	while(1)
-	{
+	while(1) {
 		res = dev_keypad_read(&keyvalue, 1);
-		if(res == 1)
-		{
-			if(keyvalue == 12)
-			{
+		if(res == 1) {
+			if(keyvalue == 12){
 				break;
 			}
 		}
 
-		len = dev_rs485_read(buf, sizeof(buf));
+		//len = dev_rs485_read(buf, sizeof(buf));
 		if(len > 0)
 		{
 			buf[len] = 0;
@@ -606,7 +604,7 @@ s32 test_rs485_snd(void)
 	dev_lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
 	dev_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
 	dev_lcd_update(WJQTestLcd);
-	dev_rs485_open();
+	//dev_rs485_open();
 
 	while(1)
 	{
@@ -619,13 +617,14 @@ s32 test_rs485_snd(void)
 			}
 			else if(keyvalue == 16)
 			{
-				res = dev_rs485_write("rs485 test\r\n", 14);
+				//res = dev_rs485_write("rs485 test\r\n", 14);
 				wjq_log(LOG_DEBUG, "dev rs485 write:%d\r\n", res);
 			}
 		}
 	}
 	return 0;
 }
+
 
 s32 test_can_rec(void)
 {
@@ -647,18 +646,15 @@ s32 test_uart(void)
 	dev_lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
 	dev_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
 	dev_lcd_update(WJQTestLcd);
-	while(1)
-	{
+	while(1) {
 		
-	    len =  mcu_uart_read (MCU_UART_3, buf, 10);
-		if(len > 0)
-		{
-	    	res = mcu_uart_write(MCU_UART_3, buf, len);
+	    //len =  mcu_uart_read (MCU_UART_3, buf, 10);
+		if(len > 0) {
+	    	//res = mcu_uart_write(MCU_UART_3, buf, len);
 		}
 
 		res = dev_keypad_read(&keyvalue, 1);
-		if(res == 1)
-		{
+		if(res == 1) {
 			if(keyvalue == 12)
 			{
 				break;
@@ -1259,8 +1255,7 @@ void wujique_stm407_test(void)
 
 	//WJQTestLcd = dev_lcd_open("tftlcd");
 	WJQTestLcd = dev_lcd_open("i2coledlcd");
-	if(WJQTestLcd == NULL)
-	{
+	if (WJQTestLcd == NULL) {
 		wjq_log(LOG_DEBUG, "emenu open lcd err\r\n");
 	}
 
@@ -1268,9 +1263,7 @@ void wujique_stm407_test(void)
 	dev_keypad_open();
 
 	emenu_run(WJQTestLcd, (MENU *)&WJQTestList[0], sizeof(WJQTestList)/sizeof(MENU), TEST_FONG, 1, MENU_LANG_CHA);	
-	while(1)
-	{
-	}
+	while(1) { }
 }
 
 
@@ -1365,14 +1358,12 @@ s32 test_cog_lcd(void)
 	u8 dis = 1;
 	
 	lcd = dev_lcd_open("spicoglcd");
-	if(lcd == NULL)
-	{
+	if (lcd == NULL) {
 		wjq_test_showstr("open cog lcd err!");	
 		while(1);
 	}
 
-	while(1)
-	{
+	while(1) {
 		dev_lcd_color_fill(lcd, 1, 1000, 1, 1000, BLACK);
 		dev_lcd_update(lcd);
 		wjq_wait_key(16);
@@ -1394,7 +1385,6 @@ s32 test_cog_lcd(void)
 s32 test_tft_tp(void)
 {
 	DevLcdNode *lcd;
-
 
 	lcd = dev_lcd_open("tftlcd");
 	if(lcd == NULL)

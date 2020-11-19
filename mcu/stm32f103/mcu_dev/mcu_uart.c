@@ -23,93 +23,29 @@
 #include "mcu_uart.h"
 #include "log.h"
 #include "alloc.h"
+#include "p_kfifo.h"
+#include "bus_uart.h"
 
 
-#define MCU_UART1_BUF_SIZE       256
-#define MCU_UART2_BUF_SIZE       1024
-/*调试信息串口*/
-#define MCU_UART3_BUF_SIZE       256
-
-#if 0
-/*串口缓冲 暂时通过定义数组，后续改为动态申请*/
-u8 McuUart1Buf[MCU_UART1_BUF_SIZE];
-u8 McuUart2Buf[MCU_UART2_BUF_SIZE];
-u8 McuUart3Buf[MCU_UART3_BUF_SIZE];
-#endif
-u8 McuUartLogBuf[MCU_UART3_BUF_SIZE];
-
-/*
-@bref：串口设备
-*/
-typedef struct  
-{	
-	/* 硬件相关*/
-	/*
-		STM IO 配置需要太多数据，可以直接在代码中定义， 或者用宏定义
-		如果是更上一层设备驱动，例如FLASH ，就可以在设备抽象中定义一个用哪个SPI的定义。
-	*/
-
-	USART_TypeDef* USARTx;
-
-	/*RAM相关*/
-	s32 gd;	//设备句柄 小于等于0则为未打开设备
-	
-	u16 size;// buf 大小
-	u8 *Buf;//缓冲指针
-	u16 Head;//头
-	u16 End;//尾
-	u8  OverFg;//溢出标志	
-}_strMcuUart; 
-
-static _strMcuUart McuUart[MCU_UART_MAX];
+static BusUartNode *McuUart[MCU_UART_MAX];
 /*------------------------------------------------------*/
-/**
- *@brief:      mcu_uart_init
- *@details:       初始化串口设备
- *@param[in]  void  
- *@param[out]  无
- *@retval:     
- */
-s32 mcu_uart_init(void)
-{
-	u8 i;
-
-	for(i = 0; i<MCU_UART_MAX; i++)
-	{
-		McuUart[i].gd = -1;	
-	}
-
-	return 0;	
-}
 
 /**
- *@brief:      mcu_uart_open
+ *@brief:      
  *@details:    打开串口，实际就是初始化串口
  *@param[in]   s32 comport  
  *@param[out]  无
  *@retval:     
  */
-s32 mcu_uart_open(McuUartNum comport)
+s32 mcu_uart_init(McuUartNum comport)
 {
     GPIO_InitTypeDef GPIO_InitStructure;
     USART_InitTypeDef USART_InitStructure;
     NVIC_InitTypeDef NVIC_InitStructure;
 	
-	if(comport >= MCU_UART_MAX)
-		return -1;
+	if(comport >= MCU_UART_MAX)	return -1;
 
-	if(McuUart[comport].gd >=0)
-		return -1;
-
-	if(comport == MCU_UART_1)
-	{
-		McuUart[MCU_UART_1].USARTx = USART1;
-		McuUart[MCU_UART_1].End = 0;
-		McuUart[MCU_UART_1].Head = 0;
-		McuUart[MCU_UART_1].OverFg = 0;
-		McuUart[MCU_UART_1].size = MCU_UART1_BUF_SIZE;
-		McuUart[MCU_UART_1].gd = 0;
-		McuUart[MCU_UART_1].Buf = (u8 *)wjq_malloc(MCU_UART1_BUF_SIZE);
+	if(comport == MCU_UART_1) {
 
 		// 打开串口时钟
 		RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1, ENABLE);
@@ -145,16 +81,7 @@ s32 mcu_uart_open(McuUartNum comport)
 		NVIC_Init(&NVIC_InitStructure);
 
 	}
-	else if(comport == MCU_UART_2)
-	{
-		McuUart[MCU_UART_2].USARTx = USART2;
-		McuUart[MCU_UART_2].End = 0;
-		McuUart[MCU_UART_2].Head = 0;
-		McuUart[MCU_UART_2].OverFg = 0;
-		McuUart[MCU_UART_2].size = MCU_UART2_BUF_SIZE;
-		McuUart[MCU_UART_2].gd = 0;
-		
-		McuUart[MCU_UART_2].Buf = (u8 *)wjq_malloc(MCU_UART2_BUF_SIZE);
+	else if(comport == MCU_UART_2)	{
 		
 		// 打开串口时钟
 		RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE);
@@ -190,15 +117,7 @@ s32 mcu_uart_open(McuUartNum comport)
 		NVIC_Init(&NVIC_InitStructure);
 
 	}
-	else if(comport == MCU_UART_3)
-	{
-		McuUart[MCU_UART_3].USARTx = USART3;
-		McuUart[MCU_UART_3].End = 0;
-		McuUart[MCU_UART_3].Head = 0;
-		McuUart[MCU_UART_3].OverFg = 0;
-		McuUart[MCU_UART_3].size = MCU_UART3_BUF_SIZE;
-		McuUart[MCU_UART_3].gd = 0;
-		McuUart[MCU_UART_3].Buf = McuUartLogBuf;//(u8 *)wjq_malloc(MCU_UART3_BUF_SIZE);
+	else if(comport == MCU_UART_3)	{
 
 		// 打开串口时钟
 		RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3, ENABLE);
@@ -234,8 +153,7 @@ s32 mcu_uart_open(McuUartNum comport)
 		NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 		NVIC_Init(&NVIC_InitStructure);
 	}
-	else
-	{
+	else {
 		/* 串口号不支持*/
 		return -1;
 	}
@@ -248,55 +166,23 @@ s32 mcu_uart_open(McuUartNum comport)
  *@param[out]  无
  *@retval:     
  */
-s32 mcu_uart_close (McuUartNum comport)
+s32 mcu_uart_deinit (McuUartNum comport)
 {
 	if(comport >= MCU_UART_MAX)
 		return -1;
 
-	if(McuUart[comport].gd < 0)
-		return 0;
-
-	if(comport == MCU_UART_1)
-	{
+	if (comport == MCU_UART_1) {
     	USART_Cmd(USART1, DISABLE);
     	RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1, DISABLE);
-    }
-    else if(comport == MCU_UART_2)
-	{
+    } else if(comport == MCU_UART_2) {
     	USART_Cmd(USART2, DISABLE);
     	RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, DISABLE);
-    }
-	else if(comport == MCU_UART_3)
-	{
+    } else if(comport == MCU_UART_3) {
     	USART_Cmd(USART3, DISABLE);
     	RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3, DISABLE);
-    } 
-	else
-		return -1;
-	
-	wjq_free(McuUart[comport].Buf);
-	
-	McuUart[comport].gd = -1;
-	
-    return(0);
-}
-/**
- *@brief:      mcu_dev_uart_tcflush
- *@details:    清串口接收缓冲
- *@param[in]   s32 comport  
- *@param[out]  无
- *@retval:     
- */
-s32 mcu_uart_tcflush(McuUartNum comport)
-{ 
-	if(comport >= MCU_UART_MAX)
-		return -1;
+    } else return -1;
 
-	if(McuUart[comport].gd < 0)
-		return -1;
-	
-	McuUart[comport].Head = McuUart[comport].End; 
-    return 0;
+    return(0);
 }
 /**
  *@brief:      mcu_dev_uart_set_baud
@@ -316,9 +202,7 @@ s32 mcu_uart_set_baud (McuUartNum comport, s32 baud)
 
 	if(comport >= MCU_UART_MAX)
 		return -1;
-    if(McuUart[comport].gd < 0)
-		return -1;
-    
+
     USART_Cmd(McuUart[comport].USARTx, DISABLE);
     USART_InitStructure.USART_BaudRate = baud; 
     USART_InitStructure.USART_WordLength = USART_WordLength_8b;
@@ -328,50 +212,9 @@ s32 mcu_uart_set_baud (McuUartNum comport, s32 baud)
     USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
     USART_Init(McuUart[comport].USARTx, &USART_InitStructure);
 	
-    mcu_uart_tcflush(comport);
     USART_Cmd(McuUart[comport].USARTx, ENABLE); 
 
     return 0;
-}
-/**
- *@brief:      mcu_uart_read
- *@details:    读串口数据（接收数据）
- *@param[in]   s32 comport  
-               u8 *buf      
-               s32 len      
- *@param[out]  无
- *@retval:     
- */
-s32 mcu_uart_read (McuUartNum comport, u8 *buf, s32 len)
-{
-    s32 i;
-    
-    if(len <= 0) return(-1);
-    if(buf == NULL) return(-1);
-	if(comport >= MCU_UART_MAX)
-		return -1;
-	
-	if(McuUart[comport].gd < 0)
-		return -1;
-	
-    i = 0;
-
-    //uart_printf("rec index:%d, %d\r\n", UartHead3, rec_end3);
-    while(McuUart[comport].Head != McuUart[comport].End)
-    {
-        *buf = *(McuUart[comport].Buf + McuUart[comport].Head);
-		McuUart[comport].Head++;
-        if(McuUart[comport].Head >= McuUart[comport].size) 
-            McuUart[comport].Head = 0;
-
-        buf ++;
-        i ++;
-        if(i >= len)
-        {
-            break;
-        }
-  }
-  return (i);
 }
 /**
  *@brief:      mcu_dev_uart_write
@@ -382,25 +225,16 @@ s32 mcu_uart_read (McuUartNum comport, u8 *buf, s32 len)
  *@param[out]  无
  *@retval:     
  */
-s32 mcu_uart_write (McuUartNum comport, u8 *buf, s32 len)
+s32 mcu_uart_send (McuUartNum comport, u8 *buf, s32 len)
 {
     u32 t;
     u16 ch;
   
-    if (len <= 0) 
-        return(-1);
-        
-    if(buf == NULL) 
-        return(-1);
-	
-	if(comport >= MCU_UART_MAX)
-		return -1;
+    if (len <= 0) return(-1);
+    if(buf == NULL) return(-1);
+	if(comport >= MCU_UART_MAX) return -1;
 
-	if(McuUart[comport].gd < 0)
-		return -1;
-	
-    while(len != 0)
-    {
+    while(len != 0)  {
         // 等待串口发送完毕
         t = 0;
         while(USART_GetFlagStatus(McuUart[comport].USARTx, USART_FLAG_TXE) == RESET)
@@ -426,7 +260,7 @@ s32 mcu_uart_write (McuUartNum comport, u8 *buf, s32 len)
 void mcu_uart3_IRQhandler(void)
 {
     unsigned short ch;
-
+	struct _pkfifo *pfifo;
     if(USART_GetITStatus(USART3, USART_IT_RXNE) != RESET)
     {
         USART_ClearITPendingBit(USART3, USART_IT_RXNE);
@@ -437,19 +271,14 @@ void mcu_uart3_IRQhandler(void)
             ch = USART_ReceiveData(USART3);
             USART_GetITStatus(USART3, USART_IT_ORE); // 清除ORE标记
 
-            McuUart[MCU_UART_3].OverFg = 1;
+            McuUart[MCU_UART_3]->OverFg = 1;
         }
         else
         {
             ch = USART_ReceiveData(USART3);
             //uart_printf("%02x", ch);
-            *(McuUart[MCU_UART_3].Buf+McuUart[MCU_UART_3].End) = (unsigned char)(ch&0xff);
-			McuUart[MCU_UART_3].End++;
-			if(McuUart[MCU_UART_3].End >= McuUart[MCU_UART_3].size)
-                McuUart[MCU_UART_3].End = 0;
-                
-            if(McuUart[MCU_UART_3].End == McuUart[MCU_UART_3].Head)       // 串口接收缓冲溢出了
-                McuUart[MCU_UART_3].Head = 1;
+            pfifo = &McuUart[MCU_UART_3]->Kfifo;
+			PKFIFO_IN_1U8(pfifo, ch);
         }
     }
     
@@ -460,32 +289,6 @@ void mcu_uart3_IRQhandler(void)
         USART_ReceiveData(USART3);
 
     }
-#if 0
-    /* If the USART3 detects a parity error */
-    if(USART_GetITStatus(USART3, USART_IT_PE) != RESET)
-    {
-        while(USART_GetFlagStatus(USART3, USART_FLAG_RXNE) == RESET)
-        {
-        }
-        /* Clear the USART3 Parity error pending bit */
-        USART_ClearITPendingBit(USART3, USART_IT_PE);
-        USART_ReceiveData(USART3);
-    }
-    /* If a Overrun error is signaled by the card */
-    if(USART_GetITStatus(USART3, USART_IT_ORE) != RESET)
-    {
-        /* Clear the USART3 Frame error pending bit */
-        USART_ClearITPendingBit(USART3, USART_IT_ORE);
-        USART_ReceiveData(USART3);
-    }
-    /* If a Noise error is signaled by the card */
-    if(USART_GetITStatus(USART3, USART_IT_NE) != RESET)
-    {
-        /* Clear the USART3 Frame error pending bit */
-        USART_ClearITPendingBit(USART3, USART_IT_NE);
-        USART_ReceiveData(USART3);
-    }
-#endif    
 }
 /**
  *@brief:      mcu_uart2_IRQhandler
@@ -497,7 +300,7 @@ void mcu_uart3_IRQhandler(void)
 void mcu_uart2_IRQhandler(void)
 {
 	unsigned short ch;
-
+	struct _pkfifo *pfifo;
 	if(USART_GetITStatus(USART2, USART_IT_RXNE) != RESET)
 	{
 		USART_ClearITPendingBit(USART2, USART_IT_RXNE);
@@ -508,19 +311,14 @@ void mcu_uart2_IRQhandler(void)
 			ch = USART_ReceiveData(USART2);
 			USART_GetITStatus(USART2, USART_IT_ORE); // 清除ORE标记
 
-			McuUart[MCU_UART_2].OverFg = 1;
+			McuUart[MCU_UART_2]->OverFg = 1;
 		}
 		else
 		{
 			ch = USART_ReceiveData(USART2);
 			//uart_printf("%02x", ch);
-			*(McuUart[MCU_UART_2].Buf+McuUart[MCU_UART_2].End) = (unsigned char)(ch&0xff);
-			McuUart[MCU_UART_2].End++;
-			if(McuUart[MCU_UART_2].End >= McuUart[MCU_UART_2].size)
-				McuUart[MCU_UART_2].End = 0;
-				
-			if(McuUart[MCU_UART_2].End == McuUart[MCU_UART_2].Head) 	  // 串口接收缓冲溢出了
-				McuUart[MCU_UART_2].Head = 1;
+			pfifo = &McuUart[MCU_UART_2]->Kfifo;
+			PKFIFO_IN_1U8(pfifo, ch);
 		}
 	}
 	
@@ -531,32 +329,6 @@ void mcu_uart2_IRQhandler(void)
 		USART_ReceiveData(USART2);
 
 	}
-#if 0
-	/* If the USART3 detects a parity error */
-	if(USART_GetITStatus(USART3, USART_IT_PE) != RESET)
-	{
-		while(USART_GetFlagStatus(USART3, USART_FLAG_RXNE) == RESET)
-		{
-		}
-		/* Clear the USART3 Parity error pending bit */
-		USART_ClearITPendingBit(USART3, USART_IT_PE);
-		USART_ReceiveData(USART3);
-	}
-	/* If a Overrun error is signaled by the card */
-	if(USART_GetITStatus(USART3, USART_IT_ORE) != RESET)
-	{
-		/* Clear the USART3 Frame error pending bit */
-		USART_ClearITPendingBit(USART3, USART_IT_ORE);
-		USART_ReceiveData(USART3);
-	}
-	/* If a Noise error is signaled by the card */
-	if(USART_GetITStatus(USART3, USART_IT_NE) != RESET)
-	{
-		/* Clear the USART3 Frame error pending bit */
-		USART_ClearITPendingBit(USART3, USART_IT_NE);
-		USART_ReceiveData(USART3);
-	}
-#endif    
 }
 
 
@@ -570,7 +342,8 @@ void mcu_uart2_IRQhandler(void)
 void mcu_uart1_IRQhandler(void)
 {
 	unsigned short ch;
-
+	struct _pkfifo *pfifo;
+	
 	if(USART_GetITStatus(USART1, USART_IT_RXNE) != RESET)
 	{
 		USART_ClearITPendingBit(USART1, USART_IT_RXNE);
@@ -581,19 +354,14 @@ void mcu_uart1_IRQhandler(void)
 			ch = USART_ReceiveData(USART1);
 			USART_GetITStatus(USART1, USART_IT_ORE); // 清除ORE标记
 
-			McuUart[MCU_UART_1].OverFg = 1;
+			McuUart[MCU_UART_1]->OverFg = 1;
 		}
 		else
 		{
 			ch = USART_ReceiveData(USART1);
 			//uart_printf("%02x", ch);
-			*(McuUart[MCU_UART_1].Buf+McuUart[MCU_UART_1].End) = (unsigned char)(ch&0xff);
-			McuUart[MCU_UART_1].End++;
-			if(McuUart[MCU_UART_1].End >= McuUart[MCU_UART_1].size)
-				McuUart[MCU_UART_1].End = 0;
-				
-			if(McuUart[MCU_UART_1].End == McuUart[MCU_UART_1].Head) 	  // 串口接收缓冲溢出了
-				McuUart[MCU_UART_1].Head = 1;
+			pfifo = &McuUart[MCU_UART_1]->Kfifo;
+			PKFIFO_IN_1U8(pfifo, ch);
 		}
 	}
 	
@@ -606,26 +374,6 @@ void mcu_uart1_IRQhandler(void)
 	}
 }
 
-#if 0
-/**
- *@brief:      mcu_dev_uart_test
- *@details:    串口测试
- *@param[in]   void  
- *@param[out]  无
- *@retval:     
- */
-void mcu_uart_test(void)
-{
-    u8 buf[12];
-    s32 len;
-    s32 res;
-    
-    len =  mcu_uart_read (PC_PORT, buf, 10);
-    wjq_log(LOG_FUN, "mcu_dev_uart_read :%d\r\n", len);
-    res = mcu_uart_write(PC_PORT, buf, len);
-    wjq_log(LOG_FUN, "mcu_dev_uart_write res: %d\r\n", res);
-    wjq_log(LOG_FUN, "%s,%s,%d,%s\r\n", __FUNCTION__,__FILE__,__LINE__,__DATE__);
-    
-}
-#endif
+
+
 

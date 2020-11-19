@@ -145,7 +145,7 @@ s32 mcu_hspi_open(DevSpiNode *node, SPI_MODE mode, u16 KHz)
     SPI_InitStruct.SPI_CPOL = SpiModeSet[mode].CPOL;
     SPI_InitStruct.SPI_CPHA = SpiModeSet[mode].CPHA;
     SPI_InitStruct.SPI_NSS = SPI_NSS_Soft; //---SPI_NSS_Hard; 片选由硬件管理，SPI控制器不管理
-    SPI_InitStruct.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_64;  //---预分频
+    SPI_InitStruct.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_16;  //---预分频
     SPI_InitStruct.SPI_FirstBit = SPI_FirstBit_MSB;//---数据传输从 MSB 位开始
     SPI_InitStruct.SPI_CRCPolynomial = 7;//---CRC 值计算的多项式
 

@@ -65,7 +65,7 @@ s32 bus_spi_register(const DevSpi *dev)
 		p = list_entry(listp, DevSpiNode, list);
 
 		if (strcmp(dev->pnode.name, p->dev.pnode.name) == 0) {
-			wjq_log(LOG_INFO, "spi dev name err!\r\n");
+			wjq_log(LOG_INFO, "spi dev name repeat!\r\n");
 			return -1;
 		}
 		
@@ -293,28 +293,40 @@ s32 bus_spich_cs(DevSpiChNode * node, u8 sta)
 	return 0;
 }
 
-#if 0
-
+#if 1
 void spi_example(void)
 {
 	DevSpiChNode *spichnode;
-	u8 src[16];
-	u8 rsv[16];
+	u8 src[128];
+	u8 rsv[128];
+	uint16_t i;
 	
+	Uprintf("\r\n----------test spi -----------\r\n");
 	/*打开SPI通道*/
-	spichnode = mcu_spi_open("VSPI1_CH1", SPI_MODE_1, 4);
-	if(spichnode == NULL)
-	{
+	spichnode = bus_spich_open("SPI3_CH3", SPI_MODE_1, 40000);
+	if (spichnode == NULL) {
 		while(1);
 	}
 	/*读10个数据*/
-	mcu_spi_transfer(spichnode, NULL, rsv, 10);
+	//bus_spich_transfer(spichnode, NULL, rsv, 10);
 	/*写10个数据*/
-	mcu_spi_transfer(spichnode, src, NULL, 10);
+	//bus_spich_transfer(spichnode, src, NULL, 10);
 	/*读写10个数据*/
-	mcu_spi_transfer(spichnode, src, rsv, 10);
+	for(i=0;i<128;i++)
+		src[i] = i;
+	
+	//memset(src, 0x58, 20);
+	while(1) {
+		bus_spich_cs(spichnode, 0);
+		bus_spich_transfer(spichnode, src, rsv, 128);
+		bus_spich_cs(spichnode, 1);
+		PrintFormat(rsv, 128);
+		Delay(1000);
+	}
+	bus_spich_close(spichnode);
 
-	mcu_spi_close(spichnode);
+	Uprintf("test spi finish\r\n");
+	while(1);
 }
 
 #endif

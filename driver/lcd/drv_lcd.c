@@ -41,7 +41,7 @@
 #include "drv_nt35510.h"
 #include "drv_r61408.h"
 
-#define DEV_LCD_DEBUG
+//#define DEV_LCD_DEBUG
 
 #ifdef DEV_LCD_DEBUG
 #define LCD_DEBUG	wjq_log 
@@ -167,12 +167,12 @@ s32 dev_lcd_register(const DevLcd *dev)
 		plcdnode = list_entry(listp, DevLcdNode, list);
 
 		if (strcmp(dev->pnode.name, plcdnode->dev.pnode.name) == 0) {
-			wjq_log(LOG_INFO, "lcd dev name err!\r\n");
+			wjq_log(LOG_INFO, "            lcd dev name err!\r\n");
 			return -1;
 		}
 
 		if (strcmp(dev->buslcd, plcdnode->dev.buslcd) == 0) {
-			wjq_log(LOG_INFO, "one lcd bus just for one lcd!\r\n");
+			wjq_log(LOG_INFO, "            one lcd bus just for one lcd!\r\n");
 			return -1;
 		}
 		
@@ -239,10 +239,10 @@ s32 dev_lcd_register(const DevLcd *dev)
 		plcdnode->drv->update(plcdnode);
 		plcdnode->drv->backlight(plcdnode, 1);
 
-		wjq_log(LOG_INFO, "lcd init OK\r\n");
+		wjq_log(LOG_INFO, "            lcd init OK\r\n");
 	} else {
 		plcdnode->gd = -2;
-		wjq_log(LOG_INFO, "lcd drv init err!\r\n");
+		wjq_log(LOG_INFO, "            lcd drv init err!\r\n");
 	}
 	
 	return 0;

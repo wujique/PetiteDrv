@@ -24,10 +24,18 @@
 
 #include "mcu.h"
 #include "board_sysconf.h"
-
+#include "bus_uart.h"
 #include "log.h"
 
 LOG_L LogLevel = LOG_DEBUG;//系统调试信息等级
+
+const static BusUartPra PcPortPra={
+	.BaudRate = 115200,
+	.bufsize = 256,
+	};
+	
+BusUartNode *LogUartNode;
+
 /*
 使用串口输出调试信息
 */
@@ -79,7 +87,7 @@ void uart_printf(s8 *fmt,...)
         pt++;
     }
     
-    mcu_uart_write(PC_PORT, (u8*)&string[0], length);  //写串口
+    mcu_uart_send(LogUartNode->comport, (u8*)&string[0], length);  //写串口
     
     va_end(ap);
 }
@@ -103,7 +111,7 @@ void wjq_log(LOG_L l, s8 *fmt,...)
         pt++;
     }
     
-    mcu_uart_write(PC_PORT, (u8*)&string[0], length);  //写串口
+    mcu_uart_send(LogUartNode->comport, (u8*)&string[0], length);  //写串口
     
     va_end(ap);
 }
@@ -158,8 +166,13 @@ void cmd_uart_printf(s8 *fmt,...)
         pt++;
     }
     
-    mcu_uart_write(PC_PORT, (u8*)&string[0], length);  //写串口
+    mcu_uart_send(LogUartNode->comport, (u8*)&string[0], length);  //写串口
     
     va_end(ap);
+}
+
+void log_init(void)
+{
+	LogUartNode = bus_uart_open(PC_PORT, &PcPortPra);
 }
 
