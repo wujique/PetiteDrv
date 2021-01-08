@@ -341,12 +341,10 @@ int vfs_open(const char *pathname, int oflags)
 	vfs_get_dir_name(pathname, &dir[0], &name[0]);
 
 	fsnode = vfs_find_dir(&dir[0]);
-	if(fsnode == NULL)
-		return NULL;
+	if(fsnode == NULL) 	return NULL;
 
 	filenode = (FileNode *)wjq_malloc(sizeof(FileNode));
-	if(filenode == NULL)
-		return NULL;
+	if(filenode == NULL) return NULL;
 	filenode->fsnode = fsnode;
 	
 	switch(filenode->fsnode->Mtd->type)
@@ -362,15 +360,14 @@ int vfs_open(const char *pathname, int oflags)
 			else if(oflags == O_CREAT)
 				mode = FA_CREATE_ALWAYS | FA_WRITE;
 			
-			res = f_open(&filenode->pra.fatfd, &name[0], mode);
-			if(res == FR_OK)
-			{
+			res = f_open(&filenode->pra.fatfd, name, mode);
+			if(res == FR_OK) {
 				wjq_log(LOG_INFO, "open file :%s ok!\r\n", name);	
+				wjq_log(LOG_INFO, "vfs_open fd=%08x\r\n", (int)filenode);
 				return (int)filenode;
 				
-			}
-			else
-				#endif
+			}else
+			#endif
 			{
 				wjq_log(LOG_INFO, "open file:%s, err\r\n", name);	
 			}
@@ -450,26 +447,41 @@ int vfs_write(int fd, const void *buf, size_t length)
 	/*need fix*/
 	return -1;
 }
-
+/*
+	whence: SEEK_SET 0 //将偏移量设置为距离文件offset个字节处
+		   SEEK_CUR 1 //当前偏移量加offset,offset可为正或负
+	       SEEK_END 2 //设置为文件长度加offset,offset可为正或负
+	*/
 int vfs_lseek(int fd, int offset, int whence)
 {
 	FileNode *filenode;
 	unsigned int len;
-		
-	if(fd == NULL)
+	int file_len;
+	
+	if(fd == NULL) {
+		VfsDebug(LOG_INFO, "vfs_lseek fd=NULL\r\n");
 		return -1;
+	}
 	
 	filenode = (FileNode *)fd;
 	switch(filenode->fsnode->Mtd->type)
 	{
 		case FS_TYPE_FATFS:
-			VfsDebug(LOG_DEBUG, "vfs_lseek FS_TYPE_FATFS\r\n");
+			VfsDebug(LOG_INFO, "vfs_lseek FS_TYPE_FATFS\r\n");
 			#ifdef SYS_FS_FATFS
 			FRESULT res;
-			res = f_lseek(&filenode->pra.fatfd, offset);
-			if(res != FR_OK)
-			{
-				return 0;
+			if(whence == SEEK_SET){
+				res = f_lseek(&filenode->pra.fatfd, offset);
+			} else if(whence == SEEK_CUR) {
+				file_len = f_tell(&filenode->pra.fatfd);
+				res = f_lseek(&filenode->pra.fatfd, offset+file_len);
+			} else if(whence == SEEK_END) {
+				file_len = f_size(&filenode->pra.fatfd);
+				res = f_lseek(&filenode->pra.fatfd, offset+file_len);
+			}
+
+			if(res != FR_OK) {
+				return -1;
 			}
 			#else 	
 			return -1;
@@ -489,7 +501,7 @@ int vfs_lseek(int fd, int offset, int whence)
 			break;
 		
 		default:
-			VfsDebug(LOG_DEBUG, "vfs_lseek err: unkown fs\r\n");
+			wjq_log(LOG_INFO, "vfs_lseek err: unkown fs\r\n");
 			break;
 	}
 	return NULL;
@@ -538,6 +550,49 @@ int vfs_close(int fd)
 	}
 	return NULL;
 }
+
+int vfs_tell(int fd)
+{
+	FileNode *filenode;
+	unsigned int len;
+		
+	if(fd == NULL)
+		return -1;
+
+	filenode = (FileNode *)fd;
+	switch(filenode->fsnode->Mtd->type)
+	{
+		case FS_TYPE_FATFS:
+			VfsDebug(LOG_INFO, "vfs_tell FS_TYPE_FATFS\r\n");
+		#ifdef SYS_FS_FATFS
+			int res;
+			res = f_tell(&filenode->pra.fatfd);
+
+			return res;
+		#else 	
+			return 0;
+		#endif 
+			break;
+			
+		case FS_TYPE_SPIFFS:
+			VfsDebug(LOG_DEBUG, "vfs_tell FS_TYPE_SPIFFS\r\n");
+			break;
+		
+		case FS_TYPE_LITTLEFS:
+			VfsDebug(LOG_DEBUG, "vfs_tell FS_TYPE_LITTLEFS\r\n");
+			break;
+		
+		case FS_TYPE_CONSTFS:
+			VfsDebug(LOG_DEBUG, "vfs_lseek FS_TYPE_CONSTFS\r\n");
+			break;
+		
+		default:
+			VfsDebug(LOG_DEBUG, "vfs_lseek err: unkown fs\r\n");
+			break;
+	}
+	return NULL;
+}
+
 
 #endif
 
