@@ -1,3 +1,5 @@
+#if 0
+
 /*
  * (C) Copyright 2000-2002
  * Wolfgang Denk, DENX Software Engineering, wd@denx.de.
@@ -41,6 +43,7 @@
 #include <command.h>
 #include "console.h"
 #include "cmd_env.h"
+
 
 
 typedef unsigned char uchar;
@@ -94,7 +97,7 @@ int _do_setenv (int flag, int argc, char *argv[])
 	name = argv[1];
 
 	if (strchr(name, '=')) {
-		printf ("## Error: illegal character '=' in variable name \"%s\"\n", name);
+		cmd_printf ("## Error: illegal character '=' in variable name \"%s\"\n", name);
 		return 1;
 	}
 
@@ -134,7 +137,7 @@ int _do_setenv (int flag, int argc, char *argv[])
 		len += strlen(argv[i]) + 1;
 	}
 	if (len > (&env_data[ENV_SIZE]-env)) {
-		printf ("## Error: environment overflow, \"%s\" deleted\n", name);
+		cmd_printf ("## Error: environment overflow, \"%s\" deleted\n", name);
 		return 1;
 	}
 	
@@ -175,12 +178,6 @@ int _do_setenv (int flag, int argc, char *argv[])
 }
 
 
-
-
-
-
-
-
 int setenv (char *varname, char *varvalue)
 {
 	char *argv[4] = { "setenv", varname, varvalue, NULL };
@@ -189,8 +186,6 @@ int setenv (char *varname, char *varvalue)
 	else
 		return _do_setenv (0, 3, argv);
 }
-
-
 /************************************************************************
  * Look up variable from environment,
  * return address of storage for that variable,
@@ -379,8 +374,6 @@ static int get_default_env(int pos,char * name ,char * value)
     return -2;
 }
 
-
-
 int recover_env()
 {
     int default_env_cnt = 0;
@@ -419,7 +412,7 @@ int recover_env()
         i ++;
     }
 
-    printf("recover %d environment variables \n",flag);
+    cmd_printf("recover %d environment variables \n",flag);
  //   if(flag)
  //   {
  //       saveenv();
@@ -444,7 +437,7 @@ int do_printenv (cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
 		rcode = printenv(NULL, 1);
 		if (rcode < 0)
 			return 1;
-		printf("\nEnvironment size: %d/%ld bytes\n",rcode, (ulong)ENV_SIZE);
+		cmd_printf("\nEnvironment size: %d/%ld bytes\n",rcode, (ulong)ENV_SIZE);
 		return 0;
 	}
 
@@ -454,23 +447,13 @@ int do_printenv (cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
 		char *name = argv[i];
 		if(printenv(name, 2)) 
 		{
-			printf("## Error: \"%s\" not defined\n", name);
+			cmd_printf("## Error: \"%s\" not defined\n", name);
 			++rcode;
 		}
 	}
 
 	return rcode;
 }
-
-
-
-
-
-
-
-
-
-
 
 int do_setenv (cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
 {
@@ -482,12 +465,11 @@ int do_setenv (cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
 	return _do_setenv (flag, argc, argv);
 }
 
-
 int do_saveenv (cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
 {
 	extern char * env_name_spec;
 
-	printf ("Saving Environment to %s...\n", env_name_spec);
+	cmd_printf ("Saving Environment to %s...\n", env_name_spec);
 
 	return 1;
 	//return (saveenv() ? 1 : 0);
@@ -498,8 +480,6 @@ REGISTER_CMD(
 	"save environment variables to persistent storage",
 	""
 );
-
-
 
 /**************************************************/
 
@@ -549,9 +529,6 @@ REGISTER_CMD(
 
 //=========================================
 
-
-
-
 int do_recover_env (cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
 {
 	if (argc > 1) {
@@ -569,5 +546,5 @@ REGISTER_CMD(
 );
 #endif
 
-
+#endif
 

@@ -148,7 +148,7 @@ void board_app_task(void)
 	wjq_log(LOG_DEBUG, "[   board] run app task! 2020.10.15 \r\n");
 
 	//spi_example();
-	bus_uart_test();
+	//bus_uart_test();
 	
 	wujique_stm407_test();
 	while(1){}
@@ -219,7 +219,7 @@ s32 board_init(void)
 	/* 创建目标板应用程序 */
 	board_app_init();
 	//eth_app_init();
-	//fun_cmd_init();
+	fun_cmd_init();
 	//mcu_timer_test();	
 	
 	return 0;

@@ -1,6 +1,5 @@
 #ifndef __WJQ_CMD_ENV_H
-
-#define __WJQ_CMD_ENV_H 1
+#define __WJQ_CMD_ENV_H
 
 
 unsigned char  env_get_char_memory (int index);

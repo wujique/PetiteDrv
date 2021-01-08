@@ -37,32 +37,97 @@ cmd_tbl_t  * __u_boot_cmd_end = NULL ;
 
 int env_complete(char *var, int maxv, char *cmdv[], int bufsz, char *buf);
    
-#define puts(str) printf("%s",str)
+#define puts(str) cmd_printf("%s",str)
 
-#define CMD_DATA_SIZE	1
-
-
-   
-int
-do_version (cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
+int do_version (cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
 {
-	
-	printf ("\r\n%s\r\n", version_string);
+	cmd_printf ("\r\n%s\r\n", version_string);
 	return 0;
 }
 
-REGISTER_CMD(
-	version,	1,		1,	do_version,
-	"print monitor version",
-	""
-);
+/*
+ * Use puts() instead of printf() to avoid printf buffer overflow
+ * for long help messages
+ */
 
+int _do_help (cmd_tbl_t *cmd_start, int cmd_items, cmd_tbl_t * cmdtp, int
+	      flag, int argc, char *argv[])
+{
 
+	int rcode = 0;
+	cmd_tbl_t *cmd_array[256];
+	int i, j, swaps;
+	cmd_tbl_t *tmp;
+	const char *usage;
+	
+	if (argc == 1) {	/*show list of commands */
+		// cmd_tbl_t *cmd_array[cmd_items];  NOT compatable
+                
+		/* Make array of commands from .uboot_cmd section */
+		cmdtp = cmd_start;
+		for (i = 0; i < cmd_items; i++) {
+			cmd_array[i] = cmdtp++;
+		}
+
+		/* Sort command list (trivial bubble sort) */
+		for (i = cmd_items - 1; i > 0; --i) {
+			swaps = 0;
+			for (j = 0; j < i; ++j) {
+				if (strcmp (cmd_array[j]->name, 
+							cmd_array[j + 1]->name) > 0) {
+					
+					tmp = cmd_array[j];
+					cmd_array[j] = cmd_array[j + 1];
+					cmd_array[j + 1] = tmp;
+					++swaps;
+				}
+			}
+			if (!swaps)
+				break;
+		}
+
+		/* print short help (usage) */
+		for (i = 0; i < cmd_items; i++) {
+			usage = cmd_array[i]->usage;
+
+			/* allow user abort */
+			//if (ctrlc ()) return 1;
+			if (usage == NULL) continue;
+			
+			cmd_printf("    %-*s- %s\r\n", CONFIG_SYS_HELP_CMD_WIDTH,
+			       cmd_array[i]->name, usage);
+		}
+		return 0;
+	}
+	/*
+	 * command help (long version)
+	 */
+	for (i = 1; i < argc; ++i) {
+		if ((cmdtp = find_cmd_tbl (argv[i], cmd_start, cmd_items )) != NULL) {
+			rcode |= cmd_usage(cmdtp);
+		} else {
+			cmd_printf ("Unknown command '%s' - try 'help'"
+				" without arguments for list of all"
+				" known commands\r\n\r\n", argv[i]
+					);
+			rcode = 1;
+		}
+	}
+	return rcode;
+}
+
+int do_help (cmd_tbl_t * cmdtp, int flag, int argc, char *argv[])
+{
+	return _do_help(__u_boot_cmd_start,
+			__u_boot_cmd_end - __u_boot_cmd_start,
+			cmdtp, flag, argc, argv);
+}
+
+#if 0
 
 #if defined(CONFIG_CMD_ECHO)
 
-int
-do_echo (cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
+int do_echo (cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
 {
 	int i, putnl = 1;
 
@@ -236,6 +301,7 @@ do_exit (cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
 	return -r - 2;
 }
 
+
 REGISTER_CMD(
 	exit,	2,	1,	do_exit,
 	"exit script",
@@ -245,97 +311,8 @@ REGISTER_CMD(
 
 #endif
 
-/*
- * Use puts() instead of printf() to avoid printf buffer overflow
- * for long help messages
- */
-
-int _do_help (cmd_tbl_t *cmd_start, int cmd_items, cmd_tbl_t * cmdtp, int
-	      flag, int argc, char *argv[])
-{
-	int i;
-	int rcode = 0;
-
-	if (argc == 1) {	/*show list of commands */
-		// cmd_tbl_t *cmd_array[cmd_items];  NOT compatable
-                cmd_tbl_t *cmd_array[256];
-		int i, j, swaps;
-
-		/* Make array of commands from .uboot_cmd section */
-		cmdtp = cmd_start;
-		for (i = 0; i < cmd_items; i++) {
-			cmd_array[i] = cmdtp++;
-		}
-
-		/* Sort command list (trivial bubble sort) */
-		for (i = cmd_items - 1; i > 0; --i) {
-			swaps = 0;
-			for (j = 0; j < i; ++j) {
-				if (strcmp (cmd_array[j]->name,
-					    cmd_array[j + 1]->name) > 0) {
-					cmd_tbl_t *tmp;
-					tmp = cmd_array[j];
-					cmd_array[j] = cmd_array[j + 1];
-					cmd_array[j + 1] = tmp;
-					++swaps;
-				}
-			}
-			if (!swaps)
-				break;
-		}
-
-		/* print short help (usage) */
-		for (i = 0; i < cmd_items; i++) {
-			const char *usage = cmd_array[i]->usage;
-
-			/* allow user abort */
-			if (ctrlc ())
-				return 1;
-			if (usage == NULL)
-				continue;
-			printf("%-*s- %s\r\n", CONFIG_SYS_HELP_CMD_WIDTH,
-			       cmd_array[i]->name, usage);
-		}
-		return 0;
-	}
-	/*
-	 * command help (long version)
-	 */
-	for (i = 1; i < argc; ++i) {
-		if ((cmdtp = find_cmd_tbl (argv[i], cmd_start, cmd_items )) != NULL) {
-			rcode |= cmd_usage(cmdtp);
-		} else {
-			printf ("Unknown command '%s' - try 'help'"
-				" without arguments for list of all"
-				" known commands\r\n\r\n", argv[i]
-					);
-			rcode = 1;
-		}
-	}
-	return rcode;
-}
-
-int do_help (cmd_tbl_t * cmdtp, int flag, int argc, char *argv[])
-{
-	return _do_help(__u_boot_cmd_start,
-			__u_boot_cmd_end - __u_boot_cmd_start,
-			cmdtp, flag, argc, argv);
-}
-
-
-REGISTER_CMD(
-	help,	CONFIG_SYS_MAXARGS,	1,	do_help,
-	"print online help",
-	"[command ...]\r\n"
-	"    - show help information (for 'command')\r\n"
-	"'help' prints online help for the monitor commands.\r\n\r\n"
-	"Without arguments, it prints a short usage message for all commands.\r\n\r\n"
-	"To get detailed help information for specific commands you can type\r\n"
-	"'help' with one or more command names as arguments."
-);
-
 /* This does not use the REGISTER_CMD macro as ? can't be used in symbol names */
-#if 0
+
 #ifdef  CONFIG_SYS_LONGHELP
 __root const cmd_tbl_t __u_boot_cmd_question_mark @ ".cmd" = {
 	"?",	CONFIG_SYS_MAXARGS,	1,	do_help,
@@ -349,10 +326,10 @@ __root const cmd_tbl_t __u_boot_cmd_question_mark @".cmd" = {
 };
 #endif /* CONFIG_SYS_LONGHELP */
 #endif
-/***************************************************************************
+/*
  * find command table entry for a command
  */
-cmd_tbl_t *find_cmd_tbl (const char *cmd, cmd_tbl_t *table, int table_len)
+static cmd_tbl_t *find_cmd_tbl (const char *cmd, cmd_tbl_t *table, int table_len)
 {
 	cmd_tbl_t *cmdtp;
 	cmd_tbl_t *cmdtp_temp = table;	/*Init value */
@@ -366,11 +343,9 @@ cmd_tbl_t *find_cmd_tbl (const char *cmd, cmd_tbl_t *table, int table_len)
 	 */
 	len = ((p = (const char *)strchr(cmd, '.')) == NULL) ? strlen (cmd) : (p - cmd);
 
-	for (cmdtp = table;
-	     cmdtp != table + table_len;
-	     cmdtp++) {
+	for (cmdtp = table; cmdtp != table + table_len; cmdtp++) {
 	     
-	     //printf("cmd table:%s\r\n", cmdtp->name);
+	     //cmd_printf("cmd table:%s\r\n", cmdtp->name);
 		 
 		if (strncmp (cmd, cmdtp->name, len) == 0) {
 			if (len == strlen (cmdtp->name))
@@ -396,10 +371,10 @@ cmd_tbl_t *find_cmd (const char *cmd)
 
 int cmd_usage(cmd_tbl_t *cmdtp)
 {
-	printf("%s - %s\r\n\r\n", cmdtp->name, cmdtp->usage);
+	cmd_printf("%s - %s\r\n\r\n", cmdtp->name, cmdtp->usage);
 
 #ifdef	CONFIG_SYS_LONGHELP
-	printf("Usage:\r\n%s ", cmdtp->name);
+	cmd_printf("Usage:\r\n%s ", cmdtp->name);
 
 	if (!cmdtp->help) {
 		puts ("- No additional help available.\n");
@@ -577,7 +552,7 @@ static void print_argv(const char *banner, const char *leader, const char *sep, 
 		puts(*argv++);
 		i += len;
 	}
-	printf("\r\n");
+	cmd_printf("\r\n");
 }
 
 static int find_common_prefix(char *argv[])
@@ -728,12 +703,13 @@ int env_complete(char *var, int maxv, char *cmdv[], int bufsz, char *buf)
 
 	len = strlen(var);
 	/* now iterate over the variables and select those that match */
-	for (i=0; env_get_char(i) != '\0'; i=nxt+1) {
+	//for (i=0; env_get_char(i) != '\0'; i=nxt+1) {
+	return 0;
+	while(0){
+		//for (nxt=i; env_get_char(nxt) != '\0'; ++nxt);
 
-		for (nxt=i; env_get_char(nxt) != '\0'; ++nxt)
-			;
-
-		lval = (char *)env_get_addr(i);
+		//lval = (char *)env_get_addr(i);
+	
 		rval = (char *)strchr(lval, '=');
 		if (rval != NULL) {
 			vallen = rval - lval;
@@ -798,9 +774,9 @@ long simple_strtol(const char *cp,char **endp,unsigned int base)
 int display_options (void)
 {
 #if defined(BUILD_TAG)
-	printf ("\r\n\r\n%s, Build: %s\r\n\r\n", version_string, BUILD_TAG);
+	cmd_printf ("\r\n\r\n%s, Build: %s\r\n\r\n", version_string, BUILD_TAG);
 #else
-	printf ("\r\n\r\n%s\r\n\r\n", version_string);
+	cmd_printf ("\r\n\r\n%s\r\n\r\n", version_string);
 #endif
 	return 0;
 }
@@ -843,11 +819,11 @@ void print_size (phys_size_t size, const char *s)
 		}
 	}
 
-	printf ("%2ld", n);
+	cmd_printf ("%2ld", n);
 	if (m) {
-		printf (".%ld", m);
+		cmd_printf (".%ld", m);
 	}
-	printf (" %cB%s", c, s);
+	cmd_printf (" %cB%s", c, s);
 }
 
 /*
@@ -879,7 +855,7 @@ int print_buffer (ulong addr, void* data, uint32 width, uint32 count, uint32 lin
 		linelen = DEFAULT_LINE_LENGTH_BYTES / width;
 
 	while (count) {
-		printf("%08lx:", addr);
+		cmd_printf("%08lx:", addr);
 
 		/* check for overflow condition */
 		if (count < linelen)
@@ -889,13 +865,13 @@ int print_buffer (ulong addr, void* data, uint32 width, uint32 count, uint32 lin
 		for (i = 0; i < linelen; i++) {
 			if (width == 4) {
 				uip[i] = *(volatile uint32 *)data;
-				printf(" %08x", uip[i]);
+				cmd_printf(" %08x", uip[i]);
 			} else if (width == 2) {
 				usp[i] = *(volatile uint16 *)data;
-				printf(" %04x", usp[i]);
+				cmd_printf(" %04x", usp[i]);
 			} else {
 				ucp[i] = *(volatile uint8 *)data;
-				printf(" %02x", ucp[i]);
+				cmd_printf(" %02x", ucp[i]);
 			}
 			data = ((uint8 *)data) + width;
 		}

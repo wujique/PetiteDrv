@@ -1,52 +1,10 @@
 
-
 #include <command.h>
 #include "console.h"
-#include "mcu.h"
-#include "board_sysconf.h"
-#include "bus_uart.h"
 
-extern BusUartNode *LogUartNode;
-
-
-int serial_getc (void)
-{
-	u8 ch,ret;
-
-	while(1)
-	{
-		ret = bus_uart_read(LogUartNode, &ch, 1);
-		if(0 == ret)
-		{
-			Delay(1);
-		}
-		else
-			return (int)ch;
-	}
-	//return getchar();
-
-}
-
-
-/*
- * Output a single byte to the serial port.
- */
-void serial_putc (const char c)
-{
-	bus_uart_write(LogUartNode, (u8 *)&c, 1);
-	/* If \n, also do \r */
-	if (c == '\n')
-		serial_putc ('\r');
-}
-/*
-
-	检测串口是否有数据
-
-*/
-int serial_tstc(void)
-{
-	return 1;//public_soc_uart_get_present(TERM_PORT);
-}
+extern int serial_getc (void);
+extern void serial_putc (const char c);
+extern int serial_tstc(void);
 
 /** U-Boot INITIAL CONSOLE-COMPATIBLE FUNCTION *****************************/
 

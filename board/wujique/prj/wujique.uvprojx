@@ -336,7 +336,7 @@
               <MiscControls>--locale=english</MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\app;..\..\wujique;..\usb\inc;..\eth\inc;..\..\..\driver;..\..\..\driver\lcd;..\..\..\driver\cdev;..\..\..\mcu\stm32407\mcu_dev;..\..\..\mcu\stm32407\StLib\STM32F4xx_StdPeriph_Driver\inc;..\..\..\panel;..\..\..\Petite;..\..\..\Utilities\FreeRTOS\Source\include;..\..\..\mcu\stm32407\StLib\STM32_USB_OTG_Driver\inc;..\..\..\mcu\stm32407\StLib\STM32_USB_HOST_Library\Core\inc;..\..\..\mcu\stm32407\StLib\STM32_USB_HOST_Library\Class\MSC\inc;..\..\..\mcu\stm32407\StLib\STM32_USB_Device_Library\Core\inc;..\..\..\mcu\stm32407\StLib\STM32_USB_Device_Library\Class\msc\inc;..\..\..\Utilities\fat_fs\src;..\eth\inc;..\..\..\mcu\stm32407\StLib\STM32F4x7_ETH_Driver\inc;..\..\..\Utilities\lwip-1.4.1\port\STM32F4x7\Standalone;..\..\..\Utilities\lwip-1.4.1\src\include\ipv4;..\..\..\Utilities\lwip-1.4.1\src\include;..\..\..\Utilities\lwip-1.4.1\src\include\netif;..\..\..\Utilities\lwip-1.4.1\src\include\lwip;..\..\..\Utilities\lwip-1.4.1\port\STM32F4x7;..\..\..\Utilities\tslib;..\..\..\Utilities\cmd;..\..\..\Utilities\spiffs-0.3.7\src;..\..\..\Utilities\littlefs-master;..\usb\inc;..\..\..\mcu\stm32407;..\..\..\Utilities\font;..\..\..\driver\camera;..\..\..\mcu\stm32407\StLib\core;..\rtos</IncludePath>
+              <IncludePath>..\..\..\app;..\..\wujique;..\usb\inc;..\eth\inc;..\..\..\driver;..\..\..\driver\lcd;..\..\..\driver\cdev;..\..\..\mcu\stm32407\mcu_dev;..\..\..\mcu\stm32407\StLib\STM32F4xx_StdPeriph_Driver\inc;..\..\..\panel;..\..\..\Petite;..\..\..\Utilities\FreeRTOS\Source\include;..\..\..\mcu\stm32407\StLib\STM32_USB_OTG_Driver\inc;..\..\..\mcu\stm32407\StLib\STM32_USB_HOST_Library\Core\inc;..\..\..\mcu\stm32407\StLib\STM32_USB_HOST_Library\Class\MSC\inc;..\..\..\mcu\stm32407\StLib\STM32_USB_Device_Library\Core\inc;..\..\..\mcu\stm32407\StLib\STM32_USB_Device_Library\Class\msc\inc;..\..\..\Utilities\fat_fs\src;..\eth\inc;..\..\..\mcu\stm32407\StLib\STM32F4x7_ETH_Driver\inc;..\..\..\Utilities\lwip-1.4.1\port\STM32F4x7\Standalone;..\..\..\Utilities\lwip-1.4.1\src\include\ipv4;..\..\..\Utilities\lwip-1.4.1\src\include;..\..\..\Utilities\lwip-1.4.1\src\include\netif;..\..\..\Utilities\lwip-1.4.1\src\include\lwip;..\..\..\Utilities\lwip-1.4.1\port\STM32F4x7;..\..\..\Utilities\tslib;..\..\..\Utilities\cmd\ubootcmd;..\..\..\Utilities\spiffs-0.3.7\src;..\..\..\Utilities\littlefs-master;..\usb\inc;..\..\..\mcu\stm32407;..\..\..\Utilities\font;..\..\..\driver\camera;..\..\..\mcu\stm32407\StLib\core;..\rtos</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1293,42 +1293,42 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>Utilities/cmd</GroupName>
+          <GroupName>Utilities/uboot_cmd</GroupName>
           <Files>
-            <File>
-              <FileName>cmd.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\cmd\cmd.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_nvedit.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\cmd\cmd_nvedit.c</FilePath>
-            </File>
             <File>
               <FileName>cmd_sys.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\Utilities\cmd\cmd_sys.c</FilePath>
             </File>
             <File>
+              <FileName>cmd_spiffs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Utilities\cmd\cmd_spiffs.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_display.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Utilities\cmd\cmd_display.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_port.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Utilities\cmd\cmd_port.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Utilities\cmd\ubootcmd\cmd.c</FilePath>
+            </File>
+            <File>
               <FileName>commnad.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\cmd\commnad.c</FilePath>
+              <FilePath>..\..\..\Utilities\cmd\ubootcmd\commnad.c</FilePath>
             </File>
             <File>
               <FileName>console.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\cmd\console.c</FilePath>
-            </File>
-            <File>
-              <FileName>env.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\cmd\env.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_spiffs.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\cmd\cmd_spiffs.c</FilePath>
+              <FilePath>..\..\..\Utilities\cmd\ubootcmd\console.c</FilePath>
             </File>
           </Files>
         </Group>

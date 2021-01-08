@@ -1,23 +1,14 @@
 /*
 
-
-Command Interface   Port from uboot 
-
+	Command Interface   Port from uboot 
 
 */
 #include <command.h>
 #include "console.h"
 
-
-#define MAX_DELAY_STOP_STR 32
-
 #if defined(CONFIG_BOOTDELAY) && (CONFIG_BOOTDELAY >= 0)
 static int abortboot(int);
 #endif
-
-//#define DEBUG_PARSER
-#undef DEBUG_PARSER
-
 
 char console_buffer[CONFIG_SYS_CBSIZE];		/* console I/O buffer	*/
 
@@ -25,65 +16,13 @@ static char * delete_char (char *buffer, char *p, int *colp, int *np, int plen);
 static char erase_seq[] = "\b \b";		/* erase sequence	*/
 static char tab_seq[] = "        ";		/* used to expand TABs	*/
 
-#define	endtick(seconds) (get_ticks() + (uint64_t)(seconds) * get_tbclk())
-
-
-const char * env_name_spec="Iflash";
-
 int readline (const char *const prompt);
 int run_command (const char *cmd, int flag);
 int readline_into_buffer (const char *const prompt, char * buffer);
 
-/***************************************************************************
- * Watch for 'delay' seconds for autoboot stop or autoboot delay string.
- * returns: 0 -  no key string, allow autoboot
- *          1 - got key string, abort
- */
+static char lastcommand[CONFIG_SYS_CBSIZE] = { 0, };
 
-/****************************************************************************/
-#if defined(CONFIG_BOOTDELAY) && (CONFIG_BOOTDELAY >= 0)
-
-static __inline__ int abortboot(int bootdelay)
-{
-	int abort = 0;
-
-
-	printf("Hit any key to stop autoboot: %2d ", bootdelay);
-
-	while ((bootdelay > 0) && (!abort)) {
-		int i;
-
-		--bootdelay;
-		/* delay 100 * 10ms */
-		for (i=0; !abort && i<100; ++i) {
-			if (tstc()) {	/* we got a key press	*/
-				
-				bootdelay = 0;	/* no more delay	*/
-
-
-				//(void) getc();  /* consume input	*/
-				// modify by lixin@xgd
-				// we only support to cancel bootdelay
-				if (ctrlc())
-				{
-					abort  = 1;	/* don't auto boot	*/
-
-				}
-
-				break;
-			}
-			Delay(10000);
-		}
-
-		printf("\b\b\b%2d ", bootdelay);
-	}
-
-	putc('\n');
-
-	return abort;
-}
-
-#endif	/* CONFIG_BOOTDELAY >= 0  */
+extern const cmd_tbl_t static_cmd_table[CONFIG_CMD_TABLE_SIZE];
 
 /**
  *@brief:      cli_main_loop
@@ -94,73 +33,42 @@ static __inline__ int abortboot(int bootdelay)
  */
 void cli_main_loop (void* p)
 {
-
-	static char lastcommand[CONFIG_SYS_CBSIZE] = { 0, };
 	int len;
 	int rc = 1;
 	int flag;
-
 	char *s;
 	int bootdelay;
 
-	extern unsigned char Load$$cmdreg$$Base[];
-	extern unsigned char Load$$cmdreg$$Limit[];
+	int num;
 
-	unsigned long cmd_addr = (unsigned long)Load$$cmdreg$$Base;
-	unsigned long cmd_end = (unsigned long)Load$$cmdreg$$Limit;	
+	num = (sizeof(static_cmd_table)/sizeof(struct cmd_tbl_s));
+	cmd_printf("cmd table size:%d\r\n", num);
 	
-	printf("cmd addr:%08x, limit:%08x\r\n", cmd_addr, cmd_end);
-	
-	__u_boot_cmd_start =(cmd_tbl_t  *)cmd_addr;
-	__u_boot_cmd_end  = (cmd_tbl_t  *)cmd_end;
+	__u_boot_cmd_start =(cmd_tbl_t  *)static_cmd_table;
+	__u_boot_cmd_end  = __u_boot_cmd_start + num;
         
 	install_auto_complete();
-
-#if defined(CONFIG_BOOTDELAY) && (CONFIG_BOOTDELAY >= 0)
-	s = cmd_getenv ("bootdelay");
-	bootdelay = s ? (int)simple_strtol(s, NULL, 10) : CONFIG_BOOTDELAY;
-
-	debug ("### cli_main_loop entered: bootdelay=%d\r\n", bootdelay);
-
-
-		s = cmd_getenv ("bootcmd");
-
-	debug ("### cli_main_loop: bootcmd=\"%s\"\r\n", s ? s : "<UNDEFINED>");
-
-	if (bootdelay >= 0 && s && !abortboot (bootdelay)) {
-
-		run_command (s, 0);
-
-	}
-
-#endif	/* CONFIG_BOOTDELAY */
 
 	/*
 	 * Main Loop for Monitor Command Processing
 	 */
-	 
 	for (;;) {
 		len = readline (CONFIG_SYS_PROMPT);
 		flag = 0;	/* assume no special flags for now */
 
-		if (len > 0)
-		{
+		if (len > 0) {
 			//printf("modify last command\r\n");
 			strcpy (lastcommand, console_buffer);
 			rc = run_command (lastcommand, flag);
-		}
-		else if (len == 0)
-		{
+		} else if (len == 0) {
 			flag |= CMD_FLAG_REPEAT;
 		}
 		
 		if (len == -1)
 			puts ("<INTERRUPT>\r\n");
-		else
-		{
+		else {
 			/*wujique mask :no repeat cmd*/
-			//rc = run_command (lastcommand, flag);
-			
+			//rc = run_command (lastcommand, flag);	
 		}
 		
 		if (rc <= 0) {
@@ -173,20 +81,20 @@ void cli_main_loop (void* p)
 
 
 #ifdef CONFIG_CMDLINE_EDITING
-
+/* 支持编辑指令 */
 /*
  * cmdline-editing related codes from vivi.
  * Author: Janghoon Lyu <nandy@mizi.com>
  */
-
 #define putnstr(str,n)	do {			\
-		printf ("%.*s", (int)n, str);	\
+		cmd_printf ("%.*s", (int)n, str);	\
 	} while (0)
 
 #define CTL_CH(c)		((c) - 'a' + 1)
 
-#define MAX_CMDBUF_SIZE		256
-
+/* 指令最长长度？ */
+#define MAX_CMDBUF_SIZE		CONFIG_SYS_CBSIZE
+/*控制支付*/
 #define CTL_BACKSPACE		('\b')
 #define DEL			((char)255)
 #define DEL7			((char)127)
@@ -196,21 +104,14 @@ void cli_main_loop (void* p)
 #define getcmd_getch()		getc()
 #define getcmd_cbeep()		getcmd_putch('\a')
 
-/*
-
-	hist
-
-*/
-#define HIST_MAX		20
+/*	历史命令 	hist  */
 #define HIST_SIZE		MAX_CMDBUF_SIZE
 static int hist_max = 0;
 static int hist_add_idx = 0;
 static int hist_cur = -1;
 unsigned hist_num = 0;
 char* hist_list[HIST_MAX];
-/* wujique mask 改为malloc*/
-#include "alloc.h"
-//char hist_lines[HIST_MAX][HIST_SIZE];//5k 
+char hist_lines[HIST_MAX][HIST_SIZE];
 
 #define add_idx_minus_one() ((hist_add_idx == 0) ? hist_max : hist_add_idx-1)
 /**
@@ -230,11 +131,7 @@ static void hist_init(void)
 	hist_num = 0;
 
 	for (i = 0; i < HIST_MAX; i++) {
-		#if 0
 		hist_list[i] = hist_lines[i];
-		#else
-		hist_list[i] = (char*)wjq_malloc(HIST_SIZE);
-		#endif
 		hist_list[i][0] = '\0';
 	}
 }
@@ -308,7 +205,7 @@ static void cread_print_hist_list(void)
 			i = 0;
 		if (i == hist_add_idx)
 			break;
-		printf("%s\n", hist_list[i]);
+		cmd_printf("%s\n", hist_list[i]);
 		n++;
 		i++;
 	}
@@ -407,9 +304,7 @@ static int cread_line(const char *const prompt, char *buf, unsigned int *len)
 				return (-2);	/* timed out */
 		}
 #endif
-		/*
-			从串口读取一个字节，注意，这里是死等的
-		*/
+		/*	从串口读取一个字节，注意，这里是死等的	*/
 		ichar = getcmd_getch();
 		
 		if ((ichar == '\n') || (ichar == '\r')) {
@@ -624,7 +519,7 @@ int readline (const char *const prompt)
 }
 
 
-#define puts(str) printf("%s",str)
+#define puts(str) cmd_printf("%s",str)
 
 int readline_into_buffer (const char *const prompt, char * buffer)
 {
@@ -644,7 +539,7 @@ int readline_into_buffer (const char *const prompt, char * buffer)
 		if (!initted) {
 			hist_init();
 			initted = 1;
-		printf("cmd hist init\r\n");
+			cmd_printf("cmd hist init\r\n");
 		}
 		
 		puts (prompt);
@@ -773,7 +668,7 @@ int parse_line (char *line, char *argv[])
 	int nargs = 0;
 
 #ifdef DEBUG_PARSER
-	printf ("parse_line: \"%s\"\r\n", line);
+	cmd_printf ("parse_line: \"%s\"\r\n", line);
 #endif
 	while (nargs < CONFIG_SYS_MAXARGS) {
 
@@ -785,7 +680,7 @@ int parse_line (char *line, char *argv[])
 		if (*line == '\0') {	/* end of line, no more args	*/
 			argv[nargs] = NULL;
 #ifdef DEBUG_PARSER
-		printf ("parse_line: nargs=%d\r\n", nargs);
+		cmd_printf ("parse_line: nargs=%d\r\n", nargs);
 #endif
 			return (nargs);
 		}
@@ -800,7 +695,7 @@ int parse_line (char *line, char *argv[])
 		if (*line == '\0') {	/* end of line, no more args	*/
 			argv[nargs] = NULL;
 #ifdef DEBUG_PARSER
-		printf ("parse_line: nargs=%d\r\n", nargs);
+		cmd_printf ("parse_line: nargs=%d\r\n", nargs);
 #endif
 			return (nargs);
 		}
@@ -808,10 +703,10 @@ int parse_line (char *line, char *argv[])
 		*line++ = '\0';		/* terminate current arg	 */
 	}
 
-	printf ("** Too many args (max. %d) **\r\n", CONFIG_SYS_MAXARGS);
+	cmd_printf ("** Too many args (max. %d) **\r\n", CONFIG_SYS_MAXARGS);
 
 #ifdef DEBUG_PARSER
-	printf ("parse_line: nargs=%d\r\n", nargs);
+	cmd_printf ("parse_line: nargs=%d\r\n", nargs);
 #endif
 	return (nargs);
 }
@@ -832,8 +727,7 @@ static void process_macros (const char *input, char *output)
 #ifdef DEBUG_PARSER
 	char *output_start = output;
 
-	printf ("[PROCESS_MACROS] INPUT len %d: \"%s\"\r\n", strlen (input),
-		input);
+	cmd_printf ("[PROCESS_MACROS] INPUT len %d: \"%s\"\r\n", strlen (input), input);
 #endif
 
 	prev = '\0';		/* previous character   */
@@ -892,8 +786,8 @@ static void process_macros (const char *input, char *output)
 				}
 				envname[i] = 0;
 
-				/* Get its value */
-				envval = (char *)cmd_getenv (envname);
+				/* Get its value  need fix*/
+				//envval = (char *)cmd_getenv (envname);
 
 				/* Copy into the line if it exists */
 				if (envval != NULL)
@@ -923,7 +817,7 @@ static void process_macros (const char *input, char *output)
 		*(output - 1) = 0;
 
 #ifdef DEBUG_PARSER
-	printf ("[PROCESS_MACROS] OUTPUT len %d: \"%s\"\r\n",
+	cmd_printf ("[PROCESS_MACROS] OUTPUT len %d: \"%s\"\r\n",
 		strlen (output_start), output_start);
 #endif
 }
@@ -944,14 +838,15 @@ static void process_macros (const char *input, char *output)
  * the environment data, which may change magicly when the command we run
  * creates or modifies environment variables (like "bootp" does).
  */
+ 
+char cmdbuf[CONFIG_SYS_CBSIZE];	/* working copy of cmd		*/
+char finaltoken[CONFIG_SYS_CBSIZE];
 
 int run_command (const char *cmd, int flag)
 {
 	cmd_tbl_t *cmdtp;
-	char cmdbuf[CONFIG_SYS_CBSIZE];	/* working copy of cmd		*/
 	char *token;			/* start of token in cmdbuf	*/
 	char *sep;			/* end of token (separator) in cmdbuf */
-	char finaltoken[CONFIG_SYS_CBSIZE];
 	char *str = cmdbuf;
 	char *argv[CONFIG_SYS_MAXARGS + 1];	/* NULL terminated	*/
 	int argc, inquotes;
@@ -959,7 +854,7 @@ int run_command (const char *cmd, int flag)
 	int rc = 0;
 
 #ifdef DEBUG_PARSER
-	printf ("[RUN_COMMAND] cmd[%p]=\"", cmd);
+	cmd_printf ("[RUN_COMMAND] cmd[%p]=\"", cmd);
 	puts (cmd ? cmd : "NULL");	/* use puts - string may be loooong */
 	puts ("\"\r\n");
 #endif
@@ -982,7 +877,7 @@ int run_command (const char *cmd, int flag)
 	 */
 
 #ifdef DEBUG_PARSER
-	printf ("[PROCESS_SEPARATORS] %s\r\n", cmd);
+	cmd_printf ("[PROCESS_SEPARATORS] %s\r\n", cmd);
 #endif
 	while (*str) {
 	
@@ -1012,8 +907,9 @@ int run_command (const char *cmd, int flag)
 		}
 		else
 			str = sep;	/* no more commands for next pass */
+		
 #ifdef DEBUG_PARSER
-		printf ("token: \"%s\"\r\n", token);
+		cmd_printf ("token: \"%s\"\r\n", token);
 #endif
 
 		/* find macros in this token and replace them */
@@ -1027,7 +923,7 @@ int run_command (const char *cmd, int flag)
 
 		/* Look up command in command table */
 		if ((cmdtp = find_cmd(argv[0])) == NULL) {
-			printf ("Unknown command '%s' - try 'help'\r\n", argv[0]);
+			cmd_printf ("Unknown command '%s' - try 'help'\r\n", argv[0]);
 			rc = -1;	/* give up after bad command */
 			continue;
 		}
@@ -1070,11 +966,12 @@ int do_run (cmd_tbl_t * cmdtp, int flag, int argc, char *argv[])
 	for (i=1; i<argc; ++i) {
 		char *arg;
 
+		#if 0//need fix		
 		if ((arg = (char *)cmd_getenv (argv[i])) == NULL) {
-			printf ("## Error: \"%s\" not defined\n", argv[i]);
+			cmd_printf ("## Error: \"%s\" not defined\n", argv[i]);
 			return 1;
 		}
-	
+		#endif
 	
 		if (run_command (arg, flag) == -1){
 		
@@ -1084,41 +981,5 @@ int do_run (cmd_tbl_t * cmdtp, int flag, int argc, char *argv[])
 	return 0;
 }
 #endif
-
-
-#include "FreeRtos.h"
-#include "frtos_task.h"
-
-#define FUN_CMD_TASK_STK_SIZE 1024
-#define FUN_CMD_TASK_PRIO	1
-TaskHandle_t  FunCmdTaskHandle;
-
-
-void cli_main_loop_test (void* p)
-{
-	printf("test!\r\n");
-	while(1)
-	{
-		printf("test 1 !\r\n");	
-	}
-}
-
-
-/**
- *@brief:      fun_cmd_init
- *@details:    初始化命令行，建立命令行任务
- *@param[in]   void  
- *@param[out]  无
- *@retval:     
- */
-s32 fun_cmd_init(void)
-{
-	xTaskCreate(	(TaskFunction_t) cli_main_loop,
-					(const char *)"cmd task",		/*lint !e971 Unqualified char types are allowed for strings and single characters only. */
-					(const configSTACK_DEPTH_TYPE) FUN_CMD_TASK_STK_SIZE,
-					(void *) NULL,
-					(UBaseType_t) FUN_CMD_TASK_PRIO,
-					(TaskHandle_t *) &FunCmdTaskHandle );	
-}
 
 

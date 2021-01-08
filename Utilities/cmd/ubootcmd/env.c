@@ -32,12 +32,11 @@
 	暂时不实现，
 
 */
-
+#if 0
 #undef DEBUG_ENV
 
-
 #ifdef DEBUG_ENV
-#define DEBUGF(fmt,args...) printf(fmt ,##args)
+#define DEBUGF(fmt,args...) cmd_printf(fmt ,##args)
 #else
 #define DEBUGF(fmt,args...)
 #endif
@@ -53,9 +52,7 @@ static uchar env_get_char_init (int index);
 #define MK_STR(x)	XMK_STR(x)
 
 /*
-
 	默认环境变量
-
 */
 const uchar default_environment[CONFIG_ENV_SIZE-8] = {
 #ifdef	CONFIG_BOOTARGS
@@ -283,4 +280,5 @@ int saveenv(void)
 	return -1;
 }
 
+#endif
 

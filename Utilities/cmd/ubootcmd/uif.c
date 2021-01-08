@@ -5,7 +5,7 @@
  * Notes:   The commands, set/show parameters, and prompt are configured 
  *          at the project level
  */
-
+#if 0
 #include "common.h"
 #include "uif.h"
 
@@ -325,5 +325,7 @@ uif_cmd_show (int argc, char **argv)
     }
     printf(INVOPT,argv[1]);
 }
+
+#endif
 
 /********************************************************************/

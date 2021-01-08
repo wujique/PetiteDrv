@@ -103,12 +103,15 @@
 /*默认应用任务，比如测试程序，有死循环 */
 #define Wujique407_TASK_STK_SIZE (1024)
 #define Wujique407_TASK_PRIO	(1)
-
-#define START_TASK_STK_SIZE (512)
-#define START_TASK_PRIO	3//
+/* 命令行交互 */
+#define UBOOTCMD_TASK_STK_SIZE (1024)
+#define UBOOTCMD_TASK_PRIO	(1)
 
 #define USB_TASK_STK_SIZE (1024)
 #define USB_TASK_PRIO	2
+
+#define START_TASK_STK_SIZE (512)
+#define START_TASK_PRIO	3
 
 /*  配置 虚拟文件系统 */
 #define SYS_FS_NUM 5

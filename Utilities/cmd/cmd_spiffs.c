@@ -6,26 +6,16 @@
 
 int cmd_spiffs_ls( cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
 {
-	//sys_spiffs_ls();
+	cmd_printf("do cmd spiffs ls\r\n");
 	return 0;
 }
 
-REGISTER_CMD(
-	spiffsls, 2 , 1, cmd_spiffs_ls,
-	"spiffsls",
-	"\t ls spiffs file "
-);
 
 int cmd_spiffs_format( cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
 {
-	//sys_spiffs_format();
+	cmd_printf("do cmd spiffs format!\r\n");
 	return 0;
 }
 
-REGISTER_CMD(
-	spiffsformat, 2 , 1, cmd_spiffs_format,
-	"format spiffs",
-	"\t ls spiffs file "
-);
 
 
