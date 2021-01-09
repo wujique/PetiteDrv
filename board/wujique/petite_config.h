@@ -51,7 +51,7 @@
 
 
 /*定义alloc.c内存管理数组*/
-#define AllocArraySize (80*1024)
+#define AllocArraySize (100*1024)
 
 
 #endif
