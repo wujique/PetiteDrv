@@ -24,8 +24,6 @@
 #include "log.h"
 #include "board_sysconf.h"
 
-
-/* ------------------------------重构-------------------------------------------- */
 #include "vfs.h"
 /*
 
@@ -60,12 +58,13 @@ typedef struct _strFontHead
 	unsigned char w;//宽
 	unsigned char h;//高
 
-	/* 	>0 ， ch偏移
-		<0, 失败*/
-	int (*getdot)(char *Ch, FontDot *Dot);
+	/* 求索引 */
+	int (*fpos)(char c1, char c2);
+
+	int fd;
 }FontHead;
 
-/*-------------------共用函数------------------------------*/
+/*-------------------GBK 共用函数------------------------------*/
 typedef enum{
 	ASC_AREA = 0,		//单字节， ASC字符
 	HZ_DBYTE_1AREA = 1, //符号区，双字节1区 A1A1--A9FE
@@ -79,9 +78,10 @@ typedef enum{
 }FontHzArea;
 
 /*
-	区分字符在哪个区间
+	区分字符在GBK哪个区间
 输入：
     str:输入的双字节的区位码(两个BYTE)
+    C1为首字节 C2是尾字节
 返回：
 	FontHzArea
 */
@@ -138,11 +138,13 @@ static FontHzArea font_get_area(char c1, char c2)
 /*
 	点阵字库由<字库制作软件>生成
 	点阵定位请参考《点阵字库生成器使用说明.pdf》
+	输入汉字双字节内码，
+	返回汉字在点阵字库文件中的索引
 */
 int32_t font_pos_1_gbk(char c1, char c2)
 {
 	uint8_t hcode,lcode;
-	uint32_t addr;
+	uint32_t index;
 
 	hcode = c1;
 	lcode = c2;
@@ -155,14 +157,14 @@ int32_t font_pos_1_gbk(char c1, char c2)
 	}
 
 	//PRINTF("hz code:%02x, %02x\r\n", hcode, lcode);
-	addr = (hcode-0x81)*190;
+	index = (hcode-0x81)*190;
 	if (lcode<0x7f) {
-		addr = addr+lcode-0x40;	
+		index = index+lcode-0x40;	
 	}else{
-		addr = addr+lcode-0x41;	
+		index = index+lcode-0x41;	
 	}
 	
-	return addr;
+	return index;
 
 }
 /*
@@ -172,7 +174,7 @@ int32_t font_pos_1_gbk(char c1, char c2)
 int32_t font_pos_1_big5(char c1, char c2)
 {
 	uint8_t hcode,lcode;
-	uint32_t addr;
+	uint32_t index;
 
 	hcode = c1;
 	lcode = c2;
@@ -185,18 +187,18 @@ int32_t font_pos_1_big5(char c1, char c2)
 		return -1;
 	}
 
-	addr = (hcode-0xa1)*157;
+	index = (hcode-0xa1)*157;
 	if((lcode<=0x7e) && (lcode >= 0x40)){
-		addr = addr+lcode-0x40;	
+		index = index+lcode-0x40;	
 	}else if((lcode<=0xfe) && (lcode >= 0xa1)){
-		addr = addr+lcode-0x62;	
+		index = index+lcode-0x62;	
 	}else{
 		//uart_printf("no big5 hz\r\n");
 		return -1;
 	}
 	//uart_printf(" big5 code:%02x, %02x, addr:%x\r\n", hcode, lcode, addr);
 	
-	return addr;
+	return index;
 }
 /*--------------------------------------------------------*/
 /* 
@@ -207,8 +209,75 @@ int32_t font_pos_1_big5(char c1, char c2)
 	保存在文件系统
 	
 */
-int font_syst1212_getdot(char *Ch, FontDot *Dot);
+int font_dot_getdot(FontHead * font, char *Ch, FontDot *Dot)
+{
+	uint32_t addr;
+	uint32_t base_addr;
+	uint8_t i;
+	uint8_t *p;
+	FontHzArea area;
+	int res;
+	u8* fp;
+	
 
+	if(font->fd == NULL) {
+		font->fd = vfs_open(font->path, O_RDONLY);
+		if (font == NULL) return -1;
+	}
+
+	area = font_get_area(*Ch, *(Ch+1));
+
+	if(area == ASC_AREA) {
+		res = 1;
+
+		if(font->w == 12) {
+			fp = (u8*)(font_vga_6x12.path) + (*Ch)*font_vga_6x12.size;
+			memcpy(Dot->dot, fp, font_vga_6x12.size);
+		
+			Dot->datac = font_vga_6x12.size;
+			Dot->dt = FONT_H_H_L_R_U_D;     //内置ASC码格式
+			Dot->w = font_vga_6x12.width;
+			Dot->h = font_vga_6x12.height;
+		}else if(font->w == 16){
+			fp = (u8*)(font_vga_8x16.path) + (*Ch)*font_vga_8x16.size;
+			memcpy(Dot->dot, fp, font_vga_8x16.size);
+		
+			Dot->datac = font_vga_8x16.size;
+			Dot->dt = FONT_H_H_L_R_U_D; 	//内置ASC码格式
+			Dot->w = font_vga_8x16.width;
+			Dot->h = font_vga_8x16.height;	
+		}
+	
+	} else if(area == HZ_USER_AREA
+		||area == HZ_NO_AREA) {
+		res = 2;
+	} else if(area == HZ_QBYTE_AREA ) {
+		res = 4;
+	} else {
+		res = 2;
+		
+		addr = font_pos_1_gbk(*Ch, *(Ch+1));
+		addr = addr * font->datac;
+
+		vfs_lseek(font->fd, addr, SEEK_SET);
+		vfs_read(font->fd, (const void *)Dot->dot, font->datac);
+
+		Dot->datac = font->datac;
+		Dot->dt = font->dt;
+		Dot->w = font->w;
+		Dot->h = font->h;	
+	}
+	
+
+	/*只支持双字节汉字*/
+	return res;
+
+}
+
+/*-------------------------------------------------------------------------------
+
+	如何支持多国语言？ codepage， GBK、big5、其他语言， codepage是应用层的概念？
+*/
 FontHead SYSongTi1212 ={
 
 	.name = "SYsongti_12",//名字
@@ -222,69 +291,10 @@ FontHead SYSongTi1212 ={
 	.w = 12,
 	.h = 12,
 	
-	.getdot = font_syst1212_getdot,
+	.fpos = font_pos_1_gbk,
+	.fd = NULL,
 	};
-
-int font_syst1212_getdot(char *Ch, FontDot *Dot)
-{
-	uint32_t addr;
-	uint32_t base_addr;
-	uint8_t i;
-	uint8_t *p;
-	FontHzArea area;
-	int res;
-	u8* fp;
 	
-	static int font = NULL;
-
-	if(font == NULL) {
-		font = vfs_open(SYSongTi1212.path, O_RDONLY);
-		if (font == NULL) return -1;
-	}
-
-	area = font_get_area(*Ch, *(Ch+1));
-
-	if(area == ASC_AREA) {
-		res = 1;
-		
-		fp = (u8*)(font_vga_6x12.path) + (*Ch)*font_vga_6x12.size;
-		memcpy(Dot->dot, fp, font_vga_6x12.size);
-		
-		Dot->datac = font_vga_6x12.size;
-		Dot->dt = FONT_H_H_L_R_U_D;     //内置ASC码格式
-		Dot->w = font_vga_6x12.width;
-		Dot->h = font_vga_6x12.height;
-			
-	} else if(area == HZ_USER_AREA
-		||area == HZ_NO_AREA) {
-		res = 2;
-	} else if(area == HZ_QBYTE_AREA ) {
-		res = 4;
-	} else {
-		res = 2;
-		
-		addr = font_pos_1_gbk(*Ch, *(Ch+1));
-		addr = addr * SYSongTi1212.datac;
-
-		vfs_lseek(font, addr, SEEK_SET);
-		vfs_read(font, (const void *)Dot->dot, SYSongTi1212.datac);
-
-		Dot->datac = SYSongTi1212.datac;
-		Dot->dt = SYSongTi1212.dt;
-		Dot->w = SYSongTi1212.w;
-		Dot->h = SYSongTi1212.h;	
-	}
-	
-
-	/*只支持双字节汉字*/
-	return res;
-
-}
-
-/*------------------------------------------------------*/
-
-int font_syst1616_getdot(char *Ch, FontDot *Dot);
-
 FontHead SYSongTi1616 ={
 
 	.name = "SYsongti_16",//名字
@@ -298,69 +308,9 @@ FontHead SYSongTi1616 ={
 	.w = 16,
 	.h = 16,
 	
-	.getdot = font_syst1616_getdot,
+	.fpos = font_pos_1_gbk,
+	.fd = NULL,
 	};
-
-int font_syst1616_getdot(char *Ch, FontDot *Dot)
-{
-	uint32_t addr;
-	uint32_t base_addr;
-	uint8_t i;
-	uint8_t *p;
-	FontHzArea area;
-	int res;
-	u8* fp;
-	
-	static int font = NULL;
-
-	if(font == NULL) {
-		font = vfs_open(SYSongTi1616.path, O_RDONLY);
-		if (font == NULL) return -1;
-	}
-
-	area = font_get_area(*Ch, *(Ch+1));
-
-	if(area == ASC_AREA) {
-		res = 1;
-		
-		fp = (u8*)(font_vga_8x16.path) + (*Ch)*font_vga_8x16.size;
-		memcpy(Dot->dot, fp, font_vga_8x16.size);
-		
-		Dot->datac = font_vga_8x16.size;
-		Dot->dt = FONT_H_H_L_R_U_D; 	//内置ASC码格式
-		Dot->w = font_vga_8x16.width;
-		Dot->h = font_vga_8x16.height;
-			
-	} else if(area == HZ_USER_AREA
-		||area == HZ_NO_AREA) {
-		res = 2;
-	} else if(area == HZ_QBYTE_AREA ) {
-		res = 4;
-	} else {
-		res = 2;
-		
-		addr = font_pos_1_gbk(*Ch, *(Ch+1));
-		addr = addr * SYSongTi1616.datac;
-
-		vfs_lseek(font, addr, SEEK_SET);
-		vfs_read(font, (const void *)Dot->dot, SYSongTi1616.datac);
-
-		Dot->datac = SYSongTi1616.datac;
-		Dot->dt = SYSongTi1616.dt;
-		Dot->w = SYSongTi1616.w;
-		Dot->h = SYSongTi1616.h;	
-	}
-	
-
-	/*只支持双字节汉字*/
-	return res;
-
-}
-
-/*-------------------------------------------------------------------------------
-
-	如何支持多国语言？ codepage， GBK、big5、其他语言， codepage是应用层的概念？
-*/
 
 FontHead *FontListN[] = {
 	&SYSongTi1212,
@@ -408,7 +358,7 @@ int font_get_dotdata(char *fontname, char *str, FontDot *Dot)
 		return -1;
 
 	/* 读取字库 */
-	res = font->getdot(str, Dot);
+	res = font_dot_getdot(font, str, Dot);
 	return res;
 }
 
@@ -437,7 +387,7 @@ s32 font_get_hw(char *fontname, u16 *h, u16 *w)
 		return -1;
 	}
 
-	/* 汉字两个字符， 转为1个字符宽度， 后续做codepage兼容在重新设计*/
+	/* 汉字两个字符， 转为1个字符宽度， 后续做codepage兼容再重新设计*/
 	*w = font->w/2;
 	*h = font->h;
 
