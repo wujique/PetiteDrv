@@ -200,13 +200,14 @@ int32_t font_pos_1_big5(char c1, char c2)
 	
 	return index;
 }
+
+int32_t font_index_gbk_wjq(char c1, char c2)
+{
+	return (c1-0x81)*197 + (c2-0x40);
+}
 /*--------------------------------------------------------*/
 /* 
-	思源宋体 用字模工具生成的18030字库
-	从矢量字体转来的，某些字效果非常不好
-	仅供测试
 
-	保存在文件系统
 	
 */
 int font_dot_getdot(FontHead * font, char *Ch, FontDot *Dot)
@@ -230,7 +231,7 @@ int font_dot_getdot(FontHead * font, char *Ch, FontDot *Dot)
 	if(area == ASC_AREA) {
 		res = 1;
 
-		if(font->w == 12) {
+		if (font->w == 12) {
 			fp = (u8*)(font_vga_6x12.path) + (*Ch)*font_vga_6x12.size;
 			memcpy(Dot->dot, fp, font_vga_6x12.size);
 		
@@ -238,7 +239,7 @@ int font_dot_getdot(FontHead * font, char *Ch, FontDot *Dot)
 			Dot->dt = FONT_H_H_L_R_U_D;     //内置ASC码格式
 			Dot->w = font_vga_6x12.width;
 			Dot->h = font_vga_6x12.height;
-		}else if(font->w == 16){
+		} else {
 			fp = (u8*)(font_vga_8x16.path) + (*Ch)*font_vga_8x16.size;
 			memcpy(Dot->dot, fp, font_vga_8x16.size);
 		
@@ -256,8 +257,8 @@ int font_dot_getdot(FontHead * font, char *Ch, FontDot *Dot)
 	} else {
 		res = 2;
 		
-		addr = font_pos_1_gbk(*Ch, *(Ch+1));
-		addr = addr * font->datac;
+		addr = font->fpos(*Ch, *(Ch+1));
+		addr = addr * (font->datac);
 
 		vfs_lseek(font->fd, addr, SEEK_SET);
 		vfs_read(font->fd, (const void *)Dot->dot, font->datac);
@@ -268,7 +269,6 @@ int font_dot_getdot(FontHead * font, char *Ch, FontDot *Dot)
 		Dot->h = font->h;	
 	}
 	
-
 	/*只支持双字节汉字*/
 	return res;
 
@@ -278,11 +278,19 @@ int font_dot_getdot(FontHead * font, char *Ch, FontDot *Dot)
 
 	如何支持多国语言？ codepage， GBK、big5、其他语言， codepage是应用层的概念？
 */
+
+	/*思源宋体 用字模工具生成的18030字库
+	从矢量字体转来的，某些字效果非常不好
+	仅供测试
+
+	保存在文件系统
+	*/
+
 FontHead SYSongTi1212 ={
 
 	.name = "SYsongti_12",//名字
 	.size = 12,
-	.path = "mtd0/1:/songti1212.DZK",//路径
+	.path = "mtd0/1:/font/songti1212.DZK",//路径
 		//"mtd0/1:/shscn1212.DZK",
 	.st = FONT_ST_GB18030,
 	.dt = FONT_V_H_U_D_L_R,
@@ -299,7 +307,7 @@ FontHead SYSongTi1616 ={
 
 	.name = "SYsongti_16",//名字
 	.size = 16,
-	.path = "mtd0/1:/shscn1616.DZK",//路径
+	.path = "mtd0/1:/font/shscn1616.DZK",//路径
 			//"mtd0/1:/songti1616.DZK",
 	.st = FONT_ST_GB18030,
 	.dt = FONT_V_H_U_D_L_R,
@@ -311,10 +319,47 @@ FontHead SYSongTi1616 ={
 	.fpos = font_pos_1_gbk,
 	.fd = NULL,
 	};
+/*
+	屋脊雀优化的点阵，基于思源宋体
+	*/	
+FontHead SYSongTiM1616 ={
+
+	.name = "SYST_16_m",//名字
+	.size = 16,
+	.path = "mtd0/1:/font/syst_m_16.bin",//路径
+
+	.st = FONT_ST_GB18030,
+	.dt = FONT_H_H_L_R_U_D,
+	
+	.datac = 32,
+	.w = 16,
+	.h = 16,
+	
+	.fpos = font_index_gbk_wjq,
+	.fd = NULL,
+	};
+FontHead SYSongTiM2424 ={
+
+	.name = "SYST_24_m",//名字
+	.size = 24,
+	.path = "mtd0/1:/font/syst_m_24.bin",//路径
+
+	.st = FONT_ST_GB18030,
+	.dt = FONT_H_H_L_R_U_D,
+	
+	.datac = 72,
+	.w = 24,
+	.h = 24,
+	
+	.fpos = font_index_gbk_wjq,
+	.fd = NULL,
+	};
 
 FontHead *FontListN[] = {
 	&SYSongTi1212,
 	&SYSongTi1616,	
+	&SYSongTiM1616,
+	&SYSongTiM2424,
 	};
 
 /* 查询系统字体 */

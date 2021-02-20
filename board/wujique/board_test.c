@@ -28,9 +28,10 @@
 extern u16 PenColor;
 extern u16 BackColor;
 
-#define TEST_FONG "SYsongti_12"
+//#define TEST_FONG "SYsongti_12"
 //#define TEST_FONG "SYsongti_16"
-
+#define TEST_FONG "SYST_16_m"
+//#define TEST_FONG "SYST_24_m"
 DevLcdNode * WJQTestLcd;
 
 s32 wjq_wait_key(u8 key)
@@ -1253,8 +1254,8 @@ void wujique_stm407_test(void)
 	wjq_log(LOG_DEBUG,"\r\n\r\n\r\n---run board test\r\n\r\n\r\n\r\n");
 
 
-	//WJQTestLcd = dev_lcd_open("tftlcd");
-	WJQTestLcd = dev_lcd_open("i2coledlcd");
+	WJQTestLcd = dev_lcd_open("tftlcd");
+	//WJQTestLcd = dev_lcd_open("i2coledlcd");
 	if (WJQTestLcd == NULL) {
 		wjq_log(LOG_DEBUG, "emenu open lcd err\r\n");
 	}

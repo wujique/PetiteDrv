@@ -630,7 +630,7 @@ s32 dev_lcd_put_string(DevLcdNode *lcd, char *font, int x, int y, char *s, unsig
 	ylen = fonth;
 
 	framebuff = (u16*)wjq_malloc(xlen*ylen*sizeof(u16));//样点缓冲
-	dotbuf = (u8*)wjq_malloc(32);//要改为根据字库类型申请
+	dotbuf = (u8*)wjq_malloc(72);//要改为根据字库类型申请
 	sidx = 0;
 
 	/*获取点阵，并转化为LCD像素*/
