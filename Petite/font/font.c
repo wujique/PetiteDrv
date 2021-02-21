@@ -187,6 +187,43 @@ FontHead SYSongTiM2424 ={
 	
 	.fd = NULL,
 	};
+/*------文泉驿点阵12pt------*/
+FontHead WQYST16H18030 ={
+
+	.name = "WQY_ST_16_H",//名字
+	.size = 16,
+	.path = "mtd0/1:/font/wqy16h18030.bin",//路径
+	
+	.type = FONT_DOT_WJQ,
+	.st = FONT_ST_GB18030,
+	.dt = FONT_H_H_L_R_U_D,
+	.shift = 0,
+	
+	.datac = 32,
+	.w = 16,
+	.h = 16,
+	
+	
+	.fd = NULL,
+	};
+FontHead WQYST12H18030 ={
+
+	.name = "WQY_ST_12_H",//名字
+	.size = 12,
+	.path = "mtd0/1:/font/wqy12h18030.bin",//路径
+	
+	.type = FONT_DOT_WJQ,
+	.st = FONT_ST_GB18030,
+	.dt = FONT_H_H_L_R_U_D,
+	.shift = 0,
+	
+	.datac = 24,
+	.w = 12,
+	.h = 12,
+	
+	
+	.fd = NULL,
+	};
 
 extern FontHead ZYST12V18030;
 extern FontHead ZYST12H18030;
@@ -198,7 +235,8 @@ FontHead *FontListN[] = {
 	&SYSongTi1616,	
 	&SYSongTiM1616,
 	&SYSongTiM2424,
-
+	&WQYST16H18030,
+	&WQYST12H18030,
 	};
 
 /* 查询系统字体 */
