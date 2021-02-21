@@ -14,7 +14,7 @@
 #include "petite_config.h"
 
 #include "log.h"
-#include "alloc.h"
+#include "mem/alloc.h"
 
 /*
 使用编译器定义的堆作为内存池，注意，直接使用malloc，会调用C库的函数，使用的就是堆

@@ -68,7 +68,7 @@ s32 fun_cmd_init(void)
 }
 
 /*-----------------------串口交互接口--------------------------*/
-#include "bus_uart.h"
+#include "bus/bus_uart.h"
 
 extern BusUartNode *LogUartNode;
 

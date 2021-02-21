@@ -21,12 +21,10 @@
 */
 #include "mcu.h"
 #include "log.h"
-#include "p_list.h"
+
 #include "board_sysconf.h"
 
-#include "bus_spi.h"
-#include "bus_vspi.h"
-#include "alloc.h"
+#include "petite.h"
 
 #define BUS_SPI_DEBUG
 

@@ -21,8 +21,9 @@
 #include "mcu.h"
 #include "mcu_uart.h"
 #include "log.h"
-#include "alloc.h"
-#include "p_kfifo.h"
+
+#include "petite.h"
+
 
 uint8_t BusUartGd[32];
 

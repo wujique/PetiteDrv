@@ -42,7 +42,9 @@
 #include "drv_ov2640.h"
 #include "drv_lcd.h"
 #include "log.h"
-#include "alloc.h"
+
+#include "petite.h"
+
 
 
 extern void Delay(__IO uint32_t nTime);

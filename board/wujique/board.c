@@ -2,7 +2,7 @@
 
 #include "board_sysconf.h"
 #include "log.h"
-#include "bus_uart.h"
+#include "bus/bus_uart.h"
 #include "vfs.h"
 #include "drv_keypad.h"
 #include "drv_buzzer.h"

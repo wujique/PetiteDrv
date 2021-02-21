@@ -23,15 +23,12 @@
 
 #include "mcu.h"
 #include "mcu_io.h"
-#include "log.h"
-#include "p_list.h"
-#include "alloc.h"
-
-#include "bus_i2c.h"
-#include "bus_spi.h"
-#include "bus_lcd.h"
-
 #include "mcu_fsmc.h"
+
+#include "log.h"
+
+#include "petite.h"
+
 
 /*
 	一个LCD接口

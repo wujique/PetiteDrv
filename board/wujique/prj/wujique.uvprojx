@@ -591,64 +591,14 @@
           <GroupName>Petite</GroupName>
           <Files>
             <File>
-              <FileName>bus_i2c.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Petite\bus_i2c.c</FilePath>
-            </File>
-            <File>
-              <FileName>bus_lcd.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Petite\bus_lcd.c</FilePath>
-            </File>
-            <File>
-              <FileName>bus_spi.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Petite\bus_spi.c</FilePath>
-            </File>
-            <File>
-              <FileName>alloc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Petite\alloc.c</FilePath>
-            </File>
-            <File>
               <FileName>maths.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\Petite\maths.c</FilePath>
             </File>
             <File>
-              <FileName>bus_vi2c.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Petite\bus_vi2c.c</FilePath>
-            </File>
-            <File>
-              <FileName>bus_vspi.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Petite\bus_vspi.c</FilePath>
-            </File>
-            <File>
               <FileName>vfs.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\Petite\vfs.c</FilePath>
-            </File>
-            <File>
-              <FileName>font.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Petite\font.c</FilePath>
-            </File>
-            <File>
-              <FileName>font_6x12.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Petite\font_6x12.c</FilePath>
-            </File>
-            <File>
-              <FileName>font_8x8.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Petite\font_8x8.c</FilePath>
-            </File>
-            <File>
-              <FileName>font_8x16.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Petite\font_8x16.c</FilePath>
             </File>
             <File>
               <FileName>log.c</FileName>
@@ -661,24 +611,99 @@
               <FilePath>..\..\..\Petite\stimer.c</FilePath>
             </File>
             <File>
-              <FileName>p_list.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Petite\p_list.c</FilePath>
-            </File>
-            <File>
               <FileName>pfsm.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\Petite\pfsm.c</FilePath>
             </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Petite/font</GroupName>
+          <Files>
+            <File>
+              <FileName>font.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Petite\font\font.c</FilePath>
+            </File>
+            <File>
+              <FileName>font_6x12.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Petite\font\font_6x12.c</FilePath>
+            </File>
+            <File>
+              <FileName>font_8x8.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Petite\font\font_8x8.c</FilePath>
+            </File>
+            <File>
+              <FileName>font_8x16.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Petite\font\font_8x16.c</FilePath>
+            </File>
+            <File>
+              <FileName>font_wjq.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Petite\font\font_wjq.c</FilePath>
+            </File>
+            <File>
+              <FileName>font_ymy.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Petite\font\font_ymy.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Petite/mem</GroupName>
+          <Files>
+            <File>
+              <FileName>alloc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Petite\mem\alloc.c</FilePath>
+            </File>
             <File>
               <FileName>p_kfifo.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Petite\p_kfifo.c</FilePath>
+              <FilePath>..\..\..\Petite\mem\p_kfifo.c</FilePath>
+            </File>
+            <File>
+              <FileName>p_list.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Petite\mem\p_list.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Petite/bus</GroupName>
+          <Files>
+            <File>
+              <FileName>bus_i2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Petite\bus\bus_i2c.c</FilePath>
+            </File>
+            <File>
+              <FileName>bus_lcd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Petite\bus\bus_lcd.c</FilePath>
+            </File>
+            <File>
+              <FileName>bus_spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Petite\bus\bus_spi.c</FilePath>
             </File>
             <File>
               <FileName>bus_uart.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Petite\bus_uart.c</FilePath>
+              <FilePath>..\..\..\Petite\bus\bus_uart.c</FilePath>
+            </File>
+            <File>
+              <FileName>bus_vi2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Petite\bus\bus_vi2c.c</FilePath>
+            </File>
+            <File>
+              <FileName>bus_vspi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Petite\bus\bus_vspi.c</FilePath>
             </File>
           </Files>
         </Group>

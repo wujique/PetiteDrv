@@ -20,11 +20,11 @@
 */
 #include "mcu.h"
 #include "petite_config.h"
+#include "petite.h"
 
 #if (SYS_USE_VFS == 1)
 #include "log.h"
 #include "board_sysconf.h"
-#include "alloc.h"
 #include "vfs.h"
 
 #if (SYS_FS_FATFS == 1)

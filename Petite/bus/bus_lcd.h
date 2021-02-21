@@ -1,7 +1,8 @@
 #ifndef _DEV_LCDBUS_H_
 #define _DEV_LCDBUS_H_
 
-#include "p_list.h"
+#include "mem/p_list.h"
+
 #include "petite_def.h"
 
 

@@ -7,7 +7,7 @@
 #define SEEK_END 2 //设置为文件长度加offset,offset可为正或负
 
 #define VFS_DIR_LEN  8//目录长度，一般都是mtd0 mtd1
-#define VFS_NAME_LEN 30//文件名长度
+#define VFS_NAME_LEN 32//文件名长度
 
 typedef enum 
 {

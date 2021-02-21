@@ -20,15 +20,14 @@
 */
 #include "mcu.h"
 #include "petite_config.h"
+#include "petite.h"
 
 #include "board_sysconf.h"
 
 #include "log.h"
-#include "p_list.h"
-#include "alloc.h"
 #include "vfs.h"
 
-#include "bus_lcd.h"
+
 #include "drv_lcd.h"
 
 #include "drv_ILI9341.h"
@@ -429,7 +428,7 @@ s32 dev_lcd_setdir(DevLcdNode *node, u8 dir, u8 scan_dir)
 从tslib拷贝一些显示函数到这里
 这些函数可以归为GUI
 */
-#include "font.h"
+#include "petite.h"
 
 /**
  *@brief:      line

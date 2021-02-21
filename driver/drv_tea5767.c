@@ -23,7 +23,7 @@
 
 
 #include "log.h"
-#include "bus_i2c.h"
+#include "bus/bus_i2c.h"
 
 extern void Delay(__IO uint32_t nTime);
 

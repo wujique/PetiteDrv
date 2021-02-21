@@ -22,12 +22,11 @@
 /*	COG LCD 的驱动*/
 #include "mcu.h"
 #include "petite_config.h"
+#include "petite.h"
 
 #if( (LCD_DRIVER_ST7565 == 1) || (LCD_DRIVER_SSD1615 == 1 ))
 
 #include "log.h"
-#include "alloc.h"
-#include "bus_lcd.h"
 #include "drv_lcd.h"
 #include "drv_str7565.h"
 

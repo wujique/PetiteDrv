@@ -5,7 +5,8 @@
 /**********************************************/
 #include "mcu.h"
 
-#include "font.h"
+#include "font/font.h"
+
 
 #define FONTDATAMAX 4096
 

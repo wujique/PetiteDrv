@@ -16,7 +16,7 @@
 #if (PANEL_EMENU_MODULE == 1)
 #include "log.h"
 #include "emenu.h"
-#include "font.h"
+#include "petite.h"
 
 #include "drv_keypad.h"
 #include "drv_lcd.h"

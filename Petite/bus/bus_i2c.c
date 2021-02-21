@@ -21,10 +21,11 @@
 
 #include "mcu.h"
 #include "log.h"
-#include "p_list.h"
-#include "bus_i2c.h"
-#include "bus_vi2c.h"
-#include "alloc.h"
+#include "mem/p_list.h"
+#include "bus/bus_i2c.h"
+#include "bus/bus_vi2c.h"
+#include "mem/alloc.h"
+
 
 /*	I2C模块维护一个链表，记录有当前初始化的I2C控制器*/
 struct list_head DevI2cGdRoot = {&DevI2cGdRoot, &DevI2cGdRoot};

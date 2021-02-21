@@ -22,9 +22,7 @@
 #include "mcu.h"
 #include "mcu_uart.h"
 #include "log.h"
-#include "alloc.h"
-#include "p_kfifo.h"
-#include "bus_uart.h"
+#include "petite.h"
 
 /* 初始化时保存设备节点，以便中断直接写接收bug 
 	如果要逻辑上分层更清晰，可以用回调函数

@@ -4,7 +4,7 @@
 #include "emenu.h"
 #include "drv_lcd.h"
 #include "drv_keypad.h"
-#include "font.h"
+#include "petite.h"
 #include "mcu_uart.h"
 
 DevLcdNode *emenulcd;

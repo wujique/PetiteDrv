@@ -1,7 +1,7 @@
 #ifndef __BUS_SPI_H_
 #define __BUS_SPI_H_
 
-#include "p_list.h"
+#include "mem/p_list.h"
 #include "petite_def.h"
 
 /*

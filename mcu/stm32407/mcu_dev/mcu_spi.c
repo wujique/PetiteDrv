@@ -21,7 +21,7 @@
 */
 #include "mcu.h"
 #include "log.h"
-#include "bus_spi.h"
+#include "bus/bus_spi.h"
 #include "board_sysconf.h"
 
 #define MCU_SPI_DEBUG

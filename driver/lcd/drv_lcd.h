@@ -1,10 +1,9 @@
 #ifndef _DEV_LCD_H_
 #define _DEV_LCD_H_
 
-#include "bus_lcd.h"
-#include "petite_def.h"
 
-#include "font.h"
+#include "petite_def.h"
+#include "petite.h"
 
 typedef struct _strDevLcdNode DevLcdNode;
 /*

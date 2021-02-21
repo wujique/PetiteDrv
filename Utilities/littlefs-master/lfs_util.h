@@ -167,7 +167,7 @@ void lfs_crc(uint32_t *crc, const void *buffer, size_t size);
 	lfs内存分配，默认使用c库的分配。
 	我们的工程有自己的内存分配
 */
-#include "alloc.h"
+#include "mem/alloc.h"
 
 // Allocate memory, only used if buffers are not provided to littlefs
 static inline void *lfs_malloc(size_t size) {

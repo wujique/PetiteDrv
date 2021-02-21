@@ -20,14 +20,12 @@
 */
 #include "mcu.h"
 #include "petite_config.h"
+#include "petite.h"
 
 /*	9341驱动*/
 #if( LCD_DRIVER_9341 == 1 )
 
-#include "alloc.h"
 #include "log.h"
-#include "bus_lcd.h"
-
 #include "drv_lcd.h"
 #include "drv_ILI9341.h"
 

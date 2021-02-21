@@ -24,7 +24,7 @@
 
 #include "mcu.h"
 #include "board_sysconf.h"
-#include "bus_uart.h"
+#include "bus/bus_uart.h"
 #include "log.h"
 
 LOG_L LogLevel = LOG_DEBUG;//系统调试信息等级

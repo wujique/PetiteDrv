@@ -29,14 +29,12 @@
 */
 #include "mcu.h"
 #include "petite_config.h"
+#include "petite.h"
 
 #if (PANEL_SOUND_MODULE == 1)
 
 #include "log.h"
-#include "alloc.h"
-
 #include "vfs.h"
-
 #include "drv_wm8978.h"
 #include "drv_dacsound.h"
 #include "soundplay.h"

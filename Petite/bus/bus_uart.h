@@ -1,7 +1,7 @@
 #ifndef __BUS_UART_H__
 #define __BUS_UART_H__
 
-#include "p_kfifo.h"
+#include "mem/p_kfifo.h"
 /* */
 typedef struct {
 	McuUartNum comport;

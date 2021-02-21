@@ -27,7 +27,7 @@
 #include "board_sysconf.h"
 #include "log.h"
 
-#include "bus_spi.h"
+#include "bus/bus_spi.h"
 #include "mcu_spi.h"
 #include "mcu_timer.h"
 

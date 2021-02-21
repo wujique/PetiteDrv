@@ -21,13 +21,11 @@
 */
 #include "mcu.h"
 #include "petite_config.h"
+#include "petite.h"
 
 #if (DRV_SPI_FLASH_MODULE == 1)
 #include "board_sysconf.h"
 #include "log.h"
-#include "alloc.h"
-#include "p_list.h"
-#include "bus_spi.h"
 #include "drv_spiflash.h"
 
 //#define DEV_SPIFLASH_DEBUG
@@ -458,7 +456,7 @@ s32 dev_spiflash_register(const DevSpiFlash *dev)
 	return 0;
 }
 
-#include "alloc.h"
+#include "petite.h"
 
 /**
  *@brief:      dev_spiflash_test_fun

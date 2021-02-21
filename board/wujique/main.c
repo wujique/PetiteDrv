@@ -30,7 +30,7 @@
 #include "log.h"
 #include "stimer.h"
 #include "board_sysconf.h"
-#include "bus_uart.h"
+#include "bus/bus_uart.h"
 
 /** @addtogroup Template_Project
   * @{

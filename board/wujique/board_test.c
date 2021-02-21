@@ -14,7 +14,8 @@
 #include "board_sysconf.h"
 
 #include "log.h"
-#include "font.h"
+#include "petite.h"
+
 #include "emenu.h"
 #include "tslib.h"
 
@@ -30,8 +31,14 @@ extern u16 BackColor;
 
 //#define TEST_FONG "SYsongti_12"
 //#define TEST_FONG "SYsongti_16"
-#define TEST_FONG "SYST_16_m"
-//#define TEST_FONG "SYST_24_m"
+//#define TEST_FONG "SYST_16_m"
+#define TEST_FONG "SYST_24_m"
+
+//#define TEST_FONG "ZYST_12_V_18030"
+//#define TEST_FONG "ZYST_12_H_18030"
+//#define TEST_FONG "ZYST_24_H_2312"
+//#define TEST_FONG "ZYST_16_H_18030"
+
 DevLcdNode * WJQTestLcd;
 
 s32 wjq_wait_key(u8 key)

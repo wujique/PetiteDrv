@@ -7,7 +7,8 @@
 	*/
 #include "mcu.h"
 #include "log.h"
-#include "p_list.h"
+#include "mem/p_list.h"
+
 
 /*
 测试宏offsetof功能：获取结构体成员在结构体中的偏移

@@ -22,8 +22,8 @@
 #include "mcu.h"
 #include "mcu_io.h"
 #include "log.h"
-#include "bus_spi.h"
-#include "bus_vspi.h"
+#include "bus/bus_spi.h"
+#include "bus/bus_vspi.h"
 
 #define BUS_VSPI_DEBUG
 

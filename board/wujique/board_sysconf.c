@@ -13,15 +13,9 @@
 #include "mcu.h"
 
 #include "board_sysconf.h"
+#include "petite.h"
 
 #include "log.h"	
-#include "font.h"
-
-#include "bus_lcd.h"
-#include "bus_spi.h"
-#include "bus_i2c.h"
-
-
 #include "drv_spiflash.h"
 #include "drv_lcd.h"
 

@@ -24,12 +24,11 @@
 */	
 #include "mcu.h"
 #include "petite_config.h"
+#include "petite.h"
 
 #if( LCD_DRIVER_7789 == 1 )
 
-#include "alloc.h"
 #include "log.h"
-#include "bus_lcd.h"
 #include "drv_lcd.h"
 
 extern void Delay(__IO uint32_t nTime);

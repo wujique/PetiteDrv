@@ -124,7 +124,7 @@ void ff_rel_grant (
 
 #if _USE_LFN == 3	/* LFN with a working buffer on the heap */
 
-#include "alloc.h"
+#include "mem/alloc.h"
 /*------------------------------------------------------------------------*/
 /* Allocate a memory block                                                */
 /*------------------------------------------------------------------------*/

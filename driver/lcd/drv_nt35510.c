@@ -10,12 +10,11 @@
 
 #include "mcu.h"
 #include "petite_config.h"
+#include "petite.h"
 
 #if( LCD_DRIVER_NT35510 == 1 )
 
-#include "alloc.h"
 #include "log.h"
-#include "bus_lcd.h"
 #include "drv_lcd.h"
 
 #define DRV_NT35510_DEBUG
