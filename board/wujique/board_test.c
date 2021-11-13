@@ -900,8 +900,8 @@ const MENU WJQTestList[]=
 			test_spi_cog_display,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 			*/
 			MENU_L_2,//菜单等级
-			"SPI tft",//中文
-			"SPI tft",	//英文
+			"SPI oled/cog",//中文
+			"SPI oled/cog",	//英文
 			MENU_TYPE_FUN,//菜单类型
 			//test_lcd_spi_128128,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 			test_spi_cog_display,
@@ -1265,6 +1265,7 @@ void wujique_stm407_test(void)
 
 
 	//WJQTestLcd = dev_lcd_open("tftlcd");
+	//WJQTestLcd = dev_lcd_open("spicoglcd");
 	WJQTestLcd = dev_lcd_open("i2coledlcd");
 	if (WJQTestLcd == NULL) {
 		wjq_log(LOG_DEBUG, "emenu open lcd err\r\n");

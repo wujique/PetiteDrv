@@ -465,14 +465,17 @@ const DevLcd DevLcdOled1={
 };
 
 /*SPI接口的 OLED*/
-/*
-DevLcd DevLcdSpiOled	=	{
-	.name = "spioledlcd", 	
+
+DevLcd DevLcdSpiOled	=	{	
+	.pnode={
+				.name = "spioledlcd",
+				.type = DEV_LCD,
+		},
 	.buslcd = "BusLcdSpi3", 	
 	.id = 0X1315, 
 	.width = 64, 
 	.height = 128};
-*/
+
 /*SPI接口的 COG LCD*/
 
 const DevLcd DevLcdCOG1	=	{
@@ -553,12 +556,16 @@ s32 petite_dev_register(void)
 	bus_spi_register(&DevSpi3IO);
 			bus_spich_register(&DevSpi3CH1);
 					dev_spiflash_register(&DevSpiFlashBoard);
+					
 			bus_spich_register(&DevSpi3CH2);
 					dev_spiflash_register(&DevSpiFlashCore);
+					
 			bus_spich_register(&DevSpi3CH3);
 					dev_lcdbus_register(&BusLcdSpi3);
 						//dev_lcd_register(&DevLcdSPIEPaper);
 						dev_lcd_register(&DevLcdCOG1);
+						//dev_lcd_register(&DevLcdSpiOled);
+
 			//mcu_spich_register(&DevSpi3CH4);
 	
 	#if (SYS_USE_VSPI1 == 1)

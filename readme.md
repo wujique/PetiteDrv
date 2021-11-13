@@ -13,10 +13,20 @@ It will port to more chip in the future, E.g FSL MK60, K210, ESP32, RT1052...
 |driver|Peripheral drive, such as LCD driver|
 |mcu|mcu lib, such as StLib, May include a secondary encapsulation layer|
 |panel|some code between app and drver|
-|Petite|PetiteDrv Module|
+|Petite|PetiteDrv Module：bus,font,mem|
 |Utilities|Third party library|
 
 ## Petite
+
+#### bus
+
+i2c bus, lcd bus, spi bus, uart bus, vi2c bus, vspi bus
+
+#### font
+
+#### mem
+
+alloc, kfifo, list, linkfifo
 
 ## Main feature
 Please find the detail from :board_sysconf.c/board_sysconf.h, and Petite.
