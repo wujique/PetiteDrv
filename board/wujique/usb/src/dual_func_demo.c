@@ -374,6 +374,8 @@ static void Demo_Application (void)
 		demo.select = 0x80; 
 		
         Enum_Done = 2;
+		/* USB设备枚举成功，并且挂载文件系统成功后，将文件系统写入 vfs */
+		board_mount_udisk_2_vfs();
       }
       
       if(Enum_Done == 2)

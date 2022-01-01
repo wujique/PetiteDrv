@@ -134,6 +134,12 @@ s32 bsp_exuart_wifi_write(u8 *buf, s32 len)
 
 	return res;
 }
+
+int board_mount_udisk_2_vfs(void)
+{
+	vfs_add_node(&USBFatFs);
+	return 0;
+}
 /**/
 #include "FreeRtos.h"
 #include "frtos_task.h"
@@ -213,8 +219,8 @@ s32 board_init(void)
 	//sys_lfs_mount();
 	//lfs_test();
 	/* USB 任务有长延时，后续要处理 need fix*/
-	//usb_task_create();
-	//vfs_mount(&USBFatFs);
+	usb_task_create();
+	//vfs_add_node(&USBFatFs);
 	/*---------------------------------------*/
 	/* 创建目标板应用程序 */
 	board_app_init();

@@ -46,9 +46,9 @@
 /*-----------------------------------------------------------*/
 /*	RS485跟外扩串口设备共用。*/
 #define SYS_USE_RS485	0
-#define SYS_USE_EXUART	1
-#define SYS_USE_USB		0
-#define SYS_USE_CAMERA  0
+#define SYS_USE_EXUART	0
+#define SYS_USE_USB		1
+#define SYS_USE_CAMERA  1
 
 #if ((SYS_USE_EXUART == 1) && (SYS_USE_RS485 == 1))
  #error "please not define SYS_USE_EXUART & SYS_USE_RS485 sametime!(in board_sysconf.h file)"

@@ -219,6 +219,32 @@ void vfs_init(void)
 	
 }
 /*
+	将一个已经初始化好的文件系统
+	添加到vfs节点中
+*/
+int vfs_add_node(const VFSDIR *Mtd)
+{
+	u8 i = 0;
+	
+	VfsDebug(LOG_DEBUG, "mount %s 到 / \r\n", Mtd->vfsdir);
+
+	while(1) {
+		if (i>= SYS_FS_NUM) {
+			VfsDebug(LOG_DEBUG, "mount err\r\n");
+			break;
+		}
+		
+		if (VfsNodeList[i].Mtd == NULL) {
+			VfsNodeList[i].Mtd = Mtd;
+			return 0;
+		}
+		
+		i++;
+	}
+	return -1;
+}
+
+/*
 **Description:      挂一个mtd到root链表上     
 **Input parameters:  
 **Output parameters: 
@@ -230,7 +256,7 @@ int vfs_mount(const VFSDIR *Mtd)
 {
 	u8 i = 0;
 	
-    VfsDebug(LOG_DEBUG, "mount %s 到 / \r\n", Mtd->name);
+    VfsDebug(LOG_DEBUG, "mount %s 到 / \r\n", Mtd->vfsdir);
 
     while(1)
 	{
@@ -398,8 +424,7 @@ int vfs_read(int fd, const void *buf, size_t length)
 	FileNode *filenode;
 	unsigned int len;
 		
-	if(fd == NULL)
-		return -1;
+	if(fd == NULL) return -1;
 	
 	filenode = (FileNode *)fd;
 	switch(filenode->fsnode->Mtd->type)
@@ -444,8 +469,50 @@ int vfs_read(int fd, const void *buf, size_t length)
 
 int vfs_write(int fd, const void *buf, size_t length)
 {
-	/*need fix*/
-	return -1;
+	FileNode *filenode;
+	unsigned int len;
+		
+	if(fd == NULL) return -1;
+	
+	filenode = (FileNode *)fd;
+	switch(filenode->fsnode->Mtd->type)
+	{
+		case FS_TYPE_FATFS:
+			VfsDebug(LOG_DEBUG, "vfs_read FS_TYPE_FATFS\r\n");
+			
+		#ifdef SYS_FS_FATFS
+			FRESULT res;
+		
+			res = f_write(&filenode->pra.fatfd, (void *)buf, length, &len);
+			if((res != FR_OK) || (len != length))
+			{
+				VfsDebug(LOG_DEBUG, "write err\r\n");
+				return -1;
+			}
+
+			return (int)len;
+		#else
+			return -1;
+		#endif 
+
+			
+		case FS_TYPE_SPIFFS:
+			VfsDebug(LOG_DEBUG, "vfs_read FS_TYPE_SPIFFS\r\n");
+			break;
+		
+		case FS_TYPE_LITTLEFS:
+			VfsDebug(LOG_DEBUG, "vfs_read FS_TYPE_LITTLEFS\r\n");
+			break;
+		
+		case FS_TYPE_CONSTFS:
+			VfsDebug(LOG_DEBUG, "vfs_read FS_TYPE_CONSTFS\r\n");
+			break;
+		
+		default:
+			VfsDebug(LOG_DEBUG, "vfs_read err: unkown fs\r\n");
+			break;
+	}
+	return NULL;
 }
 /*
 	whence: SEEK_SET 0 //将偏移量设置为距离文件offset个字节处

@@ -505,7 +505,22 @@ const DevLcd DevLcdtTFT	=	{
 	.width = 240, 
 	.height = 320,
 };
-#endif		
+#endif	
+#if 0
+/*1408, 4.0寸的IPS屏幕，好巨润 r61408驱动芯片*/
+const DevLcd DevLcdtTFT	=	{
+	.pnode={
+				.name = "tftlcd",
+				.type = DEV_LCD,
+			},
+			
+	.buslcd = "BusLcd8080",  
+	.id = 0x1408, 
+	.width = 480, 
+	.height = 800,
+};
+#endif	
+
 #if 0
 const DevLcd DevLcdtTFT	=	{
 	.pnode={
@@ -521,8 +536,7 @@ const DevLcd DevLcdtTFT	=	{
 #endif
 //const DevLcd DevLcdtTFT	=	{"tftlcd", 		"BusLcd8080", 	0x9325, 240, 320};
 //const DevLcd DevLcdtTFT	=	{"tftlcd", 		"BusLcd8080", 	0x9341, 240, 320};
-/*1408, 4.0寸的IPS屏幕*/
-//const DevLcd DevLcdtTFT	=	{"tftlcd", 		"BusLcd8080", 	0x1408, 480, 800};
+
 /*SPI接口的 tft lcd*/
 //const DevLcd DevLcdtTFT	=	{"spitftlcd", 		"BusLcdSpi3", 	0x9342, 240, 320};
 //const DevLcd DevLcdtTFT	=	{"spitftlcd", 		"BusLcdVSpi1CH2", 	0x9342, 240, 320};
