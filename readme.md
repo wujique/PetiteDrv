@@ -8,13 +8,12 @@ It will port to more chip in the future, E.g FSL MK60, K210, ESP32, RT1052...
 ## Directory Structure
 |Dir|Decription|
 |-|-|
-|app|base app, Independent of hardware configuration|
 |board|Configuration and application of different hardware, including project files and app|
 |driver|Peripheral drive, such as LCD driver|
 |mcu|mcu lib, such as StLib, May include a secondary encapsulation layer|
-|panel|some code between app and drver|
+|panel|some code between app and driver|
 |Petite|PetiteDrv Module：bus,font,mem|
-|Utilities|Third party library|
+|Utilities|Third party library: freertos,fatfs,lvgl,littlefs,zbar,zint|
 
 ## Petite
 
