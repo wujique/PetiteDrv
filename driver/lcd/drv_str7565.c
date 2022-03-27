@@ -78,7 +78,6 @@ _lcd_drv CogLcdST7565Drv = {
 void drv_ST7565_lcd_bl(DevLcdNode *lcd, u8 sta)
 {
 	DevLcdBusNode * node;
-	
 	node = bus_lcd_open(lcd->dev.buslcd);
 	bus_lcd_bl(node, sta);
 	bus_lcd_close(node);
@@ -218,9 +217,9 @@ s32 drv_ST7565_init(DevLcdNode *lcd)
 
 	/*申请显存，永不释放*/
 	lcd->pri = (void *)wjq_malloc(sizeof(struct _cog_drv_data));
-	memset((char*)lcd->pri, 0x00, 128*8);//要改为动态判断显存大小
+	memset((char*)lcd->pri, 0x55, 128*8);//要改为动态判断显存大小
 	
-	//drv_ST7565_refresh_gram(lcd, 0,127,0,63);
+	drv_ST7565_refresh_gram(lcd, 0,127,0,63);
 
 	return 0;
 }

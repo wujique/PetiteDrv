@@ -18,13 +18,22 @@
 		7 如侵犯你的权利，请联系：code@wujique.com
 		8 一切解释权归屋脊雀工作室所有。
 */
-
 #include "mcu.h"
+#include "cmsis_os.h"
+
 #include "log.h"
 #include "mem/p_list.h"
 #include "bus/bus_i2c.h"
 #include "bus/bus_vi2c.h"
 #include "mem/alloc.h"
+
+//#define BUS_I2C_DEBUG
+
+#ifdef BUS_I2C_DEBUG
+#define BUSI2C_DEBUG	wjq_log 
+#else
+#define BUSI2C_DEBUG(a, ...)
+#endif
 
 
 /*	I2C模块维护一个链表，记录有当前初始化的I2C控制器*/
@@ -43,7 +52,7 @@ s32 bus_i2c_register(const DevI2c * dev)
 	struct list_head *listp;
 	DevI2cNode *p;
 	
-	wjq_log(LOG_INFO, "[register] i2c:%s!\r\n", dev->pnode.name);
+	BUSI2C_DEBUG(LOG_INFO, "[register] i2c:%s!\r\n", dev->pnode.name);
 
 	/*	先要查询当前I2C控制器，防止重名	*/
 	listp = DevI2cGdRoot.next;
@@ -51,7 +60,6 @@ s32 bus_i2c_register(const DevI2c * dev)
 		if (listp == &DevI2cGdRoot) break;
 
 		p = list_entry(listp, DevI2cNode, list);
-		//wjq_log(LOG_INFO, "i2c dev name:%s!\r\n", p->dev.name);
 		
 		if (strcmp(dev->pnode.name, p->dev.pnode.name) == 0) {
 			wjq_log(LOG_INFO, "i2c dev name err!\r\n");
@@ -67,29 +75,36 @@ s32 bus_i2c_register(const DevI2c * dev)
 	
 	/*	初始化设备节点 	*/
 	memcpy((u8 *)&p->dev, (u8 *)dev, sizeof(DevI2c));
-	p->gd = -1;
 
+	/*初始化互斥 */
+	p->gd = -1;
+	p->mutex = osMutexNew(NULL);
+	if (p->mutex == NULL) {
+		BUSI2C_DEBUG(LOG_DEBUG, "mutex new err!\r\n");
+	}
+	
 	if (dev->pnode.type == BUS_I2C_V)
 		bus_vi2c_init(&p->dev);
 	else if (dev->pnode.type == BUS_I2C_H)
-		mcu_hi2c_init(&p->dev);
+		return -1;//mcu_hi2c_init(&p->dev);
 	
 	return 0;
 }
 /**
  *@brief:      bus_i2c_open
  *@details:    根据名字打开一个i2c接口
- *@param[in]   void  
+ *@param[in]   name 设备名称
+ 			   wait 等待时间，单位ms, oxffffffff 永远
  *@param[out]  无
  *@retval:     返回设备节点
  */
-DevI2cNode *bus_i2c_open(char *name)
+DevI2cNode *bus_i2c_open(char *name, uint32_t wait)
 {
 
 	DevI2cNode *node;
 	struct list_head *listp;
-	
-	//I2C_DEBUG(LOG_INFO, "i2c open:%s!\r\n", name);
+	osStatus_t res;
+	BUSI2C_DEBUG(LOG_INFO, "i2c open:%s!\r\n", name);
 
 	listp = DevI2cGdRoot.next;
 	node = NULL;
@@ -98,23 +113,30 @@ DevI2cNode *bus_i2c_open(char *name)
 		if (listp == &DevI2cGdRoot) break;
 
 		node = list_entry(listp, DevI2cNode, list);
-		//I2C_DEBUG(LOG_INFO, "i2c dev name:%s!\r\n", node->dev.name);
 		 
 		if (strcmp(name, node->dev.pnode.name) == 0) {
-			//I2C_DEBUG(LOG_INFO, "i2c dev open ok!\r\n");
+			BUSI2C_DEBUG(LOG_INFO, "i2c dev find!\r\n");
 			break;
 		}
 		
 		listp = listp->next;
 	}
-
+	
 	if (node != NULL) {
-		if (node->gd == 0) {
-			node = NULL;
-		} else {
-			node->gd = 0;
+		/* 判断互斥是否可用          osWaitForever*/
+		while (1) {
+			BUSI2C_DEBUG(LOG_INFO, "i2c mutex ");
+			res = osMutexAcquire(node->mutex, 10);
+			if (osOK == res) break;
 		}
+		
+		if ( osOK == res && node->gd != 0) {
+			node->gd = 0;		
+		} else {
+			node = NULL;
+		}	
 	}
+	BUSI2C_DEBUG(LOG_INFO, "open suc\r\n ");
 	return node;
 }
 /**
@@ -129,8 +151,10 @@ s32 bus_i2c_close(DevI2cNode *node)
 	if  (node == NULL) return -1;
 
 	if (node->gd != 0) return -1;
-
+	BUSI2C_DEBUG(LOG_INFO, "i2c close:%s!\r\n", node->dev.pnode.name);
 	node->gd = -1; 
+	
+	osMutexRelease(node->mutex);
 
 	return 0;
 }
@@ -151,7 +175,7 @@ s32 bus_i2c_transfer(DevI2cNode *node, u8 addr, u8 rw, u8* data, s32 datalen)
 	if (node == NULL) return -1;
 
 	if(node->dev.pnode.type == BUS_I2C_H)
-		return mcu_hi2c_transfer (node, addr, rw, data, datalen);
+		return 0;//mcu_hi2c_transfer (node, addr, rw, data, datalen);
 	else if (node->dev.pnode.type == BUS_I2C_V)	
 		return bus_vi2c_transfer(node, addr, rw, data, datalen);
 	else {

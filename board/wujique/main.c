@@ -47,6 +47,11 @@
 
 RCC_ClocksTypeDef RCC_Clocks;
 
+const static BusUartPra PcPortPra={
+	.BaudRate = 115200,
+	.bufsize = 256,
+	};
+
 /*
 	cpu初始化
 */
@@ -65,6 +70,7 @@ s32 board_mcu_preinit(void)
 	/*IO跟串口是调试信息的依赖，所以最早初始化*/
 	mcu_io_init();
 	bus_uart_init();
+	bus_uart_open(PC_PORT_STR, &PcPortPra);
 	log_init();
 	
 	wjq_log(LOG_INFO, "\r\n\r\n\r\n****************************************\r\n");

@@ -26,7 +26,7 @@
 
 #include "petite.h"
 
-#define BUS_SPI_DEBUG
+//#define BUS_SPI_DEBUG
 
 #ifdef BUS_SPI_DEBUG
 #define BUSSPI_DEBUG	wjq_log 
@@ -70,9 +70,7 @@ s32 bus_spi_register(const DevSpi *dev)
 		listp = listp->next;
 	}
 
-	/* 
-		申请一个节点空间 
-	*/
+	/*  申请一个节点空间    	*/
 	p = (DevSpiNode *)wjq_malloc(sizeof(DevSpiNode));
 	list_add(&(p->list), &DevSpiRoot);
 
@@ -171,7 +169,7 @@ DevSpiChNode *bus_spich_open(char *name, SPI_MODE mode, u16 KHz)
 	DevSpiChNode *node;
 	struct list_head *listp;
 	
-	//BUSSPI_DEBUG(LOG_INFO, "spi ch open:%s!\r\n", name);
+	BUSSPI_DEBUG(LOG_INFO, "spi ch open:%s!\r\n", name);
 
 	listp = DevSpiChRoot.next;
 	node = NULL;
@@ -180,10 +178,10 @@ DevSpiChNode *bus_spich_open(char *name, SPI_MODE mode, u16 KHz)
 		if (listp == &DevSpiChRoot)	break;
 
 		node = list_entry(listp, DevSpiChNode, list);
-		//BUSSPI_DEBUG(LOG_INFO, "spi ch name%s!\r\n", node->dev.name);
+		BUSSPI_DEBUG(LOG_INFO, "spi ch name%s!\r\n", node->dev.spi);
 		
 		if (strcmp(name, node->dev.pnode.name) == 0) {
-			//BUSSPI_DEBUG(LOG_INFO, "spi ch dev get ok!\r\n");
+			BUSSPI_DEBUG(LOG_INFO, "spi ch dev get ok!\r\n");
 			break;
 		} else {
 			node = NULL;
@@ -195,7 +193,7 @@ DevSpiChNode *bus_spich_open(char *name, SPI_MODE mode, u16 KHz)
 	if (node != NULL) {
 		
 		if(node->gd == 0) {
-			//BUSSPI_DEBUG(LOG_INFO, "spi ch open err:using!\r\n");
+			BUSSPI_DEBUG(LOG_INFO, "spi ch open err:using!\r\n");
 			node = NULL;
 		} else {
 			/*打开SPI控制器*/
@@ -207,10 +205,10 @@ DevSpiChNode *bus_spich_open(char *name, SPI_MODE mode, u16 KHz)
 
 			if (res == 0) {
 				node->gd = 0;
-				//BUSSPI_DEBUG(LOG_INFO, "spi dev open ok: %s!\r\n", name);
+				BUSSPI_DEBUG(LOG_INFO, "spi dev open ok: %s!\r\n", name);
 				mcu_io_output_resetbit(node->dev.csport, node->dev.cspin);
 			} else {
-				//BUSSPI_DEBUG(LOG_INFO, "spi dev open err!\r\n");
+				BUSSPI_DEBUG(LOG_INFO, "spi dev open err!\r\n");
 				node = NULL;
 			}
 		}
@@ -259,7 +257,7 @@ s32 bus_spich_transfer(DevSpiChNode * node, u8 *snd, u8 *rsv, s32 len)
 	else if (node->spi->dev.pnode.type == BUS_SPI_V)	
 		return bus_vspi_transfer(node->spi, snd, rsv, len);
 	else {
-		BUSSPI_DEBUG(LOG_DEBUG, "        spi dev type err\r\n");	
+		BUSSPI_DEBUG(LOG_DEBUG, "spi dev type err\r\n");	
 	}
 	return -1;
 }

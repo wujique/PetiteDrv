@@ -30,11 +30,11 @@
 /* Includes ------------------------------------------------------------------*/
 #include "mcu.h"
 
-#include "usb_bsp.h"
-#include "usb_hcd_int.h"
-#include "usb_dcd_int.h"
-#include "usbh_core.h"
-#include "dual_func_demo.h"
+//#include "usb_bsp.h"
+//#include "usb_hcd_int.h"
+//#include "usb_dcd_int.h"
+//#include "usbh_core.h"
+//#include "dual_func_demo.h"
 
 #include "stm32f4xx_it.h"
 #include "log.h"
@@ -49,13 +49,13 @@
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
-extern USB_OTG_CORE_HANDLE          USB_OTG_Core;
-extern USBH_HOST                    USB_Host;
-extern void USB_OTG_BSP_TimerIRQ (void);
+//extern USB_OTG_CORE_HANDLE          USB_OTG_Core;
+//extern USBH_HOST                    USB_Host;
+//extern void USB_OTG_BSP_TimerIRQ (void);
 
 #ifdef USB_OTG_HS_DEDICATED_EP1_ENABLED 
-extern uint32_t USBD_OTG_EP1IN_ISR_Handler (USB_OTG_CORE_HANDLE *pdev);
-extern uint32_t USBD_OTG_EP1OUT_ISR_Handler (USB_OTG_CORE_HANDLE *pdev);
+//extern uint32_t USBD_OTG_EP1IN_ISR_Handler (USB_OTG_CORE_HANDLE *pdev);
+//extern uint32_t USBD_OTG_EP1OUT_ISR_Handler (USB_OTG_CORE_HANDLE *pdev);
 #endif
 /* Private functions ---------------------------------------------------------*/
 extern void mcu_uart1_IRQhandler(void);
@@ -90,8 +90,7 @@ extern void vPortSVCHandler( void );
 void NMI_Handler(void)
 {
 	wjq_log(LOG_ERR, "NMI_Handler\r\n");
-	while (1)
-	{
+	while (1)	{
 	}
 
 }
@@ -105,8 +104,7 @@ void HardFault_Handler(void)
 {
   /* Go to infinite loop when Hard Fault exception occurs */
   wjq_log(LOG_ERR, "HardFault_Handler\r\n");
-  while (1)
-  {
+  while (1)  {
   }
 }
 
@@ -119,8 +117,7 @@ void MemManage_Handler(void)
 {
   /* Go to infinite loop when Memory Manage exception occurs */
   wjq_log(LOG_ERR, "MemManage_Handler\r\n");
-  while (1)
-  {
+  while (1)   {
   }
 }
 
@@ -133,8 +130,7 @@ void BusFault_Handler(void)
 {
   /* Go to infinite loop when Bus Fault exception occurs */
   wjq_log(LOG_ERR, "BusFault_Handler\r\n");
-  while (1)
-  {
+  while (1)  {
   }
 }
 
@@ -147,11 +143,10 @@ void UsageFault_Handler(void)
 {
   /* Go to infinite loop when Usage Fault exception occurs */
   wjq_log(LOG_ERR, "UsageFault_Handler\r\n");
-  while (1)
-  {
+  while (1)  {
   }
 }
-
+#if 0
 /**
   * @brief  This function handles SVCall exception.
   * @param  None
@@ -160,9 +155,9 @@ void UsageFault_Handler(void)
 void SVC_Handler(void)
 {
     //uart_printf("SVC_Handler\r\n");
-	vPortSVCHandler();
+	//vPortSVCHandler();
 }
-
+#endif
 /**
   * @brief  This function handles Debug Monitor exception.
   * @param  None
@@ -172,7 +167,7 @@ void DebugMon_Handler(void)
 {
     wjq_log(LOG_ERR, "DebugMon_Handler\r\n");
 }
-
+#if 0
 /**
   * @brief  This function handles PendSVC exception.
   * @param  None
@@ -181,8 +176,28 @@ void DebugMon_Handler(void)
 void PendSV_Handler(void)
 {
     //uart_printf("PendSV_Handler\r\n");
-	xPortPendSVHandler();
+	//xPortPendSVHandler();
 
+}
+#endif
+/**
+  * @brief This function handles System tick timer.
+  */
+#include "FreeRTOS.h"
+#include "task.h"
+
+/* cmsis os v2 */
+void osSystickHandler(void)
+{
+
+#if (INCLUDE_xTaskGetSchedulerState  == 1 )
+  if (xTaskGetSchedulerState() != taskSCHEDULER_NOT_STARTED)
+  {
+#endif  /* INCLUDE_xTaskGetSchedulerState */  
+    xPortSysTickHandler();
+#if (INCLUDE_xTaskGetSchedulerState  == 1 )
+  }
+#endif  /* INCLUDE_xTaskGetSchedulerState */  
 }
 
 /**
@@ -194,10 +209,8 @@ void SysTick_Handler(void)
 {
   //wjq_log(LOG_DEBUG, "DebugMon_Handler\r\n");
   Time_Update();
-  /*
-	freertos的接口放在这里
-  */
-  xPortSysTickHandler();
+  /* rtos的接口放在这里     */
+   osSystickHandler();
 
 }
 
@@ -296,6 +309,7 @@ void ADC_IRQHandler(void)
 	mcu_adc_IRQhandler();
 }
 
+#if 0
 /**
   * @brief  EXTI2_IRQHandler
   *         This function handles External line 1 interrupt request.
@@ -393,6 +407,7 @@ void EXTI15_10_IRQHandler(void)
     EXTI_ClearITPendingBit(EXTI_Line10);
   }
 }
+#endif
 /**
   * @brief  This function handles CAN1 RX0 request.
   * @param  None

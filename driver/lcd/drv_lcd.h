@@ -29,7 +29,7 @@ typedef struct
 	void (*backlight)(DevLcdNode *lcd, u8 sta);
 
 	/*
-		update配合draw_point/color_fill/fill使用，如果是没有gram的，相当于空操作。
+		update配合draw_point/color_fill/fill使用，如果是没有gram(framebuf)的，相当于空操作。
 	*/
 	s32 (*update)(DevLcdNode *lcd);
 }_lcd_drv; 
@@ -48,11 +48,15 @@ typedef struct
 {
 	PetiteNode pnode;
 	
-	char buslcd[DEV_NAME_SIZE]; //挂在那条LCD总线上
 	u16 id;
 	u16 width;	//LCD 宽度   竖屏
 	u16 height;	//LCD 高度    竖屏
+
+	char buslcd[DEV_NAME_SIZE]; //挂在那条LCD总线上
+	
+	void *buspra;//总线参数，如果是I2C，则包含I2C地址和时钟频率，如果是SPI，则包含时钟频率等信息
 }DevLcd;
+
 /* 设备节点*/
 struct _strDevLcdNode
 {

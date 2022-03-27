@@ -6,7 +6,7 @@
 #include "vfs.h"
 #include "drv_keypad.h"
 #include "drv_buzzer.h"
-#include "drv_dacsound.h"
+#include "dacsound.h"
 
 
 /* 硬件相关的都在board.c定义
@@ -141,10 +141,14 @@ int board_mount_udisk_2_vfs(void)
 	return 0;
 }
 /**/
-#include "FreeRtos.h"
-#include "frtos_task.h"
+#include "cmsis_os.h"
 
-TaskHandle_t  Wujique407TaskHandle;
+osThreadId_t TestTaskHandle;
+const osThreadAttr_t TestTask_attributes = {
+  .name = "TestTask",
+  .stack_size = Wujique407_TASK_STK_SIZE,
+  .priority = (osPriority_t) Wujique407_TASK_PRIO,//osPriorityNormal,
+};
 
 extern void wujique_stm407_test(void);
 
@@ -155,6 +159,10 @@ void board_app_task(void)
 
 	//spi_example();
 	//bus_uart_test();
+
+	/* 初始化文件系统 */
+	sd_fatfs_init();
+	vfs_add_node(&SdFatFs);
 	
 	wujique_stm407_test();
 	while(1){}
@@ -162,17 +170,13 @@ void board_app_task(void)
 /**/
 s32 board_app_init(void)
 {
-	BaseType_t xReturn = pdPASS;
-	
-	xReturn = xTaskCreate(	(TaskFunction_t) board_app_task,
-					(const char *)"wujique 407 test task",		/*lint !e971 Unqualified char types are allowed for strings and single characters only. */
-					(const configSTACK_DEPTH_TYPE) Wujique407_TASK_STK_SIZE,
-					(void *) NULL,
-					(UBaseType_t) Wujique407_TASK_PRIO,
-					(TaskHandle_t *) &Wujique407TaskHandle );	
-	
-	if(xReturn != pdPASS)	
-		wjq_log(LOG_DEBUG, "xTaskCreate wujique_407test err!\r\n");	
+	TestTaskHandle = osThreadNew(board_app_task, NULL, &TestTask_attributes);
+					
+	if(NULL != TestTaskHandle){
+		wjq_log(LOG_INFO,"[    _app] freertos Scheduler\r\n");
+	}else{
+		wjq_log(LOG_INFO,"[    _app] xTaskCreate fail\r\n");
+	}
 	
 	return 0;
 }
@@ -211,21 +215,21 @@ s32 board_init(void)
 		兼容多种声音播放方式 */
 	dev_tea5767_init(DEV_TEA5767_I2CBUS);
 	dev_dacsound_init(&BoardDacSound);
+
+	mcu_i2s_init();//初始化I2S接口
 	dev_wm8978_init();
-	/* 初始化文件系统 */
-	vfs_init();
-	vfs_mount(&SdFatFs);
+
 	//sys_spiffs_mount_coreflash();
 	//sys_lfs_mount();
 	//lfs_test();
 	/* USB 任务有长延时，后续要处理 need fix*/
-	usb_task_create();
+	//usb_task_create();
 	//vfs_add_node(&USBFatFs);
 	/*---------------------------------------*/
 	/* 创建目标板应用程序 */
 	board_app_init();
 	//eth_app_init();
-	fun_cmd_init();
+	//fun_cmd_init();
 	//mcu_timer_test();	
 	
 	return 0;
@@ -244,9 +248,10 @@ void board_low_task(void)
 	dev_keypad_scan();
 	#endif
 	
-	eth_loop_task();
+	//eth_loop_task();
 	fun_sound_task();
-	fun_rec_task();
+	//fun_rec_task();
+	
 	dev_touchkey_task();
 
 }

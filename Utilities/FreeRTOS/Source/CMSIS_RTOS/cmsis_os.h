@@ -26,7 +26,7 @@
  *  
  *----------------------------------------------------------------------------
  *
- * Portions Copyright ?2016 STMicroelectronics International N.V. All rights reserved.
+ * Portions Copyright © 2016 STMicroelectronics International N.V. All rights reserved.
  * Portions Copyright (c) 2013 ARM LIMITED
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without
@@ -54,11 +54,11 @@
  *---------------------------------------------------------------------------*/
 
 #include "FreeRTOS.h"
-#include "frtos_task.h"
-#include "frtos_timers.h"
-#include "frtos_queue.h"
-#include "frtos_semphr.h"
-#include "frtos_event_groups.h"
+#include "task.h"
+#include "timers.h"
+#include "queue.h"
+#include "semphr.h"
+#include "event_groups.h"
 
 /**
 \page cmsis_os_h Header File Template: cmsis_os.h

@@ -608,6 +608,129 @@ s32 petite_dev_register(void)
 	
 	return 0;
 }
+/*	字库定义		*/
+
+/* 思源宋体 用字模工具生成的18030字库
+	从矢量字体转来的，某些字效果非常不好
+	仅供测试
+
+	保存在文件系统
+	*/
+FontHead SYSongTi1212 ={
+
+	.name = "SYsongti_12",//名字
+	.size = 12,
+	.path = "mtd0/1:font/songti1212.DZK",//路径
+		//"mtd0/1:/shscn1212.DZK",
+		
+	.type = FONT_DOT_YMY,
+	.st = FONT_ST_GB18030,
+	.dt = FONT_V_H_U_D_L_R,
+	.shift = 0,
+	
+	.datac = 24,
+	.w = 12,
+	.h = 12,
+	
+	};
+	
+FontHead SYSongTi1616 ={
+
+	.name = "SYsongti_16",//名字
+	.size = 16,
+	.path = "mtd0/1:font/shscn1616.DZK",//路径
+			//"mtd0/1:/songti1616.DZK",
+
+	.type = FONT_DOT_YMY,
+	.st = FONT_ST_GB18030,
+	.dt = FONT_V_H_U_D_L_R,
+	.shift = 0,
+	
+	.datac = 32,
+	.w = 16,
+	.h = 16,
+	
+	};
+/*
+	屋脊雀优化的点阵，基于思源宋体
+	*/	
+FontHead SYSongTiM1616 ={
+
+	.name = "SYST_16_m",//名字
+	.size = 16,
+	.path = "mtd0/1:font/syst_m_16.bin",//路径
+	
+	.type = FONT_DOT_WJQ,
+	.st = FONT_ST_GB18030,
+	.dt = FONT_H_H_L_R_U_D,
+	.shift = 0,
+	
+	.datac = 32,
+	.w = 16,
+	.h = 16,
+	
+	
+	};
+FontHead SYSongTiM2424 ={
+
+	.name = "SYST_24_m",//名字
+	.size = 24,
+	.path = "mtd0/1:font/syst_m_24.bin",//路径
+
+	.type = FONT_DOT_WJQ,
+	.st = FONT_ST_GB18030,
+	.dt = FONT_H_H_L_R_U_D,
+	.shift = 0,
+	
+	.datac = 72,
+	.w = 24,
+	.h = 24,
+	
+	};
+/*------文泉驿点阵12pt------*/
+FontHead WQYST16H18030 ={
+
+	.name = "WQY_ST_16_H",//名字
+	.size = 16,
+	.path = "mtd0/1:font/wqy16h18030.bin",//路径
+	
+	.type = FONT_DOT_WJQ,
+	.st = FONT_ST_GB18030,
+	.dt = FONT_H_H_L_R_U_D,
+	.shift = 0,
+	
+	.datac = 32,
+	.w = 16,
+	.h = 16,
+	
+	
+	};
+	
+FontHead WQYST12H18030 ={
+
+	.name = "WQY_ST_12_H",//名字
+	.size = 12,
+	.path = "mtd0/1:font/wqy12h18030.bin",//路径
+	
+	.type = FONT_DOT_WJQ,
+	.st = FONT_ST_GB18030,
+	.dt = FONT_H_H_L_R_U_D,
+	.shift = 0,
+	
+	.datac = 24,
+	.w = 12,
+	.h = 12,
+	
+	};
+
+FontHead *FontListN[FONT_LIST_MAX] = {
+	&SYSongTi1212,
+	&SYSongTi1616,	
+	&SYSongTiM1616,
+	&SYSongTiM2424,
+	&WQYST16H18030,
+	&WQYST12H18030,
+	};
 
 /*
 

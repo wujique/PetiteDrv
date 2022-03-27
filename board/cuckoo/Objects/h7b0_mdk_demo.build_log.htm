@@ -1,0 +1,986 @@
+<html>
+<body>
+<pre>
+<h1>�Vision Build Log</h1>
+<h2>Tool Versions:</h2>
+IDE-Version: ��Vision V5.24.2.0
+Copyright (C) 2017 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: xuejia huang, wujique, LIC=BL28G-VZ8WZ-5BAEB-27JCA-VAYN1-NSDPT
+ 
+Tool Versions:
+Toolchain:       MDK-ARM Professional  Version: 5.24.1
+Toolchain Path:  C:\Keil_v5\ARM\ARMCC\Bin
+C Compiler:      Armcc.exe V5.06 update 5 (build 528)
+Assembler:       Armasm.exe V5.06 update 5 (build 528)
+Linker/Locator:  ArmLink.exe V5.06 update 5 (build 528)
+Library Manager: ArmAr.exe V5.06 update 5 (build 528)
+Hex Converter:   FromElf.exe V5.06 update 5 (build 528)
+CPU DLL:         SARMCM3.DLL V5.24.1
+Dialog DLL:      DCM.DLL V1.16.0.0
+Target DLL:      CMSIS_AGDI.dll V1.28.3.0
+Dialog DLL:      TCM.DLL V1.32.0.0
+ 
+<h2>Project:</h2>
+F:\PetiteDrv\prog\PetiteDrv\board\cuckoo\h7b0_mdk_demo.uvprojx
+Project File Date:  03/26/2022
+
+<h2>Output:</h2>
+*** Using Compiler 'V5.06 update 5 (build 528)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
+Build target 'Target 1'
+assembling startup_stm32h7b0xx.s...
+compiling main.c...
+Core\Src\main.c(192): warning:  #223-D: function "mcu_uart_init_pra" declared implicitly
+  	mcu_uart_init_pra();
+Core\Src\main.c(213): warning:  #223-D: function "W25Qxx_init" declared implicitly
+     	W25Qxx_init();
+Core\Src\main.c(214): warning:  #223-D: function "w25qxx_map" declared implicitly
+    	w25qxx_map();
+Core\Src\main.c(217): warning:  #223-D: function "test_qpi_run_fun" declared implicitly
+  	cnt = test_qpi_run_fun(2);
+Core\Src\main.c(220): warning:  #223-D: function "petite_app" declared implicitly
+    	petite_app();
+Core\Src\main.c(637): warning:  #177-D: function "MX_UART4_Init"  was declared but never referenced
+  static void MX_UART4_Init(void)
+Core\Src\main.c(378): warning:  #177-D: function "MX_LTDC_Init"  was declared but never referenced
+  static void MX_LTDC_Init(void)
+Core\Src\main.c(517): warning:  #177-D: function "MX_SAI2_Init"  was declared but never referenced
+  static void MX_SAI2_Init(void)
+Core\Src\main.c(554): warning:  #177-D: function "MX_SDMMC1_SD_Init"  was declared but never referenced
+  static void MX_SDMMC1_SD_Init(void)
+Core\Src\main.c(685): warning:  #177-D: function "MX_UART7_Init"  was declared but never referenced
+  static void MX_UART7_Init(void)
+Core\Src\main.c(338): warning:  #177-D: function "MX_DMA2D_Init"  was declared but never referenced
+  static void MX_DMA2D_Init(void)
+Core\Src\main.c: 11 warnings, 0 errors
+compiling stm32h7xx_it.c...
+Core\Src\stm32h7xx_it.c(79): warning:  #223-D: function "uart_printf" declared implicitly
+  	uart_printf("\r\nNMI_Handler\r\n");
+Core\Src\stm32h7xx_it.c(94): warning:  #223-D: function "uart_printf" declared implicitly
+    uart_printf("\r\nHardFault_Handler\r\n");
+Core\Src\stm32h7xx_it.c(110): warning:  #223-D: function "uart_printf" declared implicitly
+    uart_printf("\r\nMemManage_Handler\r\n");
+Core\Src\stm32h7xx_it.c(126): warning:  #223-D: function "uart_printf" declared implicitly
+    uart_printf("\r\nBusFault_Handler\r\n");
+Core\Src\stm32h7xx_it.c(142): warning:  #223-D: function "uart_printf" declared implicitly
+    uart_printf("\r\nUsageFault_Handler\r\n");
+Core\Src\stm32h7xx_it.c(173): warning:  #223-D: function "uart_printf" declared implicitly
+  	uart_printf("\r\nDebugMon_Handler\r\n");
+Core\Src\stm32h7xx_it.c(216): warning:  #223-D: function "Time_Update" declared implicitly
+  	Time_Update();
+Core\Src\stm32h7xx_it.c(222): warning:  #223-D: function "lv_tick_inc" declared implicitly
+  	lv_tick_inc(1);
+Core\Src\stm32h7xx_it.c: 8 warnings, 0 errors
+compiling system_stm32h7xx.c...
+compiling stm32h7xx_hal_msp.c...
+Core\Src\stm32h7xx_hal_msp.c(289): warning:  #177-D: variable "PeriphClkInitStruct"  was declared but never referenced
+    RCC_PeriphCLKInitTypeDef PeriphClkInitStruct = {0};
+Core\Src\stm32h7xx_hal_msp.c: 1 warning, 0 errors
+compiling stm32h7xx_hal.c...
+compiling stm32h7xx_hal_cortex.c...
+compiling stm32h7xx_hal_exti.c...
+compiling stm32h7xx_hal_gpio.c...
+compiling stm32h7xx_hal_flash.c...
+compiling stm32h7xx_hal_dma_ex.c...
+compiling stm32h7xx_hal_flash_ex.c...
+compiling stm32h7xx_hal_dma.c...
+compiling stm32h7xx_hal_hsem.c...
+compiling stm32h7xx_hal_i2c_ex.c...
+compiling stm32h7xx_hal_mdma.c...
+compiling stm32h7xx_hal_pwr.c...
+compiling stm32h7xx_hal_ospi.c...
+compiling stm32h7xx_hal_i2c.c...
+compiling stm32h7xx_hal_pwr_ex.c...
+compiling stm32h7xx_hal_tim.c...
+compiling stm32h7xx_hal_rcc.c...
+compiling stm32h7xx_hal_tim_ex.c...
+compiling stm32h7xx_hal_rcc_ex.c...
+compiling stm32h7xx_hal_uart_ex.c...
+compiling stm32h7xx_hal_uart.c...
+compiling stm32h7xx_hal_ltdc_ex.c...
+compiling stm32h7xx_hal_dcmi.c...
+compiling stm32h7xx_hal_ltdc.c...
+compiling stm32h7xx_hal_sai.c...
+compiling stm32h7xx_hal_sai_ex.c...
+compiling stm32h7xx_hal_sd_ex.c...
+compiling stm32h7xx_hal_spi_ex.c...
+compiling stm32h7xx_hal_sd.c...
+compiling stm32h7xx_hal_spi.c...
+compiling stm32h7xx_ll_delayblock.c...
+compiling stm32h7xx_ll_sdmmc.c...
+compiling stm32h7xx_hal_dma2d.c...
+compiling board.c...
+User\board.c(13): warning:  #223-D: function "petite_dev_register" declared implicitly
+  	petite_dev_register();
+User\board.c(15): warning:  #223-D: function "lcd_reset" declared implicitly
+      lcd_reset();
+User\board.c(16): warning:  #223-D: function "LCD_Config" declared implicitly
+      LCD_Config();
+User\board.c(22): warning:  #223-D: function "dev_wm8978_init" declared implicitly
+  	dev_wm8978_init();
+User\board.c(26): warning:  #223-D: function "cuckoo_7b0_test_init" declared implicitly
+  	cuckoo_7b0_test_init();
+User\board.c: 5 warnings, 0 errors
+compiling board_sysconf.c...
+..\..\Petite\mem/p_list.h(9): warning:  #47-D: incompatible redefinition of macro "offsetof"  (declared at line 91 of "C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h")
+  #define offsetof(type,  member)    ((size_t) &((type *)0)-> member)
+User\board_sysconf.c: 1 warning, 0 errors
+compiling w25q64.c...
+User\w25q64.c(111): warning:  #223-D: function "Error_Handler" declared implicitly
+          Error_Handler();
+User\w25q64.c(115): warning:  #223-D: function "Error_Handler" declared implicitly
+          Error_Handler();
+User\w25q64.c(118): warning:  #223-D: function "uart_printf" declared implicitly
+      uart_printf("SPI  I/0 Read Device ID : 0x%2X 0x%2X\r\n", Buff[0], Buff[1]);
+User\w25q64.c(149): warning:  #223-D: function "Error_Handler" declared implicitly
+          Error_Handler();
+User\w25q64.c(153): warning:  #223-D: function "Error_Handler" declared implicitly
+          Error_Handler();
+User\w25q64.c(187): warning:  #223-D: function "Error_Handler" declared implicitly
+          Error_Handler();
+User\w25q64.c(191): warning:  #223-D: function "Error_Handler" declared implicitly
+          Error_Handler();
+User\w25q64.c(226): warning:  #223-D: function "Error_Handler" declared implicitly
+          Error_Handler();
+User\w25q64.c(230): warning:  #223-D: function "Error_Handler" declared implicitly
+          Error_Handler();
+User\w25q64.c(298): warning:  #223-D: function "Error_Handler" declared implicitly
+  			Error_Handler();
+User\w25q64.c(301): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "uint8_t *"
+  		if (HAL_OSPI_Receive(&
+SPIHandle, reg, 
+AL_OSPI_TIMEOUT_DEFAULT_VALUE) != HAL_OK)	{
+User\w25q64.c(302): warning:  #223-D: function "Error_Handler" declared implicitly
+  			Error_Handler();
+User\w25q64.c(249): warning:  #177-D: variable "sConfig"  was declared but never referenced
+      OSPI_AutoPollingTypeDef sConfig; 	
+User\w25q64.c(319): warning:  #177-D: variable "sConfig"  was declared but never referenced
+     OSPI_AutoPollingTypeDef sConfig;
+User\w25q64.c(496): warning:  #223-D: function "uart_printf" declared implicitly
+  		uart_printf(" warr: flash id err!\r\n");
+User\w25q64.c(499): warning:  #223-D: function "uart_printf" declared implicitly
+  		uart_printf("name  :%s\r\n", OspiFlashPra.name);
+User\w25q64.c(528): warning:  #177-D: variable "sConfig"  was declared but never referenced
+      OSPI_AutoPollingTypeDef sConfig; 	
+User\w25q64.c(737): warning:  #177-D: variable "command"  was declared but never referenced
+  	u8 command[4];
+User\w25q64.c(920): warning:  #223-D: function "Error_Handler" declared implicitly
+  	  Error_Handler();
+User\w25q64.c(926): warning:  #223-D: function "Error_Handler" declared implicitly
+  	  Error_Handler();
+User\w25q64.c(947): warning:  #223-D: function "uart_printf" declared implicitly
+  	uart_printf("w25qxx_test...\r\n");
+User\w25q64.c(956): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "u8 *"
+  		w25qxx_read_any(
+User\w25q64.c(968): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "u8 *"
+  		w25qxx_write_any(
+User\w25q64.c(971): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "u8 *"
+  		w25qxx_read_any(
+User\w25q64.c(1009): warning:  #223-D: function "MX_OCTOSPI1_Init" declared implicitly
+  	MX_OCTOSPI1_Init();
+User\w25q64.c(1017): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "u8 *"
+  	w25qxx_read_any(
+User\w25q64.c(1029): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "u8 *"
+  	w25qxx_write_any(
+User\w25q64.c(1032): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "u8 *"
+  	w25qxx_read_any(
+User\w25q64.c: 28 warnings, 0 errors
+compiling cuckoo_test.c...
+..\..\Petite\mem/p_list.h(9): warning:  #47-D: incompatible redefinition of macro "offsetof"  (declared at line 91 of "C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h")
+  #define offsetof(type,  member)    ((size_t) &((type *)0)-> member)
+User\cuckoo_test.c(40): warning:  #223-D: function "sd_fatfs_init" declared implicitly
+  	sd_fatfs_init();
+User\cuckoo_test.c(42): warning:  #223-D: function "vfs_add_node" declared implicitly
+  	vfs_add_node(&SdFatFs);
+User\cuckoo_test.c(99): warning:  #223-D: function "fun_sound_play" declared implicitly
+  	fun_sound_play("mtd0/0:stereo_16bit_32k.wav", "wm8978");
+User\cuckoo_test.c(35): warning:  #177-D: variable "tickstart"  was declared but never referenced
+  	uint32_t tickstart,tmp;
+User\cuckoo_test.c(35): warning:  #177-D: variable "tmp"  was declared but never referenced
+  	uint32_t tickstart,tmp;
+User\cuckoo_test.c(180): warning:  #167-D: argument of type "void (*)(void)" is incompatible with parameter of type "osThreadFunc_t"
+  	TestTaskHandle = osThreadNew(cuckoo_7b0_test, 
+ULL, &TestTask_attributes);
+User\cuckoo_test.c: 7 warnings, 0 errors
+compiling test_qspi.c...
+User\test_qspi.c(37): warning:  #223-D: function "w25qxx_test_2" declared implicitly
+  	w25qxx_test_2();
+User\test_qspi.c: 1 warning, 0 errors
+compiling sd_fat.c...
+User\sd_fat.c(25): warning:  #223-D: function "uart_printf" declared implicitly
+  	uart_printf("\r\nmount...");
+User\sd_fat.c(56): warning:  #223-D: function "uart_printf" declared implicitly
+  	uart_printf("-------------------pra-----------------\r\n");		
+User\sd_fat.c(74): warning:  #223-D: function "uart_printf" declared implicitly
+  	uart_printf("-------------FatFs open & write---------------\r\n");
+User\sd_fat.c(80): warning:  #223-D: function "strlen" declared implicitly
+  		MyFile_Res = f_write(&MyFile, MyFile_WriteBuffer,strlen(MyFile_WriteBuffer),&MyFile_Num);
+User\sd_fat.c(98): warning:  #223-D: function "strlen" declared implicitly
+  	rlen = strlen(MyFile_WriteBuffer);							
+User\sd_fat.c(103): warning:  #223-D: function "PrintFormat" declared implicitly
+  		PrintFormat(MyFile_ReadBuffer, rlen);
+User\sd_fat.c: 6 warnings, 0 errors
+compiling log.c...
+compiling maths.c...
+compiling petite.c...
+..\..\Petite\mem/p_list.h(9): warning:  #47-D: incompatible redefinition of macro "offsetof"  (declared at line 91 of "C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h")
+  #define offsetof(type,  member)    ((size_t) &((type *)0)-> member)
+..\..\Petite\petite.c(56): warning:  #223-D: function "board_low_task" declared implicitly
+  		board_low_task(5);
+..\..\Petite\petite.c: 2 warnings, 0 errors
+compiling pfsm.c...
+compiling stimer.c...
+compiling p_list.c...
+..\..\Petite\mem/p_list.h(9): warning:  #47-D: incompatible redefinition of macro "offsetof"  (declared at line 91 of "C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h")
+  #define offsetof(type,  member)    ((size_t) &((type *)0)-> member)
+..\..\Petite\mem\p_list.c: 1 warning, 0 errors
+compiling vfs.c...
+..\..\Petite\mem/p_list.h(9): warning:  #47-D: incompatible redefinition of macro "offsetof"  (declared at line 91 of "C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h")
+  #define offsetof(type,  member)    ((size_t) &((type *)0)-> member)
+..\..\Petite\vfs.c(155): warning:  #167-D: argument of type "const u8 *" is incompatible with parameter of type "const char *"
+      while(index < strlen(lpPath)) {
+..\..\Petite\vfs.c(159): warning:  #167-D: argument of type "u8 *" is incompatible with parameter of type "const char *"
+              str_len = strlen(name);
+..\..\Petite\vfs.c(164): warning:  #167-D: argument of type "u8 *" is incompatible with parameter of type "char *restrict"
+                  strcpy(dir, name);//只能保存一级路�?
+..\..\Petite\vfs.c(164): warning:  #167-D: argument of type "u8 *" is incompatible with parameter of type "const char *restrict"
+                  strcpy(dir, name);//只能保存一级路�?
+..\..\Petite\vfs.c(175): warning:  #111-D: statement is unreachable
+                  break;//文件名太长，错误，退�?
+..\..\Petite\vfs.c(182): warning:  #167-D: argument of type "u8 *" is incompatible with parameter of type "char *restrict"
+      strcpy(lpDir, dir);
+..\..\Petite\vfs.c(182): warning:  #167-D: argument of type "u8 *" is incompatible with parameter of type "const char *restrict"
+      strcpy(lpDir, dir);
+..\..\Petite\vfs.c(183): warning:  #167-D: argument of type "u8 *" is incompatible with parameter of type "char *restrict"
+      strcpy(lpName, name);
+..\..\Petite\vfs.c(183): warning:  #167-D: argument of type "u8 *" is incompatible with parameter of type "const char *restrict"
+      strcpy(lpName, name);
+..\..\Petite\vfs.c(185): warning:  #167-D: argument of type "u8 *" is incompatible with parameter of type "const char *"
+      if(strlen(dir) == 0) {
+..\..\Petite\vfs.c(186): warning:  #167-D: argument of type "u8 *" is incompatible with parameter of type "char *restrict"
+          strcpy(lpDir,"mtd0");
+..\..\Petite\vfs.c(270): warning:  #167-D: argument of type "const u8 *" is incompatible with parameter of type "const TCHAR *"
+  					res = f_mount(&VfsNodeList[i].pra.fatfs, Mtd->dir, 1);
+..\..\Petite\vfs.c(327): warning:  #167-D: argument of type "const u8 *" is incompatible with parameter of type "const char *"
+  			if(0 == strcmp(VfsNodeList[i].Mtd->vfsdir, dirname)) {
+..\..\Petite\vfs.c(327): warning:  #167-D: argument of type "u8 *" is incompatible with parameter of type "const char *"
+  			if(0 == strcmp(VfsNodeList[i].Mtd->vfsdir, dirname)) {
+..\..\Petite\vfs.c(350): warning:  #167-D: argument of type "const char *" is incompatible with parameter of type "const u8 *"
+  	vfs_get_dir_name(pathname, &dir[0], &name[0]);
+..\..\Petite\vfs.c(375): warning:  #167-D: argument of type "u8 *" is incompatible with parameter of type "const TCHAR *"
+  			res = f_open(&filenode->pra.fatfd, name, mode);
+..\..\Petite\vfs.c(514): warning:  #177-D: variable "len"  was declared but never referenced
+  	unsigned int len;
+..\..\Petite\vfs.c(569): warning:  #177-D: variable "len"  was declared but never referenced
+  	unsigned int len;
+..\..\Petite\vfs.c(631): warning:  #111-D: statement is unreachable
+  			break;
+..\..\Petite\vfs.c(613): warning:  #177-D: variable "len"  was declared but never referenced
+  	unsigned int len;
+..\..\Petite\vfs.c: 21 warnings, 0 errors
+compiling p_kfifo.c...
+..\..\Petite\mem\p_kfifo.c(102): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "u8 *"
+  	PrintFormat(kfifo_u8_buf, 513);
+..\..\Petite\mem\p_kfifo.c(112): warning:  #223-D: function "PrintFormatU16" declared implicitly
+  	PrintFormatU16(kfifo_u16_buf, 513);
+..\..\Petite\mem\p_kfifo.c: 2 warnings, 0 errors
+compiling alloc.c...
+..\..\Petite\mem\alloc.c(253): warning:  #111-D: statement is unreachable
+  			return NULL;
+..\..\Petite\mem\alloc.c(299): warning:  #177-D: variable "p"  was declared but never referenced
+  	ALLOC_HDR*bp, *p, *np;
+..\..\Petite\mem\alloc.c(299): warning:  #177-D: variable "np"  was declared but never referenced
+  	ALLOC_HDR*bp, *p, *np;
+..\..\Petite\mem\alloc.c(302): warning:  #177-D: variable "aunits"  was declared but never referenced
+  	unsigned aunits;
+..\..\Petite\mem\alloc.c: 4 warnings, 0 errors
+compiling font.c...
+..\..\Petite\font\font.c(112): warning:  #381-D: extra ";" ignored
+  	int fd;;
+..\..\Petite\font\font.c(122): warning:  #177-D: variable "font"  was declared but never referenced
+  	FontHead *font = NULL;
+..\..\Petite\font\font.c(224): warning:  #223-D: function "font_dot_wjq_addr" declared implicitly
+  			addr = font_dot_wjq_addr(font, Ch, area);
+..\..\Petite\font\font.c(231): warning:  #223-D: function "font_dot_ymy_addr" declared implicitly
+  			addr = font_dot_ymy_addr(font, Ch, area);
+..\..\Petite\font\font.c(292): warning:  #177-D: variable "res"  was declared but never referenced
+  	int res;
+..\..\Petite\font\font.c: 5 warnings, 0 errors
+compiling font_6x12.c...
+compiling font_8x8.c...
+compiling font_8x16.c...
+compiling font_wjq.c...
+compiling font_ymy.c...
+compiling bus_i2c.c...
+..\..\Petite\mem/p_list.h(9): warning:  #47-D: incompatible redefinition of macro "offsetof"  (declared at line 91 of "C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h")
+  #define offsetof(type,  member)    ((size_t) &((type *)0)-> member)
+..\..\Petite\bus\bus_i2c.c(87): warning:  #223-D: function "bus_vi2c_init" declared implicitly
+  		bus_vi2c_init(&p->dev);
+..\..\Petite\bus\bus_i2c.c: 2 warnings, 0 errors
+compiling bus_lcd.c...
+..\..\Petite\mem/p_list.h(9): warning:  #47-D: incompatible redefinition of macro "offsetof"  (declared at line 91 of "C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h")
+  #define offsetof(type,  member)    ((size_t) &((type *)0)-> member)
+..\..\Petite\bus\bus_lcd.c(59): warning:  #188-D: enumerated type mixed with another type
+  		mcu_io_config_out(dev->A0port,dev->A0pin);
+..\..\Petite\bus\bus_lcd.c(60): warning:  #188-D: enumerated type mixed with another type
+  		mcu_io_output_setbit(dev->A0port,dev->A0pin);
+..\..\Petite\bus\bus_lcd.c(64): warning:  #188-D: enumerated type mixed with another type
+  		mcu_io_config_out(dev->rstport,dev->rstpin);
+..\..\Petite\bus\bus_lcd.c(65): warning:  #188-D: enumerated type mixed with another type
+  		mcu_io_output_setbit(dev->rstport,dev->rstpin);
+..\..\Petite\bus\bus_lcd.c(69): warning:  #188-D: enumerated type mixed with another type
+  		mcu_io_config_out(dev->blport,dev->blpin);
+..\..\Petite\bus\bus_lcd.c(70): warning:  #188-D: enumerated type mixed with another type
+  		mcu_io_output_setbit(dev->blport,dev->blpin);
+..\..\Petite\bus\bus_lcd.c(83): warning:  #188-D: enumerated type mixed with another type
+  		mcu_io_output_setbit(node->dev.blport, node->dev.blpin);
+..\..\Petite\bus\bus_lcd.c(85): warning:  #188-D: enumerated type mixed with another type
+  		mcu_io_output_resetbit(node->dev.blport, node->dev.blpin);	
+..\..\Petite\bus\bus_lcd.c(99): warning:  #188-D: enumerated type mixed with another type
+  		mcu_io_output_setbit(node->dev.rstport, node->dev.rstpin);
+..\..\Petite\bus\bus_lcd.c(101): warning:  #188-D: enumerated type mixed with another type
+  		mcu_io_output_resetbit(node->dev.rstport, node->dev.rstpin);	
+..\..\Petite\bus\bus_lcd.c(215): warning:  #177-D: variable "i"  was declared but never referenced
+  	u32 i;
+..\..\Petite\bus\bus_lcd.c(257): warning:  #177-D: variable "i"  was declared but never referenced
+  	u32 i;
+..\..\Petite\bus\bus_lcd.c(438): warning:  #177-D: variable "i"  was declared but never referenced
+  	u32 i;
+..\..\Petite\bus\bus_lcd.c(489): warning:  #188-D: enumerated type mixed with another type
+  			mcu_io_output_resetbit(node->dev.A0port, node->dev.A0pin);
+..\..\Petite\bus\bus_lcd.c(492): warning:  #188-D: enumerated type mixed with another type
+  			mcu_io_output_setbit(node->dev.A0port, node->dev.A0pin);
+..\..\Petite\bus\bus_lcd.c: 16 warnings, 0 errors
+compiling bus_spi.c...
+..\..\Petite\mem/p_list.h(9): warning:  #47-D: incompatible redefinition of macro "offsetof"  (declared at line 91 of "C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h")
+  #define offsetof(type,  member)    ((size_t) &((type *)0)-> member)
+..\..\Petite\bus\bus_spi.c(83): warning:  #223-D: function "mcu_hspi_init" declared implicitly
+  		mcu_hspi_init(dev);
+..\..\Petite\bus\bus_spi.c(148): warning:  #188-D: enumerated type mixed with another type
+  	mcu_io_config_out(dev->csport,dev->cspin);
+..\..\Petite\bus\bus_spi.c(149): warning:  #188-D: enumerated type mixed with another type
+  	mcu_io_output_setbit(dev->csport,dev->cspin);
+..\..\Petite\bus\bus_spi.c(201): warning:  #223-D: function "mcu_hspi_open" declared implicitly
+  				res = mcu_hspi_open(node->spi, mode, KHz);	
+..\..\Petite\bus\bus_spi.c(209): warning:  #188-D: enumerated type mixed with another type
+  				mcu_io_output_resetbit(node->dev.csport, node->dev.cspin);
+..\..\Petite\bus\bus_spi.c(231): warning:  #223-D: function "mcu_hspi_close" declared implicitly
+  		mcu_hspi_close(node->spi);
+..\..\Petite\bus\bus_spi.c(236): warning:  #188-D: enumerated type mixed with another type
+  	mcu_io_output_setbit(node->dev.csport, node->dev.cspin);
+..\..\Petite\bus\bus_spi.c(256): warning:  #223-D: function "mcu_hspi_transfer" declared implicitly
+  		return mcu_hspi_transfer(node->spi, snd, rsv, len);
+..\..\Petite\bus\bus_spi.c(277): warning:  #188-D: enumerated type mixed with another type
+  			mcu_io_output_setbit(node->dev.csport, node->dev.cspin);
+..\..\Petite\bus\bus_spi.c(281): warning:  #188-D: enumerated type mixed with another type
+  			mcu_io_output_resetbit(node->dev.csport, node->dev.cspin);
+..\..\Petite\bus\bus_spi.c(322): warning:  #111-D: statement is unreachable
+  	bus_spich_close(spichnode);
+..\..\Petite\bus\bus_spi.c: 12 warnings, 0 errors
+compiling bus_uart.c...
+..\..\Petite\mem/p_list.h(9): warning:  #47-D: incompatible redefinition of macro "offsetof"  (declared at line 91 of "C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h")
+  #define offsetof(type,  member)    ((size_t) &((type *)0)-> member)
+..\..\Petite\bus\bus_uart.c(61): warning:  #223-D: function "mcu_uart_init" declared implicitly
+  	res = mcu_uart_init(comport,node, Pra);
+..\..\Petite\bus\bus_uart.c(93): warning:  #940-D: missing return statement at end of non-void function "bus_uart_tcflush" 
+  }
+..\..\Petite\bus\bus_uart.c(150): warning:  #550-D: variable "res"  was set but never used
+      s32 res;
+..\..\Petite\bus\bus_uart.c: 4 warnings, 0 errors
+compiling bus_vi2c.c...
+..\..\Petite\mem/p_list.h(9): warning:  #47-D: incompatible redefinition of macro "offsetof"  (declared at line 91 of "C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h")
+  #define offsetof(type,  member)    ((size_t) &((type *)0)-> member)
+..\..\Petite\bus\bus_vi2c.c(52): warning:  #188-D: enumerated type mixed with another type
+  	mcu_io_config_in(dev->sdaport, dev->sdapin);
+..\..\Petite\bus\bus_vi2c.c(63): warning:  #188-D: enumerated type mixed with another type
+  	mcu_io_config_out(dev->sdaport, dev->sdapin);
+..\..\Petite\bus\bus_vi2c.c(75): warning:  #188-D: enumerated type mixed with another type
+      if (MCU_IO_STA_1 == mcu_io_input_readbit(dev->sdaport, dev->sdapin))
+..\..\Petite\bus\bus_vi2c.c(91): warning:  #188-D: enumerated type mixed with another type
+  		mcu_io_output_setbit(dev->sdaport, dev->sdapin);
+..\..\Petite\bus\bus_vi2c.c(93): warning:  #188-D: enumerated type mixed with another type
+      	mcu_io_output_resetbit(dev->sdaport, dev->sdapin);
+..\..\Petite\bus\bus_vi2c.c(109): warning:  #188-D: enumerated type mixed with another type
+  		mcu_io_output_setbit(dev->sclport, dev->sclpin);
+..\..\Petite\bus\bus_vi2c.c(111): warning:  #188-D: enumerated type mixed with another type
+      	mcu_io_output_resetbit(dev->sclport, dev->sclpin);
+..\..\Petite\bus\bus_vi2c.c(288): warning:  #188-D: enumerated type mixed with another type
+  	mcu_io_config_out(dev->sclport, dev->sclpin);
+..\..\Petite\bus\bus_vi2c.c(289): warning:  #188-D: enumerated type mixed with another type
+  	mcu_io_config_out(dev->sdaport, dev->sdapin);
+..\..\Petite\bus\bus_vi2c.c(291): warning:  #188-D: enumerated type mixed with another type
+  	mcu_io_output_setbit(dev->sdaport, dev->sdapin);
+..\..\Petite\bus\bus_vi2c.c(292): warning:  #188-D: enumerated type mixed with another type
+  	mcu_io_output_setbit(dev->sclport, dev->sclpin); 
+..\..\Petite\bus\bus_vi2c.c: 12 warnings, 0 errors
+compiling bus_vspi.c...
+..\..\Petite\mem/p_list.h(9): warning:  #47-D: incompatible redefinition of macro "offsetof"  (declared at line 91 of "C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h")
+  #define offsetof(type,  member)    ((size_t) &((type *)0)-> member)
+..\..\Petite\bus\bus_vspi.c(48): warning:  #188-D: enumerated type mixed with another type
+  	mcu_io_config_out(dev->clkport, dev->clkpin);
+..\..\Petite\bus\bus_vspi.c(49): warning:  #188-D: enumerated type mixed with another type
+  	mcu_io_output_setbit(dev->clkport,dev->clkpin);
+..\..\Petite\bus\bus_vspi.c(51): warning:  #188-D: enumerated type mixed with another type
+  	mcu_io_config_out(dev->mosiport, dev->mosipin);
+..\..\Petite\bus\bus_vspi.c(52): warning:  #188-D: enumerated type mixed with another type
+  	mcu_io_output_setbit(dev->mosiport, dev->mosipin);
+..\..\Petite\bus\bus_vspi.c(55): warning:  #188-D: enumerated type mixed with another type
+  	mcu_io_config_in(dev->misoport, dev->misopin);
+..\..\Petite\bus\bus_vspi.c(56): warning:  #188-D: enumerated type mixed with another type
+  	mcu_io_output_setbit(dev->misoport, dev->misopin);
+..\..\Petite\bus\bus_vspi.c(175): warning:  #188-D: enumerated type mixed with another type
+  			mcu_io_output_resetbit(dev->clkport, dev->clkpin);
+..\..\Petite\bus\bus_vspi.c(183): warning:  #188-D: enumerated type mixed with another type
+  				mcu_io_output_setbit(dev->mosiport, dev->mosipin);
+..\..\Petite\bus\bus_vspi.c(185): warning:  #188-D: enumerated type mixed with another type
+  				mcu_io_output_resetbit(dev->mosiport, dev->mosipin);
+..\..\Petite\bus\bus_vspi.c(193): warning:  #188-D: enumerated type mixed with another type
+  			mcu_io_output_setbit(dev->clkport, dev->clkpin);
+..\..\Petite\bus\bus_vspi.c(200): warning:  #188-D: enumerated type mixed with another type
+  			misosta = mcu_io_input_readbit(dev->misoport, dev->misopin);
+..\..\Petite\bus\bus_vspi.c: 12 warnings, 0 errors
+compiling mcu_dcmi.c...
+compiling mcu_io.c...
+..\..\mcu\stm32h7b0vb\mcu_io.c(49): warning:  #177-D: variable "GPIO_InitStructure"  was declared but never referenced
+  	GPIO_InitTypeDef GPIO_InitStructure;
+..\..\mcu\stm32h7b0vb\mcu_io.c(65): warning:  #177-D: variable "GPIO_InitStructure"  was declared but never referenced
+  	GPIO_InitTypeDef GPIO_InitStructure;
+..\..\mcu\stm32h7b0vb\mcu_io.c(111): warning:  #177-D: variable "GPIO_InitStructure"  was declared but never referenced
+  	GPIO_InitTypeDef GPIO_InitStructure;
+..\..\mcu\stm32h7b0vb\mcu_io.c: 3 warnings, 0 errors
+compiling mcu_LTDC.c...
+..\..\mcu\stm32h7b0vb\mcu_LTDC.c(145): warning:  #223-D: function "Error_Handler" declared implicitly
+        Error_Handler();
+..\..\mcu\stm32h7b0vb\mcu_LTDC.c(178): warning:  #223-D: function "Error_Handler" declared implicitly
+      Error_Handler();
+..\..\mcu\stm32h7b0vb\mcu_LTDC.c(202): warning:  #223-D: function "Error_Handler" declared implicitly
+      Error_Handler();
+..\..\mcu\stm32h7b0vb\mcu_LTDC.c(226): warning:  #223-D: function "uart_printf" declared implicitly
+  	uart_printf("ltdc init finish!\r\n");
+..\..\mcu\stm32h7b0vb\mcu_LTDC.c(150): warning:  #177-D: variable "pLayerCfg1"  was declared but never referenced
+    LTDC_LayerCfgTypeDef pLayerCfg1 = {0};
+..\..\mcu\stm32h7b0vb\mcu_LTDC.c: 5 warnings, 0 errors
+compiling mcu_octospi.c...
+compiling mcu_spi.c...
+..\..\Petite\mem/p_list.h(9): warning:  #47-D: incompatible redefinition of macro "offsetof"  (declared at line 91 of "C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h")
+  #define offsetof(type,  member)    ((size_t) &((type *)0)-> member)
+..\..\mcu\stm32h7b0vb\mcu_spi.c(85): warning:  #223-D: function "MX_SPI1_Init" declared implicitly
+  	MX_SPI1_Init();
+..\..\mcu\stm32h7b0vb\mcu_spi.c(73): warning:  #177-D: variable "GPIO_InitStruct"  was declared but never referenced
+  	GPIO_InitTypeDef GPIO_InitStruct = {0};
+..\..\mcu\stm32h7b0vb\mcu_spi.c(127): warning:  #177-D: variable "pos"  was declared but never referenced
+      s32 pos = 0;
+..\..\mcu\stm32h7b0vb\mcu_spi.c(128): warning:  #177-D: variable "time_out"  was declared but never referenced
+      u32 time_out = 0;
+..\..\mcu\stm32h7b0vb\mcu_spi.c(129): warning:  #177-D: variable "ch"  was declared but never referenced
+      u16 ch;
+..\..\mcu\stm32h7b0vb\mcu_spi.c: 6 warnings, 0 errors
+compiling sdmmc_sd.c...
+..\..\mcu\stm32h7b0vb\sdmmc_sd.c(957): warning:  #223-D: function "uart_printf" declared implicitly
+  	uart_printf("SD_MspInit SDMMC1!\r\n");
+..\..\mcu\stm32h7b0vb\sdmmc_sd.c(963): warning:  #223-D: function "Error_Handler" declared implicitly
+        Error_Handler();
+..\..\mcu\stm32h7b0vb\sdmmc_sd.c: 2 warnings, 0 errors
+compiling mcu_uart.c...
+..\..\Petite\mem/p_list.h(9): warning:  #47-D: incompatible redefinition of macro "offsetof"  (declared at line 91 of "C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h")
+  #define offsetof(type,  member)    ((size_t) &((type *)0)-> member)
+..\..\mcu\stm32h7b0vb\mcu_uart.c(81): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "u8 *"
+  		mcu_uart_receive(MCU_UART_4, &ch,1);
+..\..\mcu\stm32h7b0vb\mcu_uart.c(426): warning:  #177-D: variable "t"  was declared but never referenced
+  	u32 t;
+..\..\mcu\stm32h7b0vb\mcu_uart.c(427): warning:  #177-D: variable "ch"  was declared but never referenced
+  	u16 ch;
+..\..\mcu\stm32h7b0vb\mcu_uart.c(457): warning:  #550-D: variable "res"  was set but never used
+      s32 res;
+..\..\mcu\stm32h7b0vb\mcu_uart.c: 5 warnings, 0 errors
+compiling mcu_i2s.c...
+..\..\mcu\stm32h7b0vb\mcu_i2s.c(72): warning:  #223-D: function "Error_Handler" declared implicitly
+      Error_Handler();
+..\..\mcu\stm32h7b0vb\mcu_i2s.c(78): warning:  #940-D: missing return statement at end of non-void function "mcu_i2s_dataformat" 
+  }
+..\..\mcu\stm32h7b0vb\mcu_i2s.c(84): warning:  #223-D: function "Error_Handler" declared implicitly
+      	Error_Handler();
+..\..\mcu\stm32h7b0vb\mcu_i2s.c(123): warning:  #223-D: function "audio_pipe_callback" declared implicitly
+  	audio_pipe_callback(1);
+..\..\mcu\stm32h7b0vb\mcu_i2s.c(138): warning:  #223-D: function "audio_pipe_callback" declared implicitly
+    audio_pipe_callback(0);
+..\..\mcu\stm32h7b0vb\mcu_i2s.c: 5 warnings, 0 errors
+compiling drv_st7735r.c...
+..\..\Petite\mem/p_list.h(9): warning:  #47-D: incompatible redefinition of macro "offsetof"  (declared at line 91 of "C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h")
+  #define offsetof(type,  member)    ((size_t) &((type *)0)-> member)
+..\..\driver\lcd\drv_st7735r.c: 1 warning, 0 errors
+compiling drv_st7789.c...
+..\..\Petite\mem/p_list.h(9): warning:  #47-D: incompatible redefinition of macro "offsetof"  (declared at line 91 of "C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h")
+  #define offsetof(type,  member)    ((size_t) &((type *)0)-> member)
+..\..\driver\lcd\drv_st7789.c: 1 warning, 0 errors
+compiling drv_str7565.c...
+..\..\Petite\mem/p_list.h(9): warning:  #47-D: incompatible redefinition of macro "offsetof"  (declared at line 91 of "C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h")
+  #define offsetof(type,  member)    ((size_t) &((type *)0)-> member)
+..\..\driver\lcd\drv_str7565.c(411): warning:  #550-D: variable "ylen"  was set but never used
+  	u16 xlen,ylen;
+..\..\driver\lcd\drv_str7565.c(516): warning:  #177-D: variable "i"  was declared but never referenced
+  	u16 i,j;
+..\..\driver\lcd\drv_str7565.c(516): warning:  #177-D: variable "j"  was declared but never referenced
+  	u16 i,j;
+..\..\driver\lcd\drv_str7565.c: 4 warnings, 0 errors
+compiling drv_lcd.c...
+..\..\Petite\mem/p_list.h(9): warning:  #47-D: incompatible redefinition of macro "offsetof"  (declared at line 91 of "C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h")
+  #define offsetof(type,  member)    ((size_t) &((type *)0)-> member)
+..\..\driver\lcd\drv_lcd.c: 1 warning, 0 errors
+compiling touch.c...
+..\..\Petite\mem/p_list.h(9): warning:  #47-D: incompatible redefinition of macro "offsetof"  (declared at line 91 of "C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h")
+  #define offsetof(type,  member)    ((size_t) &((type *)0)-> member)
+..\..\driver\touch\touch.c(13): warning:  #188-D: enumerated type mixed with another type
+  static eTouchType TouchType = -1;
+..\..\driver\touch\touch.c(13): warning:  #68-D: integer conversion resulted in a change of sign
+  static eTouchType TouchType = -1;
+..\..\driver\touch\touch.c(33): warning:  #223-D: function "gt9147_init" declared implicitly
+  	res = gt9147_init();	
+..\..\driver\touch\touch.c(36): warning:  #513-D: a value of type "int (*)(void)" cannot be assigned to an entity of type "void (*)(void)"
+  		cap_touch_task = gt9147_task;
+..\..\driver\touch\touch.c(40): warning:  #223-D: function "gt1151_init" declared implicitly
+  	res = gt1151_init();	
+..\..\driver\touch\touch.c(43): warning:  #513-D: a value of type "int (*)(void)" cannot be assigned to an entity of type "void (*)(void)"
+  		cap_touch_task = gt1151_task;
+..\..\driver\touch\touch.c(13): warning:  #550-D: variable "TouchType"  was set but never used
+  static eTouchType TouchType = -1;
+..\..\driver\touch\touch.c: 8 warnings, 0 errors
+compiling drv_IL3820.c...
+..\..\Petite\mem/p_list.h(9): warning:  #47-D: incompatible redefinition of macro "offsetof"  (declared at line 91 of "C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h")
+  #define offsetof(type,  member)    ((size_t) &((type *)0)-> member)
+..\..\driver\lcd\drv_IL3820.c(217): warning:  #188-D: enumerated type mixed with another type
+  		busy = mcu_io_input_readbit(node->dev.staport, node->dev.stapin);
+..\..\driver\lcd\drv_IL3820.c(188): warning:  #177-D: variable "i"  was declared but never referenced
+  	u16 i,j;
+..\..\driver\lcd\drv_IL3820.c(188): warning:  #177-D: variable "j"  was declared but never referenced
+  	u16 i,j;
+..\..\driver\lcd\drv_IL3820.c(190): warning:  #177-D: variable "w"  was declared but never referenced
+  	u16 w,l;
+..\..\driver\lcd\drv_IL3820.c(190): warning:  #177-D: variable "l"  was declared but never referenced
+  	u16 w,l;
+..\..\driver\lcd\drv_IL3820.c(257): warning:  #177-D: variable "tmp"  was declared but never referenced
+  	u8 tmp[16];
+..\..\driver\lcd\drv_IL3820.c(285): warning:  #188-D: enumerated type mixed with another type
+  	mcu_io_config_in(node->dev.staport, node->dev.stapin);
+..\..\driver\lcd\drv_IL3820.c(356): warning:  #188-D: enumerated type mixed with another type
+  		busy = mcu_io_input_readbit(node->dev.staport, node->dev.stapin);
+..\..\driver\lcd\drv_IL3820.c(276): warning:  #177-D: variable "data"  was declared but never referenced
+  	u16 data;
+..\..\driver\lcd\drv_IL3820.c(279): warning:  #177-D: variable "testbuf"  was declared but never referenced
+  	u8 testbuf[2];
+..\..\driver\lcd\drv_IL3820.c(428): warning:  #177-D: variable "sp"  was declared but never referenced
+  	u16 sp, ep, sc, ec;
+..\..\driver\lcd\drv_IL3820.c(428): warning:  #177-D: variable "ep"  was declared but never referenced
+  	u16 sp, ep, sc, ec;
+..\..\driver\lcd\drv_IL3820.c(428): warning:  #177-D: variable "sc"  was declared but never referenced
+  	u16 sp, ep, sc, ec;
+..\..\driver\lcd\drv_IL3820.c(428): warning:  #177-D: variable "ec"  was declared but never referenced
+  	u16 sp, ep, sc, ec;
+..\..\driver\lcd\drv_IL3820.c(528): warning:  #550-D: variable "ylen"  was set but never used
+  	u16 xlen,ylen;
+..\..\driver\lcd\drv_IL3820.c(532): warning:  #177-D: variable "sp"  was declared but never referenced
+  	u16 sp, ep, sc, ec;
+..\..\driver\lcd\drv_IL3820.c(532): warning:  #177-D: variable "ep"  was declared but never referenced
+  	u16 sp, ep, sc, ec;
+..\..\driver\lcd\drv_IL3820.c(532): warning:  #177-D: variable "sc"  was declared but never referenced
+  	u16 sp, ep, sc, ec;
+..\..\driver\lcd\drv_IL3820.c(532): warning:  #177-D: variable "ec"  was declared but never referenced
+  	u16 sp, ep, sc, ec;
+..\..\driver\lcd\drv_IL3820.c: 20 warnings, 0 errors
+compiling GT9147.c...
+..\..\Petite\mem/p_list.h(9): warning:  #47-D: incompatible redefinition of macro "offsetof"  (declared at line 91 of "C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h")
+  #define offsetof(type,  member)    ((size_t) &((type *)0)-> member)
+..\..\driver\touch\ctp\GT9147.c(154): warning:  #223-D: function "mcu_vi2c_transfer_reg" declared implicitly
+  	mcu_vi2c_transfer_reg(DevVi2cGT9147,GT9147_DEVICE_ADDR, reg, 2, MCU_I2C_MODE_W, (u8*)GT9147CfgTab, sizeof(GT9147CfgTab));
+..\..\driver\touch\ctp\GT9147.c(139): warning:  #177-D: variable "tmp"  was declared but never referenced
+  	u8 tmp[4];
+..\..\driver\touch\ctp\GT9147.c(195): warning:  #223-D: function "mcu_vi2c_transfer_reg" declared implicitly
+  	mcu_vi2c_transfer_reg(DevVi2cGT9147,GT9147_DEVICE_ADDR, reg, 2, MCU_I2C_MODE_R, ID, 4);
+..\..\driver\touch\ctp\GT9147.c(280): warning:  #223-D: function "mcu_vi2c_transfer_reg" declared implicitly
+  		mcu_vi2c_transfer_reg(DevVi2cGT9147,GT9147_DEVICE_ADDR, reg, 2, MCU_I2C_MODE_R, tmp, 1);
+..\..\driver\touch\ctp\GT9147.c(313): warning:  #223-D: function "tp_fill_buf" declared implicitly
+  				tp_fill_buf(x, y);
+..\..\driver\touch\ctp\GT9147.c(164): warning:  #550-D: variable "Gt9147Gd"  was set but never used
+  static int Gt9147Gd = -1;
+..\..\driver\touch\ctp\GT9147.c: 7 warnings, 0 errors
+compiling gt1151.c...
+..\..\Petite\mem/p_list.h(9): warning:  #47-D: incompatible redefinition of macro "offsetof"  (declared at line 91 of "C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h")
+  #define offsetof(type,  member)    ((size_t) &((type *)0)-> member)
+..\..\driver\touch\ctp\gt1151.c(127): warning:  #175-D: subscript out of range
+  	buf[2]= 0;	//是否写入到FLASH,   即是否掉电保�?,0不保存，1 保存
+..\..\driver\touch\ctp\gt1151.c(131): warning:  #223-D: function "mcu_vi2c_transfer_reg" declared implicitly
+  	mcu_vi2c_transfer_reg(DevVi2cGT1151, GT1151_DEVICE_ADDR, reg, 2, MCU_I2C_MODE_W, (u8*)GT1151CfgTab, sizeof(GT1151CfgTab)-3);
+..\..\driver\touch\ctp\gt1151.c(112): warning:  #177-D: variable "tmp"  was declared but never referenced
+  	u8 tmp[4];
+..\..\driver\touch\ctp\gt1151.c(172): warning:  #223-D: function "mcu_vi2c_transfer_reg" declared implicitly
+  	mcu_vi2c_transfer_reg(DevVi2cGT1151, GT1151_DEVICE_ADDR, reg, 2, MCU_I2C_MODE_R, ID, 4);
+..\..\driver\touch\ctp\gt1151.c(254): warning:  #223-D: function "mcu_vi2c_transfer_reg" declared implicitly
+  		mcu_vi2c_transfer_reg(DevVi2cGT1151, GT1151_DEVICE_ADDR, reg, 2, MCU_I2C_MODE_R, tmp, 1);
+..\..\driver\touch\ctp\gt1151.c(286): warning:  #223-D: function "tp_fill_buf" declared implicitly
+  				tp_fill_buf(x, y);
+..\..\driver\touch\ctp\gt1151.c(293): warning:  #111-D: statement is unreachable
+  	return -1;
+..\..\driver\touch\ctp\gt1151.c(141): warning:  #550-D: variable "Gt1151Gd"  was set but never used
+  static int Gt1151Gd = -1;
+..\..\driver\touch\ctp\gt1151.c(138): warning: C4488E: write to variable 'buf' with offset out of bounds
+} 
+..\..\driver\touch\ctp\gt1151.c: 10 warnings, 0 errors
+compiling audio_pipeline.c...
+..\..\Petite\mem/p_list.h(9): warning:  #47-D: incompatible redefinition of macro "offsetof"  (declared at line 91 of "C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h")
+  #define offsetof(type,  member)    ((size_t) &((type *)0)-> member)
+..\..\driver\sound\audio_pipeline.c(95): warning:  #223-D: function "dev_wm8978_inout" declared implicitly
+  		dev_wm8978_inout(WM8978_INPUT_DAC|WM8978_INPUT_AUX|WM8978_INPUT_ADC,
+..\..\driver\sound\audio_pipeline.c(98): warning:  #223-D: function "dev_wm8978_set_dataformat" declared implicitly
+  		dev_wm8978_set_dataformat(AUDIO_I2S_Phillips, anode->BitsPerSample);
+..\..\driver\sound\audio_pipeline.c(100): warning:  #223-D: function "mcu_i2s_dataformat" declared implicitly
+  		mcu_i2s_dataformat(anode->nSamplesPerSec, AUDIO_I2S_Phillips, anode->BitsPerSample);
+..\..\driver\sound\audio_pipeline.c(101): warning:  #223-D: function "mcu_i2s_dma_init" declared implicitly
+  		mcu_i2s_dma_init(anode->buf, anode->buflen);
+..\..\driver\sound\audio_pipeline.c(102): warning:  #223-D: function "mcu_i2s_dma_start" declared implicitly
+  		mcu_i2s_dma_start();//启动I2S传输	
+..\..\driver\sound\audio_pipeline.c(115): warning:  #940-D: missing return statement at end of non-void function "audio_pipe_run" 
+  }
+..\..\driver\sound\audio_pipeline.c(121): warning:  #223-D: function "mcu_i2s_dma_stop" declared implicitly
+  		mcu_i2s_dma_stop(); 
+..\..\driver\sound\audio_pipeline.c(127): warning:  #940-D: missing return statement at end of non-void function "audio_pipe_close" 
+  }
+..\..\driver\sound\audio_pipeline.c: 9 warnings, 0 errors
+compiling wm8978.c...
+..\..\Petite\mem/p_list.h(9): warning:  #47-D: incompatible redefinition of macro "offsetof"  (declared at line 91 of "C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h")
+  #define offsetof(type,  member)    ((size_t) &((type *)0)-> member)
+..\..\driver\sound\wm8978.c: 1 warning, 0 errors
+compiling display.c...
+..\..\Petite\mem/p_list.h(9): warning:  #47-D: incompatible redefinition of macro "offsetof"  (declared at line 91 of "C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h")
+  #define offsetof(type,  member)    ((size_t) &((type *)0)-> member)
+..\..\panel\display.c(250): warning:  #513-D: a value of type "u8 *" cannot be assigned to an entity of type "char *"
+  		dot.dot = dotbuf;
+..\..\panel\display.c(379): warning:  #550-D: variable "rlen"  was set but never used
+  	int rlen;
+..\..\panel\display.c(644): warning:  #167-D: argument of type "s8 *" is incompatible with parameter of type "char *"
+  	res = bmp_parse_open(pbmpparse, BmpFileName);
+..\..\panel\display.c(665): warning:  #223-D: function "dev_lcd_flush" declared implicitly
+  			dev_lcd_flush(lcd, pdata + k* pbmpparse->bi.biWidth, xlen);
+..\..\panel\display.c: 5 warnings, 0 errors
+compiling croutine.c...
+compiling soundplay.c...
+..\..\Petite\mem/p_list.h(9): warning:  #47-D: incompatible redefinition of macro "offsetof"  (declared at line 91 of "C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h")
+  #define offsetof(type,  member)    ((size_t) &((type *)0)-> member)
+..\..\panel\soundplay.c(136): warning:  #870-D: invalid multibyte character sequence
+  	
+OUND_DEBUG(LOG_DEBUG, "---每秒数据�? %d\r\n", wav_header->nAvgBytesPerSec);
+..\..\panel\soundplay.c(137): warning:  #870-D: invalid multibyte character sequence
+  	
+OUND_DEBUG(LOG_DEBUG, "---样点字节�? %d\r\n", wav_header->nBlockAlign);
+..\..\panel\soundplay.c(150): warning:  #223-D: function "audio_pipe_open" declared implicitly
+  	res = audio_pipe_open(&pipenode);
+..\..\panel\soundplay.c(163): warning:  #223-D: function "audio_pipe_run" declared implicitly
+  	audio_pipe_run(&pipenode);
+..\..\panel\soundplay.c(247): warning:  #223-D: function "audio_pipe_close" declared implicitly
+  		audio_pipe_close(&pipenode);
+..\..\panel\soundplay.c: 6 warnings, 0 errors
+compiling list.c...
+compiling event_groups.c...
+compiling stream_buffer.c...
+compiling queue.c...
+compiling heap_4.c...
+compiling timers.c...
+compiling audio_sample.c...
+compiling tasks.c...
+compiling port.c...
+compiling lv_btn.c...
+compiling lv_arc.c...
+compiling lv_bar.c...
+compiling lv_btnmatrix.c...
+compiling cmsis_os2.c...
+compiling lv_checkbox.c...
+compiling lv_canvas.c...
+compiling lv_img.c...
+compiling lv_dropdown.c...
+compiling lv_objx_templ.c...
+compiling lv_line.c...
+compiling lv_label.c...
+compiling lv_roller.c...
+compiling lv_switch.c...
+compiling lv_slider.c...
+compiling lv_table.c...
+compiling lv_textarea.c...
+compiling lv_anim_timeline.c...
+compiling lv_anim.c...
+compiling lv_async.c...
+compiling lv_area.c...
+compiling lv_bidi.c...
+compiling lv_color.c...
+compiling lv_gc.c...
+compiling lv_fs.c...
+compiling lv_log.c...
+compiling lv_ll.c...
+compiling lv_lru.c...
+..\..\Utilities\lvgl\src\misc\lv_lru.c(313): warning:  #68-D: integer conversion resulted in a change of sign
+      uint32_t i = 0, min_index = -1;
+..\..\Utilities\lvgl\src\misc\lv_lru.c(314): warning:  #68-D: integer conversion resulted in a change of sign
+      uint64_t min_access_count = -1;
+..\..\Utilities\lvgl\src\misc\lv_lru.c: 2 warnings, 0 errors
+compiling lv_math.c...
+compiling lv_mem.c...
+..\..\Utilities\lvgl\src\misc\lv_mem.c(311): warning:  #111-D: statement is unreachable
+      return NULL;
+..\..\Utilities\lvgl\src\misc\lv_mem.c: 1 warning, 0 errors
+compiling lv_style.c...
+..\..\Utilities\lvgl\src\misc\lv_style.c(74): warning:  #188-D: enumerated type mixed with another type
+      return act_id;
+..\..\Utilities\lvgl\src\misc\lv_style.c: 1 warning, 0 errors
+compiling lv_printf.c...
+compiling lv_style_gen.c...
+compiling lv_templ.c...
+compiling lv_timer.c...
+compiling lv_utils.c...
+compiling lv_txt_ap.c...
+compiling lv_tlsf.c...
+..\..\Utilities\lvgl\src\misc\lv_tlsf.c(898): warning:  #68-D: integer conversion resulted in a change of sign
+          offset_to_block(pool, -(int)block_header_overhead);
+..\..\Utilities\lvgl\src\misc\lv_tlsf.c(1000): warning:  #68-D: integer conversion resulted in a change of sign
+      block = offset_to_block(mem, -(tlsfptr_t)block_header_overhead);
+..\..\Utilities\lvgl\src\misc\lv_tlsf.c(1018): warning:  #68-D: integer conversion resulted in a change of sign
+      block_header_t * block = offset_to_block(pool, -(int)block_header_overhead);
+..\..\Utilities\lvgl\src\misc\lv_tlsf.c: 3 warnings, 0 errors
+compiling lv_txt.c...
+compiling lv_hal_indev.c...
+compiling lv_hal_disp.c...
+..\..\Utilities\lvgl\src\hal\lv_hal_disp.c(573): warning:  #188-D: enumerated type mixed with another type
+      return disp->driver->rotated;
+..\..\Utilities\lvgl\src\hal\lv_hal_disp.c: 1 warning, 0 errors
+compiling lv_hal_tick.c...
+compiling lv_font.c...
+compiling lv_font_fmt_txt.c...
+..\..\Utilities\lvgl\src\font\lv_font_fmt_txt.c(137): warning:  #111-D: statement is unreachable
+      return NULL;
+..\..\Utilities\lvgl\src\font\lv_font_fmt_txt.c: 1 warning, 0 errors
+compiling lv_font_dejavu_16_persian_hebrew.c...
+compiling lv_font_montserrat_8.c...
+compiling lv_font_loader.c...
+compiling lv_font_montserrat_10.c...
+compiling lv_font_montserrat_12.c...
+compiling lv_font_montserrat_12_subpx.c...
+compiling lv_font_montserrat_14.c...
+compiling lv_font_montserrat_16.c...
+compiling lv_font_montserrat_18.c...
+compiling lv_font_montserrat_20.c...
+compiling lv_font_montserrat_22.c...
+compiling lv_font_montserrat_24.c...
+compiling lv_font_montserrat_26.c...
+compiling lv_font_montserrat_28.c...
+compiling lv_font_montserrat_28_compressed.c...
+compiling lv_font_montserrat_30.c...
+compiling lv_font_montserrat_32.c...
+compiling lv_font_montserrat_34.c...
+compiling lv_font_montserrat_36.c...
+compiling lv_font_montserrat_38.c...
+compiling lv_font_montserrat_40.c...
+compiling lv_font_montserrat_42.c...
+compiling lv_font_montserrat_44.c...
+compiling lv_font_montserrat_46.c...
+compiling lv_font_montserrat_48.c...
+compiling lv_font_unscii_8.c...
+compiling lv_font_simsun_16_cjk.c...
+compiling lv_font_unscii_16.c...
+compiling lv_extra.c...
+compiling lv_draw.c...
+compiling lv_draw_arc.c...
+compiling lv_draw_line.c...
+compiling lv_draw_img.c...
+compiling lv_draw_label.c...
+compiling lv_draw_rect.c...
+compiling lv_draw_triangle.c...
+compiling lv_draw_mask.c...
+compiling lv_img_cache.c...
+compiling lv_draw_sw.c...
+compiling lv_img_buf.c...
+compiling lv_img_decoder.c...
+compiling lv_draw_sw_arc.c...
+compiling lv_draw_sw_dither.c...
+compiling lv_draw_sw_blend.c...
+compiling lv_draw_sw_gradient.c...
+compiling lv_draw_sw_letter.c...
+compiling lv_draw_sw_img.c...
+compiling lv_draw_sw_polygon.c...
+compiling lv_draw_sw_line.c...
+compiling lv_draw_sdl.c...
+compiling lv_draw_sdl_bg.c...
+compiling lv_draw_sdl_arc.c...
+compiling lv_draw_sdl_composite.c...
+compiling lv_draw_sdl_img.c...
+compiling lv_draw_sdl_label.c...
+compiling lv_draw_sw_rect.c...
+..\..\Utilities\lvgl\src\draw\sw\lv_draw_sw_rect.c(239): warning:  #546-D: transfer of control bypasses initialization of:
+            variable "mask_any_center"  (declared at line 286)
+          goto bg_clean_up;
+          ^
+..\..\Utilities\lvgl\src\draw\sw\lv_draw_sw_rect.c: 1 warning, 0 errors
+compiling lv_draw_sdl_line.c...
+compiling lv_draw_sdl_mask.c...
+compiling lv_draw_sdl_polygon.c...
+compiling lv_draw_sdl_rect.c...
+compiling lv_draw_sdl_stack_blur.c...
+compiling lv_draw_sdl_texture_cache.c...
+compiling lv_draw_sdl_utils.c...
+compiling lv_disp.c...
+compiling lv_event.c...
+..\..\Utilities\lvgl\src\core\lv_event.c(120): warning:  #188-D: enumerated type mixed with another type
+      return e->code & ~LV_EVENT_PREPROCESS;
+..\..\Utilities\lvgl\src\core\lv_event.c: 1 warning, 0 errors
+compiling lv_group.c...
+compiling lv_indev_scroll.c...
+compiling lv_indev.c...
+compiling lv_obj_class.c...
+compiling lv_obj.c...
+compiling lv_obj_draw.c...
+compiling lv_obj_pos.c...
+compiling lv_obj_tree.c...
+compiling lv_obj_style_gen.c...
+compiling lv_obj_style.c...
+compiling lv_obj_scroll.c...
+compiling lv_refr.c...
+compiling lv_theme.c...
+compiling lv_grid.c...
+..\..\Utilities\lvgl\src\extra\layouts\grid\lv_grid.c(134): warning:  #188-D: enumerated type mixed with another type
+      LV_STYLE_GRID_COLUMN_DSC_ARRAY = lv_style_register_prop() | 
+V_STYLE_PROP_LAYOUT_REFR;
+..\..\Utilities\lvgl\src\extra\layouts\grid\lv_grid.c(135): warning:  #188-D: enumerated type mixed with another type
+      LV_STYLE_GRID_ROW_DSC_ARRAY = lv_style_register_prop() | 
+V_STYLE_PROP_LAYOUT_REFR;
+..\..\Utilities\lvgl\src\extra\layouts\grid\lv_grid.c(136): warning:  #188-D: enumerated type mixed with another type
+      LV_STYLE_GRID_COLUMN_ALIGN = lv_style_register_prop() | 
+V_STYLE_PROP_LAYOUT_REFR;
+..\..\Utilities\lvgl\src\extra\layouts\grid\lv_grid.c(137): warning:  #188-D: enumerated type mixed with another type
+      LV_STYLE_GRID_ROW_ALIGN = lv_style_register_prop() | 
+V_STYLE_PROP_LAYOUT_REFR;
+..\..\Utilities\lvgl\src\extra\layouts\grid\lv_grid.c(139): warning:  #188-D: enumerated type mixed with another type
+      LV_STYLE_GRID_CELL_ROW_SPAN = lv_style_register_prop() | 
+V_STYLE_PROP_LAYOUT_REFR;
+..\..\Utilities\lvgl\src\extra\layouts\grid\lv_grid.c(140): warning:  #188-D: enumerated type mixed with another type
+      LV_STYLE_GRID_CELL_ROW_POS = lv_style_register_prop() | 
+V_STYLE_PROP_LAYOUT_REFR;
+..\..\Utilities\lvgl\src\extra\layouts\grid\lv_grid.c(141): warning:  #188-D: enumerated type mixed with another type
+      LV_STYLE_GRID_CELL_COLUMN_SPAN = lv_style_register_prop() | 
+V_STYLE_PROP_LAYOUT_REFR;
+..\..\Utilities\lvgl\src\extra\layouts\grid\lv_grid.c(142): warning:  #188-D: enumerated type mixed with another type
+      LV_STYLE_GRID_CELL_COLUMN_POS = lv_style_register_prop() | 
+V_STYLE_PROP_LAYOUT_REFR;
+..\..\Utilities\lvgl\src\extra\layouts\grid\lv_grid.c(143): warning:  #188-D: enumerated type mixed with another type
+      LV_STYLE_GRID_CELL_X_ALIGN = lv_style_register_prop() | 
+V_STYLE_PROP_LAYOUT_REFR;
+..\..\Utilities\lvgl\src\extra\layouts\grid\lv_grid.c(144): warning:  #188-D: enumerated type mixed with another type
+      LV_STYLE_GRID_CELL_Y_ALIGN = lv_style_register_prop() | 
+V_STYLE_PROP_LAYOUT_REFR;
+..\..\Utilities\lvgl\src\extra\layouts\grid\lv_grid.c(589): warning:  #188-D: enumerated type mixed with another type
+      lv_grid_align_t col_align = get_cell_col_align(item);
+..\..\Utilities\lvgl\src\extra\layouts\grid\lv_grid.c(590): warning:  #188-D: enumerated type mixed with another type
+      lv_grid_align_t row_align = get_cell_row_align(item);
+..\..\Utilities\lvgl\src\extra\layouts\grid\lv_grid.c: 12 warnings, 0 errors
+compiling lv_flex.c...
+..\..\Utilities\lvgl\src\extra\layouts\flex\lv_flex.c(97): warning:  #188-D: enumerated type mixed with another type
+      LV_STYLE_FLEX_MAIN_PLACE = lv_style_register_prop() | 
+V_STYLE_PROP_LAYOUT_REFR;
+..\..\Utilities\lvgl\src\extra\layouts\flex\lv_flex.c(98): warning:  #188-D: enumerated type mixed with another type
+      LV_STYLE_FLEX_CROSS_PLACE = lv_style_register_prop() | 
+V_STYLE_PROP_LAYOUT_REFR;
+..\..\Utilities\lvgl\src\extra\layouts\flex\lv_flex.c(99): warning:  #188-D: enumerated type mixed with another type
+      LV_STYLE_FLEX_TRACK_PLACE = lv_style_register_prop() | 
+V_STYLE_PROP_LAYOUT_REFR;
+..\..\Utilities\lvgl\src\extra\layouts\flex\lv_flex.c: 3 warnings, 0 errors
+compiling lv_theme_mono.c...
+compiling lv_theme_basic.c...
+compiling lv_animimg.c...
+compiling lv_theme_default.c...
+..\..\Utilities\lvgl\src\extra\themes\default\lv_theme_default.c(213): warning:  #188-D: enumerated type mixed with another type
+..\..\Utilities\lvgl\src\extra\themes\default\lv_theme_default.c: 1 warning, 0 errors
+compiling lv_calendar_header_arrow.c...
+compiling lv_calendar_header_dropdown.c...
+compiling lv_calendar.c...
+compiling lv_imgbtn.c...
+compiling lv_colorwheel.c...
+compiling lv_list.c...
+compiling lv_keyboard.c...
+compiling lv_chart.c...
+compiling lv_led.c...
+compiling lv_menu.c...
+compiling lv_meter.c...
+compiling lv_msgbox.c...
+compiling lv_spinner.c...
+compiling lv_spinbox.c...
+compiling lv_span.c...
+..\..\Utilities\lvgl\src\extra\widgets\span\lv_span.c(881): warning:  #546-D: transfer of control bypasses initialization of:
+            variable "align"  (declared at line 885)
+              goto Next_line_init;
+              ^
+..\..\Utilities\lvgl\src\extra\widgets\span\lv_span.c: 1 warning, 0 errors
+compiling lv_tabview.c...
+compiling lv_tileview.c...
+compiling lv_win.c...
+compiling lv_gpu_stm32_dma2d.c...
+compiling lv_port_indev.c...
+..\..\Utilities\lvgl\porting\lv_port_indev.c(214): warning:  #223-D: function "tp_is_press" declared implicitly
+  	if(1 == tp_is_press()) return true;
+..\..\Utilities\lvgl\porting\lv_port_indev.c(223): warning:  #223-D: function "tp_get_point" declared implicitly
+  	res = tp_get_point(x, y);
+..\..\Utilities\lvgl\porting\lv_port_indev.c(235): warning:  #177-D: function "mouse_init"  was declared but never referenced
+  static void mouse_init(void)
+..\..\Utilities\lvgl\porting\lv_port_indev.c(241): warning:  #177-D: function "mouse_read"  was declared but never referenced
+  static void mouse_read(lv_indev_drv_t * indev_drv, lv_indev_data_t * data)
+..\..\Utilities\lvgl\porting\lv_port_indev.c(276): warning:  #177-D: function "keypad_init"  was declared but never referenced
+  static void keypad_init(void)
+..\..\Utilities\lvgl\porting\lv_port_indev.c(282): warning:  #177-D: function "keypad_read"  was declared but never referenced
+  static void keypad_read(lv_indev_drv_t * indev_drv, lv_indev_data_t * data)
+..\..\Utilities\lvgl\porting\lv_port_indev.c(334): warning:  #177-D: function "encoder_init"  was declared but never referenced
+  static void encoder_init(void)
+..\..\Utilities\lvgl\porting\lv_port_indev.c(340): warning:  #177-D: function "encoder_read"  was declared but never referenced
+  static void encoder_read(lv_indev_drv_t * indev_drv, lv_indev_data_t * data)
+..\..\Utilities\lvgl\porting\lv_port_indev.c(348): warning:  #177-D: function "encoder_handler"  was declared but never referenced
+  static void encoder_handler(void)
+..\..\Utilities\lvgl\porting\lv_port_indev.c(361): warning:  #177-D: function "button_init"  was declared but never referenced
+  static void button_init(void)
+..\..\Utilities\lvgl\porting\lv_port_indev.c(367): warning:  #177-D: function "button_read"  was declared but never referenced
+  static void button_read(lv_indev_drv_t * indev_drv, lv_indev_data_t * data)
+..\..\Utilities\lvgl\porting\lv_port_indev.c: 11 warnings, 0 errors
+compiling lv_port_fs.c...
+compiling img_clothes.c...
+compiling img_demo_widgets_avatar.c...
+compiling diskio.c...
+compiling lv_port_disp.c...
+..\..\Utilities\lvgl\porting\lv_port_disp.c(181): warning:  #223-D: function "DMA2D_cpy_framebuff" declared implicitly
+  	DMA2D_cpy_framebuff(area->x1, area->y1, area->x2 - area->x1+1, area->y2 - area->y1 +1,(uint32_t*)color_p);	
+..\..\Utilities\lvgl\porting\lv_port_disp.c: 1 warning, 0 errors
+compiling img_lvgl_logo.c...
+compiling lv_demo_widgets.c...
+..\..\Utilities\lvgl\demos\widgets\lv_demo_widgets.c(1065): warning:  #188-D: enumerated type mixed with another type
+          lv_palette_t palette_secondary = (*palette_primary) + 3; /*Use another palette as secondary*/
+..\..\Utilities\lvgl\demos\widgets\lv_demo_widgets.c(1066): warning:  #188-D: enumerated type mixed with another type
+          if(palette_secondary >= _LV_PALETTE_LAST) palette_secondary = 0;
+..\..\Utilities\lvgl\demos\widgets\lv_demo_widgets.c: 2 warnings, 0 errors
+compiling ff_gen_drv.c...
+compiling ffunicode.c...
+compiling ff.c...
+compiling sd_diskio.c...
+linking...
+.\Objects\h7b0_mdk_demo.sct(7): warning: L6329W: Pattern lv*(RO) only matches removed unused sections.
+.\Objects\h7b0_mdk_demo.sct(8): warning: L6329W: Pattern img*(RO) only matches removed unused sections.
+Program Size: Code=60632 RO-data=2560 RW-data=500 ZI-data=842612  
+Finished: 0 information, 2 warning and 0 error messages.
+FromELF: creating hex file...
+".\Objects\h7b0_mdk_demo.axf" - 0 Error(s), 304 Warning(s).
+
+<h2>Software Packages used:</h2>
+
+Package Vendor: Keil
+                http://www.keil.com/pack/Keil.STM32H7xx_DFP.2.8.0.pack
+                Keil.STM32H7xx_DFP.2.8.0
+                STMicroelectronics STM32H7 Series Device Support and Examples
+
+<h2>Collection of Component include folders:</h2>
+  .\RTE\_Target_1
+  C:\Keil_v5\ARM\PACK\Keil\STM32H7xx_DFP\2.8.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include
+
+<h2>Collection of Component Files used:</h2>
+Build Time Elapsed:  00:00:29
+</pre>
+</body>
+</html>

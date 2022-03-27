@@ -20,7 +20,6 @@
 		8 一切解释权归屋脊雀工作室所有。
 */
 #include "mcu.h"
-#include "mcu_io.h"
 #include "log.h"
 #include "bus/bus_spi.h"
 #include "bus/bus_vspi.h"

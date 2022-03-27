@@ -73,7 +73,7 @@ void bus_uart_close(BusUartNode *node)
 {
 	if(node == NULL) return;
 
-	mcu_uart_deinit(node->comport);
+	//mcu_uart_deinit(node->comport);
 	wjq_free(node->buf);
 	wjq_free(node);
 	BusUartGd[node->comport] = 0;
@@ -127,7 +127,7 @@ s32 bus_uart_read (BusUartNode *node, u8 *buf, s32 len)
 
 int bus_uart_write(BusUartNode *node, u8 *buf, s32 len)
 {
-	return mcu_uart_send(node->comport, buf, len);
+	return 0;//mcu_uart_send(node->comport, buf, len);
 }
 
 /**
@@ -137,14 +137,20 @@ int bus_uart_write(BusUartNode *node, u8 *buf, s32 len)
  *@param[out]  无
  *@retval:     
  */
-extern BusUartNode *LogUartNode;
+const static BusUartPra TestPcPortPra={
+	.BaudRate = 115200,
+	.bufsize = 256,
+	};
+#define TEST_UART_PORT  "uart3"
 
 void bus_uart_test(void)
 {
     u8 buf[12];
     s32 len;
     s32 res;
-
+	BusUartNode *LogUartNode;
+	LogUartNode = bus_uart_open(TEST_UART_PORT, &TestPcPortPra);
+	
 	while(1) {
     	len =  bus_uart_read (LogUartNode, buf, 10);
 		if(len != 0) {

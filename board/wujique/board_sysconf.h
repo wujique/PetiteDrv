@@ -14,7 +14,9 @@
 #define __WUJIQUE_SYSCONF__
 
 /*定义调试信息输出串口号*/
-#define PC_PORT  "uart3" 
+#define PC_PORT  MCU_UART_3 
+#define PC_PORT_STR "uart3"
+
 
 /* 
 	本文件定义板设备情况。
@@ -92,7 +94,7 @@
 #endif
 
 /*-----------------------------------------------------------*/
-
+#define DEV_WM8978_I2CBUS "VI2C1"
 #define DEV_HTU21D_I2CBUS "VI2C2"
 #define DEV_PTHCHO_UART "uart1"
 
@@ -101,7 +103,7 @@
 	栈定义的是U32
 */
 /*默认应用任务，比如测试程序，有死循环 */
-#define Wujique407_TASK_STK_SIZE (1024)
+#define Wujique407_TASK_STK_SIZE (2048)
 #define Wujique407_TASK_PRIO	(1)
 /* 命令行交互 */
 #define UBOOTCMD_TASK_STK_SIZE (1024)
@@ -117,9 +119,13 @@
 #define SYS_FS_NUM 5
 
 #define VFS_SD_DIR	"mtd0"//sd卡文件系统挂载vfs中的目录名
-#define SYS_FS_FATFS_SD "1:/"//sd卡目录名， 这个名字跟diso.c中的序号有关系
+#define SYS_FS_FATFS_SD "1:"//sd卡目录名， 这个名字跟diso.c中的序号有关系
+
 #define VFS_USB_DIR	"mtd1"//USB
-#define SYS_FS_FATFS_USB "2:/"
+#define SYS_FS_FATFS_USB "2:"//usb目录
+
+/*	字体类型定义 */
+#define FONT_LIST_MAX 6	
 
 
 /*--------------------------------------------------------------------------------*/

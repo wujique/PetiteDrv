@@ -29,7 +29,21 @@
 
 #include "stimer.h"
 
+
 volatile uint32_t LocalTime = 0; 
+/**
+  * @brief  Updates the system local time
+  * @param  None
+  * @retval None
+  本函数放在系统滴答中执行，通常滴答间隔1ms
+  在board_mcu_preinit中，如果没有用RTOS，会初始化一个裸奔用的滴答定时器。
+  */
+void Time_Update(void)
+{
+  LocalTime += SYSTEMTICK_PERIOD_MS;
+}
+
+
 uint32_t timingdelay;
 
 /**
@@ -49,17 +63,6 @@ void Delay(uint32_t nCount)
 }
 
 
-/**
-  * @brief  Updates the system local time
-  * @param  None
-  * @retval None
-  本函数放在系统滴答中执行，通常滴答间隔1ms
-  在board_mcu_preinit中，如果没有用RTOS，会初始化一个裸奔用的滴答定时器。
-  */
-void Time_Update(void)
-{
-  LocalTime += SYSTEMTICK_PERIOD_MS;
-}
 
 
 uint32_t Stime_get_localtime(void)

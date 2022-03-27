@@ -29,14 +29,13 @@
 /**
  *@brief:      mcu_i2c_delay
  *@details:    I2C信号延时函数
- *@param[in]   void  
+ *@param[in]   us 延时，  
  *@param[out]  无
  *@retval:     static
  */
 static void bus_vi2c_delay(void)
 {
-    //Delay(1);//延时，I2C时钟
-    volatile u32 i = 1;
+    volatile u32 i = 50;
 
     for(;i>0;i--);
 }
@@ -373,4 +372,121 @@ s32 bus_vi2c_transfer(DevI2cNode *node, u8 addr, u8 rw, u8* data, s32 datalen)
     return 0;
 }
 
+/*
+	带寄存器地址的操作方法
+*/
+s32 mcu_vi2c_transfer_reg(DevI2c *dev, u8 addr, u8* reg, u8 reglen, u8 rw, u8* data, s32 datalen)
+{
+    s32 i;
+    u8 ch;
+	s32 res;
+	u8 addr_tmp;
+
+    //发送起始
+    bus_vi2c_start(dev);
+   
+	addr_tmp = ((addr<<1)&0xfe);
+	
+    bus_vi2c_writebyte(dev,addr_tmp);
+	
+    res = bus_vi2c_wait_ack(dev);
+	if(res == 1)
+		return 1;
+	
+    i = 0;
+	while(i < reglen) {
+		ch = *(reg+i);
+        bus_vi2c_writebyte(dev,ch);
+        res = bus_vi2c_wait_ack(dev);
+		if(res == 1)
+			return 1;
+
+		i++;
+    }
+	
+    //数据传输
+    i=0;
+    if(rw == MCU_I2C_MODE_W)//写
+    {
+	    while(i < datalen)	{
+            ch = *(data+i);
+            bus_vi2c_writebyte(dev,ch);
+            res = bus_vi2c_wait_ack(dev);
+			if(res == 1)
+				return 1;
+			
+			i++;
+	    }
+    } else if(rw == MCU_I2C_MODE_R) {
+		//读
+		bus_vi2c_start(dev);
+		addr_tmp = ((addr<<1)|0x01);
+    	bus_vi2c_writebyte(dev,addr_tmp);
+    	res = bus_vi2c_wait_ack(dev);
+		if(res == 1)
+			return 1;
+
+       	while(i < datalen) {
+            ch = bus_vi2c_readbyte(dev);  
+            bus_vi2c_ack(dev);
+            *(data+i) = ch;
+			i++;
+	    }
+    }
+
+    //发送结束
+    bus_vi2c_stop(dev);
+    return 0;
+}
+
+
+/*
+	以下为SCCB读写逻辑（OV2640地址默认0x60）
+
+写寄存器 
+	Start+0x60+寄存器ID+数据+Stop
+读寄存器 
+	Start+0x60+寄存器ID+Stop  Start+0x61 + 所读数据+Stop
+错误方式读寄存器：
+	Start+0x61+寄存器ID+Stop  Start+0x61 + 所读数据+Stop
+*/
+uint8_t mcu_sccb_writereg(uint8_t DeviceAddr, uint16_t Addr, uint8_t Data)
+{
+	DevI2c *dev;
+	
+	bus_vi2c_start(dev);
+	bus_vi2c_writebyte(dev,DeviceAddr);
+	bus_vi2c_wait_ack(dev);
+	bus_vi2c_writebyte(dev,Addr);
+	bus_vi2c_wait_ack(dev);
+	bus_vi2c_writebyte(dev,Data);
+	bus_vi2c_wait_ack(dev);
+	bus_vi2c_stop(dev);
+
+	return 0;
+}
+
+uint8_t mcu_sccb_readreg(uint8_t DeviceAddr, uint16_t Addr)
+{
+	DevI2c *dev;
+	uint8_t ch;
+	
+	bus_vi2c_start(dev);
+	bus_vi2c_writebyte(dev,DeviceAddr&0xfe);
+	bus_vi2c_wait_ack(dev);
+	bus_vi2c_writebyte(dev,Addr);
+	bus_vi2c_wait_ack(dev);
+	bus_vi2c_stop(dev);
+	
+	//bus_vi2c_delay(10*1000);
+	
+	bus_vi2c_start(dev);
+	bus_vi2c_writebyte(dev,DeviceAddr);
+	bus_vi2c_wait_ack(dev);
+	ch = bus_vi2c_readbyte(dev);
+	bus_vi2c_ack(dev);
+	bus_vi2c_stop(dev);
+
+	return ch;
+}
 

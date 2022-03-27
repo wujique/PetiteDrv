@@ -1,7 +1,8 @@
 #ifndef _FONT_H
 #define _FONT_H
 
-/* github 上有一个 DisplayCore, 计划参考它来做字库管理 */
+/* github 上有一个 DisplayCore, 计划参考它来做字库管理 
+	将asc字符内嵌再代码中，以便没汉字点阵时做显示 */
 
 struct fbcon_font_desc 
 {
@@ -14,9 +15,7 @@ struct fbcon_font_desc
 extern struct fbcon_font_desc font_vga_8x8;
 extern struct fbcon_font_desc font_vga_8x16;
 extern struct fbcon_font_desc font_vga_6x12;
-
-
-extern s32 font_get_hw(char *font, u16 *h, u16 *w);
+/*-------------------------------------------------------------*/
 
 /*
 	字库标准*/
@@ -24,6 +23,7 @@ typedef enum{
 	FONT_ST_GB2312 = 1,
 	FONT_ST_GB18030,	
 	FONT_ST_BIG5,
+	FONT_ST_ASC,
 }FontS;
 /*
 	字库类型，匹配取点阵算法
@@ -39,7 +39,6 @@ typedef enum{
 
 	
 /* 取模方式*/
-
 typedef enum{
 	FONT_DOT_HL = 1, /*横向取模，字节正序*/
 	FONT_DOT_VL, /*纵向取模，字节正序*/	
@@ -92,8 +91,15 @@ typedef struct _strFontHead
 	FontDotType dt;//取模方式
 	
 	/* 求索引 */
-	int fd;
+	//int fd;
 }FontHead;
+
+extern void font_init(void);
+
+extern void *font_find_font(char *name);
+extern int font_getdot(void *fontstr_in, char *Ch, FontDot *Dot);
+extern int font_get_dotdata(char *fontname, char *str, FontDot *Dot);
+extern s32 font_get_hw(char *font, u16 *h, u16 *w);
 
 
 #endif /* _VIDEO_FONT_H */

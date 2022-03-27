@@ -1,0 +1,2 @@
+不同模块的wifi驱动，依赖petite中的AT指令通信模块。
+提供接口给pannel中的WIFI通信管理流程使用。

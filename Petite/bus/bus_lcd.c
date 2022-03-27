@@ -22,18 +22,22 @@
 #include <stdio.h>
 
 #include "mcu.h"
-#include "mcu_io.h"
-#include "mcu_fsmc.h"
-
-#include "log.h"
-
 #include "petite.h"
 
-
+#if (PETITE_BUS_LCD_8080 == 1)
+extern volatile u16 *LcdReg;
+extern volatile u16 *LcdData;
+#endif
 /*
 	一个LCD接口
 	除了通信的接口
+	
 	还有其他不属于通信接口的信号
+
+	为什么要加 BUS LCD层？是解决不论SPI接口或I2C接口，lcd驱动都是同一份，比如SSD1615。
+	2022.03.09 值得吗？是否可以取消bus lcd 层，直接将I2C或者SPI操作放到SSD1615层中做分支？
+			  ILI9341有8080接口，也有SPI接口的，是否可以都在驱动中做判断，这样就取消了BUS LCD层	
+	2022.03.22 取消BUS_LCD层可能是一个好选择。lcd--drv---bus(i2c spi 8080)
 */
 
 /*LCD 总线设备节点根节点*/
@@ -141,10 +145,14 @@ DevLcdBusNode *bus_lcd_open(char *name)
 				node->basenode = (void *)bus_spich_open(node->dev.basebus, SPI_MODE_3, 10000);
 
 			} else if (node->dev.pnode.type == BUS_LCD_I2C) {
-				node->basenode = bus_i2c_open(node->dev.basebus);
+				node->basenode = bus_i2c_open(node->dev.basebus, 0xffffffff);
 			} else if (node->dev.pnode.type == BUS_LCD_8080) {
+				#if (PETITE_BUS_LCD_8080 == 1)
 				/*8080特殊处理*/
 				node->basenode = (void *)1;
+				#else
+				wjq_log(LOG_INFO, "lcd bus unsuport 8080 !\r\n");
+				#endif
 			}
 			
 			if (node->basenode == NULL) {
@@ -178,9 +186,13 @@ s32 bus_lcd_close(DevLcdBusNode *node)
 		
 	}else if(node->dev.pnode.type == BUS_LCD_I2C){
 		bus_i2c_close((DevI2cNode *)node->basenode);	
-	}else if(node->dev.pnode.type == BUS_LCD_8080){
+	}else if(node->dev.pnode.type == BUS_LCD_8080){	
+		#if (PETITE_BUS_LCD_8080 == 1)
 		/*8080特殊处理*/
 		node->basenode = NULL;
+		#else
+		wjq_log(LOG_INFO, "lcd bus unsuport 8080 !\r\n");
+		#endif
 	}
 	
 	node->gd = -1;
@@ -218,13 +230,18 @@ s32 bus_lcd_write_data(DevLcdBusNode *node, u8 *data, u32 len)
 		break;
 		case BUS_LCD_8080:			
 		{
+			#if (PETITE_BUS_LCD_8080 == 1)
+			/*8080特殊处理*/
 			u16 *p;
 			p = (u16 *)data;
 			for(i=0; i<len; i++)
 			{
 				*LcdData = *(p+i);	
 			}
-		}
+			#else
+			wjq_log(LOG_INFO, "lcd bus unsuport 8080 !\r\n");
+			#endif
+			}
 		break;
 		default:
 			break;
@@ -253,10 +270,15 @@ s32 bus_lcd_w_data(DevLcdBusNode *node, u16 color, u32 len)
 		break;
 		case BUS_LCD_8080:			
 		{
-			for(i=len; i>0; i--)
-			{
+			#if (PETITE_BUS_LCD_8080 == 1)
+			/*8080特殊处理*/
+			for(i=len; i>0; i--) {
 				*LcdData = color;	
 			}
+			#else
+			wjq_log(LOG_INFO, "lcd bus unsuport 8080 !\r\n");
+			#endif
+			
 		}
 		break;
 		default:
@@ -431,12 +453,17 @@ s32 bus_lcd_read_data(DevLcdBusNode *node, u8 *data, u32 len)
 		
 		case BUS_LCD_8080:
 		{
+			
+			#if (PETITE_BUS_LCD_8080 == 1)
 			u16 *p;
 			p = (u16 *)data;
 			
 			for(i=0; i<len; i++){
 				*(p+i) = *LcdData;	
 			}
+			#else
+			wjq_log(LOG_INFO, "lcd bus unsuport 8080 !\r\n");
+			#endif
 		}
 		break;
 		default:
@@ -477,7 +504,11 @@ s32 bus_lcd_write_cmd(DevLcdBusNode *node, u16 cmd)
 		
 		case BUS_LCD_8080:
 		{
-			*LcdReg = cmd;	
+			#if (PETITE_BUS_LCD_8080 == 1)
+			*LcdReg = cmd;
+			#else
+			wjq_log(LOG_INFO, "lcd bus unsuport 8080 !\r\n");
+			#endif
 		}
 		break;
 		default:
@@ -525,8 +556,13 @@ s32 dev_lcdbus_register(const DevLcdBus *dev)
 	bus_lcd_IO_init(dev);
 
 	if(dev->pnode.type == BUS_LCD_8080){
+		
+		#if (PETITE_BUS_LCD_8080 == 1)
 		//初始FSMC
 		mcu_fsmc_lcd_Init();
+		#else
+		wjq_log(LOG_INFO, "lcd bus unsuport 8080 !\r\n");
+		#endif
 	}
 	return 0;
 }

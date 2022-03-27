@@ -7,6 +7,8 @@
 #define DEV_NAME_SIZE	16
 
 /* 这里的定义决定是否编译对应的驱动 */
+/* 自定义BUS*/
+#define PETITE_BUS_LCD_8080		1
 
 /* 中间件配置 */
 #define PANEL_SOUND_MODULE	1
@@ -31,15 +33,16 @@
 #define DRV_CAMERA_OV9655	 	1
 
 /* 	用宏控制哪些LCD驱动参加编译*/
-#define LCD_DRIVER_ST7565		1
-#define LCD_DRIVER_SSD1615		1
+#define LCD_DRIVER				1
+#define LCD_DRIVER_ST7565		1/* cog lcd 128*64 */
+#define LCD_DRIVER_SSD1615		1/* oled 128*64 */
 #define LCD_DRIVER_9341			1
 #define LCD_DRIVER_9341_8BIT	0
 #define LCD_DRIVER_9325			1
 #define LCD_DRIVER_7735			0
 #define LCD_DRIVER_7789			0
 #define LCD_DRIVER_91874		0
-#define LCD_DRIVER_3820			0
+#define LCD_DRIVER_3820			0/* e paper */
 #define LCD_DRIVER_NT35510		1
 #define LCD_DRIVER_R61408		1
 

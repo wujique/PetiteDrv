@@ -89,7 +89,7 @@ app-----VFS ----|
 */
 union _uFileSysPra
 {
-	#ifdef SYS_FS_FATFS
+	#if (SYS_FS_FATFS == 1)
     FATFS fatfs;	//fatfs
     #endif
 	//CONSTFS constfs;	//const fs
@@ -101,7 +101,7 @@ union _uFileSysPra
 */
 union _uFilePra
 {
-	#ifdef SYS_FS_FATFS
+	#if (SYS_FS_FATFS == 1)
 	FIL fatfd;//fatfs
 	#endif
 	u8 NA;
@@ -152,32 +152,24 @@ static s32 vfs_get_dir_name(const u8 *lpPath, u8 *lpDir, u8 *lpName)
     memset(name, 0, sizeof(name));
     memset(dir, 0, sizeof(dir));
     
-    while(index < strlen(lpPath))
-    {
+    while(index < strlen(lpPath)) {
         
         if(*(lpPath+index) == '/'
-            && flag == 0)//分隔符
-        {
+            && flag == 0) {
             str_len = strlen(name);
-            if( str_len > VFS_DIR_LEN)
-            {
+            if ( str_len > VFS_DIR_LEN) {
                 VfsDebug(LOG_DEBUG, "目录名太长\r\n");
                 return -1;
-            }
-            else if(str_len > 0)
-            {
+            } else if(str_len > 0) {
                 strcpy(dir, name);//只能保存一级路径
                 name_index = 0;
                 memset(name, 0, sizeof(name)); 
                 flag = 1;
             }
             
-        }
-        else
-        {
+        } else {
             name[name_index++] = *(lpPath+index);
-            if(name_index >= VFS_NAME_LEN)
-            {
+            if (name_index >= VFS_NAME_LEN) {
                 VfsDebug(LOG_DEBUG, "文件名太长\r\n");
                 return -1;
                 break;//文件名太长，错误，退出
@@ -190,8 +182,7 @@ static s32 vfs_get_dir_name(const u8 *lpPath, u8 *lpDir, u8 *lpName)
     strcpy(lpDir, dir);
     strcpy(lpName, name);
 
-    if(strlen(dir) == 0)
-    {
+    if(strlen(dir) == 0) {
         strcpy(lpDir,"mtd0");
     }
     
@@ -209,10 +200,9 @@ static s32 vfs_get_dir_name(const u8 *lpPath, u8 *lpDir, u8 *lpName)
 void vfs_init(void)
 {
 	u8 i = 0;
-	while(1)
-	{
-		if(i>= SYS_FS_NUM)
-			break;
+	while(1) {
+		if(i>= SYS_FS_NUM) 	break;
+		
 		VfsNodeList[i].Mtd = NULL;
 		i++;
 	}
@@ -258,16 +248,13 @@ int vfs_mount(const VFSDIR *Mtd)
 	
     VfsDebug(LOG_DEBUG, "mount %s 到 / \r\n", Mtd->vfsdir);
 
-    while(1)
-	{
-		if(i>= SYS_FS_NUM)
-		{
+    while(1) {
+		if (i>= SYS_FS_NUM) {
 			VfsDebug(LOG_DEBUG, "mount err\r\n");
 			break;
 		}
 		
-		if(VfsNodeList[i].Mtd == NULL)
-		{
+		if (VfsNodeList[i].Mtd == NULL) {
 			VfsNodeList[i].Mtd = Mtd;
 
 			/*根据 文件系统类型调用对应的初始化*/
@@ -275,13 +262,13 @@ int vfs_mount(const VFSDIR *Mtd)
 			{
 				case FS_TYPE_FATFS:
 					VfsDebug(LOG_DEBUG, "mount FS_TYPE_FATFS\r\n");
-					#ifdef SYS_FS_FATFS
+					#if (SYS_FS_FATFS == 1)
 					FRESULT res;
 
 					/* Initialises the File System*/
+					
 					res = f_mount(&VfsNodeList[i].pra.fatfs, Mtd->dir, 1);
-					if ( res == FR_OK ) 
-					{
+					if ( res == FR_OK )  {
 						wjq_log(LOG_FUN, "> vfs mount fatfs initialized.\r\n");
 						return 0;
 					}
@@ -330,18 +317,14 @@ static FsNode *vfs_find_dir(u8* dirname)
 	
     VfsDebug(LOG_DEBUG, "find dir %s\r\n", dirname);
 
-	while(1)
-	{
-		if(i>= SYS_FS_NUM)
-		{
+	while(1) {
+		if(i>= SYS_FS_NUM) {
 			VfsDebug(LOG_DEBUG, "scan dir err:no dir %s\r\n", dirname);
 			return NULL;
 		}
 		
-		if(VfsNodeList[i].Mtd != NULL)
-		{
-			if(0 == strcmp(VfsNodeList[i].Mtd->vfsdir, dirname))
-        	{
+		if (VfsNodeList[i].Mtd != NULL) {
+			if(0 == strcmp(VfsNodeList[i].Mtd->vfsdir, dirname)) {
             	VfsDebug(LOG_DEBUG, "找到对应目录 %s\r\n", dirname);
         	    return &VfsNodeList[i];
        		}	
@@ -377,14 +360,17 @@ int vfs_open(const char *pathname, int oflags)
 	{
 		case FS_TYPE_FATFS:
 			VfsDebug(LOG_DEBUG, "open FS_TYPE_FATFS\r\n");
-			#ifdef SYS_FS_FATFS
+			#if (SYS_FS_FATFS == 1)
 			FRESULT res;
 			BYTE mode;
 			/*need fix*/
 			if(oflags == O_RDONLY)
-				mode = FA_READ;
+				mode = FA_OPEN_EXISTING | FA_READ;
 			else if(oflags == O_CREAT)
 				mode = FA_CREATE_ALWAYS | FA_WRITE;
+			else {
+				mode = FA_OPEN_EXISTING | FA_READ;	
+			}
 			
 			res = f_open(&filenode->pra.fatfd, name, mode);
 			if(res == FR_OK) {
@@ -392,11 +378,11 @@ int vfs_open(const char *pathname, int oflags)
 				wjq_log(LOG_INFO, "vfs_open fd=%08x\r\n", (int)filenode);
 				return (int)filenode;
 				
-			}else
-			#endif
-			{
-				wjq_log(LOG_INFO, "open file:%s, err\r\n", name);	
+			} else {
+				wjq_log(LOG_INFO, "open file:%s,err\r\n", name);	
 			}
+
+			#endif
 			return NULL;
 
 			
@@ -432,14 +418,17 @@ int vfs_read(int fd, const void *buf, size_t length)
 		case FS_TYPE_FATFS:
 			VfsDebug(LOG_DEBUG, "vfs_read FS_TYPE_FATFS\r\n");
 			
-			#ifdef SYS_FS_FATFS
+			#if (SYS_FS_FATFS == 1)
 			FRESULT res;
 		
 			res = f_read(&filenode->pra.fatfd, (void *)buf, length, &len);
-			if((res != FR_OK) || (len != length))
-			{
+			if (res != FR_OK) {
 				VfsDebug(LOG_DEBUG, "read err\r\n");
 				return -1;
+			}
+
+			if (len != length) {
+				VfsDebug(LOG_DEBUG, "fs end\r\n");
 			}
 
 			return (int)len;
@@ -480,7 +469,7 @@ int vfs_write(int fd, const void *buf, size_t length)
 		case FS_TYPE_FATFS:
 			VfsDebug(LOG_DEBUG, "vfs_read FS_TYPE_FATFS\r\n");
 			
-		#ifdef SYS_FS_FATFS
+		#if (SYS_FS_FATFS == 1)
 			FRESULT res;
 		
 			res = f_write(&filenode->pra.fatfd, (void *)buf, length, &len);
@@ -535,7 +524,7 @@ int vfs_lseek(int fd, int offset, int whence)
 	{
 		case FS_TYPE_FATFS:
 			VfsDebug(LOG_INFO, "vfs_lseek FS_TYPE_FATFS\r\n");
-			#ifdef SYS_FS_FATFS
+			#if (SYS_FS_FATFS == 1)
 			FRESULT res;
 			if(whence == SEEK_SET){
 				res = f_lseek(&filenode->pra.fatfd, offset);
@@ -587,7 +576,7 @@ int vfs_close(int fd)
 	{
 		case FS_TYPE_FATFS:
 			VfsDebug(LOG_DEBUG, "vfs_close FS_TYPE_FATFS\r\n");
-		#ifdef SYS_FS_FATFS
+		#if (SYS_FS_FATFS == 1)
 			FRESULT res;
 			res = f_close(&filenode->pra.fatfd);
 			if(res != FR_OK)
@@ -631,7 +620,7 @@ int vfs_tell(int fd)
 	{
 		case FS_TYPE_FATFS:
 			VfsDebug(LOG_INFO, "vfs_tell FS_TYPE_FATFS\r\n");
-		#ifdef SYS_FS_FATFS
+		#if (SYS_FS_FATFS == 1)
 			int res;
 			res = f_tell(&filenode->pra.fatfd);
 

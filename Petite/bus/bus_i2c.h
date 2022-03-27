@@ -4,6 +4,7 @@
 #include "mem/p_list.h"
 
 #include "petite_def.h"
+#include "cmsis_os.h"
 
 
 /*	i2c设备定义 */
@@ -23,7 +24,7 @@ typedef struct
 typedef struct
 {
 	s32 gd;
-	
+	osMutexId_t mutex;	
 	
 	DevI2c dev;	
 
@@ -34,7 +35,7 @@ typedef struct
 #define MCU_I2C_MODE_R 1
 
 extern s32 bus_i2c_register(const DevI2c * dev);
-extern DevI2cNode *bus_i2c_open(char *name);
+extern DevI2cNode *bus_i2c_open(char *name, uint32_t wait);
 extern s32 bus_i2c_close(DevI2cNode *node);
 extern s32 bus_i2c_transfer(DevI2cNode *node, u8 addr, u8 rw, u8* data, s32 datalen);
 

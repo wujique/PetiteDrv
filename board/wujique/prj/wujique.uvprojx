@@ -53,7 +53,7 @@
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>1</CreateHexFile>
-          <DebugInformation>1</DebugInformation>
+          <DebugInformation>0</DebugInformation>
           <BrowseInformation>0</BrowseInformation>
           <ListingPath>.\Listings\</ListingPath>
           <HexFormatSelection>1</HexFormatSelection>
@@ -336,7 +336,7 @@
               <MiscControls>--locale=english</MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\app;..\..\wujique;..\usb\inc;..\eth\inc;..\..\..\driver;..\..\..\driver\lcd;..\..\..\driver\cdev;..\..\..\mcu\stm32407\mcu_dev;..\..\..\mcu\stm32407\StLib\STM32F4xx_StdPeriph_Driver\inc;..\..\..\panel;..\..\..\Petite;..\..\..\Utilities\FreeRTOS\Source\include;..\..\..\mcu\stm32407\StLib\STM32_USB_OTG_Driver\inc;..\..\..\mcu\stm32407\StLib\STM32_USB_HOST_Library\Core\inc;..\..\..\mcu\stm32407\StLib\STM32_USB_HOST_Library\Class\MSC\inc;..\..\..\mcu\stm32407\StLib\STM32_USB_Device_Library\Core\inc;..\..\..\mcu\stm32407\StLib\STM32_USB_Device_Library\Class\msc\inc;..\..\..\Utilities\fat_fs\src;..\eth\inc;..\..\..\mcu\stm32407\StLib\STM32F4x7_ETH_Driver\inc;..\..\..\Utilities\lwip-1.4.1\port\STM32F4x7\Standalone;..\..\..\Utilities\lwip-1.4.1\src\include\ipv4;..\..\..\Utilities\lwip-1.4.1\src\include;..\..\..\Utilities\lwip-1.4.1\src\include\netif;..\..\..\Utilities\lwip-1.4.1\src\include\lwip;..\..\..\Utilities\lwip-1.4.1\port\STM32F4x7;..\..\..\Utilities\tslib;..\..\..\Utilities\cmd\ubootcmd;..\..\..\Utilities\spiffs-0.3.7\src;..\..\..\Utilities\littlefs-master;..\usb\inc;..\..\..\mcu\stm32407;..\..\..\Utilities\font;..\..\..\driver\camera;..\..\..\mcu\stm32407\StLib\core;..\rtos</IncludePath>
+              <IncludePath>..\..\..\app;..\..\wujique;..\usb\inc;..\eth\inc;..\..\..\driver;..\..\..\driver\lcd;..\..\..\driver\cdev;..\..\..\mcu\stm32407\mcu_dev;..\..\..\mcu\stm32407\StLib\STM32F4xx_StdPeriph_Driver\inc;..\..\..\panel;..\..\..\Petite;..\..\..\Utilities\FatFs;..\eth\inc;..\..\..\Utilities\cmd\ubootcmd;..\..\..\Utilities\spiffs-0.3.7\src;..\..\..\Utilities\littlefs-master;..\usb\inc;..\..\..\mcu\stm32407;..\..\..\driver\camera;..\..\..\mcu\stm32407\StLib\CMSIS\Include;..\..\..\driver\touch;..\..\..\Utilities\FreeRTOS\Source\include;..\..\..\Utilities\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\..\..\Utilities\FreeRTOS\Source\CMSIS_RTOS_V2;..\..\..\driver\touch\rtp\tslib;..\..\..\driver\touch\rtp\tslib\tests;..\..\..\driver\sound;..\..\..\driver\touch;..\..\..\driver\touch\rtp</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -378,336 +378,6 @@
       </TargetOption>
       <Groups>
         <Group>
-          <GroupName>app</GroupName>
-          <Files>
-            <File>
-              <FileName>sys_littlefs.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\app\sys_littlefs.c</FilePath>
-            </File>
-            <File>
-              <FileName>sys_spiffs.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\app\sys_spiffs.c</FilePath>
-            </File>
-            <File>
-              <FileName>app.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\app\app.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>panel</GroupName>
-          <Files>
-            <File>
-              <FileName>audio_sample.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\panel\audio_sample.c</FilePath>
-            </File>
-            <File>
-              <FileName>emenu.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\panel\emenu.c</FilePath>
-            </File>
-            <File>
-              <FileName>emenu_test.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\panel\emenu_test.c</FilePath>
-            </File>
-            <File>
-              <FileName>soundplay.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\panel\soundplay.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>driver</GroupName>
-          <Files>
-            <File>
-              <FileName>drv_buzzer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\driver\drv_buzzer.c</FilePath>
-            </File>
-            <File>
-              <FileName>drv_dacsound.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\driver\drv_dacsound.c</FilePath>
-            </File>
-            <File>
-              <FileName>drv_key.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\driver\drv_key.c</FilePath>
-            </File>
-            <File>
-              <FileName>drv_keypad.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\driver\drv_keypad.c</FilePath>
-            </File>
-            <File>
-              <FileName>drv_rf24l01.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\driver\drv_rf24l01.c</FilePath>
-            </File>
-            <File>
-              <FileName>drv_rs485.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\driver\drv_rs485.c</FilePath>
-            </File>
-            <File>
-              <FileName>drv_spiflash.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\driver\drv_spiflash.c</FilePath>
-            </File>
-            <File>
-              <FileName>drv_srf05.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\driver\drv_srf05.c</FilePath>
-            </File>
-            <File>
-              <FileName>drv_tea5767.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\driver\drv_tea5767.c</FilePath>
-            </File>
-            <File>
-              <FileName>drv_touchkey.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\driver\drv_touchkey.c</FilePath>
-            </File>
-            <File>
-              <FileName>drv_touchscreen.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\driver\drv_touchscreen.c</FilePath>
-            </File>
-            <File>
-              <FileName>drv_wm8978.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\driver\drv_wm8978.c</FilePath>
-            </File>
-            <File>
-              <FileName>drv_xpt2046.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\driver\drv_xpt2046.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm324xg_eval_sdio_sd.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\driver\stm324xg_eval_sdio_sd.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>driver/lcd</GroupName>
-          <Files>
-            <File>
-              <FileName>drv_nt35510.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\driver\lcd\drv_nt35510.c</FilePath>
-            </File>
-            <File>
-              <FileName>drv_r61408.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\driver\lcd\drv_r61408.c</FilePath>
-            </File>
-            <File>
-              <FileName>drv_IL3820.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\driver\lcd\drv_IL3820.c</FilePath>
-            </File>
-            <File>
-              <FileName>drv_IL91874.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\driver\lcd\drv_IL91874.c</FilePath>
-            </File>
-            <File>
-              <FileName>drv_ILI9325.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\driver\lcd\drv_ILI9325.c</FilePath>
-            </File>
-            <File>
-              <FileName>drv_ILI9341.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\driver\lcd\drv_ILI9341.c</FilePath>
-            </File>
-            <File>
-              <FileName>drv_lcd.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\driver\lcd\drv_lcd.c</FilePath>
-            </File>
-            <File>
-              <FileName>drv_st7735r.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\driver\lcd\drv_st7735r.c</FilePath>
-            </File>
-            <File>
-              <FileName>drv_st7789.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\driver\lcd\drv_st7789.c</FilePath>
-            </File>
-            <File>
-              <FileName>drv_str7565.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\driver\lcd\drv_str7565.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>driver/cdev</GroupName>
-          <Files>
-            <File>
-              <FileName>drv_htu21d.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\driver\cdev\drv_htu21d.c</FilePath>
-            </File>
-            <File>
-              <FileName>drv_ptHCHO.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\driver\cdev\drv_ptHCHO.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>driver/camera</GroupName>
-          <Files>
-            <File>
-              <FileName>camera_api.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\driver\camera\camera_api.c</FilePath>
-            </File>
-            <File>
-              <FileName>drv_ov2640.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\driver\camera\drv_ov2640.c</FilePath>
-            </File>
-            <File>
-              <FileName>drv_ov9655.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\driver\camera\drv_ov9655.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>Petite</GroupName>
-          <Files>
-            <File>
-              <FileName>maths.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Petite\maths.c</FilePath>
-            </File>
-            <File>
-              <FileName>vfs.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Petite\vfs.c</FilePath>
-            </File>
-            <File>
-              <FileName>log.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Petite\log.c</FilePath>
-            </File>
-            <File>
-              <FileName>stimer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Petite\stimer.c</FilePath>
-            </File>
-            <File>
-              <FileName>pfsm.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Petite\pfsm.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>Petite/font</GroupName>
-          <Files>
-            <File>
-              <FileName>font.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Petite\font\font.c</FilePath>
-            </File>
-            <File>
-              <FileName>font_6x12.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Petite\font\font_6x12.c</FilePath>
-            </File>
-            <File>
-              <FileName>font_8x8.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Petite\font\font_8x8.c</FilePath>
-            </File>
-            <File>
-              <FileName>font_8x16.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Petite\font\font_8x16.c</FilePath>
-            </File>
-            <File>
-              <FileName>font_wjq.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Petite\font\font_wjq.c</FilePath>
-            </File>
-            <File>
-              <FileName>font_ymy.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Petite\font\font_ymy.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>Petite/mem</GroupName>
-          <Files>
-            <File>
-              <FileName>alloc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Petite\mem\alloc.c</FilePath>
-            </File>
-            <File>
-              <FileName>p_kfifo.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Petite\mem\p_kfifo.c</FilePath>
-            </File>
-            <File>
-              <FileName>p_list.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Petite\mem\p_list.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>Petite/bus</GroupName>
-          <Files>
-            <File>
-              <FileName>bus_i2c.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Petite\bus\bus_i2c.c</FilePath>
-            </File>
-            <File>
-              <FileName>bus_lcd.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Petite\bus\bus_lcd.c</FilePath>
-            </File>
-            <File>
-              <FileName>bus_spi.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Petite\bus\bus_spi.c</FilePath>
-            </File>
-            <File>
-              <FileName>bus_uart.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Petite\bus\bus_uart.c</FilePath>
-            </File>
-            <File>
-              <FileName>bus_vi2c.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Petite\bus\bus_vi2c.c</FilePath>
-            </File>
-            <File>
-              <FileName>bus_vspi.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Petite\bus\bus_vspi.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>mcu</GroupName>
           <Files>
             <File>
@@ -719,76 +389,6 @@
               <FileName>startup_stm32f40_41xxx.s</FileName>
               <FileType>2</FileType>
               <FilePath>..\..\..\mcu\stm32407\startup_stm32f40_41xxx.s</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>mcu/dev</GroupName>
-          <Files>
-            <File>
-              <FileName>mcu_adc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\mcu_dev\mcu_adc.c</FilePath>
-            </File>
-            <File>
-              <FileName>mcu_can.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\mcu_dev\mcu_can.c</FilePath>
-            </File>
-            <File>
-              <FileName>mcu_dac.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\mcu_dev\mcu_dac.c</FilePath>
-            </File>
-            <File>
-              <FileName>mcu_dcmi.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\mcu_dev\mcu_dcmi.c</FilePath>
-            </File>
-            <File>
-              <FileName>mcu_i2c.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\mcu_dev\mcu_i2c.c</FilePath>
-            </File>
-            <File>
-              <FileName>mcu_i2s.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\mcu_dev\mcu_i2s.c</FilePath>
-            </File>
-            <File>
-              <FileName>mcu_rtc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\mcu_dev\mcu_rtc.c</FilePath>
-            </File>
-            <File>
-              <FileName>mcu_sdio.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\mcu_dev\mcu_sdio.c</FilePath>
-            </File>
-            <File>
-              <FileName>mcu_spi.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\mcu_dev\mcu_spi.c</FilePath>
-            </File>
-            <File>
-              <FileName>mcu_timer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\mcu_dev\mcu_timer.c</FilePath>
-            </File>
-            <File>
-              <FileName>mcu_uart.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\mcu_dev\mcu_uart.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm324xg_eval_fsmc_sram.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\mcu_dev\stm324xg_eval_fsmc_sram.c</FilePath>
-            </File>
-            <File>
-              <FileName>mcu_io.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\mcu_dev\mcu_io.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1008,352 +608,422 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>mcu/usb/otg_driver</GroupName>
+          <GroupName>mcu/dev</GroupName>
           <Files>
             <File>
-              <FileName>usb_core.c</FileName>
+              <FileName>mcu_adc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_OTG_Driver\src\usb_core.c</FilePath>
+              <FilePath>..\..\..\mcu\stm32407\mcu_dev\mcu_adc.c</FilePath>
             </File>
             <File>
-              <FileName>usb_dcd.c</FileName>
+              <FileName>mcu_can.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_OTG_Driver\src\usb_dcd.c</FilePath>
+              <FilePath>..\..\..\mcu\stm32407\mcu_dev\mcu_can.c</FilePath>
             </File>
             <File>
-              <FileName>usb_dcd_int.c</FileName>
+              <FileName>mcu_dac.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_OTG_Driver\src\usb_dcd_int.c</FilePath>
+              <FilePath>..\..\..\mcu\stm32407\mcu_dev\mcu_dac.c</FilePath>
             </File>
             <File>
-              <FileName>usb_hcd.c</FileName>
+              <FileName>mcu_dcmi.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_OTG_Driver\src\usb_hcd.c</FilePath>
+              <FilePath>..\..\..\mcu\stm32407\mcu_dev\mcu_dcmi.c</FilePath>
             </File>
             <File>
-              <FileName>usb_hcd_int.c</FileName>
+              <FileName>mcu_i2c.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_OTG_Driver\src\usb_hcd_int.c</FilePath>
+              <FilePath>..\..\..\mcu\stm32407\mcu_dev\mcu_i2c.c</FilePath>
+            </File>
+            <File>
+              <FileName>mcu_i2s.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\mcu\stm32407\mcu_dev\mcu_i2s.c</FilePath>
+            </File>
+            <File>
+              <FileName>mcu_rtc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\mcu\stm32407\mcu_dev\mcu_rtc.c</FilePath>
+            </File>
+            <File>
+              <FileName>mcu_sdio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\mcu\stm32407\mcu_dev\mcu_sdio.c</FilePath>
+            </File>
+            <File>
+              <FileName>mcu_spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\mcu\stm32407\mcu_dev\mcu_spi.c</FilePath>
+            </File>
+            <File>
+              <FileName>mcu_timer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\mcu\stm32407\mcu_dev\mcu_timer.c</FilePath>
+            </File>
+            <File>
+              <FileName>mcu_uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\mcu\stm32407\mcu_dev\mcu_uart.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm324xg_eval_fsmc_sram.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\mcu\stm32407\mcu_dev\stm324xg_eval_fsmc_sram.c</FilePath>
+            </File>
+            <File>
+              <FileName>mcu_io.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\mcu\stm32407\mcu_dev\mcu_io.c</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>mcu/usb/host_core</GroupName>
+          <GroupName>driver</GroupName>
           <Files>
             <File>
-              <FileName>usbh_core.c</FileName>
+              <FileName>drv_buzzer.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_HOST_Library\Core\src\usbh_core.c</FilePath>
+              <FilePath>..\..\..\driver\drv_buzzer.c</FilePath>
             </File>
             <File>
-              <FileName>usbh_hcs.c</FileName>
+              <FileName>drv_key.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_HOST_Library\Core\src\usbh_hcs.c</FilePath>
+              <FilePath>..\..\..\driver\drv_key.c</FilePath>
             </File>
             <File>
-              <FileName>usbh_ioreq.c</FileName>
+              <FileName>drv_keypad.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_HOST_Library\Core\src\usbh_ioreq.c</FilePath>
+              <FilePath>..\..\..\driver\drv_keypad.c</FilePath>
             </File>
             <File>
-              <FileName>usbh_stdreq.c</FileName>
+              <FileName>drv_rf24l01.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_HOST_Library\Core\src\usbh_stdreq.c</FilePath>
+              <FilePath>..\..\..\driver\drv_rf24l01.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_rs485.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\driver\drv_rs485.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_spiflash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\driver\drv_spiflash.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_srf05.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\driver\drv_srf05.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_tea5767.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\driver\drv_tea5767.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_touchkey.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\driver\drv_touchkey.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm324xg_eval_sdio_sd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\driver\stm324xg_eval_sdio_sd.c</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>mcu/usb/host_class_msc</GroupName>
+          <GroupName>driver/lcd</GroupName>
           <Files>
             <File>
-              <FileName>usbh_msc_bot.c</FileName>
+              <FileName>drv_nt35510.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_HOST_Library\Class\MSC\src\usbh_msc_bot.c</FilePath>
+              <FilePath>..\..\..\driver\lcd\drv_nt35510.c</FilePath>
             </File>
             <File>
-              <FileName>usbh_msc_core.c</FileName>
+              <FileName>drv_r61408.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_HOST_Library\Class\MSC\src\usbh_msc_core.c</FilePath>
+              <FilePath>..\..\..\driver\lcd\drv_r61408.c</FilePath>
             </File>
             <File>
-              <FileName>usbh_msc_fatfs.c</FileName>
+              <FileName>drv_IL3820.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_HOST_Library\Class\MSC\src\usbh_msc_fatfs.c</FilePath>
+              <FilePath>..\..\..\driver\lcd\drv_IL3820.c</FilePath>
             </File>
             <File>
-              <FileName>usbh_msc_scsi.c</FileName>
+              <FileName>drv_IL91874.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_HOST_Library\Class\MSC\src\usbh_msc_scsi.c</FilePath>
+              <FilePath>..\..\..\driver\lcd\drv_IL91874.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_ILI9325.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\driver\lcd\drv_ILI9325.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_ILI9341.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\driver\lcd\drv_ILI9341.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_lcd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\driver\lcd\drv_lcd.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_st7735r.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\driver\lcd\drv_st7735r.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_st7789.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\driver\lcd\drv_st7789.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_str7565.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\driver\lcd\drv_str7565.c</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>mcu/usb/device_core</GroupName>
+          <GroupName>driver/cdev</GroupName>
           <Files>
             <File>
-              <FileName>usbd_core.c</FileName>
+              <FileName>drv_htu21d.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_Device_Library\Core\src\usbd_core.c</FilePath>
+              <FilePath>..\..\..\driver\cdev\drv_htu21d.c</FilePath>
             </File>
             <File>
-              <FileName>usbd_ioreq.c</FileName>
+              <FileName>drv_ptHCHO.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_Device_Library\Core\src\usbd_ioreq.c</FilePath>
-            </File>
-            <File>
-              <FileName>usbd_req.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_Device_Library\Core\src\usbd_req.c</FilePath>
+              <FilePath>..\..\..\driver\cdev\drv_ptHCHO.c</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>mcu/usb/device_class_msc</GroupName>
+          <GroupName>driver/camera</GroupName>
           <Files>
             <File>
-              <FileName>usbd_msc_bot.c</FileName>
+              <FileName>camera_api.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_Device_Library\Class\msc\src\usbd_msc_bot.c</FilePath>
+              <FilePath>..\..\..\driver\camera\camera_api.c</FilePath>
             </File>
             <File>
-              <FileName>usbd_msc_core.c</FileName>
+              <FileName>drv_ov2640.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_Device_Library\Class\msc\src\usbd_msc_core.c</FilePath>
+              <FilePath>..\..\..\driver\camera\drv_ov2640.c</FilePath>
             </File>
             <File>
-              <FileName>usbd_msc_data.c</FileName>
+              <FileName>drv_ov9655.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_Device_Library\Class\msc\src\usbd_msc_data.c</FilePath>
-            </File>
-            <File>
-              <FileName>usbd_msc_scsi.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\StLib\STM32_USB_Device_Library\Class\msc\src\usbd_msc_scsi.c</FilePath>
+              <FilePath>..\..\..\driver\camera\drv_ov9655.c</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>mcu/STM32F4X7_ETH_Driver</GroupName>
+          <GroupName>drv/sound</GroupName>
           <Files>
             <File>
-              <FileName>stm32f4x7_eth.c</FileName>
+              <FileName>dacsound.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\StLib\STM32F4x7_ETH_Driver\src\stm32f4x7_eth.c</FilePath>
+              <FilePath>..\..\..\driver\sound\dacsound.c</FilePath>
+            </File>
+            <File>
+              <FileName>ES8388.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\driver\sound\ES8388.c</FilePath>
+            </File>
+            <File>
+              <FileName>wm8978.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\driver\sound\wm8978.c</FilePath>
+            </File>
+            <File>
+              <FileName>audio_pipeline.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\driver\sound\audio_pipeline.c</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>Utilities/lwip</GroupName>
+          <GroupName>drv/touch</GroupName>
           <Files>
             <File>
-              <FileName>api_lib.c</FileName>
+              <FileName>drv_touchscreen.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\lwip-1.4.1\src\api\api_lib.c</FilePath>
+              <FilePath>..\..\..\driver\touch\drv_touchscreen.c</FilePath>
             </File>
             <File>
-              <FileName>api_msg.c</FileName>
+              <FileName>ctp_adc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\lwip-1.4.1\src\api\api_msg.c</FilePath>
+              <FilePath>..\..\..\driver\touch\rtp\ctp_adc.c</FilePath>
             </File>
             <File>
-              <FileName>err.c</FileName>
+              <FileName>xpt2046.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\lwip-1.4.1\src\api\err.c</FilePath>
+              <FilePath>..\..\..\driver\touch\rtp\xpt2046.c</FilePath>
             </File>
             <File>
-              <FileName>netbuf.c</FileName>
+              <FileName>tslib.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\lwip-1.4.1\src\api\netbuf.c</FilePath>
+              <FilePath>..\..\..\driver\touch\rtp\tslib\tslib.c</FilePath>
             </File>
             <File>
-              <FileName>netdb.c</FileName>
+              <FileName>testutils.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\lwip-1.4.1\src\api\netdb.c</FilePath>
+              <FilePath>..\..\..\driver\touch\rtp\tslib\tests\testutils.c</FilePath>
             </File>
             <File>
-              <FileName>netifapi.c</FileName>
+              <FileName>ts_calibrate.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\lwip-1.4.1\src\api\netifapi.c</FilePath>
-            </File>
-            <File>
-              <FileName>sockets.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\lwip-1.4.1\src\api\sockets.c</FilePath>
-            </File>
-            <File>
-              <FileName>tcpip.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\lwip-1.4.1\src\api\tcpip.c</FilePath>
-            </File>
-            <File>
-              <FileName>def.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\lwip-1.4.1\src\core\def.c</FilePath>
-            </File>
-            <File>
-              <FileName>dhcp.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\lwip-1.4.1\src\core\dhcp.c</FilePath>
-            </File>
-            <File>
-              <FileName>dns.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\lwip-1.4.1\src\core\dns.c</FilePath>
-            </File>
-            <File>
-              <FileName>init.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\lwip-1.4.1\src\core\init.c</FilePath>
-            </File>
-            <File>
-              <FileName>mem.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\lwip-1.4.1\src\core\mem.c</FilePath>
-            </File>
-            <File>
-              <FileName>memp.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\lwip-1.4.1\src\core\memp.c</FilePath>
-            </File>
-            <File>
-              <FileName>netif.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\lwip-1.4.1\src\core\netif.c</FilePath>
-            </File>
-            <File>
-              <FileName>pbuf.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\lwip-1.4.1\src\core\pbuf.c</FilePath>
-            </File>
-            <File>
-              <FileName>raw.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\lwip-1.4.1\src\core\raw.c</FilePath>
-            </File>
-            <File>
-              <FileName>stats.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\lwip-1.4.1\src\core\stats.c</FilePath>
-            </File>
-            <File>
-              <FileName>sys.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\lwip-1.4.1\src\core\sys.c</FilePath>
-            </File>
-            <File>
-              <FileName>tcp.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\lwip-1.4.1\src\core\tcp.c</FilePath>
-            </File>
-            <File>
-              <FileName>tcp_in.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\lwip-1.4.1\src\core\tcp_in.c</FilePath>
-            </File>
-            <File>
-              <FileName>tcp_out.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\lwip-1.4.1\src\core\tcp_out.c</FilePath>
-            </File>
-            <File>
-              <FileName>timers.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\lwip-1.4.1\src\core\timers.c</FilePath>
-            </File>
-            <File>
-              <FileName>udp.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\lwip-1.4.1\src\core\udp.c</FilePath>
-            </File>
-            <File>
-              <FileName>etharp.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\lwip-1.4.1\src\netif\etharp.c</FilePath>
-            </File>
-            <File>
-              <FileName>autoip.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\lwip-1.4.1\src\core\ipv4\autoip.c</FilePath>
-            </File>
-            <File>
-              <FileName>icmp.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\lwip-1.4.1\src\core\ipv4\icmp.c</FilePath>
-            </File>
-            <File>
-              <FileName>igmp.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\lwip-1.4.1\src\core\ipv4\igmp.c</FilePath>
-            </File>
-            <File>
-              <FileName>inet.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\lwip-1.4.1\src\core\ipv4\inet.c</FilePath>
-            </File>
-            <File>
-              <FileName>inet_chksum.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\lwip-1.4.1\src\core\ipv4\inet_chksum.c</FilePath>
-            </File>
-            <File>
-              <FileName>ip.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\lwip-1.4.1\src\core\ipv4\ip.c</FilePath>
-            </File>
-            <File>
-              <FileName>ip_addr.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\lwip-1.4.1\src\core\ipv4\ip_addr.c</FilePath>
-            </File>
-            <File>
-              <FileName>ip_frag.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\lwip-1.4.1\src\core\ipv4\ip_frag.c</FilePath>
-            </File>
-            <File>
-              <FileName>ethernetif.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\lwip-1.4.1\port\STM32F4x7\Standalone\ethernetif.c</FilePath>
+              <FilePath>..\..\..\driver\touch\rtp\tslib\tests\ts_calibrate.c</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>Utilities/uboot_cmd</GroupName>
+          <GroupName>Petite</GroupName>
           <Files>
             <File>
-              <FileName>cmd_sys.c</FileName>
+              <FileName>maths.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\cmd\cmd_sys.c</FilePath>
+              <FilePath>..\..\..\Petite\maths.c</FilePath>
             </File>
             <File>
-              <FileName>cmd_spiffs.c</FileName>
+              <FileName>vfs.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\cmd\cmd_spiffs.c</FilePath>
+              <FilePath>..\..\..\Petite\vfs.c</FilePath>
             </File>
             <File>
-              <FileName>cmd_display.c</FileName>
+              <FileName>log.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\cmd\cmd_display.c</FilePath>
+              <FilePath>..\..\..\Petite\log.c</FilePath>
             </File>
             <File>
-              <FileName>cmd_port.c</FileName>
+              <FileName>stimer.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\cmd\cmd_port.c</FilePath>
+              <FilePath>..\..\..\Petite\stimer.c</FilePath>
             </File>
             <File>
-              <FileName>cmd.c</FileName>
+              <FileName>pfsm.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\cmd\ubootcmd\cmd.c</FilePath>
+              <FilePath>..\..\..\Petite\pfsm.c</FilePath>
             </File>
             <File>
-              <FileName>commnad.c</FileName>
+              <FileName>font.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\cmd\ubootcmd\commnad.c</FilePath>
+              <FilePath>..\..\..\Petite\font\font.c</FilePath>
             </File>
             <File>
-              <FileName>console.c</FileName>
+              <FileName>font_6x12.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\cmd\ubootcmd\console.c</FilePath>
+              <FilePath>..\..\..\Petite\font\font_6x12.c</FilePath>
+            </File>
+            <File>
+              <FileName>font_8x8.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Petite\font\font_8x8.c</FilePath>
+            </File>
+            <File>
+              <FileName>font_8x16.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Petite\font\font_8x16.c</FilePath>
+            </File>
+            <File>
+              <FileName>font_wjq.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Petite\font\font_wjq.c</FilePath>
+            </File>
+            <File>
+              <FileName>font_ymy.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Petite\font\font_ymy.c</FilePath>
+            </File>
+            <File>
+              <FileName>alloc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Petite\mem\alloc.c</FilePath>
+            </File>
+            <File>
+              <FileName>p_kfifo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Petite\mem\p_kfifo.c</FilePath>
+            </File>
+            <File>
+              <FileName>p_list.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Petite\mem\p_list.c</FilePath>
+            </File>
+            <File>
+              <FileName>petite.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Petite\petite.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Petite/bus</GroupName>
+          <Files>
+            <File>
+              <FileName>bus_i2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Petite\bus\bus_i2c.c</FilePath>
+            </File>
+            <File>
+              <FileName>bus_lcd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Petite\bus\bus_lcd.c</FilePath>
+            </File>
+            <File>
+              <FileName>bus_spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Petite\bus\bus_spi.c</FilePath>
+            </File>
+            <File>
+              <FileName>bus_uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Petite\bus\bus_uart.c</FilePath>
+            </File>
+            <File>
+              <FileName>bus_vi2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Petite\bus\bus_vi2c.c</FilePath>
+            </File>
+            <File>
+              <FileName>bus_vspi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Petite\bus\bus_vspi.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>panel</GroupName>
+          <Files>
+            <File>
+              <FileName>audio_sample.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\panel\audio_sample.c</FilePath>
+            </File>
+            <File>
+              <FileName>emenu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\panel\emenu.c</FilePath>
+            </File>
+            <File>
+              <FileName>emenu_test.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\panel\emenu_test.c</FilePath>
+            </File>
+            <File>
+              <FileName>soundplay.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\panel\soundplay.c</FilePath>
+            </File>
+            <File>
+              <FileName>display.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\panel\display.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1361,44 +1031,54 @@
           <GroupName>Utilities/freertos</GroupName>
           <Files>
             <File>
-              <FileName>frtos_croutine.c</FileName>
+              <FileName>croutine.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\FreeRTOS\Source\frtos_croutine.c</FilePath>
+              <FilePath>..\..\..\Utilities\FreeRTOS\Source\croutine.c</FilePath>
             </File>
             <File>
-              <FileName>frtos_event_groups.c</FileName>
+              <FileName>event_groups.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\FreeRTOS\Source\frtos_event_groups.c</FilePath>
+              <FilePath>..\..\..\Utilities\FreeRTOS\Source\event_groups.c</FilePath>
             </File>
             <File>
-              <FileName>frtos_list.c</FileName>
+              <FileName>list.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\FreeRTOS\Source\frtos_list.c</FilePath>
+              <FilePath>..\..\..\Utilities\FreeRTOS\Source\list.c</FilePath>
             </File>
             <File>
-              <FileName>frtos_queue.c</FileName>
+              <FileName>queue.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\FreeRTOS\Source\frtos_queue.c</FilePath>
+              <FilePath>..\..\..\Utilities\FreeRTOS\Source\queue.c</FilePath>
             </File>
             <File>
-              <FileName>frtos_stream_buffer.c</FileName>
+              <FileName>stream_buffer.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\FreeRTOS\Source\frtos_stream_buffer.c</FilePath>
+              <FilePath>..\..\..\Utilities\FreeRTOS\Source\stream_buffer.c</FilePath>
             </File>
             <File>
-              <FileName>frtos_tasks.c</FileName>
+              <FileName>tasks.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\FreeRTOS\Source\frtos_tasks.c</FilePath>
+              <FilePath>..\..\..\Utilities\FreeRTOS\Source\tasks.c</FilePath>
             </File>
             <File>
-              <FileName>frtos_timers.c</FileName>
+              <FileName>timers.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\FreeRTOS\Source\frtos_timers.c</FilePath>
+              <FilePath>..\..\..\Utilities\FreeRTOS\Source\timers.c</FilePath>
             </File>
             <File>
               <FileName>heap_4.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\Utilities\FreeRTOS\Source\portable\MemMang\heap_4.c</FilePath>
+            </File>
+            <File>
+              <FileName>port.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Utilities\FreeRTOS\Source\portable\RVDS\ARM_CM4F\port.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmsis_os2.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Utilities\FreeRTOS\Source\CMSIS_RTOS_V2\cmsis_os2.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1453,42 +1133,32 @@
             <File>
               <FileName>diskio.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\fat_fs\src\diskio.c</FilePath>
+              <FilePath>..\..\..\Utilities\FatFs\diskio.c</FilePath>
             </File>
             <File>
               <FileName>ff.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\fat_fs\src\ff.c</FilePath>
+              <FilePath>..\..\..\Utilities\FatFs\ff.c</FilePath>
+            </File>
+            <File>
+              <FileName>ff_gen_drv.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Utilities\FatFs\ff_gen_drv.c</FilePath>
+            </File>
+            <File>
+              <FileName>ffunicode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Utilities\FatFs\ffunicode.c</FilePath>
             </File>
             <File>
               <FileName>cc936.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\fat_fs\src\option\cc936.c</FilePath>
+              <FilePath>..\..\..\Utilities\FatFs\option\cc936.c</FilePath>
             </File>
             <File>
               <FileName>syscall.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\fat_fs\src\option\syscall.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>Utilities/tslib</GroupName>
-          <Files>
-            <File>
-              <FileName>testutils.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\tslib\tests\testutils.c</FilePath>
-            </File>
-            <File>
-              <FileName>ts_calibrate.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\tslib\tests\ts_calibrate.c</FilePath>
-            </File>
-            <File>
-              <FileName>tslib.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\tslib\tslib.c</FilePath>
+              <FilePath>..\..\..\Utilities\FatFs\option\syscall.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1506,84 +1176,24 @@
               <FilePath>..\main.c</FilePath>
             </File>
             <File>
-              <FileName>board_test.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\board_test.c</FilePath>
-            </File>
-            <File>
               <FileName>board.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\board.c</FilePath>
-            </File>
-            <File>
-              <FileName>port.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\rtos\port.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_it.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\stm32f4xx_it.c</FilePath>
             </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>board/eth</GroupName>
-          <Files>
             <File>
-              <FileName>eth_app.c</FileName>
+              <FileName>wujique_test.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\eth\src\eth_app.c</FilePath>
+              <FilePath>..\wujique_test.c</FilePath>
             </File>
             <File>
-              <FileName>netconf.c</FileName>
+              <FileName>sd_fat.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\eth\src\netconf.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4x7_eth_bsp.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\eth\src\stm32f4x7_eth_bsp.c</FilePath>
-            </File>
-            <File>
-              <FileName>tcp_echoserver.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\eth\src\tcp_echoserver.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>board/usb</GroupName>
-          <Files>
-            <File>
-              <FileName>dual_func_demo.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\usb\src\dual_func_demo.c</FilePath>
-            </File>
-            <File>
-              <FileName>usb_bsp.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\usb\src\usb_bsp.c</FilePath>
-            </File>
-            <File>
-              <FileName>usbd_desc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\usb\src\usbd_desc.c</FilePath>
-            </File>
-            <File>
-              <FileName>usbd_storage_msd.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\usb\src\usbd_storage_msd.c</FilePath>
-            </File>
-            <File>
-              <FileName>usbd_usr.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\usb\src\usbd_usr.c</FilePath>
-            </File>
-            <File>
-              <FileName>usbh_msc_usr.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\usb\src\usbh_msc_usr.c</FilePath>
+              <FilePath>..\sd_fat.c</FilePath>
             </File>
           </Files>
         </Group>

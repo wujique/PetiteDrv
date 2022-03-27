@@ -68,7 +68,7 @@ s32 dev_htu21d_init(void)
 
 	tmp[0] = HTU21D_CMD_RESET;
 	
-	dev = bus_i2c_open(DEV_HTU21D_I2CBUS);
+	dev = bus_i2c_open(DEV_HTU21D_I2CBUS, 0xffffffff);
     bus_i2c_transfer(dev, HTU21D_I2C_ADDR, MCU_I2C_MODE_W, tmp, 1);
 	bus_i2c_close(dev);
 	return 0;	
@@ -107,7 +107,7 @@ s32 dev_htu21d_read(u8 type)
 	else
 		return -1;
 	
-	dev = bus_i2c_open(DEV_HTU21D_I2CBUS);
+	dev = bus_i2c_open(DEV_HTU21D_I2CBUS, 0xffffffff);
 	wjq_log(LOG_INFO, "HTU21D_CMD_TTM_NH\r\n");	
     bus_i2c_transfer(dev, HTU21D_I2C_ADDR, MCU_I2C_MODE_W, tmp, 1);
 

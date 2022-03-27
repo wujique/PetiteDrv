@@ -172,7 +172,6 @@ s32 dev_spiflash_read(DevSpiFlashNode *node, u32 addr, u32 rlen, u8 *dst)
  *@param[out]  无
  *@retval:     
  */
-
 s32 dev_spiflash_write(DevSpiFlashNode *node,  u32 addr, u16 wlen, u8* src)
 {
     s32 len;

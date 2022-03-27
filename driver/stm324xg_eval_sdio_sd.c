@@ -232,7 +232,6 @@
 
 #include "log.h"
 
-
 //#define DEV_SDIO_DEBUG
 
 #ifdef DEV_SDIO_DEBUG
@@ -3508,18 +3507,17 @@ uint8_t vfs_explore_disk (char* path , uint8_t recu_level)
 	char tmp[14];
 	
 	res = f_opendir(&dir, path);
-	if (res == FR_OK) 
-	{
+	if (res == FR_OK) {
 		wjq_log(LOG_INFO, "open dir ok\r\n");
-		while(1)//这里可能要判断硬件是否断开
-		{
+		while(1) {
+			//这里可能要判断硬件是否断开
 			res = f_readdir(&dir, &fno);
-			if (res != FR_OK || fno.fname[0] == 0) 
-			{
+			if (res != FR_OK || fno.fname[0] == 0) {
 				break;
 			}
-			if (fno.fname[0] == '.')//隐藏文件
-			{
+			
+			if (fno.fname[0] == '.') {
+				//隐藏文件
 				continue;
 			}
 
@@ -3527,11 +3525,9 @@ uint8_t vfs_explore_disk (char* path , uint8_t recu_level)
 			strcpy(tmp, fn); 
  
 
-			if(recu_level == 1)
-			{
+			if (recu_level == 1) {
 				wjq_log(LOG_FUN, "   |__");
-			}
-			else if(recu_level == 2)
+			} else if(recu_level == 2)
 			{
 				wjq_log(LOG_FUN, "   |   |__");
 			}
@@ -3540,19 +3536,15 @@ uint8_t vfs_explore_disk (char* path , uint8_t recu_level)
 				wjq_log(LOG_FUN, "   |   |   |__");
 			}
 			
-			if((fno.fattrib & AM_MASK) == AM_DIR)
-			{
+			if((fno.fattrib & AM_MASK) == AM_DIR) {
 				strcat(tmp, "\n"); 
 				wjq_log(LOG_INFO, "%s\r\n",(void *)tmp);
-			}
-			else
-			{
+			} else {
 				strcat(tmp, "\n"); 
 				wjq_log(LOG_INFO, "%s\r\n",(void *)tmp);
 			}
 
-			if(((fno.fattrib & AM_MASK) == AM_DIR))
-			{
+			if (((fno.fattrib & AM_MASK) == AM_DIR)) {
 				strcpy(path_tmp, path);
 				strcat(path_tmp, fn);
 				wjq_log(LOG_INFO, "explore dir:%s\r\n", path_tmp);
@@ -3560,9 +3552,7 @@ uint8_t vfs_explore_disk (char* path , uint8_t recu_level)
 			}
 			
 		}
-	}
-	else
-	{
+	} else {
 
 		wjq_log(LOG_FUN, "open dir err:%d\r\n", res);
 	}

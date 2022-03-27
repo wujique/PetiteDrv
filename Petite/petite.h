@@ -1,6 +1,14 @@
 #ifndef __PETITE_H__
 #define __PETITE_H__
 
+#include "log.h"
+#include "maths.h"
+#include "petite_def.h"
+#include "pfsm.h"
+#include "stimer.h"
+#include "vfs.h"
+
+
 
 #include "mem/alloc.h"
 #include "mem/p_kfifo.h"

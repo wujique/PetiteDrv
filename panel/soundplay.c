@@ -35,8 +35,7 @@
 
 #include "log.h"
 #include "vfs.h"
-#include "drv_wm8978.h"
-#include "drv_dacsound.h"
+#include "audio_pipeline.h"
 #include "soundplay.h"
 
 #define FUN_SOUND_DEBUG
@@ -72,85 +71,13 @@ typedef struct _TWavHeader
 
 TWavHeader *wav_header;	
 int SoundFileFd;//声音文件
-
-/*
-播放SD卡的音乐，只要2*4K缓冲
-播放U盘中的音乐，却要2*8K
-*/
-#define I2S_DMA_BUFF_SIZE1   (1024*4)
-#define DAC_SOUND_BUFF_SIZE2 (1024*1)
-
-u32 SoundBufSize = I2S_DMA_BUFF_SIZE1;//采样频率小，就开小一点缓冲。
-
-volatile u8 SoundBufIndex=0xff;//双缓冲索引，取值0和1，都填充后赋值0XFF
-u16 *SoundBufP[2];
-
 volatile SOUND_State SoundSta = SOUND_IDLE;
 u32 playlen;
-SOUND_DEV_TYPE SoundDevType = SOUND_DEV_NULL;
 
 /*------------------------------------------*/
 
-s32 fun_sound_stop(void);
-/**
- *@brief:      fun_sound_set_free_buf
- *@details:    设置空闲缓冲索引
- 			   这个函数提供给I2S或者DAC SOUND模块调用
- *@param[in]   u8 *index  
- *@param[out]  无
- *@retval:     
- */
-s32 fun_sound_set_free_buf(u8 index)
-{
-	SoundBufIndex = index;
-	return 0;
-}
-/**
- *@brief:      fun_sound_get_buff_index
- *@details:    查询当前需要填充的BUF
- *@param[in]   void  
- *@param[out]  无
- *@retval:     
- */
-static s32 fun_sound_get_buff_index(void)
-{
-	s32 res;
 
-	res = SoundBufIndex;
-	SoundBufIndex = 0xff;
-	return res;
-}
-/*
-
-	单声道数据使用WM8978播放要经过处理，
-	造成双声道
-
-*/
-static s32 fun_sound_deal_1ch_data(u8 *p)
-{
-	u8 ch1,ch2;
-	u16 shift;
-	u16 i;
-	
-	for(i=SoundBufSize;i>0;)
-	{
-		i--;
-		//uart_printf("%d-",i);
-		ch1 = *(p+i);
-		i--;
-		ch2 = *(p+i);
-		
-		shift = i*2;
-		
-		*(p+shift) = ch2;	
-		*(p+shift+1) = ch1;
-		*(p+shift+2) = ch2;	
-		*(p+shift+3) = ch1;
-
-	}
-	
-	return 0;
-}
+AudioPipeNode pipenode;
 
 /**
  *@brief:      fun_sound_play
@@ -163,15 +90,13 @@ static s32 fun_sound_deal_1ch_data(u8 *p)
 int fun_sound_play(char *name, char *dev)
 {
 	unsigned int len;
-
+	int rlen;
+	
 	SoundSta = SOUND_BUSY;
-	/*
-		打开文件是否需要关闭？
-		同时打开很多文件事发后会内存泄漏。
-	*/
+	/* 	打开文件是否需要关闭？
+		同时打开很多文件事发后会内存泄漏。	*/
 	SoundFileFd = vfs_open(name, O_RDONLY);
-	if(SoundFileFd == NULL)
-	{
+	if (SoundFileFd == NULL) {
 		SOUND_DEBUG(LOG_DEBUG, "sound open file err\r\n");
 		SoundSta = SOUND_IDLE;
 		return -1;
@@ -180,24 +105,21 @@ int fun_sound_play(char *name, char *dev)
 	SOUND_DEBUG(LOG_DEBUG, "sound open file ok\r\n");
 
 	wav_header = (TWavHeader *)wjq_malloc(sizeof(TWavHeader));
-	if(wav_header == 0)
-	{
+	if (wav_header == 0) {
 		SOUND_DEBUG(LOG_DEBUG, "sound malloc err!\r\n");
 		SoundSta = SOUND_IDLE;
 		return -1;
 	}
 	SOUND_DEBUG(LOG_DEBUG, "sound malloc ok\r\n");
 	len = vfs_read(SoundFileFd, (void *)wav_header, sizeof(TWavHeader));
-	if(len != sizeof(TWavHeader))
-	{
+	if (len != sizeof(TWavHeader)) {
 		SOUND_DEBUG(LOG_DEBUG, "sound read err\r\n");
 		SoundSta = SOUND_IDLE;
 		return -1;
 	}
 
 	SOUND_DEBUG(LOG_DEBUG, "sound read ok\r\n");
-	if(len != sizeof(TWavHeader))
-	{
+	if (len != sizeof(TWavHeader)) {
 		SOUND_DEBUG(LOG_DEBUG, "read wav header err %d\r\n", len);
 		SoundSta = SOUND_IDLE;
 		return -1;
@@ -217,102 +139,29 @@ int fun_sound_play(char *name, char *dev)
 	SOUND_DEBUG(LOG_DEBUG, "---data =    %x\r\n", wav_header->dId);
 	SOUND_DEBUG(LOG_DEBUG, "---数据长度: %x\r\n", wav_header->wSampleLength);
 
-	if(wav_header->nSamplesPerSec <= I2S_AudioFreq_16k)
-	{
-		SoundBufSize = DAC_SOUND_BUFF_SIZE2;
-	}
-	else
-	{
-		SoundBufSize = I2S_DMA_BUFF_SIZE1;
-	}
-	/*
-	
-	*/
-	SoundBufP[0] = (u16 *)wjq_malloc(SoundBufSize*2); 
-	SoundBufP[1] = (u16 *)wjq_malloc(SoundBufSize*2); 
-	
-	SOUND_DEBUG(LOG_DEBUG, "%08x, %08x\r\n", SoundBufP[0], SoundBufP[1]);
-	if(SoundBufP[0] == NULL)
-	{
-
-		SOUND_DEBUG(LOG_DEBUG, "sound malloc err\r\n");
-		SoundSta = SOUND_IDLE;
-		return -1;
-	}
-
-	if(SoundBufP[1] == NULL )
-	{
-		wjq_free(SoundBufP[0]);
-		SoundSta = SOUND_IDLE;
-		return -1;
-	}
-		
 
 	/*根据文件内容设置采样频率跟样点格式*/
-	u8 format;
-	if(wav_header->wBitsPerSample == 16)
-	{
-		format =	WM8978_I2S_Data_16b; 	
+	pipenode.BitsPerSample = wav_header->wBitsPerSample;
+	pipenode.nChannels = wav_header->nChannels;
+	pipenode.nSamplesPerSec = wav_header->nSamplesPerSec;
+	strcpy(pipenode.pipname, dev);
+	
+	int res;
+	res = audio_pipe_open(&pipenode);
+	if (res == -1) {
+		SoundSta = SOUND_IDLE;
+		return -1;
 	}
-	else if(wav_header->wBitsPerSample == 24)
-	{
-		format =	WM8978_I2S_Data_24b; 	
-	}
-	else if(wav_header->wBitsPerSample == 32)
-	{
-		format =	WM8978_I2S_Data_32b; 	
-	}
-
-	/*打开指定设备*/
-	if(0 == strcmp(dev, "wm8978"))
-	{
-
-	}
-
+	
 	playlen = 0;
-
-	u32 rlen;
-
-	/*音源单声道，设备双声道，对数据复制一份到另外一个声道*/
-	if((wav_header->nChannels == 1) && (SoundDevType == SOUND_DEV_2CH))
-	{
-		rlen = SoundBufSize;
-		len = vfs_read(SoundFileFd, (void *)SoundBufP[0], rlen);
-		fun_sound_deal_1ch_data((u8*)SoundBufP[0]);
-		len = vfs_read(SoundFileFd, (void *)SoundBufP[1], rlen);
-		fun_sound_deal_1ch_data((u8*)SoundBufP[1]);
-
-	}
-	else
-	{
-		rlen = SoundBufSize*2;
-		len = vfs_read(SoundFileFd, (void *)SoundBufP[0], rlen);
-		len = vfs_read(SoundFileFd, (void *)SoundBufP[1], rlen);
-
-	}
+	rlen = pipenode.UpdateLen*2;
+	len = vfs_read(SoundFileFd, (void *)pipenode.UpdatePointer, rlen);
+	pipenode.UpdateLen = 0;
 	
-	playlen += rlen*2;
+	playlen += len;
 
-	if(0 == strcmp(dev, "wm8978"))
-	{
-		dev_wm8978_open();
-		dev_wm8978_inout(WM8978_INPUT_DAC|WM8978_INPUT_AUX|WM8978_INPUT_ADC,
-					WM8978_OUTPUT_PHONE|WM8978_OUTPUT_SPK);
-		dev_wm8978_dataformat(wav_header->nSamplesPerSec, WM8978_I2S_Phillips, format);
-		mcu_i2s_dma_init(SoundBufP[0], SoundBufP[1], SoundBufSize);
-		SoundDevType = SOUND_DEV_2CH;
-		dev_wm8978_transfer(1);//启动I2S传输
-	}
-	else if(0 == strcmp(dev, "dacsound"))
-	{
-		dev_dacsound_open();
-		dev_dacsound_dataformat(wav_header->nSamplesPerSec, WM8978_I2S_Phillips, format);
-		dev_dacsound_setbuf(SoundBufP[0], SoundBufP[1], SoundBufSize);
-		SoundDevType = SOUND_DEV_1CH;
-		dev_dacsound_transfer(1);
-	}
+	audio_pipe_run(&pipenode);
 	
-
 	SoundSta = SOUND_PLAY;
 	
 	return 0;
@@ -329,7 +178,7 @@ int fun_sound_play(char *name, char *dev)
 void fun_sound_task(void)
 {
 
-	unsigned int len;
+	int len;
 	volatile s32 buf_index = 0;
 	int rlen;
 	u16 i;
@@ -338,48 +187,33 @@ void fun_sound_task(void)
 		|| SoundSta == SOUND_IDLE)
 		return;
 	
-	buf_index = fun_sound_get_buff_index();
-	if(0xff != buf_index)
-	{
-		if(SoundSta == SOUND_PAUSE)//暂停
-		{
-			for(i=0;i<SoundBufSize;i++)
-			{
-				*(SoundBufP[buf_index]+i)= 0x0000;
+	if (0 != pipenode.UpdateLen) {
+		rlen = pipenode.UpdateLen*2;
+		
+		//uart_printf("%08x ", pipenode.UpdatePointer);
+	
+		pipenode.UpdateLen = 0;
+	
+		if (SoundSta == SOUND_PAUSE) {
+			for(i=0; i<rlen; i++) {
+				*(pipenode.UpdatePointer + i) = 0x0000;
 			}	
+		} else {
+			len = vfs_read(SoundFileFd, (void *)pipenode.UpdatePointer, rlen);
 		}
-		else
-		{
-
-			if((wav_header->nChannels == 1) && (SoundDevType == SOUND_DEV_2CH))
-			{
-				rlen = SoundBufSize;
-				len = vfs_read(SoundFileFd, (void *)SoundBufP[buf_index], rlen);
-				fun_sound_deal_1ch_data((u8*)SoundBufP[buf_index]);
-			}
-			else
-			{
-				rlen = SoundBufSize*2;
-				len = vfs_read(SoundFileFd, (void *)SoundBufP[buf_index], rlen);
-			}
-			
-			//memset(SoundBufP[buf_index], 0, SoundRecBufSize*2);
-			
-			playlen += len;
-
-
-			/*
-				u盘有BUG，有时候读到的数据长度不对
-				稳健的做法是用已经播放的长度跟音源长度比较。
-			*/
-			if(len < rlen)
-			{
-				SOUND_DEBUG(LOG_DEBUG, "play finish %d, playlen:%x\r\n", len, playlen);
-				fun_sound_stop();
-				
-			}	
+		if (0 != pipenode.UpdateLen) {
+			uart_printf(" ao ");
 		}
-			
+		
+		playlen += len;
+
+		/*	u盘有BUG，有时候读到的数据长度不对
+			稳健的做法是用已经播放的长度跟音源长度比较。		*/
+		if(len < rlen) {
+			fun_sound_stop();
+			SOUND_DEBUG(LOG_DEBUG, "play finish %d, playlen:%x\r\n", len, playlen);
+		}	
+		
 	}
 
 }
@@ -409,18 +243,8 @@ s32 fun_sound_stop(void)
 	if(SoundSta == SOUND_PLAY
 		|| SoundSta == SOUND_PAUSE)	
 	{
-		if(SoundDevType == SOUND_DEV_2CH)
-		{
-			dev_wm8978_transfer(0);
-		}
-		else if(SoundDevType == SOUND_DEV_1CH)
-		{
-			dev_dacsound_transfer(0);
-			dev_dacsound_close();
-		}
+		audio_pipe_close(&pipenode);
 		
-		wjq_free(SoundBufP[0]);
-		wjq_free(SoundBufP[1]);
 		vfs_close(SoundFileFd);
 		SOUND_DEBUG(LOG_DEBUG, "f_close:%d\r\n", res);
 		wjq_free(wav_header);
@@ -437,8 +261,7 @@ s32 fun_sound_stop(void)
  */
 s32 fun_sound_pause(void)
 {
-	if(SoundSta == SOUND_PLAY)
-	{
+	if (SoundSta == SOUND_PLAY) {
 		SoundSta = SOUND_PAUSE;
 	}
 	return 0;
@@ -452,8 +275,7 @@ s32 fun_sound_pause(void)
  */
 s32 fun_sound_resume(void)
 {
-	if(SoundSta == SOUND_PAUSE)
-	{
+	if (SoundSta == SOUND_PAUSE) {
 		SoundSta = SOUND_PLAY;
 	}
 	return 0;
@@ -483,15 +305,7 @@ void fun_sound_test(void)
 	fun_sound_play("1:/mono_16bit_8k.wav", "dacsound");		
 
 }
-/*
-测试音源名称
-mono_16bit_8k.wav
-mono_16bit_44k.wav
-stereo_16bit_32k.wav
-十送红军.wav
-
-*/
-
+/*-------------------------------------------------------------------------------------*/
 /*
 
 	通过I2S利用WM8978录音
@@ -501,6 +315,10 @@ stereo_16bit_32k.wav
 	所以录音时，也要配置I2S播放，我们只配置一个字节的DMA缓冲，以便I2S产生通信时钟，
 	
 */
+#include "wm8978.h"
+#include "dacsound.h"
+
+#if 0
 /*---录音跟播音缓冲要差不多，否则会互相卡顿----*/
 u32 SoundRecBufSize;
 u16 *SoundRecBufP[2];
@@ -712,6 +530,8 @@ void fun_play_rec_test(void)
 {
 	fun_sound_play("1:/rec9.wav", "wm8978");	
 }
+
+#endif
 
 #endif
 

@@ -24,11 +24,7 @@
 #include "log.h"
 #include "petite.h"
 
-/* 初始化时保存设备节点，以便中断直接写接收bug 
-	如果要逻辑上分层更清晰，可以用回调函数
-	但是会引入一个调用函数切换的开销
-	个人觉得在嵌入式（IOT）直接操作节点更合适。
-	减少中断时间。      	*/
+
 static BusUartNode *McuUart[MCU_UART_MAX];
 /*------------------------------------------------------*/
 /**
@@ -198,7 +194,7 @@ s32 mcu_uart_set_baud(McuUartNum comport, s32 baud)
  *@param[out]  无
  *@retval:     
  */
-s32 mcu_uart_send(McuUartNum comport, u8 *buf, s32 len)
+s32 mcu_uart_write(McuUartNum comport, u8 *buf, s32 len)
 {
     u32 t;
     u16 ch;

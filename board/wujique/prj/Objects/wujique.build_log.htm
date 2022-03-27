@@ -1,0 +1,60 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Tool Versions:</h2>
+IDE-Version: ¦ÌVision V5.24.2.0
+Copyright (C) 2017 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: xuejia huang, wujique, LIC=BL28G-VZ8WZ-5BAEB-27JCA-VAYN1-NSDPT
+ 
+Tool Versions:
+Toolchain:       MDK-ARM Professional  Version: 5.24.1
+Toolchain Path:  C:\Keil_v5\ARM\ARMCC\Bin
+C Compiler:      Armcc.exe V5.06 update 5 (build 528)
+Assembler:       Armasm.exe V5.06 update 5 (build 528)
+Linker/Locator:  ArmLink.exe V5.06 update 5 (build 528)
+Library Manager: ArmAr.exe V5.06 update 5 (build 528)
+Hex Converter:   FromElf.exe V5.06 update 5 (build 528)
+CPU DLL:         SARMCM3.DLL V5.24.1
+Dialog DLL:      DCM.DLL V1.16.0.0
+Target DLL:      CMSIS_AGDI.dll V1.28.3.0
+Dialog DLL:      TCM.DLL V1.32.0.0
+ 
+<h2>Project:</h2>
+F:\PetiteDrv\prog\PetiteDrv\board\wujique\prj\wujique.uvprojx
+Project File Date:  03/22/2022
+
+<h2>Output:</h2>
+*** Using Compiler 'V5.06 update 5 (build 528)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
+Build target 'wujique'
+compiling dacsound.c...
+..\..\..\driver\sound\dacsound.c(702): warning:  #223-D: function "mcu_io_config_dac" declared implicitly
+      mcu_io_config_dac(pDevDacSOUND->Port, pDevDacSOUND->Pio);
+..\..\..\driver\sound\dacsound.c(707): warning:  #167-D: argument of type "s32 (*)(void)" is incompatible with parameter of type "void (*)(void)"
+  	mcu_timer_config(pDevDacSOUND->Timer, MCU_TIMER_1US, 125, dev_dacsound_timerinit, MCU_TIMER_RE);
+..\..\..\driver\sound\dacsound.c(793): warning:  #223-D: function "audio_pipe_callback" declared implicitly
+  			audio_pipe_callback(0);
+..\..\..\driver\sound\dacsound.c(798): warning:  #223-D: function "audio_pipe_callback" declared implicitly
+  			audio_pipe_callback(1);
+..\..\..\driver\sound\dacsound.c: 4 warnings, 0 errors
+linking...
+Program Size: Code=75256 RO-data=192688 RW-data=3428 ZI-data=116648  
+FromELF: creating hex file...
+".\Objects\wujique.axf" - 0 Error(s), 4 Warning(s).
+
+<h2>Software Packages used:</h2>
+
+Package Vendor: Keil
+                http://www.keil.com/pack/Keil.STM32F4xx_DFP.2.13.0.pack
+                Keil.STM32F4xx_DFP.2.13.0
+                STMicroelectronics STM32F4 Series Device Support, Drivers and Examples
+
+<h2>Collection of Component include folders:</h2>
+  .\RTE\_wujique
+  C:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include
+
+<h2>Collection of Component Files used:</h2>
+Build Time Elapsed:  00:00:02
+</pre>
+</body>
+</html>

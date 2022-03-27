@@ -199,10 +199,11 @@ static s32 drv_IL3820_refresh_gram(DevLcdNode *lcd, u16 sc, u16 ec, u16 sp, u16 
 	gramsize = lcd->dev.height * IL3820_PAGE_SIZE;
 	//wjq_log(LOG_DEBUG, "gram size: %d\r\n ", gramsize);
 
-	drv_il91874_write_cmd(node, (0x24));
-	for(cnt = 0; cnt <gramsize; cnt++)
-		drv_il91874_write_data(node, (u8 *)&drvdata->bgram[cnt], 1);
-
+	drv_il3820_write_cmd(node, (0x24));
+	for(cnt = 0; cnt <gramsize; cnt++) {
+		drv_il3820_write_data(node, (u8 *)&drvdata->bgram[cnt], 1);
+	}
+	
 	wjq_log(LOG_DEBUG, " DISPLAY REFRESH\r\n ");
 
 	drv_il3820_write_cmd(node, 0x22); 
@@ -211,12 +212,11 @@ static s32 drv_IL3820_refresh_gram(DevLcdNode *lcd, u16 sc, u16 ec, u16 sp, u16 
 	drv_il3820_write_cmd(node, 0x20); 
 
 	unsigned char busy;
-	do
-	{
+	
+	do	{
 		busy = mcu_io_input_readbit(node->dev.staport, node->dev.stapin);
 		busy = (busy & 0x01);        
-	}
-	while(busy); 
+	} while(busy); 
 
 	wjq_log(LOG_DEBUG, "IL3820 refresh finish\r\n ");
 	bus_lcd_close(node);
@@ -258,8 +258,7 @@ void EPD_select_LUT(DevLcdBusNode *node, const unsigned char * wave_data)
     unsigned char count;
 
      drv_il3820_write_cmd(node, 0x32);
-	 for(count=0;count<30;count++)
-	 {
+	 for (count=0;count<30;count++) {
 		drv_il3820_write_data(node, (u8 *)wave_data, 1);
 		wave_data++;
 	 }
@@ -353,12 +352,10 @@ s32 drv_IL3820_init(DevLcdNode *lcd)
 	drv_il3820_write_data(node, (u8*)tmp, 1);
 	
 	unsigned char busy;
-	do
-	{
+	do	{
 		busy = mcu_io_input_readbit(node->dev.staport, node->dev.stapin);
 		busy =(busy & 0x01);        
-	}
-	while(busy); 
+	}while(busy); 
 	
 	Delay(200); 
 
@@ -437,23 +434,19 @@ s32 drv_IL3820_color_fill(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey, u16 c
 	drvdata = (struct _epaper3820_drv_data *)lcd->pri;
 
 	/*防止坐标溢出*/
-	if(sy >= lcd->height)
-	{
+	if(sy >= lcd->height){
 		sy = lcd->height-1;
 	}
 	
-	if(sx >= lcd->width)
-	{
+	if(sx >= lcd->width){
 		sx = lcd->width-1;
 	}
 	
-	if(ey >= lcd->height)
-	{
+	if(ey >= lcd->height){
 		ey = lcd->height-1;
 	}
 	
-	if(ex >= lcd->width)
-	{
+	if(ex >= lcd->width) {
 		ex = lcd->width-1;
 	}
 
@@ -478,20 +471,16 @@ s32 drv_IL3820_color_fill(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey, u16 c
 	}
 	#endif
 	wjq_log(LOG_DEBUG, " %d, %d, %d, %d\r\n ", sx, ex, sy, ey);
-	for(j=sy;j<=ey;j++)
-	{
+	for(j=sy;j<=ey;j++) {
 		//wjq_log(LOG_DEBUG, "\r\n");
 		
-		for(i=sx;i<=ex;i++)
-		{
+		for(i=sx;i<=ex;i++) {
 
-			if(lcd->dir == H_LCD)
-			{
+			if(lcd->dir == H_LCD) {
 				xtmp = i;
 				ytmp = j;
-			}
-			else//如果是竖屏，XY轴跟显存的映射要对调
-			{
+			} else {//如果是竖屏，XY轴跟显存的映射要对调
+			
 				/* 不同的算法，相当于不同的扫描方式*/
 				xtmp = lcd->dev.width- 1 - j;
 				ytmp = i;
@@ -502,13 +491,10 @@ s32 drv_IL3820_color_fill(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey, u16 c
 			colum = xtmp/8;//列地址
 		
 			
-			if(color != BLACK)
-			{
+			if (color != BLACK) {
 				drvdata->bgram[page*IL3820_PAGE_SIZE + colum] |= (0x80>>(xtmp%8));
 				//uart_printf("*");
-			}	
-			else
-			{
+			} else {
 				drvdata->bgram[page*IL3820_PAGE_SIZE + colum] &= ~(0x80>>(xtmp%8));
 				//uart_printf("-");
 			}
@@ -556,22 +542,19 @@ s32 drv_IL3820_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
 	ylen = ey-sy+1;
 
 	/*防止坐标溢出*/
-	if(sy >= lcd->height)
-	{
+	if (sy >= lcd->height) {
 		sy = lcd->height-1;
 	}
 	
-	if(sx >= lcd->width)
-	{
+	if (sx >= lcd->width) {
 		sx = lcd->width-1;
 	}
 	
-	if(ey >= lcd->height)
-	{
+	if (ey >= lcd->height) {
 		ey = lcd->height-1;
 	}
-	if(ex >= lcd->width)
-	{
+	
+	if (ex >= lcd->width) {
 		ex = lcd->width-1;
 	}
 
@@ -596,22 +579,17 @@ s32 drv_IL3820_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
 	}
 	#endif
 	
-	for(j=sy;j<=ey;j++)
-	{
+	for(j=sy;j<=ey;j++)	{
 		//uart_printf("\r\n");
 
 		index = (j-sy)*xlen;
 		
-		for(i=sx;i<=ex;i++)
-		{
+		for(i=sx;i<=ex;i++) {
 			/*如果是W横屏，就将坐标转为竖屏的坐标。*/
-			if(lcd->dir == H_LCD)
-			{
+			if(lcd->dir == H_LCD) {
 				xtmp = i;
 				ytmp = j;
-			}
-			else
-			{
+			} else {
 				xtmp = lcd->dev.width - j;
 				ytmp = i;
 			}
@@ -622,13 +600,10 @@ s32 drv_IL3820_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
 			
 			cdata = *(color+index+i-sx);
 
-			if(cdata != BLACK)
-			{
+			if(cdata != BLACK) {
 				drvdata->bgram[page*IL3820_PAGE_SIZE + colum] |= (0x80>>(xtmp%8));
 				//uart_printf("*");
-			}	
-			else
-			{
+			} else {
 				drvdata->bgram[page*IL3820_PAGE_SIZE + colum] &= ~(0x80>>(xtmp%8));
 				//uart_printf("-");
 			}

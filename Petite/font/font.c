@@ -105,142 +105,16 @@ static FontHzArea font_gbk_get_area(char c1, char c2)
 	如何支持多国语言？ codepage， GBK、big5、其他语言， codepage是应用层的概念？
 */
 
-	/*思源宋体 用字模工具生成的18030字库
-	从矢量字体转来的，某些字效果非常不好
-	仅供测试
+extern FontHead *FontListN[FONT_LIST_MAX];
 
-	保存在文件系统
-	*/
+struct _FontStr {
+	FontHead *head;
+	int fd;;
+};
 
-FontHead SYSongTi1212 ={
+struct _FontStr FontStr[FONT_LIST_MAX];
 
-	.name = "SYsongti_12",//名字
-	.size = 12,
-	.path = "mtd0/1:/font/songti1212.DZK",//路径
-		//"mtd0/1:/shscn1212.DZK",
-		
-	.type = FONT_DOT_YMY,
-	.st = FONT_ST_GB18030,
-	.dt = FONT_V_H_U_D_L_R,
-	.shift = 0,
-	
-	.datac = 24,
-	.w = 12,
-	.h = 12,
-	
-	.fd = NULL,
-	};
-	
-FontHead SYSongTi1616 ={
-
-	.name = "SYsongti_16",//名字
-	.size = 16,
-	.path = "mtd0/1:/font/shscn1616.DZK",//路径
-			//"mtd0/1:/songti1616.DZK",
-
-	.type = FONT_DOT_YMY,
-	.st = FONT_ST_GB18030,
-	.dt = FONT_V_H_U_D_L_R,
-	.shift = 0,
-	
-	.datac = 32,
-	.w = 16,
-	.h = 16,
-	
-	.fd = NULL,
-	};
-/*
-	屋脊雀优化的点阵，基于思源宋体
-	*/	
-FontHead SYSongTiM1616 ={
-
-	.name = "SYST_16_m",//名字
-	.size = 16,
-	.path = "mtd0/1:/font/syst_m_16.bin",//路径
-	
-	.type = FONT_DOT_WJQ,
-	.st = FONT_ST_GB18030,
-	.dt = FONT_H_H_L_R_U_D,
-	.shift = 0,
-	
-	.datac = 32,
-	.w = 16,
-	.h = 16,
-	
-	
-	.fd = NULL,
-	};
-FontHead SYSongTiM2424 ={
-
-	.name = "SYST_24_m",//名字
-	.size = 24,
-	.path = "mtd0/1:/font/syst_m_24.bin",//路径
-
-	.type = FONT_DOT_WJQ,
-	.st = FONT_ST_GB18030,
-	.dt = FONT_H_H_L_R_U_D,
-	.shift = 0,
-	
-	.datac = 72,
-	.w = 24,
-	.h = 24,
-	
-	.fd = NULL,
-	};
-/*------文泉驿点阵12pt------*/
-FontHead WQYST16H18030 ={
-
-	.name = "WQY_ST_16_H",//名字
-	.size = 16,
-	.path = "mtd0/1:/font/wqy16h18030.bin",//路径
-	
-	.type = FONT_DOT_WJQ,
-	.st = FONT_ST_GB18030,
-	.dt = FONT_H_H_L_R_U_D,
-	.shift = 0,
-	
-	.datac = 32,
-	.w = 16,
-	.h = 16,
-	
-	
-	.fd = NULL,
-	};
-FontHead WQYST12H18030 ={
-
-	.name = "WQY_ST_12_H",//名字
-	.size = 12,
-	.path = "mtd0/1:/font/wqy12h18030.bin",//路径
-	
-	.type = FONT_DOT_WJQ,
-	.st = FONT_ST_GB18030,
-	.dt = FONT_H_H_L_R_U_D,
-	.shift = 0,
-	
-	.datac = 24,
-	.w = 12,
-	.h = 12,
-	
-	
-	.fd = NULL,
-	};
-
-extern FontHead ZYST12V18030;
-extern FontHead ZYST12H18030;
-extern FontHead ZYST24H2312;
-extern FontHead ZYST16H18030;
-
-FontHead *FontListN[] = {
-	&SYSongTi1212,
-	&SYSongTi1616,	
-	&SYSongTiM1616,
-	&SYSongTiM2424,
-	&WQYST16H18030,
-	&WQYST12H18030,
-	};
-
-/* 查询系统字体 */
-FontHead * font_find_font(char *name)
+void font_init(void)
 {
 	u8 fontnum;
 	u8 i;
@@ -251,86 +125,58 @@ FontHead * font_find_font(char *name)
 	i = 0;
 	while(1) {
 		if(i >= fontnum) break;
+		FontStr[i].head = FontListN[i];
+		FontStr[i].fd = NULL;
+		i++;
+	}	
+
+	return ;
+}
+
+
+
+/* 查询系统字体 */
+void *font_find_font(char *name)
+{
+	u8 fontnum;
+	u8 i;
+
+	struct _FontStr *fontstr = NULL;
+	
+	fontnum = sizeof(FontListN)/sizeof(FontHead *);
+	i = 0;
+	while(1) {
+		if(i >= fontnum) break;
 		if(0 == strcmp(FontListN[i]->name, name)) {
-			font = FontListN[i];
+			fontstr = &FontStr[i];
+			if(fontstr->fd == NULL) {
+				fontstr->fd = vfs_open(FontListN[i]->path, O_RDONLY);
+			}
 			break;
 		}
 		i++;
 	}	
 
-	return font;
-}
-/*
-
-return <0 err
-	   >0 输入字符串偏移	ASC返回1，汉字2，四字节汉字返回4。
-
-	   说明：
-	   		传入是字体名字。
-	   		不同的字体会根据自己支持的语言判断？
-*/
-int font_get_dotdata(char *fontname, char *str, FontDot *Dot)
-{
-	FontHead * font;
-	int res;
-	
-	/* 判断系统是否存在字体 并返回字体的信息指针 */
-	font = font_find_font(fontname);
-	if(font == NULL)
-		return -1;
-
-	/* 读取字库 */
-	res = font_dot_getdot(font, str, Dot);
-	return res;
+	return (void *)fontstr;
 }
 
-/**
- *@brief:      font_get_hw
- *@details:    获取字体长宽
- *@param[in]   FontType type  
-               u8 *h       
-               u8 *w      
- *@param[out]  无
- *@retval:     
- 			返回的是单个字符长宽，也就是对应的ASC宽度，汉字算两个字符宽度
- */
-
-s32 font_get_hw(char *fontname, u16 *h, u16 *w)
-{
-	FontHead * font;
-	int res;
-	
-	/* 判断系统是否存在字体 并返回字体的信息指针 */
-	font = font_find_font(fontname);
-	if(font == NULL) {
-		/* 返回一个常用值，防止意外*/
-		*w = 12;
-		*h = 12;
-		return -1;
-	}
-
-	/* 汉字两个字符， 转为1个字符宽度， 后续做codepage兼容再重新设计*/
-	*w = font->w/2;
-	*h = font->h;
-
-	return 0;
-}
-
-int font_dot_getdot(FontHead * font, char *Ch, FontDot *Dot)
+int font_getdot(void *fontstr_in, char *Ch, FontDot *Dot)
 {
 	int addr;
 	FontHzArea area;
 	int res;
 	u8* fp;
-	
+	FontHead *font;
+	struct _FontStr *fontstr;
 
-	if(font->fd == NULL) {
-		font->fd = vfs_open(font->path, O_RDONLY);
-		if (font == NULL) return -1;
-	}
+	fontstr = (struct _FontStr *)fontstr_in;
+	font = fontstr->head;
 
+	//uart_printf("%s\r\n", font->name);
+		
 	area = font_gbk_get_area(*Ch, *(Ch+1));
 
+	/* 无汉字字库时保证内置的ASC能用 */
 	if(area == ASC_AREA) {
 		/* ASC, 优先使用内置 */
 		res = 1;
@@ -356,6 +202,11 @@ int font_dot_getdot(FontHead * font, char *Ch, FontDot *Dot)
 		return res;
 	}
 
+
+	if(fontstr->fd == NULL) {
+		return -1;
+	}
+	
 	/* 汉字，由各点阵字库自行处理 */
 	if(area == HZ_USER_AREA
 		||area == HZ_NO_AREA) {
@@ -387,8 +238,8 @@ int font_dot_getdot(FontHead * font, char *Ch, FontDot *Dot)
 
 	if(addr < 0) return res;
 	
-	vfs_lseek(font->fd, addr, SEEK_SET);
-	vfs_read(font->fd, (const void *)Dot->dot, font->datac);
+	vfs_lseek(fontstr->fd, addr, SEEK_SET);
+	vfs_read(fontstr->fd, (const void *)Dot->dot, font->datac);
 	Dot->datac = font->datac;
 	Dot->dt = font->dt;
 	Dot->w = font->w;
@@ -398,5 +249,65 @@ int font_dot_getdot(FontHead * font, char *Ch, FontDot *Dot)
 	return res;
 
 }
+
+/*
+	一次只是查询1个字符，每次都进行find font 非常浪费时间
+	
+return <0 err
+	   >0 输入字符串偏移	ASC返回1，汉字2，四字节汉字返回4。
+
+	   说明：
+	   		传入是字体名字。
+	   		不同的字体会根据自己支持的语言判断？
+*/
+int font_get_dotdata(char *fontname, char *str, FontDot *Dot)
+{
+	void  *font;
+	int res;
+	
+	/* 判断系统是否存在字体 并返回字体的信息指针 */
+	font = font_find_font(fontname);
+	if(font == NULL) {
+		return -1;
+	}
+	/* 读取字库 */
+	res = font_getdot(font, str, Dot);
+	return res;
+}
+
+/**
+ *@brief:      font_get_hw
+ *@details:    获取字体长宽
+ *@param[in]   FontType type  
+               u8 *h       
+               u8 *w      
+ *@param[out]  无
+ *@retval:     
+ 			返回的是单个字符长宽，也就是对应的ASC宽度，汉字算两个字符宽度
+ */
+
+s32 font_get_hw(char *fontname, u16 *h, u16 *w)
+{
+	FontHead * font;
+	int res;
+	struct _FontStr *fontstr;
+	
+	/* 判断系统是否存在字体 并返回字体的信息指针 */
+	fontstr = font_find_font(fontname);
+	if(fontstr == NULL) {
+		/* 返回一个常用值，防止意外*/
+		*w = 12;
+		*h = 12;
+		return -1;
+	}
+	font = fontstr->head;
+	/* 汉字两个字符， 转为1个字符宽度， 后续做codepage兼容再重新设计*/
+	*w = font->w/2;
+	*h = font->h;
+
+	return 0;
+}
+
+
 
 

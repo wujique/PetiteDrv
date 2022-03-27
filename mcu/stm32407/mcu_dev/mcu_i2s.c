@@ -22,6 +22,8 @@
 #include "stm32f4xx.h"
 #include "log.h"
 
+#include "audio_pipeline.h"
+
 extern s32 fun_sound_set_free_buf(u8 index);
 /*
 
@@ -106,11 +108,16 @@ void mcu_i2s_config(u32 AudioFreq, u16 Standard,u16 DataFormat)
  *@param[out]  无
  *@retval:     
  */
-void mcu_i2s_dma_init(u16 *buffer0,u16 *buffer1,u32 len)
+void mcu_i2s_dma_init(u16 *buffer,u32 len)
 {  
 	NVIC_InitTypeDef   NVIC_InitStructure;
 	DMA_InitTypeDef  DMA_str;
+	u16 *buffer0;
+	u16 *buffer1;
 
+	buffer0 = buffer;
+	buffer1 = buffer+len/2;
+	
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_DMA1,ENABLE);	// 使IIS DMA时钟 
 	DMA_DeInit(DMA1_Stream4);	//	恢复初始DMA配置
 
@@ -118,7 +125,7 @@ void mcu_i2s_dma_init(u16 *buffer0,u16 *buffer1,u32 len)
 	DMA_str.DMA_PeripheralBaseAddr 	= (u32)&SPI2->DR;							//	外设地址
 	DMA_str.DMA_Memory0BaseAddr 		= (u32)buffer0;							//	缓冲区0
 	DMA_str.DMA_DIR 					= DMA_DIR_MemoryToPeripheral;			//	存储器到外设模式
-	DMA_str.DMA_BufferSize 			= len;										//	数据长度 
+	DMA_str.DMA_BufferSize 			= len/2;										//	数据长度 
 	DMA_str.DMA_PeripheralInc 		= DMA_PeripheralInc_Disable;			//	外设非增量模式
 
 	if(len == 1)
@@ -191,14 +198,11 @@ void mcu_i2s_dma_stop(void)
  */
 void mcu_i2s_dma_process(void)
 {
-	if(DMA1_Stream4->CR&(1<<19))
-	{
+	if(DMA1_Stream4->CR&(1<<19)) {
 		/*当前目标存储器为1，我们就设置空闲BUF为0*/
-		fun_sound_set_free_buf(0);
-	}
-	else
-	{
-		fun_sound_set_free_buf(1);
+		audio_pipe_callback(0);
+	} else {
+		audio_pipe_callback(1);
 	}
 }
 
@@ -324,15 +328,49 @@ void mcu_i2sext_dma_stop(void)
  */
 void mcu_i2sext_dma_process(void)
 {
-	if(I2S2_EXT_DMA->CR&(1<<19))
-	{
-		fun_rec_set_free_buf(0);
-	}
-	else
-	{
-		fun_rec_set_free_buf(1);
+	if(I2S2_EXT_DMA->CR&(1<<19)) {
+		//fun_rec_set_free_buf(0);
+	} else {
+		//fun_rec_set_free_buf(1);
 	}
 
 }
+
+
+
+s32 mcu_i2s_dataformat(u32 Freq, u8 Standard, short BitsPerSample)
+{
+	u16 standard;
+	u16 dataformat;
+	
+
+	if (Standard == AUDIO_I2S_LSB) {
+		standard = 	I2S_Standard_LSB;
+	} else if(Standard == AUDIO_I2S_MSB) {
+		standard = 	I2S_Standard_MSB;
+	} else if(Standard == AUDIO_I2S_Phillips) {
+		standard = 	I2S_Standard_Phillips;
+	} else if(Standard == AUDIO_I2S_PCM) {
+		standard = 	I2S_Standard_PCMLong;
+	} else {
+		standard = 	I2S_Standard_Phillips;	
+	}
+
+	if (BitsPerSample == 16) {
+		dataformat = 	I2S_DataFormat_16b;
+	} else if(BitsPerSample == 20) {
+		dataformat = 	I2S_DataFormat_16bextended;
+	} else if(BitsPerSample == 24) {
+		dataformat = 	I2S_DataFormat_24b;
+	} else if(BitsPerSample == 32) {
+		dataformat = 	I2S_DataFormat_32b;
+	}
+	
+	mcu_i2s_config(Freq, standard, dataformat);
+	mcu_i2sext_config(Freq, standard, dataformat);
+
+	return 0;
+}
+
 
 
