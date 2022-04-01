@@ -20,6 +20,61 @@
 
 #include "drv_config.h"
 
+extern ADC_HandleTypeDef hadc2;
+
+__align(8) double adcx;/*双精度浮点数*/
+__align(8) double cpu_temp_sensor = 32.35;
+
+int temp_a;
+char testbuf[128];
+__align(8) union{
+	double x;
+	char y[8];
+}ut;
+
+void cpu_temp(void)
+{
+	uint16_t TS_CAL1;
+	uint16_t TS_CAL2;
+	uint32_t   temp_adc;
+
+	TS_CAL1 = *(__IO uint16_t *)(0x08FFF814);
+	TS_CAL2 = *(__IO uint16_t *)(0x08FFF818);
+	
+	HAL_ADC_Start(&hadc2);
+	HAL_ADC_PollForConversion(&hadc2, 100);
+	temp_adc = HAL_ADC_GetValue(&hadc2);  /* 读取数值 */
+	uart_printf("\r\nadc_v:%d, %d, %d\r\n", temp_adc, TS_CAL1, TS_CAL2);
+	
+	cpu_temp_sensor = (130.0 - 30.0)* (temp_adc - TS_CAL1) / (TS_CAL2 - TS_CAL1)  + 30;   /* 转换 */
+
+	//uart_printf("double size:%d\r\n", sizeof(double));
+	//uart_printf("stm32 temp:%f\r\n", cpu_temp_sensor);
+	
+	sprintf(testbuf, "%f", cpu_temp_sensor);
+	uart_printf("sprintf:%s\r\n", testbuf);
+	ut.x = cpu_temp_sensor;
+	uart_printf("%02x %02x %02x %02x %02x %02x %02x %02x\r\n", ut.y[0],ut.y[1],ut.y[2],ut.y[3],ut.y[4],ut.y[5],ut.y[6],ut.y[7]);
+	/*
+	ut.x = 32.35;
+	uart_printf("32.35:%02x %02x %02x %02x %02x %02x %02x %02x\r\n", ut.y[0],ut.y[1],ut.y[2],ut.y[3],ut.y[4],ut.y[5],ut.y[6],ut.y[7]);
+	*/
+	temp_a = (int)cpu_temp_sensor;
+	uart_printf("(int):%d\r\n", temp_a);
+
+}
+
+extern RTC_HandleTypeDef hrtc;
+void cpu_rtc(void)
+{
+	RTC_TimeTypeDef sTime;
+	RTC_DateTypeDef sDate;
+	
+	HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
+	uart_printf("stime:%d-%d-%d\r\n", sTime.Hours, sTime.Minutes, sTime.Seconds);
+	HAL_RTC_GetDate(&hrtc, &sDate, RTC_FORMAT_BIN);
+}
+
 
 const VFSDIR SdFatFs=
 {
@@ -90,23 +145,28 @@ void cuckoo_7b0_test(void)
 	注意，初始化LVGL的过程，会用到不少栈，
 	如果在rtos的任务中进行初始化，注意任务栈的大小，
 	防止溢出造成hardfault */
-	#if 0
+	#if 1
 	lv_init();
 	lv_port_disp_init();
 	lv_port_indev_init();
 	lv_demo_widgets();
 	#endif
-	fun_sound_play("mtd0/0:stereo_16bit_32k.wav", "wm8978");
+	//fun_sound_play("mtd0/0:stereo_16bit_32k.wav", "wm8978");
 	
 	while(1) {
 		
 		osDelay(5);
 		
 		/* lvgl */
-		//lv_task_handler();
+		lv_task_handler();
 		/*测试LCD RGB565 */
 
 		a++;
+
+		if (a % 1000 == 0) {	
+			cpu_temp();
+			cpu_rtc();
+		}
 		if (a % 100 == 0) {
 			b++;
 

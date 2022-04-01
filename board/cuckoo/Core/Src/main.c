@@ -45,6 +45,7 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
+ADC_HandleTypeDef hadc2;
 
 DCMI_HandleTypeDef hdcmi;
 DMA_HandleTypeDef hdma_dcmi_pssi;
@@ -54,6 +55,8 @@ DMA2D_HandleTypeDef hdma2d;
 LTDC_HandleTypeDef hltdc;
 
 OSPI_HandleTypeDef hospi1;
+
+RTC_HandleTypeDef hrtc;
 
 SAI_HandleTypeDef hsai_BlockB2;
 DMA_HandleTypeDef hdma_sai2_b;
@@ -83,6 +86,8 @@ void MX_SPI1_Init(void);
 static void MX_DMA_Init(void);
 static void MX_UART7_Init(void);
 static void MX_DMA2D_Init(void);
+static void MX_RTC_Init(void);
+static void MX_ADC2_Init(void);
 
 /* USER CODE BEGIN PFP */
 
@@ -104,6 +109,14 @@ static void CPU_CACHE_Enable(void)
 
   /* Enable D-Cache */
   SCB_EnableDCache();
+}
+static void CPU_CACHE_Disable(void)
+{
+  /* Enable I-Cache */
+  SCB_DisableICache();
+
+  /* Enable D-Cache */
+  SCB_DisableDCache();
 }
 
 
@@ -192,6 +205,7 @@ int main(void)
 	mcu_uart_init_pra();
     mcu_uart_open(MCU_UART_4);
 	wjq_log(LOG_INFO, "------Cuckoo (stm32h7b0vb) run! 20220306------\r\n");	
+
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
@@ -199,17 +213,19 @@ int main(void)
   MX_OCTOSPI1_Init();
   //MX_UART4_Init();
   //MX_LTDC_Init();
-  //MX_DMA2D_Init();
-  MX_DMA_Init();
-  MX_DCMI_Init();
-  //MX_SAI2_Init();/* SAI接口会影响 OLED的I2C地址*/
+	MX_DCMI_Init();
+	//MX_SAI2_Init();/* SAI接口会影响 OLED的I2C地址*/
   //MX_SDMMC1_SD_Init();
-  //MX_SPI1_Init();
-  //MX_UART7_Init();
+    //MX_SPI1_Init();
+
+  MX_DMA_Init();
+  	  //MX_UART7_Init();
+  //MX_DMA2D_Init();
+  MX_RTC_Init();
+  MX_ADC2_Init();
   /* USER CODE BEGIN 2 */
   	/*  尽早初始化 Flash，并使其进入map模式，因为后续有代码是保存在 QSPI Flash上 
-		在执行到这里之前已经开了systick中断，中断中调用的函数都需要放到内部Flash
-  		*/
+		在执行到这里之前已经开了systick中断，中断中调用的函数都需要放到内部Flash        		*/
    	W25Qxx_init();
   	w25qxx_map();
 	#if 1
@@ -250,14 +266,20 @@ void SystemClock_Config(void)
   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE0);
 
   while(!__HAL_PWR_GET_FLAG(PWR_FLAG_VOSRDY)) {}
+  /** Configure LSE Drive Capability
+  */
+  HAL_PWR_EnableBkUpAccess();
+  __HAL_RCC_LSEDRIVE_CONFIG(RCC_LSEDRIVE_HIGH);
   /** Macro to configure the PLL clock source
   */
   __HAL_RCC_PLL_PLLSOURCE_CONFIG(RCC_PLLSOURCE_HSE);
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
   */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI48|RCC_OSCILLATORTYPE_HSE;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI48|RCC_OSCILLATORTYPE_HSE
+                              |RCC_OSCILLATORTYPE_LSE;
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+  RCC_OscInitStruct.LSEState = RCC_LSE_ON;
   RCC_OscInitStruct.HSI48State = RCC_HSI48_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
@@ -291,6 +313,63 @@ void SystemClock_Config(void)
     Error_Handler();
   }
   HAL_RCC_MCOConfig(RCC_MCO1, RCC_MCO1SOURCE_HSI48, RCC_MCODIV_2);
+}
+
+/**
+  * @brief ADC2 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_ADC2_Init(void)
+{
+
+  /* USER CODE BEGIN ADC2_Init 0 */
+
+  /* USER CODE END ADC2_Init 0 */
+
+  ADC_ChannelConfTypeDef sConfig = {0};
+
+  /* USER CODE BEGIN ADC2_Init 1 */
+
+  /* USER CODE END ADC2_Init 1 */
+  /** Common config
+  */
+  hadc2.Instance = ADC2;
+  hadc2.Init.ClockPrescaler = ADC_CLOCK_ASYNC_DIV1;
+  hadc2.Init.Resolution = ADC_RESOLUTION_16B;
+  hadc2.Init.ScanConvMode = ADC_SCAN_DISABLE;
+  hadc2.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
+  hadc2.Init.LowPowerAutoWait = DISABLE;
+  hadc2.Init.ContinuousConvMode = DISABLE;
+  hadc2.Init.NbrOfConversion = 1;
+  hadc2.Init.DiscontinuousConvMode = DISABLE;
+  hadc2.Init.ExternalTrigConv = ADC_SOFTWARE_START;
+  hadc2.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
+  hadc2.Init.ConversionDataManagement = ADC_CONVERSIONDATA_DR;
+  hadc2.Init.Overrun = ADC_OVR_DATA_PRESERVED;
+  hadc2.Init.LeftBitShift = ADC_LEFTBITSHIFT_NONE;
+  hadc2.Init.OversamplingMode = DISABLE;
+  if (HAL_ADC_Init(&hadc2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure Regular Channel
+  */
+  sConfig.Channel = ADC_CHANNEL_TEMPSENSOR;
+  sConfig.Rank = ADC_REGULAR_RANK_1;
+  sConfig.SamplingTime = ADC_SAMPLETIME_387CYCLES_5;
+  sConfig.SingleDiff = ADC_SINGLE_ENDED;
+  sConfig.OffsetNumber = ADC_OFFSET_NONE;
+  sConfig.Offset = 0;
+  sConfig.OffsetSignedSaturation = DISABLE;
+  if (HAL_ADC_ConfigChannel(&hadc2, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN ADC2_Init 2 */
+
+  /* USER CODE END ADC2_Init 2 */
+
 }
 
 /**
@@ -506,6 +585,69 @@ void MX_OCTOSPI1_Init(void)
   /* USER CODE BEGIN OCTOSPI1_Init 2 */
 
   /* USER CODE END OCTOSPI1_Init 2 */
+
+}
+
+/**
+  * @brief RTC Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_RTC_Init(void)
+{
+
+  /* USER CODE BEGIN RTC_Init 0 */
+
+  /* USER CODE END RTC_Init 0 */
+
+  RTC_TimeTypeDef sTime = {0};
+  RTC_DateTypeDef sDate = {0};
+
+  /* USER CODE BEGIN RTC_Init 1 */
+
+  /* USER CODE END RTC_Init 1 */
+  /** Initialize RTC Only
+  */
+  hrtc.Instance = RTC;
+  hrtc.Init.HourFormat = RTC_HOURFORMAT_24;
+  hrtc.Init.AsynchPrediv = 127;
+  hrtc.Init.SynchPrediv = 255;
+  hrtc.Init.OutPut = RTC_OUTPUT_DISABLE;
+  hrtc.Init.OutPutPolarity = RTC_OUTPUT_POLARITY_HIGH;
+  hrtc.Init.OutPutType = RTC_OUTPUT_TYPE_OPENDRAIN;
+  hrtc.Init.OutPutRemap = RTC_OUTPUT_REMAP_NONE;
+  if (HAL_RTC_Init(&hrtc) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /* USER CODE BEGIN Check_RTC_BKUP */
+  return;
+  /* USER CODE END Check_RTC_BKUP */
+
+  /** Initialize RTC and set the Time and Date
+  */
+  sTime.Hours = 16;
+  sTime.Minutes = 29;
+  sTime.Seconds = 35;
+  sTime.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
+  sTime.StoreOperation = RTC_STOREOPERATION_RESET;
+  if (HAL_RTC_SetTime(&hrtc, &sTime, RTC_FORMAT_BIN) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sDate.WeekDay = RTC_WEEKDAY_SUNDAY;
+  sDate.Month = RTC_MONTH_MARCH;
+  sDate.Date = 31;
+  sDate.Year = 22;
+
+  if (HAL_RTC_SetDate(&hrtc, &sDate, RTC_FORMAT_BIN) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN RTC_Init 2 */
+
+  /* USER CODE END RTC_Init 2 */
 
 }
 

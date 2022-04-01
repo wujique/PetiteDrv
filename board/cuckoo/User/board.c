@@ -3,6 +3,8 @@
 #include "log.h"
 #include "board_sysconf.h"
 
+
+
 /*
 	板级初始化
 */
@@ -19,9 +21,9 @@ s32 board_init(void)
 	//dev_camera_show();
 	//camera_test();
 
-	dev_wm8978_init();
+	//dev_wm8978_init();
 	
-	//cap_touch_init();
+	cap_touch_init();
 
 	cuckoo_7b0_test_init();
 	
@@ -48,8 +50,8 @@ void board_low_task(uint8_t tick)
 		touch_task_cnt = 0;
 
 		cap_touch_task();
-
 	}
+
 
 	fun_sound_task();
 }
