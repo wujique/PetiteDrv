@@ -220,7 +220,7 @@ static void touchpad_get_xy(lv_coord_t * x, lv_coord_t * y)
 {
 	int res = 0;
     /*Your code comes here*/
-	res = tp_get_point(x, y);
+	res = tp_get_pointxy(x, y);
 	if (res == 1) return;
 	
     (*x) = 0;

@@ -24,7 +24,7 @@ static int ts_input_read(struct ts_sample *samp, int nr)
 {
 	int ret = nr;
 	
-	ret = dev_touchscreen_read(samp, nr);
+	ret = tslib_read_rtp(samp, nr);
 
 	return ret;
 }

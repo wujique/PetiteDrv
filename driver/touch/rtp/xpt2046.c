@@ -33,9 +33,8 @@
 
 #include "tslib.h"
 
-#include "drv_touchscreen.h"
+#include "touch.h"
 
-extern s32 dev_touchscreen_write(struct ts_sample *samp, int nr);
 
 /*
 	命令字意义：
@@ -73,6 +72,7 @@ s32 DevXpt2046Gd = -2;
 DevSpiChNode *Xpt2046SpiCHNode;
 
 void dev_xpt2046_task(void);
+
 
 /**
  *@brief:      dev_xpt2046_init
@@ -148,13 +148,12 @@ void dev_xpt2046_task(void)
 	static u16 sample_y, sample_x;
 
 	static u8 pendownup = 1;
-	struct ts_sample tss;
+	TouchPoint tss;
 	
 	u8 stmp[4];
 	u8 rtmp[4];
 	
-	if(DevXpt2046Gd != 0)
-		return;
+	if(DevXpt2046Gd != 0) return;
 	/*
 
 		整个流程分四步
@@ -178,8 +177,7 @@ void dev_xpt2046_task(void)
 	
 	Xpt2046SpiCHNode = bus_spich_open(XPT2046_SPI, SPI_MODE_0, XPT2046_SPI_KHZ);
 
-	if(Xpt2046SpiCHNode == NULL)
-		return;
+	if(Xpt2046SpiCHNode == NULL) return;
 	
 	stmp[0] = XPT2046_CMD_Z2;
 	bus_spich_transfer(Xpt2046SpiCHNode, stmp, NULL, 1);
@@ -217,35 +215,48 @@ void dev_xpt2046_task(void)
 		实际：
 		R触摸电阻=Rx面板*（X位置/4096）*(Z2/Z1-1)
 	*/
-	if(pre_x +  DEV_XPT2046_PENDOWN_GATE > pre_y)
-	{
+	if (pre_x +  DEV_XPT2046_PENDOWN_GATE > pre_y) {
 		/*有压力*/
 		tss.pressure = 200;//DEV_XPT2046_PENDOWN_GATE - rpress;
 		tss.x = sample_x;
 		tss.y = sample_y;
-		dev_touchscreen_write(&tss,1);
+		rtp_fill_buff(&tss,1);
 		//uart_printf("%d,%d,%d\r\n", tss.pressure, tss.x, tss.y);
 		pendownup = 0;
-	}
-	else if(pre_x + DEV_XPT2046_PENUP_GATE < pre_y)//没压力，不进行XY轴检测
-	{
+	} else if(pre_x + DEV_XPT2046_PENUP_GATE < pre_y) {
+		//没压力，不进行XY轴检测
 		/* 起笔只上送一点缓冲*/
-		if(pendownup == 0)
-		{
+		if (pendownup == 0) {
 			pendownup = 1;
 			tss.pressure = 0;//压力要搞清楚怎么计算
 			tss.x = 0xffff;
 			tss.y = 0xffff;
-			dev_touchscreen_write(&tss,1);
+			rtp_fill_buff(&tss,1);
 		}
 
-	}
-	else
-	{
+	} else {
 		//uart_printf("--press :%d %d\r\n", pre_y, pre_x);
 		/*上下笔的过渡，丢弃*/
-
 	}
 
 }
+
+
+void xpt2046_drv_task(void)
+{
+	return;
+}
+
+
+const TouchDev RtpXpt2046={
+	.name ="rtp_xpt2046",
+	.type = 1, 
+
+	.init = dev_xpt2046_init,
+	.open = dev_xpt2046_open,
+	.close = dev_xpt2046_close,
+	.task = xpt2046_drv_task,
+};
+
+
 

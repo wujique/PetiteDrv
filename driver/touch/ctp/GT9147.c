@@ -310,7 +310,7 @@ int gt9147_task(void)
 				/* this is a demo, you can fill the xy into a buf,
 					the app read the buf get the point.
 				*/
-				tp_fill_buf(x, y);
+				ctp_fill_buf(x, y);
 			}
 		}
 
@@ -318,4 +318,24 @@ int gt9147_task(void)
 		return 0;
 }
 
+int gt9147_open(void)
+{
+	return 0;
+}
+
+int gt9147_close(void)
+{
+	return 0;
+}
+
+
+const TouchDev CtpGt9147={
+	.name ="ctp_gt9147",
+	.type = 2, 
+
+	.init = gt9147_init,
+	.open = gt9147_open,
+	.close = gt9147_close,
+	.task = gt9147_task,
+};
 

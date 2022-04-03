@@ -18,6 +18,7 @@
 
 #include "emenu.h"
 #include "tslib.h"
+#include "touch.h"
 
 #include "wm8978.h"
 #include "drv_lcd.h"
@@ -431,9 +432,9 @@ s32 test_tp_calibrate(void)
 		wjq_test_showstr("open lcd err!");	
 	} else	{
 		dev_lcd_setdir(lcd, H_LCD, L2R_U2D);
-		dev_touchscreen_open();
+		tp_open();
 		ts_calibrate(lcd);
-		dev_touchscreen_close();
+		tp_close();
 	}
 	
 	dev_lcd_color_fill(lcd, 1, 1000, 1, 1000, BLUE);
@@ -457,16 +458,13 @@ s32 test_tp_test(void)
 		wjq_test_showstr("open lcd err!");	
 	} else {
 		dev_lcd_setdir(lcd, H_LCD, L2R_U2D);
-		dev_touchscreen_open();	
+		tp_open();	
 	
-		struct tsdev *ts;
-		ts = ts_open_module();
-
-		struct ts_sample samp[10];
+		TouchPoint samp[10];
 		int ret;
 		u8 i =0;	
 		while(1) {
-			ret = ts_read(ts, samp, 10);
+			ret = rtp_get_point(samp, 10);
 			if (ret != 0) {
 				//uart_printf("pre:%d, x:%d, y:%d\r\n", samp[0].pressure, samp[0].x, samp[0].y);
 						
@@ -497,7 +495,7 @@ s32 test_tp_test(void)
 			}
 		}
 
-		dev_touchscreen_close();
+		tp_close();
 	}
 	return 0;
 }
@@ -1293,7 +1291,7 @@ void wujique_stm407_test(void)
 Éú²ú²âÊÔ
 
 */
-
+#if 0
 s32 test_tft_lcd(void)
 {
 	DevLcdNode *lcd;
@@ -1368,7 +1366,9 @@ s32 test_tft_lcd(void)
 	dev_lcd_close(lcd);
 	return 0;
 }
+#endif
 
+#if 0
 s32 test_cog_lcd(void)
 {
 	DevLcdNode *lcd;
@@ -1399,67 +1399,59 @@ s32 test_cog_lcd(void)
 	
 	return 0;
 }
+#endif
 
+#if 0
 s32 test_tft_tp(void)
 {
 	DevLcdNode *lcd;
 
 	lcd = dev_lcd_open("tftlcd");
-	if(lcd == NULL)
-	{
+	if(lcd == NULL) {
 		wjq_test_showstr("open lcd err!");	
-	}
-	else
-	{
+	} else {
 		dev_lcd_backlight(lcd, 1);
 		
 		dev_lcd_color_fill(lcd, 1, 1000, 1, 1000, BLUE);
 		dev_lcd_update(lcd);
 		dev_lcd_setdir(lcd, H_LCD, L2R_U2D);
-		dev_touchscreen_open();
+		tp_open();
 		ts_calibrate(lcd);
-		dev_touchscreen_close();
+		tp_close();
 	}
 	
 	dev_lcd_color_fill(lcd, 1, 1000, 1, 1000, BLUE);
 	dev_lcd_update(lcd);
-	{
-		dev_touchscreen_open();	
 	
-		struct tsdev *ts;
-		ts = ts_open_module();
 
-		struct ts_sample samp[10];
-		int ret;
-		u8 i =0;	
-		while(1)
-		{
-			ret = ts_read(ts, samp, 10);
-			if(ret != 0)
-			{
-				//uart_printf("pre:%d, x:%d, y:%d\r\n", samp[0].pressure, samp[0].x, samp[0].y);
-						
-				i = 0;
-				
-				while(1)
-				{
-					if(i>= ret)
-						break;
+	tp_open();
+
+	TouchPoint samp[10];
+	int ret;
+	u8 i =0;	
+	while(1) {
+		ret = rtp_get_point(samp, 10);
+		if (ret != 0) {
+			//uart_printf("pre:%d, x:%d, y:%d\r\n", samp[0].pressure, samp[0].x, samp[0].y);
 					
-					if(samp[i].pressure != 0 )
-					{
-						//uart_printf("pre:%d, x:%d, y:%d\r\n", samp.pressure, samp.x, samp.y);
-						dev_lcd_drawpoint(lcd, samp[i].x, samp[i].y, 0xF800); 
-					}
-					i++;
+			i = 0;
+			
+			while(1) {
+				if (i>= ret) break;
+				
+				if (samp[i].pressure != 0 ) {
+					//uart_printf("pre:%d, x:%d, y:%d\r\n", samp.pressure, samp.x, samp.y);
+					dev_lcd_drawpoint(lcd, samp[i].x, samp[i].y, 0xF800); 
 				}
+				i++;
 			}
-
 		}
 
-		dev_touchscreen_close();
 	}
+
+	tp_close();
+
 	return 0;
 }
-
+#endif
 

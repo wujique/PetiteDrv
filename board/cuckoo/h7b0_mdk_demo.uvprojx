@@ -336,7 +336,7 @@
               <MiscControls></MiscControls>
               <Define>NDEBUG</Define>
               <Undefine></Undefine>
-              <IncludePath>.\Core\Inc;.\Drivers\STM32H7xx_HAL_Driver\Inc;.\User;.\Drivers\CMSIS\Include;.\Drivers\CMSIS\Device\ST\STM32H7xx\Include;.\Drivers\STM32H7xx_HAL_Driver\Inc\Legacy;..\..\mcu\stm32h7b0vb;..\..\Petite;..\..\driver;..\..\driver\touch;..\..\driver\lcd;..\..\Utilities\lvgl;..\..\Utilities\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\..\Utilities\FreeRTOS\Source\include;..\..\Utilities\FreeRTOS\Source\CMSIS_RTOS_V2;..\..\Utilities\FatFs;..\..\driver\sound</IncludePath>
+              <IncludePath>.\Core\Inc;.\Drivers\STM32H7xx_HAL_Driver\Inc;.\User;.\Drivers\CMSIS\Include;.\Drivers\CMSIS\Device\ST\STM32H7xx\Include;.\Drivers\STM32H7xx_HAL_Driver\Inc\Legacy;..\..\mcu\stm32h7b0vb;..\..\Petite;..\..\driver;..\..\driver\touch;..\..\driver\lcd;..\..\Utilities\lvgl;..\..\Utilities\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\..\Utilities\FreeRTOS\Source\include;..\..\Utilities\FreeRTOS\Source\CMSIS_RTOS_V2;..\..\Utilities\FatFs;..\..\driver\sound;..\..\driver\touch\rtp\tslib;..\..\driver\touch\rtp</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -837,6 +837,21 @@
               <FileName>gt1151.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\driver\touch\ctp\gt1151.c</FilePath>
+            </File>
+            <File>
+              <FileName>tslib.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\driver\touch\rtp\tslib\tslib.c</FilePath>
+            </File>
+            <File>
+              <FileName>ts_calibrate.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\driver\touch\rtp\tslib\tests\ts_calibrate.c</FilePath>
+            </File>
+            <File>
+              <FileName>testutils.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\driver\touch\rtp\tslib\tests\testutils.c</FilePath>
             </File>
           </Files>
         </Group>

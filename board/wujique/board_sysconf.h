@@ -103,7 +103,7 @@
 	栈定义的是U32
 */
 /*默认应用任务，比如测试程序，有死循环 */
-#define Wujique407_TASK_STK_SIZE (2048)
+#define Wujique407_TASK_STK_SIZE (1024*3)
 #define Wujique407_TASK_PRIO	(1)
 /* 命令行交互 */
 #define UBOOTCMD_TASK_STK_SIZE (1024)

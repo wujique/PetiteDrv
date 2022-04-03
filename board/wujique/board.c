@@ -7,12 +7,15 @@
 #include "drv_keypad.h"
 #include "drv_buzzer.h"
 #include "dacsound.h"
+#include "touch.h"
 
 
 /* 硬件相关的都在board.c定义
 	调用对应的驱动进行初始化。
 	不能在驱动中包含硬件相关信息。
 */
+extern const TouchDev RtpXpt2046;
+
 /*
 	矩阵按键硬件定义
 	row输出，放前面
@@ -203,7 +206,7 @@ s32 board_init(void)
 	dev_buzzer_init(&BoardBuzzer);
 	dev_key_init();
 	//dev_rs485_init();
-	dev_touchscreen_init();
+	tp_init(&RtpXpt2046);
 	dev_touchkey_init();
 	mcu_adc_temprate_init();
 	//dev_htu21d_init();

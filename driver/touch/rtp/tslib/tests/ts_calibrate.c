@@ -46,8 +46,7 @@ int perform_calibration(calibration *cal)
     float scaling = 65536.0;
     
     n = x = y = x2 = y2 = xy = 0;
-    for (j = 0; j < 5; j++)
-    {
+    for (j = 0; j < 5; j++) {
         n += 1.0;
         x += (float)cal->x[j];
         y += (float)cal->y[j];
@@ -57,15 +56,13 @@ int perform_calibration(calibration *cal)
     }
     
     det = n * (x2*y2 - xy*xy) + x * (xy*y - x*y2) + y * (x*xy - y*x2);
-    if (det < 0.1 && det > -0.1)
-    {
+    if (det < 0.1 && det > -0.1) {
     	wjq_log(LOG_DEBUG, "ts_calibrate: determinant is too small -- %f\n",det);
         return -1;
     }
     
     z = zx = zy = 0;
-    for (j = 0; j < 5; j++)
-    {
+    for (j = 0; j < 5; j++) {
         z += (float)cal->xfb[j];
         zx += (float)(cal->xfb[j] * cal->x[j]);
         zy += (float)(cal->xfb[j] * cal->y[j]);
@@ -79,8 +76,7 @@ int perform_calibration(calibration *cal)
     cal->a[2] = (int)((det3 / det) * scaling);
 
     z = zx = zy = 0;
-    for (j = 0; j < 5; j++)
-    {
+    for (j = 0; j < 5; j++) {
         z += (float)cal->yfb[j];
         zx += (float)(cal->yfb[j] * cal->x[j]);
         zy += (float)(cal->yfb[j] * cal->y[j]);
@@ -139,13 +135,11 @@ struct tsdev *ts_open_module(void)
 
 	ts = ts_open(tsdevice,0);
 
-	if (!ts) 
-	{
+	if (!ts) {
 		return NULL;
 	}
 	
-	if (ts_config(ts)) 
-	{
+	if (ts_config(ts)) {
 		return NULL;
 	}
 	
@@ -163,13 +157,11 @@ int ts_calibrate(DevLcdNode *lcd)
 	wjq_log(LOG_DEBUG, " main ts calibrate!\r\n");
 
 	ts = ts_open(tsdevice,0);
-	if (!ts) 
-	{
+	if (!ts) {
 		return -1;
 	}
 
-	if (ts_config(ts)) 
-	{
+	if (ts_config(ts)) {
 		return -1;
 	}
 
@@ -208,17 +200,14 @@ int ts_calibrate(DevLcdNode *lcd)
 	get_sample (ts, &cal, 4, xres / 2,  yres / 2,  "Center");
 	wjq_log(LOG_DEBUG, "-----------------------Center\r\n");
 
-	if (0 == perform_calibration (&cal)) 
-	{
+	if (0 == perform_calibration (&cal)) {
 		//校准后得到的数据
 		wjq_log(LOG_DEBUG, "Calibration constants: ");
 		for (i = 0; i < 7; i++) 
 			wjq_log(LOG_DEBUG, "%d ", cal.a [i]);
 		wjq_log(LOG_DEBUG, "\n");
 
-	} 
-	else 
-	{
+	} else {
 		wjq_log(LOG_DEBUG, "Calibration failed.\n");
 		i = -1;
 	}

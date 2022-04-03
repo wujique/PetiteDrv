@@ -283,7 +283,7 @@ int gt1151_task(void)
 				//uart_printf("tp:%d, x=%d, y=%d\r\n", point_num+1, x, y);
 				/* this is a demo, you can fill the xy into a buf,
 					the app read the buf get the point.  */
-				tp_fill_buf(x, y);
+				ctp_fill_buf(x, y);
 			}
 		}
 		bus_i2c_close(node);
@@ -292,5 +292,26 @@ int gt1151_task(void)
 
 	return -1;
 }
+
+int gt1151_open(void)
+{
+	return 0;
+}
+
+int gt1151_close(void)
+{
+	return 0;
+}
+
+
+const TouchDev CtpGt1151={
+	.name ="ctp_gt1151",
+	.type = 2, 
+
+	.init = gt1151_init,
+	.open = gt1151_open,
+	.close = gt1151_close,
+	.task = gt1151_task,
+};
 
 

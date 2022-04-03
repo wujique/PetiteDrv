@@ -22,27 +22,33 @@ Dialog DLL:      TCM.DLL V1.32.0.0
  
 <h2>Project:</h2>
 F:\PetiteDrv\prog\PetiteDrv\board\cuckoo\h7b0_mdk_demo.uvprojx
-Project File Date:  03/31/2022
+Project File Date:  04/03/2022
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 5 (build 528)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'Target 1'
-compiling board.c...
-User\board.c(15): warning:  #223-D: function "petite_dev_register" declared implicitly
-  	petite_dev_register();
-User\board.c(17): warning:  #223-D: function "lcd_reset" declared implicitly
-      lcd_reset();
-User\board.c(18): warning:  #223-D: function "LCD_Config" declared implicitly
-      LCD_Config();
-User\board.c(26): warning:  #223-D: function "cap_touch_init" declared implicitly
-  	cap_touch_init();
-User\board.c(28): warning:  #223-D: function "cuckoo_7b0_test_init" declared implicitly
-  	cuckoo_7b0_test_init();
-User\board.c: 5 warnings, 0 errors
+compiling GT9147.c...
+..\..\Petite\mem/p_list.h(9): warning:  #47-D: incompatible redefinition of macro "offsetof"  (declared at line 91 of "C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h")
+  #define offsetof(type,  member)    ((size_t) &((type *)0)-> member)
+..\..\driver\touch\ctp\GT9147.c(154): warning:  #223-D: function "mcu_vi2c_transfer_reg" declared implicitly
+  	mcu_vi2c_transfer_reg(DevVi2cGT9147,GT9147_DEVICE_ADDR, reg, 2, MCU_I2C_MODE_W, (u8*)GT9147CfgTab, sizeof(GT9147CfgTab));
+..\..\driver\touch\ctp\GT9147.c(139): warning:  #177-D: variable "tmp"  was declared but never referenced
+  	u8 tmp[4];
+..\..\driver\touch\ctp\GT9147.c(195): warning:  #223-D: function "mcu_vi2c_transfer_reg" declared implicitly
+  	mcu_vi2c_transfer_reg(DevVi2cGT9147,GT9147_DEVICE_ADDR, reg, 2, MCU_I2C_MODE_R, ID, 4);
+..\..\driver\touch\ctp\GT9147.c(280): warning:  #223-D: function "mcu_vi2c_transfer_reg" declared implicitly
+  		mcu_vi2c_transfer_reg(DevVi2cGT9147,GT9147_DEVICE_ADDR, reg, 2, MCU_I2C_MODE_R, tmp, 1);
+..\..\driver\touch\ctp\GT9147.c(313): warning:  #223-D: function "ctp_fill_buf" declared implicitly
+  				ctp_fill_buf(x, y);
+..\..\driver\touch\ctp\GT9147.c(339): warning:  #144-D: a value of type "int (*)(void)" cannot be used to initialize an entity of type "void (*)(void)"
+  	.task = gt9147_task,
+..\..\driver\touch\ctp\GT9147.c(164): warning:  #550-D: variable "Gt9147Gd"  was set but never used
+  static int Gt9147Gd = -1;
+..\..\driver\touch\ctp\GT9147.c: 8 warnings, 0 errors
 linking...
-Program Size: Code=218840 RO-data=107352 RW-data=1348 ZI-data=997232  
+Program Size: Code=219816 RO-data=107444 RW-data=1352 ZI-data=997492  
 FromELF: creating hex file...
-".\Objects\h7b0_mdk_demo.axf" - 0 Error(s), 5 Warning(s).
+".\Objects\h7b0_mdk_demo.axf" - 0 Error(s), 8 Warning(s).
 
 <h2>Software Packages used:</h2>
 

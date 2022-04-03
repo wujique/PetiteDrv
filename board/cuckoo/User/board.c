@@ -3,6 +3,11 @@
 #include "log.h"
 #include "board_sysconf.h"
 
+#include "touch.h"
+
+
+extern const TouchDev CtpGt9147;
+extern const TouchDev CtpGt1151;
 
 
 /*
@@ -10,6 +15,8 @@
 */
 s32 board_init(void)
 {
+	int res;
+	
 	wjq_log(LOG_DEBUG, "[   board] cuckoo other dev init!\r\n");
 
 	petite_dev_register();
@@ -23,7 +30,14 @@ s32 board_init(void)
 
 	//dev_wm8978_init();
 	
-	cap_touch_init();
+	res = tp_init(&CtpGt9147);
+	if (res == -1) {
+		res = tp_init(&CtpGt1151);	
+	}
+
+	if (res == -1) {
+		/*  初始化电阻屏 */
+	}
 
 	cuckoo_7b0_test_init();
 	
