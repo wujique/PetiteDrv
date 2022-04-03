@@ -1324,18 +1324,6 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\driver\touch\rtp\ctp_adc.c</PathWithFileName>
-      <FilenameWithoutPath>ctp_adc.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>9</GroupNumber>
-      <FileNumber>88</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\driver\touch\rtp\xpt2046.c</PathWithFileName>
       <FilenameWithoutPath>xpt2046.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
@@ -1343,7 +1331,7 @@
     </File>
     <File>
       <GroupNumber>9</GroupNumber>
-      <FileNumber>89</FileNumber>
+      <FileNumber>88</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1355,7 +1343,7 @@
     </File>
     <File>
       <GroupNumber>9</GroupNumber>
-      <FileNumber>90</FileNumber>
+      <FileNumber>89</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1367,7 +1355,7 @@
     </File>
     <File>
       <GroupNumber>9</GroupNumber>
-      <FileNumber>91</FileNumber>
+      <FileNumber>90</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1379,13 +1367,25 @@
     </File>
     <File>
       <GroupNumber>9</GroupNumber>
-      <FileNumber>92</FileNumber>
+      <FileNumber>91</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\driver\touch\touch.c</PathWithFileName>
       <FilenameWithoutPath>touch.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>9</GroupNumber>
+      <FileNumber>92</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\driver\touch\rtp\rtp_adc.c</PathWithFileName>
+      <FilenameWithoutPath>rtp_adc.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

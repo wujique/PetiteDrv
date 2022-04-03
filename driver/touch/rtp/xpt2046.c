@@ -30,9 +30,6 @@
 #include "bus/bus_spi.h"
 #include "mcu_spi.h"
 #include "mcu_timer.h"
-
-#include "tslib.h"
-
 #include "touch.h"
 
 

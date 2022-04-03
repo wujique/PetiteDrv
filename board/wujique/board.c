@@ -15,7 +15,7 @@
 	不能在驱动中包含硬件相关信息。
 */
 extern const TouchDev RtpXpt2046;
-
+extern const TouchDev RtpAdc;
 /*
 	矩阵按键硬件定义
 	row输出，放前面
@@ -206,9 +206,17 @@ s32 board_init(void)
 	dev_buzzer_init(&BoardBuzzer);
 	dev_key_init();
 	//dev_rs485_init();
+	//mcu_adc_test();
+	#if (SYS_USE_TS_IC_CASE == 1)
 	tp_init(&RtpXpt2046);
+	#endif
+	#if (SYS_USE_TS_ADC_CASE == 1)
+	tp_init(&RtpAdc);
+	#endif
 	dev_touchkey_init();
+	#if (SYS_USE_TS_ADC_CASE != 1)
 	mcu_adc_temprate_init();
+	#endif
 	//dev_htu21d_init();
 	//dev_ptHCHO_init();
 	//dev_srf05_test();
@@ -241,12 +249,16 @@ s32 board_init(void)
 /*
 	低优先级轮训任务
 */
-void board_low_task(void)
+extern void (*cap_touch_task)(void);
+
+void board_low_task(int tick)
 {
 	//wjq_log(LOG_DEBUG, "low TASK ");
 	
 	dev_key_scan();
-		
+	
+	//cap_touch_task();
+	
 	#if (SYS_USE_KEYPAD == 1)
 	dev_keypad_scan();
 	#endif

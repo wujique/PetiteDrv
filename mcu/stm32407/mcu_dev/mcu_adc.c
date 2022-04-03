@@ -176,51 +176,43 @@ void mcu_adc_IRQhandler(void)
 	volatile u16 adc_value;
 	FlagStatus ret;
 	ITStatus itret;
-	
+
 	itret = ADC_GetITStatus(ADC2, ADC_IT_EOC);
-	if( itret == SET)
-    {    
+	if ( itret == SET) {    
 
 		ret = ADC_GetFlagStatus(ADC2, ADC_FLAG_EOC);
-		if(ret == SET)
-		{
-			//uart_printf("ADC_FLAG_EOC t\r\n");
+		if (ret == SET) {
+			//uart_printf("t\r\n");
 			adc_value = ADC_GetConversionValue(ADC2);
 			//MCU_ADC_DEBUG(LOG_DEBUG, "%d ", adc_value);
 			if(AdcCallbackFun!= NULL)
 				AdcCallbackFun(adc_value);
-
 		}
 		
 		ret = ADC_GetFlagStatus(ADC2, ADC_FLAG_AWD);
-		if(ret == SET)
-		{
+		if (ret == SET) {
 			MCU_ADC_DEBUG(LOG_DEBUG, "ADC_FLAG_AWD t\r\n");
 
 		}
 		ret = ADC_GetFlagStatus(ADC2, ADC_FLAG_JEOC);
-		if(ret == SET)
-		{
+		if (ret == SET) {
 			MCU_ADC_DEBUG(LOG_DEBUG, "ADC_FLAG_JEOC t\r\n");
 
 		}
 		ret = ADC_GetFlagStatus(ADC2, ADC_FLAG_JSTRT);
-		if(ret == SET)
-		{
+		if (ret == SET) {
 			MCU_ADC_DEBUG(LOG_DEBUG, "ADC_FLAG_JSTRT t\r\n");
 
 		}
 
 		ret = ADC_GetFlagStatus(ADC2, ADC_FLAG_STRT);
-		if(ret == SET)
-		{
+		if (ret == SET) {
 			//uart_printf("ADC_FLAG_STRT t\r\n");
 
 		}
 
 		ret = ADC_GetFlagStatus(ADC2, ADC_FLAG_OVR);
-		if(ret == SET)
-		{
+		if (ret == SET) {
 			MCU_ADC_DEBUG(LOG_DEBUG, "ADC_FLAG_OVR t\r\n");
 			ADC_ClearFlag(ADC2, ADC_FLAG_OVR);
 		}

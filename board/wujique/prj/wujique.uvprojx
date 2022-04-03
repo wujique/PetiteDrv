@@ -851,11 +851,6 @@
           <GroupName>drv/touch</GroupName>
           <Files>
             <File>
-              <FileName>ctp_adc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\driver\touch\rtp\ctp_adc.c</FilePath>
-            </File>
-            <File>
               <FileName>xpt2046.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\driver\touch\rtp\xpt2046.c</FilePath>
@@ -879,6 +874,11 @@
               <FileName>touch.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\driver\touch\touch.c</FilePath>
+            </File>
+            <File>
+              <FileName>rtp_adc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\driver\touch\rtp\rtp_adc.c</FilePath>
             </File>
           </Files>
         </Group>

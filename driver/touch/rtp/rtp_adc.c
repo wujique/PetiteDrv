@@ -1,8 +1,17 @@
+#include "mcu.h"
+
+#include "petite_config.h"
+
+#include "board_sysconf.h"
+#include "log.h"
+
+#include "mcu_timer.h"
+#include "touch.h"
 
 
 
-//#if (SYS_USE_TS_ADC_CASE == 1)
-#if 0
+#if (SYS_USE_TS_ADC_CASE == 1)
+
 #include "mcu_adc.h"
 
 #define DEV_TP_S_PORT GPIOD
@@ -54,6 +63,8 @@ s32 dev_ts_adc_init(void)
 
 	GPIO_InitTypeDef GPIO_InitStructure;
 	
+	wjq_log(LOG_DEBUG, "dev_ts_adc_init\r\n");
+	
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE);
 
     GPIO_InitStructure.GPIO_Pin = DEV_TP_S0 | DEV_TP_S1;
@@ -75,21 +86,24 @@ s32 dev_ts_adc_init(void)
 
 s32 dev_ts_adc_open(void)
 {
-	if(TsAdcGd != -1)
-		return -1;
+	if(TsAdcGd != -1) return -1;
 	/* wjq bug
 	
 	要清定时器跟ADC中断标志	
 	*/
+	wjq_log(LOG_DEBUG, "dev_ts_adc_open\r\n");
+	
+	TsAdcGd = 0;
 	DEV_TP_PRESS_SCAN;
 	mcu_adc_start_conv(ADC_Channel_9);
-	TsAdcGd = 0;
+	
 	return 0;
 }
 
 s32 dev_ts_adc_close(void)
 {
-		return 0;
+	wjq_log(LOG_DEBUG, "dev_ts_adc_close\r\n");
+	return 0;
 }
 /**
  *@brief:      dev_touchscreen_tr
@@ -100,12 +114,9 @@ s32 dev_ts_adc_close(void)
  */
 void dev_ts_adc_tr(void)
 {
-	if(TouchScreenStep	== 3)
-	{
+	if(TouchScreenStep	== 3) {
 		mcu_adc_start_conv(ADC_Channel_8);
-	}
-	else
-	{
+	} else {
 		mcu_adc_start_conv(ADC_Channel_9);	
 	}
 }
@@ -122,38 +133,32 @@ s32 dev_ts_adc_task(u16 dac_value)
 	static u16 pre_y, pre_x;
 	static u16 sample_x;
 	static u8 pendownup = 1;
-	struct ts_sample tss;
-	
-	if(TsAdcGd != 0)
-		return -1;
-	
-	if(TouchScreenStep == 0)//压力检测第一步ADC转换结束
-	{	
+	TouchPoint tss;
+
+	if(TsAdcGd != 0) return -1;
+
+	//压力检测第一步ADC转换结束
+	if(TouchScreenStep == 0) {	
 		pre_y = dac_value;
 		TouchScreenStep	= 1;
 		mcu_adc_start_conv(ADC_Channel_8);
-	}
-	else if(TouchScreenStep == 1)
-	{
+	} else if(TouchScreenStep == 1) {
 		pre_x = dac_value;
-		//TS_DEBUG(LOG_DEBUG, "--press :%d %d\r\n", pre_y, pre_x);
+		//wjq_log(LOG_DEBUG, "--press :%d %d\r\n", pre_y, pre_x);
 
-		if(pre_x + DEV_TP_PENDOWN_GATE > pre_y)
-		{
+		if(pre_x + DEV_TP_PENDOWN_GATE > pre_y) {
 			TouchScreenStep	= 2;
 			DEV_TP_SCAN_X;
 			dev_ts_adc_timerrun(2);
-		}
-		else if(pre_x + DEV_TP_PENUP_GATE < pre_y)//没压力，不进行XY轴检测
-		{
+		} else if(pre_x + DEV_TP_PENUP_GATE < pre_y) {
+			//没压力，不进行XY轴检测
 			/* 起笔只上送一点缓冲*/
-			if(pendownup == 0)
-			{
+			if (pendownup == 0) {
 				pendownup = 1;
 				tss.pressure = 0;//压力要搞清楚怎么计算
 				tss.x = 0xffff;
 				tss.y = 0xffff;
-				dev_touchscreen_write(&tss,1);
+				rtp_fill_buff(&tss,1);
 				
 			}
 			TouchScreenStep	= 0;
@@ -161,9 +166,7 @@ s32 dev_ts_adc_task(u16 dac_value)
 			DEV_TP_PRESS_SCAN;
 			//打开一个定时器，定时时间到了才进行压力检测
 			dev_ts_adc_timerrun(100);
-		}
-		else
-		{
+		} else {
 			/*上下笔的过渡，丢弃*/
 			TouchScreenStep	= 0;
 
@@ -171,32 +174,28 @@ s32 dev_ts_adc_task(u16 dac_value)
 
 			dev_ts_adc_timerrun(20);
 		}
-	}
-	else if(TouchScreenStep == 2)
-	{
+	}else if(TouchScreenStep == 2) {
 		sample_x =  dac_value;
 		
 		TouchScreenStep	= 3;
 		DEV_TP_SCAN_Y;
 
 		dev_ts_adc_timerrun(2);
-	}
-	else if(TouchScreenStep == 3)//一轮结束，重启启动压力检测
-	{
+	} else if(TouchScreenStep == 3) {
+		//一轮结束，重启启动压力检测
 		tss.pressure = DEV_TP_PENDOWN_GATE-(pre_y - pre_x);//压力要搞清楚怎么计算
 		tss.x = sample_x;
 		tss.y = dac_value;
-		dev_touchscreen_write(&tss,1);
-		//TS_DEBUG(LOG_DEBUG, "tp :%d, %d, %d\r\n", tss.pressure, tss.x, tss.y);
+		rtp_fill_buff(&tss,1);
+		//wjq_log(LOG_DEBUG, "tp :%d, %d, %d\r\n", tss.pressure, tss.x, tss.y);
 		pendownup = 0;
 		
 		TouchScreenStep	= 0;
 		DEV_TP_PRESS_SCAN;
 		
 		dev_ts_adc_timerrun(2);
-	}
-	else//异常，启动压力检测
-	{
+	} else {
+		//异常，启动压力检测
 		TouchScreenStep	= 0;
 		DEV_TP_PRESS_SCAN;
 
@@ -206,6 +205,23 @@ s32 dev_ts_adc_task(u16 dac_value)
 	return 0;
 }
 
+void rtp_adc_drv_task(void)
+{
+	uart_printf("1 ");
+	return;
+}
+
+
+const TouchDev RtpAdc={
+	.name ="rtp_adc",
+	.type = 1, 
+
+	.init = dev_ts_adc_init,
+	.open = dev_ts_adc_open,
+	.close = dev_ts_adc_close,
+	.task = rtp_adc_drv_task,
+};
+
 /**
  *@brief:      dev_touchscreen_test
  *@details:       触摸屏采样测试
@@ -213,6 +229,7 @@ s32 dev_ts_adc_task(u16 dac_value)
  *@param[out]  无
  *@retval:     
  */
+#if 0 
 s32 dev_touchscreen_test(void)
 {
 	/*轮询，不使用中断 把MCU_ADC_IRQ屏蔽*/
@@ -282,5 +299,7 @@ s32 dev_touchscreen_test(void)
 #endif
 
 }
+#endif
+
 #endif
 

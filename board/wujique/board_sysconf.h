@@ -35,7 +35,9 @@
 
 /*	定义xpt 2046使用 模拟SPI1_ch1
 	分频设置为0      */
+#if (SYS_USE_TS_IC_CASE == 1)
 #define SYS_USE_VSPI1	 1	
+#endif
 #define XPT2046_SPI "VSPI1_CH1"
 #define XPT2046_SPI_KHZ	 2000
 #define XPT2046_TIMER MCU_TIMER_7
