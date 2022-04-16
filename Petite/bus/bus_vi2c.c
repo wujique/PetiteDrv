@@ -450,10 +450,9 @@ s32 mcu_vi2c_transfer_reg(DevI2c *dev, u8 addr, u8* reg, u8 reglen, u8 rw, u8* d
 错误方式读寄存器：
 	Start+0x61+寄存器ID+Stop  Start+0x61 + 所读数据+Stop
 */
-uint8_t mcu_sccb_writereg(uint8_t DeviceAddr, uint16_t Addr, uint8_t Data)
+uint8_t mcu_sccb_writereg(DevI2c *dev, uint8_t DeviceAddr, uint16_t Addr, uint8_t Data)
 {
-	DevI2c *dev;
-	
+
 	bus_vi2c_start(dev);
 	bus_vi2c_writebyte(dev,DeviceAddr);
 	bus_vi2c_wait_ack(dev);
@@ -466,9 +465,8 @@ uint8_t mcu_sccb_writereg(uint8_t DeviceAddr, uint16_t Addr, uint8_t Data)
 	return 0;
 }
 
-uint8_t mcu_sccb_readreg(uint8_t DeviceAddr, uint16_t Addr)
+uint8_t mcu_sccb_readreg(DevI2c *dev, uint8_t DeviceAddr, uint16_t Addr)
 {
-	DevI2c *dev;
 	uint8_t ch;
 	
 	bus_vi2c_start(dev);

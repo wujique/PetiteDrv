@@ -336,7 +336,7 @@
               <MiscControls></MiscControls>
               <Define>NDEBUG</Define>
               <Undefine></Undefine>
-              <IncludePath>.\Core\Inc;.\Drivers\STM32H7xx_HAL_Driver\Inc;.\User;.\Drivers\CMSIS\Include;.\Drivers\CMSIS\Device\ST\STM32H7xx\Include;.\Drivers\STM32H7xx_HAL_Driver\Inc\Legacy;..\..\mcu\stm32h7b0vb;..\..\Petite;..\..\driver;..\..\driver\touch;..\..\driver\lcd;..\..\Utilities\lvgl;..\..\Utilities\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\..\Utilities\FreeRTOS\Source\include;..\..\Utilities\FreeRTOS\Source\CMSIS_RTOS_V2;..\..\Utilities\FatFs;..\..\driver\sound;..\..\driver\touch\rtp\tslib;..\..\driver\touch\rtp</IncludePath>
+              <IncludePath>.\Core\Inc;.\Drivers\STM32H7xx_HAL_Driver\Inc;.\User;.\Drivers\CMSIS\Include;.\Drivers\CMSIS\Device\ST\STM32H7xx\Include;.\Drivers\STM32H7xx_HAL_Driver\Inc\Legacy;..\..\mcu\stm32h7b0vb;..\..\Petite;..\..\driver;..\..\driver\touch;..\..\driver\lcd;..\..\Utilities\lvgl;..\..\Utilities\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\..\Utilities\FreeRTOS\Source\include;..\..\Utilities\FreeRTOS\Source\CMSIS_RTOS_V2;..\..\Utilities\FatFs;..\..\driver\sound;..\..\driver\touch\rtp\tslib;..\..\driver\touch\rtp;..\..\Petite\bus</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -872,6 +872,18 @@
         </Group>
         <Group>
           <GroupName>drv/camera</GroupName>
+          <Files>
+            <File>
+              <FileName>camera_api.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\driver\camera\camera_api.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_ov2640.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\driver\camera\drv_ov2640.c</FilePath>
+            </File>
+          </Files>
         </Group>
         <Group>
           <GroupName>panel</GroupName>

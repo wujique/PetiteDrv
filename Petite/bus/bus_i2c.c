@@ -94,7 +94,7 @@ s32 bus_i2c_register(const DevI2c * dev)
  *@brief:      bus_i2c_open
  *@details:    根据名字打开一个i2c接口
  *@param[in]   name 设备名称
- 			   wait 等待时间，单位ms, oxffffffff 永远
+ 			   wait 等待时间，单位ms, 0xffffffff 永远
  *@param[out]  无
  *@retval:     返回设备节点
  */
@@ -104,7 +104,7 @@ DevI2cNode *bus_i2c_open(char *name, uint32_t wait)
 	DevI2cNode *node;
 	struct list_head *listp;
 	osStatus_t res;
-	BUSI2C_DEBUG(LOG_INFO, "i2c open:%s!\r\n", name);
+	//BUSI2C_DEBUG(LOG_INFO, "i2c open:%s!\r\n", name);
 
 	listp = DevI2cGdRoot.next;
 	node = NULL;
@@ -115,7 +115,7 @@ DevI2cNode *bus_i2c_open(char *name, uint32_t wait)
 		node = list_entry(listp, DevI2cNode, list);
 		 
 		if (strcmp(name, node->dev.pnode.name) == 0) {
-			BUSI2C_DEBUG(LOG_INFO, "i2c dev find!\r\n");
+			//BUSI2C_DEBUG(LOG_INFO, "i2c dev find!\r\n");
 			break;
 		}
 		
@@ -124,19 +124,16 @@ DevI2cNode *bus_i2c_open(char *name, uint32_t wait)
 	
 	if (node != NULL) {
 		/* 判断互斥是否可用          osWaitForever*/
-		while (1) {
-			BUSI2C_DEBUG(LOG_INFO, "i2c mutex ");
-			res = osMutexAcquire(node->mutex, 10);
-			if (osOK == res) break;
-		}
-		
-		if ( osOK == res && node->gd != 0) {
-			node->gd = 0;		
-		} else {
+
+		//BUSI2C_DEBUG(LOG_INFO, "i2c mutex %d ", wait);
+		res = osMutexAcquire(node->mutex, wait);
+
+		if ( osOK != res) {
+			//BUSI2C_DEBUG(LOG_INFO, "fail ");
 			node = NULL;
 		}	
 	}
-	BUSI2C_DEBUG(LOG_INFO, "open suc\r\n ");
+	//BUSI2C_DEBUG(LOG_INFO, "open suc\r\n ");
 	return node;
 }
 /**
@@ -150,10 +147,10 @@ s32 bus_i2c_close(DevI2cNode *node)
 {
 	if  (node == NULL) return -1;
 
-	if (node->gd != 0) return -1;
-	BUSI2C_DEBUG(LOG_INFO, "i2c close:%s!\r\n", node->dev.pnode.name);
-	node->gd = -1; 
+	//if (node->gd != 0) return -1;
+	//node->gd = -1; 
 	
+	//BUSI2C_DEBUG(LOG_INFO, "i2c close:%s!\r\n", node->dev.pnode.name);
 	osMutexRelease(node->mutex);
 
 	return 0;
