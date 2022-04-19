@@ -27,6 +27,7 @@
   */
 
 #include "mcu.h"
+#include "log.h"
 #include "petite_config.h"
 
 /* Includes ------------------------------------------------------------------*/
@@ -417,44 +418,6 @@ void OV9655_ReadID(OV9655_IDTypeDef* OV9655ID)
   OV9655ID->PID = OV9655_ReadReg(OV9655_PID);
 }
 
-/**
-  * @brief  Configures the DCMI/DMA to capture image from the OV9655 camera.
-  * @param  ImageFormat: Image format BMP or JPEG
-  * @param  BMPImageSize: BMP Image size  
-  * @retval None
-  */
-void OV9655_Init(ImageFormat_TypeDef ImageFormat)
-{
-	DCMI_InitTypeDef DCMI_InitStructure;
-	
-	/* DCMI configuration */ 
-	BUS_DCMI_Config(DCMI_PCKPolarity_Falling, DCMI_VSPolarity_High, DCMI_HSPolarity_High);
-	
-	switch (ImageFormat)
-	{
-		case BMP_QQVGA:
-		{
-			/* Configure the OV9655 camera and set the QQVGA mode */
-
-			OV9655_QQVGAConfig();
-			break;
-		}
-		case BMP_QVGA:
-		{
-			/* Configure the OV9655 camera and set set the QVGA mode */
-
-			OV9655_QVGAConfig();
-			break;
-		}
-		default:
-		{
-			/* Configure the OV9655 camera and set the QQVGA mode */
-
-			OV9655_QQVGAConfig();
-			break;
-		} 
-	}
-}
 
 /**
   * @brief  Configures the OV9655 camera in QQVGA mode.
@@ -469,8 +432,7 @@ void OV9655_QQVGAConfig(void)
   Delay(200);
 
   /* Initialize OV9655 */
-  for(i=0; i<(sizeof(OV9655_QQVGA)/2); i++)
-  {
+  for (i=0; i<(sizeof(OV9655_QQVGA)/2); i++) {
     OV9655_WriteReg(OV9655_QQVGA[i][0], OV9655_QQVGA[i][1]);
     Delay(2);
   }
@@ -489,8 +451,7 @@ void OV9655_QVGAConfig(void)
   Delay(200);
 
   /* Initialize OV9655 */
-  for(i=0; i<(sizeof(OV9655_QVGA)/2); i++)
-  {
+  for (i=0; i<(sizeof(OV9655_QVGA)/2); i++) {
     OV9655_WriteReg(OV9655_QVGA[i][0], OV9655_QVGA[i][1]);
     Delay(2);
   }
@@ -575,6 +536,59 @@ void OV9655_SelectRGBOption(uint8_t OV9665_RGBOption)
 {
   OV9655_WriteReg(OV9655_COM15, OV9665_RGBOption);
 }
+
+/*
+	----------------------------------------------------------*/
+OV9655_IDTypeDef  OV9655_Camera_ID;
+
+int OV9655_Init(void)
+{
+	OV9655_ReadID(&OV9655_Camera_ID);
+	
+	if(OV9655_Camera_ID.PID  == 0x96){
+		wjq_log(LOG_DEBUG, "OV9655 Camera ID 0x%x\r\n", OV9655_Camera_ID.PID);
+		return 0;
+	}
+
+	return -1;
+}
+
+/**
+  * @brief	Configures the DCMI/DMA to capture image from the OV9655 camera.
+  * @param	ImageFormat: Image format BMP or JPEG
+  * @param	BMPImageSize: BMP Image size  
+  * @retval None
+  */
+void OV9655_Config(ImageFormat_TypeDef ImageFormat)
+{
+	DCMI_InitTypeDef DCMI_InitStructure;
+	
+	/* DCMI configuration */ 
+	BUS_DCMI_Config(DCMI_PCKPolarity_Falling, DCMI_VSPolarity_High, DCMI_HSPolarity_High);
+	
+	switch (ImageFormat)
+	{
+		case BMP_QQVGA:
+			/* Configure the OV9655 camera and set the QQVGA mode */
+			OV9655_QQVGAConfig();
+			break;
+
+		case BMP_QVGA:
+			/* Configure the OV9655 camera and set set the QVGA mode */
+
+			OV9655_QVGAConfig();
+			break;
+
+		default:
+			/* Configure the OV9655 camera and set the QQVGA mode */
+			OV9655_QQVGAConfig();
+			break;
+		} 
+	return;
+}
+
+
+
 
 
 #endif

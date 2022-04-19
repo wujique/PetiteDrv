@@ -268,11 +268,14 @@ int gt9147_task(void)
 	u8 point_num;
 	u16 x,y;
 	DevI2cNode *node;
-	//if (Gt9147Gd >= 0) 
+	
+	if (Gt9147Gd <= 0) return 0; 
 
-	node = bus_i2c_open("VI2C1", 0x1);
+	/*  应该等待多少时间超时？等太久，会卡住board task
+		不等，会不会经常获取不到I2C,造成触摸屏失效？*/
+	node = bus_i2c_open("VI2C1", 2);
 	if (node ==NULL ) { 
-		//uart_printf("gt9147 open i2c err!\r\n");
+		uart_printf("gt9147 open i2c err!\r\n");
 		return -1;
 	}
 		reg[0] = GT9147_REG_GSTID>>8;
@@ -320,11 +323,16 @@ int gt9147_task(void)
 
 int gt9147_open(void)
 {
+	if (Gt9147Gd == 0)
+		Gt9147Gd = 1;
 	return 0;
 }
 
 int gt9147_close(void)
 {
+	if (Gt9147Gd == 1)
+		Gt9147Gd = 0;
+	
 	return 0;
 }
 

@@ -785,6 +785,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\mcu\stm32h7b0vb\mcu_i2s.c</FilePath>
             </File>
+            <File>
+              <FileName>mcu_i2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\mcu\stm32h7b0vb\mcu_i2c.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -882,6 +887,11 @@
               <FileName>drv_ov2640.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\driver\camera\drv_ov2640.c</FilePath>
+            </File>
+            <File>
+              <FileName>ov5640.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\driver\camera\ov5640.c</FilePath>
             </File>
           </Files>
         </Group>

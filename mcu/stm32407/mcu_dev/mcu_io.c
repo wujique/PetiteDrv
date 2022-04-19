@@ -169,4 +169,34 @@ u16 mcu_io_input_readport(MCU_PORT port)
 }
 
 
+void mcu_vi2c_io_config_out(MCU_PORT port, MCU_IO pin)
+{
+	GPIO_InitTypeDef GPIO_InitStructure;
+
+	if(port == NULL)
+		return;
+	
+	GPIO_InitStructure.GPIO_Pin = pin;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;//普通输出模式	
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;//推挽输出
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;//100MHz
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+	GPIO_Init((GPIO_TypeDef *)Stm32PortList[port], &GPIO_InitStructure);//初始化
+}
+
+void mcu_vi2c_io_config_in(MCU_PORT port, MCU_IO pin)
+{
+    GPIO_InitTypeDef GPIO_InitStructure;
+	
+	if(port == NULL)
+		return;
+	
+    GPIO_InitStructure.GPIO_Pin = pin;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;//输入模式  
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;//100MHz
+    //GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+    GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
+    GPIO_Init((GPIO_TypeDef *)Stm32PortList[port], &GPIO_InitStructure);//初始化  	
+}
+
 

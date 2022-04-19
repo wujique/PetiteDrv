@@ -17,6 +17,7 @@
 #define PC_PORT  MCU_UART_3 
 #define PC_PORT_STR "uart3"
 
+#define FSMC_LCD_ADDRESS      0x6C010000//DMA传输目的地址       LCD 地址
 
 /* 
 	本文件定义板设备情况。
@@ -96,6 +97,7 @@
 #endif
 
 /*-----------------------------------------------------------*/
+#define DEV_CAMERA_I2CBUS "VI2C0"
 #define DEV_WM8978_I2CBUS "VI2C1"
 #define DEV_HTU21D_I2CBUS "VI2C2"
 #define DEV_PTHCHO_UART "uart1"
@@ -221,6 +223,8 @@ EXTI15_10_IRQn 1 1
 */
 #define NVIC_PRE_PRI_EXTI15_10_IRQn	1
 #define NVIC_SUB_PRI_EXTI15_10_IRQn	1
+
+#define HAL_Delay Delay
 
 #endif
 

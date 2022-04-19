@@ -160,7 +160,7 @@ void MPU_Config(void)
   MPU_InitStruct.IsCacheable 			= MPU_ACCESS_CACHEABLE;
   MPU_InitStruct.IsShareable 			= MPU_ACCESS_NOT_SHAREABLE;
   
-  MPU_InitStruct.Number 				= MPU_REGION_NUMBER2;
+  MPU_InitStruct.Number 				= MPU_REGION_NUMBER1;
   MPU_InitStruct.TypeExtField 		= MPU_TEX_LEVEL0;
   MPU_InitStruct.SubRegionDisable 	= 0x00;
   MPU_InitStruct.DisableExec 			= MPU_INSTRUCTION_ACCESS_ENABLE;
@@ -213,12 +213,15 @@ int main(void)
   MX_OCTOSPI1_Init();
   //MX_UART4_Init();
   //MX_LTDC_Init();
+  
+	MX_DMA_Init();
+  
 	MX_DCMI_Init();
 	//MX_SAI2_Init();/* SAI接口会影响 OLED的I2C地址*/
   //MX_SDMMC1_SD_Init();
     //MX_SPI1_Init();
 
-  MX_DMA_Init();
+
   	  //MX_UART7_Init();
   //MX_DMA2D_Init();
   MX_RTC_Init();
@@ -966,7 +969,7 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pin = GPIO_PIN_8;
   GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
   GPIO_InitStruct.Alternate = GPIO_AF0_MCO;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 

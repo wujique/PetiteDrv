@@ -547,20 +547,16 @@ s32 test_camera(void)
 	//dev_lcd_put_string(emenulcd, FONT_SONGTI_1212, 1, 32, __FUNCTION__, BLACK);
 	//dev_lcd_update(emenulcd);
 	lcd = dev_lcd_open("tftlcd");
-	if(lcd == NULL)
-	{
+	if (lcd == NULL) {
 		wjq_test_showstr("open lcd err!");
 		wjq_wait_key(16);
-	}
-	else
-	{
-
-		if(-1 == dev_camera_open())
-		{
+	} else {
+		if (-1 == camera_open()) {
 			wjq_log(LOG_DEBUG, "open camera err\r\n");
 			return -1;
 		}
-		dev_camera_show(lcd);
+		
+		board_camera_show(lcd);
 		
 		wjq_wait_key(16);
 		dev_camera_close();

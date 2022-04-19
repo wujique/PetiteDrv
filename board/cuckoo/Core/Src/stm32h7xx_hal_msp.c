@@ -210,18 +210,23 @@ void HAL_DCMI_MspInit(DCMI_HandleTypeDef* hdcmi)
     hdma_dcmi_pssi.Init.Direction = DMA_PERIPH_TO_MEMORY;
     hdma_dcmi_pssi.Init.PeriphInc = DMA_PINC_DISABLE;
     hdma_dcmi_pssi.Init.MemInc = DMA_MINC_ENABLE;
+	
     hdma_dcmi_pssi.Init.PeriphDataAlignment = DMA_PDATAALIGN_WORD;
     hdma_dcmi_pssi.Init.MemDataAlignment = DMA_MDATAALIGN_WORD;
-    hdma_dcmi_pssi.Init.Mode = DMA_NORMAL;
+	
+    hdma_dcmi_pssi.Init.Mode = DMA_CIRCULAR;
     hdma_dcmi_pssi.Init.Priority = DMA_PRIORITY_HIGH;
-    hdma_dcmi_pssi.Init.FIFOMode = DMA_FIFOMODE_ENABLE;
-    hdma_dcmi_pssi.Init.FIFOThreshold = DMA_FIFO_THRESHOLD_HALFFULL;
+	
+    hdma_dcmi_pssi.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
+    hdma_dcmi_pssi.Init.FIFOThreshold = DMA_FIFO_THRESHOLD_HALFFULL;//
+	
     hdma_dcmi_pssi.Init.MemBurst = DMA_MBURST_SINGLE;
     hdma_dcmi_pssi.Init.PeriphBurst = DMA_PBURST_SINGLE;
     if (HAL_DMA_Init(&hdma_dcmi_pssi) != HAL_OK)
     {
       Error_Handler();
     }
+
 
     /* Several peripheral DMA handle pointers point to the same DMA handle.
      Be aware that there is only one channel to perform all the requested DMAs. */

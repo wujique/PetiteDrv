@@ -3,7 +3,7 @@
 
 #include "mcu_timer.h"
 
-extern const GPIO_TypeDef *Stm32PortList[MCU_PORT_MAX];
+extern const GPIO_TypeDef *Stm32H7B0PortList[MCU_PORT_MAX];
 
 extern void mcu_io_init(void);
 extern void mcu_io_config_in(MCU_PORT port, MCU_IO pin);

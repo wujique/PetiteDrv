@@ -204,15 +204,7 @@ typedef struct
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
 
-void OV9655_HW_Init(void);
-void OV9655_Reset(void);
-void OV9655_ReadID(OV9655_IDTypeDef* OV9655ID);
-void OV9655_Init(ImageFormat_TypeDef ImageFormat);
-void OV9655_QQVGAConfig(void);
-void OV9655_QVGAConfig(void);
-void OV9655_BrightnessConfig(uint8_t Brightness);
-uint8_t OV9655_WriteReg(uint16_t Addr, uint8_t Data);
-uint8_t OV9655_ReadReg(uint16_t Addr);
+
 
 #endif /* __DCMI_OV9655_H */
 

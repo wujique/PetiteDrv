@@ -22,7 +22,7 @@
 */
 
 /*--------------------- 任务定定义 ------------------------------*/
-#define CUCKOO_TASK_STK_SIZE (1024*2)
+#define CUCKOO_TASK_STK_SIZE (1024*4)
 #define CUCKOO_TASK_PRIO	1
 
 #define START_TASK_STK_SIZE (2048)
@@ -39,11 +39,10 @@
 /*	字体类型定义 */
 #define FONT_LIST_MAX 4	
 
-
 #define DEV_WM8978_I2CBUS "VI2C1"
+#define DEV_CAMERA_I2CBUS "VI2C1"
 
-
-/*         rgb lcd 定义       */
+/*    rgb lcd 定义       */
 //#define ATK4342 1
 #define WKS43WQ 1
 

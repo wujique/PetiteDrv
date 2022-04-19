@@ -28,8 +28,8 @@
 #define DRV_HCOC_MODULE			0
 
 /* 摄像头功能 */
-#define DRV_CAMERA_MODULE		0
-#define DRV_CAMERA_OV2640 		0
+#define DRV_CAMERA_MODULE		1
+#define DRV_CAMERA_OV2640 		1
 #define DRV_CAMERA_OV9655	 	0
 
 /* 	用宏控制哪些LCD驱动参加编译*/

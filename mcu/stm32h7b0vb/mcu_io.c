@@ -25,7 +25,7 @@
 #include "log.h"
 #include "mcu_io.h"
 
-const GPIO_TypeDef *Stm32H750PortList[MCU_PORT_MAX] = {NULL, GPIOA,  GPIOB, GPIOC, GPIOD,
+const GPIO_TypeDef *Stm32H7B0PortList[MCU_PORT_MAX] = {NULL, GPIOA,  GPIOB, GPIOC, GPIOD,
 									GPIOE, GPIOF, GPIOG};
 
 /*
@@ -83,7 +83,7 @@ void mcu_io_config_in(MCU_PORT port, MCU_IO pin)
   	GPIO_InitStruct.Pin = pin;
   	GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   	GPIO_InitStruct.Pull = GPIO_PULLUP;
-  	HAL_GPIO_Init((GPIO_TypeDef *)Stm32H750PortList[port], &GPIO_InitStruct);
+  	HAL_GPIO_Init((GPIO_TypeDef *)Stm32H7B0PortList[port], &GPIO_InitStruct);
 }
 
 
@@ -91,14 +91,13 @@ void mcu_io_config_out(MCU_PORT port, MCU_IO pin)
 {
 
 	GPIO_InitTypeDef GPIO_InitStruct = {0};
-	if(port == NULL)
-		return;
+	if(port == NULL) return;
 
 	GPIO_InitStruct.Pin = pin;
   	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   	GPIO_InitStruct.Pull = GPIO_PULLUP;
   	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-  	HAL_GPIO_Init((GPIO_TypeDef *)Stm32H750PortList[port], &GPIO_InitStruct);
+  	HAL_GPIO_Init((GPIO_TypeDef *)Stm32H7B0PortList[port], &GPIO_InitStruct);
 
 }
 
@@ -125,7 +124,7 @@ void mcu_io_output_setbit(MCU_PORT port, MCU_IO pin)
 	if(port == NULL)
 		return;
 	
-	HAL_GPIO_WritePin((GPIO_TypeDef *)Stm32H750PortList[port], pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin((GPIO_TypeDef *)Stm32H7B0PortList[port], pin, GPIO_PIN_SET);
 }
 
 void mcu_io_output_resetbit(MCU_PORT port, MCU_IO pin)
@@ -133,7 +132,7 @@ void mcu_io_output_resetbit(MCU_PORT port, MCU_IO pin)
 	if(port == NULL)
 		return;
 	
-	HAL_GPIO_WritePin((GPIO_TypeDef *)Stm32H750PortList[port], pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin((GPIO_TypeDef *)Stm32H7B0PortList[port], pin, GPIO_PIN_RESET);
 }		
 
 u8 mcu_io_input_readbit(MCU_PORT port, MCU_IO pin)
@@ -141,7 +140,7 @@ u8 mcu_io_input_readbit(MCU_PORT port, MCU_IO pin)
 	if(port == NULL)
 		return GPIO_PIN_SET;
 	
-	return HAL_GPIO_ReadPin((GPIO_TypeDef *)Stm32H750PortList[port], pin);
+	return HAL_GPIO_ReadPin((GPIO_TypeDef *)Stm32H7B0PortList[port], pin);
 }
 
 u16 mcu_io_input_readport(MCU_PORT port)

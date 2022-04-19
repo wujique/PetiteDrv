@@ -34,6 +34,7 @@ void cap_touch_task_idle(void)
 }
 
 void (*cap_touch_task)(void) = cap_touch_task_idle;
+//void (*cap_touch_task)(void) = NULL;
 
 
 /*

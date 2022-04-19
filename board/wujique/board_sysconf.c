@@ -27,6 +27,19 @@
 /*-------------------------------
 	I2C控制器
 -------------------------------*/
+const DevI2c DevVi2c0={
+		.pnode={
+				.name = "VI2C0",
+				.type = BUS_I2C_V,
+				},
+		
+		.sclport = MCU_PORT_F,
+		.sclpin = MCU_IO_1,
+
+		.sdaport = MCU_PORT_F,
+		.sdapin = MCU_IO_0,
+		};
+
 /*
 	IO口模拟的I2C1
 	WM8978、TEA5767、外扩接口的I2C使用
@@ -561,6 +574,8 @@ s32 petite_dev_register(void)
 	wjq_log(LOG_DEBUG, "[register] petite_dev_register!\r\n");
 	
 	/*注册I2C总线*/
+	bus_i2c_register(&DevVi2c0);
+	
 	bus_i2c_register(&DevVi2c1);
 			dev_lcdbus_register(&BusLcdI2C1);
 					dev_lcd_register(&DevLcdOled1);

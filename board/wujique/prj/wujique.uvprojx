@@ -336,7 +336,7 @@
               <MiscControls>--locale=english</MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\app;..\..\wujique;..\usb\inc;..\eth\inc;..\..\..\driver;..\..\..\driver\lcd;..\..\..\driver\cdev;..\..\..\mcu\stm32407\mcu_dev;..\..\..\mcu\stm32407\StLib\STM32F4xx_StdPeriph_Driver\inc;..\..\..\panel;..\..\..\Petite;..\..\..\Utilities\FatFs;..\eth\inc;..\..\..\Utilities\cmd\ubootcmd;..\..\..\Utilities\spiffs-0.3.7\src;..\..\..\Utilities\littlefs-master;..\usb\inc;..\..\..\mcu\stm32407;..\..\..\driver\camera;..\..\..\mcu\stm32407\StLib\CMSIS\Include;..\..\..\driver\touch;..\..\..\Utilities\FreeRTOS\Source\include;..\..\..\Utilities\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\..\..\Utilities\FreeRTOS\Source\CMSIS_RTOS_V2;..\..\..\driver\touch\rtp\tslib;..\..\..\driver\touch\rtp\tslib\tests;..\..\..\driver\sound;..\..\..\driver\touch;..\..\..\driver\touch\rtp</IncludePath>
+              <IncludePath>..\..\..\app;..\..\wujique;..\usb\inc;..\eth\inc;..\..\..\driver;..\..\..\driver\lcd;..\..\..\driver\cdev;..\..\..\mcu\stm32407\mcu_dev;..\..\..\mcu\stm32407\StLib\STM32F4xx_StdPeriph_Driver\inc;..\..\..\panel;..\..\..\Petite;..\..\..\Utilities\FatFs;..\eth\inc;..\..\..\Utilities\cmd\ubootcmd;..\..\..\Utilities\spiffs-0.3.7\src;..\..\..\Utilities\littlefs-master;..\usb\inc;..\..\..\mcu\stm32407;..\..\..\driver\camera;..\..\..\mcu\stm32407\StLib\CMSIS\Include;..\..\..\driver\touch;..\..\..\Utilities\FreeRTOS\Source\include;..\..\..\Utilities\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\..\..\Utilities\FreeRTOS\Source\CMSIS_RTOS_V2;..\..\..\driver\touch\rtp\tslib;..\..\..\driver\touch\rtp\tslib\tests;..\..\..\driver\sound;..\..\..\driver\touch;..\..\..\driver\touch\rtp;..\..\..\Petite\bus</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -820,6 +820,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\driver\camera\drv_ov9655.c</FilePath>
             </File>
+            <File>
+              <FileName>ov5640.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\driver\camera\ov5640.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1194,6 +1199,11 @@
               <FileName>sd_fat.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\sd_fat.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f407_hal_msp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\stm32f407_hal_msp.c</FilePath>
             </File>
           </Files>
         </Group>

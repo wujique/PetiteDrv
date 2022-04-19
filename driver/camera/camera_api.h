@@ -35,19 +35,14 @@
 #include "mcu.h"
 
 /* Exported constants --------------------------------------------------------*/
-#define DCMI_DR_ADDRESS       0x50050028//DMA传输DCMI的地址
-#define FSMC_LCD_ADDRESS      0x6C010000//DMA传输目的地址       LCD 地址
-#define NOKEY                 0
-#define SEL                   1
-#define UP                    2
-#define DOWN                  3
 
 /* Exported types ------------------------------------------------------------*/
 /* Camera devices enumeration */
 typedef enum   
 {
   OV9655_CAMERA            =   0x00,	 /* Use OV9655 Camera */
-  OV2640_CAMERA            =   0x01      /* Use OV2640 Camera */
+  OV2640_CAMERA            =   0x01,      /* Use OV2640 Camera */
+  OV5640_CAMERA            =   0x02 
 }Camera_TypeDef;
 
 /* Image Sizes enumeration */
@@ -61,11 +56,18 @@ typedef enum
   JPEG_352x288          =   0x05	    /* JPEG Image 352x288 Size */
 }ImageFormat_TypeDef;
 
-/* Exported macro ------------------------------------------------------------*/
-/* Exported functions ------------------------------------------------------- */
-extern s32 dev_camera_init(void);
-extern s32 dev_camera_open(void);
-extern s32 dev_camera_close(void);
+
+
+typedef struct{
+	char *name;
+
+	/* 驱动 */
+	int (*init)(void);
+
+	/* bus *//* 理论上dev要和bus分开*/
+	
+}DevCamera;
+
 #endif /* __CAMERA_API_H */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

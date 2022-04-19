@@ -49,9 +49,6 @@ typedef struct
    The period of the delay will depend on the system operating frequency. The following
    value has been set for system running at 168 MHz. */
 
-#define OV2640_DEVICE_WRITE_ADDRESS    0x60
-#define OV2640_DEVICE_READ_ADDRESS     0x61
-
 /* OV2640 Registers definition when DSP bank selected (0xFF = 0x00) */
 #define OV2640_DSP_R_BYPASS     0x05
 #define OV2640_DSP_Qs           0x44
@@ -139,19 +136,6 @@ typedef struct
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
 
-void OV2640_HW_Init(void);
-void OV2640_Reset(void);
-void OV2640_ReadID(OV2640_IDTypeDef *OV2640ID);
-void OV2640_Init(ImageFormat_TypeDef ImageFormat);
-void OV2640_QQVGAConfig(void);
-void OV2640_QVGAConfig(void);
-void OV2640_JPEGConfig(ImageFormat_TypeDef ImageFormat);
-void OV2640_BrightnessConfig(uint8_t Brightness);
-void OV2640_ContrastConfig(uint8_t value1, uint8_t value2);
-void OV2640_BandWConfig(uint8_t BlackWhite);
-void OV2640_ColorEffectsConfig(uint8_t value1, uint8_t value2);
-uint8_t OV2640_WriteReg(uint16_t Addr, uint8_t Data);
-uint8_t OV2640_ReadReg(uint16_t Addr);
 
 #endif /* __DCMI_OV2640_H */
 

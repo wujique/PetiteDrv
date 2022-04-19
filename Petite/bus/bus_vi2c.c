@@ -35,7 +35,7 @@
  */
 static void bus_vi2c_delay(void)
 {
-    volatile u32 i = 50;
+    volatile u32 i = 200;
 
     for(;i>0;i--);
 }
@@ -49,7 +49,7 @@ static void bus_vi2c_delay(void)
  */
 void bus_vi2c_sda_input(DevI2c *dev)
 {
-	mcu_io_config_in(dev->sdaport, dev->sdapin);
+	mcu_vi2c_io_config_in(dev->sdaport, dev->sdapin);
 }
 /**
  *@brief:      mcu_i2c_sda_output
@@ -60,7 +60,7 @@ void bus_vi2c_sda_input(DevI2c *dev)
  */
 void bus_vi2c_sda_output(DevI2c *dev)
 {
-	mcu_io_config_out(dev->sdaport, dev->sdapin);
+	mcu_vi2c_io_config_out(dev->sdaport, dev->sdapin);
 }
 /**
  *@brief:      mcu_i2c_readsda
@@ -286,7 +286,8 @@ s32 bus_vi2c_init(DevI2c * dev)
 {
 	/*初始化IO口状态*/
 	mcu_io_config_out(dev->sclport, dev->sclpin);
-	mcu_io_config_out(dev->sdaport, dev->sdapin);
+	
+	mcu_vi2c_io_config_out(dev->sdaport, dev->sdapin);
 
 	mcu_io_output_setbit(dev->sdaport, dev->sdapin);
 	mcu_io_output_setbit(dev->sclport, dev->sclpin); 
