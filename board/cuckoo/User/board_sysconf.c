@@ -77,8 +77,42 @@ const DevLcd DevLcdOled1={
 	//.buspra = &OledLcdI2cPra,
 };
 
+/*
+	VSPI1，核心板上的LCD接口中的4根IO模拟SPI，
+	用于XPT2046方案触摸处理，可读可写。
+*/					
+const DevSpi DevVSpi1IO={
+		.pnode={
+				.name = "VSPI1",
+				.type = BUS_SPI_V,
+			},
+		/*clk*/
+		.clkport = MCU_PORT_C,
+		.clkpin = MCU_IO_4,
+		/*mosi*/
+		.mosiport = MCU_PORT_A,
+		.mosipin = MCU_IO_5,
+		/*miso*/
+		.misoport = MCU_PORT_D,
+		.misopin = MCU_IO_9,
+	};
+/* 
+	LCD座子中的触摸屏接口, IO模拟SPI
+*/
+const DevSpiCh DevVSpi1CH1={
+		.pnode={
+				.name = "VSPI1_CH1",
+				.type = BUS_SPI_CH,
+			},
+		
+		.spi = "VSPI1",
+		
+		.csport = MCU_PORT_D,
+		.cspin = MCU_IO_14,
+		
+	};
 
-/* 触摸芯片设备定义 */
+
 #if 0
 const Devtp BusLcdI2C1={
 	.pnode={
@@ -246,7 +280,9 @@ s32 petite_dev_register(void)
 						//dev_lcd_register(&DevLcdSpiOled);
 
 			//mcu_spich_register(&DevSpi3CH4);
-	
+			
+	bus_spi_register(&DevVSpi1IO);			
+			bus_spich_register(&DevVSpi1CH1);
 	/*测试1.33寸IPS屏幕采用*/
 	#if 0
 	mcu_spi_register(&DevVspi3IO);

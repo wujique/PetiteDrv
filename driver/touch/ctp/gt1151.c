@@ -242,7 +242,8 @@ int gt1151_task(void)
 	u8 point_num;
 	u16 x,y;
 	DevI2cNode *node;
-	//if (Gt1151Gd >= 0) 
+	
+	if (Gt1151Gd > 0) 
 	{
 	node = bus_i2c_open("VI2C1", 1);
 	if (node ==NULL ) { 
@@ -280,7 +281,7 @@ int gt1151_task(void)
 				y = tmp[3]<<8;
 				y += tmp[2];
 
-				//uart_printf("tp:%d, x=%d, y=%d\r\n", point_num+1, x, y);
+				uart_printf("tp:%d, x=%d, y=%d\r\n", point_num+1, x, y);
 				/* this is a demo, you can fill the xy into a buf,
 					the app read the buf get the point.  */
 				ctp_fill_buf(x, y);
@@ -295,11 +296,15 @@ int gt1151_task(void)
 
 int gt1151_open(void)
 {
+	if (Gt1151Gd == 0)
+		Gt1151Gd = 1;
 	return 0;
 }
 
 int gt1151_close(void)
 {
+	if (Gt1151Gd == 1)
+		Gt1151Gd = 0;
 	return 0;
 }
 

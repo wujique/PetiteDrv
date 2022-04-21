@@ -233,7 +233,7 @@ s32 board_init(void)
 	DCMI_PWDN_RESET_Init();
 	
 	camera_init();
-	test_camera();
+	//test_camera();
 	/* 要实现一个声卡框架 
 		兼容多种声音播放方式 */
 	dev_tea5767_init(DEV_TEA5767_I2CBUS);
@@ -261,7 +261,7 @@ s32 board_init(void)
 /*
 	低优先级轮训任务
 */
-extern void (*cap_touch_task)(void);
+extern void (*tp_task)(void);
 
 void board_low_task(int tick)
 {
@@ -269,7 +269,10 @@ void board_low_task(int tick)
 	
 	dev_key_scan();
 	
-	//cap_touch_task();
+	if (tp_task != NULL) {
+			//wjq_log(LOG_DEBUG, "1");
+			tp_task();
+		}
 	
 	#if (SYS_USE_KEYPAD == 1)
 	dev_keypad_scan();
@@ -281,6 +284,7 @@ void board_low_task(int tick)
 	
 	dev_touchkey_task();
 
+	
 }
 
 

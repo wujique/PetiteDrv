@@ -790,6 +790,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\mcu\stm32h7b0vb\mcu_i2c.c</FilePath>
             </File>
+            <File>
+              <FileName>mcu_timer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\mcu\stm32h7b0vb\mcu_timer.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -857,6 +862,11 @@
               <FileName>testutils.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\driver\touch\rtp\tslib\tests\testutils.c</FilePath>
+            </File>
+            <File>
+              <FileName>xpt2046.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\driver\touch\rtp\xpt2046.c</FilePath>
             </File>
           </Files>
         </Group>

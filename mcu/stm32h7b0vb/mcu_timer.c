@@ -270,3 +270,8 @@ s32 mcu_timer_test(void)
 }
 
 
+/*	delay延时基准 未测试
+	*/
+uint32_t McuDelayUs = 10;
+
+

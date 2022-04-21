@@ -33,7 +33,7 @@ void cap_touch_task_idle(void)
 	return;
 }
 
-void (*cap_touch_task)(void) = cap_touch_task_idle;
+void (*tp_task)(void) = cap_touch_task_idle;
 //void (*cap_touch_task)(void) = NULL;
 
 
@@ -163,10 +163,11 @@ int rtp_get_point(TouchPoint *rtpsamp, int nr)
 	while(i < nr) {
 		res = ts_read(ts, &samp, 1);
 		if (res == 1) {
+			
 			p->pressure = samp.pressure;
 			p->x = samp.x;
 			p->y = samp.y;
-			
+			//uart_printf("[%d %d] ", samp.x, samp.y);
 			p++;
 			i++;
 		} else return i;
@@ -192,7 +193,7 @@ int tp_init(const TouchDev *TpDev)
 	uart_printf("init tp:%s\r\n", TpDev->name);
 	res = TpDev->init();
 	if (res == 0) {
-		cap_touch_task = TpDev->task;
+		tp_task = TpDev->task;
 		gdTpDev = TpDev;
 		return 0;
 	}

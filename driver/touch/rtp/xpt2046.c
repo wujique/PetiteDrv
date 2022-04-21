@@ -84,7 +84,9 @@ s32 dev_xpt2046_init(void)
 	DevXpt2046Gd = -1;
 	
 	wjq_log(LOG_INFO, ">-----------xpt2046 init!\r\n");
+	#ifdef XPT2046_TIMER
 	mcu_timer_init(XPT2046_TIMER);
+	#endif
 	#else
 	wjq_log(LOG_INFO, ">-----------xpt2046 not init!\r\n");
 
@@ -107,9 +109,12 @@ s32 dev_xpt2046_open(void)
 		return -1;
 
 	wjq_log(LOG_INFO, ">--------------xpt2046 open!\r\n");
-
+	
+	#ifdef XPT2046_TIMER
 	mcu_timer_config(XPT2046_TIMER, MCU_TIMER_10US, 100, dev_xpt2046_task, MCU_TIMER_RE);
 	mcu_timer_start(XPT2046_TIMER);
+	#endif
+	
 	DevXpt2046Gd = 0;
 	return 0;
 }
@@ -126,7 +131,9 @@ s32 dev_xpt2046_close(void)
 	if(DevXpt2046Gd != 0)
 		return -1;
 	
+	#ifdef XPT2046_TIMER
 	mcu_timer_stop(XPT2046_TIMER);
+	#endif
 	
 	DevXpt2046Gd = -1;
 	return 0;
@@ -218,7 +225,7 @@ void dev_xpt2046_task(void)
 		tss.x = sample_x;
 		tss.y = sample_y;
 		rtp_fill_buff(&tss,1);
-		//uart_printf("%d,%d,%d\r\n", tss.pressure, tss.x, tss.y);
+		//uart_printf("(%d,%d,%d) ", tss.pressure, tss.x, tss.y);
 		pendownup = 0;
 	} else if(pre_x + DEV_XPT2046_PENUP_GATE < pre_y) {
 		//没压力，不进行XY轴检测
@@ -239,7 +246,7 @@ void dev_xpt2046_task(void)
 }
 
 
-void xpt2046_drv_task(void)
+void xpt2046_task(void)
 {
 	return;
 }
@@ -252,7 +259,12 @@ const TouchDev RtpXpt2046={
 	.init = dev_xpt2046_init,
 	.open = dev_xpt2046_open,
 	.close = dev_xpt2046_close,
-	.task = xpt2046_drv_task,
+	
+	#ifdef XPT2046_TIMER
+	.task = xpt2046_task,
+	#else
+	.task = dev_xpt2046_task,
+	#endif
 };
 
 

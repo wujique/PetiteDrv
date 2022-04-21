@@ -26,6 +26,8 @@
 
 #define MCU_I2C_TIMEOUT 250
 
+extern uint32_t McuDelayUs;
+
 /**
  *@brief:      mcu_i2c_delay
  *@details:    I2C信号延时函数

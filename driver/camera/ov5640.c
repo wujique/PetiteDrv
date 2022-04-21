@@ -377,7 +377,7 @@ uint8_t OV5640_OutSize_Set(uint16_t offx,uint16_t offy,uint16_t width,uint16_t h
         OV5640_WriteReg(0X3212,0Xa3);
 		OV5640_I2C_close();
 		/*此处不加延时就有问题，具体问题没高清楚 */
-		HAL_Delay(5);
+		HAL_Delay(20);
 
         return 0; 
 }

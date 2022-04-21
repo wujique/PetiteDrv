@@ -42,6 +42,10 @@
 #define DEV_WM8978_I2CBUS "VI2C1"
 #define DEV_CAMERA_I2CBUS "VI2C1"
 
+#define XPT2046_SPI "VSPI1_CH1"
+#define XPT2046_SPI_KHZ	 2000
+
+
 /*    rgb lcd 定义       */
 //#define ATK4342 1
 #define WKS43WQ 1

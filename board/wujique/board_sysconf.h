@@ -40,7 +40,7 @@
 #define SYS_USE_VSPI1	 1	
 #endif
 #define XPT2046_SPI "VSPI1_CH1"
-#define XPT2046_SPI_KHZ	 2000
+#define XPT2046_SPI_KHZ	 1000
 #define XPT2046_TIMER MCU_TIMER_7
 #if 0
 /*	如果使用硬件SPI3_CH4,

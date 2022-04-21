@@ -13,6 +13,7 @@
 
 extern const TouchDev CtpGt9147;
 extern const TouchDev CtpGt1151;
+extern const TouchDev RtpXpt2046;
 
 extern void DCMI_PWDN_RESET_Init(void);
 /*
@@ -20,7 +21,7 @@ extern void DCMI_PWDN_RESET_Init(void);
 */
 s32 board_init(void)
 {
-	int res;
+	int res= -1;
 	
 	wjq_log(LOG_DEBUG, "[   board] cuckoo other dev init!\r\n");
 
@@ -30,15 +31,20 @@ s32 board_init(void)
     LCD_Config();
 
 	//dev_wm8978_init();
+	
 	/*  触摸屏初始化 */
+	res= -1;
+	#if 0
 	res = tp_init(&CtpGt9147);
 	/**/
 	if (res == -1) {
 		res = tp_init(&CtpGt1151);	
 	}
+	#endif
 	/**/
 	if (res == -1) {
 		/*  初始化电阻屏 */
+		tp_init(&RtpXpt2046);
 	}
 	/* 摄像头初始化 */
 	DCMI_PWDN_RESET_Init();
@@ -67,7 +73,7 @@ s32 board_init(void)
 	2 临时变量不要使用太多，否则会任务栈溢出。
 */
 extern void fun_sound_task(void);
-extern void (*cap_touch_task)(void);
+extern void (*tp_task)(void);
 
 uint16_t touch_task_cnt = 0;
 void board_low_task(uint8_t tick)
@@ -77,9 +83,9 @@ void board_low_task(uint8_t tick)
 	touch_task_cnt += tick;
 	if (touch_task_cnt >= 15) {
 		touch_task_cnt = 0;
-		if (cap_touch_task != NULL) {
+		if (tp_task != NULL) {
 			//wjq_log(LOG_DEBUG, "1");
-			cap_touch_task();
+			tp_task();
 		}
 	}
 
@@ -152,7 +158,7 @@ extern uint32_t RGB565_480x272[LCD_WIDTH*LCD_HEIGHT/2];
 
 void camera_test(void)
 {
-#if 1
+#if 0
 	OV5640_RGB565_Mode();	
 	OV5640_OutSize_Set(4, 0, LCD_WIDTH , LCD_HEIGHT); 
 	OV5640_SET_SCPLL(2);
