@@ -26,7 +26,7 @@ s32 board_init(void)
 	wjq_log(LOG_DEBUG, "[   board] cuckoo other dev init!\r\n");
 
 	petite_dev_register();
-
+	
     lcd_reset();
     LCD_Config();
 
@@ -34,7 +34,7 @@ s32 board_init(void)
 	
 	/*  触摸屏初始化 */
 	res= -1;
-	#if 0
+	#if 1
 	res = tp_init(&CtpGt9147);
 	/**/
 	if (res == -1) {
@@ -44,7 +44,7 @@ s32 board_init(void)
 	/**/
 	if (res == -1) {
 		/*  初始化电阻屏 */
-		tp_init(&RtpXpt2046);
+		//tp_init(&RtpXpt2046);
 	}
 	/* 摄像头初始化 */
 	DCMI_PWDN_RESET_Init();
@@ -158,8 +158,8 @@ extern uint32_t RGB565_480x272[LCD_WIDTH*LCD_HEIGHT/2];
 
 void camera_test(void)
 {
-#if 0
-	OV5640_RGB565_Mode();	
+#if 1
+	//OV5640_RGB565_Mode();	
 	OV5640_OutSize_Set(4, 0, LCD_WIDTH , LCD_HEIGHT); 
 	OV5640_SET_SCPLL(2);
 #else

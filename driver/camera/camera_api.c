@@ -109,7 +109,7 @@ s32 camera_init(void)
 		res = OV5640_Init();
 		if (res == 0) {
 			uart_printf("OV5640 init!\r\n");
-			Camera = OV2640_CAMERA;
+			Camera = OV5640_CAMERA;
 		}
 	}
 
@@ -150,7 +150,7 @@ s32 camera_open(void)
  *@param[out]  无
  *@retval:	   
  */
-s32 dev_camera_close(void)
+s32 camera_close(void)
 {
 	if(CameraGd!= 0)
 		return -1;
@@ -160,6 +160,20 @@ s32 dev_camera_close(void)
 	return 0;
 }
 
+// Flash Lamp
+//  sw:  0: off
+//       1:  on
+void camera_Flash_Lamp(uint8_t sw)
+{
+	if ( Camera == OV5640_CAMERA ){
+		OV5640_Flash_Lamp(sw);
+	} else {
+		if (sw == 1)
+			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_6, GPIO_PIN_SET);
+		else
+			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_6, GPIO_PIN_RESET);
+	}
+}
 
 
 /*--------------------------------------------------------------*/

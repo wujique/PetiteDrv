@@ -89,13 +89,13 @@ void cuckoo_7b0_test(void)
 	
 	uint32_t tickstart,tmp;
   	uint32_t a,b;
-	
+	uint8_t lampsta = 0;
 	wjq_log(LOG_DEBUG,"run app\r\n");
 
 	sd_fatfs_init();
 	/* 将SD卡文件系统挂载到VFS上 */
 	vfs_add_node(&SdFatFs);
-	
+
 	#if 0
 	wjq_log(LOG_FUN, "dev_i2coledlcd_test\r\n");
 	LcdOledI2C = dev_lcd_open("i2coledlcd");
@@ -158,8 +158,8 @@ void cuckoo_7b0_test(void)
 	tp_open();
 
 	while(1) {
-		
-		osDelay(5);
+		/* 鎵цdelay锛岀數娴佸30ma锛屼负鍟ワ紵*/
+		//osDelay(5);
 		
 		/* lvgl */
 		//lv_task_handler();
@@ -167,9 +167,16 @@ void cuckoo_7b0_test(void)
 
 		a++;
 
-		if (a % 1000 == 0) {	
+		if (a % 200 == 0) {	
 			//cpu_temp();
 			//cpu_rtc();
+
+			/* 闪光灯 */
+			//camera_Flash_Lamp(lampsta);
+			//if (lampsta == 0 ) lampsta = 1;
+			//else lampsta = 0;
+
+			//OV5640_Auto_Focus();
 		}
 		
 		if (a % 100 == 0) {

@@ -116,7 +116,16 @@ int OV5640_Init(void)
 	OV5640_Flash_Lamp(1);
 	HAL_Delay(50); 
 	OV5640_Flash_Lamp(0);        
-               
+
+	OV5640_RGB565_Mode();	
+	OV5640_Focus_Init(); 	
+	OV5640_Light_Mode(0);	   //set auto
+	OV5640_Color_Saturation(3); //default
+	OV5640_Brightness(4);	//default
+	OV5640_Contrast(3);     //default
+	OV5640_Sharpness(33);	//set auto
+	OV5640_Auto_Focus();
+	
 	return 0;
 }  
 
@@ -152,7 +161,7 @@ const static uint8_t OV5640_EXPOSURE_TBL[7][6]=
     0x60,0x58,0xa0,0x60,0x58,0x20,//+3    
 };
 
-//exposure: 0 - 6,
+//exposure: 0 - 6, 快门
 void OV5640_Exposure(uint8_t exposure)
 {
 	OV5640_I2C_open();
@@ -381,6 +390,8 @@ uint8_t OV5640_OutSize_Set(uint16_t offx,uint16_t offy,uint16_t width,uint16_t h
 
         return 0; 
 }
+
+uint8_t FoucusInit = 0;
 
 uint8_t OV5640_Focus_Init(void)
 { 

@@ -37,7 +37,7 @@ extern uint32_t McuDelayUs;
  */
 static void bus_vi2c_delay(void)
 {
-    volatile u32 i = 200;
+    volatile u32 i = 1000;
 
     for(;i>0;i--);
 }
@@ -295,6 +295,17 @@ s32 bus_vi2c_init(DevI2c * dev)
 	mcu_io_output_setbit(dev->sclport, dev->sclpin); 
 	return 0;
 }
+
+s32 bus_vi2c_open()
+{
+
+}
+
+s32 bus_vi2c_close()
+{
+
+}
+
 /**
  *@brief:      mcu_i2c_transfer
  *@details:    中间无重新开始位的传输流程
@@ -453,6 +464,7 @@ s32 mcu_vi2c_transfer_reg(DevI2c *dev, u8 addr, u8* reg, u8 reglen, u8 rw, u8* d
 错误方式读寄存器：
 	Start+0x61+寄存器ID+Stop  Start+0x61 + 所读数据+Stop
 */
+#if 0
 uint8_t mcu_sccb_writereg(DevI2c *dev, uint8_t DeviceAddr, uint16_t Addr, uint8_t Data)
 {
 
@@ -490,4 +502,6 @@ uint8_t mcu_sccb_readreg(DevI2c *dev, uint8_t DeviceAddr, uint16_t Addr)
 
 	return ch;
 }
+#endif
+
 

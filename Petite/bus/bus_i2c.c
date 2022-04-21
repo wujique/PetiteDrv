@@ -98,7 +98,7 @@ s32 bus_i2c_register(const DevI2c * dev)
  *@param[out]  无
  *@retval:     返回设备节点
  */
-DevI2cNode *bus_i2c_open(char *name, uint32_t wait)
+DevI2cNode *bus_i2c_open (char *name, uint32_t wait)
 {
 
 	DevI2cNode *node;
@@ -131,6 +131,8 @@ DevI2cNode *bus_i2c_open(char *name, uint32_t wait)
 		if ( osOK != res) {
 			//BUSI2C_DEBUG(LOG_INFO, "fail ");
 			node = NULL;
+		} else {
+			//node->clkkhz = 	kHZ;
 		}	
 	}
 	//BUSI2C_DEBUG(LOG_INFO, "open suc\r\n ");

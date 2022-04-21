@@ -80,7 +80,11 @@ const DevLcd DevLcdOled1={
 /*
 	VSPI1，核心板上的LCD接口中的4根IO模拟SPI，
 	用于XPT2046方案触摸处理，可读可写。
-*/					
+	在cuckoo上，SPI方案和I2C接口复用，
+	其中I2C用于CTP，CAMERA，I2S，OLED等。
+	因此，XPT2046只用来是LCD，实际上不用。
+*/
+#if 0
 const DevSpi DevVSpi1IO={
 		.pnode={
 				.name = "VSPI1",
@@ -111,7 +115,7 @@ const DevSpiCh DevVSpi1CH1={
 		.cspin = MCU_IO_14,
 		
 	};
-
+#endif
 
 #if 0
 const Devtp BusLcdI2C1={
@@ -280,9 +284,10 @@ s32 petite_dev_register(void)
 						//dev_lcd_register(&DevLcdSpiOled);
 
 			//mcu_spich_register(&DevSpi3CH4);
-			
+	/*		
 	bus_spi_register(&DevVSpi1IO);			
 			bus_spich_register(&DevVSpi1CH1);
+			*/
 	/*测试1.33寸IPS屏幕采用*/
 	#if 0
 	mcu_spi_register(&DevVspi3IO);

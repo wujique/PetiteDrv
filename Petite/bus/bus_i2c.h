@@ -25,6 +25,8 @@ typedef struct
 {
 	s32 gd;
 	osMutexId_t mutex;	
+
+	uint16_t clkkhz;//时钟频率
 	
 	DevI2c dev;	
 
