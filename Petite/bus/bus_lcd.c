@@ -28,6 +28,9 @@
 extern volatile u16 *LcdReg;
 extern volatile u16 *LcdData;
 #endif
+
+#define OLED_I2C_ADDR 0x3c
+
 /*
 	一个LCD接口
 	除了通信的接口
@@ -225,9 +228,10 @@ s32 bus_lcd_write_data(DevLcdBusNode *node, u8 *data, u32 len)
 		{
 			tmp[0] = 0x40;
 			memcpy(&tmp[1], data, len);
-			bus_i2c_transfer((DevI2cNode *)node->basenode, 0x3C, MCU_I2C_MODE_W, tmp, len+1);
+			bus_i2c_transfer((DevI2cNode *)node->basenode, OLED_I2C_ADDR, MCU_I2C_MODE_W, tmp, len+1);
 		}
 		break;
+		
 		case BUS_LCD_8080:			
 		{
 			#if (PETITE_BUS_LCD_8080 == 1)
@@ -498,7 +502,7 @@ s32 bus_lcd_write_cmd(DevLcdBusNode *node, u16 cmd)
 			tmp[0] = 0x00;
 			tmp[1] = cmd;
 			
-			bus_i2c_transfer((DevI2cNode *)node->basenode, 0x3C, MCU_I2C_MODE_W, tmp, 2);
+			bus_i2c_transfer((DevI2cNode *)node->basenode, OLED_I2C_ADDR, MCU_I2C_MODE_W, tmp, 2);
 		}
 		break;
 		
