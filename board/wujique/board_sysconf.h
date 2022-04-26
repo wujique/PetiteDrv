@@ -102,6 +102,8 @@
 #define DEV_HTU21D_I2CBUS "VI2C2"
 #define DEV_PTHCHO_UART "uart1"
 
+#define OLED_I2C_ADDR 0x3d
+
 /*----------------------------------------------------
 	任务优先级，数字越小优先级越低
 	栈定义的是U32

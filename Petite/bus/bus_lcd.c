@@ -23,13 +23,12 @@
 
 #include "mcu.h"
 #include "petite.h"
+#include "board_sysconf.h"
 
 #if (PETITE_BUS_LCD_8080 == 1)
 extern volatile u16 *LcdReg;
 extern volatile u16 *LcdData;
 #endif
-
-#define OLED_I2C_ADDR 0x3c
 
 /*
 	一个LCD接口

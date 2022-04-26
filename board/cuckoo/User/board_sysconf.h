@@ -39,6 +39,9 @@
 /*	字体类型定义 */
 #define FONT_LIST_MAX 4	
 
+#define OLED_I2C_ADDR 0x3d
+
+
 #define DEV_WM8978_I2CBUS "VI2C1"
 #define DEV_CAMERA_I2CBUS "VI2C1"
 

@@ -275,7 +275,7 @@ int gt9147_task(void)
 		不等，会不会经常获取不到I2C,造成触摸屏失效？*/
 	node = bus_i2c_open("VI2C1", 2);
 	if (node ==NULL ) { 
-		uart_printf("gt9147 open i2c err!\r\n");
+		//uart_printf("gt9147 open i2c err!\r\n");
 		return -1;
 	}
 		reg[0] = GT9147_REG_GSTID>>8;
@@ -309,7 +309,7 @@ int gt9147_task(void)
 				y = tmp[3]<<8;
 				y += tmp[2];
 
-				//uart_printf("tp:%d, x=%d, y=%d\r\n", point_num+1, x, y);
+				uart_printf("tp:%d, x=%d, y=%d\r\n", point_num+1, x, y);
 				/* this is a demo, you can fill the xy into a buf,
 					the app read the buf get the point.
 				*/
