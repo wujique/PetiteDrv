@@ -96,7 +96,7 @@ void cuckoo_7b0_test(void)
 	/* 将SD卡文件系统挂载到VFS上 */
 	vfs_add_node(&SdFatFs);
 
-	#if 0
+	#if 1
 	wjq_log(LOG_FUN, "dev_i2coledlcd_test\r\n");
 	LcdOledI2C = dev_lcd_open("i2coledlcd");
 	if (LcdOledI2C==NULL)
@@ -107,7 +107,6 @@ void cuckoo_7b0_test(void)
 	dev_lcd_backlight(LcdOledI2C, 1);
 	dev_lcd_put_string(LcdOledI2C, "WQY_ST_12_H", 10,1, "oled test", BLACK);
 	dev_lcd_put_string(LcdOledI2C, "WQY_ST_12_H", 10,30, "www.wujique.com", BLACK);
-	dev_lcd_put_string(LcdOledI2C, "WQY_ST_12_H", 10,46, "屋脊雀工作室", BLACK);
 	dev_lcd_update(LcdOledI2C);
 
 	#endif
@@ -159,7 +158,7 @@ void cuckoo_7b0_test(void)
 
 	while(1) {
 		/* 鎵цdelay锛岀數娴佸30ma锛屼负鍟ワ紵*/
-		//osDelay(5);
+		osDelay(5);
 		
 		/* lvgl */
 		//lv_task_handler();
@@ -168,15 +167,9 @@ void cuckoo_7b0_test(void)
 		a++;
 
 		if (a % 200 == 0) {	
-			//cpu_temp();
-			//cpu_rtc();
+			cpu_temp();
+			cpu_rtc();
 
-			/* 闪光灯 */
-			//camera_Flash_Lamp(lampsta);
-			//if (lampsta == 0 ) lampsta = 1;
-			//else lampsta = 0;
-
-			//OV5640_Auto_Focus();
 		}
 		
 		if (a % 100 == 0) {
@@ -205,7 +198,7 @@ void cuckoo_7b0_test(void)
 			//fill_rgb565buf(RGB565_480x272_PIC,0,0,480, 272);
 			//HAL_Delay(1000);
 		#endif
-		#if 0
+		#if 1
 			switch (b) {
 				case 1:
 					dev_lcd_put_string(LcdOledI2C, "WQY_ST_12_H", 10,1, "111111111111111111111111", BLACK);

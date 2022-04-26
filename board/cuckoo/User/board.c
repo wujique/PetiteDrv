@@ -50,16 +50,6 @@ s32 board_init(void)
 	DCMI_PWDN_RESET_Init();
 	camera_init();
 
-#if 0
-	camera_open();
-	OV2640_UXGAConfig();
-	OV2640_RGB565_Mode();
-	OV2640_OutSize_Set(480,272);
-	//OV2640_OutSize_Set(800,480);
-	HAL_Delay(200);
-	camera_test();
-#endif
-
 	cuckoo_7b0_test_init();
 	
 	return 0;
@@ -128,9 +118,9 @@ void DCMI_PWDN_RESET_Init(void)
    	HAL_GPIO_Init(DCMI_RESET_PORT, &GPIO_InitStructure);
 
 	GPIO_InitStructure.Pin = DCMI_PWDN_PIN;
-	GPIO_InitStructure.Pull = GPIO_PULLUP;
+	GPIO_InitStructure.Pull = GPIO_NOPULL;
    	GPIO_InitStructure.Speed = GPIO_SPEED_FREQ_LOW;
-   	GPIO_InitStructure.Mode = GPIO_MODE_OUTPUT_PP;
+   	GPIO_InitStructure.Mode = GPIO_MODE_INPUT;
    	HAL_GPIO_Init(DCMI_PWDN_PORT, &GPIO_InitStructure);
 
 	HAL_Delay(10);

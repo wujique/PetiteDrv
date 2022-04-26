@@ -204,6 +204,7 @@ const uint16_t ov5640_init_reg_tbl[][2]=
 	0x3636, 0x03,
 	0x3634, 0x40,
 	0x3622, 0x01,
+	
 	// 50/60Hz detection 50/60Hz 
 	0x3c01, 0x34, // Band auto, bit[7]
 	0x3c04, 0x28, // threshold low sum
@@ -214,6 +215,7 @@ const uint16_t ov5640_init_reg_tbl[][2]=
 	0x3c09, 0x1c, // light meter 2 threshold[7:0]
 	0x3c0a, 0x9c, // sample number[15:8]
 	0x3c0b, 0x40, // sample number[7:0]
+	
 	0x3810, 0x00, // Timing Hoffset[11:8]
 	0x3811, 0x10, // Timing Hoffset[7:0]
 	0x3812, 0x00, // Timing Voffset[10:8]

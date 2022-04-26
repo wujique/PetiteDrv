@@ -271,8 +271,8 @@ s32 petite_dev_register(void)
 
 	/*注册I2C总线*/
 	bus_i2c_register(&DevVi2c1);
-			//dev_lcdbus_register(&BusLcdI2C1);
-					//dev_lcd_register(&DevLcdOled1);
+			dev_lcdbus_register(&BusLcdI2C1);
+					dev_lcd_register(&DevLcdOled1);
 
 				
 	/*硬SPI3控制器，核心板和底板的FLASH、外扩接口的SPI口*/

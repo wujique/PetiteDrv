@@ -168,10 +168,12 @@ void camera_Flash_Lamp(uint8_t sw)
 	if ( Camera == OV5640_CAMERA ){
 		OV5640_Flash_Lamp(sw);
 	} else {
+	#if 0
 		if (sw == 1)
 			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_6, GPIO_PIN_SET);
 		else
 			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_6, GPIO_PIN_RESET);
+	#endif
 	}
 }
 
