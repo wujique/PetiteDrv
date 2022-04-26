@@ -383,9 +383,8 @@ int vfs_open(const char *pathname, int oflags)
 			}
 
 			#endif
-			return NULL;
+			break;
 
-			
 		case FS_TYPE_SPIFFS:
 			VfsDebug(LOG_DEBUG, "open FS_TYPE_SPIFFS\r\n");
 			break;
@@ -402,6 +401,8 @@ int vfs_open(const char *pathname, int oflags)
 			VfsDebug(LOG_DEBUG, "open err: unkown fs\r\n");
 			break;
 	}
+
+	wjq_free(filenode);
 	return NULL;
 }
 

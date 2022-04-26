@@ -1,0 +1,97 @@
+<html>
+<body>
+<pre>
+<h1>�Vision Build Log</h1>
+<h2>Tool Versions:</h2>
+IDE-Version: ��Vision V5.24.2.0
+Copyright (C) 2017 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: xuejia huang, wujique, LIC=BL28G-VZ8WZ-5BAEB-27JCA-VAYN1-NSDPT
+ 
+Tool Versions:
+Toolchain:       MDK-ARM Professional  Version: 5.24.1
+Toolchain Path:  C:\Keil_v5\ARM\ARMCC\Bin
+C Compiler:      Armcc.exe V5.06 update 5 (build 528)
+Assembler:       Armasm.exe V5.06 update 5 (build 528)
+Linker/Locator:  ArmLink.exe V5.06 update 5 (build 528)
+Library Manager: ArmAr.exe V5.06 update 5 (build 528)
+Hex Converter:   FromElf.exe V5.06 update 5 (build 528)
+CPU DLL:         SARMCM3.DLL V5.24.1
+Dialog DLL:      DCM.DLL V1.16.0.0
+Target DLL:      CMSIS_AGDI.dll V1.28.3.0
+Dialog DLL:      TCM.DLL V1.32.0.0
+ 
+<h2>Project:</h2>
+F:\PetiteDrv\prog\PetiteDrv\board\cuckoo\h7b0_mdk_demo.uvprojx
+Project File Date:  04/21/2022
+
+<h2>Output:</h2>
+*** Using Compiler 'V5.06 update 5 (build 528)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
+Build target 'Target 1'
+compiling vfs.c...
+..\..\Petite\mem/p_list.h(9): warning:  #47-D: incompatible redefinition of macro "offsetof"  (declared at line 91 of "C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h")
+  #define offsetof(type,  member)    ((size_t) &((type *)0)-> member)
+..\..\Petite\vfs.c(155): warning:  #167-D: argument of type "const u8 *" is incompatible with parameter of type "const char *"
+      while(index < strlen(lpPath)) {
+..\..\Petite\vfs.c(159): warning:  #167-D: argument of type "u8 *" is incompatible with parameter of type "const char *"
+              str_len = strlen(name);
+..\..\Petite\vfs.c(164): warning:  #167-D: argument of type "u8 *" is incompatible with parameter of type "char *restrict"
+                  strcpy(dir, name);//只能保存一级路�?
+..\..\Petite\vfs.c(164): warning:  #167-D: argument of type "u8 *" is incompatible with parameter of type "const char *restrict"
+                  strcpy(dir, name);//只能保存一级路�?
+..\..\Petite\vfs.c(175): warning:  #111-D: statement is unreachable
+                  break;//文件名太长，错误，退�?
+..\..\Petite\vfs.c(182): warning:  #167-D: argument of type "u8 *" is incompatible with parameter of type "char *restrict"
+      strcpy(lpDir, dir);
+..\..\Petite\vfs.c(182): warning:  #167-D: argument of type "u8 *" is incompatible with parameter of type "const char *restrict"
+      strcpy(lpDir, dir);
+..\..\Petite\vfs.c(183): warning:  #167-D: argument of type "u8 *" is incompatible with parameter of type "char *restrict"
+      strcpy(lpName, name);
+..\..\Petite\vfs.c(183): warning:  #167-D: argument of type "u8 *" is incompatible with parameter of type "const char *restrict"
+      strcpy(lpName, name);
+..\..\Petite\vfs.c(185): warning:  #167-D: argument of type "u8 *" is incompatible with parameter of type "const char *"
+      if(strlen(dir) == 0) {
+..\..\Petite\vfs.c(186): warning:  #167-D: argument of type "u8 *" is incompatible with parameter of type "char *restrict"
+          strcpy(lpDir,"mtd0");
+..\..\Petite\vfs.c(270): warning:  #167-D: argument of type "const u8 *" is incompatible with parameter of type "const TCHAR *"
+  					res = f_mount(&VfsNodeList[i].pra.fatfs, Mtd->dir, 1);
+..\..\Petite\vfs.c(327): warning:  #167-D: argument of type "const u8 *" is incompatible with parameter of type "const char *"
+  			if(0 == strcmp(VfsNodeList[i].Mtd->vfsdir, dirname)) {
+..\..\Petite\vfs.c(327): warning:  #167-D: argument of type "u8 *" is incompatible with parameter of type "const char *"
+  			if(0 == strcmp(VfsNodeList[i].Mtd->vfsdir, dirname)) {
+..\..\Petite\vfs.c(350): warning:  #167-D: argument of type "const char *" is incompatible with parameter of type "const u8 *"
+  	vfs_get_dir_name(pathname, &dir[0], &name[0]);
+..\..\Petite\vfs.c(375): warning:  #167-D: argument of type "u8 *" is incompatible with parameter of type "const TCHAR *"
+  			res = f_open(&filenode->pra.fatfd, name, mode);
+..\..\Petite\vfs.c(515): warning:  #177-D: variable "len"  was declared but never referenced
+  	unsigned int len;
+..\..\Petite\vfs.c(570): warning:  #177-D: variable "len"  was declared but never referenced
+  	unsigned int len;
+..\..\Petite\vfs.c(632): warning:  #111-D: statement is unreachable
+  			break;
+..\..\Petite\vfs.c(614): warning:  #177-D: variable "len"  was declared but never referenced
+  	unsigned int len;
+..\..\Petite\vfs.c: 21 warnings, 0 errors
+linking...
+.\Objects\h7b0_mdk_demo.sct(7): warning: L6329W: Pattern lv*(RO) only matches removed unused sections.
+.\Objects\h7b0_mdk_demo.sct(8): warning: L6329W: Pattern img*(RO) only matches removed unused sections.
+Program Size: Code=77696 RO-data=14264 RW-data=692 ZI-data=851436  
+Finished: 0 information, 2 warning and 0 error messages.
+FromELF: creating hex file...
+".\Objects\h7b0_mdk_demo.axf" - 0 Error(s), 23 Warning(s).
+
+<h2>Software Packages used:</h2>
+
+Package Vendor: Keil
+                http://www.keil.com/pack/Keil.STM32H7xx_DFP.2.8.0.pack
+                Keil.STM32H7xx_DFP.2.8.0
+                STMicroelectronics STM32H7 Series Device Support and Examples
+
+<h2>Collection of Component include folders:</h2>
+  .\RTE\_Target_1
+  C:\Keil_v5\ARM\PACK\Keil\STM32H7xx_DFP\2.8.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include
+
+<h2>Collection of Component Files used:</h2>
+Build Time Elapsed:  00:00:12
+</pre>
+</body>
+</html>
