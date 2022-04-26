@@ -559,7 +559,7 @@ s32 test_camera(void)
 		board_camera_show(lcd);
 		
 		wjq_wait_key(16);
-		dev_camera_close();
+		camera_close();
 			
 	}
 	
