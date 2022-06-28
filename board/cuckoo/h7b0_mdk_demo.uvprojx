@@ -630,6 +630,11 @@
               <FileType>1</FileType>
               <FilePath>.\User\sd_fat.c</FilePath>
             </File>
+            <File>
+              <FileName>esp8266_test.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\User\esp8266_test.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

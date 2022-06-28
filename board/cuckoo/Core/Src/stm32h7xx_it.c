@@ -63,6 +63,8 @@ extern DCMI_HandleTypeDef hdcmi;
 extern DMA2D_HandleTypeDef hdma2d;
 extern DMA_HandleTypeDef hdma_sai2_b;
 extern SAI_HandleTypeDef hsai_BlockB2;
+extern UART_HandleTypeDef huart7;
+
 /* USER CODE BEGIN EV */
 
 /* USER CODE END EV */
@@ -273,6 +275,20 @@ void DCMI_PSSI_IRQHandler(void)
 }
 
 /**
+  * @brief This function handles UART7 global interrupt.
+  */
+void UART7_IRQHandler(void)
+{
+  /* USER CODE BEGIN UART7_IRQn 0 */
+
+  /* USER CODE END UART7_IRQn 0 */
+  HAL_UART_IRQHandler(&huart7);
+  /* USER CODE BEGIN UART7_IRQn 1 */
+
+  /* USER CODE END UART7_IRQn 1 */
+}
+
+/**
   * @brief This function handles DMA2D global interrupt.
   */
 void DMA2D_IRQHandler(void)
@@ -285,6 +301,7 @@ void DMA2D_IRQHandler(void)
 
   /* USER CODE END DMA2D_IRQn 1 */
 }
+
 /**
   * @brief This function handles SAI2 global interrupt.
   */
@@ -298,6 +315,7 @@ void SAI2_IRQHandler(void)
 
   /* USER CODE END SAI2_IRQn 1 */
 }
+
 /* USER CODE BEGIN 1 */
 /**
   * @brief This function handles SDMMC1 global interrupt.

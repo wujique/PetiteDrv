@@ -50,6 +50,10 @@ s32 board_init(void)
 	DCMI_PWDN_RESET_Init();
 	camera_init();
 
+	//esp8266_io_init();
+	//esp8266_uart_test();
+
+	
 	cuckoo_7b0_test_init();
 	
 	return 0;
@@ -112,11 +116,12 @@ void DCMI_PWDN_RESET_Init(void)
 	HAL_GPIO_WritePin(DCMI_RESET_PORT, DCMI_RESET_PIN, GPIO_PIN_RESET);
 
    	GPIO_InitStructure.Pin = DCMI_RESET_PIN;
-	GPIO_InitStructure.Pull = GPIO_PULLUP;
+	GPIO_InitStructure.Pull = GPIO_NOPULL;
    	GPIO_InitStructure.Speed = GPIO_SPEED_FREQ_LOW;
-   	GPIO_InitStructure.Mode = GPIO_MODE_OUTPUT_PP;
+   	GPIO_InitStructure.Mode = GPIO_MODE_INPUT;
    	HAL_GPIO_Init(DCMI_RESET_PORT, &GPIO_InitStructure);
 
+	/* PWDN hight ov5640 power off */
 	GPIO_InitStructure.Pin = DCMI_PWDN_PIN;
 	GPIO_InitStructure.Pull = GPIO_NOPULL;
    	GPIO_InitStructure.Speed = GPIO_SPEED_FREQ_LOW;

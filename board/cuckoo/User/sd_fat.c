@@ -118,7 +118,7 @@ uint8_t  FatFs_FileTest(void)	//文件创建和写入测试
 	
 	f_close(&MyFile);	  //关闭文件	
 
-	uart_printf("sdmmc and fatfs test finish!\r\n");
+	uart_printf("sdmmc and fatfs test finish!\r\n\r\n\r\n\r\n");
 	return SUCCESS;
 }
 

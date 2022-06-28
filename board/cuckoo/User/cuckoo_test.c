@@ -198,7 +198,7 @@ void cuckoo_7b0_test(void)
 			//fill_rgb565buf(RGB565_480x272_PIC,0,0,480, 272);
 			//HAL_Delay(1000);
 		#endif
-		#if 1
+		#if 0
 			switch (b) {
 				case 1:
 					dev_lcd_put_string(LcdOledI2C, "WQY_ST_12_H", 10,1, "111111111111111111111111", BLACK);

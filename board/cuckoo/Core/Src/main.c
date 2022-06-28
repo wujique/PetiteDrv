@@ -213,16 +213,12 @@ int main(void)
   MX_OCTOSPI1_Init();
   //MX_UART4_Init();
   //MX_LTDC_Init();
-  
 	MX_DMA_Init();
-  
 	MX_DCMI_Init();
-	//MX_SAI2_Init();/* SAI接口会影响 OLED的I2C地址*/
+	//MX_SAI2_Init();/* SAI接口会影响 OLED的I2C地址 */
   //MX_SDMMC1_SD_Init();
     //MX_SPI1_Init();
-
-
-  	  //MX_UART7_Init();
+  	  MX_UART7_Init();
   //MX_DMA2D_Init();
   MX_RTC_Init();
   MX_ADC2_Init();
@@ -231,6 +227,7 @@ int main(void)
 		在执行到这里之前已经开了systick中断，中断中调用的函数都需要放到内部Flash        		*/
    	W25Qxx_init();
   	w25qxx_map();
+
 	#if 1
 	u8 cnt;
 	cnt = test_qpi_run_fun(2);
@@ -843,7 +840,7 @@ static void MX_UART7_Init(void)
   huart7.Init.StopBits = UART_STOPBITS_1;
   huart7.Init.Parity = UART_PARITY_NONE;
   huart7.Init.Mode = UART_MODE_TX_RX;
-  huart7.Init.HwFlowCtl = UART_HWCONTROL_RTS_CTS;
+  huart7.Init.HwFlowCtl = UART_HWCONTROL_NONE;
   huart7.Init.OverSampling = UART_OVERSAMPLING_16;
   huart7.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
   huart7.Init.ClockPrescaler = UART_PRESCALER_DIV1;
