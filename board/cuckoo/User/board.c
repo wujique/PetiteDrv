@@ -53,12 +53,34 @@ s32 board_init(void)
 	//esp8266_io_init();
 	//esp8266_uart_test();
 
-	
 	cuckoo_7b0_test_init();
 	
 	return 0;
 }
 
+void board_main(void)
+{
+	mcu_uart_init_pra();
+    mcu_uart_open(MCU_UART_4);
+	wjq_log(LOG_INFO, "------Cuckoo (stm32h7b0vb) run! 20220306------\r\n");
+	
+	/*  尽早初始化 Flash，并使其进入map模式，因为后续有代码是保存在 QSPI Flash上 
+		在执行到这里之前已经开了systick中断，中断中调用的函数都需要放到内部Flash        		*/
+   	W25Qxx_init();
+  	w25qxx_map();
+
+	#if 1
+	u8 cnt;
+	cnt = test_qpi_run_fun(2);
+	uart_printf("run qpi:%d\r\n", cnt);
+	if (cnt != 3) {
+		uart_printf("run qpi err!\r\n");
+		while(1);
+	}
+	#endif
+	
+  	petite_app();
+}
 /*
 	低优先级轮训任务
 	这是系统整个系统的底层轮询

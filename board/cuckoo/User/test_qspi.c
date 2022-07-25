@@ -3,8 +3,6 @@
 
 #include "log.h"
 
-extern OSPI_HandleTypeDef hospi1;
-
 const u8 test_qspi_tab[33] = {
 	0x99, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
 	0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f,
@@ -34,7 +32,7 @@ void test_iap(void)
 	uart_printf("run test_iap\r\n");
 	
 	tickstart = HAL_GetTick();
-	w25qxx_test_2();
+	w25qxx_test_wr();
 	tmp = HAL_GetTick();
 	
 	test_qpi_run_fun(2);

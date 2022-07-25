@@ -202,9 +202,6 @@ int main(void)
   /* USER CODE BEGIN SysInit */
   	__HAL_RCC_DMA2D_CLK_ENABLE();
   
-	mcu_uart_init_pra();
-    mcu_uart_open(MCU_UART_4);
-	wjq_log(LOG_INFO, "------Cuckoo (stm32h7b0vb) run! 20220306------\r\n");	
 
   /* USER CODE END SysInit */
 
@@ -223,18 +220,8 @@ int main(void)
   MX_RTC_Init();
   MX_ADC2_Init();
   /* USER CODE BEGIN 2 */
-  	/*  尽早初始化 Flash，并使其进入map模式，因为后续有代码是保存在 QSPI Flash上 
-		在执行到这里之前已经开了systick中断，中断中调用的函数都需要放到内部Flash        		*/
-   	W25Qxx_init();
-  	w25qxx_map();
-
-	#if 1
-	u8 cnt;
-	cnt = test_qpi_run_fun(2);
-	uart_printf("run qpi:%d\r\n", cnt);
-	#endif
-  	petite_app();
-  
+  board_main();
+  	
   /* USER CODE END 2 */
 
   /* Infinite loop */

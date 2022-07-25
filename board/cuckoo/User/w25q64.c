@@ -9,6 +9,16 @@
 #include "mcu.h"
 #include "w25q128fv.h"
 
+/*
+	调试过程
+	1 用CUBEIDE初始化QSPI
+	2 调用W25Qxx_init，能读到Flash ID
+	3 测试读写
+	4 修改分散加载文件，把test_qspi.o放到外部，用MDK下载，然后读出来
+	5 配置map，用地址读test_qspi中的数据
+	6 放一段代码到外部Flash，执行代码。
+	*/
+
 extern OSPI_HandleTypeDef hospi1;
 #define QSPIHandle hospi1
 
@@ -22,8 +32,6 @@ extern OSPI_HandleTypeDef hospi1;
 
 
 H7B0的OCTOSPI，会在芯片中配置一套所谓的SPI通信通用配置。
-RT1052，则是可以通过LUT表配置命令序列。
-
 	
 	使用说明：
 	1 QSPI模式和QPI模式不一样。
@@ -31,15 +39,7 @@ RT1052，则是可以通过LUT表配置命令序列。
 		QPI则是并行。
 		
 	2 FLASH芯片上电默认是SPI模式。注意，是FLASH芯片断电重新上电。
-	   
-	3 要切换到QPI模式，先要把QE位置位为1，这个位在状态寄存器2.
-	  然后发送0X38命令过去切换为QPI模式。
-	  
-	4 在QPI模式，发送0XFF指令，可以让芯片退出QPI模式。
 
-	注意问题：
-		在SPI模式下，指令用的是1LINE模式。QPI模式则用4LINE模式。
-	
 	*/
 /*SPI FLASH 信息*/
 typedef struct
@@ -56,8 +56,6 @@ typedef struct
 }_strSpiFlash;
 
 /*
-	** W25Q64JV, 在文档中找不到QPI模式的说明，是否不支持？**
-	
 	erase: [4K 45ms], [32K 120ms] ,[64K 150ms], [chip 20S~100S]
 	*/
 _strSpiFlash OspiFlashPra={
@@ -429,11 +427,14 @@ int w25qxx_reset(void)
 	return 0;
 }
 
-
+/*
+	用WRITE_STATUS_REG2_CMD命令将W25Q128FV_FSR_QE写到Flash的寄存器2
+	
+	*/
 int w25qxx_status_init(void)
 { 
 	OSPI_RegularCmdTypeDef s_command;
-	uint8_t value = W25Q128FV_FSR_QE;
+	uint8_t value = W25Q128FV_FSR_QE;//用
 	
   	/* QSPI memory reset */
  	w25qxx_reset();
@@ -446,13 +447,13 @@ int w25qxx_status_init(void)
 	s_command.OperationType		= HAL_OSPI_OPTYPE_COMMON_CFG;
 	s_command.FlashId			= HAL_OSPI_FLASH_ID_1; 
 	/* 命令 */
-	s_command.Instruction		= WRITE_STATUS_REG2_CMD;
-	s_command.InstructionMode	= HAL_OSPI_INSTRUCTION_1_LINE;		 
-	s_command.InstructionSize	= HAL_OSPI_INSTRUCTION_8_BITS;	
-	s_command.InstructionDtrMode = HAL_OSPI_INSTRUCTION_DTR_DISABLE;
+	s_command.Instruction		= WRITE_STATUS_REG2_CMD;//命令
+	s_command.InstructionMode	= HAL_OSPI_INSTRUCTION_1_LINE;//发送命令使用1线SPI模式		 
+	s_command.InstructionSize	= HAL_OSPI_INSTRUCTION_8_BITS;//命令长8bit	
+	s_command.InstructionDtrMode = HAL_OSPI_INSTRUCTION_DTR_DISABLE;//不使用DTR模式
 	/* 地址配置*/
 	s_command.Address			= 0;
-	s_command.AddressMode		= HAL_OSPI_ADDRESS_NONE;			 
+	s_command.AddressMode		= HAL_OSPI_ADDRESS_NONE;//本次通信无地址			 
 	s_command.AddressSize		= HAL_OSPI_ADDRESS_24_BITS; 
 	s_command.AddressDtrMode 	= HAL_OSPI_ADDRESS_DTR_DISABLE;
 	/* alternate*/
@@ -461,10 +462,10 @@ int w25qxx_status_init(void)
 	s_command.AlternateBytesSize = HAL_OSPI_ALTERNATE_BYTES_8_BITS;
 	s_command.AlternateBytesDtrMode = HAL_OSPI_ALTERNATE_BYTES_DTR_DISABLE;
 	/* 数据 传输*/
-	s_command.DataMode			= HAL_OSPI_DATA_1_LINE; 
-	s_command.NbData 			= 1;
+	s_command.DataMode			= HAL_OSPI_DATA_1_LINE;//数据用1线SPI模式
+	s_command.NbData 			= 1;				//1字节数据
 	s_command.DataDtrMode		= HAL_OSPI_DATA_DTR_DISABLE;						
-	s_command.DummyCycles		= 0;
+	s_command.DummyCycles		= 0;				//无dummy
 	/* 其他 */
 	s_command.DQSMode			= HAL_OSPI_DQS_DISABLE; 			
 	s_command.SIOOMode			= HAL_OSPI_SIOO_INST_EVERY_CMD;	
@@ -483,7 +484,7 @@ int w25qxx_status_init(void)
   	return 0;
 }
 /*
-	
+	在初始化QSPI接口后，调用本函数初始化W25Q64	
 	*/
 int W25Qxx_init(void)
 {
@@ -930,114 +931,83 @@ int w25qxx_map(void)
 	return 0;
 }
 
-
 #if 1
 char w25qxx_testbuf_r[4096];
 char w25qxx_testbuf_w[4096];
-#define W25QXX_TEST_ADDR (4096*1024)
+#define W25QXX_TEST_ADDR (4096*100)
+
 __IO uint8_t *mem_addr;
 extern const u8 test_qspi_tab[33];
 
-void w25qxx_test(void)
+/*
+	测试Flash读写
+	*/
+void w25qxx_test_wr(void)
 {
 	int i;
-	u8 cnt=0;
-	uint32_t tickstart, tmp;
-	
+
 	uart_printf("w25qxx_test...\r\n");
-
-	//while(1) 
-	{
-		cnt++;
-		for (i = 0;i<4096; i++) {
-			w25qxx_testbuf_w[i] = cnt;	
-		}
-		tickstart = HAL_GetTick();
-		w25qxx_read_any(W25QXX_TEST_ADDR, 4096, w25qxx_testbuf_r);
-		//uart_printf("read...\r\n");
-		//PrintFormat(w25qxx_testbuf_r, 128);
-		
-		//uart_printf("erase_sector...\r\n");
-		w25qxx_erase_sector(W25QXX_TEST_ADDR);
-
-		//uart_printf("read...\r\n");
-		//w25qxx_read_any(W25QXX_TEST_ADDR, 4096, w25qxx_testbuf_r);
-		//PrintFormat(w25qxx_testbuf_r, 128);
-		
-		//uart_printf("write_any...\r\n");
-		w25qxx_write_any(W25QXX_TEST_ADDR+16, 4096-32, &w25qxx_testbuf_w[16]);
-
-		//uart_printf("read...\r\n");
-		w25qxx_read_any(W25QXX_TEST_ADDR, 4096, w25qxx_testbuf_r);
-		//PrintFormat(w25qxx_testbuf_r, 128);
-		tmp = HAL_GetTick();
-		
-		uart_printf("finish: %d\r\n", tmp-tickstart);
-
-		#if 0
-		uart_printf("w25qxx_map...\r\n");
-		w25qxx_map();
-		uart_printf("dr read...\r\n");
-		mem_addr = (__IO uint8_t *)(0x90000000);
-	    PrintFormat(mem_addr, 256);
-
-		PrintFormat(test_qspi_tab, 32);
-
-		uart_printf("run ex flash code...\r\n");
-		u8 cnt = 0;
-		while(1) {
-			cnt = test_qpi_run_fun(cnt);
-			uart_printf("%d ", cnt);
-			if(cnt >= 128) break;
-		}
-		uart_printf("----run code in qspi flash ok\r\n");
-
-		HAL_OSPI_DeInit(&hospi1);
-		MX_OCTOSPI1_Init();
-		#endif
-	}
-}
-
-
-void w25qxx_test_2(void)
-{
-	int i;
-	u8 cnt=0;
-	//uart_printf("w25qxx_test...\r\n");
-
-	HAL_OSPI_DeInit(&hospi1);
-	MX_OCTOSPI1_Init();
-	
-
-	cnt++;
 	for (i = 0;i<4096; i++) {
-		w25qxx_testbuf_w[i] = cnt;	
+		w25qxx_testbuf_w[i] = 0xaa;	
 	}
 
 	w25qxx_read_any(W25QXX_TEST_ADDR, 4096, w25qxx_testbuf_r);
-	//uart_printf("read...\r\n");
-	//PrintFormat(w25qxx_testbuf_r, 128);
+	uart_printf("read...\r\n");
+	PrintFormat(w25qxx_testbuf_r, 128);
 	
-	//uart_printf("erase_sector...\r\n");
+	uart_printf("erase_sector...\r\n");
 	w25qxx_erase_sector(W25QXX_TEST_ADDR);
 
-	//uart_printf("read...\r\n");
-	//w25qxx_read_any(W25QXX_TEST_ADDR, 4096, w25qxx_testbuf_r);
-	//PrintFormat(w25qxx_testbuf_r, 128);
-	
-	//uart_printf("write_any...\r\n");
-	w25qxx_write_any(W25QXX_TEST_ADDR+16, 4096-32, &w25qxx_testbuf_w[16]);
-
-	//uart_printf("read...\r\n");
+	uart_printf("read...\r\n");
 	w25qxx_read_any(W25QXX_TEST_ADDR, 4096, w25qxx_testbuf_r);
-	//PrintFormat(w25qxx_testbuf_r, 128);
+	PrintFormat(w25qxx_testbuf_r, 128);
 	
-	//uart_printf("finish\r\n");
+	uart_printf("write_any...\r\n");
+	w25qxx_write_any(W25QXX_TEST_ADDR, 4096, w25qxx_testbuf_w);
 
-	w25qxx_map();
+	uart_printf("read...\r\n");
+	w25qxx_read_any(W25QXX_TEST_ADDR, 4096, w25qxx_testbuf_r);
+	PrintFormat(w25qxx_testbuf_r, 128);
+	
+	uart_printf("finish\r\n");
 
 }
 
+/*
+	修改分散加载文件，把test_qspi.o放到外部flash，
+	调用本函数将其读出来 */
+void w25qxx_test_read_exdata(void)
+{
+	u32 addr;
 
+	addr = (uint32_t)test_qspi_tab;
+	
+	uart_printf("test_qspi_tab addr:%08x\r\n", addr);
+	/*此处是直接读，地址从0开始*/
+	w25qxx_read_any(addr-0x90000000, 4096, w25qxx_testbuf_r);
+	uart_printf("read...\r\n");
+	PrintFormat(w25qxx_testbuf_r, 128);
+}
+/*
+	w25qxx_map之后调用本函数进行测试
+	*/
+void w25qxx_test_map_read_exdata(void)
+{
+	uart_printf("dr read...\r\n");
+	mem_addr = (__IO uint8_t *)(0x90000000);
+	PrintFormat(mem_addr, 256);
+	
+	PrintFormat((uint8_t *)test_qspi_tab, 32);
+	
+	uart_printf("run ex flash code...\r\n");
+	u8 cnt = 0;
+	while(1) {
+		cnt = test_qpi_run_fun(cnt);
+		uart_printf("%d ", cnt);
+		if(cnt >= 128) break;
+	}
+	uart_printf("----run code in qspi flash ok\r\n");
+	
+}
 #endif
 
