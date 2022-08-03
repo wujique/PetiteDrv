@@ -174,8 +174,7 @@ void*wjq_malloc_t(unsigned nbytes)
 
 	/*第一次使用malloc，内存链表没有建立
 	  初始化链表*/
-	if((prevp = freep)==NULL)
-	{
+	if((prevp = freep)==NULL) {
 		p = (ALLOC_HDR*)
 		__HEAP_START;
 		p->s.size = (((uint32_t) __HEAP_END- (uint32_t) __HEAP_START) / sizeof(ALLOC_HDR));
@@ -188,29 +187,23 @@ void*wjq_malloc_t(unsigned nbytes)
 	}
 
 	/*查询链表，查找合适块*/
-	for(p = prevp->s.ptr; ; prevp = p, p = p->s.ptr)
-	{
+	for (p = prevp->s.ptr; ; prevp = p, p = p->s.ptr) {
 
-		if(p->s.size==nunits)
-		{
+		if(p->s.size==nunits) {
 			prevp->s.ptr = p->s.ptr;
 			freep = prevp;
 
 			/*返回可用内存指针给用户，
 			可用内存要出去内存块管理结构体*/
 			return (void*) (p+1);
-		}
-		else if(p->s.size > nunits)
-		{
+		} else if(p->s.size > nunits) {
 			#ifdef _ALLOC_BEST_FIT_/*最适合法*/
-			if(bp == NULL)
-            {
+			if (bp == NULL) {
                 bp = p;
                 bprevp = prevp;
             }
 			
-            if(bp->s.size > p->s.size)
-            {
+            if (bp->s.size > p->s.size) {
                 bprevp = prevp;
                 bp = p;                
             }
@@ -227,11 +220,9 @@ void*wjq_malloc_t(unsigned nbytes)
 		}
 
 		/*分配失败*/
-		if(p==freep)
-		{
+		if (p==freep) {
 			#ifdef _ALLOC_BEST_FIT_
-			if(bp != NULL)
-			{
+			if (bp != NULL) {
                 freep = bprevp;
                 p = bp;
                 
@@ -243,8 +234,7 @@ void*wjq_malloc_t(unsigned nbytes)
             }
 			#endif
 			
-			while(1)
-			{
+			while(1) {
 				/*对于嵌入式来说，没有机制整理内存，因此，不允许内存分配失败*/
 				wjq_log(LOG_ERR, "\r\n\r\n----wujique malloc err!!---------\r\n\r\n");
 				

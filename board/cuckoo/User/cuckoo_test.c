@@ -1,14 +1,14 @@
 /**
  * @file                wujique_stm407.c
- * @brief           Îİ¼¹È¸STM32F407¿ª·¢°åÓ²¼ş²âÊÔ³ÌĞò
+ * @brief           å±‹è„Šé›€STM32F407å¼€å‘æ¿ç¡¬ä»¶æµ‹è¯•ç¨‹åº
  * @author          wujique
- * @date            2018Äê1ÔÂ29ÈÕ ĞÇÆÚÒ»
- * @version         ³õ¸å
- * @par             °æÈ¨ËùÓĞ (C), 2013-2023
+ * @date            2018å¹´1æœˆ29æ—¥ æ˜ŸæœŸä¸€
+ * @version         åˆç¨¿
+ * @par             ç‰ˆæƒæ‰€æœ‰ (C), 2013-2023
  * @par History:
- * 1.ÈÕ    ÆÚ:        2018Äê1ÔÂ29ÈÕ ĞÇÆÚÒ»
- *   ×÷    Õß:         wujique
- *   ĞŞ¸ÄÄÚÈİ:   ´´½¨ÎÄ¼ş
+ * 1.æ—¥    æœŸ:        2018å¹´1æœˆ29æ—¥ æ˜ŸæœŸä¸€
+ *   ä½œ    è€…:         wujique
+ *   ä¿®æ”¹å†…å®¹:   åˆ›å»ºæ–‡ä»¶
 */
 #include "mcu.h"
 #include "board_sysconf.h"
@@ -22,7 +22,7 @@
 
 extern ADC_HandleTypeDef hadc2;
 
-__align(8) double adcx;/*Ë«¾«¶È¸¡µãÊı*/
+__align(8) double adcx;/*åŒç²¾åº¦æµ®ç‚¹æ•°*/
 __align(8) double cpu_temp_sensor = 32.35;
 
 int temp_a;
@@ -43,10 +43,10 @@ void cpu_temp(void)
 	
 	HAL_ADC_Start(&hadc2);
 	HAL_ADC_PollForConversion(&hadc2, 100);
-	temp_adc = HAL_ADC_GetValue(&hadc2);  /* ¶ÁÈ¡ÊıÖµ */
+	temp_adc = HAL_ADC_GetValue(&hadc2);  /* è¯»å–æ•°å€¼ */
 	uart_printf("\r\nadc_v:%d, %d, %d\r\n", temp_adc, TS_CAL1, TS_CAL2);
 	
-	cpu_temp_sensor = (130.0 - 30.0)* (temp_adc - TS_CAL1) / (TS_CAL2 - TS_CAL1)  + 30;   /* ×ª»» */
+	cpu_temp_sensor = (130.0 - 30.0)* (temp_adc - TS_CAL1) / (TS_CAL2 - TS_CAL1)  + 30;   /* è½¬æ¢ */
 
 	//uart_printf("double size:%d\r\n", sizeof(double));
 	//uart_printf("stm32 temp:%f\r\n", cpu_temp_sensor);
@@ -92,8 +92,13 @@ void cuckoo_7b0_test(void)
 	uint8_t lampsta = 0;
 	wjq_log(LOG_DEBUG,"run app\r\n");
 
+
+	//esp8266_io_init();
+	//esp8266_uart_test();
+	dev_ptHCHO_test();
+
 	sd_fatfs_init();
-	/* ½«SD¿¨ÎÄ¼şÏµÍ³¹ÒÔØµ½VFSÉÏ */
+	/* å°†SDå¡æ–‡ä»¶ç³»ç»ŸæŒ‚è½½åˆ°VFSä¸Š */
 	vfs_add_node(&SdFatFs);
 
 	#if 1
@@ -103,7 +108,7 @@ void cuckoo_7b0_test(void)
 		wjq_log(LOG_FUN, "open oled i2c lcd err\r\n");
 	else
 		wjq_log(LOG_FUN, "open oled i2c lcd suc\r\n");
-	/*´ò¿ª±³¹â*/
+	/*æ‰“å¼€èƒŒå…‰*/
 	dev_lcd_backlight(LcdOledI2C, 1);
 	dev_lcd_put_string(LcdOledI2C, "WQY_ST_12_H", 10,1, "oled test", BLACK);
 	dev_lcd_put_string(LcdOledI2C, "WQY_ST_12_H", 10,30, "www.wujique.com", BLACK);
@@ -119,7 +124,7 @@ void cuckoo_7b0_test(void)
 		wjq_log(LOG_FUN, "open spi cog-lcd err\r\n");
 	else
 		wjq_log(LOG_FUN, "open spi cog-lcd suc\r\n");
-	/*´ò¿ª±³¹â*/
+	/*æ‰“å¼€èƒŒå…‰*/
 	dev_lcd_backlight(LcdCogSpi, 1);
 	dev_lcd_put_string(LcdCogSpi, "WQY_ST_12_H", 10,1, "cog lcd", BLACK);
 	dev_lcd_put_string(LcdCogSpi, "WQY_ST_12_H", 10,30, "www.wujique.com", BLACK);
@@ -133,17 +138,17 @@ void cuckoo_7b0_test(void)
 		wjq_log(LOG_FUN, "open e paper test err\r\n");
 	else
 		wjq_log(LOG_FUN, "open e paper test suc\r\n");
-	/*´ò¿ª±³¹â*/
+	/*æ‰“å¼€èƒŒå…‰*/
 	dev_lcd_backlight(LcdEpaper, 1);
 	dev_lcd_put_string(LcdEpaper, "WQY_ST_16_H", 10,1, "e paper test", BLACK);
 	dev_lcd_put_string(LcdEpaper, "WQY_ST_16_H", 10,30, "www.wujique.com", BLACK);
 	dev_lcd_update(LcdEpaper);
 	#endif
 	
-	/* ³õÊ¼»¯lvgl 
-	×¢Òâ£¬³õÊ¼»¯LVGLµÄ¹ı³Ì£¬»áÓÃµ½²»ÉÙÕ»£¬
-	Èç¹ûÔÚrtosµÄÈÎÎñÖĞ½øĞĞ³õÊ¼»¯£¬×¢ÒâÈÎÎñÕ»µÄ´óĞ¡£¬
-	·ÀÖ¹Òç³öÔì³Éhardfault */
+	/* åˆå§‹åŒ–lvgl 
+	æ³¨æ„ï¼Œåˆå§‹åŒ–LVGLçš„è¿‡ç¨‹ï¼Œä¼šç”¨åˆ°ä¸å°‘æ ˆï¼Œ
+	å¦‚æœåœ¨rtosçš„ä»»åŠ¡ä¸­è¿›è¡Œåˆå§‹åŒ–ï¼Œæ³¨æ„ä»»åŠ¡æ ˆçš„å¤§å°ï¼Œ
+	é˜²æ­¢æº¢å‡ºé€ æˆhardfault */
 	#if 0
 	lv_init();
 	lv_port_disp_init();
@@ -157,12 +162,12 @@ void cuckoo_7b0_test(void)
 	tp_open();
 
 	while(1) {
-		/* æ‰§è¡Œdelayï¼Œç”µæµå¤š30maï¼Œä¸ºå•¥ï¼Ÿ*/
+
 		osDelay(5);
 		
 		/* lvgl */
 		//lv_task_handler();
-		/*²âÊÔLCD RGB565 */
+		/*æµ‹è¯•LCD RGB565 */
 
 		a++;
 

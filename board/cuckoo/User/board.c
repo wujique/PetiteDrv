@@ -5,6 +5,7 @@
 
 	*/
 #include "mcu.h"
+#include "bus_uart.h"
 #include "log.h"
 #include "board_sysconf.h"
 
@@ -50,18 +51,23 @@ s32 board_init(void)
 	DCMI_PWDN_RESET_Init();
 	camera_init();
 
-	//esp8266_io_init();
-	//esp8266_uart_test();
-
 	cuckoo_7b0_test_init();
 	
 	return 0;
 }
 
+
+const BusUartPra Uart4Pra = {
+	.BaudRate = 115200, //波特率			 
+
+	.bufsize = 16,//接收缓冲长度
+};
+
+
 void board_main(void)
 {
-	mcu_uart_init_pra();
-    mcu_uart_open(MCU_UART_4);
+	bus_uart_init();
+	bus_uart_open("uart4", &Uart4Pra);
 	wjq_log(LOG_INFO, "------Cuckoo (stm32h7b0vb) run! 20220306------\r\n");
 	
 	/*  尽早初始化 Flash，并使其进入map模式，因为后续有代码是保存在 QSPI Flash上 

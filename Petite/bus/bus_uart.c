@@ -25,11 +25,14 @@
 #include "petite.h"
 
 
-uint8_t BusUartGd[32];
-
+int BusUartGd[32];
+/*
+	初始化所有串口 
+	*/
 int bus_uart_init(void) {
 
 	memset(BusUartGd, 0, sizeof(BusUartGd));
+	//mcu_uart_init(0,0,0);
 	return 0;
 }
 
@@ -50,22 +53,40 @@ BusUartNode *bus_uart_open(char *name, const BusUartPra *Pra)
 		comport = MCU_UART_2;	
 	} else if(strcmp(name, "uart3") == 0) {
 		comport = MCU_UART_3;	
-	} else return NULL;
+	} else if(strcmp(name, "uart4") == 0) {
+		comport = MCU_UART_4;
+	} else if(strcmp(name, "uart7") == 0) {
+		comport = MCU_UART_7;
+	} else 	{
+		uart_printf("no %s\r\n", name);
+		return NULL;
+	}
 
-	if(BusUartGd[comport] == 1) return NULL;
-	
+	if(BusUartGd[comport] != 0) {
+		uart_printf("uart is openning\r\n");
+		return NULL;
+	}
 	node = wjq_malloc(sizeof(BusUartNode));
+	
+	if (node == NULL) {
+		
+	}
 	node->buf = wjq_malloc(Pra->bufsize);
+	if (node->buf == NULL) {
+
+	}
 	pkfifo_init(&(node->Kfifo), node->buf, Pra->bufsize, 1);
 	
-	res = mcu_uart_init(comport,node, Pra);
+	res = mcu_uart_open(comport, node, Pra);
 	if(res != 0) {
 		wjq_free(node->buf);
 		wjq_free(node);	
+		uart_printf("mcu uart open err\r\n");
 		return NULL;
 	}
 	node->comport = comport;
-	BusUartGd[comport] = 1;
+	BusUartGd[comport] = (int)node;
+	uart_printf("mcu uart open %08x\r\n", node);
 	return node;
 }
 
@@ -127,7 +148,7 @@ s32 bus_uart_read (BusUartNode *node, u8 *buf, s32 len)
 
 int bus_uart_write(BusUartNode *node, u8 *buf, s32 len)
 {
-	return 0;//mcu_uart_send(node->comport, buf, len);
+	return mcu_uart_send(node->comport, buf, len);
 }
 
 /**

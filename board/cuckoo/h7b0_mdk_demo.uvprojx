@@ -1798,6 +1798,16 @@
             </File>
           </Files>
         </Group>
+        <Group>
+          <GroupName>drv/cdev</GroupName>
+          <Files>
+            <File>
+              <FileName>drv_ptHCHO.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\driver\cdev\drv_ptHCHO.c</FilePath>
+            </File>
+          </Files>
+        </Group>
       </Groups>
     </Target>
   </Targets>

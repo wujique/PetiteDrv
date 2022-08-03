@@ -208,7 +208,10 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_OCTOSPI1_Init();
-  //MX_UART4_Init();
+  MX_UART4_Init();
+  
+  HAL_UART_Transmit(&huart4, "log init\r\n", 10, 100);
+  
   //MX_LTDC_Init();
 	MX_DMA_Init();
 	MX_DCMI_Init();
@@ -822,7 +825,7 @@ static void MX_UART7_Init(void)
 
   /* USER CODE END UART7_Init 1 */
   huart7.Instance = UART7;
-  huart7.Init.BaudRate = 115200;
+  huart7.Init.BaudRate = 9600;
   huart7.Init.WordLength = UART_WORDLENGTH_8B;
   huart7.Init.StopBits = UART_STOPBITS_1;
   huart7.Init.Parity = UART_PARITY_NONE;

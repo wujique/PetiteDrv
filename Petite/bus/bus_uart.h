@@ -2,6 +2,22 @@
 #define __BUS_UART_H__
 
 #include "mem/p_kfifo.h"
+
+
+typedef enum {
+  MCU_UART_1 =0,
+  MCU_UART_2,
+  MCU_UART_3,
+  MCU_UART_4,
+  MCU_UART_5,
+  MCU_UART_6,
+  MCU_UART_7,
+  MCU_UART_8,
+  MCU_UART_MAX,
+}
+McuUartNum; 
+
+
 /* */
 typedef struct {
 	McuUartNum comport;

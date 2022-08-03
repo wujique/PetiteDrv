@@ -4180,10 +4180,16 @@ static void UART_RxISR_8BIT(UART_HandleTypeDef *huart)
   if (huart->RxState == HAL_UART_STATE_BUSY_RX)
   {
     uhdata = (uint16_t) READ_REG(huart->Instance->RDR);
+	//uart_printf("%c", (uint8_t)(uhdata & (uint8_t)uhMask));
+	/* 填入环形缓冲 */
+	mcu_uart_rec(huart, (uint8_t)(uhdata & (uint8_t)uhMask));
+	/* 应用层的回调 */
+	#if 0
     *huart->pRxBuffPtr = (uint8_t)(uhdata & (uint8_t)uhMask);
     huart->pRxBuffPtr++;
     huart->RxXferCount--;
-
+	#endif
+	
     if (huart->RxXferCount == 0U)
     {
       /* Disable the UART Parity Error Interrupt and RXNE interrupts */
@@ -4330,9 +4336,11 @@ static void UART_RxISR_8BIT_FIFOEN(UART_HandleTypeDef *huart)
     while ((nb_rx_data > 0U) && ((isrflags & USART_ISR_RXNE_RXFNE) != 0U))
     {
       uhdata = (uint16_t) READ_REG(huart->Instance->RDR);
-      *huart->pRxBuffPtr = (uint8_t)(uhdata & (uint8_t)uhMask);
-      huart->pRxBuffPtr++;
-      huart->RxXferCount--;
+	  
+      //*huart->pRxBuffPtr = (uint8_t)(uhdata & (uint8_t)uhMask);
+      //huart->pRxBuffPtr++;
+      //huart->RxXferCount--;
+      
       isrflags = READ_REG(huart->Instance->ISR);
 
       /* If some non blocking errors occurred */

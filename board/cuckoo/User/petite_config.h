@@ -25,7 +25,7 @@
 #define DRV_WM8978_MODULE   	1
 #define DRV_XPT2046_MODULE		1
 #define DRV_HTU21U_MODULE		0
-#define DRV_HCOC_MODULE			0
+#define DRV_HCOC_MODULE			1
 
 /* 摄像头功能 */
 #define DRV_CAMERA_MODULE		1

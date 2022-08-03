@@ -3,14 +3,13 @@
 #include "mcu.h"
 #include "log.h"
 #include "board_sysconf.h"
-
+#include "bus_uart.h"
 
 /*
 	PE9 IO2
 	PE10 IO0
 	PA2 EN
 	PE13 RST
-	
 	*/
 
 void esp8266_io_init(void)
@@ -35,32 +34,30 @@ void esp8266_io_init(void)
 	
 }
 
-/*
-HAL_UART_Transmit_IT()
-HAL_UART_Receive_IT
-HAL_UART_TxCpltCallback
-HAL_UART_RxCpltCallback
-*/
-extern UART_HandleTypeDef McuHuart2;
-extern UART_HandleTypeDef huart7;
-
 char ESP8266_buf[10];
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
-{
-	
-	//HAL_UART_Transmit(&McuHuart2, ESP8266_buf, 1, 100);	
-	uart_printf("%c", ESP8266_buf[0]);
-	HAL_UART_Receive_IT(&huart7, ESP8266_buf, 1);
-}
+
+const static BusUartPra Uart7Pra = {
+	.BaudRate = 115200, //波特率			 
+
+	.bufsize = 512,//接收缓冲长度
+};
 
 void esp8266_uart_test(void)
 {
-	HAL_UART_Receive_IT(&huart7, ESP8266_buf, 1);
-	
+	int rlen;
+	BusUartNode *uartnode;
+	uint8_t buf[16];
+	uartnode = bus_uart_open("uart7", &Uart7Pra);
+
 	while(1) {
 		//uart_printf("s ");
-		HAL_UART_Transmit(&huart7, "AT\r\n", 4, 1000);
+		bus_uart_write(uartnode, "AT\r\n", 4);
 		HAL_Delay(1000);
+		memset(buf, 0, sizeof(buf));
+		rlen = bus_uart_read(uartnode, buf, 10);
+		if (rlen != 0) {
+			uart_printf("%s", buf);
+		}
 	}
 }
 
