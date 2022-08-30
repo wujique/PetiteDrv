@@ -36,17 +36,21 @@ extern s32 board_init(void);
  */
 osThreadId_t defaultTaskHandle;
 const osThreadAttr_t defaultTask_attributes = {
-  .name = "StartTask",
+  .name = "PetiteTask",
   .stack_size = START_TASK_STK_SIZE,
   .priority = (osPriority_t) START_TASK_PRIO,//osPriorityNormal,
 };
 
-void start_task(void *pvParameters)
+extern osThreadId_t TestTaskHandle;
+
+
+void petite_task(void *pvParameters)
 {
-	char TaskListBuf[256];
+	char TaskListBuf[512];
 	char tcnt=0;
+	UBaseType_t stackHWM;
 	
-	wjq_log(LOG_INFO,"[    _app] start task\r\n");
+	wjq_log(LOG_INFO,"[    _app] petite_task\r\n");
 
 	/* 初始化petite模块状态*/
 	vfs_init();
@@ -67,6 +71,12 @@ void start_task(void *pvParameters)
 			vTaskGetRunTimeStats(TaskListBuf);
 			uart_printf("  name count per\r\n");
 			uart_printf("%s", TaskListBuf);
+
+			/* 栈的水位线，意味着剩余多少个 U32 */
+			stackHWM = uxTaskGetStackHighWaterMark(defaultTaskHandle);
+			uart_printf("PetiteTask hwm:%d\r\n", stackHWM);
+			stackHWM = uxTaskGetStackHighWaterMark(TestTaskHandle);
+			uart_printf("TestTask hwm:%d\r\n", stackHWM);
 		}
 	}
 }
@@ -92,7 +102,7 @@ int petite_app(void)
 	wjq_log(LOG_INFO,"ccreate start task!\r\n");
   	/* Init scheduler */
   	osKernelInitialize();
-	defaultTaskHandle = osThreadNew(start_task, NULL, &defaultTask_attributes);
+	defaultTaskHandle = osThreadNew(petite_task, NULL, &defaultTask_attributes);
 					
 	if(NULL != defaultTaskHandle){
 		wjq_log(LOG_INFO,"[    _app] freertos Scheduler\r\n");
