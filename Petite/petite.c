@@ -46,7 +46,7 @@ extern osThreadId_t TestTaskHandle;
 
 void petite_task(void *pvParameters)
 {
-	char TaskListBuf[512];
+	char TaskListBuf[256];
 	char tcnt=0;
 	UBaseType_t stackHWM;
 	
@@ -57,13 +57,17 @@ void petite_task(void *pvParameters)
 	font_init();
 	
 	board_init();
+
+	/* 测试内存溢出 rtos检测 ，溢出后HOOK函数会被调用
+		vApplicationStackOverflowHook */
+	//memset(TaskListBuf, 0, sizeof(TaskListBuf)+50*4);
 	
 	for(;;) {
 		
 		osDelay(5);
 		board_low_task(5);
 		tcnt++;
-		if (tcnt >= 200) {
+		if (tcnt >= 400) {
 			tcnt = 0;
 			vTaskList(TaskListBuf);
 			uart_printf("  name         state priority   stack   NUM\r\n");
@@ -72,7 +76,7 @@ void petite_task(void *pvParameters)
 			uart_printf("  name count per\r\n");
 			uart_printf("%s", TaskListBuf);
 
-			/* 栈的水位线，意味着剩余多少个 U32 */
+			/* 栈的水位线，指栈剩余多少个 U32 */
 			stackHWM = uxTaskGetStackHighWaterMark(defaultTaskHandle);
 			uart_printf("PetiteTask hwm:%d\r\n", stackHWM);
 			stackHWM = uxTaskGetStackHighWaterMark(TestTaskHandle);
@@ -122,6 +126,15 @@ int petite_app(void)
 /**
   * @}
   */
+/*-------------------------------------
+	一些OS HOOK函数定义，暂时放这里
+-----------------------------------*/
+void vApplicationStackOverflowHook (TaskHandle_t xTask, signed char *pcTaskName)
+{
+	uart_printf("stack overflow %s\r\n", pcTaskName);
+	
+}
+
 
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

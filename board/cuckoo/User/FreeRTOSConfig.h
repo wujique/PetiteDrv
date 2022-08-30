@@ -83,7 +83,7 @@
 	void vApplicationStackOverflowHook( TaskHandle_t xTask,
 	signed char *pcTaskName );
 	*/
-#define configCHECK_FOR_STACK_OVERFLOW 			1
+//#define configCHECK_FOR_STACK_OVERFLOW 			1
 /*任务创建的时候将任务栈所有数据初始化为 0xa5，任务切换时进行任务栈检测的时候会检测末
 	尾的 16 个字节是否都是 0xa5，通过这种方式来检测任务栈是否溢出了
 	*/
@@ -92,12 +92,10 @@
 
 /* 统计CPU使用率，CPU_RunTime 是一个时钟滴答，最好比 RTOS 的tick精度高*/
 #define configGENERATE_RUN_TIME_STATS     		1
-
 extern volatile uint32_t LocalTime; 
 #define portCONFIGURE_TIMER_FOR_RUN_TIME_STATS() 	(LocalTime = 0ul) 
 #define portGET_RUN_TIME_COUNTER_VALUE() 			LocalTime
-
-
+/*--------------------------------*/
 #define configUSE_PORT_OPTIMISED_TASK_SELECTION  0
 /* USER CODE BEGIN MESSAGE_BUFFER_LENGTH_TYPE */
 /* Defaults to size_t for backward compatibility, but can be changed
