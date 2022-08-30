@@ -25,8 +25,11 @@
 #if (DRV_HCOC_MODULE == 1)
 
 #include "board_sysconf.h"
-
 #include "log.h"
+
+/*
+	攀藤的串口传感器驱动
+	*/
 #include "drv_ptHCHO.h"
 
 s32 PtHCHOGd = -2;

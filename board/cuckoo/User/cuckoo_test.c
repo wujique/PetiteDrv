@@ -92,16 +92,17 @@ void cuckoo_7b0_test(void)
 	uint8_t lampsta = 0;
 	wjq_log(LOG_DEBUG,"run app\r\n");
 
-
-	//esp8266_io_init();
-	//esp8266_uart_test();
+	#if 0//test
+	esp8266_io_init();
+	esp8266_uart_test();
 	dev_ptHCHO_test();
-
+	#endif
+	
 	sd_fatfs_init();
 	/* 将SD卡文件系统挂载到VFS上 */
 	vfs_add_node(&SdFatFs);
 
-	#if 1
+	#if 0//test
 	wjq_log(LOG_FUN, "dev_i2coledlcd_test\r\n");
 	LcdOledI2C = dev_lcd_open("i2coledlcd");
 	if (LcdOledI2C==NULL)
@@ -116,7 +117,7 @@ void cuckoo_7b0_test(void)
 
 	#endif
 
-	#if 0
+	#if 0//test
 	DevLcdNode *LcdCogSpi = NULL;
 	wjq_log(LOG_FUN, "cog lcd test\r\n");
 	LcdCogSpi = dev_lcd_open("spicoglcd");
@@ -149,15 +150,17 @@ void cuckoo_7b0_test(void)
 	注意，初始化LVGL的过程，会用到不少栈，
 	如果在rtos的任务中进行初始化，注意任务栈的大小，
 	防止溢出造成hardfault */
-	#if 0
+	#if 1
 	lv_init();
 	lv_port_disp_init();
 	lv_port_indev_init();
 	lv_demo_widgets();
 	#endif
-	//fun_sound_play("mtd0/0:stereo_16bit_32k.wav", "wm8978");
-	
-	camera_test();
+
+	#if 0//测试WM8978
+	fun_sound_play("mtd0/0:stereo_16bit_32k.wav", "wm8978");
+	#endif
+	//camera_test();
 
 	tp_open();
 
@@ -166,16 +169,18 @@ void cuckoo_7b0_test(void)
 		osDelay(5);
 		
 		/* lvgl */
-		//lv_task_handler();
+		lv_task_handler();
 		/*测试LCD RGB565 */
 
 		a++;
-
+	
+		#if 0
 		if (a % 200 == 0) {	
 			cpu_temp();
 			cpu_rtc();
 
 		}
+		#endif
 		
 		if (a % 100 == 0) {
 			b++;

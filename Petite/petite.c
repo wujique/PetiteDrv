@@ -43,6 +43,9 @@ const osThreadAttr_t defaultTask_attributes = {
 
 void start_task(void *pvParameters)
 {
+	char TaskListBuf[256];
+	char tcnt=0;
+	
 	wjq_log(LOG_INFO,"[    _app] start task\r\n");
 
 	/* 初始化petite模块状态*/
@@ -52,8 +55,19 @@ void start_task(void *pvParameters)
 	board_init();
 	
 	for(;;) {
+		
 		osDelay(5);
 		board_low_task(5);
+		tcnt++;
+		if (tcnt >= 200) {
+			tcnt = 0;
+			vTaskList(TaskListBuf);
+			uart_printf("  name         state priority   stack   NUM\r\n");
+			uart_printf("%s", TaskListBuf);
+			vTaskGetRunTimeStats(TaskListBuf);
+			uart_printf("  name count per\r\n");
+			uart_printf("%s", TaskListBuf);
+		}
 	}
 }
 

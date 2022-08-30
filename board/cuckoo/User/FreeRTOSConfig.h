@@ -67,15 +67,37 @@
 #define configCPU_CLOCK_HZ				( SystemCoreClock )
 #define configTICK_RATE_HZ				( ( TickType_t ) 1000 )//系统频率，1Khz，也就是1MS调度一次
 #define configMAX_PRIORITIES			( 56 )//56个优先级
-#define configMINIMAL_STACK_SIZE		( ( unsigned short ) 130 )
+#define configMINIMAL_STACK_SIZE		( ( unsigned short ) 130 )/* 任务栈最小SIZE*/
 #define configTOTAL_HEAP_SIZE			( ( size_t ) ( 20 * 1024 ) )//堆，使用FreeRtos的内存分配方案才会用到
 #define configMAX_TASK_NAME_LEN                  ( 16 )
-#define configUSE_TRACE_FACILITY                 1
+
+#define configUSE_TRACE_FACILITY                1/* 使能可视化追踪功能*/
+#define configUSE_STATS_FORMATTING_FUNCTIONS	1
+
 #define configUSE_16_BIT_TICKS                   0
 #define configUSE_MUTEXES                        1
 #define configQUEUE_REGISTRY_SIZE                8
 #define configUSE_RECURSIVE_MUTEXES              0/* 递归mutexes*/
 #define configUSE_COUNTING_SEMAPHORES            1
+/* 任务切换时间进行 SP指针是否越界， 
+	void vApplicationStackOverflowHook( TaskHandle_t xTask,
+	signed char *pcTaskName );
+	*/
+#define configCHECK_FOR_STACK_OVERFLOW 			1
+/*任务创建的时候将任务栈所有数据初始化为 0xa5，任务切换时进行任务栈检测的时候会检测末
+	尾的 16 个字节是否都是 0xa5，通过这种方式来检测任务栈是否溢出了
+	*/
+#define configCHECK_FOR_STACK_OVERFLOW 			2
+
+
+/* 统计CPU使用率，CPU_RunTime 是一个时钟滴答，最好比 RTOS 的tick精度高*/
+#define configGENERATE_RUN_TIME_STATS     		1
+
+extern volatile uint32_t LocalTime; 
+#define portCONFIGURE_TIMER_FOR_RUN_TIME_STATS() 	(LocalTime = 0ul) 
+#define portGET_RUN_TIME_COUNTER_VALUE() 			LocalTime
+
+
 #define configUSE_PORT_OPTIMISED_TASK_SELECTION  0
 /* USER CODE BEGIN MESSAGE_BUFFER_LENGTH_TYPE */
 /* Defaults to size_t for backward compatibility, but can be changed
@@ -88,7 +110,7 @@
 #define configMAX_CO_ROUTINE_PRIORITIES          ( 2 )
 
 /* Software timer definitions. */
-#define configUSE_TIMERS                         1
+#define configUSE_TIMERS                         1/* 软定时器任务 Tmr_SVC*/
 #define configTIMER_TASK_PRIORITY                ( 2 )
 #define configTIMER_QUEUE_LENGTH                 10
 #define configTIMER_TASK_STACK_DEPTH             256
@@ -96,7 +118,7 @@
 /* CMSIS-RTOS V2 flags */
 #define configUSE_OS2_THREAD_SUSPEND_RESUME  1
 #define configUSE_OS2_THREAD_ENUMERATE       1
-#define configUSE_OS2_EVENTFLAGS_FROM_ISR    1
+#define configUSE_OS2_EVENTFLAGS_FROM_ISR    1/*  */
 #define configUSE_OS2_THREAD_FLAGS           1
 #define configUSE_OS2_TIMER                  1
 #define configUSE_OS2_MUTEX                  1
@@ -111,7 +133,7 @@ to exclude the API function. */
 #define INCLUDE_vTaskDelayUntil              1
 #define INCLUDE_vTaskDelay                   1
 #define INCLUDE_xTaskGetSchedulerState       1
-#define INCLUDE_xTimerPendFunctionCall       1
+#define INCLUDE_xTimerPendFunctionCall       1/* */
 #define INCLUDE_xQueueGetMutexHolder         1
 #define INCLUDE_uxTaskGetStackHighWaterMark  1
 #define INCLUDE_xTaskGetCurrentTaskHandle    1
@@ -124,6 +146,9 @@ to exclude the API function. */
 #define USE_FreeRTOS_HEAP_4
 
 /* Cortex-M specific definitions. */
+/* configPRIO_BITS 定义了芯片优先级用了内核的几个bit，M内核是8个bit
+	STM32只用了高4bit
+	*/
 #ifdef __NVIC_PRIO_BITS
  /* __BVIC_PRIO_BITS will be specified when CMSIS is being used. */
  #define configPRIO_BITS         __NVIC_PRIO_BITS
@@ -133,6 +158,8 @@ to exclude the API function. */
 
 /* The lowest interrupt priority that can be used in a call to a "set priority"
 function. */
+/* freertos使用中断分组4，所有BIT都是抢占优先级，没有次优先级 
+	所以最低优先级就是15*/
 #define configLIBRARY_LOWEST_INTERRUPT_PRIORITY   15
 
 /* The highest interrupt priority that can be used by any interrupt service
@@ -141,7 +168,7 @@ INTERRUPT SAFE FREERTOS API FUNCTIONS FROM ANY INTERRUPT THAT HAS A HIGHER
 PRIORITY THAN THIS! (higher priorities are lower numeric values. 
 	系统管理中断阈值
 	优先级高于这个值（数值小于这个值）的中断不受RTOS管理(关中断)
-	通常，尽量不要在中断调用系统接口
+	这些中断不能调用系统接口，比如 xxx_FromISR函数
 	关闭了所有小于等于宏定义 configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY
     所定义的中断优先级，这样临界段代码就不会被中断干扰到
 */
@@ -170,7 +197,6 @@ standard names. */
 #define vPortSVCHandler SVC_Handler
 #define xPortPendSVHandler PendSV_Handler
 //#define xPortSysTickHandler SysTick_Handler
-
 //#define pvPortMalloc wjq_malloc_m
 //#define vPortFree	wjq_free_m
 /* IMPORTANT: After 10.3.1 update, Systick_Handler comes from NVIC (if SYS timebase = systick), otherwise from cmsis_os2.c */
