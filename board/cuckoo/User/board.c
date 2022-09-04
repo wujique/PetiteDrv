@@ -48,8 +48,8 @@ s32 board_init(void)
 		//tp_init(&RtpXpt2046);
 	}
 	/* 摄像头初始化 */
-	//DCMI_PWDN_RESET_Init();
-	//camera_init();
+	DCMI_PWDN_RESET_Init();
+	camera_init();
 
 	cuckoo_7b0_test_init();
 	

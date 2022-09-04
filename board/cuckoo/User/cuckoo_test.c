@@ -150,7 +150,7 @@ void cuckoo_7b0_test(void)
 	注意，初始化LVGL的过程，会用到不少栈，
 	如果在rtos的任务中进行初始化，注意任务栈的大小，
 	防止溢出造成hardfault */
-	#if 1
+	#if 0
 	lv_init();
 	lv_port_disp_init();
 	lv_port_indev_init();
@@ -160,9 +160,9 @@ void cuckoo_7b0_test(void)
 	#if 0//测试WM8978
 	fun_sound_play("mtd0/0:stereo_16bit_32k.wav", "wm8978");
 	#endif
-	//camera_test();
+	camera_test();
 
-	tp_open();
+	//tp_open();
 
 	while(1) {
 
