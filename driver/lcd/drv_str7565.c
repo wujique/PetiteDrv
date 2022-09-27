@@ -260,9 +260,9 @@ static s32 drv_ST7565_drawpoint(DevLcdNode *lcd, u16 x, u16 y, u16 color)
 	
 	drvdata = (struct _cog_drv_data *)lcd->pri;
 
-	if(x > lcd->width)
+	if(x >= lcd->width)
 		return -1;
-	if(y > lcd->height)
+	if(y >= lcd->height)
 		return -1;
 
 	if(lcd->dir == W_LCD)
