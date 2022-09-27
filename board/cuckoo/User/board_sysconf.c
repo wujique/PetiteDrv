@@ -17,7 +17,7 @@
 
 
 /* cuckoo 小板， SAI接口和外扩I2C接口的其他信号共用，
-	需要注意，特别是外界OLED等外设时。*/
+	需要注意，特别是外界OLED等外设*/
 const DevI2c DevVi2c1={
 		.pnode={
 				.name = "VI2C1",
@@ -30,11 +30,8 @@ const DevI2c DevVi2c1={
 		.sdaport = MCU_PORT_A,
 		.sdapin = MCU_IO_5,
 		};
-
-
 /*
-	I2C接口的LCD总线
-*/
+	I2C接口的LCD总线 */
 const DevLcdBus BusLcdI2C1={
 	.pnode={
 				.name = "BusLcdI2C1",
@@ -77,14 +74,15 @@ const DevLcd DevLcdOled1={
 	//.buspra = &OledLcdI2cPra,
 };
 
+
+#if 0
 /*
 	VSPI1，核心板上的LCD接口中的4根IO模拟SPI，
 	用于XPT2046方案触摸处理，可读可写。
 	在cuckoo上，SPI方案和I2C接口复用，
 	其中I2C用于CTP，CAMERA，I2S，OLED等。
-	因此，XPT2046只用来是LCD，实际上不用。
-*/
-#if 0
+	因此，XPT2046只用来是LCD 触摸。*/
+
 const DevSpi DevVSpi1IO={
 		.pnode={
 				.name = "VSPI1",
@@ -183,7 +181,7 @@ const DevSpiCh DevSpi3CH3={
 		
 	};
 
-#if 1
+
 /*
 	串行LCD接口，使用真正的SPI控制
 	外扩接口中的SPI接口
@@ -208,26 +206,6 @@ const DevLcdBus BusLcdSpi3={
 	.staport = MCU_PORT_E, 
 	.stapin = MCU_IO_14,
 };
-#else
-				/*
-					用来接没有CS和MISO的1.33寸LCD屏
-				*/
-				const DevLcdBus BusLcdVSpi3={
-					.name = "BusLcdVSpi3",
-					.type = LCD_BUS_SPI,
-					.basebus = "VSPI3_CH1",
-				
-					.A0port = MCU_PORT_G,
-					.A0pin = GPIO_Pin_4,
-				
-					.rstport = MCU_PORT_G,
-					.rstpin = GPIO_Pin_7,
-				
-					.blport = MCU_PORT_G,
-					.blpin = GPIO_Pin_9,
-				};
-				
-#endif 
 
 /*SPI接口的 COG LCD*/
 
@@ -244,11 +222,8 @@ const DevLcd DevLcdCOG1	=	{
 	.width = 64, 
 	.height = 128};
 				
-/* spi 接口的三色墨水屏 */
-//const DevLcd DevLcdSPIEPaper =	{"spiE-Paper",		"BusLcdSpi3",	0x9187, 176, 264};
 /* spi 接口 黑白墨水屏 1.54寸 GDEH154D27*/
 const DevLcd DevLcdSPIEPaper =	{
-
 	.pnode={
 				.name = "spiE-Paper",
 				.type = DEV_LCD,
@@ -257,7 +232,22 @@ const DevLcd DevLcdSPIEPaper =	{
 	.buslcd = "BusLcdSpi3",
 	.id = 0x3820, 
 	.width = 200, 
-	.height = 200};
+	.height = 200
+	};
+
+
+void *PetiteDevTable[]={
+	/*注册I2C总线，将oled1挂载此 I2C总线上 */
+	(void *)&DevVi2c1,
+		(void *)&BusLcdI2C1,
+			(void *)&DevLcdOled1,
+	/*硬SPI3控制器，外扩接口的SPI口，并定义一个BusLcd在此总线上 
+		可将一些LCD设备挂在本总线上 */
+	(void *)&DevSpi3IO,
+		(void *)&DevSpi3CH3,
+			(void *)&BusLcdSpi3,
+				(void *)&DevLcdCOG1,
+	};
 
 
 /*
@@ -267,36 +257,46 @@ const DevLcd DevLcdSPIEPaper =	{
 */
 s32 petite_dev_register(void)
 {
-	wjq_log(LOG_DEBUG, "[register] petite_dev_register!\r\n");
+	uint8_t i=0;
+	uint8_t len;
+	PetiteNode *pnod;
 
-	/*注册I2C总线*/
-	bus_i2c_register(&DevVi2c1);
-			dev_lcdbus_register(&BusLcdI2C1);
-					dev_lcd_register(&DevLcdOled1);
+	len = (sizeof(PetiteDevTable)/sizeof(PetiteDevTable[0]));
+	
+	wjq_log(LOG_DEBUG, "\r\n\r\n[register] petite_dev_register: %d device!\r\n", len);
 
+	while(i < len){
+		pnod = 	(PetiteNode *)PetiteDevTable[i];
+		uart_printf("pnode name:%s\r\n", pnod->name);
+		switch(pnod->type)
+		{
+			case BUS_I2C_V:
+				bus_i2c_register((const DevI2c *)PetiteDevTable[i]);
+				break;
+
+			case BUS_SPI_H:
+				bus_spi_register((const DevSpi *)PetiteDevTable[i]);
+				break;
+			case BUS_SPI_CH:
+				bus_spich_register((const DevSpiCh *)PetiteDevTable[i]);
+				break;
 				
-	/*硬SPI3控制器，核心板和底板的FLASH、外扩接口的SPI口*/
-	bus_spi_register(&DevSpi3IO);			
-			bus_spich_register(&DevSpi3CH3);
-					dev_lcdbus_register(&BusLcdSpi3);
-						//dev_lcd_register(&DevLcdSPIEPaper);
-						//dev_lcd_register(&DevLcdCOG1);
-						//dev_lcd_register(&DevLcdSpiOled);
-
-			//mcu_spich_register(&DevSpi3CH4);
-	/*		
-	bus_spi_register(&DevVSpi1IO);			
-			bus_spich_register(&DevVSpi1CH1);
-			*/
-	/*测试1.33寸IPS屏幕采用*/
-	#if 0
-	mcu_spi_register(&DevVspi3IO);
-			mcu_spich_register(&DevVSpi3CH1);
-					dev_lcdbus_register(&BusLcdVSpi3);
-							dev_lcd_register(&DevLcdVSPITFT);
-	#endif
-
-
+			case BUS_LCD_SPI:
+			case BUS_LCD_I2C:
+				dev_lcdbus_register((const DevLcdBus *)PetiteDevTable[i]);
+				break;
+			
+			case DEV_LCD:
+				dev_lcd_register((const DevLcd *)PetiteDevTable[i]);
+				break;
+			
+			default:
+				wjq_log(LOG_DEBUG, "\r\n\r\n[register] not register!\r\n\r\n");
+				break;
+		}
+		i++;
+	}
+				
 	return 0;
 }
 
