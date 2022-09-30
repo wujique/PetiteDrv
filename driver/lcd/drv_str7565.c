@@ -217,7 +217,7 @@ s32 drv_ST7565_init(DevLcdNode *lcd)
 
 	/*申请显存，永不释放*/
 	lcd->pri = (void *)wjq_malloc(sizeof(struct _cog_drv_data));
-	memset((char*)lcd->pri, 0x55, 128*8);//要改为动态判断显存大小
+	memset((char*)lcd->pri, 0x55, sizeof(struct _cog_drv_data));
 	
 	drv_ST7565_refresh_gram(lcd, 0,127,0,63);
 
