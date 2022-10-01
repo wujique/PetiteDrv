@@ -313,7 +313,7 @@
           </ArmAdsMisc>
           <Cads>
             <interw>1</interw>
-            <Optim>3</Optim>
+            <Optim>2</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>1</OneElfS>
@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>NDEBUG</Define>
               <Undefine></Undefine>
-              <IncludePath>.\Core\Inc;.\Drivers\STM32H7xx_HAL_Driver\Inc;.\User;.\Drivers\CMSIS\Include;.\Drivers\CMSIS\Device\ST\STM32H7xx\Include;.\Drivers\STM32H7xx_HAL_Driver\Inc\Legacy;..\..\mcu\stm32h7b0vb;..\..\Petite;..\..\driver;..\..\driver\touch;..\..\driver\lcd;..\..\Utilities\lvgl;..\..\Utilities\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\..\Utilities\FreeRTOS\Source\include;..\..\Utilities\FreeRTOS\Source\CMSIS_RTOS_V2;..\..\Utilities\FatFs;..\..\driver\sound;..\..\driver\touch\rtp\tslib;..\..\driver\touch\rtp;..\..\Petite\bus</IncludePath>
+              <IncludePath>.\Core\Inc;.\Drivers\STM32H7xx_HAL_Driver\Inc;.\User;.\Drivers\CMSIS\Include;.\Drivers\CMSIS\Device\ST\STM32H7xx\Include;.\Drivers\STM32H7xx_HAL_Driver\Inc\Legacy;..\..\mcu\stm32h7b0vb;..\..\Petite;..\..\driver;..\..\driver\touch;..\..\driver\lcd;..\..\Utilities\lvgl;..\..\Utilities\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\..\Utilities\FreeRTOS\Source\include;..\..\Utilities\FreeRTOS\Source\CMSIS_RTOS_V2;..\..\Utilities\FatFs;..\..\driver\sound;..\..\driver\touch\rtp\tslib;..\..\driver\touch\rtp;..\..\Petite\bus;..\..\Utilities\Freetype\include</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1805,6 +1805,26 @@
               <FileName>drv_ptHCHO.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\driver\cdev\drv_ptHCHO.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>mid/freetype</GroupName>
+          <Files>
+            <File>
+              <FileName>freetype_src.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Utilities\Freetype\freetype_src.c</FilePath>
+            </File>
+            <File>
+              <FileName>freetype_test.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Utilities\Freetype\freetype_test.c</FilePath>
+            </File>
+            <File>
+              <FileName>ftdebug.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Utilities\Freetype\ftdebug.c</FilePath>
             </File>
           </Files>
         </Group>

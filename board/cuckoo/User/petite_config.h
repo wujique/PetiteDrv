@@ -54,7 +54,7 @@
 #define SYS_FS_CONST	1
 
 /*定义alloc.c内存管理数组*/
-#define AllocArraySize (40*1024)
+#define AllocArraySize (100*1024)
 
 
 #endif

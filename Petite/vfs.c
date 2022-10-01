@@ -651,5 +651,39 @@ int vfs_tell(int fd)
 }
 
 
+
+ft_file_struct * vfs_node_open(const char *pathname, char* oflags)
+{
+	//Uprintf("vfs_node_open:%s\r\n", pathname);
+	int tmp;
+	tmp = vfs_open(pathname, O_RDONLY);
+	return (ft_file_struct *)tmp;
+}
+
+int vfs_node_read(void *buf, unsigned int size,unsigned int nmemb, ft_file_struct * fd)
+{
+	
+	return vfs_read((int)fd, buf, size*nmemb);	
+}
+
+int vfs_node_write(ft_file_struct * fd, const void *buf, size_t length)
+{
+}
+
+int vfs_node_lseek(ft_file_struct * fd, int offset, int whence)
+{
+	return vfs_lseek((int) fd, offset, whence);
+}
+
+int vfs_node_close(ft_file_struct * fd)
+{
+	return vfs_close((int) fd);
+}
+
+int vfs_node_tell(ft_file_struct * fd)
+{
+	return vfs_tell((int) fd);
+}
+
 #endif
 

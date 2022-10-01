@@ -67,6 +67,7 @@ void petite_task(void *pvParameters)
 		osDelay(5);
 		board_low_task(5);
 		tcnt++;
+		#if 0
 		if (tcnt >= 400) {
 			tcnt = 0;
 			vTaskList(TaskListBuf);
@@ -82,6 +83,7 @@ void petite_task(void *pvParameters)
 			stackHWM = uxTaskGetStackHighWaterMark(TestTaskHandle);
 			uart_printf("TestTask hwm:%d\r\n", stackHWM);
 		}
+		#endif
 	}
 }
 

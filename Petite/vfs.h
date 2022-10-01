@@ -45,5 +45,15 @@ extern int vfs_write(int fd, const void *buf, size_t length);
 extern int vfs_lseek(int fd, int offset, int whence);
 extern int vfs_close(int fd);
 
+
+typedef struct
+{
+	int na;
+}ft_file_struct;
+
+
+extern ft_file_struct * vfs_node_open(const char * pathname, char * oflags);
+
+
 #endif
 

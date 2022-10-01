@@ -6,6 +6,7 @@ LR_ROM1 0x90000000 0x00200000  {
    test_qspi.o (+RO)
    lv* (+RO)
    img* (+RO)
+   freetype_src.o (+RO)
   }
 }
 

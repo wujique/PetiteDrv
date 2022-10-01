@@ -249,11 +249,11 @@ void*wjq_malloc_t(unsigned nbytes)
 /*
 	二次封装，如果需要做互斥，在_m后缀的函数内实现。
 */
-void*wjq_malloc_m(unsigned nbytes)
+void*wjq_malloc_m(unsigned nbytes, const char *f, int l)
 {
 	void*p;
-	//wjq_log(LOG_DEBUG, "malloc:%d\r\n", nbytes);
-	
+	//uart_printf("malloc:%d, %s, %d\r\n", nbytes, f, l);
+	//uart_printf("malloc:%d\r\n", nbytes);
 	p = wjq_malloc_t(nbytes);
 
 	return p;
@@ -269,7 +269,7 @@ void wjq_free_m(void*ap)
 }
 
 
-void*wjq_calloc(size_t n, size_t size)
+void*wjq_calloc_m(size_t n, size_t size)
 {
 	void *p;
 
@@ -277,8 +277,7 @@ void*wjq_calloc(size_t n, size_t size)
 
 	p = wjq_malloc_t(n*size);
 
-	if(p!=NULL)
-	{
+	if(p!=NULL) {
 		memset((char*) p, 0, n*size);
 	}
 	return p;
