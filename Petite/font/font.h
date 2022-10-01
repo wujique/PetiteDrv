@@ -102,5 +102,23 @@ extern int font_get_dotdata(char *fontname, char *str, FontDot *Dot);
 extern s32 font_get_hw(char *font, u16 *h, u16 *w);
 
 
+
+/*
+	每个字符的bitmap都有一个头，
+	为了取点阵方便，头长度是固定的，所有将所有的头放在一起
+	*/
+struct _strBitmapHead{
+	uint16_t rev;//保留字节，默认是回车换行，为了4字节对齐而定义
+	/* 以下五个数据在LCD描字时需要 */
+	uint16_t rows;//bitmap行数
+	uint16_t width;//bitmap宽度，单位像素
+	uint16_t pitch;//每row占字节数
+	int16_t left;//bitmap距离左边的距离，单位像素，可能为负数
+	int16_t top;//bitmap右上角距离基线的距离，可能为负数，例如下划线'_'
+	/*	读bitmap数据的偏移地址  	 */
+	uint32_t index;
+};
+
+
 #endif /* _VIDEO_FONT_H */
 

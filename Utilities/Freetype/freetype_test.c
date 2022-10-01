@@ -114,6 +114,12 @@ int FreeTypeTest1(int ucode[],int lengh)
 #include FT_FREETYPE_H
 
 
+#include "petite_config.h"
+#include "font/font.h"
+#include "petite.h"
+#include "drv_config.h"
+
+
 static FT_Library g_ft_library=0;
 static FT_Face g_ft_face=0;
 
@@ -143,13 +149,10 @@ void WIN_FontInit (void)
 /*
 	获取矢量字体
 	*/
-int WIN_GetWordData(u8 type,unsigned char *buff, int word, int buff_size)
+int WIN_GetWordData(u8 type, unsigned char *buff, int word, int buff_size)
 {
   	unsigned long foffset=0; 
-	u8 qh=word>>8;u8 ql=word&0xff;
-	u8 gbk[3]={0};
-	gbk[0]=word>>8;
-	gbk[1]=word&0xff;
+
 	u8 uni[3]={0};
 	int  i ,j;
 	int  time, time2;
@@ -157,17 +160,15 @@ int WIN_GetWordData(u8 type,unsigned char *buff, int word, int buff_size)
 	if (g_ft_face)	{
 		FT_GlyphSlot slot = g_ft_face->glyph;
 		
-		int w_byte=slot->bitmap.pitch;
-		u8 *buf=slot->bitmap.buffer;
-		
 		Uprintf("FT_Set_Pixel_Sizes!\r\n");
 		FT_Set_Pixel_Sizes(g_ft_face, 24, 24);
 		
 		Uprintf("FT_Load_Char!\r\n");
-		/* 输入的字符是unicode编码：韦 */
+		/* 输入的字符是unicode编码：韦 0x97e6 */
 		time = Stime_get_localtime();
 		FT_Load_Char (g_ft_face, 0x97e6, FT_LOAD_RENDER|FT_LOAD_MONOCHROME);
 		time2 = Stime_get_localtime();
+		/* 测试转换时间 */
 		Uprintf("FT_Load_Char time:%d!\r\n", time2-time);
 		uart_printf( "bitmap.rows=%d\r\n" , slot->bitmap.rows);
 	    uart_printf( "bitmap.width=%d\r\n" , slot->bitmap.width);
@@ -192,9 +193,120 @@ int WIN_GetWordData(u8 type,unsigned char *buff, int word, int buff_size)
 }
 
 
-void FreeTypeTest(void)
+int freetype_getdata(uint16_t pixw, int16_t pixh, struct _strBitmapHead* head, uint8_t *dotbuf, uint16_t unicode)
 {
+	unsigned long foffset=0; 
+
+	u8 uni[3]={0};
+	int  i ,j;
+	int  time, time2;
+	
+	if (g_ft_face)	{
+		FT_GlyphSlot slot = g_ft_face->glyph;
+		
+		Uprintf("FT_Set_Pixel_Sizes: %d, %d\r\n", pixw, pixh);
+		uart_printf("unicode:%04x\r\n", unicode);
+		FT_Set_Pixel_Sizes(g_ft_face, pixw, pixh);
+		
+		Uprintf("FT_Load_Char!\r\n");
+		time = Stime_get_localtime();
+		FT_Load_Char (g_ft_face, unicode, FT_LOAD_RENDER|FT_LOAD_MONOCHROME);
+		time2 = Stime_get_localtime();
+		/* 测试转换时间 */
+		Uprintf("FT_Load_Char time:%d!\r\n", time2-time);
+		uart_printf( "bitmap.rows=%d\r\n" , slot->bitmap.rows);
+		uart_printf( "bitmap.width=%d\r\n" , slot->bitmap.width);
+		uart_printf( "bitmap.pitch=%d\r\n" , slot->bitmap.pitch);
+		uart_printf( "bitmap_left=%d\r\n" , slot->bitmap_left);
+		uart_printf( "bitmap_top=%d\r\n" , slot->bitmap_top);
+
+		head->rows = slot->bitmap.rows;
+		head->width = slot->bitmap.width;
+		head->pitch = slot->bitmap.pitch;
+		head->left = slot->bitmap_left;
+		head->top = slot->bitmap_top;
+
+		memcpy(dotbuf, slot->bitmap.buffer, head->rows*head->pitch);
+
+	}	
+	
+}
+
+/* 
+	在指定位置显示字符串
+	输入的字符串是utf16格式
+	*/
+int freetype_showstr_unicode(uint16_t pixw, int16_t pixh, DevLcdNode *lcd, uint16_t x, uint16_t y, uint16_t *unicodestr)
+{
+	uint16_t *pStr;
+	uint16_t lcdx,lcdy;
+	uint8_t row, col,yshift;
+	uint8_t dotdata;
+	struct _strBitmapHead BitmapHead;
+	uint8_t bitmaptmp[256];
+	
+	pStr = unicodestr;
+
+	lcdx = x;
+	lcdy = y;
+
+	uint16_t baseline = pixh-2;
+
+	while((*pStr) != 0){
+
+		freetype_getdata(pixw, pixh, &BitmapHead, bitmaptmp,*pStr);
+
+		/* 填点 left 和 top 两个参数都会出现负数 */
+		lcdx += BitmapHead.left;
+		
+		if (BitmapHead.top > baseline) yshift = 0;
+		else yshift = baseline - BitmapHead.top;
+		//uart_printf("yshift:%d\r\n", yshift);
+		if (yshift >= pixh) yshift = pixh-1;
+		
+		
+		for(row=0; row<BitmapHead.rows; row++){
+			
+			for(col=0; col<BitmapHead.width; col++){
+				dotdata = bitmaptmp[row * BitmapHead.pitch + col/8];
+				
+				if((dotdata & (0x80>>(col%8)) )!=0 ){
+					uart_printf("*");
+					drv_ST7565_drawpoint(lcd, lcdx + col, lcdy + row + yshift, BLACK);
+				}else{
+					uart_printf("-");
+					drv_ST7565_drawpoint(lcd, lcdx + col, lcdy + row + yshift, WHITE);
+				}
+			}
+			uart_printf("\r\n");
+		}
+		
+		lcdx += BitmapHead.width;
+
+		pStr++;
+	}
+
+	uart_printf("update\r\n");
+	drv_ST7565_update(lcd);
+	
+	return 0;
+}
+
+
+void FreeTypeTest(DevLcdNode *lcd)
+{
+	uint16_t cha[4] = {0x97e6, 0x00};
+	
 	WIN_FontInit();	
-	WIN_GetWordData(1,(unsigned char *)1,1,1);
+	//WIN_GetWordData(1,(unsigned char *)1,1,1);
+	
+	freetype_showstr_unicode(12, 12, lcd, 1, 1, cha);
+	freetype_showstr_unicode(16, 16, lcd, 1+13, 1+8, cha);
+	freetype_showstr_unicode(24, 24, lcd, 1+13+16, 1+16, cha);
+	freetype_showstr_unicode(32, 32, lcd, 1+13+16+24, 1+24, cha);
+	while(1){
+
+	}
+	
 }
 

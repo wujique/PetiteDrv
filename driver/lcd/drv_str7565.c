@@ -48,7 +48,7 @@ struct _cog_drv_data
 
 
 s32 drv_ST7565_init(DevLcdNode *lcd);
-static s32 drv_ST7565_drawpoint(DevLcdNode *lcd, u16 x, u16 y, u16 color);
+s32 drv_ST7565_drawpoint(DevLcdNode *lcd, u16 x, u16 y, u16 color);
 s32 drv_ST7565_color_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 color);
 s32 drv_ST7565_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color);
 static s32 drv_ST7565_display_onoff(DevLcdNode *lcd, u8 sta);
@@ -249,7 +249,7 @@ s32 drv_ST7565_xy2cp(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey, u16 *sc, u
  *@param[out]  无
  *@retval:     static
  */
-static s32 drv_ST7565_drawpoint(DevLcdNode *lcd, u16 x, u16 y, u16 color)
+s32 drv_ST7565_drawpoint(DevLcdNode *lcd, u16 x, u16 y, u16 color)
 {
 	u16 xtmp,ytmp;
 	u16 page, colum;

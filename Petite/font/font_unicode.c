@@ -42,6 +42,7 @@ struct _StrBitmapFontHead{
 	int rev[16-6];
 	
 };
+#if 0
 /*
 	每个字符的bitmap都有一个头，
 	为了取点阵方便，头长度是固定的，所有将所有的头放在一起
@@ -57,7 +58,7 @@ struct _strBitmapHead{
 	/*	读bitmap数据的偏移地址  	 */
 	uint32_t index;
 };
-
+#endif
 /*
 	输入一个unicode内码取点阵的方法
 	1 从block1:unicode tab中查询，得到位置索引------多次读文件-----是否可以用二分法提高速度？
@@ -244,8 +245,7 @@ int font_bitmap_showstr_ansi(DevLcdNode *lcd, uint16_t x, uint16_t y, char *str)
 		/*	如果是中文，自己添加
 			*/
 		unicode = *pStr;
-		font_bitmap_getdata(&BitmapHead, bitmaptmp,unicode);
-
+		font_bitmap_getdata(&BitmapHead, bitmaptmp, unicode);
 		/* 填点 left 和 top 两个参数都会出现负数 */
 		lcdx += BitmapHead.left;
 		

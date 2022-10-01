@@ -22,7 +22,7 @@
 */
 
 /*--------------------- 任务定定义 ------------------------------*/
-#define CUCKOO_TASK_STK_SIZE (1024*8)
+#define CUCKOO_TASK_STK_SIZE (1024*16)
 #define CUCKOO_TASK_PRIO	1
 
 #define START_TASK_STK_SIZE (1024)
