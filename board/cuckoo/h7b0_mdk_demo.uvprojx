@@ -748,6 +748,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\Petite\bus\bus_vspi.c</FilePath>
             </File>
+            <File>
+              <FileName>font_unicode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Petite\font\font_unicode.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

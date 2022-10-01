@@ -198,3 +198,14 @@ void camera_test(void)
 }
 
 
+void board_pre_sleep(uint32_t xModifiableIdleTime)
+{
+	//uart_printf("1");
+}
+
+void board_post_sleep(uint32_t xExpectedIdleTime)
+{
+	//uart_printf("2");
+}
+
+

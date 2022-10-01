@@ -79,8 +79,16 @@
 #define configCPU_CLOCK_HZ				( SystemCoreClock )
 #define configTICK_RATE_HZ				( ( TickType_t ) 1000 )//系统频率，1Khz，也就是1MS调度一次
 #define configMAX_PRIORITIES			( 56 )//56个优先级
-#define configMINIMAL_STACK_SIZE		( ( unsigned short ) 130 )/* 任务栈最小SIZE*/
+#define configMINIMAL_STACK_SIZE		( ( unsigned short ) 512 )/* 任务栈最小SIZE，涉及IDLE任务栈和定时任务*/
 #define configMAX_TASK_NAME_LEN                  ( 16 )
+
+/* 低功耗模式，在IDLE 任务中进入 tickless模式 
+	实现下面两个宏函数，就会在sleep前后调用。
+	#define configPRE_SLEEP_PROCESSING( x )
+	#define configPOST_SLEEP_PROCESSING( x )
+
+	*/
+#define configUSE_TICKLESS_IDLE		1
 
 #define configUSE_TRACE_FACILITY                1/* 使能可视化追踪功能*/
 #define configUSE_STATS_FORMATTING_FUNCTIONS	1
@@ -215,6 +223,11 @@ standard names. */
 //#define xPortSysTickHandler SysTick_Handler
 //#define pvPortMalloc wjq_malloc_m
 //#define vPortFree	wjq_free_m
+
+#define configPRE_SLEEP_PROCESSING( x ) board_pre_sleep(x)
+#define configPOST_SLEEP_PROCESSING( x ) board_post_sleep(x)
+
+
 /* IMPORTANT: After 10.3.1 update, Systick_Handler comes from NVIC (if SYS timebase = systick), otherwise from cmsis_os2.c */
 
 #define USE_CUSTOM_SYSTICK_HANDLER_IMPLEMENTATION 1
