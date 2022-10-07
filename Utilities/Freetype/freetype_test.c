@@ -305,7 +305,7 @@ void FreeTypeTest(DevLcdNode *lcd)
 	freetype_showstr_unicode(24, 24, lcd, 1+13+16, 1+16, cha);
 	freetype_showstr_unicode(32, 32, lcd, 1+13+16+24, 1+24, cha);
 	while(1){
-
+		osDelay(1000);		
 	}
 	
 }

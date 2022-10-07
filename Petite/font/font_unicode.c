@@ -291,7 +291,9 @@ void font_unicode_bitmap_test(DevLcdNode *lcd)
 	font_bitmap_showstr_ansi(lcd, 0, 0, teststr1);
 	font_bitmap_showstr_ansi(lcd, 0, LINE_HIGHT, teststr2);
 
-	while(1){	}
+	while(1){
+		osDelay(1000);
+	}
 	
 }
 
