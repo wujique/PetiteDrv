@@ -36,7 +36,7 @@ extern s32 board_init(void);
  */
 osThreadId_t defaultTaskHandle;
 const osThreadAttr_t defaultTask_attributes = {
-  .name = "PetiteTask",
+  .name = "Pet",
   .stack_size = START_TASK_STK_SIZE,
   .priority = (osPriority_t) START_TASK_PRIO,//osPriorityNormal,
 };
@@ -67,21 +67,23 @@ void petite_task(void *pvParameters)
 		osDelay(5);
 		board_low_task(5);
 		tcnt++;
-		#if 0
-		if (tcnt >= 400) {
+		#if 1
+		if (tcnt >= 1000) {
 			tcnt = 0;
-			vTaskList(TaskListBuf);
-			uart_printf("  name         state priority   stack   NUM\r\n");
-			uart_printf("%s", TaskListBuf);
+			
+			//vTaskList(TaskListBuf);
+			//uart_printf("  name         state priority   stack   NUM\r\n");
+			//uart_printf("%s", TaskListBuf);
+			
 			vTaskGetRunTimeStats(TaskListBuf);
-			uart_printf("  name count per\r\n");
+			//uart_printf("  name count per\r\n");
 			uart_printf("%s", TaskListBuf);
 
 			/* 栈的水位线，指栈剩余多少个 U32 */
-			stackHWM = uxTaskGetStackHighWaterMark(defaultTaskHandle);
-			uart_printf("PetiteTask hwm:%d\r\n", stackHWM);
-			stackHWM = uxTaskGetStackHighWaterMark(TestTaskHandle);
-			uart_printf("TestTask hwm:%d\r\n", stackHWM);
+			//stackHWM = uxTaskGetStackHighWaterMark(defaultTaskHandle);
+			//uart_printf("PetiteTask hwm:%d\r\n", stackHWM);
+			//stackHWM = uxTaskGetStackHighWaterMark(TestTaskHandle);
+			//uart_printf("TestTask hwm:%d\r\n", stackHWM);
 		}
 		#endif
 	}

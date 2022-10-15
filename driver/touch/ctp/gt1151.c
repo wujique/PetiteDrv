@@ -281,7 +281,7 @@ int gt1151_task(void)
 				y = tmp[3]<<8;
 				y += tmp[2];
 
-				uart_printf("tp:%d, x=%d, y=%d\r\n", point_num+1, x, y);
+				//uart_printf("tp:%d, x=%d, y=%d\r\n", point_num+1, x, y);
 				/* this is a demo, you can fill the xy into a buf,
 					the app read the buf get the point.  */
 				ctp_fill_buf(x, y);

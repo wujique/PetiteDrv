@@ -58,6 +58,7 @@ struct _strBitmapHead{
 	/*	读bitmap数据的偏移地址  	 */
 	uint32_t index;
 };
+
 #endif
 /*
 	输入一个unicode内码取点阵的方法
@@ -185,8 +186,31 @@ int font_bitmap_showstr_unicode(DevLcdNode *lcd, uint16_t x, uint16_t y, uint16_
 
 	while((*pStr) != 0){
 
+		if(*pStr == 0x00d){
+			pStr += 1;
+			if (*(pStr+1) == 0x00a){
+				pStr += 1;
+			}
+			lcdy += 13;//BitmapFontHead.pixelh;
+			lcdx = x;
+			continue;
+		}else if (*pStr == 0x00a){
+			pStr += 1;
+			lcdy += 13;//BitmapFontHead.pixelh;
+			lcdx = x;
+			continue;
+		}
+		
 		font_bitmap_getdata(&BitmapHead, bitmaptmp,*pStr);
 
+		#if 0
+		uart_printf("\r\nrows:%d\r\n", BitmapHead.rows);
+		uart_printf("width:%d\r\n", BitmapHead.width);
+		uart_printf("pitch:%d\r\n", BitmapHead.pitch);
+		uart_printf("left:%d\r\n", BitmapHead.left);
+		uart_printf("top:%d\r\n", BitmapHead.top);
+		uart_printf("index:%d\r\n", BitmapHead.index);
+		#endif
 		/* 填点 left 和 top 两个参数都会出现负数 */
 		lcdx += BitmapHead.left;
 		
@@ -211,7 +235,7 @@ int font_bitmap_showstr_unicode(DevLcdNode *lcd, uint16_t x, uint16_t y, uint16_
 			}
 			//uart_printf("\r\n");
 		}
-		
+
 		lcdx += BitmapHead.width;
 
 		pStr++;
@@ -242,10 +266,18 @@ int font_bitmap_showstr_ansi(DevLcdNode *lcd, uint16_t x, uint16_t y, char *str)
 
 	while((*pStr) != 0){
 
-		/*	如果是中文，自己添加
+		/*	如果是中文，自己添加将GBK转为 unicode的代码
 			*/
 		unicode = *pStr;
 		font_bitmap_getdata(&BitmapHead, bitmaptmp, unicode);
+
+		uart_printf("\r\nrows:%d\r\n", BitmapHead.rows);
+		uart_printf("width:%d\r\n", BitmapHead.width);
+		uart_printf("pitch:%d\r\n", BitmapHead.pitch);
+		uart_printf("left:%d\r\n", BitmapHead.left);
+		uart_printf("top:%d\r\n", BitmapHead.top);
+		uart_printf("index:%d\r\n", BitmapHead.index);
+		
 		/* 填点 left 和 top 两个参数都会出现负数 */
 		lcdx += BitmapHead.left;
 		
@@ -324,16 +356,17 @@ void font_unicode_bitmap_test1(DevLcdNode *lcd)
 		res = vfs_lseek(fd_fontfile, BitmapFontHead.bitmap_head + (uindex * sizeof(BitmapHead)), 0);
 		uart_printf("lseek res:%d\r\n", res);
 		rlen = vfs_read(fd_fontfile, &BitmapHead, sizeof(BitmapHead));
+		
 		uart_printf("read res:%d\r\n", rlen);
 		{
-		
+		#if 0
 		uart_printf("rows:%d\r\n", BitmapHead.rows);
 		uart_printf("width:%d\r\n", BitmapHead.width);
 		uart_printf("pitch:%d\r\n", BitmapHead.pitch);
 		uart_printf("left:%d\r\n", BitmapHead.left);
 		uart_printf("top:%d\r\n", BitmapHead.top);
 		uart_printf("index:%d\r\n", BitmapHead.index);
-
+		#endif
 		vfs_lseek(fd_fontfile, BitmapFontHead.bitmap +  BitmapHead.index, 0);
 		rlen = vfs_read(fd_fontfile, bitmaptmp, BitmapHead.pitch*BitmapHead.rows);
 		//PrintFormat(bitmaptmp, BitmapHead.pitch*BitmapHead.rows);
@@ -349,6 +382,7 @@ void font_unicode_bitmap_test1(DevLcdNode *lcd)
 				drv_ST7565_color_fill(lcd, 0, 200, 0, 200, WHITE);
 			}
 		}
+
 
 		/* 填点 left 和 top 两个参数都会出现负数 */
 		if (BitmapHead.left < 0 || BitmapHead.top < 0){

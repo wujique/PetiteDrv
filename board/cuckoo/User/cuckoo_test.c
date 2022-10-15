@@ -207,7 +207,7 @@ void cuckoo_7b0_test(void)
 	DevLcdNode *LcdCogSpi = NULL;
 	LcdCogSpi = dev_lcd_open("spicoglcd");
 
-	font_unicode_bitmap_test(LcdCogSpi);
+	//font_unicode_bitmap_test(LcdCogSpi);
 	//FreeTypeTest(LcdCogSpi);
 	
 	//emenu_test(LcdCogSpi);
@@ -223,8 +223,9 @@ void cuckoo_7b0_test(void)
 	lv_demo_widgets();
 	#endif
 
-	#if 0//测试WM8978
-	fun_sound_play("mtd0/0:stereo_16bit_32k.wav", "wm8978");
+	#if 1//测试WM8978
+	fun_sound_play("mtd0/0:sound/stereo_16bit_32k.wav", "wm8960");
+	//fun_sound_play("mtd0/0:sound/stereo_16bit_32k.wav", "wm8978");
 	#endif
 	//camera_test();
 
@@ -232,7 +233,7 @@ void cuckoo_7b0_test(void)
 
 	while(1) {
 
-		osDelay(5);
+		osDelay(2);
 		
 		/* lvgl */
 		//lv_task_handler();
@@ -246,7 +247,7 @@ void cuckoo_7b0_test(void)
 		}
 		#endif
 		
-		if (a % 100 == 0) {
+		if (a % 500 == 0) {
 			b++;
 			//cuckoo_test_lcdtask(b);
 			
@@ -260,7 +261,7 @@ void cuckoo_7b0_test(void)
 
 osThreadId_t TestTaskHandle;
 const osThreadAttr_t TestTask_attributes = {
-  .name = "TestTask",
+  .name = "Te",
   .stack_size = CUCKOO_TASK_STK_SIZE,
   .priority = (osPriority_t) CUCKOO_TASK_PRIO,//osPriorityNormal,
 };

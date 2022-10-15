@@ -101,7 +101,22 @@ s32 audio_pipe_run(AudioPipeNode *anode)
 		mcu_i2s_dma_init(anode->buf, anode->buflen);
 		mcu_i2s_dma_start();//启动I2S传输	
 	
-	} else {
+	} else if(0 == strcmp(anode->pipname, "wm8960")){
+		wjq_log(LOG_DEBUG, "wm8960 run\r\n");
+		
+		dev_wm8960_open();
+
+		dev_wm8960_inout(WM8978_INPUT_DAC|WM8978_INPUT_AUX|WM8978_INPUT_ADC,
+					WM8978_OUTPUT_PHONE|WM8978_OUTPUT_SPK);
+
+		dev_wm8960_set_dataformat(AUDIO_I2S_Phillips, anode->BitsPerSample);
+
+		/* 这里属于音频通道，是I2S，或者SAI，或者SPI都有可能*/
+		mcu_i2s_dataformat(anode->nSamplesPerSec, AUDIO_I2S_Phillips, anode->BitsPerSample);
+		mcu_i2s_dma_init(anode->buf, anode->buflen);
+		uart_printf("i2s dma start..");
+		mcu_i2s_dma_start();//启动I2S传输	
+	}else{
 	#if 0
 		dev_dacsound_open();
 		dev_dacsound_dataformat(wav_header->nSamplesPerSec, WM8978_I2S_Phillips, format);

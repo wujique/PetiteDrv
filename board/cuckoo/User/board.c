@@ -32,7 +32,7 @@ s32 board_init(void)
     LCD_Config();
 
 	//dev_wm8978_init();
-	
+	dev_wm8960_init();
 	/*  触摸屏初始化 */
 	res= -1;
 	#if 1
@@ -103,7 +103,7 @@ void board_low_task(uint8_t tick)
 	
 	//wjq_log(LOG_DEBUG, " low task ");
 	touch_task_cnt += tick;
-	if (touch_task_cnt >= 15) {
+	if (touch_task_cnt >= 30) {
 		touch_task_cnt = 0;
 		if (tp_task != NULL) {
 			//wjq_log(LOG_DEBUG, "1");
