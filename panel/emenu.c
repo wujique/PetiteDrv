@@ -66,7 +66,7 @@ u8 emenu_get_key(void)
 	u8 key;
 	s32 res = 0;
 	
-	res = dev_keypad_read(&key, 1);
+	//res = dev_keypad_read(&key, 1);
 	if (res == 1) {
 		//EMENU_DEBUG(LOG_DEBUG,"key:%02x\r\n", key);
 		

@@ -896,6 +896,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\driver\sound\wm8978.c</FilePath>
             </File>
+            <File>
+              <FileName>wm8960.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\driver\sound\wm8960.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -935,6 +940,16 @@
               <FileName>audio_sample.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\panel\audio_sample.c</FilePath>
+            </File>
+            <File>
+              <FileName>emenu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\panel\emenu.c</FilePath>
+            </File>
+            <File>
+              <FileName>emenu_test.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\panel\emenu_test.c</FilePath>
             </File>
           </Files>
         </Group>
