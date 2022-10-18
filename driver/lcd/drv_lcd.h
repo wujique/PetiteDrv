@@ -14,9 +14,8 @@ typedef struct
 	u16 id;
 	/*初始化*/
 	s32 (*init)(DevLcdNode *lcd);
-	/*
-		draw_point、color_fill、fill
-	*/
+	/*	draw_point、color_fill、fill 
+		if use framebuff，ex. cog lcd or oled lcd ,use update function after */
 	s32 (*draw_point)(DevLcdNode *lcd, u16 x, u16 y, u16 color);
 	s32 (*color_fill)(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey, u16 color);
 	s32 (*fill)(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color);
@@ -28,9 +27,7 @@ typedef struct
 	void (*set_dir)(DevLcdNode *lcd, u8 scan_dir);
 	void (*backlight)(DevLcdNode *lcd, u8 sta);
 
-	/*
-		update配合draw_point/color_fill/fill使用，如果是没有gram(framebuf)的，相当于空操作。
-	*/
+	/*  update配合draw_point/color_fill/fill使用，如果是没有gram(framebuf)的，相当于空操作。*/
 	s32 (*update)(DevLcdNode *lcd);
 }_lcd_drv; 
 
@@ -70,9 +67,10 @@ struct _strDevLcdNode
 	/*驱动需要的变量*/
 	u8  dir;	//横屏还是竖屏控制：0，竖屏；1，横屏。	
 	u8  scandir;//扫描方向
+	u8  fb;//如果开辟了 framebuff，则为0x55,否则等于0xaa
 	u16 width;	//LCD 宽度 
 	u16 height;	//LCD 高度
-
+	
 	void *pri;//私有数据，黑白屏跟OLED屏在初始化的时候会开辟显存
 
 	DevLcdBusNode *busnode;
@@ -80,6 +78,7 @@ struct _strDevLcdNode
 	struct list_head list;
 };
 
+#define LCD_HAVE_FRAMEBUFF 0X55
 
 #define H_LCD 0//竖屏
 #define W_LCD 1//横屏
@@ -133,22 +132,22 @@ struct _strDevLcdNode
 #define LGRAYBLUE        0XA651 //浅灰蓝色(中间层颜色)
 #define LBBLUE           0X2B12 //浅棕蓝色(选择条目的反色)
 
-extern s32 dev_lcd_register(const DevLcd *dev);
-extern DevLcdNode *dev_lcd_open(char *name);
-extern s32 dev_lcd_close(DevLcdNode *node);
-extern s32 dev_lcd_drawpoint(DevLcdNode *lcd, u16 x, u16 y, u16 color);
-extern s32 dev_lcd_prepare_display(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey);
-extern s32 dev_lcd_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color);
-extern s32 dev_lcd_color_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 color);
-extern s32 dev_lcd_backlight(DevLcdNode *lcd, u8 sta);
-extern s32 dev_lcd_display_onoff(DevLcdNode *lcd, u8 sta);
-extern s32 dev_lcd_setdir(DevLcdNode *node, u8 dir, u8 scan_dir);
+extern s32 lcd_dev_register(const DevLcd *dev);
+extern DevLcdNode *lcd_open(char *name);
+extern s32 lcd_close(DevLcdNode *node);
+extern s32 lcd_drawpoint(DevLcdNode *lcd, u16 x, u16 y, u16 color);
+extern s32 lcd_prepare_display(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey);
+extern s32 lcd_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color);
+extern s32 lcd_color_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 color);
+extern s32 lcd_backlight(DevLcdNode *lcd, u8 sta);
+extern s32 lcd_display_onoff(DevLcdNode *lcd, u8 sta);
+extern s32 lcd_setdir(DevLcdNode *node, u8 dir, u8 scan_dir);
 
-extern s32 dev_lcd_put_string(DevLcdNode *lcd, char *font, int x, int y, char *s, unsigned colidx);
+extern s32 display_lcd_put_string(DevLcdNode *lcd, char *font, int x, int y, char *s, unsigned colidx);
 
 extern void put_string_center(DevLcdNode *lcd, int x, int y, char *s, unsigned colidx);
-extern s32 dev_lcd_setdir(DevLcdNode *lcd, u8 dir, u8 scan_dir);
-extern s32 dev_lcd_update(DevLcdNode *lcd);
+extern s32 lcd_setdir(DevLcdNode *lcd, u8 dir, u8 scan_dir);
+extern s32 lcd_update(DevLcdNode *lcd);
 
 #endif
 

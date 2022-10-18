@@ -109,11 +109,12 @@ extern FontHead *FontListN[FONT_LIST_MAX];
 
 struct _FontStr {
 	FontHead *head;
-	int fd;;
+	int fd;
 };
 
 struct _FontStr FontStr[FONT_LIST_MAX];
-
+/*
+	*/
 void font_init(void)
 {
 	u8 fontnum;
@@ -151,6 +152,7 @@ void *font_find_font(char *name)
 			fontstr = &FontStr[i];
 			if(fontstr->fd == NULL) {
 				fontstr->fd = vfs_open(FontListN[i]->path, O_RDONLY);
+				/* 并且对字库进行初始化 */
 			}
 			break;
 		}
@@ -159,47 +161,84 @@ void *font_find_font(char *name)
 
 	return (void *)fontstr;
 }
-
-int font_getdot(void *fontstr_in, char *Ch, FontDot *Dot)
+/*
+	一次只是转换一个字符的点阵
+	
+	CodeType: "utf-8","GBK","BIG5","unicode"
+	
+	*/
+int font_getdot(void *fontstr_in, char *Ch, FontBitMap *Dot, char *CodeType)
 {
 	int addr;
-	FontHzArea area;
 	int res;
 	u8* fp;
 	FontHead *font;
 	struct _FontStr *fontstr;
-
+	
+	FontHzArea area = ASC_AREA;
+	int chr = 1;
+	uint32_t chcode = 0x00000042;
+	
 	fontstr = (struct _FontStr *)fontstr_in;
 	font = fontstr->head;
 
-	//uart_printf("%s\r\n", font->name);
-		
-	area = font_gbk_get_area(*Ch, *(Ch+1));
+	//uart_printf("codetype:%s\r\n", CodeType);
 
-	/* 无汉字字库时保证内置的ASC能用 */
-	if(area == ASC_AREA) {
-		/* ASC, 优先使用内置 */
-		res = 1;
+	if(strcmp(CodeType, "utf-8")==0){
+		/* 如果字库是GBK索引，那么就将UTF-8转为gbk*/
+	}
 
-		if (font->w == 12) {
-			fp = (u8*)(font_vga_6x12.path) + (*Ch)*font_vga_6x12.size;
-			memcpy(Dot->dot, fp, font_vga_6x12.size);
-		
-			Dot->datac = font_vga_6x12.size;
-			Dot->dt = FONT_H_H_L_R_U_D;     //内置ASC码格式
-			Dot->w = font_vga_6x12.width;
-			Dot->h = font_vga_6x12.height;
+	if (strcmp(CodeType, "GBK")==0) {
+		/* 这是gbk+asc编码格式的 方法 */
+		area = font_gbk_get_area(*Ch, *(Ch+1));
+		if(area == ASC_AREA) {
+			chcode = *Ch;
+			chr = 1;
+		} else if(area == HZ_USER_AREA
+			||area == HZ_NO_AREA) {
+			chcode = *Ch;
+			chcode = chcode << 8;
+			chcode += *(Ch+1);
+			chr = 2;
+		} else if(area == HZ_QBYTE_AREA ) {
+			chr = 4;
 		} else {
-			fp = (u8*)(font_vga_8x16.path) + (*Ch)*font_vga_8x16.size;
+			chr = 2;
+			chcode = *Ch;
+			chcode = chcode << 8;
+			chcode += *(Ch+1);
+		}
+	}
+	
+	//uart_printf("chcode:%04x\r\n", chcode);
+	
+	if(area == ASC_AREA) {
+		#if 1
+		if (font->size == 12) {
+			fp = (u8*)(font_vga_6x12.path) + chcode * font_vga_6x12.size;
+			memcpy(Dot->dot, fp, font_vga_6x12.size);
+			
+			Dot->head.rows = font_vga_6x12.height;
+			Dot->head.width = font_vga_6x12.width;
+			Dot->head.pitch = 1;
+			Dot->head.left = 0;
+			Dot->head.top = 10;
+			
+			Dot->dt = FONT_H_H_L_R_U_D;
+		} else {
+			fp = (u8*)(font_vga_8x16.path) + chcode * font_vga_8x16.size;
 			memcpy(Dot->dot, fp, font_vga_8x16.size);
 		
-			Dot->datac = font_vga_8x16.size;
-			Dot->dt = FONT_H_H_L_R_U_D; 	//内置ASC码格式
-			Dot->w = font_vga_8x16.width;
-			Dot->h = font_vga_8x16.height;	
+			Dot->head.rows = font_vga_8x16.height;
+			Dot->head.width = font_vga_8x16.width;
+			Dot->head.pitch = 1;
+			Dot->head.left = 0;
+			Dot->head.top = 14;
+			
+			Dot->dt = FONT_H_H_L_R_U_D;
 		}
-
-		return res;
+		#endif
+		return chr;
 	}
 
 
@@ -207,28 +246,18 @@ int font_getdot(void *fontstr_in, char *Ch, FontDot *Dot)
 		return -1;
 	}
 	
-	/* 汉字，由各点阵字库自行处理 */
-	if(area == HZ_USER_AREA
-		||area == HZ_NO_AREA) {
-		res = 2;
-	} else if(area == HZ_QBYTE_AREA ) {
-		res = 4;
-	} else {
-		res = 2;
-	}
-
 	/*查询读地址，返回-1， 则说明不存在字符 */
 	switch(font->type)
 	{
 		case FONT_DOT_WJQ:
-			addr = font_dot_wjq_addr(font, Ch, area);
+			addr = font_dot_wjq_addr(font, chcode);
 			break;
 		case FONT_DOT_ZY:
 			//addr = font_dot_zy_addr(font, Ch, area);
 			break;
 
 		case FONT_DOT_YMY:
-			addr = font_dot_ymy_addr(font, Ch, area);
+			//addr = font_dot_ymy_addr(font, Ch, area);
 			break;
 
 		default:
@@ -236,43 +265,21 @@ int font_getdot(void *fontstr_in, char *Ch, FontDot *Dot)
 			break;
 	}
 
-	if(addr < 0) return res;
+	if(addr < 0) {return -1;}
 	
-	vfs_lseek(fontstr->fd, addr, SEEK_SET);
-	vfs_read(fontstr->fd, (const void *)Dot->dot, font->datac);
-	Dot->datac = font->datac;
+	res = vfs_lseek(fontstr->fd, addr, SEEK_SET);
+	res = vfs_read(fontstr->fd, (const void *)Dot->dot, font->datac);
+
+	Dot->head.rows = font->bitmap.rows;
+	Dot->head.width = font->bitmap.width;
+	Dot->head.pitch = font->bitmap.pitch;
+	Dot->head.left = font->bitmap.left;
+	Dot->head.top = font->bitmap.top;
+			
 	Dot->dt = font->dt;
-	Dot->w = font->w;
-	Dot->h = font->h;	
-	
-	/*只支持双字节汉字*/
-	return res;
 
-}
+	return chr;
 
-/*
-	一次只是查询1个字符，每次都进行find font 非常浪费时间
-	
-return <0 err
-	   >0 输入字符串偏移	ASC返回1，汉字2，四字节汉字返回4。
-
-	   说明：
-	   		传入是字体名字。
-	   		不同的字体会根据自己支持的语言判断？
-*/
-int font_get_dotdata(char *fontname, char *str, FontDot *Dot)
-{
-	void  *font;
-	int res;
-	
-	/* 判断系统是否存在字体 并返回字体的信息指针 */
-	font = font_find_font(fontname);
-	if(font == NULL) {
-		return -1;
-	}
-	/* 读取字库 */
-	res = font_getdot(font, str, Dot);
-	return res;
 }
 
 /**
@@ -285,7 +292,6 @@ int font_get_dotdata(char *fontname, char *str, FontDot *Dot)
  *@retval:     
  			返回的是单个字符长宽，也就是对应的ASC宽度，汉字算两个字符宽度
  */
-
 s32 font_get_hw(char *fontname, u16 *h, u16 *w)
 {
 	FontHead * font;
@@ -302,11 +308,41 @@ s32 font_get_hw(char *fontname, u16 *h, u16 *w)
 	}
 	font = fontstr->head;
 	/* 汉字两个字符， 转为1个字符宽度， 后续做codepage兼容再重新设计*/
-	*w = font->w/2;
-	*h = font->h;
+	*w = font->size/2;
+	*h = font->size;
 
 	return 0;
 }
+
+/*---------------------------------------------------------------
+	重构一个点阵管理系统
+	*/
+
+/*
+	根据名字打开一个字库文件
+	返回字库句柄
+	*/
+int font_get_font(char *name)
+{
+	
+}
+/*
+	从字库文件中获bitmap和bitmap参数
+
+	输入的字符的编码？进行编码转换？
+	ASC，codepage, GBK, Unicode, BIG5
+	codepage还要指定page？
+	GBK其实也是cp的其中一个page
+	*/
+int font_get_bitmap()
+{
+
+}
+
+
+/* 编码 函数 
+	GBK unicode, big5
+	*/
 
 
 

@@ -200,22 +200,26 @@ s32 emenu_display(DevLcdNode *lcd)
 	MENU *p;
 	u16 disy = 1;
 	u16 disx;
+	u16 dislen;
 	u8 discol = 0;
 	char disbuf[32];
 	u8 menu_num = 0;
 	u16 lang;
 	u8 col2_dis_num;
+	
 	/*计算不同语言显示内容的偏移*/
 	lang = menu_ctrl.lang*MENU_LANG_BUF_SIZE;
 	
 	//EMENU_DEBUG(LOG_DEBUG,"emenu display:%s\r\n", menu_ctrl.fa->cha + lang);
 	
-	dev_lcd_color_fill(lcd, 1, menu_ctrl.lcdw, 1, menu_ctrl.lcdh, BackColor);
+	lcd_color_fill(lcd, 1, menu_ctrl.lcdw, 1, menu_ctrl.lcdh, BackColor);
 	
 	/*顶行居中显示父菜单*/
-	disx = (menu_ctrl.lcdw - strlen(menu_ctrl.fa->cha)*menu_ctrl.fontw)/2;//居中显示
-	dev_lcd_put_string(lcd, menu_ctrl.font, disx, disy, menu_ctrl.fa->cha + lang, PenColor);
-	
+	dislen = strlen(menu_ctrl.fa->cha)*menu_ctrl.fontw;
+	if (dislen >= menu_ctrl.lcdw) disx = 1;
+	else disx = (menu_ctrl.lcdw - dislen)/2;//居中显示
+
+	display_lcd_put_string(lcd, menu_ctrl.font, disx, disy, menu_ctrl.fa->cha + lang, PenColor);
 	
 	/* 显示子菜单*/
 	switch(menu_ctrl.fa->type)
@@ -250,7 +254,7 @@ s32 emenu_display(DevLcdNode *lcd)
 						}
 						strcat(disbuf, p->cha + lang);
 						
-						dev_lcd_put_string(lcd, menu_ctrl.font, 1, disy, disbuf, PenColor);
+						display_lcd_put_string(lcd, menu_ctrl.font, 1, disy, disbuf, PenColor);
 
 						disy += (menu_ctrl.fonth + menu_ctrl.spaced);//每行间隔
 					}
@@ -301,7 +305,7 @@ s32 emenu_display(DevLcdNode *lcd)
 					sprintf(disbuf, "%d.", menu_num);	
 					strcat(disbuf, p->cha + lang);
 					
-					dev_lcd_put_string(lcd, menu_ctrl.font, menu_ctrl.lcdw/2*discol+1, disy, disbuf, PenColor);
+					display_lcd_put_string(lcd, menu_ctrl.font, menu_ctrl.lcdw/2*discol+1, disy, disbuf, PenColor);
 
 					disy += (menu_ctrl.fonth + menu_ctrl.spaced);
 				}else if (p->l == (menu_ctrl.fa->l)) {
@@ -327,7 +331,7 @@ s32 emenu_display(DevLcdNode *lcd)
 			break;
 	}
 
-	dev_lcd_update(lcd);
+	lcd_update(lcd);
 	return 0;
 }
 /**

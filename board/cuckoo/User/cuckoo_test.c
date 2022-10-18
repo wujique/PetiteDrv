@@ -95,16 +95,16 @@ void cuckoo_test_lcd(void)
 	#if 1//test
 	DevLcdNode *LcdCogSpi = NULL;
 	wjq_log(LOG_FUN, "cog lcd test\r\n");
-	LcdCogSpi = dev_lcd_open("spicoglcd");
+	LcdCogSpi = lcd_open("spicoglcd");
 	if (LcdCogSpi==NULL)
 		wjq_log(LOG_FUN, "open spi cog-lcd err\r\n");
 	else
 		wjq_log(LOG_FUN, "open spi cog-lcd suc\r\n");
 	/*打开背光*/
-	dev_lcd_backlight(LcdCogSpi, 1);
-	dev_lcd_put_string(LcdCogSpi, "WQY_ST_12_H", 10,1, "cog lcd", BLACK);
-	dev_lcd_put_string(LcdCogSpi, "WQY_ST_12_H", 10,30, "www.wujique.com", BLACK);
-	dev_lcd_update(LcdCogSpi);
+	lcd_backlight(LcdCogSpi, 1);
+	display_lcd_put_string(LcdCogSpi, "WQY_ST_12_H", 10,1, "cog lcd", BLACK);
+	display_lcd_put_string(LcdCogSpi, "WQY_ST_12_H", 10,30, "www.wujique.com", BLACK);
+	lcd_update(LcdCogSpi);
 	#endif
 	#if 0
 	DevLcdNode *LcdEpaper = NULL;
@@ -205,7 +205,7 @@ void cuckoo_7b0_test(void)
 
 	//cuckoo_test_lcd();
 	DevLcdNode *LcdCogSpi = NULL;
-	LcdCogSpi = dev_lcd_open("spicoglcd");
+	LcdCogSpi = lcd_open("spicoglcd");
 
 	//font_unicode_bitmap_test(LcdCogSpi);
 	//FreeTypeTest(LcdCogSpi);

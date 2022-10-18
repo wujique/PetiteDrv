@@ -133,15 +133,14 @@ static s32 drv_ST7565_refresh_gram(DevLcdNode *lcd, u16 sc, u16 ec, u16 sp, u16 
 	//uart_printf("drv_ST7565_refresh:%d,%d,%d,%d\r\n", sc,ec,sp,ep);
 	drvdata = (struct _cog_drv_data *)lcd->pri;
 	
-    for(i=sp/8; i <= ep/8; i++)
-    {
+    for(i=sp/8; i <= ep/8; i++) {
         bus_lcd_write_cmd (node, 0xb0+i);    //设置页地址（0~7）
         bus_lcd_write_cmd(node, ((sc>>4)&0x0f)+0x10);      //设置显示位置—列高地址
         bus_lcd_write_cmd(node, sc&0x0f);      //设置显示位置—列低地址
 
-         bus_lcd_write_data(node, &(drvdata->gram[i][sc]), ec-sc+1);
-
+        bus_lcd_write_data(node, &(drvdata->gram[i][sc]), ec-sc+1);
 	}
+	
 	bus_lcd_close(node);
 	
 	return 0;
@@ -160,12 +159,9 @@ static s32 drv_ST7565_display_onoff(DevLcdNode *lcd, u8 sta)
 	
 	node = bus_lcd_open(lcd->dev.buslcd);
 
-	if(sta == 1)
-	{
+	if (sta == 1) {
 		bus_lcd_write_cmd (node, 0XCF);  //DISPLAY ON
-	}
-	else
-	{
+	} else {
 		bus_lcd_write_cmd (node, 0XCE);  //DISPLAY OFF	
 	}
 	bus_lcd_close(node);
@@ -217,7 +213,9 @@ s32 drv_ST7565_init(DevLcdNode *lcd)
 
 	/*申请显存，永不释放*/
 	lcd->pri = (void *)wjq_malloc(sizeof(struct _cog_drv_data));
-	memset((char*)lcd->pri, 0x55, sizeof(struct _cog_drv_data));
+	lcd->fb = LCD_HAVE_FRAMEBUFF;
+	
+	memset((char*)lcd->pri, 0x00, sizeof(struct _cog_drv_data));
 	
 	drv_ST7565_refresh_gram(lcd, 0,127,0,63);
 
@@ -255,23 +253,18 @@ s32 drv_ST7565_drawpoint(DevLcdNode *lcd, u16 x, u16 y, u16 color)
 	u16 page, colum;
 
 	struct _cog_drv_data *drvdata;
-	
 	DevLcdBusNode * node;
 	
 	drvdata = (struct _cog_drv_data *)lcd->pri;
 
-	if(x >= lcd->width)
-		return -1;
-	if(y >= lcd->height)
-		return -1;
+	if(x >= lcd->width) return -1;
+	if(y >= lcd->height) return -1;
 
-	if(lcd->dir == W_LCD)
-	{
+	if(lcd->dir == W_LCD) {
 		xtmp = x;
 		ytmp = y;
-	}
-	else//如果是竖屏，XY轴跟显存的映射要对调
-	{
+	}	else 	{
+		//如果是竖屏，XY轴跟显存的映射要对调
 		xtmp = y;
 		ytmp = lcd->width-1-x;
 	}
@@ -279,22 +272,21 @@ s32 drv_ST7565_drawpoint(DevLcdNode *lcd, u16 x, u16 y, u16 color)
 	page = ytmp/8; //页地址
 	colum = xtmp;//列地址
 	
-	if(color == BLACK)
-	{
+	if(color == BLACK) {
 		drvdata->gram[page][colum] |= (0x01<<(ytmp%8));
-	}
-	else
-	{
+	} else {
 		drvdata->gram[page][colum] &= ~(0x01<<(ytmp%8));
 	}
-
+	
 	/*效率不高*/
+	#if 0
 	node = bus_lcd_open(lcd->dev.buslcd);
     bus_lcd_write_cmd (node, 0xb0 + page );   
     bus_lcd_write_cmd (node, ((colum>>4)&0x0f)+0x10); 
     bus_lcd_write_cmd (node, colum&0x0f);    
     bus_lcd_write_data (node, &(drvdata->gram[page][colum]), 1);
 	bus_lcd_close (node);
+	#endif
 	return 0;
 }
 /**
@@ -322,38 +314,30 @@ s32 drv_ST7565_color_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 color
 	drvdata = (struct _cog_drv_data *)lcd->pri;
 
 	/*防止坐标溢出*/
-	if(sy >= lcd->height)
-	{
+	if(sy >= lcd->height) {
 		sy = lcd->height-1;
 	}
-	if(sx >= lcd->width)
-	{
+	if(sx >= lcd->width) {
 		sx = lcd->width-1;
 	}
 	
-	if(ey >= lcd->height)
-	{
+	if(ey >= lcd->height) {
 		ey = lcd->height-1;
 	}
-	if(ex >= lcd->width)
-	{
+	if(ex >= lcd->width) {
 		ex = lcd->width-1;
 	}
 	
-	for(j=sy;j<=ey;j++)
-	{
+	for(j=sy;j<=ey;j++) {
 		//uart_printf("\r\n");
 		
-		for(i=sx;i<=ex;i++)
-		{
+		for(i=sx;i<=ex;i++) {
 
-			if(lcd->dir == W_LCD)
-			{
+			if(lcd->dir == W_LCD) {
 				xtmp = i;
 				ytmp = j;
-			}
-			else//如果是竖屏，XY轴跟显存的映射要对调
-			{
+			} else {
+				//如果是竖屏，XY轴跟显存的映射要对调
 				xtmp = j;
 				ytmp = lcd->width-1-i;
 			}
@@ -361,30 +345,25 @@ s32 drv_ST7565_color_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 color
 			page = ytmp/8; //页地址
 			colum = xtmp;//列地址
 			
-			if(color == BLACK)
-			{
+			if(color == BLACK) {
 				drvdata->gram[page][colum] |= (0x01<<(ytmp%8));
 				//uart_printf("*");
-			}
-			else
-			{
+			} else {
 				drvdata->gram[page][colum] &= ~(0x01<<(ytmp%8));
 				//uart_printf("-");
 			}
 		}
 	}
 
+	/* 通过调用update刷新 */
 	#if 0
 	/*
 		只刷新需要刷新的区域
 		坐标范围是横屏模式
 	*/
-	if(lcd->dir == W_LCD)
-	{
+	if(lcd->dir == W_LCD) {
 		drv_ST7565_refresh_gram(lcd, sx,ex,sy,ey);
-	}
-	else
-	{
+	} else {
 
 		drv_ST7565_refresh_gram(lcd, sy, ey, lcd->width-ex-1, lcd->width-sx-1); 	
 	}
@@ -423,40 +402,33 @@ s32 drv_ST7565_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
 	ylen = ey-sy+1;
 
 	/*防止坐标溢出*/
-	if(sy >= lcd->height)
-	{
+	if(sy >= lcd->height) {
 		sy = lcd->height-1;
 	}
-	if(sx >= lcd->width)
-	{
+	
+	if(sx >= lcd->width) {
 		sx = lcd->width-1;
 	}
 	
-	if(ey >= lcd->height)
-	{
+	if(ey >= lcd->height) {
 		ey = lcd->height-1;
 	}
-	if(ex >= lcd->width)
-	{
+	if(ex >= lcd->width) {
 		ex = lcd->width-1;
 	}
 	
-	for(j=sy;j<=ey;j++)
-	{
+	for(j=sy;j<=ey;j++) {
 		//uart_printf("\r\n");
 
 		index = (j-sy)*xlen;
 		
-		for(i=sx;i<=ex;i++)
-		{
+		for(i=sx;i<=ex;i++) {
 
-			if(lcd->dir == W_LCD)
-			{
+			if(lcd->dir == W_LCD) {
 				xtmp = i;
 				ytmp = j;
-			}
-			else//如果是竖屏，XY轴跟显存的映射要对调
-			{
+			} else {
+				//如果是竖屏，XY轴跟显存的映射要对调
 				xtmp = j;
 				ytmp = lcd->width-1-i;
 			}
@@ -464,29 +436,25 @@ s32 drv_ST7565_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
 			page = ytmp/8; //页地址
 			colum = xtmp;//列地址
 			
-			if(*(color+index+i-sx) == BLACK)
-			{
+			if(*(color+index+i-sx) == BLACK) {
 				drvdata->gram[page][colum] |= (0x01<<(ytmp%8));
 				//uart_printf("*");
-			}
-			else
-			{
+			} else {
 				drvdata->gram[page][colum] &= ~(0x01<<(ytmp%8));
 				//uart_printf("-");
 			}
 		}
 	}
+
+	/* 通过调用update刷新 */
 	#if 0
 	/*
 		只刷新需要刷新的区域
 		坐标范围是横屏模式
 	*/
-	if(lcd->dir == W_LCD)
-	{
+	if(lcd->dir == W_LCD) {
 		drv_ST7565_refresh_gram(lcd, sx,ex,sy,ey);
-	}
-	else
-	{
+	} else {
 
 		drv_ST7565_refresh_gram(lcd, sy, ey, lcd->width-ex-1, lcd->width-sx-1); 	
 	}
@@ -532,33 +500,23 @@ s32 drv_ST7565_flush(DevLcdNode *lcd, u16 *color, u32 len)
 	ey = 0;
 
 	index = 0;
-	while(1)
-	{
-		if(index >= len)
-			break;
+	while(1) {
+		if(index >= len) break;
 
-		if((drvdata->disx < lcd->width)&&(drvdata->disy < lcd->height))
-		{			
-			if(sx >drvdata->disx)
-				sx = drvdata->disx;
+		if((drvdata->disx < lcd->width)&&(drvdata->disy < lcd->height)) {			
+			if(sx >drvdata->disx) sx = drvdata->disx;
 
-		
-			if(ex < drvdata->disx)
-				ex = drvdata->disx;
+			if(ex < drvdata->disx) ex = drvdata->disx;
 
-			if(sy >drvdata->disy)
-				sy = drvdata->disy;
+			if(sy >drvdata->disy) sy = drvdata->disy;
 
-			if(ey < drvdata->disy)
-				ey = drvdata->disy;
+			if(ey < drvdata->disy) ey = drvdata->disy;
 
-			if(lcd->dir == W_LCD)
-			{
+			if(lcd->dir == W_LCD) {
 				xtmp = drvdata->disx;
 				ytmp = drvdata->disy;
-			}
-			else//如果是竖屏，XY轴跟显存的映射要对调
-			{
+			} else {
+				//如果是竖屏，XY轴跟显存的映射要对调
 				xtmp = drvdata->disy;
 				ytmp = lcd->width-drvdata->disx;
 			}
@@ -568,26 +526,21 @@ s32 drv_ST7565_flush(DevLcdNode *lcd, u16 *color, u32 len)
 			page = ytmp/8; //页地址
 			colum = xtmp;//列地址
 				
-			if(*(color+index) == BLACK)
-			{
+			if(*(color+index) == BLACK) {
 				drvdata->gram[page][colum] |= (0x01<<(ytmp%8));
 				//uart_printf("*");
-			}
-			else
-			{
+			} else {
 				drvdata->gram[page][colum] &= ~(0x01<<(ytmp%8));
 				//uart_printf("-");
 			}
 		}
 
 		drvdata->disx++;
-		if(drvdata->disx > drvdata->ex)
-		{
+		if(drvdata->disx > drvdata->ex) {
 			drvdata->disx = drvdata->sx;
 			drvdata->disy++;
 			
-			if(drvdata->disy> drvdata->ey)
-				drvdata->disy = drvdata->sy;
+			if(drvdata->disy> drvdata->ey) drvdata->disy = drvdata->sy;
 		}
 		index++;
 		
@@ -598,12 +551,9 @@ s32 drv_ST7565_flush(DevLcdNode *lcd, u16 *color, u32 len)
 		只刷新需要刷新的区域
 		坐标范围是横屏模式
 	*/
-	if(lcd->dir == W_LCD)
-	{
+	if(lcd->dir == W_LCD) {
 		drv_ST7565_refresh_gram(lcd, sx,ex,sy,ey);
-	}
-	else
-	{
+	} else {
 
 		drv_ST7565_refresh_gram(lcd, sy, ey, lcd->width-ex-1, lcd->width-sx-1); 	
 	}
@@ -683,7 +633,9 @@ s32 drv_ssd1615_init(DevLcdNode *lcd)
 	
 
 	lcd->pri = (void *)wjq_malloc(sizeof(struct _cog_drv_data));
-	memset((char*)lcd->pri, 0x00, 128*8);//要改为动态判断显存大小
+	lcd->fb = LCD_HAVE_FRAMEBUFF;
+	
+	memset((char*)lcd->pri, 0x00, sizeof(struct _cog_drv_data));
 	
 	wjq_log(LOG_INFO, "dev_ssd1615_init finish\r\n");
 	return 0;
@@ -703,14 +655,11 @@ s32 drv_ssd1615_display_onoff(DevLcdNode *lcd, u8 sta)
 	
 	node = bus_lcd_open(lcd->dev.buslcd);
 
-	if(sta == 1)
-	{
+	if(sta == 1) {
     	bus_lcd_write_cmd (node, 0X8D);  //SET DCDC命令
     	bus_lcd_write_cmd (node, 0X14);  //DCDC ON
     	bus_lcd_write_cmd (node, 0XAF);  //DISPLAY ON
-	}
-	else
-	{
+	} else {
 		bus_lcd_write_cmd (node, 0X8D);  //SET DCDC命令
     	bus_lcd_write_cmd (node, 0X10);  //DCDC OFF
     	bus_lcd_write_cmd (node, 0XAE);  //DISPLAY OFF	

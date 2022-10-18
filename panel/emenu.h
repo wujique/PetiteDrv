@@ -43,7 +43,7 @@ typedef enum{
 	MENU_LANG_ENG,
 }MenuLang;
 
-#define MENU_LANG_BUF_SIZE 16
+#define MENU_LANG_BUF_SIZE 32
 /**
  * @brief  菜单对象
 */

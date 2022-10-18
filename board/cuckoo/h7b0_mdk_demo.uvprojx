@@ -336,7 +336,7 @@
             <v6WtE>0</v6WtE>
             <v6Rtti>0</v6Rtti>
             <VariousControls>
-              <MiscControls></MiscControls>
+              <MiscControls>--locale=english</MiscControls>
               <Define>NDEBUG</Define>
               <Undefine></Undefine>
               <IncludePath>.\Core\Inc;.\Drivers\STM32H7xx_HAL_Driver\Inc;.\User;.\Drivers\CMSIS\Include;.\Drivers\CMSIS\Device\ST\STM32H7xx\Include;.\Drivers\STM32H7xx_HAL_Driver\Inc\Legacy;..\..\mcu\stm32h7b0vb;..\..\Petite;..\..\driver;..\..\driver\touch;..\..\driver\lcd;..\..\Utilities\lvgl;..\..\Utilities\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\..\Utilities\FreeRTOS\Source\include;..\..\Utilities\FreeRTOS\Source\CMSIS_RTOS_V2;..\..\Utilities\FatFs;..\..\driver\sound;..\..\driver\touch\rtp\tslib;..\..\driver\touch\rtp;..\..\Petite\bus;..\..\Utilities\Freetype\include</IncludePath>
@@ -752,6 +752,11 @@
               <FileName>font_unicode.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\Petite\font\font_unicode.c</FilePath>
+            </File>
+            <File>
+              <FileName>conv.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Petite\font\conv.c</FilePath>
             </File>
           </Files>
         </Group>

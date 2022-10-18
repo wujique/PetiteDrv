@@ -160,7 +160,7 @@ _lcd_drv *LcdProbDrvList[] = {
  *@param[out]  无
  *@retval:     _lcd_drv
  */
-static _lcd_drv *dev_lcd_finddrv(u16 id)
+static _lcd_drv *lcd_finddrv(u16 id)
 {
 	u8 i =0;
 	
@@ -183,7 +183,7 @@ struct list_head DevLcdRoot = {&DevLcdRoot, &DevLcdRoot};
  *@param[out]  
  *@retval:     
  */
-s32 dev_lcd_register(const DevLcd *dev)
+s32 lcd_dev_register(const DevLcd *dev)
 {
 	struct list_head *listp;
 	DevLcdNode *plcdnode;
@@ -220,15 +220,15 @@ s32 dev_lcd_register(const DevLcd *dev)
 	/*复制设备信息*/
 	memcpy((u8 *)&plcdnode->dev, (u8 *)dev, sizeof(DevLcd));
 	plcdnode->gd = -1;
-
-	/* 初始化 */
+	plcdnode->fb = 0;
+	
 	if (dev->id == NULL) {
+		/* 没有指定lcd id，通过porb 初始化 */
 		LCD_DEBUG(LOG_DEBUG, "prob LCD id\r\n");
 
-		/*找到驱动跟规格后，初始化*/
 		u8 j = 0;
-
 		while(1) {
+			/* 简单粗暴的方法，尝试初始化*/
 			ret = LcdProbDrvList[j]->init(plcdnode);
 			if (ret == 0) {
 				LCD_DEBUG(LOG_DEBUG, "lcd drv prob ok!\r\n");	
@@ -243,11 +243,12 @@ s32 dev_lcd_register(const DevLcd *dev)
 			}
 		}
 	}else {
-		ret = -1;
+		/* 设备指定了 id，根据id找驱动 */
 		LCD_DEBUG(LOG_DEBUG, "find lcd drv, id:%04x...", dev->id);
-		plcdnode->drv = dev_lcd_finddrv(dev->id);
+		
+		ret = -1;
+		plcdnode->drv = lcd_finddrv(dev->id);
 		if (plcdnode->drv != NULL) {
-			/*找到驱动跟规格后，初始化*/
 			LCD_DEBUG(LOG_DEBUG, "suc!\r\n");
 			ret = plcdnode->drv->init(plcdnode);
 		} else {
@@ -263,14 +264,12 @@ s32 dev_lcd_register(const DevLcd *dev)
 		plcdnode->height = plcdnode->dev.height;
 		plcdnode->width = plcdnode->dev.width;
 		
-		dev_lcd_setdir(plcdnode, W_LCD, L2R_U2D);
+		lcd_setdir(plcdnode, W_LCD, L2R_U2D);
 		
-		plcdnode->drv->onoff((plcdnode),1);//打开显示
-		
+		plcdnode->drv->onoff((plcdnode),1);
 		plcdnode->drv->color_fill(plcdnode, 0, plcdnode->width, 0, plcdnode->height, BLUE);
 		plcdnode->drv->update(plcdnode);
 		plcdnode->drv->backlight(plcdnode, 1);
-
 		wjq_log(LOG_INFO, "            lcd init OK\r\n");
 	} else {
 		plcdnode->gd = -2;
@@ -288,7 +287,7 @@ s32 dev_lcd_register(const DevLcd *dev)
  *@param[out]  无
  *@retval:     DevLcd
  */
-DevLcdNode *dev_lcd_open(char *name)
+DevLcdNode *lcd_open(char *name)
 {
 
 	DevLcdNode *node;
@@ -330,7 +329,7 @@ DevLcdNode *dev_lcd_open(char *name)
  *@param[out]  无
  *@retval:     
  */
-s32 dev_lcd_close(DevLcdNode *node)
+s32 lcd_close(DevLcdNode *node)
 {
 	if(node->gd <0)	return -1;
 	else{
@@ -339,20 +338,21 @@ s32 dev_lcd_close(DevLcdNode *node)
 	}
 }
 /*
-坐标-1 是坐标原点的变化，
-在APP层，原点是（1，1），这样更符合平常人。
+	坐标-1 是坐标原点的变化，
 
-到驱动就换为(0,0)，无论程序还是控制器显存，都是从（0，0）开始
+	在APP层，原点是（1，1），这样更符合常人逻辑。
+
+	到驱动层就换为(0,0)，无论程序还是控制器显存，都是从（0，0）开始
 
 */
-s32 dev_lcd_drawpoint(DevLcdNode *lcd, u16 x, u16 y, u16 color)
+s32 lcd_drawpoint(DevLcdNode *lcd, u16 x, u16 y, u16 color)
 {
 	if (lcd == NULL)	return -1;
 	
 	return lcd->drv->draw_point(lcd, x-1, y-1, color);
 }
 
-s32 dev_lcd_prepare_display(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey)
+s32 lcd_prepare_display(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey)
 {
 	if(lcd == NULL)	return -1;
 	
@@ -360,39 +360,40 @@ s32 dev_lcd_prepare_display(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey)
 }
 
 
-s32 dev_lcd_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
+s32 lcd_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
 {	
 	if(lcd == NULL)	return -1;
 	
 	return lcd->drv->fill(lcd, sx-1,ex-1,sy-1,ey-1,color);
 }
-s32 dev_lcd_color_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 color)
+s32 lcd_color_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 color)
 {
 	if(lcd == NULL)	return -1;
 	
 	return lcd->drv->color_fill(lcd, sx-1,ex-1,sy-1,ey-1,color);
 }
-s32 dev_lcd_backlight(DevLcdNode *lcd, u8 sta)
+s32 lcd_backlight(DevLcdNode *lcd, u8 sta)
 {
 	if(lcd == NULL)	return -1;
 	
 	lcd->drv->backlight(lcd, sta);
 	return 0;
 }
-s32 dev_lcd_display_onoff(DevLcdNode *lcd, u8 sta)
+s32 lcd_display_onoff(DevLcdNode *lcd, u8 sta)
 {
 	if(lcd == NULL)	return -1;
 
 	return lcd->drv->onoff(lcd, sta);
 }
 
-s32 dev_lcd_flush(DevLcdNode *lcd, u16 *color, u32 len)
+s32 lcd_flush(DevLcdNode *lcd, u16 *color, u32 len)
 {
 	if(lcd == NULL)	return -1;
 
 	return lcd->drv->flush(lcd, color, len);	
 }
-s32 dev_lcd_update(DevLcdNode *lcd)
+
+s32 lcd_update(DevLcdNode *lcd)
 {
 	if(lcd == NULL)	return -1;
 
@@ -406,7 +407,7 @@ s32 dev_lcd_update(DevLcdNode *lcd)
  *@param[out]  无
  *@retval:     
  */
-s32 dev_lcd_setdir(DevLcdNode *node, u8 dir, u8 scan_dir)
+s32 lcd_setdir(DevLcdNode *node, u8 dir, u8 scan_dir)
 {
 	u16 temp;
 	u8 scan_dir_tmp;

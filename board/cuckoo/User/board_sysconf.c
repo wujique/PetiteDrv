@@ -287,7 +287,7 @@ s32 petite_dev_register(void)
 				break;
 			
 			case DEV_LCD:
-				dev_lcd_register((const DevLcd *)PetiteDevTable[i]);
+				lcd_dev_register((const DevLcd *)PetiteDevTable[i]);
 				break;
 			
 			default:
@@ -300,6 +300,8 @@ s32 petite_dev_register(void)
 	return 0;
 }
 
+
+
 /*	字库定义		*/
 /*
 	屋脊雀优化的点阵，基于思源宋体
@@ -308,32 +310,50 @@ const FontHead SYSongTiM1616 ={
 
 	.name = "SYST_16_m",//名字
 	.size = 16,
-	.path = "mtd0/0:font/syst_m_16.bin",//路径
+	.baseline = 14,
+	.path = "mtd0/0:font/syst_m_1616_18030.bin",//路径
 	
 	.type = FONT_DOT_WJQ,
 	.st = FONT_ST_GB18030,
 	.dt = FONT_H_H_L_R_U_D,
 	.shift = 0,
 	
+	.bitmap={
+		/* 以下五个数据在LCD描字时需要 */
+		.rows = 16,
+		.width = 16,
+		.pitch = 2,
+		.left = 0,
+		.top = 14,
+	},
 	.datac = 32,
-	.w = 16,
-	.h = 16,
+	//.w = 16,
+	//.h = 16,
 	
 	};
 const FontHead SYSongTiM2424 ={
 
 	.name = "SYST_24_m",//名字
 	.size = 24,
-	.path = "mtd0/0:font/syst_m_24.bin",//路径
+	.baseline = 20,
+	.path = "mtd0/0:font/syst_m_2424_gb18030.bin",//路径
 
 	.type = FONT_DOT_WJQ,
 	.st = FONT_ST_GB18030,
 	.dt = FONT_H_H_L_R_U_D,
 	.shift = 0,
+
+	.bitmap={
+		/* 以下五个数据在LCD描字时需要 */
+		.rows = 24,
+		.width = 24,
+		.pitch = 3,
+		.left = 0,
+		.top = 20,
+		},
 	
 	.datac = 72,
-	.w = 24,
-	.h = 24,
+
 	
 	};
 /*------文泉驿点阵12pt------*/
@@ -341,6 +361,7 @@ const FontHead WQYST16H18030 ={
 
 	.name = "WQY_ST_16_H",//名字
 	.size = 16,
+	.baseline = 14,
 	.path = "mtd0/0:font/wqy16h18030.bin",//路径
 	
 	.type = FONT_DOT_WJQ,
@@ -348,25 +369,40 @@ const FontHead WQYST16H18030 ={
 	.dt = FONT_H_H_L_R_U_D,
 	.shift = 0,
 	
+	.bitmap={
+		/* 以下五个数据在LCD描字时需要 */
+		.rows = 16,
+		.width = 16,
+		.pitch = 2,
+		.left = 0,
+		.top = 14,
+	},
+	
 	.datac = 32,
-	.w = 16,
-	.h = 16,
 	};
 	
 const FontHead WQYST12H18030 ={
 
 	.name = "WQY_ST_12_H",//名字
 	.size = 12,
+	.baseline = 10,
 	.path = "mtd0/0:font/wqy12h18030.bin",//路径
 	
 	.type = FONT_DOT_WJQ,
 	.st = FONT_ST_GB18030,
 	.dt = FONT_H_H_L_R_U_D,
 	.shift = 0,
+
+	.bitmap={
+		/* 以下五个数据在LCD描字时需要 */
+		.rows = 12,
+		.width = 12,
+		.pitch = 2,
+		.left = 0,
+		.top = 10,
+		},
 	
 	.datac = 24,
-	.w = 12,
-	.h = 12,
 	};
 
 const FontHead *FontListN[FONT_LIST_MAX] = {

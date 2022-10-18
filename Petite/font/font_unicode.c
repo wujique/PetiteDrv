@@ -71,15 +71,16 @@ struct _strBitmapHead{
 	1 从bloc1:unicode tab表中查询，得到bitmap偏移
 	2 根据偏移，读出bitmap head和bitmap data, 问题是bitmap data 的长度是要根据bitmap head算出的。
 	*/
+
+
 /*	基线
 	1212字符的基线是10
 	1616字符的基线是14 
-	比如要在(0,0)开始显示1212字符，那么基线就是(x, 10)        
+	比如要在(0,0)开始显示1212字符，那么基线就是(x, 10)    
 	*/
 #define BASE_LINE 10
-	/* 行宽 */
+/* 字号行高 */
 #define LINE_HIGHT 12
-
 
 struct _StrBitmapFontHead BitmapFontHead;
 int fd_fontfile = 0;
@@ -164,7 +165,7 @@ int font_bitmap_getdata(struct _strBitmapHead* head, uint8_t *dotbuf, uint16_t u
 
 
 /*--------------------以下为测试程序 ------------------------*/
-
+#if 0
 
 /* 
 	在指定位置显示字符串
@@ -314,15 +315,32 @@ int font_bitmap_showstr_ansi(DevLcdNode *lcd, uint16_t x, uint16_t y, char *str)
 	return 0;
 }
 
-char teststr1[]="The Enter Key!";
-char teststr2[]="The 012349 Num!";
+char teststr1[]="The Test agkl!";
+char teststr2[]="This aglj sS!";
+char teststr3[]="0123456789";
+char teststr4[]="!\"#$%&'()*+,-./";
+char teststr5[]=":;<=>?@[\\]^_`{|}~";
+
+uint16_t thai[4];
 
 void font_unicode_bitmap_test(DevLcdNode *lcd)
 {
 	font_unicode_bitmap_init();
 	font_bitmap_showstr_ansi(lcd, 0, 0, teststr1);
-	font_bitmap_showstr_ansi(lcd, 0, LINE_HIGHT, teststr2);
+	font_bitmap_showstr_ansi(lcd, 0, (LINE_HIGHT+1)*1, teststr2);
+	font_bitmap_showstr_ansi(lcd, 0, (LINE_HIGHT+1)*2, teststr3);
+	//font_bitmap_showstr_ansi(lcd, 0, (LINE_HIGHT+1)*3, teststr4);
+	//font_bitmap_showstr_ansi(lcd, 0, (LINE_HIGHT+1)*4, teststr5);
 
+	thai[0] = 0X0E01;
+	thai[1] = 0X0E4C;
+	font_bitmap_showstr_unicode(lcd, 0, (LINE_HIGHT+1)*3, thai);
+	thai[0] = 0X0E01;
+	thai[1] = 0X0000;
+	font_bitmap_showstr_unicode(lcd, 32, (LINE_HIGHT+1)*3, thai);
+	thai[0] = 0X0E4C;
+	thai[1] = 0X000;
+	font_bitmap_showstr_unicode(lcd, 64, (LINE_HIGHT+1)*3, thai);
 	while(1){
 		osDelay(1000);
 	}
@@ -383,7 +401,6 @@ void font_unicode_bitmap_test1(DevLcdNode *lcd)
 			}
 		}
 
-
 		/* 填点 left 和 top 两个参数都会出现负数 */
 		if (BitmapHead.left < 0 || BitmapHead.top < 0){
 			uart_printf("left:%d, top:%d\r\n", BitmapHead.left, BitmapHead.top);
@@ -433,5 +450,5 @@ void font_unicode_bitmap_test1(DevLcdNode *lcd)
 		osDelay(5000);	
 	}
 }
-
+#endif
 

@@ -28,11 +28,11 @@ s32 board_init(void)
 
 	petite_dev_register();
 	
-    lcd_reset();
-    LCD_Config();
+    //lcd_reset();
+    //LCD_Config();
 
 	//dev_wm8978_init();
-	dev_wm8960_init();
+	//dev_wm8960_init();
 	/*  触摸屏初始化 */
 	res= -1;
 	#if 1
@@ -41,15 +41,16 @@ s32 board_init(void)
 	if (res == -1) {
 		res = tp_init(&CtpGt1151);	
 	}
-	#endif
+	
 	/**/
 	if (res == -1) {
 		/*  初始化电阻屏 */
 		//tp_init(&RtpXpt2046);
 	}
+	#endif
 	/* 摄像头初始化 */
-	DCMI_PWDN_RESET_Init();
-	camera_init();
+	//DCMI_PWDN_RESET_Init();
+	//camera_init();
 
 	cuckoo_7b0_test_init();
 	
@@ -111,7 +112,7 @@ void board_low_task(uint8_t tick)
 		}
 	}
 
-	fun_sound_task();
+	//fun_sound_task();
 }
 
 

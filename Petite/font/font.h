@@ -24,6 +24,8 @@ typedef enum{
 	FONT_ST_GB18030,	
 	FONT_ST_BIG5,
 	FONT_ST_ASC,
+	FONT_ST_UNICODE,
+	FONT_ST_CODEPAGE,
 }FontS;
 /*
 	字库类型，匹配取点阵算法
@@ -49,7 +51,9 @@ typedef enum{
 	/* 	横向取模,     高位在前, 左上-右上-左下-右下*/
 	FONT_H_H_L_R_U_D, 
 }FontDotType;
-	
+
+/*	
+	这是GBK编码的分区定义    	*/
 typedef enum{
 	ASC_AREA = 0,		//单字节， ASC字符
 	HZ_DBYTE_1AREA = 1, //符号区，双字节1区 A1A1--A9FE
@@ -62,51 +66,9 @@ typedef enum{
 	HZ_NO_AREA	   = 8, //无定义区域
 }FontHzArea;
 
-typedef struct{
-	FontDotType dt;//取模方式
-	unsigned char datac;//1汉字点阵数据字节数
-
-	char w;
-	char h;
-	char *dot;//2424点阵是72字节
-}FontDot;
-
-/* 定义一种字体 */
-typedef struct _strFontHead
-{
-	char name[16];//song heiti 
-	char size;//字号, 只做等宽字体，汉字12号就是1212， 24号就是2424， ASC12号就是0612，24号就是1224
-	char path[64];//字库名字或路径，用于打开
-	/* ----  */
-	FontS st;//标准 ，主要用于区分18030或GB2312，如果是2312，遇到生僻字，就要从关联字库取
-	FontStcType type;
-	
-	unsigned int shift;//点阵在文件中的开始地址
-	
-	unsigned char pitch;
-	unsigned char datac;//1汉字点阵数据字节数
-
-	unsigned char w;//宽
-	unsigned char h;//高
-	FontDotType dt;//取模方式
-	
-	/* 求索引 */
-	//int fd;
-}FontHead;
-
-extern void font_init(void);
-
-extern void *font_find_font(char *name);
-extern int font_getdot(void *fontstr_in, char *Ch, FontDot *Dot);
-extern int font_get_dotdata(char *fontname, char *str, FontDot *Dot);
-extern s32 font_get_hw(char *font, u16 *h, u16 *w);
-
-
-
 /*
 	每个字符的bitmap都有一个头，
-	为了取点阵方便，头长度是固定的，所有将所有的头放在一起
-	*/
+	为了取点阵方便，头长度是固定的，所有将所有的头放在一起            	*/
 struct _strBitmapHead{
 	uint16_t rev;//保留字节，默认是回车换行，为了4字节对齐而定义
 	/* 以下五个数据在LCD描字时需要 */
@@ -118,6 +80,48 @@ struct _strBitmapHead{
 	/*	读bitmap数据的偏移地址  	 */
 	uint32_t index;
 };
+
+typedef struct{
+	struct _strBitmapHead head;
+	
+	FontDotType dt;	//取模方式
+	char *dot;		//点阵缓冲
+}FontBitMap;
+
+/* 定义一种字体 
+	这种字体都是通过计算寻址的，
+	并且每个字符的宽度高度都是一样的
+	*/
+typedef struct _strFontHead
+{
+	char name[16];
+	/*size 字号, 可以等同于行高，
+		汉字12号就是1212， 24号就是2424， 
+		ASC12号就是0612，24号就是1224       */
+	char size;
+	char baseline;//基线
+	char path[64];//字库名字或路径，用于打开
+	/* ----  */
+	unsigned int shift;//点阵在文件中的开始地址，某些文件是多种点阵拼接在一起的
+	/* 	标准 ，主要用于区分18030或GB2312，
+		如果是2312，遇到生僻字，就要从关联字库取
+		然后进行缩放处理        */
+	FontS st;
+	
+	FontStcType type;
+	
+	/*1汉字点阵数据字节数*/
+	unsigned char datac;
+	FontDotType dt;//取模方式
+	
+	struct _strBitmapHead bitmap;
+}FontHead;
+
+extern void font_init(void);
+
+extern void *font_find_font(char *name);
+extern int font_getdot(void *fontstr_in, char *Ch, FontBitMap *Dot, char *CodeType);
+extern s32 font_get_hw(char *font, u16 *h, u16 *w);
 
 
 #endif /* _VIDEO_FONT_H */

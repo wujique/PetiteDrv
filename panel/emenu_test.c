@@ -1,4 +1,10 @@
 
+/*
+	注意本文件的格式，如果使用utf-8，mdk需要配置：
+		Option-->C/C++中的Misc Controls中添加:--locale=english
+	*/
+
+
 #include "mcu.h"
 #include "log.h"
 #include "emenu.h"
@@ -29,14 +35,13 @@ s32 test_wait_key(u8 key)
 }
 
 s32 emenu_test_fun(char *s)
-
 {
 	wjq_log(LOG_DEBUG, "test:%s", s);
 	
-	dev_lcd_color_fill(emenulcd, 1, 1000, 1, 1000, WHITE);
-	/*���о�����ʾ���˵�*/
-	dev_lcd_put_string(emenulcd, "songti12", 1, 32, s, BLACK);
-	dev_lcd_update(emenulcd);
+	lcd_color_fill(emenulcd, 1, 1000, 1, 1000, WHITE);
+	/*顶行居中显示父菜单*/
+	display_lcd_put_string(emenulcd, "songti12", 1, 32, s, BLACK);
+	lcd_update(emenulcd);
 	
 	test_wait_key(0);
 	
@@ -52,242 +57,240 @@ s32 test_test(void)
 
 const MENU EMenuListTest[]=
 {
-	MENU_L_0,//�˵��ȼ�
-	"���Գ���",//����
-	"test",	//Ӣ��
-	MENU_TYPE_LIST,//�˵�����
-	NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+	MENU_L_0,//菜单等级
+	"Theaglj 测试程序",//中文
+	"This aglj sS",	//英文
+	MENU_TYPE_LIST,//菜单类型
+	NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 
-		MENU_L_1,//�˵��ȼ�
-		"LCD",//����
-		"LCD",	//Ӣ��
-		MENU_TYPE_LIST,//�˵�����
-		NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
-			MENU_L_2,//�˵��ȼ�
-			"VSPI OLED",//����
-			"VSPI OLED",	//Ӣ��
-			MENU_TYPE_FUN,//�˵�����
-			test_test,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+		MENU_L_1,//菜单等级
+		"LCD",//中文
+		"LCD",	//英文
+		MENU_TYPE_LIST,//菜单类型
+		NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
+			MENU_L_2,//菜单等级
+			"VSPI OLED",//中文
+			"VSPI OLED",	//英文
+			MENU_TYPE_FUN,//菜单类型
+			test_test,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 
-			MENU_L_2,//�˵��ȼ�
-			"I2C OLED",//����
-			"I2C OLED",	//Ӣ��
-			MENU_TYPE_FUN,//�˵�����
-			test_test,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+			MENU_L_2,//菜单等级
+			"I2C OLED",//中文
+			"I2C OLED",	//英文
+			MENU_TYPE_FUN,//菜单类型
+			test_test,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 
-			MENU_L_2,//�˵��ȼ�
-			"SPI COG",//����
-			"SPI COG",	//Ӣ��
-			MENU_TYPE_FUN,//�˵�����
-			test_test,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+			MENU_L_2,//菜单等级
+			"SPI COG",//中文
+			"SPI COG",	//英文
+			MENU_TYPE_FUN,//菜单类型
+			test_test,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 
-			MENU_L_2,//�˵��ȼ�
-			"tft",//����
-			"tft",	//Ӣ��
-			MENU_TYPE_FUN,//�˵�����
-			test_test,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+			MENU_L_2,//菜单等级
+			"tft",//中文
+			"tft",	//英文
+			MENU_TYPE_FUN,//菜单类型
+			test_test,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 	
-			MENU_L_2,//�˵��ȼ�
-			"ͼƬ����",//����
-			"test BMP",	//Ӣ��
-			MENU_TYPE_FUN,//�˵�����
-			test_test,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+			MENU_L_2,//菜单等级
+			"图片测试",//中文
+			"test BMP",	//英文
+			MENU_TYPE_FUN,//菜单类型
+			test_test,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 			
-			MENU_L_2,//�˵��ȼ�
-			"�ֿ����",//����
-			"test Font",	//Ӣ��
-			MENU_TYPE_FUN,//�˵�����
-			test_test,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+			MENU_L_2,//菜单等级
+			"字库测试",//中文
+			"test Font",	//英文
+			MENU_TYPE_FUN,//菜单类型
+			test_test,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 
-		MENU_L_1,//�˵��ȼ�
-		"����",//����
-		"sound",	//Ӣ��
-		MENU_TYPE_LIST,//�˵�����
-		NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
-			MENU_L_2,//�˵��ȼ�
-			"������",//����
-			"buzzer",	//Ӣ��
-			MENU_TYPE_FUN,//�˵�����
-			test_test,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+		MENU_L_1,//菜单等级
+		"声音",//中文
+		"sound",	//英文
+		MENU_TYPE_LIST,//菜单类型
+		NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
+			MENU_L_2,//菜单等级
+			"蜂鸣器",//中文
+			"buzzer",	//英文
+			MENU_TYPE_FUN,//菜单类型
+			test_test,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 
-			MENU_L_2,//�˵��ȼ�
-			"DAC����",//����
-			"DAC music",	//Ӣ��
-			MENU_TYPE_FUN,//�˵�����
-			test_test,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+			MENU_L_2,//菜单等级
+			"DAC音乐",//中文
+			"DAC music",	//英文
+			MENU_TYPE_FUN,//菜单类型
+			test_test,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 
-			MENU_L_2,//�˵��ȼ�
-			"����",//����
-			"FM",	//Ӣ��
-			MENU_TYPE_FUN,//�˵�����
-			test_test,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+			MENU_L_2,//菜单等级
+			"收音",//中文
+			"FM",	//英文
+			MENU_TYPE_FUN,//菜单类型
+			test_test,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 
-			MENU_L_2,//�˵��ȼ�
-			"I2S����",//����
-			"I2S Music",	//Ӣ��
-			MENU_TYPE_FUN,//�˵�����
-			test_test,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+			MENU_L_2,//菜单等级
+			"I2S音乐",//中文
+			"I2S Music",	//英文
+			MENU_TYPE_FUN,//菜单类型
+			test_test,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 
-			MENU_L_2,//�˵��ȼ�
-			"¼��",//����
-			"rec",	//Ӣ��
-			MENU_TYPE_FUN,//�˵�����
-			test_test,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+			MENU_L_2,//菜单等级
+			"录音",//中文
+			"rec",	//英文
+			MENU_TYPE_FUN,//菜单类型
+			test_test,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 
-		MENU_L_1,//�˵��ȼ�
-		"������",//����
-		"tp",	//Ӣ��
-		MENU_TYPE_LIST,//�˵�����
-		NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+		MENU_L_1,//菜单等级
+		"触摸屏",//中文
+		"tp",	//英文
+		MENU_TYPE_LIST,//菜单类型
+		NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 			
-			MENU_L_2,//�˵��ȼ�
-			"У׼",//����
-			"calibrate",	//Ӣ��
-			MENU_TYPE_FUN,//�˵�����
-			test_test,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+			MENU_L_2,//菜单等级
+			"校准",//中文
+			"calibrate",	//英文
+			MENU_TYPE_FUN,//菜单类型
+			test_test,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 
-			MENU_L_2,//�˵��ȼ�
-			"����",//����
-			"test",	//Ӣ��
-			MENU_TYPE_FUN,//�˵�����
-			test_test,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+			MENU_L_2,//菜单等级
+			"测试",//中文
+			"test",	//英文
+			MENU_TYPE_FUN,//菜单类型
+			test_test,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 			
-		MENU_L_1,//�˵��ȼ�
-		"����",//����
-		"KEY",	//Ӣ��
-		MENU_TYPE_FUN,//�˵�����
-		test_test,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+		MENU_L_1,//菜单等级
+		"按键",//中文
+		"KEY",	//英文
+		MENU_TYPE_FUN,//菜单类型
+		test_test,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 
-		MENU_L_1,//�˵��ȼ�
-		"����",//����
-		"camera",	//Ӣ��
-		MENU_TYPE_FUN,//�˵�����
-		test_test,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+		MENU_L_1,//菜单等级
+		"摄像",//中文
+		"camera",	//英文
+		MENU_TYPE_FUN,//菜单类型
+		test_test,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 
-		MENU_L_1,//�˵��ȼ�
-		"485",//����
-		"485",	//Ӣ��
-		MENU_TYPE_LIST,//�˵�����
-		NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
-			MENU_L_2,//�˵��ȼ�
-			"485 ����",//����
-			"485 rec",	//Ӣ��
-			MENU_TYPE_FUN,//�˵�����
-			test_test,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
-			MENU_L_2,//�˵��ȼ�
-			"485 ����",//����
-			"485 snd",	//Ӣ��
-			MENU_TYPE_FUN,//�˵�����
-			test_test,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+		MENU_L_1,//菜单等级
+		"485",//中文
+		"485",	//英文
+		MENU_TYPE_LIST,//菜单类型
+		NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
+			MENU_L_2,//菜单等级
+			"485 接收",//中文
+			"485 rec",	//英文
+			MENU_TYPE_FUN,//菜单类型
+			test_test,//菜单函数，功能菜单才会执行，有子菜单的不会执行
+			MENU_L_2,//菜单等级
+			"485 发送",//中文
+			"485 snd",	//英文
+			MENU_TYPE_FUN,//菜单类型
+			test_test,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 			
-		MENU_L_1,//�˵��ȼ�
-		"CAN",//����
-		"CAN",	//Ӣ��
-		MENU_TYPE_LIST,//�˵�����
-		NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
-			MENU_L_2,//�˵��ȼ�
-			"CAN ����",//����
-			"CAN rec",	//Ӣ��
-			MENU_TYPE_FUN,//�˵�����
-			test_test,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+		MENU_L_1,//菜单等级
+		"CAN",//中文
+		"CAN",	//英文
+		MENU_TYPE_LIST,//菜单类型
+		NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
+			MENU_L_2,//菜单等级
+			"CAN 接收",//中文
+			"CAN rec",	//英文
+			MENU_TYPE_FUN,//菜单类型
+			test_test,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 			
-			MENU_L_2,//�˵��ȼ�
-			"CAN ����",//����
-			"CAN snd",	//Ӣ��
-			MENU_TYPE_FUN,//�˵�����
-			test_test,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+			MENU_L_2,//菜单等级
+			"CAN 发送",//中文
+			"CAN snd",	//英文
+			MENU_TYPE_FUN,//菜单类型
+			test_test,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 			
-		MENU_L_1,//�˵��ȼ�
-		"SPI FLASH",//����
-		"SPI FLASH",	//Ӣ��
-		MENU_TYPE_LIST,//�˵�����
-		NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
-			MENU_L_2,//�˵��ȼ�
-			"���İ�FLASH",//����
-			"core FLASH",	//Ӣ��
-			MENU_TYPE_FUN,//�˵�����
-			test_test,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+		MENU_L_1,//菜单等级
+		"SPI FLASH",//中文
+		"SPI FLASH",	//英文
+		MENU_TYPE_LIST,//菜单类型
+		NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
+			MENU_L_2,//菜单等级
+			"核心板FLASH",//中文
+			"core FLASH",	//英文
+			MENU_TYPE_FUN,//菜单类型
+			test_test,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 			
-			MENU_L_2,//�˵��ȼ�
-			"�װ� FLASH",//����
-			"board FLASH",	//Ӣ��
-			MENU_TYPE_FUN,//�˵�����
-			test_test,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+			MENU_L_2,//菜单等级
+			"底板 FLASH",//中文
+			"board FLASH",	//英文
+			MENU_TYPE_FUN,//菜单类型
+			test_test,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 		
-		MENU_L_1,//�˵��ȼ�
-		"����",//����
-		"uart",	//Ӣ��
-		MENU_TYPE_FUN,//�˵�����
-		test_test,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+		MENU_L_1,//菜单等级
+		"串口",//中文
+		"uart",	//英文
+		MENU_TYPE_FUN,//菜单类型
+		test_test,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 
-		MENU_L_1,//�˵��ȼ�
-		"����",//����
-		"eth",	//Ӣ��
-		MENU_TYPE_LIST,//�˵�����
-		NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+		MENU_L_1,//菜单等级
+		"网络",//中文
+		"eth",	//英文
+		MENU_TYPE_LIST,//菜单类型
+		NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 
-		MENU_L_1,//�˵��ȼ�
-		"OTG",//����
-		"OTG",	//Ӣ��
-		MENU_TYPE_LIST,//�˵�����
-		NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
-			MENU_L_2,//�˵��ȼ�
-			"HOST",//����
-			"HOST",	//Ӣ��
-			MENU_TYPE_LIST,//�˵�����
-			NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
-			MENU_L_2,//�˵��ȼ�
-			"Device",//����
-			"Device",	//Ӣ��
-			MENU_TYPE_LIST,//�˵�����
-			NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+		MENU_L_1,//菜单等级
+		"OTG",//中文
+		"OTG",	//英文
+		MENU_TYPE_LIST,//菜单类型
+		NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
+			MENU_L_2,//菜单等级
+			"HOST",//中文
+			"HOST",	//英文
+			MENU_TYPE_LIST,//菜单类型
+			NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
+			MENU_L_2,//菜单等级
+			"Device",//中文
+			"Device",	//英文
+			MENU_TYPE_LIST,//菜单类型
+			NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 
-		/*�����ӿڲ���*/
-		MENU_L_1,//�˵��ȼ�
-		"RF24L01",//����
-		"RF24L01",	//Ӣ��
-		MENU_TYPE_LIST,//�˵�����
-		NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+		/*外扩接口测试*/
+		MENU_L_1,//菜单等级
+		"RF24L01",//中文
+		"RF24L01",	//英文
+		MENU_TYPE_LIST,//菜单类型
+		NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 
-		MENU_L_1,//�˵��ȼ�
-		"MPU6050",//����
-		"MPU6050",	//Ӣ��
-		MENU_TYPE_LIST,//�˵�����
-		NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+		MENU_L_1,//菜单等级
+		"MPU6050",//中文
+		"MPU6050",	//英文
+		MENU_TYPE_LIST,//菜单类型
+		NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 
-		/*���Բ��⣬�������Գ����Ҫʹ�þ��󰴼�*/
-		MENU_L_1,//�˵��ȼ�
-		"���󰴼�",//����
-		"keypad",	//Ӣ��
-		MENU_TYPE_LIST,//�˵�����
-		NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+		/*可以不测，本来测试程序就要使用矩阵按键*/
+		MENU_L_1,//菜单等级
+		"矩阵按键",//中文
+		"keypad",	//英文
+		MENU_TYPE_LIST,//菜单类型
+		NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 		
-		/*�ô�������8266ģ��*/
-		MENU_L_1,//�˵��ȼ�
-		"wifi",//����
-		"wifi",	//Ӣ��
-		MENU_TYPE_LIST,//�˵�����
-		NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+		/*用串口外扩8266模块*/
+		MENU_L_1,//菜单等级
+		"wifi",//中文
+		"wifi",	//英文
+		MENU_TYPE_LIST,//菜单类型
+		NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 		
-	/*���Ĳ˵��ǽ����˵���������*/			
-	MENU_L_0,//�˵��ȼ�
-	"END",//����
-	"END",	//Ӣ��
-	MENU_TYPE_NULL,//�˵�����
-	NULL,//�˵����������ܲ˵��Ż�ִ�У����Ӳ˵��Ĳ���ִ��
+	/*最后的菜单是结束菜单，无意义*/			
+	MENU_L_0,//菜单等级
+	"END",//中文
+	"END",	//英文
+	MENU_TYPE_NULL,//菜单类型
+	NULL,//菜单函数，功能菜单才会执行，有子菜单的不会执行
 };
 	
-
-
 
 s32 emenu_test(DevLcdNode *lcd)
 {
 	emenulcd = lcd;
-	if(emenulcd == NULL)
-	{
+	if (emenulcd == NULL) {
 		wjq_log(LOG_DEBUG, "open lcd err\r\n");
 	}
-	emenu_run(emenulcd, (MENU *)&EMenuListTest[0], sizeof(EMenuListTest)/sizeof(MENU), "songti12", 1, MENU_LANG_ENG);	
+	
+	emenu_run(emenulcd, (MENU *)&EMenuListTest[0], sizeof(EMenuListTest)/sizeof(MENU), "WQY_ST_12_H", 1, MENU_LANG_CHA);	
 	
 	return 0;
 }
