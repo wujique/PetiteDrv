@@ -620,6 +620,7 @@ s32 emenu_run(DevLcdNode *lcd, MENU *p, u16 len, char *font, u8 spaced, u8 lang)
 				disflag = 1;
 
 		}
+		osDelay(10);	
 	}
 		
 }

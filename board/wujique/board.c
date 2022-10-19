@@ -191,6 +191,8 @@ s32 board_app_init(void)
 	return 0;
 }
 
+extern void *PetiteDevTable[];
+
 /*
 	板级初始化
 */
@@ -200,7 +202,7 @@ s32 board_init(void)
 
 	/* 注册总线的驱动 ：I2C/SPI/BUS LCD...*/
 	mcu_fsmc_lcd_Init();
-	petite_dev_register();
+	petite_dev_register(PetiteDevTable);
 
 	/* 以下是未归纳到总线系统的去驱动 
 		要将这些驱动改为字符驱动架构 

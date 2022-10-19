@@ -17,6 +17,9 @@ extern const TouchDev CtpGt1151;
 extern const TouchDev RtpXpt2046;
 
 extern void DCMI_PWDN_RESET_Init(void);
+
+extern void *PetiteDevTable[];
+
 /*
 	板级初始化
 */
@@ -26,7 +29,7 @@ s32 board_init(void)
 	
 	wjq_log(LOG_DEBUG, "[   board] cuckoo other dev init!\r\n");
 
-	petite_dev_register();
+	petite_dev_register(PetiteDevTable);
 	
     //lcd_reset();
     //LCD_Config();

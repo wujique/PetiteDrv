@@ -36,7 +36,6 @@ typedef struct
 	/**/
 	s32 gd;
 	/*设备信息*/
-	
 	DevSpiFlash dev;
 	
 	/*spi 通道节点*/

@@ -812,6 +812,13 @@
         </Group>
         <Group>
           <GroupName>drv</GroupName>
+          <Files>
+            <File>
+              <FileName>drv_spiflash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\driver\drv_spiflash.c</FilePath>
+            </File>
+          </Files>
         </Group>
         <Group>
           <GroupName>drv/lcd</GroupName>

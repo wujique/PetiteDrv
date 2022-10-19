@@ -11,6 +11,7 @@
 
 #include "board_sysconf.h"
 
+#include "drv_lcd.h"
 
 /** @addtogroup Template_Project
   * @{
@@ -260,6 +261,54 @@ void HardFault_Handler_c(unsigned int * hardfault_args, unsigned lr_value)
 }
 #endif
 
+/*
+	系统设备注册
+	通过缩进区分层级和依赖关系。
+	后续可以考虑实现可见字符表示的设备树
+*/
+s32 petite_dev_register(void *DevTable[])
+{
+	uint8_t i=0;
+	uint8_t len;
+	PetiteNode *pnod;
+
+	while(i < len){
+		if (DevTable[i] == NULL) break;
+		pnod =	(PetiteNode *)DevTable[i];
+		uart_printf("pnode name:%s\r\n", pnod->name);
+		switch(pnod->type)
+		{
+			case BUS_I2C_V:
+				bus_i2c_register((const DevI2c *)DevTable[i]);
+				break;
+
+			case BUS_SPI_V:
+			case BUS_SPI_H:
+				bus_spi_register((const DevSpi *)DevTable[i]);
+				break;
+			
+			case BUS_SPI_CH:
+				bus_spich_register((const DevSpiCh *)DevTable[i]);
+				break;
+
+			case DEV_LCD:
+				lcd_dev_register((const DevLcd *)DevTable[i]);
+				break;
+			case DEV_SPIFLASH:
+				dev_spiflash_register((const DevLcd *)DevTable[i]);
+				break;
+			
+			default:
+				wjq_log(LOG_DEBUG, "\r\n\r\n[register] not register!\r\n\r\n");
+				break;
+		}
+		i++;
+	}
+	
+	wjq_log(LOG_DEBUG, "\r\n\r\n[register] petite_dev_register: %d device!\r\n", i);	
+	
+	return 0;
+}
 
 
 

@@ -251,55 +251,9 @@ void *PetiteDevTable[]={
 	(void *)&DevSpi3IO,
 		(void *)&DevSpi3CH3,
 			(void *)&DevLcdCOG1,
+	/* dont move*/
+	NULL,
 	};
-
-
-/*
-	系统设备注册
-	通过缩进区分层级和依赖关系。
-	后续可以考虑实现可见字符表示的设备树
-*/
-s32 petite_dev_register(void)
-{
-	uint8_t i=0;
-	uint8_t len;
-	PetiteNode *pnod;
-
-	len = (sizeof(PetiteDevTable)/sizeof(PetiteDevTable[0]));
-	
-	wjq_log(LOG_DEBUG, "\r\n\r\n[register] petite_dev_register: %d device!\r\n", len);
-
-	while(i < len){
-		pnod = 	(PetiteNode *)PetiteDevTable[i];
-		uart_printf("pnode name:%s\r\n", pnod->name);
-		switch(pnod->type)
-		{
-			case BUS_I2C_V:
-				bus_i2c_register((const DevI2c *)PetiteDevTable[i]);
-				break;
-
-			case BUS_SPI_H:
-			case BUS_SPI_V:
-				bus_spi_register((const DevSpi *)PetiteDevTable[i]);
-				break;
-			case BUS_SPI_CH:
-				bus_spich_register((const DevSpiCh *)PetiteDevTable[i]);
-				break;
-
-			case DEV_LCD:
-				lcd_dev_register((const DevLcd *)PetiteDevTable[i]);
-				break;
-			
-			default:
-				wjq_log(LOG_DEBUG, "\r\n\r\n[register] not register!\r\n\r\n");
-				break;
-		}
-		i++;
-	}
-				
-	return 0;
-}
-
 
 
 /*	字库定义		*/

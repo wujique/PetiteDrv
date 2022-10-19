@@ -21,7 +21,7 @@
 /* dev */
 #define DRV_RS485_MODULE 		0
 #define DRV_KEYPAD_MODULE 		0
-#define DRV_SPI_FLASH_MODULE 	0
+#define DRV_SPI_FLASH_MODULE 	1
 #define DRV_WM8978_MODULE   	1
 #define DRV_XPT2046_MODULE		1
 #define DRV_HTU21U_MODULE		0
