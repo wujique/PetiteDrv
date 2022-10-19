@@ -58,20 +58,6 @@ const DevI2c DevVi2c1={
 		};
 	
 		
-#if 0
-/*
-	外扩IO口模拟I2C，和矩阵按键，模拟SPI冲突
-*/
-const DevI2c DevVi2c2={
-		.name = "VI2C2",
-		
-		.sclport = MCU_PORT_F,
-		.sclpin = GPIO_Pin_11,
-
-		.sdaport = MCU_PORT_F,
-		.sdapin = GPIO_Pin_10,
-		};	
-#endif
 /*----------------------
 	IO口模拟SPI控制器
 ------------------------*/
@@ -464,30 +450,44 @@ const DevSpiFlash DevSpiFlashBoard={
 ---------------------------------*/
 
 /*I2C接口的 OLED*/
+const I2CPra OledLcdI2cPra ={
+	.addr = 0x3c, /* i2c 设备地址，7bit模式 */
+	.fkhz = 200,/* 时钟频率，单位KHz */
+};
 
 const DevLcd DevLcdOled1={
 	.pnode={
 				.name = "i2coledlcd",
 				.type = DEV_LCD,
 		},
-		
-	.buslcd = "BusLcdI2C1",  
+		  
 	.id = 0X1315, 
 	.width = 64, 
 	.height = 128,
+
+	.bus = &BusLcdI2C1,  
+	.buspra = (void *)&OledLcdI2cPra,
 };
 
 /*SPI接口的 OLED*/
+const PraSpiSet CogSpiSet = {
+	.mode = SPI_MODE_3,
+	.KHz = 10000,
+};
 
 DevLcd DevLcdSpiOled	=	{	
 	.pnode={
 				.name = "spioledlcd",
 				.type = DEV_LCD,
 		},
-	.buslcd = "BusLcdSpi3", 	
+	
 	.id = 0X1315, 
 	.width = 64, 
-	.height = 128};
+	.height = 128,
+	
+	.bus = &BusLcdSpi3,  
+	.buspra = (void *)&CogSpiSet,
+};
 
 /*SPI接口的 COG LCD*/
 
@@ -498,11 +498,13 @@ const DevLcd DevLcdCOG1	=	{
 				.type = DEV_LCD,
 		},
 		
-	//.buslcd = "BusLcdVSpi2CH1", 
-	.buslcd = "BusLcdSpi3",
 	.id = 0X7565, 
 	.width = 64, 
-	.height = 128};
+	.height = 128,
+
+	.bus = &BusLcdSpi3,  
+	.buspra = (void *)&CogSpiSet,
+};
 
 /*fsmc接口的 tft lcd*/
 #if 1
@@ -512,11 +514,13 @@ const DevLcd DevLcdtTFT	=	{
 				.name = "tftlcd",
 				.type = DEV_LCD,
 			},
-			
-	.buslcd = "BusLcd8080",  
+			 
 	.id = NULL, 
 	.width = 240, 
 	.height = 320,
+
+	.bus = &BusLcd8080,  
+	.buspra = (void *)&CogSpiSet,
 };
 #endif	
 #if 0
@@ -526,8 +530,7 @@ const DevLcd DevLcdtTFT	=	{
 				.name = "tftlcd",
 				.type = DEV_LCD,
 			},
-			
-	.buslcd = "BusLcd8080",  
+			 
 	.id = 0x1408, 
 	.width = 480, 
 	.height = 800,
@@ -541,7 +544,6 @@ const DevLcd DevLcdtTFT	=	{
 				.type = DEV_LCD,
 			},
 			
-	.buslcd = "BusLcd8080",  
 	.id = NULL, 
 	.width = 480, 
 	.height = 800,
@@ -564,6 +566,49 @@ const DevLcd DevLcdtTFT	=	{
 /* spi 接口 黑白墨水屏 1.54寸 GDEH154D27*/
 //const DevLcd DevLcdSPIEPaper =	{"spiE-Paper",		"BusLcdSpi3",	0x3820, 200, 200};
 
+
+void *PetiteDevTable[]={
+	/*注册I2C总线*/
+	(void *)(&DevVi2c0),
+	
+	(void *)(&DevVi2c1),
+		(void *)(&DevLcdOled1),
+					
+	/*硬SPI3控制器，核心板和底板的FLASH、外扩接口的SPI口*/
+	(void *)(&DevSpi3IO),
+		(void *)(&DevSpi3CH1),
+			(void *)(&DevSpiFlashBoard),		
+		(void *)(&DevSpi3CH2),
+			(void *)(&DevSpiFlashCore),			
+		(void *)(&DevSpi3CH3),
+			//(void *)(&DevLcdSPIEPaper);
+			(void *)(&DevLcdCOG1),
+			//(void *)(&DevLcdSpiOled);
+		//(void *)(&DevSpi3CH4);
+	
+#if (SYS_USE_VSPI1 == 1)
+	(void *)(&DevVSpi1IO),
+		(void *)(&DevVSpi1CH1),//8080接口的触摸屏
+		//(void *)(&DevVSpi1CH2);
+#endif
+	
+#if (SYS_USE_VSPI2 == 1)
+	(void *)(&DevVspi2IO),
+		(void *)(&DevVSpi2CH1),
+			(void *)(&DevLcdSpiOled),
+#endif
+	
+	/*测试1.33寸IPS屏幕采用*/
+#if 0
+	(void *)(&DevVspi3IO),
+		(void *)(&DevVSpi3CH1),
+			(void *)(&DevLcdVSPITFT),
+#endif
+	(void *)(&DevLcdtTFT),
+
+	};
+
+	
 /*
 	系统设备注册
 	通过缩进区分层级和依赖关系。
@@ -571,58 +616,50 @@ const DevLcd DevLcdtTFT	=	{
 */
 s32 petite_dev_register(void)
 {
-	wjq_log(LOG_DEBUG, "[register] petite_dev_register!\r\n");
-	
-	/*注册I2C总线*/
-	bus_i2c_register(&DevVi2c0);
-	
-	bus_i2c_register(&DevVi2c1);
-			dev_lcdbus_register(&BusLcdI2C1);
-					dev_lcd_register(&DevLcdOled1);
-					
+	uint8_t i=0;
+	uint8_t len;
+	PetiteNode *pnod;
 
-	/*硬SPI3控制器，核心板和底板的FLASH、外扩接口的SPI口*/
-	bus_spi_register(&DevSpi3IO);
-			bus_spich_register(&DevSpi3CH1);
-					dev_spiflash_register(&DevSpiFlashBoard);
-					
-			bus_spich_register(&DevSpi3CH2);
-					dev_spiflash_register(&DevSpiFlashCore);
-					
-			bus_spich_register(&DevSpi3CH3);
-					dev_lcdbus_register(&BusLcdSpi3);
-						//dev_lcd_register(&DevLcdSPIEPaper);
-						dev_lcd_register(&DevLcdCOG1);
-						//dev_lcd_register(&DevLcdSpiOled);
+	len = (sizeof(PetiteDevTable)/sizeof(PetiteDevTable[0]));
+	
+	wjq_log(LOG_DEBUG, "\r\n\r\n[register] petite_dev_register: %d device!\r\n", len);
 
-			//mcu_spich_register(&DevSpi3CH4);
-	
-	#if (SYS_USE_VSPI1 == 1)
-	bus_spi_register(&DevVSpi1IO);
-			bus_spich_register(&DevVSpi1CH1);//8080接口的触摸屏
-			//mcu_spich_register(&DevVSpi1CH2);
-					//dev_lcdbus_register(&BusLcdVSpi1CH2);
-	#endif
-	
-	#if (SYS_USE_VSPI2 == 1)
-	bus_spi_register(&DevVspi2IO);
-			bus_spich_register(&DevVSpi2CH1);
-					dev_lcdbus_register(&BusLcdVSpi2CH1);
-							dev_lcd_register(&DevLcdSpiOled);
-	#endif
-	
-	/*测试1.33寸IPS屏幕采用*/
-	#if 0
-	mcu_spi_register(&DevVspi3IO);
-			mcu_spich_register(&DevVSpi3CH1);
-					dev_lcdbus_register(&BusLcdVSpi3);
-							dev_lcd_register(&DevLcdVSPITFT);
-	#endif
-	dev_lcdbus_register(&BusLcd8080);
-			dev_lcd_register(&DevLcdtTFT);
-	
+	while(i < len){
+		pnod =	(PetiteNode *)PetiteDevTable[i];
+		uart_printf("pnode name:%s\r\n", pnod->name);
+		switch(pnod->type)
+		{
+			case BUS_I2C_V:
+				bus_i2c_register((const DevI2c *)PetiteDevTable[i]);
+				break;
+
+			case BUS_SPI_V:
+			case BUS_SPI_H:
+				bus_spi_register((const DevSpi *)PetiteDevTable[i]);
+				break;
+			
+			case BUS_SPI_CH:
+				bus_spich_register((const DevSpiCh *)PetiteDevTable[i]);
+				break;
+
+			case DEV_LCD:
+				lcd_dev_register((const DevLcd *)PetiteDevTable[i]);
+				break;
+			case DEV_SPIFLASH:
+				dev_spiflash_register((const DevLcd *)PetiteDevTable[i]);
+				break;
+			
+			default:
+				wjq_log(LOG_DEBUG, "\r\n\r\n[register] not register!\r\n\r\n");
+				break;
+		}
+		i++;
+	}
+				
 	return 0;
 }
+
+
 /*	字库定义		*/
 
 /* 思源宋体 用字模工具生成的18030字库
@@ -643,9 +680,16 @@ FontHead SYSongTi1212 ={
 	.dt = FONT_V_H_U_D_L_R,
 	.shift = 0,
 	
+	.bitmap={
+		/* 以下五个数据在LCD描字时需要 */
+		.rows = 12,
+		.width = 12,
+		.pitch = 2,
+		.left = 0,
+		.top = 10,
+	},
 	.datac = 24,
-	.w = 12,
-	.h = 12,
+
 	
 	};
 	
@@ -661,9 +705,16 @@ FontHead SYSongTi1616 ={
 	.dt = FONT_V_H_U_D_L_R,
 	.shift = 0,
 	
+	.bitmap={
+		/* 以下五个数据在LCD描字时需要 */
+		.rows = 16,
+		.width = 16,
+		.pitch = 2,
+		.left = 0,
+		.top = 14,
+	},
 	.datac = 32,
-	.w = 16,
-	.h = 16,
+
 	
 	};
 /*
@@ -680,12 +731,17 @@ FontHead SYSongTiM1616 ={
 	.dt = FONT_H_H_L_R_U_D,
 	.shift = 0,
 	
+	.bitmap={
+		/* 以下五个数据在LCD描字时需要 */
+		.rows = 16,
+		.width = 16,
+		.pitch = 2,
+		.left = 0,
+		.top = 14,
+	},
 	.datac = 32,
-	.w = 16,
-	.h = 16,
-	
-	
-	};
+
+};
 FontHead SYSongTiM2424 ={
 
 	.name = "SYST_24_m",//名字
@@ -697,9 +753,17 @@ FontHead SYSongTiM2424 ={
 	.dt = FONT_H_H_L_R_U_D,
 	.shift = 0,
 	
+	.bitmap={
+		/* 以下五个数据在LCD描字时需要 */
+		.rows = 24,
+		.width = 24,
+		.pitch = 3,
+		.left = 0,
+		.top = 20,
+		},
+	
 	.datac = 72,
-	.w = 24,
-	.h = 24,
+
 	
 	};
 /*------文泉驿点阵12pt------*/
@@ -714,12 +778,17 @@ FontHead WQYST16H18030 ={
 	.dt = FONT_H_H_L_R_U_D,
 	.shift = 0,
 	
+	.bitmap={
+		/* 以下五个数据在LCD描字时需要 */
+		.rows = 16,
+		.width = 16,
+		.pitch = 2,
+		.left = 0,
+		.top = 14,
+	},
+	
 	.datac = 32,
-	.w = 16,
-	.h = 16,
-	
-	
-	};
+};
 	
 FontHead WQYST12H18030 ={
 
@@ -732,11 +801,17 @@ FontHead WQYST12H18030 ={
 	.dt = FONT_H_H_L_R_U_D,
 	.shift = 0,
 	
-	.datac = 24,
-	.w = 12,
-	.h = 12,
+	.bitmap={
+		/* 以下五个数据在LCD描字时需要 */
+		.rows = 12,
+		.width = 12,
+		.pitch = 2,
+		.left = 0,
+		.top = 10,
+		},
 	
-	};
+	.datac = 24,
+};
 
 FontHead *FontListN[FONT_LIST_MAX] = {
 	&SYSongTi1212,
@@ -746,41 +821,5 @@ FontHead *FontListN[FONT_LIST_MAX] = {
 	&WQYST16H18030,
 	&WQYST12H18030,
 	};
-
-/*
-
-硬件参数配置表想法，类似LINUX的设备树
-实际应用中，修改接口IO的可能性应该不大，
-修改外设的可能性较大。
-例如兼容多个LCD，降本的时候，会替代LCD，
-很多LCD无法自动识别，所以，能用硬件配置文件最好。
-
-格式：
-[层级]类型:名称
-	{
-		参数
-	}
-
-例如：	
-{
-	[0]cpu:stm32f407
-		{}
-		[1]VI2C:VI2C1
-			{	
-				
-			}
-			[2]LCDBUS:BusLcdI2C1
-				{
-					
-				}
-				[3]LCD:i2coledlcd
-					{
-						
-					}
-
-}
-
-
-*/
 
 

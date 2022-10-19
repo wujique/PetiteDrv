@@ -121,6 +121,26 @@ s32 mcu_uart_init(McuUartNum comport, BusUartNode *BusNode, const BusUartPra *Pr
 	
     return (0);
 }
+
+s32 mcu_uart_open(McuUartNum comport, BusUartNode *BusNode, const BusUartPra *Pra)
+{
+	mcu_uart_init(comport,BusNode, Pra);
+#if 0
+	if(comport == MCU_UART_4) {
+		HAL_UART_Receive_IT(&huart4, BusNode->buf, 1);
+	} else if(comport == MCU_UART_7) {
+		/* 如果不接上串口模块，执行这个函数会 hardfault */
+		/* issue : 7b0 mdk, hardfault*/
+		HAL_UART_Receive_IT(&huart7, BusNode->buf, 1);
+	} else {
+		/* 串口号不支持*/
+		return -1;
+	}
+	
+	return (0);
+#endif
+}
+
 /**
  *@brief:      mcu_uart_close
  *@details:    关闭串口

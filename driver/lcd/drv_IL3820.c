@@ -111,15 +111,17 @@ _lcd_drv TftLcdIL3820Drv = {
 
 	mcu_spi_cs
 */
-s32 drv_il3820_write_cmd(DevLcdBusNode *node, u8 cmd)
+s32 drv_il3820_write_cmd(DevLcdNode * lcd, u8 cmd)
 {
+	DevLcdNode * node = lcd;
+	
 	bus_spich_cs((DevSpiChNode *)node->basenode, 0);
 	bus_lcd_write_cmd(node, cmd);
 	bus_spich_cs((DevSpiChNode *)node->basenode, 1);
 	return 0;
 }
 
-s32 drv_il3820_write_data(DevLcdBusNode *node, u8 *data, u32 len)
+s32 drv_il3820_write_data(DevLcdNode *node, u8 *data, u32 len)
 {
 	bus_spich_cs((DevSpiChNode *)node->basenode, 0);
 	bus_lcd_write_data(node, data, len);
@@ -133,9 +135,9 @@ s32 drv_il3820_write_data(DevLcdBusNode *node, u8 *data, u32 len)
 */
 void drv_IL3820_lcd_bl(DevLcdNode *lcd, u8 sta)
 {
-	DevLcdBusNode * node;
+	DevLcdNode * node = lcd;
 	
-	node = bus_lcd_open(lcd->dev.buslcd);
+	node = bus_lcd_open(lcd);
 	bus_lcd_bl(node, sta);
 	bus_lcd_close(node);
 
@@ -182,7 +184,9 @@ static s32 drv_IL3820_refresh_gram(DevLcdNode *lcd, u16 sc, u16 ec, u16 sp, u16 
 {	
 	struct _epaper3820_drv_data *drvdata; 
 
-	DevLcdBusNode *node;
+	DevLcdNode * node = lcd;
+	DevLcdBus const*bus = lcd->dev.bus;
+	
 	u32 cnt;
 	u32 gramsize;
 	u16 i,j;
@@ -190,7 +194,7 @@ static s32 drv_IL3820_refresh_gram(DevLcdNode *lcd, u16 sc, u16 ec, u16 sp, u16 
 	u16 w,l;
 	
 	drvdata = (struct _epaper3820_drv_data *)lcd->pri;
-	node = bus_lcd_open(lcd->dev.buslcd);
+	node = bus_lcd_open(lcd);
 
 	wjq_log(LOG_DEBUG, "drv_IL3820_refresh_gram: %d, %d, %d, %d\r\n ", sc, ec, sp, ep);
 
@@ -214,7 +218,7 @@ static s32 drv_IL3820_refresh_gram(DevLcdNode *lcd, u16 sc, u16 ec, u16 sp, u16 
 	unsigned char busy;
 	
 	do	{
-		busy = mcu_io_input_readbit(node->dev.staport, node->dev.stapin);
+		busy = mcu_io_input_readbit(bus->staport, bus->stapin);
 		busy = (busy & 0x01);        
 	} while(busy); 
 
@@ -252,7 +256,7 @@ const unsigned char LUT_DATA_part[]={  //30 bytes
 0x11, 0x00, 0x00, 0x00, 0x00, 0x00
 };				
 
-void EPD_select_LUT(DevLcdBusNode *node, const unsigned char * wave_data)
+void EPD_select_LUT(DevLcdNode *node, const unsigned char * wave_data)
 {      
 	u8 tmp[16];
     unsigned char count;
@@ -274,15 +278,17 @@ void EPD_select_LUT(DevLcdBusNode *node, const unsigned char * wave_data)
 s32 drv_IL3820_init(DevLcdNode *lcd)
 {
 	u16 data;
-	DevLcdBusNode * node;
+	DevLcdNode * node = lcd;
+	DevLcdBus const*bus = lcd->dev.bus;
+	
 	u8 tmp[16];
 	u8 testbuf[2];
 
 	wjq_log(LOG_DEBUG, "drv_IL3820_init\r\n ");
 	
-	node = bus_lcd_open(lcd->dev.buslcd);
+	node = bus_lcd_open(lcd);
 
-	mcu_io_config_in(node->dev.staport, node->dev.stapin);
+	mcu_io_config_in(bus->staport, bus->stapin);
 
 	bus_lcd_rst(node, 1);
 	Delay(50);
@@ -353,7 +359,7 @@ s32 drv_IL3820_init(DevLcdNode *lcd)
 	
 	unsigned char busy;
 	do	{
-		busy = mcu_io_input_readbit(node->dev.staport, node->dev.stapin);
+		busy = mcu_io_input_readbit(bus->staport, bus->stapin);
 		busy =(busy & 0x01);        
 	}while(busy); 
 	

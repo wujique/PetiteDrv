@@ -1,14 +1,14 @@
 /**
  * @file                wujique_stm407.c
- * @brief           Îİ¼¹È¸STM32F407¿ª·¢°åÓ²¼ş²âÊÔ³ÌĞò
+ * @brief           å±‹è„Šé›€STM32F407å¼€å‘æ¿ç¡¬ä»¶æµ‹è¯•ç¨‹åº
  * @author          wujique
- * @date            2018Äê1ÔÂ29ÈÕ ĞÇÆÚÒ»
- * @version         ³õ¸å
- * @par             °æÈ¨ËùÓĞ (C), 2013-2023
+ * @date            2018å¹´1æœˆ29æ—¥ æ˜ŸæœŸä¸€
+ * @version         åˆç¨¿
+ * @par             ç‰ˆæƒæ‰€æœ‰ (C), 2013-2023
  * @par History:
- * 1.ÈÕ    ÆÚ:        2018Äê1ÔÂ29ÈÕ ĞÇÆÚÒ»
- *   ×÷    Õß:         wujique
- *   ĞŞ¸ÄÄÚÈİ:   ´´½¨ÎÄ¼ş
+ * 1.æ—¥    æœŸ:        2018å¹´1æœˆ29æ—¥ æ˜ŸæœŸä¸€
+ *   ä½œ    è€…:         wujique
+ *   ä¿®æ”¹å†…å®¹:   åˆ›å»ºæ–‡ä»¶
 */
 #include "mcu.h"
 #include "board_sysconf.h"
@@ -63,20 +63,20 @@ s32 wjq_wait_key(u8 key)
 s32 wjq_test_showstr(char *s)
 {
 	wjq_log(LOG_DEBUG, "test:%s", s);
-	dev_lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, BackColor);
+	lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, BackColor);
 	
-	/*¶¥ĞĞ¾ÓÖĞÏÔÊ¾¸¸²Ëµ¥*/
-	dev_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, s, PenColor);
-	dev_lcd_update(WJQTestLcd);
+	/*é¡¶è¡Œå±…ä¸­æ˜¾ç¤ºçˆ¶èœå•*/
+	display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, s, PenColor);
+	lcd_update(WJQTestLcd);
 	wjq_wait_key(0);
 	
 	return 0;
 }	
 /**
  *@brief:      test_tft_display
- *@details:    ²âÊÔTFT LCD
+ *@details:    æµ‹è¯•TFT LCD
  *@param[in]   void  
- *@param[out]  ÎŞ
+ *@param[out]  æ— 
  *@retval:     
  */
 s32 test_tft_display(void)
@@ -85,13 +85,13 @@ s32 test_tft_display(void)
 	u8 step = 0;
 	u8 dis = 1;
 	
-	dev_lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
+	lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
 	
-	/*¶¥ĞĞ¾ÓÖĞÏÔÊ¾¸¸²Ëµ¥*/
-	dev_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
-	dev_lcd_update(WJQTestLcd);
+	/*é¡¶è¡Œå±…ä¸­æ˜¾ç¤ºçˆ¶èœå•*/
+	display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
+	lcd_update(WJQTestLcd);
 	
-	lcd = dev_lcd_open("tftlcd");
+	lcd = lcd_open("tftlcd");
 	if (lcd == NULL)	{
 		wjq_test_showstr("open lcd err!");	
 	} else {
@@ -101,17 +101,17 @@ s32 test_tft_display(void)
 				switch(step)
 				{
 					case 0:
-						dev_lcd_color_fill(lcd, 1, 1000, 1, 1000, YELLOW);
-						dev_lcd_update(lcd);
+						lcd_color_fill(lcd, 1, 1000, 1, 1000, YELLOW);
+						lcd_update(lcd);
 						break;
 					case 1:
-						dev_lcd_color_fill(lcd, 1, 1000, 1, 1000, RED);
-						dev_lcd_update(lcd);
+						lcd_color_fill(lcd, 1, 1000, 1, 1000, RED);
+						lcd_update(lcd);
 						break;
 					case 2:
-						dev_lcd_color_fill(lcd, 1, 1000, 1, 1000, BLUE);
-						dev_lcd_put_string(lcd, TEST_FONG, 1, 120, "abcÎİ¼¹È¸ADC123¹¤×÷ÊÒ12345678901234Îİ¼¹È¸¹¤×÷ÊÒ", RED);
-						dev_lcd_update(lcd);
+						lcd_color_fill(lcd, 1, 1000, 1, 1000, BLUE);
+						display_lcd_put_string(lcd, TEST_FONG, 1, 120, "abcå±‹è„Šé›€ADC123å·¥ä½œå®¤12345678901234å±‹è„Šé›€å·¥ä½œå®¤", RED);
+						lcd_update(lcd);
 
 						break;
 					default:
@@ -144,7 +144,7 @@ s32 test_cogoled_lcd_display(char *name)
 	u8 step = 0;
 	u8 dis = 1;
 	
-	lcd = dev_lcd_open(name);
+	lcd = lcd_open(name);
 	if (lcd == NULL) {
 		wjq_test_showstr("open cog lcd err!");	
 	} else {
@@ -154,16 +154,16 @@ s32 test_cogoled_lcd_display(char *name)
 				switch(step)
 				{
 					case 0:
-						dev_lcd_color_fill(lcd, 1, 1000, 1, 1000, BLACK);
-						dev_lcd_update(lcd);
+						lcd_color_fill(lcd, 1, 1000, 1, 1000, BLACK);
+						lcd_update(lcd);
 						break;
 					case 1:
-						dev_lcd_color_fill(lcd, 1, 1000, 1, 1000, WHITE);
-						dev_lcd_update(lcd);
+						lcd_color_fill(lcd, 1, 1000, 1, 1000, WHITE);
+						lcd_update(lcd);
 						break;
 					case 2:
-						dev_lcd_put_string(lcd, TEST_FONG, 1, 56, "abcÎİ¼¹È¸ADC123¹¤×÷ÊÒ", BLACK);
-						dev_lcd_update(lcd);
+						display_lcd_put_string(lcd, TEST_FONG, 1, 56, "abcå±‹è„Šé›€ADC123å·¥ä½œå®¤", BLACK);
+						lcd_update(lcd);
 						break;
 						
 					default:
@@ -192,31 +192,31 @@ s32 test_cogoled_lcd_display(char *name)
 }
 s32 test_i2c_oled_display(void)
 {
-	dev_lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
-	/*¶¥ĞĞ¾ÓÖĞÏÔÊ¾¸¸²Ëµ¥*/
-	dev_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
-	dev_lcd_update(WJQTestLcd);
+	lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
+	/*é¡¶è¡Œå±…ä¸­æ˜¾ç¤ºçˆ¶èœå•*/
+	display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
+	lcd_update(WJQTestLcd);
 	return 	test_cogoled_lcd_display("i2coledlcd");
 }
 s32 test_vspi_oled_display(void)
 {
-	dev_lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
-	/*¶¥ĞĞ¾ÓÖĞÏÔÊ¾¸¸²Ëµ¥*/
-	dev_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
-	dev_lcd_update(WJQTestLcd);
+	lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
+	/*é¡¶è¡Œå±…ä¸­æ˜¾ç¤ºçˆ¶èœå•*/
+	display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
+	lcd_update(WJQTestLcd);
 	return 	test_cogoled_lcd_display("vspioledlcd");
 }
 
 s32 test_spi_cog_display(void)
 {
-	dev_lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
-	/*¶¥ĞĞ¾ÓÖĞÏÔÊ¾¸¸²Ëµ¥*/
-	dev_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
-	dev_lcd_update(WJQTestLcd);
+	lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
+	/*é¡¶è¡Œå±…ä¸­æ˜¾ç¤ºçˆ¶èœå•*/
+	display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
+	lcd_update(WJQTestLcd);
 	return 	test_cogoled_lcd_display("spicoglcd");
 }
 /*
-	240*240 ²ÊÉ«TFT lcd 0x7735¿ØÖÆÆ÷
+	240*240 å½©è‰²TFT lcd 0x7735æ§åˆ¶å™¨
 */
 s32 test_lcd_spi_128128(void)
 {
@@ -224,16 +224,16 @@ s32 test_lcd_spi_128128(void)
 	u8 step = 0;
 	u8 dis = 1;
 	
-	dev_lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
-	/*¶¥ĞĞ¾ÓÖĞÏÔÊ¾¸¸²Ëµ¥*/
-	dev_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
-	dev_lcd_update(WJQTestLcd);
+	lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
+	/*é¡¶è¡Œå±…ä¸­æ˜¾ç¤ºçˆ¶èœå•*/
+	display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
+	lcd_update(WJQTestLcd);
 	
-	lcd = dev_lcd_open("spitftlcd");
+	lcd = lcd_open("spitftlcd");
 	if (lcd == NULL)	{
 		wjq_test_showstr("open lcd err!");	
 	} else	{
-		dev_lcd_setdir(lcd, W_LCD, L2R_D2U);
+		lcd_setdir(lcd, W_LCD, L2R_D2U);
 		
 		while(1) {
 			if (dis == 1) {
@@ -241,17 +241,17 @@ s32 test_lcd_spi_128128(void)
 				switch(step)
 				{
 					case 0:
-						dev_lcd_color_fill(lcd, 1, 1000, 1, 1000, YELLOW);
-						dev_lcd_update(lcd);
+						lcd_color_fill(lcd, 1, 1000, 1, 1000, YELLOW);
+						lcd_update(lcd);
 						break;
 					case 1:
-						dev_lcd_color_fill(lcd, 1, 1000, 1, 1000, RED);
-						dev_lcd_update(lcd);
+						lcd_color_fill(lcd, 1, 1000, 1, 1000, RED);
+						lcd_update(lcd);
 						break;
 					case 2:
-						dev_lcd_color_fill(lcd, 1, 1000, 1, 1000, BLUE);
-						dev_lcd_put_string(lcd, TEST_FONG, 1, 120, "abcÎİ¼¹È¸ADC123¹¤×÷ÊÒ12345678901234Îİ¼¹È¸¹¤×÷ÊÒ", RED);
-						dev_lcd_update(lcd);
+						lcd_color_fill(lcd, 1, 1000, 1, 1000, BLUE);
+						display_lcd_put_string(lcd, TEST_FONG, 1, 120, "abcå±‹è„Šé›€ADC123å·¥ä½œå®¤12345678901234å±‹è„Šé›€å·¥ä½œå®¤", RED);
+						lcd_update(lcd);
 						break;
 					case 3:
 						dev_lcd_show_bmp(lcd, 1, 1, 240, 240, "mtd0/1:pic/pic128.bmp");
@@ -286,28 +286,28 @@ s32 test_lcd_pic(void)
 	u8 step = 0;
 	u8 dis = 1;
 	
-	dev_lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
-	/*¶¥ĞĞ¾ÓÖĞÏÔÊ¾¸¸²Ëµ¥*/
-	dev_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
-	dev_lcd_update(WJQTestLcd);
-	lcd = dev_lcd_open("tftlcd");
+	lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
+	/*é¡¶è¡Œå±…ä¸­æ˜¾ç¤ºçˆ¶èœå•*/
+	display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
+	lcd_update(WJQTestLcd);
+	lcd = lcd_open("tftlcd");
 	if (lcd == NULL)	{
 		wjq_test_showstr("open lcd err!");	
 		return -1;
 	}
 	
-	dev_lcd_setdir(lcd, W_LCD, L2R_D2U);
+	lcd_setdir(lcd, W_LCD, L2R_D2U);
 	
 	wjq_test_showstr((char *)__FUNCTION__);
-	dev_lcd_show_bmp(lcd, 1, 1, 320, 240, "mtd0/1:pic/Å®ÈËµ¥É«.bmp");
+	dev_lcd_show_bmp(lcd, 1, 1, 320, 240, "mtd0/1:pic/å¥³äººå•è‰².bmp");
 	wjq_wait_key(16);
-	dev_lcd_show_bmp(lcd, 1, 1, 320, 240, "mtd0/1:pic/Å®ÈË16É«.bmp");//µ÷É«°å
+	dev_lcd_show_bmp(lcd, 1, 1, 320, 240, "mtd0/1:pic/å¥³äºº16è‰².bmp");//è°ƒè‰²æ¿
 	wjq_wait_key(16);
-	dev_lcd_show_bmp(lcd, 1, 1, 320, 240, "mtd0/1:pic/Å®ÈË256É«.bmp");//µ÷É«°å
+	dev_lcd_show_bmp(lcd, 1, 1, 320, 240, "mtd0/1:pic/å¥³äºº256è‰².bmp");//è°ƒè‰²æ¿
 	wjq_wait_key(16);
-	dev_lcd_show_bmp(lcd, 1, 1, 320, 240, "mtd0/1:pic/Å®ÈË24Î».bmp");//Õæ²ÊÉ«
+	dev_lcd_show_bmp(lcd, 1, 1, 320, 240, "mtd0/1:pic/å¥³äºº24ä½.bmp");//çœŸå½©è‰²
 	wjq_wait_key(16);
-	dev_lcd_show_bmp(lcd, 1, 1, 320, 240, "mtd0/1:pic/logo.bmp");//Õæ²ÊÉ«
+	dev_lcd_show_bmp(lcd, 1, 1, 320, 240, "mtd0/1:pic/logo.bmp");//çœŸå½©è‰²
 	wjq_wait_key(16);
 	/*
 	dev_lcd_show_bmp(lcd, 1, 1, 128, 128, "mtd0/1:/pic/pic128.bmp");
@@ -317,7 +317,7 @@ s32 test_lcd_pic(void)
 	dev_lcd_show_bmp(lcd, 1, 1, 240, 240, "mtd0/1:/pic/pic240240.bmp");
 	wjq_wait_key(16);
 	*/
-	dev_lcd_setdir(lcd, W_LCD, L2R_U2D);
+	lcd_setdir(lcd, W_LCD, L2R_U2D);
 	
 	return 0;
 }
@@ -331,10 +331,10 @@ s32 test_lcd_font(void)
 
 s32 test_sound_buzzer(void)
 {
-	dev_lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
-	/*¶¥ĞĞ¾ÓÖĞÏÔÊ¾¸¸²Ëµ¥*/
-	dev_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
-	dev_lcd_update(WJQTestLcd);
+	lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
+	/*é¡¶è¡Œå±…ä¸­æ˜¾ç¤ºçˆ¶èœå•*/
+	display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
+	lcd_update(WJQTestLcd);
 	while(1) {
 		u8 keyvalue;
 		s32 res;
@@ -356,9 +356,9 @@ s32 test_sound_buzzer(void)
 
 s32 test_sound_fm(void)
 {
-	dev_lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
-	dev_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
-	dev_lcd_update(WJQTestLcd);
+	lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
+	display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
+	lcd_update(WJQTestLcd);
 	dev_wm8978_inout(WM8978_INPUT_DAC|WM8978_INPUT_AUX|WM8978_INPUT_ADC,
 					WM8978_OUTPUT_PHONE|WM8978_OUTPUT_SPK);
 	
@@ -371,9 +371,9 @@ s32 test_sound_fm(void)
 
 s32 test_sound_wm8978(void)
 {
-	dev_lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
-	dev_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
-	dev_lcd_update(WJQTestLcd);
+	lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
+	display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
+	lcd_update(WJQTestLcd);
 	fun_sound_play("mtd0/1:stereo_16bit_32k.wav", "wm8978");
 	wjq_wait_key(16);
 	fun_sound_stop();
@@ -383,9 +383,9 @@ s32 test_sound_wm8978(void)
 
 s32 test_sound_dac(void)
 {
-	dev_lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
-	dev_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
-	dev_lcd_update(WJQTestLcd);
+	lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
+	display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
+	lcd_update(WJQTestLcd);
 	fun_sound_play("mtd0/1:mono_16bit_8k.wav", "dacsound");
 	wjq_wait_key(16);
 	fun_sound_stop();
@@ -394,9 +394,9 @@ s32 test_sound_dac(void)
 }
 s32 test_sound_rec(void)
 {
-	dev_lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
-	dev_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
-	dev_lcd_update(WJQTestLcd);
+	lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
+	display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
+	lcd_update(WJQTestLcd);
 	//fun_sound_rec("mtd0/1:rec8.wav");
 	wjq_wait_key(16);
 	//fun_rec_stop();
@@ -423,23 +423,23 @@ s32 test_tp_calibrate(void)
 {
 	DevLcdNode *lcd;
 
-	dev_lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
-	/*¶¥ĞĞ¾ÓÖĞÏÔÊ¾¸¸²Ëµ¥*/
-	dev_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
-	dev_lcd_update(WJQTestLcd);
-	lcd = dev_lcd_open("tftlcd");
+	lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
+	/*é¡¶è¡Œå±…ä¸­æ˜¾ç¤ºçˆ¶èœå•*/
+	display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
+	lcd_update(WJQTestLcd);
+	lcd = lcd_open("tftlcd");
 	if(lcd == NULL) {
 		wjq_test_showstr("open lcd err!");	
 	} else	{
-		dev_lcd_setdir(lcd, H_LCD, L2R_U2D);
+		lcd_setdir(lcd, H_LCD, L2R_U2D);
 		tp_open();
 		ts_calibrate(lcd);
 		tp_close();
 	}
 	
-	dev_lcd_color_fill(lcd, 1, 1000, 1, 1000, BLUE);
-	dev_lcd_update(lcd);
-	dev_lcd_close(lcd);
+	lcd_color_fill(lcd, 1, 1000, 1, 1000, BLUE);
+	lcd_update(lcd);
+	lcd_close(lcd);
 	
 	return 0;
 }
@@ -449,15 +449,15 @@ s32 test_tp_test(void)
 {
 	DevLcdNode *lcd;
 
-	dev_lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
-	/*¶¥ĞĞ¾ÓÖĞÏÔÊ¾¸¸²Ëµ¥*/
-	dev_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
-	dev_lcd_update(WJQTestLcd);
-	lcd = dev_lcd_open("tftlcd");
+	lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
+	/*é¡¶è¡Œå±…ä¸­æ˜¾ç¤ºçˆ¶èœå•*/
+	display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
+	lcd_update(WJQTestLcd);
+	lcd = lcd_open("tftlcd");
 	if (lcd == NULL)	{
 		wjq_test_showstr("open lcd err!");	
 	} else {
-		dev_lcd_setdir(lcd, H_LCD, L2R_U2D);
+		lcd_setdir(lcd, H_LCD, L2R_U2D);
 		tp_open();	
 	
 		TouchPoint samp[10];
@@ -475,7 +475,7 @@ s32 test_tp_test(void)
 					
 					if (samp[i].pressure != 0 ) {
 						//uart_printf("pre:%d, x:%d, y:%d\r\n", samp.pressure, samp.x, samp.y);
-						dev_lcd_drawpoint(lcd, samp[i].x, samp[i].y, RED); 
+						lcd_drawpoint(lcd, samp[i].x, samp[i].y, RED); 
 					}
 					i++;
 				}
@@ -487,8 +487,8 @@ s32 test_tp_test(void)
 			res = dev_keypad_read(&keyvalue, 1);
 			if (res == 1) {
 				if (keyvalue == 8) {
-					dev_lcd_color_fill(lcd, 1, 1000, 1, 1000, BLUE);
-					dev_lcd_update(lcd);
+					lcd_color_fill(lcd, 1, 1000, 1, 1000, BLUE);
+					lcd_update(lcd);
 				} else if(keyvalue == 12) {
 					break;
 				}
@@ -507,20 +507,20 @@ s32 test_key(void)
 	s32 res;
 	u8 keyvalue;
 		
-	dev_lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
-	dev_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
-	dev_lcd_update(WJQTestLcd);
+	lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
+	display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
+	lcd_update(WJQTestLcd);
 	dev_key_open();
 
 	while(1) {
 		res = dev_key_read(&tmp, 1);
 		if(1 == res) {
 			if (tmp == DEV_KEY_PRESS) {
-				dev_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 10, "	   press	", BLACK);
-				dev_lcd_update(WJQTestLcd);
+				display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 10, "	   press	", BLACK);
+				lcd_update(WJQTestLcd);
 			} else if(tmp == DEV_KEY_REL) {
-				dev_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 10, "	 release	  ", BLACK);
-				dev_lcd_update(WJQTestLcd);
+				display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 10, "	 release	  ", BLACK);
+				lcd_update(WJQTestLcd);
 			}
 		}
 
@@ -543,10 +543,10 @@ s32 test_camera(void)
 	DevLcdNode *lcd;
 
 	//dev_lcd_color_fill(emenulcd, 1, 1000, 1, 1000, WHITE);
-	/*¶¥ĞĞ¾ÓÖĞÏÔÊ¾¸¸²Ëµ¥*/
+	/*é¡¶è¡Œå±…ä¸­æ˜¾ç¤ºçˆ¶èœå•*/
 	//dev_lcd_put_string(emenulcd, FONT_SONGTI_1212, 1, 32, __FUNCTION__, BLACK);
 	//dev_lcd_update(emenulcd);
-	lcd = dev_lcd_open("tftlcd");
+	lcd = lcd_open("tftlcd");
 	if (lcd == NULL) {
 		wjq_test_showstr("open lcd err!");
 		wjq_wait_key(16);
@@ -563,8 +563,8 @@ s32 test_camera(void)
 			
 	}
 	
-	dev_lcd_color_fill(lcd, 1, 1000, 1, 1000, BLUE);
-	dev_lcd_update(lcd);
+	lcd_color_fill(lcd, 1, 1000, 1, 1000, BLUE);
+	lcd_update(lcd);
 	return 0;
 }
 
@@ -575,9 +575,9 @@ s32 test_rs485_rec(void)
 	u8 len;
 	s32 res;
 	
-	dev_lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
-	dev_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
-	dev_lcd_update(WJQTestLcd);
+	lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
+	display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
+	lcd_update(WJQTestLcd);
 	//dev_rs485_open();
 
 	while(1) {
@@ -606,9 +606,9 @@ s32 test_rs485_snd(void)
 	u8 keyvalue;
 	s32 res;
 	
-	dev_lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
-	dev_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
-	dev_lcd_update(WJQTestLcd);
+	lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
+	display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
+	lcd_update(WJQTestLcd);
 	//dev_rs485_open();
 
 	while(1)
@@ -648,9 +648,9 @@ s32 test_uart(void)
     s32 len;
     s32 res;
 	
-	dev_lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
-	dev_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
-	dev_lcd_update(WJQTestLcd);
+	lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
+	display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
+	lcd_update(WJQTestLcd);
 	while(1) {
 		
 	    //len =  mcu_uart_read (MCU_UART_3, buf, 10);
@@ -670,7 +670,7 @@ s32 test_uart(void)
 }
 /*
 
-	¼òµ¥²âÊÔ£¬´®¿Ú·¢ËÍATÃüÁî£¬ÊÕµ½OK¼´¿É¡£
+	ç®€å•æµ‹è¯•ï¼Œä¸²å£å‘é€ATå‘½ä»¤ï¼Œæ”¶åˆ°OKå³å¯ã€‚
 
 */
 s32 test_esp8266(void)
@@ -688,9 +688,9 @@ s32 wjq_test(void)
 
 s32 test_spiflash_board(void)
 {
-	dev_lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
-	dev_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
-	dev_lcd_update(WJQTestLcd);
+	lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
+	display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
+	lcd_update(WJQTestLcd);
 	
 	dev_spiflash_test_chipcheck("board_spiflash");
 	wjq_wait_key(12);
@@ -699,9 +699,9 @@ s32 test_spiflash_board(void)
 
 s32 test_spiflash_core(void)
 {
-	dev_lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
-	dev_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
-	dev_lcd_update(WJQTestLcd);
+	lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
+	display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
+	lcd_update(WJQTestLcd);
 	
 	dev_spiflash_test_chiperase("core_spiflash");
 	wjq_wait_key(12);
@@ -714,9 +714,9 @@ s32 test_touchkey(void)
 	s32 res;
 	u8 keyvalue;
 		
-	dev_lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
-	dev_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
-	dev_lcd_update(WJQTestLcd);
+	lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
+	display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
+	lcd_update(WJQTestLcd);
 	
 	dev_touchkey_open();
 
@@ -728,14 +728,14 @@ s32 test_touchkey(void)
 			if(tmp == DEV_TOUCHKEY_TOUCH)
 			{
 				wjq_log(LOG_FUN, "touch key test get a touch event!\r\n");
-				dev_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 10, "      touch    ", BLACK);
-				dev_lcd_update(WJQTestLcd);
+				display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 10, "      touch    ", BLACK);
+				lcd_update(WJQTestLcd);
 			}
 			else if(tmp == DEV_TOUCHKEY_RELEASE)
 			{
 				wjq_log(LOG_FUN, "touch key test get a release event!\r\n");
-				dev_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 10, "      release    ", BLACK);
-				dev_lcd_update(WJQTestLcd);
+				display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 10, "      release    ", BLACK);
+				lcd_update(WJQTestLcd);
 			}
 		}
 
@@ -773,13 +773,13 @@ s32 test_keypad(void)
 	{
 		if(dis_flag == 1)
 		{
-			dev_lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
-			dev_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 1, (char *)__FUNCTION__, BLACK);
-			dev_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 13, testkeypad1, BLACK);
-			dev_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 26, testkeypad2, BLACK);
-			dev_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 39, testkeypad3, BLACK);
-			dev_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 52, testkeypad4, BLACK);
-			dev_lcd_update(WJQTestLcd);
+			lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
+			display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 1, (char *)__FUNCTION__, BLACK);
+			display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 13, testkeypad1, BLACK);
+			display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 26, testkeypad2, BLACK);
+			display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 39, testkeypad3, BLACK);
+			display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 52, testkeypad4, BLACK);
+			lcd_update(WJQTestLcd);
 			dis_flag = 0;
 		}
 		
@@ -863,394 +863,394 @@ s32 test_keypad(void)
 
 const MENU WJQTestList[]=
 {
-	MENU_L_0,//²Ëµ¥µÈ¼¶
-	"²âÊÔ³ÌĞò",//ÖĞÎÄ
-	"test",	//Ó¢ÎÄ
-	MENU_TYPE_KEY_2COL,//²Ëµ¥ÀàĞÍ
-	NULL,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
+	MENU_L_0,//èœå•ç­‰çº§
+	"æµ‹è¯•ç¨‹åº",//ä¸­æ–‡
+	"test",	//è‹±æ–‡
+	MENU_TYPE_KEY_2COL,//èœå•ç±»å‹
+	NULL,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
 
-		MENU_L_1,//²Ëµ¥µÈ¼¶
-		"LCD",//ÖĞÎÄ
-		"LCD",	//Ó¢ÎÄ
-		MENU_TYPE_LIST,//²Ëµ¥ÀàĞÍ
-		NULL,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
+		MENU_L_1,//èœå•ç­‰çº§
+		"LCD",//ä¸­æ–‡
+		"LCD",	//è‹±æ–‡
+		MENU_TYPE_LIST,//èœå•ç±»å‹
+		NULL,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
 			/*
-			MENU_L_2,//²Ëµ¥µÈ¼¶
-			"VSPI OLED",//ÖĞÎÄ
-			"VSPI OLED",	//Ó¢ÎÄ
-			MENU_TYPE_FUN,//²Ëµ¥ÀàĞÍ
-			test_vspi_oled_display,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
+			MENU_L_2,//èœå•ç­‰çº§
+			"VSPI OLED",//ä¸­æ–‡
+			"VSPI OLED",	//è‹±æ–‡
+			MENU_TYPE_FUN,//èœå•ç±»å‹
+			test_vspi_oled_display,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
 			*/
-			MENU_L_2,//²Ëµ¥µÈ¼¶
-			"I2C OLED",//ÖĞÎÄ
-			"I2C OLED",	//Ó¢ÎÄ
-			MENU_TYPE_FUN,//²Ëµ¥ÀàĞÍ
-			test_i2c_oled_display,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
+			MENU_L_2,//èœå•ç­‰çº§
+			"I2C OLED",//ä¸­æ–‡
+			"I2C OLED",	//è‹±æ–‡
+			MENU_TYPE_FUN,//èœå•ç±»å‹
+			test_i2c_oled_display,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
 			/*
-			MENU_L_2,//²Ëµ¥µÈ¼¶
-			"SPI COG",//ÖĞÎÄ
-			"SPI COG",	//Ó¢ÎÄ
-			MENU_TYPE_FUN,//²Ëµ¥ÀàĞÍ
-			test_spi_cog_display,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
+			MENU_L_2,//èœå•ç­‰çº§
+			"SPI COG",//ä¸­æ–‡
+			"SPI COG",	//è‹±æ–‡
+			MENU_TYPE_FUN,//èœå•ç±»å‹
+			test_spi_cog_display,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
 			*/
-			MENU_L_2,//²Ëµ¥µÈ¼¶
-			"SPI oled/cog",//ÖĞÎÄ
-			"SPI oled/cog",	//Ó¢ÎÄ
-			MENU_TYPE_FUN,//²Ëµ¥ÀàĞÍ
-			//test_lcd_spi_128128,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
+			MENU_L_2,//èœå•ç­‰çº§
+			"SPI oled/cog",//ä¸­æ–‡
+			"SPI oled/cog",	//è‹±æ–‡
+			MENU_TYPE_FUN,//èœå•ç±»å‹
+			//test_lcd_spi_128128,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
 			test_spi_cog_display,
 			
-			MENU_L_2,//²Ëµ¥µÈ¼¶
-			"tft",//ÖĞÎÄ
-			"tft",	//Ó¢ÎÄ
-			MENU_TYPE_FUN,//²Ëµ¥ÀàĞÍ
-			test_tft_display,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
+			MENU_L_2,//èœå•ç­‰çº§
+			"tft",//ä¸­æ–‡
+			"tft",	//è‹±æ–‡
+			MENU_TYPE_FUN,//èœå•ç±»å‹
+			test_tft_display,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
 	
-			MENU_L_2,//²Ëµ¥µÈ¼¶
-			"Í¼Æ¬²âÊÔ",//ÖĞÎÄ
-			"test BMP",	//Ó¢ÎÄ
-			MENU_TYPE_FUN,//²Ëµ¥ÀàĞÍ
-			test_lcd_pic,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
+			MENU_L_2,//èœå•ç­‰çº§
+			"å›¾ç‰‡æµ‹è¯•",//ä¸­æ–‡
+			"test BMP",	//è‹±æ–‡
+			MENU_TYPE_FUN,//èœå•ç±»å‹
+			test_lcd_pic,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
 			
-			MENU_L_2,//²Ëµ¥µÈ¼¶
-			"×Ö¿â²âÊÔ",//ÖĞÎÄ
-			"test Font",	//Ó¢ÎÄ
-			MENU_TYPE_FUN,//²Ëµ¥ÀàĞÍ
-			test_lcd_font,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
+			MENU_L_2,//èœå•ç­‰çº§
+			"å­—åº“æµ‹è¯•",//ä¸­æ–‡
+			"test Font",	//è‹±æ–‡
+			MENU_TYPE_FUN,//èœå•ç±»å‹
+			test_lcd_font,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
 
-		MENU_L_1,//²Ëµ¥µÈ¼¶
-		"ÉùÒô",//ÖĞÎÄ
-		"sound",	//Ó¢ÎÄ
-		MENU_TYPE_LIST,//²Ëµ¥ÀàĞÍ
-		NULL,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
-			MENU_L_2,//²Ëµ¥µÈ¼¶
-			"·äÃùÆ÷",//ÖĞÎÄ
-			"buzzer",	//Ó¢ÎÄ
-			MENU_TYPE_FUN,//²Ëµ¥ÀàĞÍ
-			test_sound_buzzer,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
+		MENU_L_1,//èœå•ç­‰çº§
+		"å£°éŸ³",//ä¸­æ–‡
+		"sound",	//è‹±æ–‡
+		MENU_TYPE_LIST,//èœå•ç±»å‹
+		NULL,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
+			MENU_L_2,//èœå•ç­‰çº§
+			"èœ‚é¸£å™¨",//ä¸­æ–‡
+			"buzzer",	//è‹±æ–‡
+			MENU_TYPE_FUN,//èœå•ç±»å‹
+			test_sound_buzzer,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
 
-			MENU_L_2,//²Ëµ¥µÈ¼¶
-			"DACÒôÀÖ",//ÖĞÎÄ
-			"DAC music",	//Ó¢ÎÄ
-			MENU_TYPE_FUN,//²Ëµ¥ÀàĞÍ
-			test_sound_dac,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
+			MENU_L_2,//èœå•ç­‰çº§
+			"DACéŸ³ä¹",//ä¸­æ–‡
+			"DAC music",	//è‹±æ–‡
+			MENU_TYPE_FUN,//èœå•ç±»å‹
+			test_sound_dac,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
 
-			MENU_L_2,//²Ëµ¥µÈ¼¶
-			"ÊÕÒô",//ÖĞÎÄ
-			"FM",	//Ó¢ÎÄ
-			MENU_TYPE_FUN,//²Ëµ¥ÀàĞÍ
-			test_sound_fm,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
+			MENU_L_2,//èœå•ç­‰çº§
+			"æ”¶éŸ³",//ä¸­æ–‡
+			"FM",	//è‹±æ–‡
+			MENU_TYPE_FUN,//èœå•ç±»å‹
+			test_sound_fm,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
 
-			MENU_L_2,//²Ëµ¥µÈ¼¶
-			"I2SÒôÀÖ",//ÖĞÎÄ
-			"I2S Music",	//Ó¢ÎÄ
-			MENU_TYPE_FUN,//²Ëµ¥ÀàĞÍ
-			test_sound_wm8978,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
+			MENU_L_2,//èœå•ç­‰çº§
+			"I2SéŸ³ä¹",//ä¸­æ–‡
+			"I2S Music",	//è‹±æ–‡
+			MENU_TYPE_FUN,//èœå•ç±»å‹
+			test_sound_wm8978,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
 
-			MENU_L_2,//²Ëµ¥µÈ¼¶
-			"Â¼Òô",//ÖĞÎÄ
-			"rec",	//Ó¢ÎÄ
-			MENU_TYPE_FUN,//²Ëµ¥ÀàĞÍ
-			test_sound_rec,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
+			MENU_L_2,//èœå•ç­‰çº§
+			"å½•éŸ³",//ä¸­æ–‡
+			"rec",	//è‹±æ–‡
+			MENU_TYPE_FUN,//èœå•ç±»å‹
+			test_sound_rec,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
 
-		MENU_L_1,//²Ëµ¥µÈ¼¶
-		"´¥ÃşÆÁ",//ÖĞÎÄ
-		"tp",	//Ó¢ÎÄ
-		MENU_TYPE_LIST,//²Ëµ¥ÀàĞÍ
-		NULL,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
+		MENU_L_1,//èœå•ç­‰çº§
+		"è§¦æ‘¸å±",//ä¸­æ–‡
+		"tp",	//è‹±æ–‡
+		MENU_TYPE_LIST,//èœå•ç±»å‹
+		NULL,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
 			
-			MENU_L_2,//²Ëµ¥µÈ¼¶
-			"Ğ£×¼",//ÖĞÎÄ
-			"calibrate",	//Ó¢ÎÄ
-			MENU_TYPE_FUN,//²Ëµ¥ÀàĞÍ
-			test_tp_calibrate,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
+			MENU_L_2,//èœå•ç­‰çº§
+			"æ ¡å‡†",//ä¸­æ–‡
+			"calibrate",	//è‹±æ–‡
+			MENU_TYPE_FUN,//èœå•ç±»å‹
+			test_tp_calibrate,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
 
-			MENU_L_2,//²Ëµ¥µÈ¼¶
-			"²âÊÔ",//ÖĞÎÄ
-			"test",	//Ó¢ÎÄ
-			MENU_TYPE_FUN,//²Ëµ¥ÀàĞÍ
-			test_tp_test,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
+			MENU_L_2,//èœå•ç­‰çº§
+			"æµ‹è¯•",//ä¸­æ–‡
+			"test",	//è‹±æ–‡
+			MENU_TYPE_FUN,//èœå•ç±»å‹
+			test_tp_test,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
 			
-		MENU_L_1,//²Ëµ¥µÈ¼¶
-		"°´¼ü",//ÖĞÎÄ
-		"KEY",	//Ó¢ÎÄ
-		MENU_TYPE_LIST,//²Ëµ¥ÀàĞÍ
-		NULL,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
-			MENU_L_2,//²Ëµ¥µÈ¼¶
-			"ºËĞÄ°å°´¼ü",//ÖĞÎÄ
-			"core KEY",	//Ó¢ÎÄ
-			MENU_TYPE_FUN,//²Ëµ¥ÀàĞÍ
-			test_key,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
+		MENU_L_1,//èœå•ç­‰çº§
+		"æŒ‰é”®",//ä¸­æ–‡
+		"KEY",	//è‹±æ–‡
+		MENU_TYPE_LIST,//èœå•ç±»å‹
+		NULL,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
+			MENU_L_2,//èœå•ç­‰çº§
+			"æ ¸å¿ƒæ¿æŒ‰é”®",//ä¸­æ–‡
+			"core KEY",	//è‹±æ–‡
+			MENU_TYPE_FUN,//èœå•ç±»å‹
+			test_key,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
 			
-			/*´¥Ãş°´¼ü*/
-			MENU_L_2,//²Ëµ¥µÈ¼¶
-			"´¥Ãş°´¼ü",//ÖĞÎÄ
-			"touch key",	//Ó¢ÎÄ
-			MENU_TYPE_FUN,//²Ëµ¥ÀàĞÍ
-			test_touchkey,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
+			/*è§¦æ‘¸æŒ‰é”®*/
+			MENU_L_2,//èœå•ç­‰çº§
+			"è§¦æ‘¸æŒ‰é”®",//ä¸­æ–‡
+			"touch key",	//è‹±æ–‡
+			MENU_TYPE_FUN,//èœå•ç±»å‹
+			test_touchkey,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
 
-			/*¿ÉÒÔ²»²â£¬±¾À´²âÊÔ³ÌĞò¾ÍÒªÊ¹ÓÃ¾ØÕó°´¼ü*/
-			MENU_L_2,//²Ëµ¥µÈ¼¶
-			"¾ØÕó°´¼ü",//ÖĞÎÄ
-			"keypad",	//Ó¢ÎÄ
-			MENU_TYPE_FUN,//²Ëµ¥ÀàĞÍ
-			test_keypad,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
+			/*å¯ä»¥ä¸æµ‹ï¼Œæœ¬æ¥æµ‹è¯•ç¨‹åºå°±è¦ä½¿ç”¨çŸ©é˜µæŒ‰é”®*/
+			MENU_L_2,//èœå•ç­‰çº§
+			"çŸ©é˜µæŒ‰é”®",//ä¸­æ–‡
+			"keypad",	//è‹±æ–‡
+			MENU_TYPE_FUN,//èœå•ç±»å‹
+			test_keypad,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
 		
-		MENU_L_1,//²Ëµ¥µÈ¼¶
-		"ÉãÏñ",//ÖĞÎÄ
-		"camera",	//Ó¢ÎÄ
-		MENU_TYPE_FUN,//²Ëµ¥ÀàĞÍ
-		test_camera,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
+		MENU_L_1,//èœå•ç­‰çº§
+		"æ‘„åƒ",//ä¸­æ–‡
+		"camera",	//è‹±æ–‡
+		MENU_TYPE_FUN,//èœå•ç±»å‹
+		test_camera,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
 		
-		MENU_L_1,//²Ëµ¥µÈ¼¶
-		"SPI FLASH",//ÖĞÎÄ
-		"SPI FLASH",	//Ó¢ÎÄ
-		MENU_TYPE_LIST,//²Ëµ¥ÀàĞÍ
-		NULL,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
-			MENU_L_2,//²Ëµ¥µÈ¼¶
-			"ºËĞÄ°åFLASH",//ÖĞÎÄ
-			"core FLASH",	//Ó¢ÎÄ
-			MENU_TYPE_FUN,//²Ëµ¥ÀàĞÍ
-			test_spiflash_core,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
+		MENU_L_1,//èœå•ç­‰çº§
+		"SPI FLASH",//ä¸­æ–‡
+		"SPI FLASH",	//è‹±æ–‡
+		MENU_TYPE_LIST,//èœå•ç±»å‹
+		NULL,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
+			MENU_L_2,//èœå•ç­‰çº§
+			"æ ¸å¿ƒæ¿FLASH",//ä¸­æ–‡
+			"core FLASH",	//è‹±æ–‡
+			MENU_TYPE_FUN,//èœå•ç±»å‹
+			test_spiflash_core,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
 			
-			MENU_L_2,//²Ëµ¥µÈ¼¶
-			"µ×°å FLASH",//ÖĞÎÄ
-			"board FLASH",	//Ó¢ÎÄ
-			MENU_TYPE_FUN,//²Ëµ¥ÀàĞÍ
-			test_spiflash_board,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
+			MENU_L_2,//èœå•ç­‰çº§
+			"åº•æ¿ FLASH",//ä¸­æ–‡
+			"board FLASH",	//è‹±æ–‡
+			MENU_TYPE_FUN,//èœå•ç±»å‹
+			test_spiflash_board,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
 			
-		MENU_L_1,//²Ëµ¥µÈ¼¶
-		"Í¨ĞÅ",//ÖĞÎÄ
-		"com",	//Ó¢ÎÄ
-		MENU_TYPE_LIST,//²Ëµ¥ÀàĞÍ
-		NULL,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
+		MENU_L_1,//èœå•ç­‰çº§
+		"é€šä¿¡",//ä¸­æ–‡
+		"com",	//è‹±æ–‡
+		MENU_TYPE_LIST,//èœå•ç±»å‹
+		NULL,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
 
-			MENU_L_2,//²Ëµ¥µÈ¼¶
-			"485",//ÖĞÎÄ
-			"485",	//Ó¢ÎÄ
-			MENU_TYPE_LIST,//²Ëµ¥ÀàĞÍ
-			NULL,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
-				MENU_L_3,//²Ëµ¥µÈ¼¶
-				"485 ½ÓÊÕ",//ÖĞÎÄ
-				"485 rec",	//Ó¢ÎÄ
-				MENU_TYPE_FUN,//²Ëµ¥ÀàĞÍ
-				test_rs485_rec,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
-				MENU_L_3,//²Ëµ¥µÈ¼¶
-				"485 ·¢ËÍ",//ÖĞÎÄ
-				"485 snd",	//Ó¢ÎÄ
-				MENU_TYPE_FUN,//²Ëµ¥ÀàĞÍ
-				test_rs485_snd,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
+			MENU_L_2,//èœå•ç­‰çº§
+			"485",//ä¸­æ–‡
+			"485",	//è‹±æ–‡
+			MENU_TYPE_LIST,//èœå•ç±»å‹
+			NULL,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
+				MENU_L_3,//èœå•ç­‰çº§
+				"485 æ¥æ”¶",//ä¸­æ–‡
+				"485 rec",	//è‹±æ–‡
+				MENU_TYPE_FUN,//èœå•ç±»å‹
+				test_rs485_rec,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
+				MENU_L_3,//èœå•ç­‰çº§
+				"485 å‘é€",//ä¸­æ–‡
+				"485 snd",	//è‹±æ–‡
+				MENU_TYPE_FUN,//èœå•ç±»å‹
+				test_rs485_snd,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
 			
-			MENU_L_2,//²Ëµ¥µÈ¼¶
-			"CAN",//ÖĞÎÄ
-			"CAN",	//Ó¢ÎÄ
-			MENU_TYPE_LIST,//²Ëµ¥ÀàĞÍ
-			NULL,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
-				MENU_L_3,//²Ëµ¥µÈ¼¶
-				"CAN ½ÓÊÕ",//ÖĞÎÄ
-				"CAN rec",	//Ó¢ÎÄ
-				MENU_TYPE_FUN,//²Ëµ¥ÀàĞÍ
-				test_can_rec,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
+			MENU_L_2,//èœå•ç­‰çº§
+			"CAN",//ä¸­æ–‡
+			"CAN",	//è‹±æ–‡
+			MENU_TYPE_LIST,//èœå•ç±»å‹
+			NULL,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
+				MENU_L_3,//èœå•ç­‰çº§
+				"CAN æ¥æ”¶",//ä¸­æ–‡
+				"CAN rec",	//è‹±æ–‡
+				MENU_TYPE_FUN,//èœå•ç±»å‹
+				test_can_rec,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
 				
-				MENU_L_3,//²Ëµ¥µÈ¼¶
-				"CAN ·¢ËÍ",//ÖĞÎÄ
-				"CAN snd",	//Ó¢ÎÄ
-				MENU_TYPE_FUN,//²Ëµ¥ÀàĞÍ
-				test_can_snd,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
+				MENU_L_3,//èœå•ç­‰çº§
+				"CAN å‘é€",//ä¸­æ–‡
+				"CAN snd",	//è‹±æ–‡
+				MENU_TYPE_FUN,//èœå•ç±»å‹
+				test_can_snd,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
 			
 		
 		
-			MENU_L_2,//²Ëµ¥µÈ¼¶
-			"´®¿Ú",//ÖĞÎÄ
-			"uart",	//Ó¢ÎÄ
-			MENU_TYPE_FUN,//²Ëµ¥ÀàĞÍ
-			test_uart,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
+			MENU_L_2,//èœå•ç­‰çº§
+			"ä¸²å£",//ä¸­æ–‡
+			"uart",	//è‹±æ–‡
+			MENU_TYPE_FUN,//èœå•ç±»å‹
+			test_uart,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
 
-			MENU_L_2,//²Ëµ¥µÈ¼¶
-			"ÍøÂç",//ÖĞÎÄ
-			"eth",	//Ó¢ÎÄ
-			MENU_TYPE_LIST,//²Ëµ¥ÀàĞÍ
-			NULL,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
+			MENU_L_2,//èœå•ç­‰çº§
+			"ç½‘ç»œ",//ä¸­æ–‡
+			"eth",	//è‹±æ–‡
+			MENU_TYPE_LIST,//èœå•ç±»å‹
+			NULL,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
 
-			MENU_L_2,//²Ëµ¥µÈ¼¶
-			"OTG",//ÖĞÎÄ
-			"OTG",	//Ó¢ÎÄ
-			MENU_TYPE_LIST,//²Ëµ¥ÀàĞÍ
-			NULL,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
-				MENU_L_3,//²Ëµ¥µÈ¼¶
-				"HOST",//ÖĞÎÄ
-				"HOST",	//Ó¢ÎÄ
-				MENU_TYPE_LIST,//²Ëµ¥ÀàĞÍ
-				NULL,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
-				MENU_L_3,//²Ëµ¥µÈ¼¶
-				"Device",//ÖĞÎÄ
-				"Device",	//Ó¢ÎÄ
-				MENU_TYPE_LIST,//²Ëµ¥ÀàĞÍ
-				NULL,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
-		MENU_L_1,//²Ëµ¥µÈ¼¶
-		"Ä£¿é",//ÖĞÎÄ
-		"mod",	//Ó¢ÎÄ
-		MENU_TYPE_LIST,//²Ëµ¥ÀàĞÍ
-		NULL,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
+			MENU_L_2,//èœå•ç­‰çº§
+			"OTG",//ä¸­æ–‡
+			"OTG",	//è‹±æ–‡
+			MENU_TYPE_LIST,//èœå•ç±»å‹
+			NULL,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
+				MENU_L_3,//èœå•ç­‰çº§
+				"HOST",//ä¸­æ–‡
+				"HOST",	//è‹±æ–‡
+				MENU_TYPE_LIST,//èœå•ç±»å‹
+				NULL,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
+				MENU_L_3,//èœå•ç­‰çº§
+				"Device",//ä¸­æ–‡
+				"Device",	//è‹±æ–‡
+				MENU_TYPE_LIST,//èœå•ç±»å‹
+				NULL,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
+		MENU_L_1,//èœå•ç­‰çº§
+		"æ¨¡å—",//ä¸­æ–‡
+		"mod",	//è‹±æ–‡
+		MENU_TYPE_LIST,//èœå•ç±»å‹
+		NULL,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
 		
-			/*ÍâÀ©½Ó¿Ú²âÊÔ*/
-			MENU_L_2,//²Ëµ¥µÈ¼¶
-			"RF24L01",//ÖĞÎÄ
-			"RF24L01",	//Ó¢ÎÄ
-			MENU_TYPE_LIST,//²Ëµ¥ÀàĞÍ
-			NULL,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
+			/*å¤–æ‰©æ¥å£æµ‹è¯•*/
+			MENU_L_2,//èœå•ç­‰çº§
+			"RF24L01",//ä¸­æ–‡
+			"RF24L01",	//è‹±æ–‡
+			MENU_TYPE_LIST,//èœå•ç±»å‹
+			NULL,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
 
-			MENU_L_2,//²Ëµ¥µÈ¼¶
-			"MPU6050",//ÖĞÎÄ
-			"MPU6050",	//Ó¢ÎÄ
-			MENU_TYPE_LIST,//²Ëµ¥ÀàĞÍ
-			NULL,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
+			MENU_L_2,//èœå•ç­‰çº§
+			"MPU6050",//ä¸­æ–‡
+			"MPU6050",	//è‹±æ–‡
+			MENU_TYPE_LIST,//èœå•ç±»å‹
+			NULL,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
 
-			/*ÓÃ´®¿ÚÍâÀ©8266Ä£¿é*/
-			MENU_L_2,//²Ëµ¥µÈ¼¶
-			"wifi",//ÖĞÎÄ
-			"wifi",	//Ó¢ÎÄ
-			MENU_TYPE_FUN,//²Ëµ¥ÀàĞÍ
-			test_esp8266,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
+			/*ç”¨ä¸²å£å¤–æ‰©8266æ¨¡å—*/
+			MENU_L_2,//èœå•ç­‰çº§
+			"wifi",//ä¸­æ–‡
+			"wifi",	//è‹±æ–‡
+			MENU_TYPE_FUN,//èœå•ç±»å‹
+			test_esp8266,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
 		
 
-		MENU_L_1,//²Ëµ¥µÈ¼¶
-		"test",//ÖĞÎÄ
-		"test",	//Ó¢ÎÄ
-		MENU_TYPE_LIST,//²Ëµ¥ÀàĞÍ
-		NULL,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
+		MENU_L_1,//èœå•ç­‰çº§
+		"test",//ä¸­æ–‡
+		"test",	//è‹±æ–‡
+		MENU_TYPE_LIST,//èœå•ç±»å‹
+		NULL,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
 		
-		MENU_L_1,//²Ëµ¥µÈ¼¶
-		"test1",//ÖĞÎÄ
-		"test1",	//Ó¢ÎÄ
-		MENU_TYPE_LIST,//²Ëµ¥ÀàĞÍ
-		NULL,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
+		MENU_L_1,//èœå•ç­‰çº§
+		"test1",//ä¸­æ–‡
+		"test1",	//è‹±æ–‡
+		MENU_TYPE_LIST,//èœå•ç±»å‹
+		NULL,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
 
-		MENU_L_1,//²Ëµ¥µÈ¼¶
-		"test2",//ÖĞÎÄ
-		"test2",	//Ó¢ÎÄ
-		MENU_TYPE_LIST,//²Ëµ¥ÀàĞÍ
-		NULL,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
+		MENU_L_1,//èœå•ç­‰çº§
+		"test2",//ä¸­æ–‡
+		"test2",	//è‹±æ–‡
+		MENU_TYPE_LIST,//èœå•ç±»å‹
+		NULL,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
 
-		MENU_L_1,//²Ëµ¥µÈ¼¶
-		"test3",//ÖĞÎÄ
-		"test3",	//Ó¢ÎÄ
-		MENU_TYPE_LIST,//²Ëµ¥ÀàĞÍ
-		NULL,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
+		MENU_L_1,//èœå•ç­‰çº§
+		"test3",//ä¸­æ–‡
+		"test3",	//è‹±æ–‡
+		MENU_TYPE_LIST,//èœå•ç±»å‹
+		NULL,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
 
-		MENU_L_1,//²Ëµ¥µÈ¼¶
-		"test4",//ÖĞÎÄ
-		"test4",	//Ó¢ÎÄ
-		MENU_TYPE_LIST,//²Ëµ¥ÀàĞÍ
-		NULL,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
+		MENU_L_1,//èœå•ç­‰çº§
+		"test4",//ä¸­æ–‡
+		"test4",	//è‹±æ–‡
+		MENU_TYPE_LIST,//èœå•ç±»å‹
+		NULL,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
 
-		MENU_L_1,//²Ëµ¥µÈ¼¶
-		"test5",//ÖĞÎÄ
-		"test5",	//Ó¢ÎÄ
-		MENU_TYPE_LIST,//²Ëµ¥ÀàĞÍ
-		NULL,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
+		MENU_L_1,//èœå•ç­‰çº§
+		"test5",//ä¸­æ–‡
+		"test5",	//è‹±æ–‡
+		MENU_TYPE_LIST,//èœå•ç±»å‹
+		NULL,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
 
-		MENU_L_1,//²Ëµ¥µÈ¼¶
-		"test6",//ÖĞÎÄ
-		"test6",	//Ó¢ÎÄ
-		MENU_TYPE_LIST,//²Ëµ¥ÀàĞÍ
-		NULL,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
+		MENU_L_1,//èœå•ç­‰çº§
+		"test6",//ä¸­æ–‡
+		"test6",	//è‹±æ–‡
+		MENU_TYPE_LIST,//èœå•ç±»å‹
+		NULL,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
 
-		MENU_L_1,//²Ëµ¥µÈ¼¶
-		"test7",//ÖĞÎÄ
-		"test7",	//Ó¢ÎÄ
-		MENU_TYPE_LIST,//²Ëµ¥ÀàĞÍ
-		NULL,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
+		MENU_L_1,//èœå•ç­‰çº§
+		"test7",//ä¸­æ–‡
+		"test7",	//è‹±æ–‡
+		MENU_TYPE_LIST,//èœå•ç±»å‹
+		NULL,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
 
-		MENU_L_1,//²Ëµ¥µÈ¼¶
-		"test8",//ÖĞÎÄ
-		"test8",	//Ó¢ÎÄ
-		MENU_TYPE_LIST,//²Ëµ¥ÀàĞÍ
-		NULL,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
+		MENU_L_1,//èœå•ç­‰çº§
+		"test8",//ä¸­æ–‡
+		"test8",	//è‹±æ–‡
+		MENU_TYPE_LIST,//èœå•ç±»å‹
+		NULL,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
 
-		MENU_L_1,//²Ëµ¥µÈ¼¶
-		"test9",//ÖĞÎÄ
-		"test9",	//Ó¢ÎÄ
-		MENU_TYPE_LIST,//²Ëµ¥ÀàĞÍ
-		NULL,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
+		MENU_L_1,//èœå•ç­‰çº§
+		"test9",//ä¸­æ–‡
+		"test9",	//è‹±æ–‡
+		MENU_TYPE_LIST,//èœå•ç±»å‹
+		NULL,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
 
-		MENU_L_1,//²Ëµ¥µÈ¼¶
-		"test10",//ÖĞÎÄ
-		"test10",	//Ó¢ÎÄ
-		MENU_TYPE_LIST,//²Ëµ¥ÀàĞÍ
-		NULL,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
+		MENU_L_1,//èœå•ç­‰çº§
+		"test10",//ä¸­æ–‡
+		"test10",	//è‹±æ–‡
+		MENU_TYPE_LIST,//èœå•ç±»å‹
+		NULL,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
 		
-			MENU_L_2,//²Ëµ¥µÈ¼¶
-			"t10-1",//ÖĞÎÄ
-			"t10-1",	//Ó¢ÎÄ
-			MENU_TYPE_LIST,//²Ëµ¥ÀàĞÍ
-			NULL,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
-			MENU_L_2,//²Ëµ¥µÈ¼¶
-			"t10-2",//ÖĞÎÄ
-			"t10-2",	//Ó¢ÎÄ
-			MENU_TYPE_LIST,//²Ëµ¥ÀàĞÍ
-			NULL,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
-			MENU_L_2,//²Ëµ¥µÈ¼¶
-			"t10-3",//ÖĞÎÄ
-			"t10-3",	//Ó¢ÎÄ
-			MENU_TYPE_LIST,//²Ëµ¥ÀàĞÍ
-			NULL,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
-			MENU_L_2,//²Ëµ¥µÈ¼¶
-			"t10-4",//ÖĞÎÄ
-			"t10-4",	//Ó¢ÎÄ
-			MENU_TYPE_LIST,//²Ëµ¥ÀàĞÍ
-			NULL,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
-			MENU_L_2,//²Ëµ¥µÈ¼¶
-			"t10-5",//ÖĞÎÄ
-			"t10-5",	//Ó¢ÎÄ
-			MENU_TYPE_LIST,//²Ëµ¥ÀàĞÍ
-			NULL,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
-			MENU_L_2,//²Ëµ¥µÈ¼¶
-			"t10-6",//ÖĞÎÄ
-			"t10-6",	//Ó¢ÎÄ
-			MENU_TYPE_LIST,//²Ëµ¥ÀàĞÍ
-			NULL,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
-			MENU_L_2,//²Ëµ¥µÈ¼¶
-			"t10-7",//ÖĞÎÄ
-			"t10-7",	//Ó¢ÎÄ
-			MENU_TYPE_LIST,//²Ëµ¥ÀàĞÍ
-			NULL,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
-			MENU_L_2,//²Ëµ¥µÈ¼¶
-			"t10-8",//ÖĞÎÄ
-			"t10-8",	//Ó¢ÎÄ
-			MENU_TYPE_LIST,//²Ëµ¥ÀàĞÍ
-			NULL,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
-			MENU_L_2,//²Ëµ¥µÈ¼¶
-			"t10-9",//ÖĞÎÄ
-			"t10-9",	//Ó¢ÎÄ
-			MENU_TYPE_LIST,//²Ëµ¥ÀàĞÍ
-			NULL,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
-			MENU_L_2,//²Ëµ¥µÈ¼¶
-			"t10-10",//ÖĞÎÄ
-			"t10-10",	//Ó¢ÎÄ
-			MENU_TYPE_LIST,//²Ëµ¥ÀàĞÍ
-			NULL,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
-			MENU_L_2,//²Ëµ¥µÈ¼¶
-			"t10-11",//ÖĞÎÄ
-			"t10-11",	//Ó¢ÎÄ
-			MENU_TYPE_LIST,//²Ëµ¥ÀàĞÍ
-			NULL,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
-			MENU_L_2,//²Ëµ¥µÈ¼¶
-			"t10-12",//ÖĞÎÄ
-			"t10-12",	//Ó¢ÎÄ
-			MENU_TYPE_LIST,//²Ëµ¥ÀàĞÍ
-			NULL,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
+			MENU_L_2,//èœå•ç­‰çº§
+			"t10-1",//ä¸­æ–‡
+			"t10-1",	//è‹±æ–‡
+			MENU_TYPE_LIST,//èœå•ç±»å‹
+			NULL,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
+			MENU_L_2,//èœå•ç­‰çº§
+			"t10-2",//ä¸­æ–‡
+			"t10-2",	//è‹±æ–‡
+			MENU_TYPE_LIST,//èœå•ç±»å‹
+			NULL,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
+			MENU_L_2,//èœå•ç­‰çº§
+			"t10-3",//ä¸­æ–‡
+			"t10-3",	//è‹±æ–‡
+			MENU_TYPE_LIST,//èœå•ç±»å‹
+			NULL,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
+			MENU_L_2,//èœå•ç­‰çº§
+			"t10-4",//ä¸­æ–‡
+			"t10-4",	//è‹±æ–‡
+			MENU_TYPE_LIST,//èœå•ç±»å‹
+			NULL,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
+			MENU_L_2,//èœå•ç­‰çº§
+			"t10-5",//ä¸­æ–‡
+			"t10-5",	//è‹±æ–‡
+			MENU_TYPE_LIST,//èœå•ç±»å‹
+			NULL,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
+			MENU_L_2,//èœå•ç­‰çº§
+			"t10-6",//ä¸­æ–‡
+			"t10-6",	//è‹±æ–‡
+			MENU_TYPE_LIST,//èœå•ç±»å‹
+			NULL,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
+			MENU_L_2,//èœå•ç­‰çº§
+			"t10-7",//ä¸­æ–‡
+			"t10-7",	//è‹±æ–‡
+			MENU_TYPE_LIST,//èœå•ç±»å‹
+			NULL,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
+			MENU_L_2,//èœå•ç­‰çº§
+			"t10-8",//ä¸­æ–‡
+			"t10-8",	//è‹±æ–‡
+			MENU_TYPE_LIST,//èœå•ç±»å‹
+			NULL,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
+			MENU_L_2,//èœå•ç­‰çº§
+			"t10-9",//ä¸­æ–‡
+			"t10-9",	//è‹±æ–‡
+			MENU_TYPE_LIST,//èœå•ç±»å‹
+			NULL,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
+			MENU_L_2,//èœå•ç­‰çº§
+			"t10-10",//ä¸­æ–‡
+			"t10-10",	//è‹±æ–‡
+			MENU_TYPE_LIST,//èœå•ç±»å‹
+			NULL,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
+			MENU_L_2,//èœå•ç­‰çº§
+			"t10-11",//ä¸­æ–‡
+			"t10-11",	//è‹±æ–‡
+			MENU_TYPE_LIST,//èœå•ç±»å‹
+			NULL,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
+			MENU_L_2,//èœå•ç­‰çº§
+			"t10-12",//ä¸­æ–‡
+			"t10-12",	//è‹±æ–‡
+			MENU_TYPE_LIST,//èœå•ç±»å‹
+			NULL,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
 	
-	/*×îºóµÄ²Ëµ¥ÊÇ½áÊø²Ëµ¥£¬ÎŞÒâÒå*/			
-	MENU_L_0,//²Ëµ¥µÈ¼¶
-	"END",//ÖĞÎÄ
-	"END",	//Ó¢ÎÄ
-	MENU_TYPE_NULL,//²Ëµ¥ÀàĞÍ
-	NULL,//²Ëµ¥º¯Êı£¬¹¦ÄÜ²Ëµ¥²Å»áÖ´ĞĞ£¬ÓĞ×Ó²Ëµ¥µÄ²»»áÖ´ĞĞ
+	/*æœ€åçš„èœå•æ˜¯ç»“æŸèœå•ï¼Œæ— æ„ä¹‰*/			
+	MENU_L_0,//èœå•ç­‰çº§
+	"END",//ä¸­æ–‡
+	"END",	//è‹±æ–‡
+	MENU_TYPE_NULL,//èœå•ç±»å‹
+	NULL,//èœå•å‡½æ•°ï¼ŒåŠŸèƒ½èœå•æ‰ä¼šæ‰§è¡Œï¼Œæœ‰å­èœå•çš„ä¸ä¼šæ‰§è¡Œ
 };
 
 /*
-	²âÊÔ³ÌĞò£¬Ïàµ±ÓÚÒ»¸öAPPÏß³Ì
+	æµ‹è¯•ç¨‹åºï¼Œç›¸å½“äºä¸€ä¸ªAPPçº¿ç¨‹
 	
 */
 void wujique_stm407_test(void)
@@ -1258,25 +1258,25 @@ void wujique_stm407_test(void)
 	wjq_log(LOG_DEBUG,"\r\n\r\n\r\n---run board test\r\n\r\n\r\n\r\n");
 
 
-	//WJQTestLcd = dev_lcd_open("tftlcd");
-	//WJQTestLcd = dev_lcd_open("spicoglcd");
-	WJQTestLcd = dev_lcd_open("i2coledlcd");
+	//WJQTestLcd = lcd_open("tftlcd");
+	WJQTestLcd = lcd_open("spicoglcd");
+	//WJQTestLcd = lcd_open("i2coledlcd");
 	if (WJQTestLcd == NULL) {
 		wjq_log(LOG_DEBUG, "emenu open lcd err\r\n");
 	}
 	#if 0
-	dev_lcd_backlight(WJQTestLcd, 1);
+	lcd_backlight(WJQTestLcd, 1);
 	dev_lcd_put_string(WJQTestLcd, "WQY_ST_12_H", 10,1, "oled test", BLACK);
 	dev_lcd_put_string(WJQTestLcd, "WQY_ST_12_H", 10,30, "www.wujique.com", BLACK);
-	dev_lcd_put_string(WJQTestLcd, "WQY_ST_12_H", 10,46, "Îİ¼¹È¸¹¤×÷ÊÒ", BLACK);
-	dev_lcd_update(WJQTestLcd);
+	dev_lcd_put_string(WJQTestLcd, "WQY_ST_12_H", 10,46, "å±‹è„Šé›€å·¥ä½œå®¤", BLACK);
+	lcd_update(WJQTestLcd);
 	#endif
 	
 	dev_key_open();
 	dev_keypad_open();
 
 	//dev_wm8978_test();
-	
+		
 	emenu_run(WJQTestLcd, (MENU *)&WJQTestList[0], sizeof(WJQTestList)/sizeof(MENU), TEST_FONG, 1, MENU_LANG_CHA);	
 	while(1) { }
 }
@@ -1284,7 +1284,7 @@ void wujique_stm407_test(void)
 
 /*
 
-Éú²ú²âÊÔ
+ç”Ÿäº§æµ‹è¯•
 
 */
 #if 0
@@ -1317,16 +1317,16 @@ s32 test_tft_lcd(void)
 					
 					case 2:
 						dev_lcd_color_fill(lcd, 1, 1000, 1, 1000, BLUE);
-						dev_lcd_put_string(lcd, TEST_FONG, 20, 20, "abcÎİ¼¹È¸¹¤×÷ÊÒADC", RED);
+						dev_lcd_put_string(lcd, TEST_FONG, 20, 20, "abcå±‹è„Šé›€å·¥ä½œå®¤ADC", RED);
 						dev_lcd_update(lcd);
 						break;
 
 					case 3:
-						dev_lcd_show_bmp(lcd, 1, 1, 320, 240, "1:pic/Å®ÈËµ¥É«.bmp");
+						dev_lcd_show_bmp(lcd, 1, 1, 320, 240, "1:pic/å¥³äººå•è‰².bmp");
 						break;
 					
 					case 4:
-						dev_lcd_show_bmp(lcd, 1, 1, 320, 240, "1:pic/Å®ÈË24Î».bmp");//Õæ²ÊÉ«
+						dev_lcd_show_bmp(lcd, 1, 1, 320, 240, "1:pic/å¥³äºº24ä½.bmp");//çœŸå½©è‰²
 						break;
 					case 5:
 						dev_lcd_backlight(lcd, 0);
@@ -1384,7 +1384,7 @@ s32 test_cog_lcd(void)
 		dev_lcd_color_fill(lcd, 1, 1000, 1, 1000, WHITE);
 		dev_lcd_update(lcd);
 		wjq_wait_key(16);
-		dev_lcd_put_string(lcd, TEST_FONG, 1, 32, "cog LCD²âÊÔ³ÌĞò", BLACK);
+		dev_lcd_put_string(lcd, TEST_FONG, 1, 32, "cog LCDæµ‹è¯•ç¨‹åº", BLACK);
 		dev_lcd_update(lcd);
 		wjq_wait_key(16);
 		dev_lcd_backlight(lcd, 0);

@@ -53,13 +53,14 @@ typedef enum{
 	MCU_IO_MAX = 16,
 }MCU_IO;
 
+#if 0
 typedef enum {
   MCU_UART_1 =0,
   MCU_UART_2,
   MCU_UART_3,
   MCU_UART_MAX,
 }McuUartNum; 
-
+#endif
 
 /*
 SPI模式

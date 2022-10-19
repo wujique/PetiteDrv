@@ -186,41 +186,34 @@ struct list_head DevLcdRoot = {&DevLcdRoot, &DevLcdRoot};
 s32 lcd_dev_register(const DevLcd *dev)
 {
 	struct list_head *listp;
-	DevLcdNode *plcdnode;
+	DevLcdNode *lcdnode;
 	s32 ret = -1;
 	
-	wjq_log(LOG_INFO, "[register] lcd :%s, base on:%s!\r\n", dev->pnode.name, dev->buslcd);
-
-	/*
-		先要查询当前，防止重名
-	*/
 	listp = DevLcdRoot.next;
 	while(1) {
 		if (listp == &DevLcdRoot) break;
 
-		plcdnode = list_entry(listp, DevLcdNode, list);
+		lcdnode = list_entry(listp, DevLcdNode, list);
 
-		if (strcmp(dev->pnode.name, plcdnode->dev.pnode.name) == 0) {
+		if (strcmp(dev->pnode.name, lcdnode->dev.pnode.name) == 0) {
 			wjq_log(LOG_INFO, "            lcd dev name err!\r\n");
 			return -1;
 		}
-
-		if (strcmp(dev->buslcd, plcdnode->dev.buslcd) == 0) {
-			wjq_log(LOG_INFO, "            one lcd bus just for one lcd!\r\n");
-			return -1;
-		}
-		
+	
 		listp = listp->next;
 	}
 
 	/*  申请一个节点空间      	*/
-	plcdnode = (DevLcdNode *)wjq_malloc(sizeof(DevLcdNode));
-	list_add(&(plcdnode->list), &DevLcdRoot);
+	lcdnode = (DevLcdNode *)wjq_malloc(sizeof(DevLcdNode));
+	list_add(&(lcdnode->list), &DevLcdRoot);
 	
 	/*复制设备信息*/
-	memcpy((u8 *)&plcdnode->dev, (u8 *)dev, sizeof(DevLcd));
-	plcdnode->gd = -1;
-	plcdnode->fb = 0;
+	memcpy((u8 *)&lcdnode->dev, (u8 *)dev, sizeof(DevLcd));
+	lcdnode->gd = -1;
+	lcdnode->fb = 0;
+
+	/* 进行bus初始化 */
+	bus_lcd_IO_init(dev->bus);
 	
 	if (dev->id == NULL) {
 		/* 没有指定lcd id，通过porb 初始化 */
@@ -229,10 +222,10 @@ s32 lcd_dev_register(const DevLcd *dev)
 		u8 j = 0;
 		while(1) {
 			/* 简单粗暴的方法，尝试初始化*/
-			ret = LcdProbDrvList[j]->init(plcdnode);
+			ret = LcdProbDrvList[j]->init(lcdnode);
 			if (ret == 0) {
 				LCD_DEBUG(LOG_DEBUG, "lcd drv prob ok!\r\n");	
-				plcdnode->drv = LcdProbDrvList[j];
+				lcdnode->drv = LcdProbDrvList[j];
 				break;
 			} else {
 				j++;
@@ -247,32 +240,32 @@ s32 lcd_dev_register(const DevLcd *dev)
 		LCD_DEBUG(LOG_DEBUG, "find lcd drv, id:%04x...", dev->id);
 		
 		ret = -1;
-		plcdnode->drv = lcd_finddrv(dev->id);
-		if (plcdnode->drv != NULL) {
+		lcdnode->drv = lcd_finddrv(dev->id);
+		if (lcdnode->drv != NULL) {
 			LCD_DEBUG(LOG_DEBUG, "suc!\r\n");
-			ret = plcdnode->drv->init(plcdnode);
+			ret = lcdnode->drv->init(lcdnode);
 		} else {
 			LCD_DEBUG(LOG_DEBUG, "fail!\r\n");
 		}
 	}
 
 	if(ret == 0) {
-		plcdnode->gd = -1;
+		lcdnode->gd = -1;
 		
-		plcdnode->dir = H_LCD;
+		lcdnode->dir = H_LCD;
 		
-		plcdnode->height = plcdnode->dev.height;
-		plcdnode->width = plcdnode->dev.width;
+		lcdnode->height = lcdnode->dev.height;
+		lcdnode->width = lcdnode->dev.width;
 		
-		lcd_setdir(plcdnode, W_LCD, L2R_U2D);
+		lcd_setdir(lcdnode, W_LCD, L2R_U2D);
 		
-		plcdnode->drv->onoff((plcdnode),1);
-		plcdnode->drv->color_fill(plcdnode, 0, plcdnode->width, 0, plcdnode->height, BLUE);
-		plcdnode->drv->update(plcdnode);
-		plcdnode->drv->backlight(plcdnode, 1);
+		lcdnode->drv->onoff((lcdnode),1);
+		lcdnode->drv->color_fill(lcdnode, 0, lcdnode->width, 0, lcdnode->height, BLUE);
+		lcdnode->drv->update(lcdnode);
+		lcdnode->drv->backlight(lcdnode, 1);
 		wjq_log(LOG_INFO, "            lcd init OK\r\n");
 	} else {
-		plcdnode->gd = -2;
+		lcdnode->gd = -2;
 		wjq_log(LOG_INFO, "            lcd drv init err!\r\n");
 	}
 	

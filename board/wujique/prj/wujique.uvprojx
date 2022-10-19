@@ -10,7 +10,7 @@
       <TargetName>wujique</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pCCUsed>5060528::V5.06 update 5 (build 528)::ARMCC</pCCUsed>
+      <pCCUsed>5060960::V5.06 update 7 (build 960)::.\ARMCC</pCCUsed>
       <uAC6>0</uAC6>
       <TargetOption>
         <TargetCommonOption>
@@ -184,6 +184,8 @@
             <hadXRAM>0</hadXRAM>
             <uocXRam>0</uocXRam>
             <RvdsVP>2</RvdsVP>
+            <RvdsMve>0</RvdsMve>
+            <RvdsCdeCp>0</RvdsCdeCp>
             <hadIRAM2>1</hadIRAM2>
             <hadIROM2>0</hadIROM2>
             <StupSel>8</StupSel>
@@ -324,6 +326,7 @@
             <uThumb>0</uThumb>
             <uSurpInc>0</uSurpInc>
             <uC99>1</uC99>
+            <uGnu>0</uGnu>
             <useXO>0</useXO>
             <v6Lang>1</v6Lang>
             <v6LangP>1</v6LangP>
@@ -334,7 +337,7 @@
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls>--locale=english</MiscControls>
-              <Define></Define>
+              <Define>NDEBUG</Define>
               <Undefine></Undefine>
               <IncludePath>..\..\..\app;..\..\wujique;..\usb\inc;..\eth\inc;..\..\..\driver;..\..\..\driver\lcd;..\..\..\driver\cdev;..\..\..\mcu\stm32407\mcu_dev;..\..\..\mcu\stm32407\StLib\STM32F4xx_StdPeriph_Driver\inc;..\..\..\panel;..\..\..\Petite;..\..\..\Utilities\FatFs;..\eth\inc;..\..\..\Utilities\cmd\ubootcmd;..\..\..\Utilities\spiffs-0.3.7\src;..\..\..\Utilities\littlefs-master;..\usb\inc;..\..\..\mcu\stm32407;..\..\..\driver\camera;..\..\..\mcu\stm32407\StLib\CMSIS\Include;..\..\..\driver\touch;..\..\..\Utilities\FreeRTOS\Source\include;..\..\..\Utilities\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\..\..\Utilities\FreeRTOS\Source\CMSIS_RTOS_V2;..\..\..\driver\touch\rtp\tslib;..\..\..\driver\touch\rtp\tslib\tests;..\..\..\driver\sound;..\..\..\driver\touch;..\..\..\driver\touch\rtp;..\..\..\Petite\bus</IncludePath>
             </VariousControls>
@@ -349,7 +352,7 @@
             <NoWarn>0</NoWarn>
             <uSurpInc>0</uSurpInc>
             <useXO>0</useXO>
-            <uClangAs>0</uClangAs>
+            <ClangAsOpt>4</ClangAsOpt>
             <VariousControls>
               <MiscControls></MiscControls>
               <Define></Define>
@@ -785,6 +788,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\driver\lcd\drv_str7565.c</FilePath>
             </File>
+            <File>
+              <FileName>bus_lcd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\driver\lcd\bus_lcd.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -849,6 +857,11 @@
               <FileName>audio_pipeline.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\driver\sound\audio_pipeline.c</FilePath>
+            </File>
+            <File>
+              <FileName>wm8960.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\driver\sound\wm8960.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -965,6 +978,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\Petite\petite.c</FilePath>
             </File>
+            <File>
+              <FileName>conv.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Petite\font\conv.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -974,11 +992,6 @@
               <FileName>bus_i2c.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\Petite\bus\bus_i2c.c</FilePath>
-            </File>
-            <File>
-              <FileName>bus_lcd.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Petite\bus\bus_lcd.c</FilePath>
             </File>
             <File>
               <FileName>bus_spi.c</FileName>
@@ -1123,12 +1136,12 @@
             <File>
               <FileName>lfs_util.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\littlefs-master\lfs_util.c</FilePath>
+              <FilePath>..\..\..\Utilities\littlefs\lfs_util.c</FilePath>
             </File>
             <File>
               <FileName>lfs.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\littlefs-master\lfs.c</FilePath>
+              <FilePath>..\..\..\Utilities\littlefs\lfs.c</FilePath>
             </File>
           </Files>
         </Group>

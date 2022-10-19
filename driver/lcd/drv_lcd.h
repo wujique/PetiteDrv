@@ -31,6 +31,31 @@ typedef struct
 	s32 (*update)(DevLcdNode *lcd);
 }_lcd_drv; 
 
+/*LCD 总线定义 */
+typedef struct
+{
+	PetiteNode pnode;
+	
+	/*依赖总线名字*/
+	char basebus[DEV_NAME_SIZE];
+
+	/*	3根线：A0-命令数据，rst-复位，bl-背光
+		I2C总线的LCD不需要这三根线    	*/
+
+	MCU_PORT A0port;
+	u16 A0pin;
+
+	MCU_PORT rstport;
+	u16 rstpin;
+
+	MCU_PORT blport;
+	u16 blpin;
+
+	/* 电子纸 91874 需要一个busy状态脚*/
+	MCU_PORT staport;
+	u16 stapin;
+}DevLcdBus;
+
 
 /*
 	设备定义
@@ -49,7 +74,7 @@ typedef struct
 	u16 width;	//LCD 宽度   竖屏
 	u16 height;	//LCD 高度    竖屏
 
-	char buslcd[DEV_NAME_SIZE]; //挂在那条LCD总线上
+	DevLcdBus const *bus;
 	
 	void *buspra;//总线参数，如果是I2C，则包含I2C地址和时钟频率，如果是SPI，则包含时钟频率等信息
 }DevLcd;
@@ -73,8 +98,8 @@ struct _strDevLcdNode
 	
 	void *pri;//私有数据，黑白屏跟OLED屏在初始化的时候会开辟显存
 
-	DevLcdBusNode *busnode;
-
+	void *basenode;
+	
 	struct list_head list;
 };
 
@@ -148,6 +173,8 @@ extern s32 display_lcd_put_string(DevLcdNode *lcd, char *font, int x, int y, cha
 extern void put_string_center(DevLcdNode *lcd, int x, int y, char *s, unsigned colidx);
 extern s32 lcd_setdir(DevLcdNode *lcd, u8 dir, u8 scan_dir);
 extern s32 lcd_update(DevLcdNode *lcd);
+
+#include "bus_lcd.h"
 
 #endif
 

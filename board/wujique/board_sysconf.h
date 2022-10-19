@@ -118,7 +118,7 @@
 #define USB_TASK_STK_SIZE (1024)
 #define USB_TASK_PRIO	2
 
-#define START_TASK_STK_SIZE (512)
+#define START_TASK_STK_SIZE (2048)
 #define START_TASK_PRIO	3
 
 /*  配置 虚拟文件系统 */

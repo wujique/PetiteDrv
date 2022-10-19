@@ -101,9 +101,9 @@ _lcd_drv TftLcdILI9325Drv = {
 							};
 void drv_ILI9325_lcd_bl(DevLcdNode *lcd, u8 sta)
 {
-	DevLcdBusNode * node;
+	DevLcdNode * node;
 	
-	node = bus_lcd_open(lcd->dev.buslcd);
+	node = bus_lcd_open(lcd);
 	bus_lcd_bl(node, sta);
 	bus_lcd_close(node);
 
@@ -152,9 +152,9 @@ static void drv_ILI9325_scan_dir(DevLcdNode *lcd, u8 dir)
     regval|=1<<12;  
 
 	u16 tmp[16];
-	DevLcdBusNode * node;
+	DevLcdNode * node;
 	
-	node = bus_lcd_open(lcd->dev.buslcd);
+	node = bus_lcd_open(lcd);
 	
 	bus_lcd_write_cmd(node, (dirreg));
 	tmp[0] = regval;
@@ -178,9 +178,9 @@ static s32 drv_ILI9325_set_cp_addr(DevLcdNode *lcd, u16 hsa, u16 hea, u16 vsa, u
 {
 	u16 heatmp;
 	u16 tmp[2];
-	DevLcdBusNode * node;
+	DevLcdNode * node;
 	
-	node = bus_lcd_open(lcd->dev.buslcd);
+	node = bus_lcd_open(lcd);
 
 	/* 设置扫描窗口 */
 	if((hsa+4) > hea)
@@ -250,9 +250,9 @@ static s32 drv_ILI9325_set_cp_addr(DevLcdNode *lcd, u16 hsa, u16 hea, u16 vsa, u
 static s32 drv_ILI9325_display_onoff(DevLcdNode *lcd, u8 sta)
 {
 	u16 tmp[2];
-	DevLcdBusNode * node;
+	DevLcdNode * node;
 	
-	node = bus_lcd_open(lcd->dev.buslcd);
+	node = bus_lcd_open(lcd);
 
 	if(sta == 1)
 	{
@@ -281,9 +281,9 @@ s32 drv_ILI9325_init(DevLcdNode *lcd)
 {
 	u16 data;
 	u16 tmp[16];
-	DevLcdBusNode * node;
+	DevLcdNode * node;
 	
-	node = bus_lcd_open(lcd->dev.buslcd);
+	node = bus_lcd_open(lcd);
 
 	bus_lcd_rst(node, 1);
 	Delay(50);
@@ -583,8 +583,8 @@ static s32 drv_ILI9325_drawpoint(DevLcdNode *lcd, u16 x, u16 y, u16 color)
 	drv_ILI9325_xy2cp(lcd, x, x, y, y, &hsa,&hea,&vsa,&vea);
 	drv_ILI9325_set_cp_addr(lcd, hsa, hea, vsa, vea);
 	
-	DevLcdBusNode * node;
-	node = bus_lcd_open(lcd->dev.buslcd);
+	DevLcdNode * node;
+	node = bus_lcd_open(lcd);
 	
 	u16 tmp[2];
 	tmp[0] = color;
@@ -673,12 +673,12 @@ s32 drv_ILI9325_color_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 colo
 	
 	//uart_printf("ili9325 width:%d, height:%d\r\n", width, height);
 	
-	DevLcdBusNode * node;
+	DevLcdNode * node;
 	u32 cnt;
 	
 	cnt = height*width;
 	
-	node = bus_lcd_open(lcd->dev.buslcd);
+	node = bus_lcd_open(lcd);
 	
 	bus_lcd_w_data(node, color, cnt);
 
@@ -716,9 +716,9 @@ s32 drv_ILI9325_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
 	//uart_printf("ili9325 width:%d, height:%d\r\n", width, height);
 	//GPIO_ResetBits(GPIOG, GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2| GPIO_Pin_3);
 
-	DevLcdBusNode * node;
+	DevLcdNode * node;
 
-	node = bus_lcd_open(lcd->dev.buslcd);
+	node = bus_lcd_open(lcd);
 	bus_lcd_write_data(node, (u8 *)color, height*width);	
 	bus_lcd_close(node);
 
@@ -743,9 +743,11 @@ s32 drv_ILI9325_prepare_display(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey)
 }
 s32 drv_ILI9325_flush(DevLcdNode *lcd, u16 *color, u32 len)
 {
-	lcd->busnode = bus_lcd_open(lcd->dev.buslcd);
-	bus_lcd_write_data(lcd->busnode, (u8 *)color,  len);	
-	bus_lcd_close(lcd->busnode);
+	DevLcdNode * node = lcd;
+
+	node = bus_lcd_open(lcd);
+	bus_lcd_write_data(node, (u8 *)color,  len);	
+	bus_lcd_close(node);
 	return 0;
 } 
 

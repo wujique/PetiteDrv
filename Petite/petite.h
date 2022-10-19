@@ -24,7 +24,6 @@
 
 #include "bus/bus_uart.h"
 
-#include "bus/bus_lcd.h"
 
 #endif
 

@@ -724,11 +724,6 @@
               <FilePath>..\..\Petite\bus\bus_i2c.c</FilePath>
             </File>
             <File>
-              <FileName>bus_lcd.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Petite\bus\bus_lcd.c</FilePath>
-            </File>
-            <File>
               <FileName>bus_spi.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\Petite\bus\bus_spi.c</FilePath>
@@ -845,6 +840,11 @@
               <FileName>drv_IL3820.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\driver\lcd\drv_IL3820.c</FilePath>
+            </File>
+            <File>
+              <FileName>bus_lcd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\driver\lcd\bus_lcd.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -80,9 +80,9 @@ _lcd_drv TftLcdILI9341Drv = {
 
 void drv_ILI9341_lcd_bl(DevLcdNode *lcd, u8 sta)
 {
-	DevLcdBusNode * node;
+	DevLcdNode * node;
 	
-	node = bus_lcd_open(lcd->dev.buslcd);
+	node = bus_lcd_open(lcd);
 	bus_lcd_bl(node, sta);
 	bus_lcd_close(node);
 
@@ -141,8 +141,8 @@ static void drv_ILI9341_scan_dir(DevLcdNode *lcd, u8 dir)
 	*/	
 	regval|=(1<<3);//0:GBR,1:RGB  跟R61408相反
 
-	DevLcdBusNode * node;
-	node = bus_lcd_open(lcd->dev.buslcd);
+	DevLcdNode * node;
+	node = bus_lcd_open(lcd);
 	
 	bus_lcd_write_cmd(node, (0x36));
 	u16 tmp[2];
@@ -165,10 +165,10 @@ static void drv_ILI9341_scan_dir(DevLcdNode *lcd, u8 dir)
 s32 drv_ILI9341_set_cp_addr(DevLcdNode *lcd, u16 sc, u16 ec, u16 sp, u16 ep)
 {
 
-	DevLcdBusNode * node;
+	DevLcdNode * node;
 	u16 tmp[4];
 
-	node = bus_lcd_open(lcd->dev.buslcd);
+	node = bus_lcd_open(lcd);
 
 	bus_lcd_write_cmd(node, ILI9341_CMD_SETX);
 	tmp[0] = (sc>>8);
@@ -200,8 +200,8 @@ s32 drv_ILI9341_set_cp_addr(DevLcdNode *lcd, u16 sc, u16 ec, u16 sp, u16 ep)
  */
 static s32 drv_ILI9341_display_onoff(DevLcdNode *lcd, u8 sta)
 {
-	DevLcdBusNode * node;
-	node = bus_lcd_open(lcd->dev.buslcd);
+	DevLcdNode * node;
+	node = bus_lcd_open(lcd);
 	
 	if(sta == 1)
 		bus_lcd_write_cmd(node, (0x29));
@@ -223,10 +223,10 @@ static s32 drv_ILI9341_display_onoff(DevLcdNode *lcd, u8 sta)
 s32 drv_ILI9341_init(DevLcdNode *lcd)
 {
 	u16 data;
-	DevLcdBusNode * node;
+	DevLcdNode * node;
 	u16 tmp[16];
 	
-	node = bus_lcd_open(lcd->dev.buslcd);
+	node = bus_lcd_open(lcd);
 
 	bus_lcd_rst(node, 1);
 	Delay(50);
@@ -432,8 +432,8 @@ static s32 drv_ILI9341_drawpoint(DevLcdNode *lcd, u16 x, u16 y, u16 color)
 	drv_ILI9341_xy2cp(lcd, x, x, y, y, &sc,&ec,&sp,&ep);
 	drv_ILI9341_set_cp_addr(lcd, sc, ec, sp, ep);
 
-	DevLcdBusNode * node;
-	node = bus_lcd_open(lcd->dev.buslcd);
+	DevLcdNode * node;
+	node = bus_lcd_open(lcd);
 	
 	u16 tmp[2];
 	tmp[0] = color;
@@ -522,12 +522,12 @@ s32 drv_ILI9341_color_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 colo
 	
 	//uart_printf("ili9325 width:%d, height:%d\r\n", width, height);
 	
-	DevLcdBusNode * node;
+	DevLcdNode * node;
 	u32 cnt;
 	
 	cnt = height*width;
 	
-	node = bus_lcd_open(lcd->dev.buslcd);
+	node = bus_lcd_open(lcd);
 	
 	bus_lcd_w_data(node, color, cnt);
 
@@ -563,9 +563,9 @@ s32 drv_ILI9341_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
 
 	wjq_log(LOG_DEBUG, "fill width:%d, height:%d\r\n", width, height);
 	
-	DevLcdBusNode * node;
+	DevLcdNode * node;
 
-	node = bus_lcd_open(lcd->dev.buslcd);
+	node = bus_lcd_open(lcd);
 	bus_lcd_write_data(node, (u8 *)color, height*width);	
 	bus_lcd_close(node);	 
 	
@@ -587,9 +587,11 @@ s32 drv_ILI9341_prepare_display(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey)
 
 s32 drv_ILI9341_flush(DevLcdNode *lcd, u16 *color, u32 len)
 {
-	lcd->busnode = bus_lcd_open(lcd->dev.buslcd);
-	bus_lcd_write_data(lcd->busnode, (u8 *)color,  len);	
-	bus_lcd_close(lcd->busnode);
+	DevLcdNode * node = lcd;
+
+	node = bus_lcd_open(lcd);
+	bus_lcd_write_data(node, (u8 *)color,  len);	
+	bus_lcd_close(node);
 	return 0;
 } 
 s32 drv_ILI9341_update(DevLcdNode *lcd)
@@ -685,8 +687,8 @@ static void drv_ILI9341_8_scan_dir(DevLcdNode *lcd, u8 dir)
 	*/	
 	regval|=(1<<3);//0:GBR,1:RGB  跟R61408相反
 
-	DevLcdBusNode * node;
-	node = bus_lcd_open(lcd->dev.buslcd);
+	DevLcdNode * node;
+	node = bus_lcd_open(lcd);
 	
 	bus_lcd_write_cmd(node, (0x36));
 	u16 tmp[2];
@@ -709,10 +711,10 @@ static void drv_ILI9341_8_scan_dir(DevLcdNode *lcd, u8 dir)
 s32 drv_ILI9341_8_set_cp_addr(DevLcdNode *lcd, u16 sc, u16 ec, u16 sp, u16 ep)
 {
 
-	DevLcdBusNode * node;
+	DevLcdNode * node;
 	u8 tmp[4];
 
-	node = bus_lcd_open(lcd->dev.buslcd);
+	node = bus_lcd_open(lcd);
 
 	bus_lcd_write_cmd(node, ILI9341_CMD_SETX);
 	tmp[0] = (sc>>8);
@@ -747,10 +749,10 @@ s32 drv_ILI9341_8_set_cp_addr(DevLcdNode *lcd, u16 sc, u16 ec, u16 sp, u16 ep)
 s32 drv_ILI9341_8_init(DevLcdNode *lcd)
 {
 	u16 data;
-	DevLcdBusNode * node;
+	DevLcdNode * node;
 	u8 tmp[16];
 	
-	node = bus_lcd_open(lcd->dev.buslcd);
+	node = bus_lcd_open(lcd);
 
 	bus_lcd_rst(node, 1);
 	Delay(50);
@@ -897,8 +899,8 @@ static s32 drv_ILI9341_8_drawpoint(DevLcdNode *lcd, u16 x, u16 y, u16 color)
 	drv_ILI9341_xy2cp(lcd, x, x, y, y, &sc,&ec,&sp,&ep);
 	drv_ILI9341_8_set_cp_addr(lcd, sc, ec, sp, ep);
 
-	DevLcdBusNode * node;
-	node = bus_lcd_open(lcd->dev.buslcd);
+	DevLcdNode * node;
+	node = bus_lcd_open(lcd);
 	
 	u8 tmp[2];
 	tmp[0] = color>>8;
@@ -948,15 +950,17 @@ s32 drv_ILI9341_8_color_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 co
 		tmp[i++] = color>>8;
 		tmp[i++] = color&0xff;
 	}
-	
-	lcd->busnode = bus_lcd_open(lcd->dev.buslcd);
+
+	DevLcdNode * node = lcd;
+
+	node = bus_lcd_open(lcd);
 
 	for(i = 0; i < height;i++)
 	{
-			bus_lcd_write_data(lcd->busnode, tmp, width*2);
+			bus_lcd_write_data(node, tmp, width*2);
 	}
 	
-	bus_lcd_close(lcd->busnode);
+	bus_lcd_close(node);
 
 	wjq_free(tmp);
 
@@ -994,8 +998,10 @@ s32 drv_ILI9341_8_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
 	u8 *tmp;
 
 	tmp = (u8 *)wjq_malloc(width*2);
+	
+	DevLcdNode * node = lcd;
 
-	lcd->busnode = bus_lcd_open(lcd->dev.buslcd);
+	node = bus_lcd_open(lcd);
 	
 	pcc = color;
 	
@@ -1007,10 +1013,10 @@ s32 drv_ILI9341_8_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
 			tmp[j++] = (*pcc) & 0xff;
 			pcc++;
 		}
-		bus_lcd_write_data(lcd->busnode, tmp, width*2);
+		bus_lcd_write_data(node, tmp, width*2);
 	}
 	
-	bus_lcd_close(lcd->busnode);
+	bus_lcd_close(node);
 
 	wjq_free(tmp);	 
 	return 0;
@@ -1032,8 +1038,8 @@ s32 drv_ILI9341_8_flush(DevLcdNode *lcd, u16 *color, u32 len)
 	u8 *tmp;
 	u32 i;
 	
-	DevLcdBusNode * node;
-	node = bus_lcd_open(lcd->dev.buslcd);
+	DevLcdNode * node;
+	node = bus_lcd_open(lcd);
 
 	/*显示320*240图片，本处数据转换大概需要10ms时间*/
 	tmp = (u8 *)wjq_malloc(len*2);
@@ -1047,7 +1053,7 @@ s32 drv_ILI9341_8_flush(DevLcdNode *lcd, u16 *color, u32 len)
 			break;
 	}
 
-	bus_lcd_write_data(lcd->busnode, tmp,  len*2);	
+	bus_lcd_write_data(node, tmp,  len*2);	
 	bus_lcd_close(node);
 	
 	wjq_free(tmp);

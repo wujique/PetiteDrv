@@ -77,8 +77,8 @@ _lcd_drv CogLcdST7565Drv = {
 
 void drv_ST7565_lcd_bl(DevLcdNode *lcd, u8 sta)
 {
-	DevLcdBusNode * node;
-	node = bus_lcd_open(lcd->dev.buslcd);
+	DevLcdNode * node = lcd;
+	node = bus_lcd_open(lcd);
 	bus_lcd_bl(node, sta);
 	bus_lcd_close(node);
 }
@@ -126,9 +126,9 @@ static s32 drv_ST7565_refresh_gram(DevLcdNode *lcd, u16 sc, u16 ec, u16 sp, u16 
 {	
 	struct _cog_drv_data *drvdata; 
 	u8 i;
-	DevLcdBusNode *node;
+	DevLcdNode * node = lcd;
 	
-	node = bus_lcd_open(lcd->dev.buslcd);
+	node = bus_lcd_open(lcd);
 
 	//uart_printf("drv_ST7565_refresh:%d,%d,%d,%d\r\n", sc,ec,sp,ep);
 	drvdata = (struct _cog_drv_data *)lcd->pri;
@@ -155,9 +155,9 @@ static s32 drv_ST7565_refresh_gram(DevLcdNode *lcd, u16 sc, u16 ec, u16 sp, u16 
  */
 static s32 drv_ST7565_display_onoff(DevLcdNode *lcd, u8 sta)
 {
-	DevLcdBusNode * node;
+	DevLcdNode * node = lcd;
 	
-	node = bus_lcd_open(lcd->dev.buslcd);
+	node = bus_lcd_open(lcd);
 
 	if (sta == 1) {
 		bus_lcd_write_cmd (node, 0XCF);  //DISPLAY ON
@@ -177,10 +177,9 @@ static s32 drv_ST7565_display_onoff(DevLcdNode *lcd, u8 sta)
  */
 s32 drv_ST7565_init(DevLcdNode *lcd)
 {
-	DevLcdBusNode * node;
+	DevLcdNode * node = lcd;
 	
-	node = bus_lcd_open(lcd->dev.buslcd);
-
+	bus_lcd_open(node);
 	bus_lcd_rst(node, 1);
 	Delay(50);
 	bus_lcd_rst(node, 0);
@@ -253,7 +252,7 @@ s32 drv_ST7565_drawpoint(DevLcdNode *lcd, u16 x, u16 y, u16 color)
 	u16 page, colum;
 
 	struct _cog_drv_data *drvdata;
-	DevLcdBusNode * node;
+	DevLcdNode * node = lcd;
 	
 	drvdata = (struct _cog_drv_data *)lcd->pri;
 
@@ -586,11 +585,11 @@ s32 drv_ST7565_update(DevLcdNode *lcd)
  */
 s32 drv_ssd1615_init(DevLcdNode *lcd)
 {
-	DevLcdBusNode * node;
+	DevLcdNode * node = lcd;
 
 	wjq_log(LOG_INFO, "drv_ssd1615_init\r\n");
 	
-	node = bus_lcd_open(lcd->dev.buslcd);
+	node = bus_lcd_open(lcd);
 
 	bus_lcd_rst(node, 1);
 	Delay(50);
@@ -651,9 +650,9 @@ s32 drv_ssd1615_init(DevLcdNode *lcd)
  */
 s32 drv_ssd1615_display_onoff(DevLcdNode *lcd, u8 sta)
 {
-	DevLcdBusNode * node;
+	DevLcdNode * node = lcd;
 	
-	node = bus_lcd_open(lcd->dev.buslcd);
+	node = bus_lcd_open(lcd);
 
 	if(sta == 1) {
     	bus_lcd_write_cmd (node, 0X8D);  //SET DCDC命令

@@ -240,9 +240,7 @@ s32 display_put_str_to_framebuff(DevLcdNode *lcd, char *font, int x, int y, char
 	/* 设置字库 */
 	fontstr= font_find_font(font);
 	if (fontstr == NULL) return -2;
-	
-	//font_get_hw(font, &fonth, &fontw);
-	
+
 	dotbuf = (u8*)wjq_malloc(72);//要改为根据字库类型申请
 	bitmap.dot = dotbuf;
 	
@@ -325,10 +323,18 @@ s32 display_put_str_to_lcd(DevLcdNode *lcd, char *font, int x, int y, char *s, u
 	u8 *dotbuf;//字符点阵缓冲
 	unsigned color;
 
+	char *chbuf;
+	
 	if (lcd == NULL) return -1;
 	
 	slen = strlen(s);
 	//uart_printf("str len:%d\r\n", slen);
+#if 1//utf-8
+	chbuf = wjq_malloc(slen*2);
+	utf8_2_gbk(s, chbuf, slen);
+#else
+	chbuf = s;
+#endif
 
 	/* 设置字库 */
 	fontstr= font_find_font(font);
@@ -352,7 +358,7 @@ s32 display_put_str_to_lcd(DevLcdNode *lcd, char *font, int x, int y, char *s, u
 	while(1) {
 		if (sidx >= slen) break;
 
-		chr = font_getdot(fontstr, s+sidx, &bitmap, "GBK");	
+		chr = font_getdot(fontstr, chbuf+sidx, &bitmap, "GBK");	
 
 		/* 填点 left 和 top 两个参数都会出现负数 */
 		lcdx += bitmap.head.left;
@@ -415,7 +421,7 @@ s32 display_put_str_to_lcd(DevLcdNode *lcd, char *font, int x, int y, char *s, u
 
 	wjq_free(framebuff);
 	wjq_free(dotbuf);
-
+	wjq_free(chbuf);
 	return 0;
 }
 

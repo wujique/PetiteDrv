@@ -33,6 +33,12 @@ typedef struct
 	struct list_head list;
 }DevI2cNode;
 
+typedef struct{
+	uint16_t addr;
+	uint16_t fkhz;
+}I2CPra;
+
+
 #define MCU_I2C_MODE_W 0
 #define MCU_I2C_MODE_R 1
 

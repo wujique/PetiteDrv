@@ -128,7 +128,7 @@ void SPI_Delay(unsigned char xrate)
 
 	mcu_spi_cs
 */
-s32 drv_il91874_write_cmd(DevLcdBusNode *node, u8 cmd)
+s32 drv_il91874_write_cmd(DevLcdNode *node, u8 cmd)
 {
 	bus_spich_cs((DevSpiChNode *)node->basenode, 0);
 	bus_lcd_write_cmd(node, cmd);
@@ -136,7 +136,7 @@ s32 drv_il91874_write_cmd(DevLcdBusNode *node, u8 cmd)
 	return 0;
 }
 
-s32 drv_il91874_write_data(DevLcdBusNode *node, u8 *data, u32 len)
+s32 drv_il91874_write_data(DevLcdNode *node, u8 *data, u32 len)
 {
 	bus_spich_cs((DevSpiChNode *)node->basenode, 0);
 	bus_lcd_write_data(node, data, len);
@@ -150,9 +150,9 @@ s32 drv_il91874_write_data(DevLcdBusNode *node, u8 *data, u32 len)
 */
 void drv_IL91874_lcd_bl(DevLcdNode *lcd, u8 sta)
 {
-	DevLcdBusNode * node;
+	DevLcdNode * node;
 	
-	node = bus_lcd_open(lcd->dev.buslcd);
+	node = bus_lcd_open(lcd);
 	bus_lcd_bl(node, sta);
 	bus_lcd_close(node);
 
@@ -199,7 +199,9 @@ static s32 drv_IL91874_refresh_gram(DevLcdNode *lcd, u16 sc, u16 ec, u16 sp, u16
 {	
 	struct _epaper_drv_data *drvdata; 
 
-	DevLcdBusNode *node;
+	DevLcdNode * node = lcd;
+	DevLcdBus *bus = lcd->dev.bus;
+	
 	u32 cnt;
 	u32 gramsize;
 	u16 i,j;
@@ -207,7 +209,7 @@ static s32 drv_IL91874_refresh_gram(DevLcdNode *lcd, u16 sc, u16 ec, u16 sp, u16
 	u16 w,l;
 	
 	drvdata = (struct _epaper_drv_data *)lcd->pri;
-	node = bus_lcd_open(lcd->dev.buslcd);
+	node = bus_lcd_open(lcd);
 
 	wjq_log(LOG_DEBUG, "drv_IL91874_refresh_gram: %d, %d, %d, %d\r\n ", sc, ec, sp, ep);
 	
@@ -323,7 +325,7 @@ static s32 drv_IL91874_refresh_gram(DevLcdNode *lcd, u16 sc, u16 ec, u16 sp, u16
 	do
 	{
 		drv_il91874_write_cmd(node, (0x71));
-		busy = mcu_io_input_readbit(node->dev.staport, node->dev.stapin);
+		busy = mcu_io_input_readbit(bus->staport, bus->stapin);
 		busy =!(busy & 0x01);        
 	}
 	while(busy);  
@@ -356,13 +358,15 @@ static s32 drv_IL91874_display_onoff(DevLcdNode *lcd, u8 sta)
 s32 drv_IL91874_init(DevLcdNode *lcd)
 {
 	u16 data;
-	DevLcdBusNode * node;
+	DevLcdNode * node = lcd;
+	DevLcdBus *bus = lcd->dev.bus;
+	
 	u8 tmp[16];
 	u8 testbuf[2];
 	
-	node = bus_lcd_open(lcd->dev.buslcd);
+	node = bus_lcd_open(lcd);
 
-	mcu_io_config_in(node->dev.staport, node->dev.stapin);
+	mcu_io_config_in(bus->staport, bus->stapin);
 
 	bus_lcd_rst(node, 1);
 	Delay(50);
@@ -386,7 +390,7 @@ s32 drv_IL91874_init(DevLcdNode *lcd)
 	do
 	{
 		drv_il91874_write_cmd(node, (0x71));
-		busy = mcu_io_input_readbit(node->dev.staport, node->dev.stapin);
+		busy = mcu_io_input_readbit(bus->staport, bus->stapin);
 		busy =!(busy & 0x01);        
 	}
 	while(busy);   

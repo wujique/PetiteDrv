@@ -5,6 +5,8 @@
 #include "petite_config.h"
 
 #include "petite.h"
+#include "petite_def.h"
+
 #include "cmsis_os.h"
 
 #include "board_sysconf.h"
@@ -257,5 +259,9 @@ void HardFault_Handler_c(unsigned int * hardfault_args, unsigned lr_value)
   }
 }
 #endif
+
+
+
+
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

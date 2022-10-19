@@ -65,6 +65,13 @@ typedef struct
 	struct list_head list;
 }DevSpiChNode;
 
+/*	SPI 参数，在打开spi时配置到spi
+	*/
+typedef struct{
+	SPI_MODE mode;
+	u16 KHz;
+}PraSpiSet;
+
 extern s32 bus_spi_register(const DevSpi *dev);
 extern s32 bus_spich_register(const DevSpiCh *dev);
 

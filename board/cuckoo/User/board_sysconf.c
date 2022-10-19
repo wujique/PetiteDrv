@@ -53,13 +53,13 @@ const DevLcdBus BusLcdI2C1={
 	.staport = MCU_PORT_NULL, 
 	.stapin = NULL,
 };
+				
 /*I2C接口的 OLED*/
-#if 0
 const I2CPra OledLcdI2cPra ={
 	.addr = 0x3c, /* i2c 设备地址，7bit模式 */
 	.fkhz = 200,/* 时钟频率，单位KHz */
 };
-#endif
+
 const DevLcd DevLcdOled1={
 	.pnode={
 				.name = "i2coledlcd",
@@ -70,8 +70,8 @@ const DevLcd DevLcdOled1={
 	.width = 64, 
 	.height = 128,
 
-	.buslcd = "BusLcdI2C1",  
-	//.buspra = &OledLcdI2cPra,
+	.bus = &BusLcdI2C1,  
+	.buspra = (void *)&OledLcdI2cPra,
 };
 
 
@@ -180,8 +180,6 @@ const DevSpiCh DevSpi3CH3={
 		.cspin = MCU_IO_15,
 		
 	};
-
-
 /*
 	串行LCD接口，使用真正的SPI控制
 	外扩接口中的SPI接口
@@ -208,6 +206,10 @@ const DevLcdBus BusLcdSpi3={
 };
 
 /*SPI接口的 COG LCD*/
+const PraSpiSet CogSpiSet = {
+	.mode = SPI_MODE_3,
+	.KHz = 10000,
+};
 
 const DevLcd DevLcdCOG1	=	{
 
@@ -215,12 +217,14 @@ const DevLcd DevLcdCOG1	=	{
 				.name = "spicoglcd",
 				.type = DEV_LCD,
 		},
-		
-	//.buslcd = "BusLcdVSpi2CH1", 
-	.buslcd = "BusLcdSpi3",
+	
 	.id = 0X7565, 
 	.width = 64, 
-	.height = 128};
+	.height = 128,
+
+	.bus = (DevLcdBus *)&BusLcdSpi3,
+	.buspra = (void *)&CogSpiSet,
+};
 				
 /* spi 接口 黑白墨水屏 1.54寸 GDEH154D27*/
 const DevLcd DevLcdSPIEPaper =	{
@@ -229,11 +233,13 @@ const DevLcd DevLcdSPIEPaper =	{
 				.type = DEV_LCD,
 		},
 		 
-	.buslcd = "BusLcdSpi3",
 	.id = 0x3820, 
 	.width = 200, 
-	.height = 200
-	};
+	.height = 200,
+	
+	.bus = &BusLcdSpi3,
+	.buspra = (void *)&CogSpiSet,
+};
 
 
 void *PetiteDevTable[]={
@@ -275,17 +281,13 @@ s32 petite_dev_register(void)
 				break;
 
 			case BUS_SPI_H:
+			case BUS_SPI_V:
 				bus_spi_register((const DevSpi *)PetiteDevTable[i]);
 				break;
 			case BUS_SPI_CH:
 				bus_spich_register((const DevSpiCh *)PetiteDevTable[i]);
 				break;
-				
-			case BUS_LCD_SPI:
-			case BUS_LCD_I2C:
-				dev_lcdbus_register((const DevLcdBus *)PetiteDevTable[i]);
-				break;
-			
+
 			case DEV_LCD:
 				lcd_dev_register((const DevLcd *)PetiteDevTable[i]);
 				break;
@@ -327,10 +329,8 @@ const FontHead SYSongTiM1616 ={
 		.top = 14,
 	},
 	.datac = 32,
-	//.w = 16,
-	//.h = 16,
-	
-	};
+
+};
 const FontHead SYSongTiM2424 ={
 
 	.name = "SYST_24_m",//名字
@@ -353,9 +353,7 @@ const FontHead SYSongTiM2424 ={
 		},
 	
 	.datac = 72,
-
-	
-	};
+};
 /*------文泉驿点阵12pt------*/
 const FontHead WQYST16H18030 ={
 
@@ -379,7 +377,7 @@ const FontHead WQYST16H18030 ={
 	},
 	
 	.datac = 32,
-	};
+};
 	
 const FontHead WQYST12H18030 ={
 
@@ -403,7 +401,7 @@ const FontHead WQYST12H18030 ={
 		},
 	
 	.datac = 24,
-	};
+};
 
 const FontHead *FontListN[FONT_LIST_MAX] = {
 	&SYSongTiM1616,

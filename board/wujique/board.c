@@ -13,6 +13,9 @@
 #include "drv_lcd.h"
 #include "camera_api.h"
 
+#include "font/gb18030.h"
+#include "font/gb2312.h"
+
 
 /* 硬件相关的都在board.c定义
 	调用对应的驱动进行初始化。
@@ -196,6 +199,7 @@ s32 board_init(void)
 	wjq_log(LOG_DEBUG, "[   board] wujique other dev init!***\r\n");
 
 	/* 注册总线的驱动 ：I2C/SPI/BUS LCD...*/
+	mcu_fsmc_lcd_Init();
 	petite_dev_register();
 
 	/* 以下是未归纳到总线系统的去驱动 
@@ -224,6 +228,7 @@ s32 board_init(void)
 	//dev_htu21d_init();
 	//dev_ptHCHO_init();
 	//dev_srf05_test();
+
 	/* 摄像头不归入字符设备 */
 	/* camera xclk use the MCO1 */
 	
@@ -318,8 +323,8 @@ s32 board_camera_show(DevLcdNode *lcd)
 	ImageFormat = (ImageFormat_TypeDef)BMP_QVGA;
 
 	/* LCD Display window */
-	dev_lcd_setdir(lcd, W_LCD, L2R_U2D);
-	dev_lcd_prepare_display(lcd, 1, 320, 1, 240);
+	lcd_setdir(lcd, W_LCD, L2R_U2D);
+	lcd_prepare_display(lcd, 1, 320, 1, 240);
 
 	BUS_DCMI_Config(DCMI_PCKPolarity_Rising, DCMI_VSPolarity_Low, DCMI_HSPolarity_Low);
 
@@ -402,4 +407,16 @@ s32 board_camera_show(DevLcdNode *lcd)
 }
 #endif
 #endif
+
+void board_pre_sleep(uint32_t xModifiableIdleTime)
+{
+	//uart_printf("1");
+}
+
+void board_post_sleep(uint32_t xExpectedIdleTime)
+{
+	//uart_printf("2");
+}
+
+
 

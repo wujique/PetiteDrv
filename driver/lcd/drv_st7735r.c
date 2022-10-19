@@ -64,9 +64,9 @@ _lcd_drv TftLcdST7735R_Drv = {
 
 void drv_ST7735R_lcd_bl(DevLcdNode *lcd, u8 sta)
 {
-	DevLcdBusNode * node;
+	DevLcdNode * node;
 	
-	node = bus_lcd_open(lcd->dev.buslcd);
+	node = bus_lcd_open(lcd);
 	bus_lcd_bl(node, sta);
 	bus_lcd_close(node);
 
@@ -150,10 +150,10 @@ static void drv_ST7735R_scan_dir(DevLcdNode *lcd, u8 dir)
 s32 drv_ST7735R_set_cp_addr(DevLcdNode *lcd, u16 sc, u16 ec, u16 sp, u16 ep)
 {
 
-	DevLcdBusNode * node;
+	DevLcdNode * node;
 	u8 tmp[4];
 
-	node = bus_lcd_open(lcd->dev.buslcd);
+	node = bus_lcd_open(lcd);
 
 	bus_lcd_write_cmd(node, ST7735R_CMD_SETX);
 	tmp[0] = (0x00);
@@ -185,8 +185,8 @@ s32 drv_ST7735R_set_cp_addr(DevLcdNode *lcd, u16 sc, u16 ec, u16 sp, u16 ep)
  */
 static s32 drv_ST7735R_display_onoff(DevLcdNode *lcd, u8 sta)
 {
-	DevLcdBusNode * node;
-	node = bus_lcd_open(lcd->dev.buslcd);
+	DevLcdNode * node;
+	node = bus_lcd_open(lcd);
 	
 	if(sta == 1)
 		bus_lcd_write_cmd(node, (0x29));
@@ -209,10 +209,10 @@ static s32 drv_ST7735R_display_onoff(DevLcdNode *lcd, u8 sta)
 s32 drv_ST7735R_init(DevLcdNode *lcd)
 {
 	u16 data;
-	DevLcdBusNode * node;
+	DevLcdNode * node;
 	u8 tmp[16];
 	
-	node = bus_lcd_open(lcd->dev.buslcd);
+	node = bus_lcd_open(lcd);
 
 	bus_lcd_rst(node, 1);
 	Delay(50);
@@ -230,15 +230,12 @@ s32 drv_ST7735R_init(DevLcdNode *lcd)
 	tmp[2] = 0x2D;
 	bus_lcd_write_data(node, (u8*)tmp, 3);
 
-
-
 	bus_lcd_write_cmd(node, (0xB2));
 	tmp[0] = 0x01;
 	tmp[1] = 0x2C;
 	tmp[2] = 0x2D;
 	bus_lcd_write_data(node, (u8*)tmp, 3);
-
-		
+	
 	bus_lcd_write_cmd(node, (0xB3));
 	tmp[0] = 0x01;
 	tmp[1] = 0x2C;
@@ -435,8 +432,8 @@ static s32 drv_ST7735R_drawpoint(DevLcdNode *lcd, u16 x, u16 y, u16 color)
 	drv_ST7735R_xy2cp(lcd, x, x, y, y, &sc,&ec,&sp,&ep);
 	drv_ST7735R_set_cp_addr(lcd, sc, ec, sp, ep);
 
-	DevLcdBusNode * node;
-	node = bus_lcd_open(lcd->dev.buslcd);
+	DevLcdNode * node;
+	node = bus_lcd_open(lcd);
 	
 	u8 tmp[2];
 	tmp[0] = color>>8;
@@ -487,15 +484,16 @@ s32 drv_ST7735R_color_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 colo
 		tmp[i++] = color&0xff;
 	}
 	
+	DevLcdNode * node = lcd;
 
-	lcd->busnode = bus_lcd_open(lcd->dev.buslcd);
+	node = bus_lcd_open(lcd);
 
 	for(i = 0; i < height;i++)
 	{
-			bus_lcd_write_data(lcd->busnode, tmp, width*2);
+			bus_lcd_write_data(node, tmp, width*2);
 	}
 	
-	bus_lcd_close(lcd->busnode);
+	bus_lcd_close(node);
 
 	wjq_free(tmp);
 	
@@ -535,8 +533,9 @@ s32 drv_ST7735R_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
 
 	tmp = (u8 *)wjq_malloc(width*2);
 
-	
-	lcd->busnode = bus_lcd_open(lcd->dev.buslcd);
+	DevLcdNode * node = lcd;
+
+	node = bus_lcd_open(lcd);
 	
 	pcc = color;
 	
@@ -548,10 +547,10 @@ s32 drv_ST7735R_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
 			tmp[j++] = (*pcc) & 0xff;
 			pcc++;
 		}
-		bus_lcd_write_data(lcd->busnode, tmp, width*2);
+		bus_lcd_write_data(node, tmp, width*2);
 	}
 	
-	bus_lcd_close(lcd->busnode);
+	bus_lcd_close(node);
 
 	wjq_free(tmp);	 
 	return 0;
@@ -573,8 +572,8 @@ s32 drv_ST7735R_flush(DevLcdNode *lcd, u16 *color, u32 len)
 	u8 *tmp;
 	u32 i;
 	
-	DevLcdBusNode * node;
-	node = bus_lcd_open(lcd->dev.buslcd);
+	DevLcdNode * node;
+	node = bus_lcd_open(lcd);
 
 	tmp = (u8 *)wjq_malloc(len*2);
 	i = 0;
@@ -587,7 +586,7 @@ s32 drv_ST7735R_flush(DevLcdNode *lcd, u16 *color, u32 len)
 			break;
 	}
 
-	bus_lcd_write_data(lcd->busnode, tmp,  len*2);	
+	bus_lcd_write_data(node, tmp,  len*2);	
 	bus_lcd_close(node);
 	
 	wjq_free(tmp);
