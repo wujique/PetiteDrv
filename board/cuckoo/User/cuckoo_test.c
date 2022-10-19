@@ -205,8 +205,8 @@ void cuckoo_7b0_test(void)
 
 	//cuckoo_test_lcd();
 	DevLcdNode *LcdCogSpi = NULL;
-	//LcdCogSpi = lcd_open("spicoglcd");
-	LcdCogSpi = lcd_open("i2coledlcd");
+	LcdCogSpi = lcd_open("spicoglcd");
+	//LcdCogSpi = lcd_open("i2coledlcd");
 	//font_unicode_bitmap_test(LcdCogSpi);
 	//FreeTypeTest(LcdCogSpi);
 	

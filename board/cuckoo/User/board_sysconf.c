@@ -15,6 +15,8 @@
 #include "petite.h"
 #include "drv_config.h"
 
+#include "drv_spiflash.h"
+
 
 /* cuckoo 小板， SAI接口和外扩I2C接口的其他信号共用，
 	需要注意，特别是外界OLED等外设*/
@@ -74,71 +76,6 @@ const DevLcd DevLcdOled1={
 	.buspra = (void *)&OledLcdI2cPra,
 };
 
-
-#if 0
-/*
-	VSPI1，核心板上的LCD接口中的4根IO模拟SPI，
-	用于XPT2046方案触摸处理，可读可写。
-	在cuckoo上，SPI方案和I2C接口复用，
-	其中I2C用于CTP，CAMERA，I2S，OLED等。
-	因此，XPT2046只用来是LCD 触摸。*/
-
-const DevSpi DevVSpi1IO={
-		.pnode={
-				.name = "VSPI1",
-				.type = BUS_SPI_V,
-			},
-		/*clk*/
-		.clkport = MCU_PORT_C,
-		.clkpin = MCU_IO_4,
-		/*mosi*/
-		.mosiport = MCU_PORT_A,
-		.mosipin = MCU_IO_5,
-		/*miso*/
-		.misoport = MCU_PORT_D,
-		.misopin = MCU_IO_9,
-	};
-/* 
-	LCD座子中的触摸屏接口, IO模拟SPI
-*/
-const DevSpiCh DevVSpi1CH1={
-		.pnode={
-				.name = "VSPI1_CH1",
-				.type = BUS_SPI_CH,
-			},
-		
-		.spi = "VSPI1",
-		
-		.csport = MCU_PORT_D,
-		.cspin = MCU_IO_14,
-		
-	};
-#endif
-
-#if 0
-const Devtp BusLcdI2C1={
-	.pnode={
-				.name = "CTP_GT1151",
-				.type = BUS_LCD_I2C,
-			},
-			
-	.basebus = "VI2C1",
-
-	/* 触摸屏 */
-	.A0port = MCU_PORT_NULL,
-	.A0pin = NULL,
-
-	.rstport = MCU_PORT_NULL,
-	.rstpin = NULL,
-
-	.blport = MCU_PORT_NULL,
-	.blpin = NULL,
-
-	.staport = MCU_PORT_NULL, 
-	.stapin = NULL,
-};
-#endif
-
 /*
 	硬件SPI控制器：SPI3
 	SPI驱动暂时支持SPI3，
@@ -165,9 +102,7 @@ const DevSpi DevSpi3IO={
 		.misopin = MCU_IO_4,
 		#endif
 	};
-/*
-	外扩接口的SPI，可接COG、OLED、SPI TFT、RF24L01
-*/			
+/*	外扩接口的SPI，可接COG、OLED、SPI TFT、RF24L01*/			
 const DevSpiCh DevSpi3CH3={
 		.pnode={
 				.name = "SPI3_CH3",
@@ -180,10 +115,21 @@ const DevSpiCh DevSpi3CH3={
 		.cspin = MCU_IO_15,
 		
 	};
-/*
-	串行LCD接口，使用真正的SPI控制
-	外扩接口中的SPI接口
-*/
+const DevSpiCh DevSpi3CH4={
+		.pnode={
+				.name = "SPI3_CH4",
+				.type = BUS_SPI_CH,
+			},
+			
+		.spi = "SPI3",
+		
+		.csport = MCU_PORT_E,
+		.cspin = MCU_IO_14,
+		
+	};
+
+/*	串行LCD接口，使用真正的SPI控制
+	外扩接口中的SPI接口*/
 const DevLcdBus BusLcdSpi3={
 	.pnode={
 				.name = "BusLcdSpi3",
@@ -240,6 +186,16 @@ const DevLcd DevLcdSPIEPaper =	{
 	.bus = &BusLcdSpi3,
 	.buspra = (void *)&CogSpiSet,
 };
+				
+const DevSpiFlash DevSpiFlashEx={
+	.pnode={
+				.name = "ex_spiflash",
+				.type = DEV_SPIFLASH,
+			},
+	
+	.spich ="SPI3_CH4", 
+	.pra = NULL,
+};
 
 
 void *PetiteDevTable[]={
@@ -251,6 +207,8 @@ void *PetiteDevTable[]={
 	(void *)&DevSpi3IO,
 		(void *)&DevSpi3CH3,
 			(void *)&DevLcdCOG1,
+		(void *)&DevSpi3CH4,
+			(void *)&DevSpiFlashEx,
 	/* dont move*/
 	NULL,
 	};

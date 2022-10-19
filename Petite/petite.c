@@ -305,7 +305,7 @@ s32 petite_dev_register(void *DevTable[])
 		i++;
 	}
 	
-	wjq_log(LOG_DEBUG, "\r\n\r\n[register] petite_dev_register: %d device!\r\n", i);	
+	wjq_log(LOG_DEBUG, "\r\n[register] petite_dev_register: %d device!\r\n\r\n", i);	
 	
 	return 0;
 }
