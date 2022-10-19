@@ -56,7 +56,7 @@ const DevLcdBus BusLcdI2C1={
 				
 /*I2C接口的 OLED*/
 const I2CPra OledLcdI2cPra ={
-	.addr = 0x3c, /* i2c 设备地址，7bit模式 */
+	.addr = 0x3D, /* 0X3C OR 0X3D */
 	.fkhz = 200,/* 时钟频率，单位KHz */
 };
 
@@ -245,14 +245,12 @@ const DevLcd DevLcdSPIEPaper =	{
 void *PetiteDevTable[]={
 	/*注册I2C总线，将oled1挂载此 I2C总线上 */
 	(void *)&DevVi2c1,
-		(void *)&BusLcdI2C1,
-			(void *)&DevLcdOled1,
+		(void *)&DevLcdOled1,
 	/*硬SPI3控制器，外扩接口的SPI口，并定义一个BusLcd在此总线上 
 		可将一些LCD设备挂在本总线上 */
 	(void *)&DevSpi3IO,
 		(void *)&DevSpi3CH3,
-			(void *)&BusLcdSpi3,
-				(void *)&DevLcdCOG1,
+			(void *)&DevLcdCOG1,
 	};
 
 

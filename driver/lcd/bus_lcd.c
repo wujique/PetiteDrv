@@ -109,14 +109,26 @@ DevLcdNode *bus_lcd_open(DevLcdNode *lcd)
 {
 	PetiteDevType type;
 	char *busname;
+	uint16_t bus_clk;
+	I2CPra *i2c_pra;
+	PraSpiSet *spi_pra;
+	SPI_MODE spi_mode;
 	
 	type = lcd->dev.bus->pnode.type;
 	busname = (char *)lcd->dev.bus->basebus;
 	
 	if (type == BUS_LCD_SPI) {
-		lcd->basenode = (void *)bus_spich_open(busname, SPI_MODE_3, 10000);
+		spi_pra = (PraSpiSet *)lcd->dev.buspra;
+		bus_clk = spi_pra->KHz;
+		spi_mode = spi_pra->mode;
+		
+		lcd->basenode = (void *)bus_spich_open(busname, spi_mode, bus_clk);
 
 	} else if (type == BUS_LCD_I2C) {
+		/*todo I2C频率配置 */
+		i2c_pra = (I2CPra *)lcd->dev.buspra;
+		bus_clk = i2c_pra->fkhz;
+		
 		lcd->basenode = bus_i2c_open(busname, 0xffffffff);
 	} else if (type == BUS_LCD_8080) {
 		#if (PETITE_BUS_LCD_8080 == 1)
@@ -178,9 +190,14 @@ s32 bus_lcd_write_data(DevLcdNode *lcd, u8 *data, u32 len)
 	/*直接定义256字节，可能有BUG，要根据len动态申请*/
 	u8 tmp[256];
 	u32 i;
-	PetiteDevType type;
-	type = lcd->dev.bus->pnode.type;
 	
+	u8 i2c_addr;
+	I2CPra *i2c_pra;
+	
+	PetiteDevType type;
+
+	type = lcd->dev.bus->pnode.type;
+
 	switch(type)
 	{
 		case BUS_LCD_SPI:
@@ -192,7 +209,11 @@ s32 bus_lcd_write_data(DevLcdNode *lcd, u8 *data, u32 len)
 		{
 			tmp[0] = 0x40;
 			memcpy(&tmp[1], data, len);
-			bus_i2c_transfer((DevI2cNode *)lcd->basenode, OLED_I2C_ADDR, MCU_I2C_MODE_W, tmp, len+1);
+			
+			i2c_pra = (I2CPra *)lcd->dev.buspra;
+			i2c_addr = i2c_pra->addr;
+			
+			bus_i2c_transfer((DevI2cNode *)lcd->basenode, i2c_addr, MCU_I2C_MODE_W, tmp, len+1);
 		}
 		break;
 		
@@ -315,6 +336,10 @@ s32 bus_lcd_read_data(DevLcdNode *lcd, u8 *data, u32 len)
 s32 bus_lcd_write_cmd(DevLcdNode *lcd, u16 cmd)
 {
 	u8 tmp[2];
+	
+	u8 i2c_addr;
+	I2CPra *i2c_pra;
+	
 	PetiteDevType type;
 	DevLcdBus const*bus;
 	
@@ -336,7 +361,10 @@ s32 bus_lcd_write_cmd(DevLcdNode *lcd, u16 cmd)
 			tmp[0] = 0x00;
 			tmp[1] = cmd;
 			
-			bus_i2c_transfer((DevI2cNode *)lcd->basenode, OLED_I2C_ADDR, MCU_I2C_MODE_W, tmp, 2);
+			i2c_pra = (I2CPra *)lcd->dev.buspra;
+			i2c_addr = i2c_pra->addr;
+			
+			bus_i2c_transfer((DevI2cNode *)lcd->basenode, i2c_addr, MCU_I2C_MODE_W, tmp, 2);
 		}
 		break;
 		

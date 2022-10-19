@@ -22,8 +22,6 @@
 /*
 	本文件用于配置系统有哪些设备和资源
 */
-
-/*---------------之下，是SPI I2C LCD 等抽象的比较好的设备和接口定义----------------*/
 /*-------------------------------
 	I2C控制器
 -------------------------------*/
@@ -40,10 +38,8 @@ const DevI2c DevVi2c0={
 		.sdapin = MCU_IO_0,
 		};
 
-/*
-	IO口模拟的I2C1
-	WM8978、TEA5767、外扩接口的I2C使用
-*/
+/* 	IO口模拟的I2C1
+	WM8978、TEA5767、外扩接口的I2C使用 */
 const DevI2c DevVi2c1={
 		.pnode={
 				.name = "VI2C1",
@@ -61,10 +57,8 @@ const DevI2c DevVi2c1={
 /*----------------------
 	IO口模拟SPI控制器
 ------------------------*/
-/*
-	VSPI1，核心板上的LCD接口中的4根IO模拟SPI，
-	用于XPT2046方案触摸处理，可读可写。
-*/					
+/* 	VSPI1，核心板上的LCD接口中的4根IO模拟SPI，
+	用于XPT2046方案触摸处理，可读可写。*/					
 const DevSpi DevVSpi1IO={
 		.pnode={
 				.name = "VSPI1",
@@ -81,11 +75,9 @@ const DevSpi DevVSpi1IO={
 		.misopin = MCU_IO_12,
 	};
 
-#if 1
-/*
-	模拟SPI，无miso
-	用于测试SPI程序框架
-*/
+#if 0
+/* 	模拟SPI，无miso
+	用于测试SPI程序框架 */
 const DevSpi DevVspi3IO={
 		.pnode={
 				.name = "VSPI3",
@@ -106,10 +98,8 @@ const DevSpi DevVspi3IO={
 	};
 #endif
 
-#if 1
-/*  
-	外扩接口模拟VSPI2， 与矩阵键盘，模拟I2C2冲突  
-*/			
+#if 0
+/*  外扩接口模拟VSPI2， 与矩阵键盘，模拟I2C2冲突          */			
 const DevSpi DevVspi2IO={
 		.pnode={
 				.name = "VSPI2",
@@ -142,11 +132,9 @@ const DevSpi DevSpi3IO={
 		/*clk*/
 		.clkport = MCU_PORT_B,
 		.clkpin = MCU_IO_3,
-		
 		/*mosi*/
 		.mosiport = MCU_PORT_B,
 		.mosipin = MCU_IO_5,
-
 		/*miso*/
 		.misoport = MCU_PORT_B,
 		.misopin = MCU_IO_4,
@@ -155,9 +143,7 @@ const DevSpi DevSpi3IO={
 /*------------------------ 
 	SPI通道
 -------------------------*/
-/*
-	FLASH用
-*/
+/* 	FLASH用  */
 const DevSpiCh DevSpi3CH1={
 		.pnode={
 				.name = "SPI3_CH1",
@@ -169,9 +155,7 @@ const DevSpiCh DevSpi3CH1={
 		.cspin = MCU_IO_14,
 		
 	};		
-/*
-	FLASH用
-*/
+/*	FLASH用 */
 const DevSpiCh DevSpi3CH2={
 		.pnode={
 				.name = "SPI3_CH2",
@@ -184,9 +168,7 @@ const DevSpiCh DevSpi3CH2={
 		.cspin = MCU_IO_15,
 		
 	};
-/*
-	外扩接口的SPI，可接COG、OLED、SPI TFT、RF24L01
-*/			
+/* 	外扩接口的SPI，可接COG、OLED、SPI TFT、RF24L01 */			
 const DevSpiCh DevSpi3CH3={
 		.pnode={
 				.name = "SPI3_CH3",
@@ -221,12 +203,10 @@ const DevSpiCh DevSpi3CH4={
 	};
 #endif
 
-#if 1
-/*
-	模拟SPI通道，无CS
+#if 0
+/*	模拟SPI通道，无CS
 	用来调试没有CS的LCD屏幕，
-	VSPI3，其实是外扩接口SPI附近的两个IO模拟的。
-*/	
+	VSPI3，其实是外扩接口SPI附近的两个IO模拟的。*/	
 const DevSpiCh DevVSpi3CH1={
 		.pnode={
 				.name = "VSPI3_CH1",
@@ -241,9 +221,7 @@ const DevSpiCh DevVSpi3CH1={
 	};
 #endif
 
-/* 
-	LCD座子中的触摸屏接口, IO模拟SPI
-*/
+/* 	LCD座子中的触摸屏接口, IO模拟SPI*/
 const DevSpiCh DevVSpi1CH1={
 		.pnode={
 				.name = "VSPI1_CH1",
@@ -288,10 +266,8 @@ const DevSpiCh DevVSpi2CH1={
 	LCD硬件接口包含一个基本通信接口basebus、A0管脚，复位管脚，背光管脚。
 ---------------------------------------*/
 #if 1
-/*
-	串行LCD接口，使用真正的SPI控制
-	外扩接口中的SPI接口
-*/
+/*	spi cog/oled LCD接口，使用真正的SPI控制
+	外扩接口中的SPI接口 */
 const DevLcdBus BusLcdSpi3={
 	.pnode={
 				.name = "BusLcdSpi3",
@@ -332,9 +308,7 @@ const DevLcdBus BusLcdVSpi3={
 };
 
 #endif 
-/*
-	I2C接口的LCD总线
-*/
+/*	I2C接口的LCD总线*/
 const DevLcdBus BusLcdI2C1={
 	.pnode={
 				.name = "BusLcdI2C1",
@@ -356,9 +330,7 @@ const DevLcdBus BusLcdI2C1={
 	.staport = MCU_PORT_NULL, 
 	.stapin = NULL,
 };
-/*
-	8080接口的LCD总线
-*/	
+/*	8080接口的LCD总线 */	
 const DevLcdBus BusLcd8080={
 	.pnode={
 				.name = "BusLcd8080",
@@ -446,12 +418,12 @@ const DevSpiFlash DevSpiFlashBoard={
 
 /*--------------------------------
 	lcd设备树定义
-	指明系统有多少个LCD设备，挂在哪个LCD总线上。
----------------------------------*/
+	指明系统有多少个LCD设备，
+--------------------------------*/
 
 /*I2C接口的 OLED*/
 const I2CPra OledLcdI2cPra ={
-	.addr = 0x3c, /* i2c 设备地址，7bit模式 */
+	.addr = 0x3D, /* 0x3c or 0x3d,  在cuckoo板子上 ,和摄像头共用I2C，OLED屏需要改为0x3C地址， */
 	.fkhz = 200,/* 时钟频率，单位KHz */
 };
 
@@ -490,7 +462,6 @@ DevLcd DevLcdSpiOled	=	{
 };
 
 /*SPI接口的 COG LCD*/
-
 const DevLcd DevLcdCOG1	=	{
 
 	.pnode={
@@ -514,8 +485,13 @@ const DevLcd DevLcdtTFT	=	{
 				.name = "tftlcd",
 				.type = DEV_LCD,
 			},
-			 
+	/* 可以指定id为：
+		0x9325，WJQ, 320 240
+		0x9341, WJQ, 320 240
+		0x1408, 好巨润, 480 800, 4.0寸的IPS屏幕，r61408驱动芯片
+				*/	 
 	.id = NULL, 
+	/* 指定lcd 尺寸 */
 	.width = 240, 
 	.height = 320,
 
@@ -523,44 +499,14 @@ const DevLcd DevLcdtTFT	=	{
 	.buspra = (void *)&CogSpiSet,
 };
 #endif	
-#if 0
-/*1408, 4.0寸的IPS屏幕，好巨润 r61408驱动芯片*/
-const DevLcd DevLcdtTFT	=	{
-	.pnode={
-				.name = "tftlcd",
-				.type = DEV_LCD,
-			},
-			 
-	.id = 0x1408, 
-	.width = 480, 
-	.height = 800,
-};
-#endif	
-
-#if 0
-const DevLcd DevLcdtTFT	=	{
-	.pnode={
-				.name = "tftlcd",
-				.type = DEV_LCD,
-			},
-			
-	.id = NULL, 
-	.width = 480, 
-	.height = 800,
-};	
-#endif
-//const DevLcd DevLcdtTFT	=	{"tftlcd", 		"BusLcd8080", 	0x9325, 240, 320};
-//const DevLcd DevLcdtTFT	=	{"tftlcd", 		"BusLcd8080", 	0x9341, 240, 320};
 
 /*SPI接口的 tft lcd*/
 //const DevLcd DevLcdtTFT	=	{"spitftlcd", 		"BusLcdSpi3", 	0x9342, 240, 320};
 //const DevLcd DevLcdtTFT	=	{"spitftlcd", 		"BusLcdVSpi1CH2", 	0x9342, 240, 320};
 /*1.44寸 中景园*/
 //const DevLcd DevSpiLcdtTFT	=	{"spitftlcd",   "BusLcdSpi3", 	0x7735, 128, 128};
-
 /* 1.3寸，IPS，中景园，只有SCL&SDA的SPI接口LCD*/
 //const DevLcd DevLcdVSPITFT =	{"vspitftlcd",		"BusLcdVSpi3",	0x7789, 240, 240};
-
 /* spi 接口的三色墨水屏 */
 //const DevLcd DevLcdSPIEPaper =	{"spiE-Paper",		"BusLcdSpi3",	0x9187, 176, 264};
 /* spi 接口 黑白墨水屏 1.54寸 GDEH154D27*/

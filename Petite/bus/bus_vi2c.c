@@ -37,7 +37,7 @@ extern uint32_t McuDelayUs;
  */
 static void bus_vi2c_delay(void)
 {
-    volatile u32 i = 1000;
+    volatile u32 i = 20;
 
     for(;i>0;i--);
 }

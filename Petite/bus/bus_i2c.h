@@ -34,7 +34,7 @@ typedef struct
 }DevI2cNode;
 
 typedef struct{
-	uint16_t addr;
+	uint8_t addr;
 	uint16_t fkhz;
 }I2CPra;
 
