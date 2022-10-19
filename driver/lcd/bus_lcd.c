@@ -129,7 +129,7 @@ DevLcdNode *bus_lcd_open(DevLcdNode *lcd)
 		i2c_pra = (I2CPra *)lcd->dev.buspra;
 		bus_clk = i2c_pra->fkhz;
 		
-		lcd->basenode = bus_i2c_open(busname, 0xffffffff);
+		lcd->basenode = bus_i2c_open(busname, 0xffffffff, bus_clk);
 	} else if (type == BUS_LCD_8080) {
 		#if (PETITE_BUS_LCD_8080 == 1)
 		/*8080特殊处理*/

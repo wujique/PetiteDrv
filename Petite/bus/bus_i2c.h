@@ -43,7 +43,7 @@ typedef struct{
 #define MCU_I2C_MODE_R 1
 
 extern s32 bus_i2c_register(const DevI2c * dev);
-extern DevI2cNode *bus_i2c_open(char *name, uint32_t wait);
+extern DevI2cNode *bus_i2c_open(char *name, uint32_t wait, uint16_t clk);
 extern s32 bus_i2c_close(DevI2cNode *node);
 extern s32 bus_i2c_transfer(DevI2cNode *node, u8 addr, u8 rw, u8* data, s32 datalen);
 

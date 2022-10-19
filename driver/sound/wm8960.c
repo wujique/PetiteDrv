@@ -63,7 +63,7 @@ static s32 dev_wm8960_writereg(u8 reg, u16 vaule)
 	data[0] = (reg<<1) | ((vaule>>8)&0x01);
 	data[1] = vaule & 0xff;
 
-	dev = bus_i2c_open(DEV_WM8978_I2CBUS, 0xffffffff);
+	dev = bus_i2c_open(DEV_WM8978_I2CBUS, 0xffffffff, 200);
 	ret = bus_i2c_transfer(dev, WM8960_SLAVE_ADDRESS, MCU_I2C_MODE_W, data, 2);
 	bus_i2c_close(dev);
 	

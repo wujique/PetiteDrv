@@ -164,7 +164,7 @@ int gt1151_init(void)
 	/* read gt9147 ID*/
 	reg[0] = GT1151_REG_PID>>8;
 	reg[1] = GT1151_REG_PID&0xff;
-	node = bus_i2c_open("VI2C1", 0xffffffff);
+	node = bus_i2c_open("VI2C1", 0xffffffff, 200);
 	if (node ==NULL ) { 
 		uart_printf("gt1151 open i2c err!\r\n");
 		return -1;
@@ -245,7 +245,7 @@ int gt1151_task(void)
 	
 	if (Gt1151Gd > 0) 
 	{
-	node = bus_i2c_open("VI2C1", 1);
+	node = bus_i2c_open("VI2C1", 1, 200);
 	if (node ==NULL ) { 
 		//uart_printf("gt9147 open i2c err!\r\n");
 		return -1;

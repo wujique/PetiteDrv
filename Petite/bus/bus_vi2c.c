@@ -31,14 +31,18 @@ extern uint32_t McuDelayUs;
 /**
  *@brief:      mcu_i2c_delay
  *@details:    I2C信号延时函数
- *@param[in]   us 延时，  
+ *@param[in]   clk, 时钟频率 khz  
  *@param[out]  无
  *@retval:     static
  */
-static void bus_vi2c_delay(void)
+static void bus_vi2c_delay(uint16_t clk)
 {
     volatile u32 i = 20;
-
+	/* 不同的芯片时钟有不同算法，这里只是大概 */
+	i = 1000/clk;//t的单位是us
+	i = i*5;//1us要的循环数
+	i = i/2;//半周期
+	
     for(;i>0;i--);
 }
 
@@ -120,17 +124,17 @@ static void bus_vi2c_scl(DevI2c *dev, u8 sta)
  *@param[out]  无
  *@retval:     static
  */
-static void bus_vi2c_start(DevI2c *dev)
+static void bus_vi2c_start(DevI2c *dev, uint16_t clk)
 {
     bus_vi2c_sda_output(dev);
     
     bus_vi2c_sda(dev, MCU_IO_STA_1);  
     bus_vi2c_scl(dev, MCU_IO_STA_1);
 
-    bus_vi2c_delay();
+    bus_vi2c_delay(clk);
     bus_vi2c_sda(dev, MCU_IO_STA_0);
 
-    bus_vi2c_delay();
+    bus_vi2c_delay(clk);
     bus_vi2c_scl(dev, MCU_IO_STA_0);
 }
 /**
@@ -140,19 +144,19 @@ static void bus_vi2c_start(DevI2c *dev)
  *@param[out]  无
  *@retval:     static
  */
-static void bus_vi2c_stop(DevI2c *dev)
+static void bus_vi2c_stop(DevI2c *dev, uint16_t clk)
 {
     bus_vi2c_sda_output(dev);
 
     bus_vi2c_scl(dev, MCU_IO_STA_0);
     bus_vi2c_sda(dev, MCU_IO_STA_0);   
-    bus_vi2c_delay();
+    bus_vi2c_delay(clk);
     
     bus_vi2c_scl(dev, MCU_IO_STA_1);
-    bus_vi2c_delay();
+    bus_vi2c_delay(clk);
     
     bus_vi2c_sda(dev, MCU_IO_STA_1);
-    bus_vi2c_delay();
+    bus_vi2c_delay(clk);
 }
 
 /**
@@ -162,22 +166,22 @@ static void bus_vi2c_stop(DevI2c *dev)
  *@param[out]  无
  *@retval:     static
  */
-static s32 bus_vi2c_wait_ack(DevI2c *dev)
+static s32 bus_vi2c_wait_ack(DevI2c *dev, uint16_t clk)
 {
     u8 time_out = 0;
     
     //sda转输入
     bus_vi2c_sda_input(dev);
     bus_vi2c_sda(dev, MCU_IO_STA_1);
-    bus_vi2c_delay();
+    bus_vi2c_delay(clk);
     
     bus_vi2c_scl(dev, MCU_IO_STA_1);
-    bus_vi2c_delay();
+    bus_vi2c_delay(clk);
     
     while(1) {
         time_out++;
         if (time_out > MCU_I2C_TIMEOUT) {
-            bus_vi2c_stop(dev);
+            bus_vi2c_stop(dev,clk);
             //wjq_log(LOG_ERR, "i2c:wait ack time out!\r\n");
             return 1;
         }
@@ -198,16 +202,16 @@ static s32 bus_vi2c_wait_ack(DevI2c *dev)
  *@param[out]  无
  *@retval:     static
  */
-static void bus_vi2c_ack(DevI2c *dev)
+static void bus_vi2c_ack(DevI2c *dev, uint16_t clk)
 {
     bus_vi2c_scl(dev, MCU_IO_STA_0);
     bus_vi2c_sda_output(dev);
     
     bus_vi2c_sda(dev, MCU_IO_STA_0);
-    bus_vi2c_delay();
+    bus_vi2c_delay(clk);
     
     bus_vi2c_scl(dev, MCU_IO_STA_1);
-    bus_vi2c_delay();
+    bus_vi2c_delay(clk);
     
     bus_vi2c_scl(dev, MCU_IO_STA_0);
 }
@@ -218,7 +222,7 @@ static void bus_vi2c_ack(DevI2c *dev)
  *@param[out]  无
  *@retval:     static
  */
-static s32 bus_vi2c_writebyte(DevI2c *dev, u8 data)
+static s32 bus_vi2c_writebyte(DevI2c *dev, u8 data, uint16_t clk)
 {
     u8 i = 0;
 
@@ -234,13 +238,13 @@ static s32 bus_vi2c_writebyte(DevI2c *dev, u8 data)
             bus_vi2c_sda(dev, MCU_IO_STA_0);
         }
         
-        bus_vi2c_delay();
+        bus_vi2c_delay(clk);
 
         bus_vi2c_scl(dev, MCU_IO_STA_1);
-        bus_vi2c_delay();
+        bus_vi2c_delay(clk);
         
         bus_vi2c_scl(dev, MCU_IO_STA_0);
-        bus_vi2c_delay();
+        bus_vi2c_delay(clk);
         
         data = data <<1;
         i++;
@@ -254,7 +258,7 @@ static s32 bus_vi2c_writebyte(DevI2c *dev, u8 data)
  *@param[out]  无
  *@retval:     static
  */
-static u8 bus_vi2c_readbyte(DevI2c *dev)
+static u8 bus_vi2c_readbyte(DevI2c *dev, uint16_t clk)
 {
     u8 i = 0;
     u8 data = 0;
@@ -263,7 +267,7 @@ static u8 bus_vi2c_readbyte(DevI2c *dev)
     
     while (i<8) {
         bus_vi2c_scl(dev, MCU_IO_STA_0);
-        bus_vi2c_delay();
+        bus_vi2c_delay(clk);
         
         bus_vi2c_scl(dev, MCU_IO_STA_1);
 
@@ -275,7 +279,7 @@ static u8 bus_vi2c_readbyte(DevI2c *dev)
             data = data & 0xfe;
         }
 
-        bus_vi2c_delay();
+        bus_vi2c_delay(clk);
         
         i++;
     }
@@ -322,6 +326,7 @@ s32 bus_vi2c_transfer(DevI2cNode *node, u8 addr, u8 rw, u8* data, s32 datalen)
     s32 i;
     u8 ch;
 	DevI2c *dev;
+	uint16_t clk;
 	s32 res;
 	
     #if 0//测试IO口是否连通
@@ -340,10 +345,10 @@ s32 bus_vi2c_transfer(DevI2cNode *node, u8 addr, u8 rw, u8* data, s32 datalen)
 	if (node == NULL) return -1;
 
 	dev = &node->dev;
-	
+	clk = node->clkkhz;
 	//I2C_DEBUG(LOG_DEBUG, "i2c trf %s\r\n", dev->name);
     //发送起始
-    bus_vi2c_start(dev);
+    bus_vi2c_start(dev, clk);
     //发送地址+读写标志
     //处理ADDR
     if (rw == MCU_I2C_MODE_W) {
@@ -354,9 +359,9 @@ s32 bus_vi2c_transfer(DevI2cNode *node, u8 addr, u8 rw, u8* data, s32 datalen)
         //uart_printf("read\r\n");
     }
     
-    bus_vi2c_writebyte(dev, addr);
+    bus_vi2c_writebyte(dev, addr, clk);
 	
-    res = bus_vi2c_wait_ack(dev);
+    res = bus_vi2c_wait_ack(dev, clk);
 	if (res == 1) return 1;
 	
     i = 0;
@@ -365,8 +370,8 @@ s32 bus_vi2c_transfer(DevI2cNode *node, u8 addr, u8 rw, u8* data, s32 datalen)
     if (rw == MCU_I2C_MODE_W) {
 	    while(i < datalen) {
             ch = *(data+i);
-            bus_vi2c_writebyte(dev, ch);
-            res = bus_vi2c_wait_ack(dev);
+            bus_vi2c_writebyte(dev, ch, clk);
+            res = bus_vi2c_wait_ack(dev, clk);
 			if (res == 1)
 				return 1;
 			
@@ -374,15 +379,15 @@ s32 bus_vi2c_transfer(DevI2cNode *node, u8 addr, u8 rw, u8* data, s32 datalen)
 	    }
     } else if (rw == MCU_I2C_MODE_R) {
        	while(i < datalen) {
-            ch = bus_vi2c_readbyte(dev);  
-            bus_vi2c_ack(dev);
+            ch = bus_vi2c_readbyte(dev, clk);  
+            bus_vi2c_ack(dev, clk);
             *(data+i) = ch;
 			i++;
 	    }
     }
 
     //发送结束
-    bus_vi2c_stop(dev);
+    bus_vi2c_stop(dev, clk);
     return 0;
 }
 
@@ -395,23 +400,23 @@ s32 mcu_vi2c_transfer_reg(DevI2c *dev, u8 addr, u8* reg, u8 reglen, u8 rw, u8* d
     u8 ch;
 	s32 res;
 	u8 addr_tmp;
-
+	uint16_t khz = 200;
     //发送起始
-    bus_vi2c_start(dev);
+    bus_vi2c_start(dev, khz);
    
 	addr_tmp = ((addr<<1)&0xfe);
 	
-    bus_vi2c_writebyte(dev,addr_tmp);
+    bus_vi2c_writebyte(dev,addr_tmp, khz);
 	
-    res = bus_vi2c_wait_ack(dev);
+    res = bus_vi2c_wait_ack(dev, khz);
 	if(res == 1)
 		return 1;
 	
     i = 0;
 	while(i < reglen) {
 		ch = *(reg+i);
-        bus_vi2c_writebyte(dev,ch);
-        res = bus_vi2c_wait_ack(dev);
+        bus_vi2c_writebyte(dev,ch, khz);
+        res = bus_vi2c_wait_ack(dev, khz);
 		if(res == 1)
 			return 1;
 
@@ -424,8 +429,8 @@ s32 mcu_vi2c_transfer_reg(DevI2c *dev, u8 addr, u8* reg, u8 reglen, u8 rw, u8* d
     {
 	    while(i < datalen)	{
             ch = *(data+i);
-            bus_vi2c_writebyte(dev,ch);
-            res = bus_vi2c_wait_ack(dev);
+            bus_vi2c_writebyte(dev,ch, khz);
+            res = bus_vi2c_wait_ack(dev, khz);
 			if(res == 1)
 				return 1;
 			
@@ -433,23 +438,23 @@ s32 mcu_vi2c_transfer_reg(DevI2c *dev, u8 addr, u8* reg, u8 reglen, u8 rw, u8* d
 	    }
     } else if(rw == MCU_I2C_MODE_R) {
 		//读
-		bus_vi2c_start(dev);
+		bus_vi2c_start(dev, khz);
 		addr_tmp = ((addr<<1)|0x01);
-    	bus_vi2c_writebyte(dev,addr_tmp);
-    	res = bus_vi2c_wait_ack(dev);
+    	bus_vi2c_writebyte(dev,addr_tmp, khz);
+    	res = bus_vi2c_wait_ack(dev, khz);
 		if(res == 1)
 			return 1;
 
        	while(i < datalen) {
-            ch = bus_vi2c_readbyte(dev);  
-            bus_vi2c_ack(dev);
+            ch = bus_vi2c_readbyte(dev, khz);  
+            bus_vi2c_ack(dev, khz);
             *(data+i) = ch;
 			i++;
 	    }
     }
 
     //发送结束
-    bus_vi2c_stop(dev);
+    bus_vi2c_stop(dev, khz);
     return 0;
 }
 

@@ -65,7 +65,7 @@ static uint8_t OV2640_WriteReg(uint16_t Addr, uint8_t Data)
 
 	uint8_t buf[2];
 
-  	node = bus_i2c_open(DEV_CAMERA_I2CBUS, 0xffffffff);
+  	node = bus_i2c_open(DEV_CAMERA_I2CBUS, 0xffffffff, 200);
 	#if 1
 	buf[0] = Addr;
 	buf[1] = Data;
@@ -91,7 +91,7 @@ static uint8_t OV2640_ReadReg(uint16_t Addr)
 	DevI2cNode *node;
 	uint8_t res;
 	
-	node = bus_i2c_open(DEV_CAMERA_I2CBUS, 0xffffffff);
+	node = bus_i2c_open(DEV_CAMERA_I2CBUS, 0xffffffff, 200);
 
 	#if 1
 	uint8_t buf[2];

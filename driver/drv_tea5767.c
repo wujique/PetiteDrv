@@ -60,7 +60,7 @@ u8 tea5767_initbuf[5]={0xaa,0xb6,0x51,0x11,0x40};//静音，上电初始化
 static s32 dev_tea5767_readreg(u8* data)
 {
 	DevI2cNode *dev;
-	dev = bus_i2c_open(Tea5767I2c, 0xffffffff);
+	dev = bus_i2c_open(Tea5767I2c, 0xffffffff, 200);
 	bus_i2c_transfer(dev, DEV_TEA5767_I2CC_ADDR, MCU_I2C_MODE_R, data, 5);
 	bus_i2c_close(dev);	
 	return 0;
@@ -69,7 +69,7 @@ static s32 dev_tea5767_writereg(u8* data)
 {
 	DevI2cNode *dev;
 
-	dev = bus_i2c_open(Tea5767I2c, 0xfffffff);
+	dev = bus_i2c_open(Tea5767I2c, 0xfffffff, 200);
     bus_i2c_transfer(dev, DEV_TEA5767_I2CC_ADDR, MCU_I2C_MODE_W, data, 5);
 	bus_i2c_close(dev);
 	return 0;	

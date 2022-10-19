@@ -95,10 +95,11 @@ s32 bus_i2c_register(const DevI2c * dev)
  *@details:    根据名字打开一个i2c接口
  *@param[in]   name 设备名称
  			   wait 等待时间，单位ms, 0xffffffff 永远
+ 			   clk 时钟频率， 单位kHZ
  *@param[out]  无
  *@retval:     返回设备节点
  */
-DevI2cNode *bus_i2c_open (char *name, uint32_t wait)
+DevI2cNode *bus_i2c_open (char *name, uint32_t wait, uint16_t clk)
 {
 
 	DevI2cNode *node;
@@ -132,7 +133,7 @@ DevI2cNode *bus_i2c_open (char *name, uint32_t wait)
 			//BUSI2C_DEBUG(LOG_INFO, "fail ");
 			node = NULL;
 		} else {
-			//node->clkkhz = 	kHZ;
+			node->clkkhz = 	clk;
 		}	
 	}
 	//BUSI2C_DEBUG(LOG_INFO, "open suc\r\n ");
@@ -149,9 +150,6 @@ s32 bus_i2c_close(DevI2cNode *node)
 {
 	if  (node == NULL) return -1;
 
-	//if (node->gd != 0) return -1;
-	//node->gd = -1; 
-	
 	//BUSI2C_DEBUG(LOG_INFO, "i2c close:%s!\r\n", node->dev.pnode.name);
 	osMutexRelease(node->mutex);
 

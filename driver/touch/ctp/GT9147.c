@@ -187,7 +187,7 @@ int gt9147_init(void)
 	reg[0] = GT9147_REG_PID>>8;
 	reg[1] = GT9147_REG_PID&0xff;
 	
-	node = bus_i2c_open("VI2C1", 0xffffffff);
+	node = bus_i2c_open("VI2C1", 0xffffffff, 200);
 	if (node ==NULL ) { 
 		uart_printf("gt9147 open i2c err!\r\n");
 		return -1;
@@ -273,7 +273,7 @@ int gt9147_task(void)
 
 	/*  应该等待多少时间超时？等太久，会卡住board task
 		不等，会不会经常获取不到I2C,造成触摸屏失效？*/
-	node = bus_i2c_open("VI2C1", 2);
+	node = bus_i2c_open("VI2C1", 2, 200);
 	if (node ==NULL ) { 
 		//uart_printf("gt9147 open i2c err!\r\n");
 		return -1;
