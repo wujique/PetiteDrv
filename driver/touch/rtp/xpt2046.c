@@ -179,7 +179,7 @@ void dev_xpt2046_task(void)
 	
 	/*------------------------*/
 	
-	Xpt2046SpiCHNode = bus_spich_open(XPT2046_SPI, SPI_MODE_0, XPT2046_SPI_KHZ);
+	Xpt2046SpiCHNode = bus_spich_open(XPT2046_SPI, SPI_MODE_0, XPT2046_SPI_KHZ, 0xffffffff);
 
 	if(Xpt2046SpiCHNode == NULL) return;
 	

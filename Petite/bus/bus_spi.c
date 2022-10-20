@@ -20,6 +20,8 @@
 		8 一切解释权归屋脊雀工作室所有。
 */
 #include "mcu.h"
+#include "cmsis_os.h"
+
 #include "log.h"
 
 #include "board_sysconf.h"
@@ -53,9 +55,6 @@ s32 bus_spi_register(const DevSpi *dev)
 	
 	wjq_log(LOG_INFO, "[register] spi :%s!\r\n", dev->pnode.name);
 
-	/*
-		先要查询当前，防止重名
-	*/
 	listp = DevSpiRoot.next;
 	while(1) {
 		if (listp == &DevSpiRoot) break;
@@ -75,12 +74,17 @@ s32 bus_spi_register(const DevSpi *dev)
 	list_add(&(p->list), &DevSpiRoot);
 
 	memcpy((u8 *)&p->dev, (u8 *)dev, sizeof(DevSpi));
-	
+
 	/*初始化*/
 	if (dev->pnode.type == BUS_SPI_V)
 		bus_vspi_init(dev);
 	else if (dev->pnode.type == BUS_SPI_H)
 		mcu_hspi_init(dev);
+
+	p->mutex = osMutexNew(NULL);
+	if (p->mutex == NULL) {
+		BUSSPI_DEBUG(LOG_DEBUG, "mutex new err!\r\n");
+	}
 	
 	p->gd = -1;
 	
@@ -162,13 +166,13 @@ s32 bus_spich_register(const DevSpiCh *dev)
  *@retval:     
  			   打开一次SPI，在F407上大概要2us
  */
-DevSpiChNode *bus_spich_open(char *name, SPI_MODE mode, u16 KHz)
+DevSpiChNode *bus_spich_open(char *name, SPI_MODE mode, u16 KHz,  uint32_t wait)
 {
 
 	s32 res;
 	DevSpiChNode *node;
 	struct list_head *listp;
-	
+	osStatus_t osres;
 	BUSSPI_DEBUG(LOG_INFO, "spi ch open:%s!\r\n", name);
 
 	listp = DevSpiChRoot.next;
@@ -196,12 +200,19 @@ DevSpiChNode *bus_spich_open(char *name, SPI_MODE mode, u16 KHz)
 			BUSSPI_DEBUG(LOG_INFO, "spi ch open err:using!\r\n");
 			node = NULL;
 		} else {
-			/*打开SPI控制器*/
-			if (node->spi->dev.pnode.type == BUS_SPI_H) {
-				res = mcu_hspi_open(node->spi, mode, KHz);	
-			} else if(node->spi->dev.pnode.type == BUS_SPI_V) {
-				res = bus_vspi_open(node->spi, mode, KHz);	
-			}
+			osres = osMutexAcquire(node->spi->mutex, wait);
+			if ( osOK != osres) {
+				node = NULL;
+			} else {
+				node->spi->clk = KHz;
+				node->spi->mode = mode;
+
+				/*打开SPI控制器*/
+				if (node->spi->dev.pnode.type == BUS_SPI_H) {
+					res = mcu_hspi_open(node->spi, mode, KHz);	
+				} else if(node->spi->dev.pnode.type == BUS_SPI_V) {
+					res = bus_vspi_open(node->spi, mode, KHz);	
+				}
 
 			if (res == 0) {
 				node->gd = 0;
@@ -210,7 +221,9 @@ DevSpiChNode *bus_spich_open(char *name, SPI_MODE mode, u16 KHz)
 			} else {
 				BUSSPI_DEBUG(LOG_INFO, "spi dev open err!\r\n");
 				node = NULL;
-			}
+					osMutexRelease(node->spi->mutex);
+				}
+			}	
 		}
 	}else {
 		BUSSPI_DEBUG(LOG_INFO, "         spi ch no exist!\r\n");	
@@ -227,6 +240,11 @@ DevSpiChNode *bus_spich_open(char *name, SPI_MODE mode, u16 KHz)
  */
 s32 bus_spich_close(DevSpiChNode * node)
 {
+	//wjq_log(LOG_INFO, "[c:%s]", node->dev.pnode.name);
+
+	if (node == NULL) return -1;
+	if(node->gd != 0) return -1;
+
 	if(node->spi->dev.pnode.type == BUS_SPI_H){
 		mcu_hspi_close(node->spi);
 	}else
@@ -234,8 +252,11 @@ s32 bus_spich_close(DevSpiChNode * node)
 	
 	/*拉高CS*/
 	mcu_io_output_setbit(node->dev.csport, node->dev.cspin);
+
 	node->gd = -1;
- 
+	
+ 	osMutexRelease(node->spi->mutex);
+
 	return 0;
 }
 /**
@@ -299,7 +320,7 @@ void spi_example(void)
 	
 	Uprintf("\r\n----------test spi -----------\r\n");
 	/*打开SPI通道*/
-	spichnode = bus_spich_open("SPI3_CH3", SPI_MODE_1, 40000);
+	spichnode = bus_spich_open("SPI3_CH3", SPI_MODE_1, 40000, 0xffffffff);
 	if (spichnode == NULL) {
 		while(1);
 	}

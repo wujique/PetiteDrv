@@ -99,12 +99,6 @@ s32 bus_vspi_open(DevSpiNode *node, SPI_MODE mode, u16 KHz)
 		return -1;
 	}
 	
-	//VSPI_DEBUG(LOG_DEBUG, "vo-");
-	/* 根据传入的参数KHz，转换为程序延时参数
-	   当前固定为2
-	*/
-	node->clk = McuDelayUs*1000/KHz;
-	//uart_printf("%d ", node->clk);
 	node->gd = 0;
 		
     return 0;

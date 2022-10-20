@@ -3,6 +3,7 @@
 
 #include "mem/p_list.h"
 #include "petite_def.h"
+#include "cmsis_os.h"
 
 /*
 	SPI 分两层，
@@ -32,9 +33,12 @@ typedef struct
 	s32 gd;
 	/*控制器硬件信息，初始化控制器时拷贝设备树的信息到此*/
 	DevSpi dev;	
+
+	osMutexId_t mutex;
 	
 	/*模拟SPI的时钟分频设置*/
 	u16 clk;
+	SPI_MODE mode;
 	/*链表*/
 	struct list_head list;
 }DevSpiNode;
@@ -75,7 +79,7 @@ typedef struct{
 extern s32 bus_spi_register(const DevSpi *dev);
 extern s32 bus_spich_register(const DevSpiCh *dev);
 
-extern DevSpiChNode *bus_spich_open(char *name, SPI_MODE mode, u16 KHz);
+extern DevSpiChNode *bus_spich_open(char *name, SPI_MODE mode, u16 KHz,  uint32_t wait);
 extern s32 bus_spich_close(DevSpiChNode * node);
 extern s32 bus_spich_transfer(DevSpiChNode * node, u8 *snd, u8 *rsv, s32 len);
 extern s32 bus_spich_cs(DevSpiChNode * node, u8 sta);

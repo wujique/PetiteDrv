@@ -122,7 +122,7 @@ DevLcdNode *bus_lcd_open(DevLcdNode *lcd)
 		bus_clk = spi_pra->KHz;
 		spi_mode = spi_pra->mode;
 		
-		lcd->basenode = (void *)bus_spich_open(busname, spi_mode, bus_clk);
+		lcd->basenode = (void *)bus_spich_open(busname, spi_mode, bus_clk, 0xffffffff);
 
 	} else if (type == BUS_LCD_I2C) {
 		/*todo I2C频率配置 */
@@ -249,16 +249,7 @@ s32 bus_lcd_w_data(DevLcdNode *lcd, u16 color, u32 len)
 
 	switch(type)
 	{
-		case BUS_LCD_SPI:
-		{
 
-		}
-		break;
-		case BUS_LCD_I2C:
-		{
-
-		}
-		break;
 		case BUS_LCD_8080:			
 		{
 			#if (PETITE_BUS_LCD_8080 == 1)

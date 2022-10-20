@@ -75,6 +75,8 @@ void cpu_rtc(void)
 	HAL_RTC_GetDate(&hrtc, &sDate, RTC_FORMAT_BIN);
 }
 
+DevLcdNode *LcdOledI2C = NULL;
+
 void cuckoo_test_lcd(void)
 {
 	#if 0//test
@@ -92,7 +94,7 @@ void cuckoo_test_lcd(void)
 
 	#endif
 
-	#if 1//test
+	#if 0//test
 	DevLcdNode *LcdCogSpi = NULL;
 	wjq_log(LOG_FUN, "cog lcd test\r\n");
 	LcdCogSpi = lcd_open("spicoglcd");
@@ -147,29 +149,29 @@ void cuckoo_test_lcdtask(uint8_t b)
 	//fill_rgb565buf(RGB565_480x272_PIC,0,0,480, 272);
 	//HAL_Delay(1000);
 #endif
-#if 0
-	switch (b) {
+#if 1
+	switch (b%4) {
+		case 0:
+			display_lcd_put_string(LcdOledI2C, "WQY_ST_12_H", 1,1, "111111111111111111111111", BLACK);
+			display_lcd_put_string(LcdOledI2C, "WQY_ST_12_H", 1,30, "www.wujique.com", BLACK);
+			lcd_update(LcdOledI2C);
+			break;
 		case 1:
-			dev_lcd_put_string(LcdOledI2C, "WQY_ST_12_H", 10,1, "111111111111111111111111", BLACK);
-			dev_lcd_put_string(LcdOledI2C, "WQY_ST_12_H", 10,30, "www.wujique.com", BLACK);
-			dev_lcd_update(LcdOledI2C);
+			display_lcd_put_string(LcdOledI2C, "WQY_ST_12_H", 1,1, "2222222222222222222222222222222", BLACK);
+			display_lcd_put_string(LcdOledI2C, "WQY_ST_12_H", 1,30, "www.wujique.com", BLACK);
+			lcd_update(LcdOledI2C);
 			break;
 		case 2:
-			dev_lcd_put_string(LcdOledI2C, "WQY_ST_12_H", 10,1, "2222222222222222222222222222222", BLACK);
-			dev_lcd_put_string(LcdOledI2C, "WQY_ST_12_H", 10,30, "www.wujique.com", BLACK);
-			dev_lcd_update(LcdOledI2C);
+			display_lcd_put_string(LcdOledI2C, "WQY_ST_12_H", 1,1, "33333333333333333333333333333333", BLACK);
+			display_lcd_put_string(LcdOledI2C, "WQY_ST_12_H", 1,30, "www.wujique.com", BLACK);
+			lcd_update(LcdOledI2C);
 			break;
 		case 3:
-			dev_lcd_put_string(LcdOledI2C, "WQY_ST_12_H", 10,1, "33333333333333333333333333333333", BLACK);
-			dev_lcd_put_string(LcdOledI2C, "WQY_ST_12_H", 10,30, "www.wujique.com", BLACK);
-			dev_lcd_update(LcdOledI2C);
-			break;
-		case 4:
-			dev_lcd_put_string(LcdOledI2C, "WQY_ST_12_H", 10,1, "4444444444444444444444444444444", BLACK);
-			dev_lcd_put_string(LcdOledI2C, "WQY_ST_12_H", 10,30, "www.wujique.com", BLACK);
-			dev_lcd_update(LcdOledI2C);
+			display_lcd_put_string(LcdOledI2C, "WQY_ST_12_H", 1,1, "4444444444444444444444444444444", BLACK);
+			display_lcd_put_string(LcdOledI2C, "WQY_ST_12_H", 1,30, "www.wujique.com", BLACK);
+			lcd_update(LcdOledI2C);
 		default:
-			b = 0;
+
 			break;
 	}
 #endif
@@ -184,7 +186,7 @@ const VFSDIR SdFatFs=
 	SYS_FS_FATFS_SD
 };
 
-DevLcdNode *LcdOledI2C = NULL;
+
 void cuckoo_7b0_test(void)
 {
 	
@@ -204,13 +206,12 @@ void cuckoo_7b0_test(void)
 	vfs_add_node(&SdFatFs);
 
 	//cuckoo_test_lcd();
-	DevLcdNode *LcdCogSpi = NULL;
-	LcdCogSpi = lcd_open("spicoglcd");
+	LcdOledI2C = lcd_open("spicoglcd");
 	//LcdCogSpi = lcd_open("i2coledlcd");
-	//font_unicode_bitmap_test(LcdCogSpi);
-	//FreeTypeTest(LcdCogSpi);
+	//font_unicode_bitmap_test(LcdOledI2C);
+	//FreeTypeTest(LcdOledI2C);
 	
-	emenu_test(LcdCogSpi);
+	//emenu_test(LcdOledI2C);
 	
 	/* 初始化lvgl 
 	注意，初始化LVGL的过程，会用到不少栈，
@@ -249,7 +250,7 @@ void cuckoo_7b0_test(void)
 		
 		if (a % 500 == 0) {
 			b++;
-			//cuckoo_test_lcdtask(b);
+			cuckoo_test_lcdtask(b);
 			
 		}
 
