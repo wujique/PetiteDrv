@@ -37,6 +37,8 @@ typedef enum{
 	FONT_DOT_ZY,	
 	/* 使用易木雨工作室软件 制作的点阵 */
 	FONT_DOT_YMY,
+	/* bmp 贴图式点阵 */
+	FONT_DOT_BMP,
 }FontStcType;
 
 	
@@ -70,7 +72,7 @@ typedef enum{
 	每个字符的bitmap都有一个头，
 	为了取点阵方便，头长度是固定的，所有将所有的头放在一起            	*/
 struct _strBitmapHead{
-	uint16_t rev;//保留字节，默认是回车换行，为了4字节对齐而定义
+	uint16_t adv_w;//字宽，其实就是字号，比如9pt，相当于 汉字1212，ASC1206
 	/* 以下五个数据在LCD描字时需要 */
 	uint16_t rows;//bitmap行数
 	uint16_t width;//bitmap宽度，单位像素

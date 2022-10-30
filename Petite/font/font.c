@@ -215,6 +215,7 @@ int font_getdot(void *fontstr_in, char *Ch, FontBitMap *Dot, char *CodeType)
 	if(area == ASC_AREA) {
 		#if 1
 		if (font->size == 12) {
+			#if 1
 			fp = (u8*)(font_vga_6x12.path) + chcode * font_vga_6x12.size;
 			memcpy(Dot->dot, fp, font_vga_6x12.size);
 			
@@ -223,6 +224,10 @@ int font_getdot(void *fontstr_in, char *Ch, FontBitMap *Dot, char *CodeType)
 			Dot->head.pitch = 1;
 			Dot->head.left = 0;
 			Dot->head.top = 10;
+			#else
+			/* 内置的1206英文点阵*/
+			font_bmp_getdata(&(Dot->head) ,Dot->dot, chcode);
+			#endif
 			
 			Dot->dt = FONT_H_H_L_R_U_D;
 		} else {
@@ -259,7 +264,9 @@ int font_getdot(void *fontstr_in, char *Ch, FontBitMap *Dot, char *CodeType)
 		case FONT_DOT_YMY:
 			//addr = font_dot_ymy_addr(font, Ch, area);
 			break;
-
+		case FONT_DOT_BMP:
+			break;
+			
 		default:
 			addr = -1;
 			break;
@@ -344,6 +351,13 @@ int font_get_bitmap()
 	GBK unicode, big5
 	*/
 
+void font_test(void)
+{
+/*
+	英文所有字符
+	
+	!"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
+*/
 
-
+}
 

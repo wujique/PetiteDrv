@@ -163,9 +163,67 @@ int font_bitmap_getdata(struct _strBitmapHead* head, uint8_t *dotbuf, uint16_t u
 	return 0;
 }
 
+int font_bitmap_get_head(struct _strBitmapHead* head, uint16_t unicode)
+{
+	int uindex;
+	int rlen = 0;
+	
+	uindex = font_find_index(unicode);
+	if (uindex == -1){
+		return -1;
+	}
+	/* 读头 */
+	vfs_lseek(fd_fontfile, BitmapFontHead.bitmap_head + uindex*sizeof(struct _strBitmapHead), 0);
+	rlen = vfs_read(fd_fontfile, head, sizeof(struct _strBitmapHead));
+
+	return 0;
+}
+
+
+int font_bitmap_get_str_width(uint16_t *unicodestr)
+{
+	uint16_t *pStr;
+	uint16_t lcdx,lcdy;
+	//uint8_t row, col,yshift;
+	//uint8_t dotdata;
+	struct _strBitmapHead BitmapHead;
+	int tmp;
+	
+	pStr = unicodestr;
+
+	lcdx = 0;
+	lcdy = 0;
+
+	while((*pStr) != 0){
+
+		if(*pStr == 0x00d){
+			break;	
+		}else if (*pStr == 0x00a){
+			break;
+		}
+		
+		font_bitmap_get_head(&BitmapHead, *pStr);
+
+	#if 0
+		uart_printf("\r\nrows:%d\r\n", BitmapHead.rows);
+		uart_printf("width:%d\r\n", BitmapHead.width);
+		uart_printf("pitch:%d\r\n", BitmapHead.pitch);
+		uart_printf("left:%d\r\n", BitmapHead.left);
+		uart_printf("top:%d\r\n", BitmapHead.top);
+		uart_printf("index:%d\r\n", BitmapHead.index);
+	#endif
+		tmp = BitmapHead.left + BitmapHead.width;
+		if (tmp > 0 )
+			lcdx += tmp;
+
+		pStr++;
+	}
+
+	return lcdx;
+}
 
 /*--------------------以下为测试程序 ------------------------*/
-#if 0
+#if 1
 
 /* 
 	在指定位置显示字符串
@@ -253,7 +311,7 @@ int font_bitmap_showstr_unicode(DevLcdNode *lcd, uint16_t x, uint16_t y, uint16_
 int font_bitmap_showstr_ansi(DevLcdNode *lcd, uint16_t x, uint16_t y, char *str)
 {
 	char *pStr;
-	uint16_t lcdx,lcdy;
+	uint16_t lcdx,lcdy, disx;
 	uint8_t row, col,yshift;
 	uint8_t dotdata;
 	struct _strBitmapHead BitmapHead;
@@ -280,7 +338,7 @@ int font_bitmap_showstr_ansi(DevLcdNode *lcd, uint16_t x, uint16_t y, char *str)
 		uart_printf("index:%d\r\n", BitmapHead.index);
 		
 		/* 填点 left 和 top 两个参数都会出现负数 */
-		lcdx += BitmapHead.left;
+		disx = lcdx + BitmapHead.left;
 		
 		if (BitmapHead.top > BASE_LINE) yshift = 0;
 		else yshift = BASE_LINE - BitmapHead.top;
@@ -295,16 +353,17 @@ int font_bitmap_showstr_ansi(DevLcdNode *lcd, uint16_t x, uint16_t y, char *str)
 				
 				if((dotdata & (0x80>>(col%8)) )!=0 ){
 					//uart_printf("*");
-					drv_ST7565_drawpoint(lcd, lcdx + col, lcdy + row + yshift, BLACK);
+					drv_ST7565_drawpoint(lcd, disx + col, lcdy + row + yshift, BLACK);
 				}else{
 					//uart_printf("-");
-					drv_ST7565_drawpoint(lcd, lcdx + col, lcdy + row + yshift, WHITE);
+					drv_ST7565_drawpoint(lcd, disx + col, lcdy + row + yshift, WHITE);
 				}
 			}
 			//uart_printf("\r\n");
 		}
+
 		
-		lcdx += BitmapHead.width;
+		lcdx += BitmapHead.left + BitmapHead.width;
 
 		pStr++;
 	}
@@ -314,33 +373,58 @@ int font_bitmap_showstr_ansi(DevLcdNode *lcd, uint16_t x, uint16_t y, char *str)
 	
 	return 0;
 }
-
+/*
+	!"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
+	*/
 char teststr1[]="The Test agkl!";
 char teststr2[]="This aglj sS!";
 char teststr3[]="0123456789";
 char teststr4[]="!\"#$%&'()*+,-./";
 char teststr5[]=":;<=>?@[\\]^_`{|}~";
 
-uint16_t thai[4];
+uint16_t thai[16];
 
-void font_unicode_bitmap_test(DevLcdNode *lcd)
+void font_unicode_bitmap_test1(DevLcdNode *lcd)
 {
+	int strw;
+	
 	font_unicode_bitmap_init();
 	font_bitmap_showstr_ansi(lcd, 0, 0, teststr1);
 	font_bitmap_showstr_ansi(lcd, 0, (LINE_HIGHT+1)*1, teststr2);
 	font_bitmap_showstr_ansi(lcd, 0, (LINE_HIGHT+1)*2, teststr3);
-	//font_bitmap_showstr_ansi(lcd, 0, (LINE_HIGHT+1)*3, teststr4);
-	//font_bitmap_showstr_ansi(lcd, 0, (LINE_HIGHT+1)*4, teststr5);
+	font_bitmap_showstr_ansi(lcd, 0, (LINE_HIGHT+1)*3, teststr4);
+	font_bitmap_showstr_ansi(lcd, 0, (LINE_HIGHT+1)*4, teststr5);
 
-	thai[0] = 0X0E01;
-	thai[1] = 0X0E4C;
-	font_bitmap_showstr_unicode(lcd, 0, (LINE_HIGHT+1)*3, thai);
+	#if 0
+	//thai[0] = 0X0E01;
+	//thai[1] = 0X0E4C;
+	//thai[2] = 0X0E01;
+	//thai[3] = 0X0E4C;
+	
+	thai[0] = 0X61;
+	thai[1] = 0X61;
+	thai[2] = 0X61;
+	thai[3] = 0X61;
+	thai[4] = 0x42;
+	thai[5] = 0x43;
+	thai[6] = 0x45;
+	thai[7] = 0x62;
+	thai[8] = 0;
+	strw = font_bitmap_get_str_width(thai);
+	uart_printf("strw:%d\r\n", strw);
+	if (strw > lcd->width) strw = 0;
+	else strw = (lcd->width - strw)/2;
+	font_bitmap_showstr_unicode(lcd, strw, (LINE_HIGHT+1)*3, thai);
+	#endif
+	#if 0
 	thai[0] = 0X0E01;
 	thai[1] = 0X0000;
 	font_bitmap_showstr_unicode(lcd, 32, (LINE_HIGHT+1)*3, thai);
 	thai[0] = 0X0E4C;
 	thai[1] = 0X000;
 	font_bitmap_showstr_unicode(lcd, 64, (LINE_HIGHT+1)*3, thai);
+	#endif
+	
 	while(1){
 		osDelay(1000);
 	}
@@ -350,12 +434,12 @@ void font_unicode_bitmap_test(DevLcdNode *lcd)
 /*
 	按顺序将整个字库打印出来
 	*/
-void font_unicode_bitmap_test1(DevLcdNode *lcd)
+void font_unicode_bitmap_test(DevLcdNode *lcd)
 {
 	int res;
 	int rlen = 0;
 	int uindex;
-	uint16_t lcdx,lcdy;
+	uint16_t lcdx,lcdy,disx;
 	uint8_t row, col,yshift;
 	uint8_t dotdata;
 	struct _strBitmapHead BitmapHead;
@@ -405,7 +489,7 @@ void font_unicode_bitmap_test1(DevLcdNode *lcd)
 		if (BitmapHead.left < 0 || BitmapHead.top < 0){
 			uart_printf("left:%d, top:%d\r\n", BitmapHead.left, BitmapHead.top);
 		}
-		lcdx += BitmapHead.left;
+		disx =lcdx + BitmapHead.left;
 		
 		if (BitmapHead.top > BASE_LINE) yshift = 0;
 		else yshift = BASE_LINE - BitmapHead.top;
@@ -419,17 +503,17 @@ void font_unicode_bitmap_test1(DevLcdNode *lcd)
 				
             	if((dotdata & (0x80>>(col%8)) )!=0 ){
                 	//uart_printf("*");
-					drv_ST7565_drawpoint(lcd, lcdx + col, lcdy + row + yshift, BLACK);
+					drv_ST7565_drawpoint(lcd, disx + col, lcdy + row + yshift, BLACK);
             	}else{
                 	//uart_printf("-");
-					drv_ST7565_drawpoint(lcd, lcdx + col, lcdy + row + yshift, WHITE);
+					drv_ST7565_drawpoint(lcd, disx + col, lcdy + row + yshift, WHITE);
             	}
 			}
         	//uart_printf("\r\n");
     	}
 		
-		lcdx += BitmapHead.width;
-
+		lcdx += (BitmapHead.width + BitmapHead.left)+1;
+		//lcdx += 6;
     	//uart_printf(">>>>>>>>>>>>>>>>>>");
 	}
 

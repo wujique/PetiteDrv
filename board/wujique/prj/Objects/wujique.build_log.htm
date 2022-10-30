@@ -1,0 +1,522 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Tool Versions:</h2>
+IDE-Version: ¦ÌVision V5.34.0.0
+Copyright (C) 2021 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: xuejia huang, wujique, LIC=BUURY-IZDHD-GK2BG-VM25I-YHSEV-8L81P
+ 
+Tool Versions:
+Toolchain:       MDK-ARM Plus  Version: 5.34.0.0
+Toolchain Path:  C:\Keil_v5\ARM\ARMCC\Bin
+C Compiler:      Armcc.exe V5.06 update 7 (build 960)
+Assembler:       Armasm.exe V5.06 update 7 (build 960)
+Linker/Locator:  ArmLink.exe V5.06 update 7 (build 960)
+Library Manager: ArmAr.exe V5.06 update 7 (build 960)
+Hex Converter:   FromElf.exe V5.06 update 7 (build 960)
+CPU DLL:         SARMCM3.DLL V5.34.0.0
+Dialog DLL:      DCM.DLL V1.17.3.0
+Target DLL:      CMSIS_AGDI.dll V1.32.13.0
+Dialog DLL:      TCM.DLL V1.48.0.0
+ 
+<h2>Project:</h2>
+F:\PetiteDrv\prog\PetiteDrv\board\wujique\prj\wujique.uvprojx
+Project File Date:  10/30/2022
+
+<h2>Output:</h2>
+*** Using Compiler 'V5.06 update 7 (build 960)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
+Build target 'wujique'
+compiling drv_ILI9325.c...
+..\..\..\driver\lcd\drv_ILI9325.c(683): warning:  #223-D: function "bus_lcd_w_data" declared implicitly
+  	bus_lcd_w_data(node, color, cnt);
+..\..\..\driver\lcd\drv_ILI9325.c(665): warning:  #177-D: variable "i"  was declared but never referenced
+  	u16 i,j;
+..\..\..\driver\lcd\drv_ILI9325.c(665): warning:  #177-D: variable "j"  was declared but never referenced
+  	u16 i,j;
+..\..\..\driver\lcd\drv_ILI9325.c(707): warning:  #177-D: variable "i"  was declared but never referenced
+  	u16 i,j;
+..\..\..\driver\lcd\drv_ILI9325.c(707): warning:  #177-D: variable "j"  was declared but never referenced
+  	u16 i,j;
+..\..\..\driver\lcd\drv_ILI9325.c: 5 warnings, 0 errors
+compiling drv_IL91874.c...
+compiling drv_IL3820.c...
+compiling mcu_uart.c...
+..\..\..\mcu\stm32407\mcu_dev\mcu_uart.c(142): warning:  #940-D: missing return statement at end of non-void function "mcu_uart_open" 
+  }
+..\..\..\mcu\stm32407\mcu_dev\mcu_uart.c: 1 warning, 0 errors
+compiling drv_nt35510.c...
+..\..\..\driver\lcd\drv_nt35510.c(578): warning:  #223-D: function "bus_lcd_w_data" declared implicitly
+  	bus_lcd_w_data(node, color, cnt);
+..\..\..\driver\lcd\drv_nt35510.c(560): warning:  #177-D: variable "i"  was declared but never referenced
+  	u16 i,j;
+..\..\..\driver\lcd\drv_nt35510.c(560): warning:  #177-D: variable "j"  was declared but never referenced
+  	u16 i,j;
+..\..\..\driver\lcd\drv_nt35510.c(600): warning:  #177-D: variable "i"  was declared but never referenced
+  	u32 i,j;
+..\..\..\driver\lcd\drv_nt35510.c(600): warning:  #177-D: variable "j"  was declared but never referenced
+  	u32 i,j;
+..\..\..\driver\lcd\drv_nt35510.c: 5 warnings, 0 errors
+compiling drv_spiflash.c...
+..\..\..\driver\drv_spiflash.c(355): warning:  #223-D: function "strcmp" declared implicitly
+  		if (strcmp(name, node->dev.pnode.name) == 0) {
+..\..\..\driver\drv_spiflash.c(420): warning:  #223-D: function "strcmp" declared implicitly
+  		if (strcmp(dev->pnode.name, node->dev.pnode.name) == 0) {
+..\..\..\driver\drv_spiflash.c(432): warning:  #223-D: function "memcpy" declared implicitly
+  	memcpy((u8 *)&node->dev, (u8 *)dev, sizeof(DevSpiFlash));
+..\..\..\driver\drv_spiflash.c(609): warning:  #177-D: variable "i"  was declared but never referenced
+      u8 i = 1;
+..\..\..\driver\drv_spiflash.c(611): warning:  #177-D: variable "wbuf"  was declared but never referenced
+      u8 *wbuf;
+..\..\..\driver\drv_spiflash.c(277): warning:  #177-D: function "dev_spiflash_readMTD"  was declared but never referenced
+  static u32 dev_spiflash_readMTD(DevSpiFlashNode *node)
+..\..\..\driver\drv_spiflash.c: 6 warnings, 0 errors
+compiling drv_r61408.c...
+..\..\..\driver\lcd\drv_r61408.c(532): warning:  #223-D: function "bus_lcd_w_data" declared implicitly
+  	bus_lcd_w_data(node, color, cnt);
+..\..\..\driver\lcd\drv_r61408.c(514): warning:  #177-D: variable "i"  was declared but never referenced
+  	u16 i,j;
+..\..\..\driver\lcd\drv_r61408.c(514): warning:  #177-D: variable "j"  was declared but never referenced
+  	u16 i,j;
+..\..\..\driver\lcd\drv_r61408.c(554): warning:  #177-D: variable "i"  was declared but never referenced
+  	u32 i,j;
+..\..\..\driver\lcd\drv_r61408.c(554): warning:  #177-D: variable "j"  was declared but never referenced
+  	u32 i,j;
+..\..\..\driver\lcd\drv_r61408.c: 5 warnings, 0 errors
+compiling drv_st7735r.c...
+compiling drv_ILI9341.c...
+..\..\..\driver\lcd\drv_ILI9341.c(532): warning:  #223-D: function "bus_lcd_w_data" declared implicitly
+  	bus_lcd_w_data(node, color, cnt);
+..\..\..\driver\lcd\drv_ILI9341.c(514): warning:  #177-D: variable "i"  was declared but never referenced
+  	u16 i,j;
+..\..\..\driver\lcd\drv_ILI9341.c(514): warning:  #177-D: variable "j"  was declared but never referenced
+  	u16 i,j;
+..\..\..\driver\lcd\drv_ILI9341.c(555): warning:  #177-D: variable "i"  was declared but never referenced
+  	u32 i,j;
+..\..\..\driver\lcd\drv_ILI9341.c(555): warning:  #177-D: variable "j"  was declared but never referenced
+  	u32 i,j;
+..\..\..\driver\lcd\drv_ILI9341.c: 5 warnings, 0 errors
+compiling drv_st7789.c...
+compiling drv_lcd.c...
+..\..\..\driver\lcd\drv_lcd.c(198): warning:  #223-D: function "strcmp" declared implicitly
+  		if (strcmp(dev->pnode.name, lcdnode->dev.pnode.name) == 0) {
+..\..\..\driver\lcd\drv_lcd.c(211): warning:  #223-D: function "memcpy" declared implicitly
+  	memcpy((u8 *)&lcdnode->dev, (u8 *)dev, sizeof(DevLcd));
+..\..\..\driver\lcd\drv_lcd.c(216): warning:  #223-D: function "bus_lcd_IO_init" declared implicitly
+  	bus_lcd_IO_init(dev->bus);
+..\..\..\driver\lcd\drv_lcd.c(300): warning:  #223-D: function "strcmp" declared implicitly
+  		if (strcmp(name, node->dev.pnode.name) == 0) {
+..\..\..\driver\lcd\drv_lcd.c: 4 warnings, 0 errors
+compiling drv_str7565.c...
+..\..\..\driver\lcd\drv_str7565.c(217): warning:  #223-D: function "memset" declared implicitly
+  	memset((char*)lcd->pri, 0x00, sizeof(struct _cog_drv_data));
+..\..\..\driver\lcd\drv_str7565.c(255): warning:  #177-D: variable "node"  was declared but never referenced
+  	DevLcdNode * node = lcd;
+..\..\..\driver\lcd\drv_str7565.c(389): warning:  #550-D: variable "ylen"  was set but never used
+  	u16 xlen,ylen;
+..\..\..\driver\lcd\drv_str7565.c(483): warning:  #177-D: variable "i"  was declared but never referenced
+  	u16 i,j;
+..\..\..\driver\lcd\drv_str7565.c(483): warning:  #177-D: variable "j"  was declared but never referenced
+  	u16 i,j;
+..\..\..\driver\lcd\drv_str7565.c(637): warning:  #223-D: function "memset" declared implicitly
+  	memset((char*)lcd->pri, 0x00, sizeof(struct _cog_drv_data));
+..\..\..\driver\lcd\drv_str7565.c: 6 warnings, 0 errors
+compiling bus_lcd.c...
+..\..\..\driver\lcd\bus_lcd.c(49): warning:  #223-D: function "mcu_io_config_out" declared implicitly
+  		mcu_io_config_out(bus->A0port,bus->A0pin);
+..\..\..\driver\lcd\bus_lcd.c(50): warning:  #223-D: function "mcu_io_output_setbit" declared implicitly
+  		mcu_io_output_setbit(bus->A0port,bus->A0pin);
+..\..\..\driver\lcd\bus_lcd.c(54): warning:  #223-D: function "mcu_io_config_out" declared implicitly
+  		mcu_io_config_out(bus->rstport,bus->rstpin);
+..\..\..\driver\lcd\bus_lcd.c(55): warning:  #223-D: function "mcu_io_output_setbit" declared implicitly
+  		mcu_io_output_setbit(bus->rstport,bus->rstpin);
+..\..\..\driver\lcd\bus_lcd.c(59): warning:  #223-D: function "mcu_io_config_out" declared implicitly
+  		mcu_io_config_out(bus->blport,bus->blpin);
+..\..\..\driver\lcd\bus_lcd.c(60): warning:  #223-D: function "mcu_io_output_setbit" declared implicitly
+  		mcu_io_output_setbit(bus->blport,bus->blpin);
+..\..\..\driver\lcd\bus_lcd.c(76): warning:  #223-D: function "mcu_io_output_setbit" declared implicitly
+  		mcu_io_output_setbit(bus->blport, bus->blpin);
+..\..\..\driver\lcd\bus_lcd.c(78): warning:  #223-D: function "mcu_io_output_resetbit" declared implicitly
+  		mcu_io_output_resetbit(bus->blport, bus->blpin);	
+..\..\..\driver\lcd\bus_lcd.c(95): warning:  #223-D: function "mcu_io_output_setbit" declared implicitly
+  		mcu_io_output_setbit(bus->rstport, bus->rstpin);
+..\..\..\driver\lcd\bus_lcd.c(97): warning:  #223-D: function "mcu_io_output_resetbit" declared implicitly
+  		mcu_io_output_resetbit(bus->rstport, bus->rstpin);	
+..\..\..\driver\lcd\bus_lcd.c(211): warning:  #223-D: function "memcpy" declared implicitly
+  			memcpy(&tmp[1], data, len);
+..\..\..\driver\lcd\bus_lcd.c(343): warning:  #223-D: function "mcu_io_output_resetbit" declared implicitly
+  			mcu_io_output_resetbit(bus->A0port, bus->A0pin);
+..\..\..\driver\lcd\bus_lcd.c(346): warning:  #223-D: function "mcu_io_output_setbit" declared implicitly
+  			mcu_io_output_setbit(bus->A0port, bus->A0pin);
+..\..\..\driver\lcd\bus_lcd.c: 13 warnings, 0 errors
+compiling camera_api.c...
+..\..\..\driver\camera\camera_api.c(102): warning:  #223-D: function "OV2640_Init" declared implicitly
+  		res = OV2640_Init();
+..\..\..\driver\camera\camera_api.c(109): warning:  #223-D: function "OV5640_Init" declared implicitly
+  		res = OV5640_Init();
+..\..\..\driver\camera\camera_api.c(130): warning:  #940-D: missing return statement at end of non-void function "camera_prob" 
+  }
+..\..\..\driver\camera\camera_api.c(169): warning:  #223-D: function "OV5640_Flash_Lamp" declared implicitly
+  		OV5640_Flash_Lamp(sw);
+..\..\..\driver\camera\camera_api.c: 4 warnings, 0 errors
+compiling audio_pipeline.c...
+..\..\..\driver\sound\audio_pipeline.c(91): warning:  #223-D: function "strcmp" declared implicitly
+  	if(0 == strcmp(anode->pipname, "wm8978")) {
+..\..\..\driver\sound\audio_pipeline.c(95): warning:  #223-D: function "dev_wm8978_inout" declared implicitly
+  		dev_wm8978_inout(WM8978_INPUT_DAC|WM8978_INPUT_AUX|WM8978_INPUT_ADC,
+..\..\..\driver\sound\audio_pipeline.c(98): warning:  #223-D: function "dev_wm8978_set_dataformat" declared implicitly
+  		dev_wm8978_set_dataformat(AUDIO_I2S_Phillips, anode->BitsPerSample);
+..\..\..\driver\sound\audio_pipeline.c(100): warning:  #223-D: function "mcu_i2s_dataformat" declared implicitly
+  		mcu_i2s_dataformat(anode->nSamplesPerSec, AUDIO_I2S_Phillips, anode->BitsPerSample);
+..\..\..\driver\sound\audio_pipeline.c(101): warning:  #223-D: function "mcu_i2s_dma_init" declared implicitly
+  		mcu_i2s_dma_init(anode->buf, anode->buflen);
+..\..\..\driver\sound\audio_pipeline.c(102): warning:  #223-D: function "mcu_i2s_dma_start" declared implicitly
+  		mcu_i2s_dma_start();//??????I2S??????	
+..\..\..\driver\sound\audio_pipeline.c(107): warning:  #223-D: function "dev_wm8960_open" declared implicitly
+  		dev_wm8960_open();
+..\..\..\driver\sound\audio_pipeline.c(109): warning:  #223-D: function "dev_wm8960_inout" declared implicitly
+  		dev_wm8960_inout(WM8978_INPUT_DAC|WM8978_INPUT_AUX|WM8978_INPUT_ADC,
+..\..\..\driver\sound\audio_pipeline.c(112): warning:  #223-D: function "dev_wm8960_set_dataformat" declared implicitly
+  		dev_wm8960_set_dataformat(AUDIO_I2S_Phillips, anode->BitsPerSample);
+..\..\..\driver\sound\audio_pipeline.c(115): warning:  #223-D: function "mcu_i2s_dataformat" declared implicitly
+  		mcu_i2s_dataformat(anode->nSamplesPerSec, AUDIO_I2S_Phillips, anode->BitsPerSample);
+..\..\..\driver\sound\audio_pipeline.c(116): warning:  #223-D: function "mcu_i2s_dma_init" declared implicitly
+  		mcu_i2s_dma_init(anode->buf, anode->buflen);
+..\..\..\driver\sound\audio_pipeline.c(118): warning:  #223-D: function "mcu_i2s_dma_start" declared implicitly
+  		mcu_i2s_dma_start();//??????I2S??????	
+..\..\..\driver\sound\audio_pipeline.c(130): warning:  #940-D: missing return statement at end of non-void function "audio_pipe_run" 
+  }
+..\..\..\driver\sound\audio_pipeline.c(135): warning:  #223-D: function "strcmp" declared implicitly
+  	if(0 == strcmp(anode->pipname, "wm8978")) {
+..\..\..\driver\sound\audio_pipeline.c(136): warning:  #223-D: function "mcu_i2s_dma_stop" declared implicitly
+  		mcu_i2s_dma_stop(); 
+..\..\..\driver\sound\audio_pipeline.c(142): warning:  #940-D: missing return statement at end of non-void function "audio_pipe_close" 
+  }
+..\..\..\driver\sound\audio_pipeline.c: 16 warnings, 0 errors
+compiling ts_calibrate.c...
+..\..\..\driver\touch\rtp\tslib\tests\ts_calibrate.c(50): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+          n += 1.0;
+..\..\..\driver\touch\rtp\tslib\tests\ts_calibrate.c(59): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+      if (det < 0.1 && det > -0.1) {
+..\..\..\driver\touch\rtp\tslib\tests\ts_calibrate.c(134): warning:  #223-D: function "ts_set_cal" declared implicitly
+  	ts_set_cal(&cal);
+..\..\..\driver\touch\rtp\tslib\tests\ts_calibrate.c: 3 warnings, 0 errors
+compiling touch.c...
+..\..\..\driver\touch\touch.c(212): warning:  #550-D: variable "ts"  was set but never used
+  	struct tsdev *ts;
+..\..\..\driver\touch\touch.c: 1 warning, 0 errors
+compiling vfs.c...
+..\..\..\Petite\vfs.c(152): warning:  #223-D: function "memset" declared implicitly
+      memset(name, 0, sizeof(name));
+..\..\..\Petite\vfs.c(155): warning:  #223-D: function "strlen" declared implicitly
+      while(index < strlen(lpPath)) {
+..\..\..\Petite\vfs.c(164): warning:  #223-D: function "strcpy" declared implicitly
+                  strcpy(dir, name);//??????????????€?????????
+..\..\..\Petite\vfs.c(175): warning:  #111-D: statement is unreachable
+                  break;//????????????????????????????€€???
+..\..\..\Petite\vfs.c(182): warning:  #223-D: function "strcpy" declared implicitly
+      strcpy(lpDir, dir);
+..\..\..\Petite\vfs.c(185): warning:  #223-D: function "strlen" declared implicitly
+      if(strlen(dir) == 0) {
+..\..\..\Petite\vfs.c(270): warning:  #167-D: argument of type "const u8 *" is incompatible with parameter of type "const TCHAR *"
+  					res = f_mount(&VfsNodeList[i].pra.fatfs, Mtd->dir, 1);
+..\..\..\Petite\vfs.c(327): warning:  #223-D: function "strcmp" declared implicitly
+  			if(0 == strcmp(VfsNodeList[i].Mtd->vfsdir, dirname)) {
+..\..\..\Petite\vfs.c(350): warning:  #167-D: argument of type "const char *" is incompatible with parameter of type "const u8 *"
+  	vfs_get_dir_name(pathname, &dir[0], &name[0]);
+..\..\..\Petite\vfs.c(375): warning:  #167-D: argument of type "u8 *" is incompatible with parameter of type "const TCHAR *"
+  			res = f_open(&filenode->pra.fatfd, name, mode);
+..\..\..\Petite\vfs.c(515): warning:  #177-D: variable "len"  was declared but never referenced
+  	unsigned int len;
+..\..\..\Petite\vfs.c(570): warning:  #177-D: variable "len"  was declared but never referenced
+  	unsigned int len;
+..\..\..\Petite\vfs.c(632): warning:  #111-D: statement is unreachable
+  			break;
+..\..\..\Petite\vfs.c(614): warning:  #177-D: variable "len"  was declared but never referenced
+  	unsigned int len;
+..\..\..\Petite\vfs.c(671): warning:  #940-D: missing return statement at end of non-void function "vfs_node_write" 
+  }
+..\..\..\Petite\vfs.c: 15 warnings, 0 errors
+compiling log.c...
+..\..\..\Petite\log.c(84): warning:  #223-D: function "mcu_uart_write" declared implicitly
+      mcu_uart_write(PC_PORT, (u8*)&string[0], length);  //?????????
+..\..\..\Petite\log.c(108): warning:  #223-D: function "mcu_uart_write" declared implicitly
+      mcu_uart_write(PC_PORT, (u8*)&string[0], length);  //?????????
+..\..\..\Petite\log.c(163): warning:  #223-D: function "mcu_uart_write" declared implicitly
+      mcu_uart_write(PC_PORT, (u8*)&string[0], length);  //?????????
+..\..\..\Petite\log.c: 3 warnings, 0 errors
+compiling font.c...
+..\..\..\Petite\font\font.c(123): warning:  #177-D: variable "font"  was declared but never referenced
+  	FontHead *font = NULL;
+..\..\..\Petite\font\font.c(151): warning:  #223-D: function "strcmp" declared implicitly
+  		if(0 == strcmp(FontListN[i]->name, name)) {
+..\..\..\Petite\font\font.c(187): warning:  #223-D: function "strcmp" declared implicitly
+  	if(strcmp(CodeType, "utf-8")==0){
+..\..\..\Petite\font\font.c(191): warning:  #223-D: function "strcmp" declared implicitly
+  	if (strcmp(CodeType, "GBK")==0) {
+..\..\..\Petite\font\font.c(220): warning:  #223-D: function "memcpy" declared implicitly
+  			memcpy(Dot->dot, fp, font_vga_6x12.size);
+..\..\..\Petite\font\font.c(235): warning:  #223-D: function "memcpy" declared implicitly
+  			memcpy(Dot->dot, fp, font_vga_8x16.size);
+..\..\..\Petite\font\font.c(258): warning:  #223-D: function "font_dot_wjq_addr" declared implicitly
+  			addr = font_dot_wjq_addr(font, chcode);
+..\..\..\Petite\font\font.c(173): warning:  #550-D: variable "res"  was set but never used
+  	int res;
+..\..\..\Petite\font\font.c(305): warning:  #177-D: variable "res"  was declared but never referenced
+  	int res;
+..\..\..\Petite\font\font.c(335): warning:  #940-D: missing return statement at end of non-void function "font_get_font" 
+  }
+..\..\..\Petite\font\font.c(347): warning:  #940-D: missing return statement at end of non-void function "font_get_bitmap" 
+  }
+..\..\..\Petite\font\font.c: 11 warnings, 0 errors
+compiling font_6x12.c...
+compiling font_8x8.c...
+compiling font_8x16.c...
+compiling font_wjq.c...
+compiling font_ymy.c...
+compiling petite.c...
+..\..\..\Petite\petite.c(66): warning:  #223-D: function "memset" declared implicitly
+  	memset(TaskListBuf, 0, sizeof(TaskListBuf));
+..\..\..\Petite\petite.c(71): warning:  #223-D: function "board_low_task" declared implicitly
+  		board_low_task(5);
+..\..\..\Petite\petite.c(54): warning:  #177-D: variable "stackHWM"  was declared but never referenced
+  	UBaseType_t stackHWM;
+..\..\..\Petite\petite.c(298): warning:  #223-D: function "dev_spiflash_register" declared implicitly
+  				dev_spiflash_register((const DevLcd *)DevTable[i]);
+..\..\..\Petite\petite.c: 4 warnings, 0 errors
+compiling bus_spi.c...
+..\..\..\Petite\mem/p_list.h(9): warning:  #47-D: incompatible redefinition of macro "offsetof"  (declared at line 91 of "C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h")
+  #define offsetof(type,  member)    ((size_t) &((type *)0)-> member)
+..\..\..\Petite\bus\bus_spi.c(64): warning:  #223-D: function "strcmp" declared implicitly
+  		if (strcmp(dev->pnode.name, p->dev.pnode.name) == 0) {
+..\..\..\Petite\bus\bus_spi.c(76): warning:  #223-D: function "memcpy" declared implicitly
+  	memcpy((u8 *)&p->dev, (u8 *)dev, sizeof(DevSpi));
+..\..\..\Petite\bus\bus_spi.c(82): warning:  #223-D: function "mcu_hspi_init" declared implicitly
+  		mcu_hspi_init(dev);
+..\..\..\Petite\bus\bus_spi.c(119): warning:  #223-D: function "strcmp" declared implicitly
+  		if (strcmp(dev->pnode.name, p->dev.pnode.name) == 0) {
+..\..\..\Petite\bus\bus_spi.c(137): warning:  #223-D: function "strcmp" declared implicitly
+  		if (strcmp(dev->spi, p_spi->dev.pnode.name) == 0) {
+..\..\..\Petite\bus\bus_spi.c(147): warning:  #223-D: function "memcpy" declared implicitly
+  	memcpy((u8 *)&p->dev, (u8 *)dev, sizeof(DevSpiCh));
+..\..\..\Petite\bus\bus_spi.c(152): warning:  #223-D: function "mcu_io_config_out" declared implicitly
+  	mcu_io_config_out(dev->csport,dev->cspin);
+..\..\..\Petite\bus\bus_spi.c(153): warning:  #223-D: function "mcu_io_output_setbit" declared implicitly
+  	mcu_io_output_setbit(dev->csport,dev->cspin);
+..\..\..\Petite\bus\bus_spi.c(187): warning:  #223-D: function "strcmp" declared implicitly
+  		if (strcmp(name, node->dev.pnode.name) == 0) {
+..\..\..\Petite\bus\bus_spi.c(212): warning:  #223-D: function "mcu_hspi_open" declared implicitly
+  					res = mcu_hspi_open(node->spi, mode, KHz);	
+..\..\..\Petite\bus\bus_spi.c(220): warning:  #223-D: function "mcu_io_output_resetbit" declared implicitly
+  				mcu_io_output_resetbit(node->dev.csport, node->dev.cspin);
+..\..\..\Petite\bus\bus_spi.c(249): warning:  #223-D: function "mcu_hspi_close" declared implicitly
+  		mcu_hspi_close(node->spi);
+..\..\..\Petite\bus\bus_spi.c(254): warning:  #223-D: function "mcu_io_output_setbit" declared implicitly
+  	mcu_io_output_setbit(node->dev.csport, node->dev.cspin);
+..\..\..\Petite\bus\bus_spi.c(277): warning:  #223-D: function "mcu_hspi_transfer" declared implicitly
+  		return mcu_hspi_transfer(node->spi, snd, rsv, len);
+..\..\..\Petite\bus\bus_spi.c(298): warning:  #223-D: function "mcu_io_output_setbit" declared implicitly
+  			mcu_io_output_setbit(node->dev.csport, node->dev.cspin);
+..\..\..\Petite\bus\bus_spi.c(302): warning:  #223-D: function "mcu_io_output_resetbit" declared implicitly
+  			mcu_io_output_resetbit(node->dev.csport, node->dev.cspin);
+..\..\..\Petite\bus\bus_spi.c(343): warning:  #111-D: statement is unreachable
+  	bus_spich_close(spichnode);
+..\..\..\Petite\bus\bus_spi.c: 18 warnings, 0 errors
+compiling bus_uart.c...
+..\..\..\Petite\bus\bus_uart.c(34): warning:  #223-D: function "memset" declared implicitly
+  	memset(BusUartGd, 0, sizeof(BusUartGd));
+..\..\..\Petite\bus\bus_uart.c(50): warning:  #223-D: function "strcmp" declared implicitly
+  	if(strcmp(name, "uart1") == 0) {
+..\..\..\Petite\bus\bus_uart.c(80): warning:  #223-D: function "mcu_uart_open" declared implicitly
+  	res = mcu_uart_open(comport, node, Pra);
+..\..\..\Petite\bus\bus_uart.c(114): warning:  #940-D: missing return statement at end of non-void function "bus_uart_tcflush" 
+  }
+..\..\..\Petite\bus\bus_uart.c(151): warning:  #223-D: function "mcu_uart_write" declared implicitly
+  	return mcu_uart_send(node->comport, buf, len);
+..\..\..\Petite\bus\bus_uart.c(171): warning:  #550-D: variable "res"  was set but never used
+      s32 res;
+..\..\..\Petite\bus\bus_uart.c: 6 warnings, 0 errors
+compiling emenu.c...
+..\..\..\panel\emenu.c(218): warning:  #223-D: function "strlen" declared implicitly
+  	dislen = strlen(menu_ctrl.fa->cha)*menu_ctrl.fontw;
+..\..\..\panel\emenu.c(248): warning:  #223-D: function "memset" declared implicitly
+  						memset(disbuf,0,sizeof(disbuf));
+..\..\..\panel\emenu.c(251): warning:  #223-D: function "sprintf" declared implicitly
+  							sprintf(disbuf, ">%d.", menu_num);
+..\..\..\panel\emenu.c(253): warning:  #223-D: function "sprintf" declared implicitly
+  							sprintf(disbuf, "%d.", menu_num);	
+..\..\..\panel\emenu.c(255): warning:  #223-D: function "strcat" declared implicitly
+  						strcat(disbuf, p->cha + lang);
+..\..\..\panel\emenu.c(304): warning:  #223-D: function "memset" declared implicitly
+  					memset(disbuf,0,sizeof(disbuf));
+..\..\..\panel\emenu.c(305): warning:  #223-D: function "sprintf" declared implicitly
+  					sprintf(disbuf, "%d.", menu_num);	
+..\..\..\panel\emenu.c(306): warning:  #223-D: function "strcat" declared implicitly
+  					strcat(disbuf, p->cha + lang);
+..\..\..\panel\emenu.c(459): warning:  #546-D: transfer of control bypasses initialization of:
+            variable "i"  (declared at line 471)
+  	switch(key)
+  	^
+..\..\..\panel\emenu.c: 9 warnings, 0 errors
+compiling emenu_test.c...
+compiling soundplay.c...
+..\..\..\panel\soundplay.c(147): warning:  #223-D: function "strcpy" declared implicitly
+  	strcpy(pipenode.pipname, dev);
+..\..\..\panel\soundplay.c(150): warning:  #223-D: function "audio_pipe_open" declared implicitly
+  	res = audio_pipe_open(&pipenode);
+..\..\..\panel\soundplay.c(163): warning:  #223-D: function "audio_pipe_run" declared implicitly
+  	audio_pipe_run(&pipenode);
+..\..\..\panel\soundplay.c(246): warning:  #223-D: function "audio_pipe_close" declared implicitly
+  		audio_pipe_close(&pipenode);
+..\..\..\panel\soundplay.c: 4 warnings, 0 errors
+compiling display.c...
+..\..\..\panel\display.c(57): warning:  #223-D: function "abs" declared implicitly
+  	if (abs (dx) < abs (dy)) {
+..\..\..\panel\display.c(174): warning:  #223-D: function "strlen" declared implicitly
+  	int sl = strlen (s);
+..\..\..\panel\display.c(231): warning:  #223-D: function "strlen" declared implicitly
+  	slen = strlen(s);
+..\..\..\panel\display.c(236): warning:  #223-D: function "utf8_2_gbk" declared implicitly
+  	utf8_2_gbk(s, chbuf, slen);
+..\..\..\panel\display.c(245): warning:  #513-D: a value of type "u8 *" cannot be assigned to an entity of type "char *"
+  	bitmap.dot = dotbuf;
+..\..\..\panel\display.c(330): warning:  #223-D: function "strlen" declared implicitly
+  	slen = strlen(s);
+..\..\..\panel\display.c(334): warning:  #223-D: function "utf8_2_gbk" declared implicitly
+  	utf8_2_gbk(s, chbuf, slen);
+..\..\..\panel\display.c(351): warning:  #513-D: a value of type "u8 *" cannot be assigned to an entity of type "char *"
+  	bitmap.dot = dotbuf;
+..\..\..\panel\display.c(414): warning:  #223-D: function "memcpy" declared implicitly
+  			memcpy(framebuff+row*col, framebuff+ row*xlen, 2*col);
+..\..\..\panel\display.c(463): warning:  #550-D: variable "res"  was set but never used
+  	s32 res;
+..\..\..\panel\display.c(543): warning:  #550-D: variable "rlen"  was set but never used
+  	int rlen;
+..\..\..\panel\display.c(808): warning:  #167-D: argument of type "s8 *" is incompatible with parameter of type "char *"
+  	res = bmp_parse_open(pbmpparse, BmpFileName);
+..\..\..\panel\display.c(829): warning:  #223-D: function "lcd_flush" declared implicitly
+  			lcd_flush(lcd, pdata + k* pbmpparse->bi.biWidth, xlen);
+..\..\..\panel\display.c: 13 warnings, 0 errors
+compiling board_sysconf.c...
+compiling board.c...
+..\board.c(71): warning:  #188-D: enumerated type mixed with another type
+  		NULL,
+..\board.c(134): warning:  #223-D: function "bus_uart_read" declared implicitly
+  	res = bus_uart_read(Esp8266UartNode, buf, len);	
+..\board.c(143): warning:  #223-D: function "bus_uart_write" declared implicitly
+  	res = bus_uart_write(Esp8266UartNode, buf, len);
+..\board.c(150): warning:  #223-D: function "vfs_add_node" declared implicitly
+  	vfs_add_node(&USBFatFs);
+..\board.c(174): warning:  #223-D: function "sd_fatfs_init" declared implicitly
+  	sd_fatfs_init();
+..\board.c(175): warning:  #223-D: function "vfs_add_node" declared implicitly
+  	vfs_add_node(&SdFatFs);
+..\board.c(183): warning:  #167-D: argument of type "void (*)(void)" is incompatible with parameter of type "osThreadFunc_t"
+  	TestTaskHandle = osThreadNew(board_app_task, NULL, &TestTask_attributes);
+..\board.c(204): warning:  #223-D: function "mcu_fsmc_lcd_Init" declared implicitly
+  	mcu_fsmc_lcd_Init();
+..\board.c(205): warning:  #223-D: function "petite_dev_register" declared implicitly
+  	petite_dev_register(PetiteDevTable);
+..\board.c(217): warning:  #223-D: function "dev_key_init" declared implicitly
+  	dev_key_init();
+..\board.c(221): warning:  #223-D: function "tp_init" declared implicitly
+  	tp_init(&RtpXpt2046);
+..\board.c(226): warning:  #223-D: function "dev_touchkey_init" declared implicitly
+  	dev_touchkey_init();
+..\board.c(228): warning:  #223-D: function "mcu_adc_temprate_init" declared implicitly
+  	mcu_adc_temprate_init();
+..\board.c(239): warning:  #223-D: function "bus_dcmi_init" declared implicitly
+  	bus_dcmi_init();
+..\board.c(242): warning:  #223-D: function "camera_init" declared implicitly
+  	camera_init();
+..\board.c(246): warning:  #223-D: function "dev_tea5767_init" declared implicitly
+  	dev_tea5767_init(DEV_TEA5767_I2CBUS);
+..\board.c(249): warning:  #223-D: function "mcu_i2s_init" declared implicitly
+  	mcu_i2s_init();//?????????I2S??????
+..\board.c(250): warning:  #223-D: function "dev_wm8978_init" declared implicitly
+  	dev_wm8978_init();
+..\board.c(277): warning:  #223-D: function "dev_key_scan" declared implicitly
+  	dev_key_scan();
+..\board.c(289): warning:  #223-D: function "fun_sound_task" declared implicitly
+  	fun_sound_task();
+..\board.c(292): warning:  #223-D: function "dev_touchkey_task" declared implicitly
+  	dev_touchkey_task();
+..\board.c(339): warning:  #223-D: function "OV2640_Config" declared implicitly
+  	OV2640_Config(ImageFormat);
+..\board.c(342): warning:  #223-D: function "mcu_dcmi_captruce" declared implicitly
+  	mcu_dcmi_captruce(0, FSMC_LCD_ADDRESS, 4);
+..\board.c(345): warning:  #223-D: function "mcu_dcmi_get_sta" declared implicitly
+  		mcu_dcmi_get_sta(&sta);
+..\board.c(351): warning:  #223-D: function "mcu_dcmi_start" declared implicitly
+  			mcu_dcmi_start();
+..\board.c(354): warning:  #111-D: statement is unreachable
+  	return 0;
+..\board.c: 26 warnings, 0 errors
+compiling wujique_test.c...
+..\wujique_test.c(257): warning:  #223-D: function "dev_lcd_show_bmp" declared implicitly
+  						dev_lcd_show_bmp(lcd, 1, 1, 240, 240, "mtd0/1:pic/pic128.bmp");
+..\wujique_test.c(302): warning:  #223-D: function "dev_lcd_show_bmp" declared implicitly
+  	dev_lcd_show_bmp(lcd, 1, 1, 320, 240, "mtd0/1:pic/????????????.bmp");
+..\wujique_test.c(286): warning:  #177-D: variable "step"  was declared but never referenced
+  	u8 step = 0;
+..\wujique_test.c(287): warning:  #177-D: variable "dis"  was declared but never referenced
+  	u8 dis = 1;
+..\wujique_test.c(345): warning:  #223-D: function "dev_buzzer_open" declared implicitly
+  				dev_buzzer_open();	
+..\wujique_test.c(347): warning:  #223-D: function "dev_buzzer_close" declared implicitly
+  				dev_buzzer_close();
+..\wujique_test.c(362): warning:  #223-D: function "dev_wm8978_inout" declared implicitly
+  	dev_wm8978_inout(WM8978_INPUT_DAC|WM8978_INPUT_AUX|WM8978_INPUT_ADC,
+..\wujique_test.c(365): warning:  #223-D: function "dev_tea5767_open" declared implicitly
+  	dev_tea5767_open();
+..\wujique_test.c(366): warning:  #223-D: function "dev_tea5767_setfre" declared implicitly
+  	dev_tea5767_setfre(105700);
+..\wujique_test.c(405): warning:  #223-D: function "fun_sound_get_sta" declared implicitly
+  		if(SOUND_IDLE == fun_sound_get_sta())
+..\wujique_test.c(435): warning:  #223-D: function "tp_open" declared implicitly
+  		tp_open();
+..\wujique_test.c(436): warning:  #223-D: function "ts_calibrate" declared implicitly
+  		ts_calibrate(lcd);
+..\wujique_test.c(437): warning:  #223-D: function "tp_close" declared implicitly
+  		tp_close();
+..\wujique_test.c(461): warning:  #223-D: function "tp_open" declared implicitly
+  		tp_open();	
+..\wujique_test.c(467): warning:  #223-D: function "rtp_get_point" declared implicitly
+  			ret = rtp_get_point(samp, 10);
+..\wujique_test.c(498): warning:  #223-D: function "tp_close" declared implicitly
+  		tp_close();
+..\wujique_test.c(554): warning:  #223-D: function "camera_open" declared implicitly
+  		if (-1 == camera_open()) {
+..\wujique_test.c(559): warning:  #223-D: function "board_camera_show" declared implicitly
+  		board_camera_show(lcd);
+..\wujique_test.c(562): warning:  #223-D: function "camera_close" declared implicitly
+  		camera_close();
+..\wujique_test.c(596): warning:  #223-D: function "memset" declared implicitly
+  			memset(buf, 0, sizeof(buf));
+..\wujique_test.c(647): warning:  #177-D: variable "buf"  was declared but never referenced
+  	u8 buf[12];
+..\wujique_test.c(695): warning:  #223-D: function "dev_spiflash_test_chipcheck" declared implicitly
+  	dev_spiflash_test_chipcheck("board_spiflash");
+..\wujique_test.c(706): warning:  #223-D: function "dev_spiflash_test_chiperase" declared implicitly
+  	dev_spiflash_test_chiperase("core_spiflash");
+..\wujique_test.c: 23 warnings, 0 errors
+linking...
+Program Size: Code=78266 RO-data=336262 RW-data=3544 ZI-data=125540  
+FromELF: creating hex file...
+".\Objects\wujique.axf" - 0 Error(s), 206 Warning(s).
+
+<h2>Software Packages used:</h2>
+
+Package Vendor: Keil
+                http://www.keil.com/pack/Keil.STM32F4xx_DFP.2.13.0.pack
+                Keil.STM32F4xx_DFP.2.13.0
+                STMicroelectronics STM32F4 Series Device Support, Drivers and Examples
+
+<h2>Collection of Component include folders:</h2>
+  C:\Users\Administrator\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include
+
+<h2>Collection of Component Files used:</h2>
+Build Time Elapsed:  00:00:05
+</pre>
+</body>
+</html>

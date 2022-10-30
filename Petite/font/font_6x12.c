@@ -8,6 +8,7 @@
 
 #include "font/font.h"
 
+/* 本点阵字符大小写基线不一样 */
 
 #define FONTDATAMAX (12*0x80)
 
