@@ -48,7 +48,7 @@ struct _StrBitmapFontHead{
 	为了取点阵方便，头长度是固定的，所有将所有的头放在一起
 	*/
 struct _strBitmapHead{
-	uint16_t rev;//保留字节，默认是回车换行，为了4字节对齐而定义
+	uint16_t advance;// 字宽
 	/* 以下五个数据在LCD描字时需要 */
 	uint16_t rows;//bitmap行数
 	uint16_t width;//bitmap宽度，单位像素
@@ -212,7 +212,7 @@ int font_bitmap_get_str_width(uint16_t *unicodestr)
 		uart_printf("top:%d\r\n", BitmapHead.top);
 		uart_printf("index:%d\r\n", BitmapHead.index);
 	#endif
-		tmp = BitmapHead.left + BitmapHead.width;
+		tmp = BitmapHead.advance;
 		if (tmp > 0 )
 			lcdx += tmp;
 
@@ -232,7 +232,7 @@ int font_bitmap_get_str_width(uint16_t *unicodestr)
 int font_bitmap_showstr_unicode(DevLcdNode *lcd, uint16_t x, uint16_t y, uint16_t *unicodestr)
 {
 	uint16_t *pStr;
-	uint16_t lcdx,lcdy;
+	uint16_t lcdx,lcdy, disx;
 	uint8_t row, col,yshift;
 	uint8_t dotdata;
 	struct _strBitmapHead BitmapHead;
@@ -262,7 +262,7 @@ int font_bitmap_showstr_unicode(DevLcdNode *lcd, uint16_t x, uint16_t y, uint16_
 		
 		font_bitmap_getdata(&BitmapHead, bitmaptmp,*pStr);
 
-		#if 0
+		#if 1
 		uart_printf("\r\nrows:%d\r\n", BitmapHead.rows);
 		uart_printf("width:%d\r\n", BitmapHead.width);
 		uart_printf("pitch:%d\r\n", BitmapHead.pitch);
@@ -271,7 +271,7 @@ int font_bitmap_showstr_unicode(DevLcdNode *lcd, uint16_t x, uint16_t y, uint16_
 		uart_printf("index:%d\r\n", BitmapHead.index);
 		#endif
 		/* 填点 left 和 top 两个参数都会出现负数 */
-		lcdx += BitmapHead.left;
+		disx = lcdx + BitmapHead.left;
 		
 		if (BitmapHead.top > BASE_LINE) yshift = 0;
 		else yshift = BASE_LINE - BitmapHead.top;
@@ -286,16 +286,16 @@ int font_bitmap_showstr_unicode(DevLcdNode *lcd, uint16_t x, uint16_t y, uint16_
 				
 				if((dotdata & (0x80>>(col%8)) )!=0 ){
 					//uart_printf("*");
-					drv_ST7565_drawpoint(lcd, lcdx + col, lcdy + row + yshift, BLACK);
+					drv_ST7565_drawpoint(lcd, disx + col, lcdy + row + yshift, BLACK);
 				}else{
 					//uart_printf("-");
-					drv_ST7565_drawpoint(lcd, lcdx + col, lcdy + row + yshift, WHITE);
+					drv_ST7565_drawpoint(lcd, disx + col, lcdy + row + yshift, WHITE);
 				}
 			}
 			//uart_printf("\r\n");
 		}
 
-		lcdx += BitmapHead.width;
+		lcdx += BitmapHead.advance;
 
 		pStr++;
 	}
@@ -304,6 +304,30 @@ int font_bitmap_showstr_unicode(DevLcdNode *lcd, uint16_t x, uint16_t y, uint16_
 	drv_ST7565_update(lcd);
 	
 	return 0;
+}
+
+#define UNICODE_NUM 44
+void font_test_utf16(DevLcdNode *lcd)
+{
+	int testfile;
+	int rlen;
+	uint16_t bitmaptmp[130];
+
+	font_unicode_bitmap_init();
+	
+	testfile = vfs_open("mtd0/0:bin_utf16/thailand.bin", O_RDONLY);
+
+	vfs_lseek(testfile, 0, 0);
+	rlen = vfs_read(testfile, (char *)bitmaptmp, UNICODE_NUM*2);
+	
+	bitmaptmp[UNICODE_NUM] = 0x0000;
+	//PrintFormat((char *)bitmaptmp, 66);
+	font_bitmap_showstr_unicode(lcd, 0, 0, bitmaptmp);
+	
+	while(1){
+		uart_printf(" finish \r\n");
+		osDelay(5000);	
+	}
 }
 /*
 	Windows环境通常就是这种模式：asc+gbk
@@ -362,8 +386,7 @@ int font_bitmap_showstr_ansi(DevLcdNode *lcd, uint16_t x, uint16_t y, char *str)
 			//uart_printf("\r\n");
 		}
 
-		
-		lcdx += BitmapHead.left + BitmapHead.width;
+		lcdx += BitmapHead.advance;
 
 		pStr++;
 	}
@@ -473,7 +496,7 @@ void font_unicode_bitmap_test(DevLcdNode *lcd)
 		rlen = vfs_read(fd_fontfile, bitmaptmp, BitmapHead.pitch*BitmapHead.rows);
 		//PrintFormat(bitmaptmp, BitmapHead.pitch*BitmapHead.rows);
 
-		if (lcdx + BitmapHead.width >= 128) {
+		if (lcdx + BitmapHead.advance >= 128) {
 			lcdx = 0;
 			lcdy += LINE_HIGHT + 1;
 			if(lcdy + LINE_HIGHT > 64){
@@ -512,7 +535,7 @@ void font_unicode_bitmap_test(DevLcdNode *lcd)
         	//uart_printf("\r\n");
     	}
 		
-		lcdx += (BitmapHead.width + BitmapHead.left)+1;
+		lcdx += BitmapHead.advance;
 		//lcdx += 6;
     	//uart_printf(">>>>>>>>>>>>>>>>>>");
 	}

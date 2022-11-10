@@ -72,7 +72,7 @@ typedef enum{
 	每个字符的bitmap都有一个头，
 	为了取点阵方便，头长度是固定的，所有将所有的头放在一起            	*/
 struct _strBitmapHead{
-	uint16_t adv_w;//字宽，其实就是字号，比如9pt，相当于 汉字1212，ASC1206
+	uint16_t advance;//字宽
 	/* 以下五个数据在LCD描字时需要 */
 	uint16_t rows;//bitmap行数
 	uint16_t width;//bitmap宽度，单位像素

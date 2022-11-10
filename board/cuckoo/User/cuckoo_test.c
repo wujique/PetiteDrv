@@ -208,9 +208,10 @@ void cuckoo_7b0_test(void)
 	//cuckoo_test_lcd();
 	LcdOledI2C = lcd_open("spicoglcd");
 	//LcdCogSpi = lcd_open("i2coledlcd");
-	//font_unicode_bitmap_test(LcdOledI2C);
+	//font_test_utf16(LcdOledI2C);
+	//font_bmp_test(LcdOledI2C);
 	//FreeTypeTest(LcdOledI2C);
-	
+	font_unicode_bitmap_test(LcdOledI2C);
 	//emenu_test(LcdOledI2C);
 	
 	/* 初始化lvgl 
