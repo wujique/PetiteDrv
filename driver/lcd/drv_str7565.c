@@ -277,15 +277,6 @@ s32 drv_ST7565_drawpoint(DevLcdNode *lcd, u16 x, u16 y, u16 color)
 		drvdata->gram[page][colum] &= ~(0x01<<(ytmp%8));
 	}
 	
-	/*效率不高*/
-	#if 0
-	node = bus_lcd_open(lcd->dev.buslcd);
-    bus_lcd_write_cmd (node, 0xb0 + page );   
-    bus_lcd_write_cmd (node, ((colum>>4)&0x0f)+0x10); 
-    bus_lcd_write_cmd (node, colum&0x0f);    
-    bus_lcd_write_data (node, &(drvdata->gram[page][colum]), 1);
-	bus_lcd_close (node);
-	#endif
 	return 0;
 }
 /**
@@ -354,19 +345,6 @@ s32 drv_ST7565_color_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 color
 		}
 	}
 
-	/* 通过调用update刷新 */
-	#if 0
-	/*
-		只刷新需要刷新的区域
-		坐标范围是横屏模式
-	*/
-	if(lcd->dir == W_LCD) {
-		drv_ST7565_refresh_gram(lcd, sx,ex,sy,ey);
-	} else {
-
-		drv_ST7565_refresh_gram(lcd, sy, ey, lcd->width-ex-1, lcd->width-sx-1); 	
-	}
-	#endif
 	return 0;
 }
 
@@ -444,21 +422,7 @@ s32 drv_ST7565_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
 			}
 		}
 	}
-
-	/* 通过调用update刷新 */
-	#if 0
-	/*
-		只刷新需要刷新的区域
-		坐标范围是横屏模式
-	*/
-	if(lcd->dir == W_LCD) {
-		drv_ST7565_refresh_gram(lcd, sx,ex,sy,ey);
-	} else {
-
-		drv_ST7565_refresh_gram(lcd, sy, ey, lcd->width-ex-1, lcd->width-sx-1); 	
-	}
-	#endif
-	//uart_printf("refresh ok\r\n");		
+		
 	return 0;
 }
 

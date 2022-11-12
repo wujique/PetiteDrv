@@ -269,10 +269,9 @@ void HardFault_Handler_c(unsigned int * hardfault_args, unsigned lr_value)
 s32 petite_dev_register(void *DevTable[])
 {
 	uint8_t i=0;
-	uint8_t len;
 	PetiteNode *pnod;
 
-	while(i < len){
+	while(1){
 		if (DevTable[i] == NULL) break;
 		pnod =	(PetiteNode *)DevTable[i];
 		uart_printf("pnode name:%s\r\n", pnod->name);

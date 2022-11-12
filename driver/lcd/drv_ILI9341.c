@@ -39,8 +39,6 @@
 
 extern void Delay(__IO uint32_t nTime);
 
-
-
 /*9341命令定义*/
 #define ILI9341_CMD_WRAM 0x2c
 #define ILI9341_CMD_SETX 0x2a
@@ -85,9 +83,7 @@ void drv_ILI9341_lcd_bl(DevLcdNode *lcd, u8 sta)
 	node = bus_lcd_open(lcd);
 	bus_lcd_bl(node, sta);
 	bus_lcd_close(node);
-
-}
-	
+}	
 /**
  *@brief:      drv_ILI9341_scan_dir
  *@details:    设置显存扫描方向， 本函数为竖屏角度
@@ -399,15 +395,12 @@ s32 drv_ILI9341_xy2cp(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey, u16 *sc, 
 		||
 		(((lcd->scandir&LRUD_BIT_MASK) == 0)
 		&&(lcd->dir == W_LCD))
-		)
-		{
+		){
 			*sc = sy;
 			*ec = ey;
 			*sp = sx;
 			*ep = ex;
-		}
-	else
-	{
+	} else {
 		*sc = sx;
 		*ec = ex;
 		*sp = sy;
@@ -928,12 +921,7 @@ s32 drv_ILI9341_8_color_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 co
 	u16 i;
 	u16 sc,ec,sp,ep;
 
-	wjq_log(LOG_DEBUG, "%d, %d, %d, %d\r\n", sx, ex, sy, ey);
-
 	drv_ILI9341_xy2cp(lcd, sx, ex, sy, ey, &sc,&ec,&sp,&ep);
-	
-	wjq_log(LOG_DEBUG, "%d, %d, %d, %d\r\n", sc, ec, sp, ep);
-	
 	drv_ILI9341_8_set_cp_addr(lcd, sc, ec, sp, ep);
 
 	width=(ec+1)-sc;//得到填充的宽度 +1是因为坐标从0开始
@@ -945,8 +933,7 @@ s32 drv_ILI9341_8_color_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 co
 
 	tmp = (u8 *)wjq_malloc(width*2);
 
-	for(i = 0; i < width*2;)
-	{
+	for(i = 0; i < width*2;) {
 		tmp[i++] = color>>8;
 		tmp[i++] = color&0xff;
 	}
@@ -955,8 +942,7 @@ s32 drv_ILI9341_8_color_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 co
 
 	node = bus_lcd_open(lcd);
 
-	for(i = 0; i < height;i++)
-	{
+	for(i = 0; i < height;i++) {
 			bus_lcd_write_data(node, tmp, width*2);
 	}
 	

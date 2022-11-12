@@ -205,14 +205,14 @@ s32 bus_lcd_write_data(DevLcdNode *lcd, u8 *data, u32 len)
 			bus_spich_transfer((DevSpiChNode *)lcd->basenode,  data, NULL, len);
 		}
 		break;
+		
 		case BUS_LCD_I2C:
 		{
-			tmp[0] = 0x40;
-			memcpy(&tmp[1], data, len);
-			
 			i2c_pra = (I2CPra *)lcd->dev.buspra;
 			i2c_addr = i2c_pra->addr;
 			
+			tmp[0] = lcd->dev.i2c_data_reg;//写入数据	
+			memcpy(&tmp[1], data, len);
 			bus_i2c_transfer((DevI2cNode *)lcd->basenode, i2c_addr, MCU_I2C_MODE_W, tmp, len+1);
 		}
 		break;
@@ -220,7 +220,6 @@ s32 bus_lcd_write_data(DevLcdNode *lcd, u8 *data, u32 len)
 		case BUS_LCD_8080:			
 		{
 			#if (PETITE_BUS_LCD_8080 == 1)
-			/*8080特殊处理*/
 			u16 *p;
 			p = (u16 *)data;
 			for(i=0; i<len; i++)
@@ -239,21 +238,22 @@ s32 bus_lcd_write_data(DevLcdNode *lcd, u8 *data, u32 len)
 	return 0;
 }
 
-
+/*
+	  当需要连续写同一个数值时，调用本函数。
+	  当前专门给8080接口的LCD驱动使用
+	*/
 s32 bus_lcd_w_data(DevLcdNode *lcd, u16 color, u32 len)
 {
-
 	u32 i;
 	PetiteDevType type;
+	
 	type = lcd->dev.bus->pnode.type;
 
 	switch(type)
 	{
-
 		case BUS_LCD_8080:			
 		{
 			#if (PETITE_BUS_LCD_8080 == 1)
-			/*8080特殊处理*/
 			for(i=len; i>0; i--) {
 				*LcdData = color;	
 			}
@@ -291,12 +291,6 @@ s32 bus_lcd_read_data(DevLcdNode *lcd, u8 *data, u32 len)
 		}
 		break;
 		
-		case BUS_LCD_I2C:
-		{	
-
-		}
-		break;
-		
 		case BUS_LCD_8080:
 		{
 			
@@ -312,6 +306,8 @@ s32 bus_lcd_read_data(DevLcdNode *lcd, u8 *data, u32 len)
 			#endif
 		}
 		break;
+
+		case BUS_LCD_I2C:
 		default:
 			break;
 	}
@@ -349,11 +345,11 @@ s32 bus_lcd_write_cmd(DevLcdNode *lcd, u16 cmd)
 		
 		case BUS_LCD_I2C:
 		{	
-			tmp[0] = 0x00;
-			tmp[1] = cmd;
-			
 			i2c_pra = (I2CPra *)lcd->dev.buspra;
 			i2c_addr = i2c_pra->addr;
+			
+			tmp[0] = lcd->dev.i2c_cmd_reg;//写入命令
+			tmp[1] = cmd;
 			
 			bus_i2c_transfer((DevI2cNode *)lcd->basenode, i2c_addr, MCU_I2C_MODE_W, tmp, 2);
 		}

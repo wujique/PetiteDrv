@@ -299,15 +299,13 @@ s32 test_lcd_pic(void)
 	lcd_setdir(lcd, W_LCD, L2R_D2U);
 	
 	wjq_test_showstr((char *)__FUNCTION__);
-	dev_lcd_show_bmp(lcd, 1, 1, 320, 240, "mtd0/1:pic/女人单色.bmp");
+	dev_lcd_show_bmp(lcd, 1, 1, 320, 240, "mtd0/1:pic/girl_black.bmp");
 	wjq_wait_key(16);
-	dev_lcd_show_bmp(lcd, 1, 1, 320, 240, "mtd0/1:pic/女人16色.bmp");//调色板
+	dev_lcd_show_bmp(lcd, 1, 1, 320, 240, "mtd0/1:pic/girl16.bmp");//调色板
 	wjq_wait_key(16);
-	dev_lcd_show_bmp(lcd, 1, 1, 320, 240, "mtd0/1:pic/女人256色.bmp");//调色板
+	dev_lcd_show_bmp(lcd, 1, 1, 320, 240, "mtd0/1:pic/girl256.bmp");//调色板
 	wjq_wait_key(16);
-	dev_lcd_show_bmp(lcd, 1, 1, 320, 240, "mtd0/1:pic/女人24位.bmp");//真彩色
-	wjq_wait_key(16);
-	dev_lcd_show_bmp(lcd, 1, 1, 320, 240, "mtd0/1:pic/logo.bmp");//真彩色
+	dev_lcd_show_bmp(lcd, 1, 1, 320, 240, "mtd0/1:pic/girl24.bmp");//真彩色
 	wjq_wait_key(16);
 	/*
 	dev_lcd_show_bmp(lcd, 1, 1, 128, 128, "mtd0/1:/pic/pic128.bmp");
@@ -1259,8 +1257,8 @@ void wujique_stm407_test(void)
 
 
 	//WJQTestLcd = lcd_open("tftlcd");
-	WJQTestLcd = lcd_open("spicoglcd");
-	//WJQTestLcd = lcd_open("i2coledlcd");
+	//WJQTestLcd = lcd_open("spicoglcd");
+	WJQTestLcd = lcd_open("i2coledlcd");
 	if (WJQTestLcd == NULL) {
 		wjq_log(LOG_DEBUG, "emenu open lcd err\r\n");
 	}

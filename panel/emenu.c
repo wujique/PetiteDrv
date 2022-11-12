@@ -60,13 +60,14 @@ const u8 emunu_key_chg[17]=
 	EMENU_KEYU_7,EMENU_KEYU_8,EMENU_KEYU_9,EMENU_KEYU_ESC,
 	EMENU_KEYU_STAR,EMENU_KEYU_0,EMENU_KEYU_HASH,EMENU_KEYU_ENTER
 };
+	
 /*  need fix 如果没有按键，只有触屏，如何支持？*/	
 u8 emenu_get_key(void)
 {
 	u8 key;
 	s32 res = 0;
 	
-	//res = dev_keypad_read(&key, 1);
+	res = dev_keypad_read(&key, 1);
 	if (res == 1) {
 		//EMENU_DEBUG(LOG_DEBUG,"key:%02x\r\n", key);
 		

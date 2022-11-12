@@ -206,8 +206,8 @@ void cuckoo_7b0_test(void)
 	vfs_add_node(&SdFatFs);
 
 	//cuckoo_test_lcd();
-	LcdOledI2C = lcd_open("spicoglcd");
-	//LcdCogSpi = lcd_open("i2coledlcd");
+	//LcdOledI2C = lcd_open("spicoglcd");
+	LcdOledI2C = lcd_open("i2coledlcd");
 	//font_test_utf16(LcdOledI2C);
 	//font_bmp_test(LcdOledI2C);
 	//FreeTypeTest(LcdOledI2C);

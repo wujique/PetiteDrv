@@ -45,13 +45,10 @@ const DevLcdBus BusLcdI2C1={
 	/*I2C接口的LCD总线，不需要其他IO*/
 	.A0port = MCU_PORT_NULL,
 	.A0pin = NULL,
-
 	.rstport = MCU_PORT_NULL,
 	.rstpin = NULL,
-
 	.blport = MCU_PORT_NULL,
 	.blpin = NULL,
-
 	.staport = MCU_PORT_NULL, 
 	.stapin = NULL,
 };
@@ -74,6 +71,9 @@ const DevLcd DevLcdOled1={
 
 	.bus = &BusLcdI2C1,  
 	.buspra = (void *)&OledLcdI2cPra,
+
+	.i2c_cmd_reg = 0x00,
+	.i2c_data_reg = 0x40,
 };
 
 /*

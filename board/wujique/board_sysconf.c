@@ -439,6 +439,9 @@ const DevLcd DevLcdOled1={
 
 	.bus = &BusLcdI2C1,  
 	.buspra = (void *)&OledLcdI2cPra,
+
+	.i2c_cmd_reg = 0x00,
+	.i2c_data_reg = 0x40,
 };
 
 /*SPI接口的 OLED*/

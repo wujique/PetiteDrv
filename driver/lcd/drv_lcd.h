@@ -12,23 +12,28 @@ typedef struct _strDevLcdNode DevLcdNode;
 typedef struct  
 {	
 	u16 id;
+	
 	/*初始化*/
 	s32 (*init)(DevLcdNode *lcd);
+	
 	/*	draw_point、color_fill、fill 
-		if use framebuff，ex. cog lcd or oled lcd ,use update function after */
+		if use framebuff，ex. cog lcd or oled lcd ,use update function */
 	s32 (*draw_point)(DevLcdNode *lcd, u16 x, u16 y, u16 color);
 	s32 (*color_fill)(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey, u16 color);
 	s32 (*fill)(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color);
+	
 	/*prepare_display指定显示区域后，用flush将数据持续更新到LCD*/
 	s32 (*prepare_display)(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey);
 	s32 (*flush)(DevLcdNode *lcd, u16 *color, u32 len);
+
+	/*  update配合draw_point/color_fill/fill使用，如果是没有gram(framebuf)的，相当于空操作。*/
+	s32 (*update)(DevLcdNode *lcd);
 	
+	/* 其他操作 */
 	s32 (*onoff)(DevLcdNode *lcd, u8 sta);
 	void (*set_dir)(DevLcdNode *lcd, u8 scan_dir);
 	void (*backlight)(DevLcdNode *lcd, u8 sta);
 
-	/*  update配合draw_point/color_fill/fill使用，如果是没有gram(framebuf)的，相当于空操作。*/
-	s32 (*update)(DevLcdNode *lcd);
 }_lcd_drv; 
 
 /*LCD 总线定义 */
@@ -69,14 +74,17 @@ typedef struct
 typedef struct
 {
 	PetiteNode pnode;
-	
+
+	/* */
 	u16 id;
 	u16 width;	//LCD 宽度   竖屏
 	u16 height;	//LCD 高度    竖屏
 
 	DevLcdBus const *bus;
-	
 	void *buspra;//总线参数，如果是I2C，则包含I2C地址和时钟频率，如果是SPI，则包含时钟频率等信息
+
+	uint8_t i2c_cmd_reg;
+	uint8_t i2c_data_reg;
 }DevLcd;
 
 /* 设备节点*/

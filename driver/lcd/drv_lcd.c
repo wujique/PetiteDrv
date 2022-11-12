@@ -43,45 +43,6 @@
 #define LCD_DEBUG(a, ...)
 #endif
 
-s32 drv_null_init(DevLcdNode *lcd)
-{return -1;}
-s32 drv_null_drawpoint(DevLcdNode *lcd, u16 x, u16 y, u16 color)
-{return -1;}
-s32 drv_null_color_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 color)
-{return -1;}
-s32 drv_null_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
-{return -1;}
-static s32 drv_null_display_onoff(DevLcdNode *lcd, u8 sta)
-{return -1;}
-s32 drv_null_prepare_display(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey)
-{return -1;}
-static void drv_null_scan_dir(DevLcdNode *lcd, u8 dir)
-{}
-void drv_null_lcd_bl(DevLcdNode *lcd, u8 sta)
-{}
-s32 drv_null_flush(DevLcdNode *lcd, u16 *color, u32 len)
-{return -1;}
-s32 drv_null_update(DevLcdNode *lcd)
-{return -1;}
-
-
-/* 定义空驱动 */
-_lcd_drv TftLcdNULLDrv = {
-							.id = 0X9999,
-
-							.init = drv_null_init,
-							.draw_point = drv_null_drawpoint,
-							.color_fill = drv_null_color_fill,
-							.fill = drv_null_fill,
-							.onoff = drv_null_display_onoff,
-							.prepare_display = drv_null_prepare_display,
-							.flush = drv_null_flush,
-							.set_dir = drv_null_scan_dir,
-							.backlight = drv_null_lcd_bl,
-							.update = drv_null_update,
-							};
-
-
 /*	LCD驱动列表 */
 _lcd_drv *LcdDrvList[] = {
 				/* tft lcd ILI9341 */
@@ -130,7 +91,7 @@ _lcd_drv *LcdDrvList[] = {
 					&TftLcdR61408Drv,
 				#endif
 				
-				&TftLcdNULLDrv,	
+				NULL,	
 };
 /*	可自动识别ID的驱动*/
 _lcd_drv *LcdProbDrvList[] = {
@@ -151,7 +112,7 @@ _lcd_drv *LcdProbDrvList[] = {
 					&TftLcdR61408Drv,
 				#endif
 				
-				&TftLcdNULLDrv,
+				NULL,
 };
 /**
  *@brief:      dev_lcd_finddrv
@@ -165,13 +126,12 @@ static _lcd_drv *lcd_finddrv(u16 id)
 	u8 i =0;
 	
 	while(1){
+		if(LcdDrvList[i] == NULL) return NULL;
+		
 		if(LcdDrvList[i]->id == id){
 			return LcdDrvList[i];
 		}
 		i++;
-		if(i>= sizeof(LcdDrvList)/sizeof(_lcd_drv *)){
-			return NULL;
-		}
 	}
 }
 
@@ -187,7 +147,7 @@ s32 lcd_dev_register(const DevLcd *dev)
 {
 	struct list_head *listp;
 	DevLcdNode *lcdnode;
-	s32 ret = -1;
+	s32 ret;
 	
 	listp = DevLcdRoot.next;
 	while(1) {
@@ -220,20 +180,19 @@ s32 lcd_dev_register(const DevLcd *dev)
 		LCD_DEBUG(LOG_DEBUG, "prob LCD id\r\n");
 
 		u8 j = 0;
+		ret = -1;
 		while(1) {
 			/* 简单粗暴的方法，尝试初始化*/
+			if (LcdProbDrvList[j] == NULL) break;
+			
 			ret = LcdProbDrvList[j]->init(lcdnode);
 			if (ret == 0) {
 				LCD_DEBUG(LOG_DEBUG, "lcd drv prob ok!\r\n");	
 				lcdnode->drv = LcdProbDrvList[j];
 				break;
-			} else {
-				j++;
-				if (j >= sizeof(LcdProbDrvList)/sizeof(_lcd_drv *)) {
-					LCD_DEBUG(LOG_DEBUG, "lcd prob err\r\n");
-					break;
-				}
 			}
+
+			j++;
 		}
 	}else {
 		/* 设备指定了 id，根据id找驱动 */

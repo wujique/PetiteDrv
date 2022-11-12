@@ -421,25 +421,16 @@ s32 drv_ST7789_color_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 color
 	u16 i;
 	u16 sc,ec,sp,ep;
 
-	wjq_log(LOG_DEBUG, "%d, %d, %d, %d\r\n", sx, ex, sy, ey);
-
 	drv_ST7789_xy2cp(lcd, sx, ex, sy, ey, &sc,&ec,&sp,&ep);
-	
-	wjq_log(LOG_DEBUG, "%d, %d, %d, %d\r\n", sc, ec, sp, ep);
-	
 	drv_ST7789_set_cp_addr(lcd, sc, ec, sp, ep);
 
 	width=(ec+1)-sc;//得到填充的宽度 +1是因为坐标从0开始
 	height=(ep+1)-sp;//高度
 	
-	wjq_log(LOG_DEBUG, "ST7789 width:%d, height:%d\r\n", width, height);
-
 	u8 *tmp;
-
 	tmp = (u8 *)wjq_malloc(width*2);
 
-	for(i = 0; i < width*2;)
-	{
+	for(i = 0; i < width*2;) {
 		tmp[i++] = color>>8;
 		tmp[i++] = color&0xff;
 	}
@@ -448,8 +439,7 @@ s32 drv_ST7789_color_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 color
 
 	node = bus_lcd_open(lcd);
 
-	for(i = 0; i < height;i++)
-	{
+	for (i = 0; i < height;i++) {
 			bus_lcd_write_data(node, tmp, width*2);
 	}
 	
@@ -486,10 +476,7 @@ s32 drv_ST7789_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
 	width=(ec+1)-sc;
 	height=(ep+1)-sp;
 
-	wjq_log(LOG_DEBUG, "fill width:%d, height:%d\r\n", width, height);
-	
 	u8 *tmp;
-
 	tmp = (u8 *)wjq_malloc(width*2);
 
 	DevLcdNode * node = lcd;
@@ -499,10 +486,8 @@ s32 drv_ST7789_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
 	
 	pcc = color;
 	
-	for(i = 0; i < height;i++)
-	{
-		for(j = 0; j < width*2;)
-		{
+	for(i = 0; i < height;i++) {
+		for(j = 0; j < width*2;) {
 			tmp[j++] = (*pcc) >> 8;
 			tmp[j++] = (*pcc) & 0xff;
 			pcc++;
@@ -519,10 +504,10 @@ s32 drv_ST7789_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
 s32 drv_ST7789_prepare_display(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey)
 {
 	u16 sc,ec,sp,ep;
-	wjq_log(LOG_DEBUG, "XY:-%d-%d-%d-%d-\r\n", sx, ex, sy, ey);
+	//wjq_log(LOG_DEBUG, "XY:-%d-%d-%d-%d-\r\n", sx, ex, sy, ey);
 	drv_ST7789_xy2cp(lcd, sx, ex, sy, ey, &sc,&ec,&sp,&ep);
 	
-	wjq_log(LOG_DEBUG, "cp:-%d-%d-%d-%d-\r\n", sc, ec, sp, ep);
+	//wjq_log(LOG_DEBUG, "cp:-%d-%d-%d-%d-\r\n", sc, ec, sp, ep);
 	drv_ST7789_set_cp_addr(lcd, sc, ec, sp, ep);	
 	return 0;
 }
@@ -537,8 +522,7 @@ s32 drv_ST7789_flush(DevLcdNode *lcd, u16 *color, u32 len)
 
 	tmp = (u8 *)wjq_malloc(len*2);
 	i = 0;
-	while(1)
-	{
+	while(1) {
 		tmp[i*2] = (*(color+i))>>8;
 		tmp[i*2+1] = (*(color+i))&0xff;
 		i++;
