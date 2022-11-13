@@ -211,7 +211,7 @@ void cuckoo_7b0_test(void)
 	//font_test_utf16(LcdOledI2C);
 	//font_bmp_test(LcdOledI2C);
 	//FreeTypeTest(LcdOledI2C);
-	font_unicode_bitmap_test(LcdOledI2C);
+	//font_unicode_bitmap_test(LcdOledI2C);
 	//emenu_test(LcdOledI2C);
 	
 	/* 初始化lvgl 
@@ -229,7 +229,7 @@ void cuckoo_7b0_test(void)
 	fun_sound_play("mtd0/0:sound/stereo_16bit_32k.wav", "wm8960");
 	//fun_sound_play("mtd0/0:sound/stereo_16bit_32k.wav", "wm8978");
 	#endif
-	//camera_test();
+	camera_test();
 
 	//tp_open();
 
@@ -251,7 +251,7 @@ void cuckoo_7b0_test(void)
 		
 		if (a % 500 == 0) {
 			b++;
-			cuckoo_test_lcdtask(b);
+			//cuckoo_test_lcdtask(b);
 			
 		}
 

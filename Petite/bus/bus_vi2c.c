@@ -42,7 +42,7 @@ static void bus_vi2c_delay(uint16_t clk)
 	i = 1000/clk;//t的单位是us
 	i = i*5;//1us要的循环数
 	i = i/2;//半周期
-	
+
     for(;i>0;i--);
 }
 
@@ -329,19 +329,6 @@ s32 bus_vi2c_transfer(DevI2cNode *node, u8 addr, u8 rw, u8* data, s32 datalen)
 	uint16_t clk;
 	s32 res;
 	
-    #if 0//测试IO口是否连通
-    while(1)
-    {
-        uart_printf("test \r\n");
-        mcu_i2c_scl(1);
-        mcu_i2c_sda(1); 
-        Delay(5);
-        mcu_i2c_scl(0);
-        mcu_i2c_sda(0); 
-        Delay(5);
-    }   
-    #endif
-
 	if (node == NULL) return -1;
 
 	dev = &node->dev;

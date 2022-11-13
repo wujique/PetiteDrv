@@ -201,7 +201,7 @@ const DevSpiFlash DevSpiFlashEx={
 void *PetiteDevTable[]={
 	/*注册I2C总线，将oled1挂载此 I2C总线上 */
 	(void *)&DevVi2c1,
-		(void *)&DevLcdOled1,
+	//	(void *)&DevLcdOled1,
 	/*硬SPI3控制器，外扩接口的SPI口，并定义一个BusLcd在此总线上 
 		可将一些LCD设备挂在本总线上 */
 	(void *)&DevSpi3IO,

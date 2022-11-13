@@ -40,7 +40,7 @@ DevI2cNode *node;
 
 static uint8_t OV5640_I2C_open(void)
 {
-	 node = bus_i2c_open(DEV_CAMERA_I2CBUS, 0xffffffff, 200);
+	 node = bus_i2c_open(DEV_CAMERA_I2CBUS, 0xffffffff, OV5640_I2C_CLK);
 	 return 0;
 }
 

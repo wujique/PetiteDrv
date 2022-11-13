@@ -31,8 +31,8 @@ s32 board_init(void)
 
 	petite_dev_register(PetiteDevTable);
 	
-    //lcd_reset();
-    //LCD_Config();
+    lcd_reset();
+    LCD_Config();
 
 	//dev_wm8978_init();
 	//dev_wm8960_init();
@@ -52,8 +52,8 @@ s32 board_init(void)
 	}
 	#endif
 	/* 摄像头初始化 */
-	//DCMI_PWDN_RESET_Init();
-	//camera_init();
+	DCMI_PWDN_RESET_Init();
+	camera_init();
 
 	cuckoo_7b0_test_init();
 	
@@ -210,6 +210,12 @@ void board_pre_sleep(uint32_t xModifiableIdleTime)
 void board_post_sleep(uint32_t xExpectedIdleTime)
 {
 	//uart_printf("2");
+}
+
+
+s32 dev_keypad_read(u8 *key, u8 len)
+{
+	return 0;
 }
 
 

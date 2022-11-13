@@ -47,6 +47,7 @@ extern void Delay(__IO uint32_t nTime);
 
 extern const DevI2c DevVi2c1;
 
+#define OV2640_I2C_CLK	20
 #define OV2640_DEVICE_ADDR	0X30
 #define OV2640_DEVICE_WRITE_ADDRESS    0x60
 #define OV2640_DEVICE_READ_ADDRESS     0x61
@@ -65,19 +66,16 @@ static uint8_t OV2640_WriteReg(uint16_t Addr, uint8_t Data)
 
 	uint8_t buf[2];
 
-  	node = bus_i2c_open(DEV_CAMERA_I2CBUS, 0xffffffff, 200);
-	#if 1
+  	node = bus_i2c_open(DEV_CAMERA_I2CBUS, 0xffffffff, OV2640_I2C_CLK);
+
 	buf[0] = Addr;
 	buf[1] = Data;
 	res  = 	bus_i2c_transfer(node, OV2640_DEVICE_ADDR, MCU_I2C_MODE_W, buf, 2);
-	#else
-	res = mcu_sccb_writereg(&DevVi2c1, OV2640_DEVICE_WRITE_ADDRESS, Addr, Data);
-	#endif
+
 	bus_i2c_close(node);
 	
 	return res;
-	
-	//return bus_sccb_writereg(OV2640_DEVICE_WRITE_ADDRESS, Addr, Data);
+
 }
 
 /**
@@ -91,9 +89,8 @@ static uint8_t OV2640_ReadReg(uint16_t Addr)
 	DevI2cNode *node;
 	uint8_t res;
 	
-	node = bus_i2c_open(DEV_CAMERA_I2CBUS, 0xffffffff, 200);
+	node = bus_i2c_open(DEV_CAMERA_I2CBUS, 0xffffffff, OV2640_I2C_CLK);
 
-	#if 1
 	uint8_t buf[2];
 	buf[0] = Addr;
 
@@ -102,12 +99,6 @@ static uint8_t OV2640_ReadReg(uint16_t Addr)
 	bus_i2c_close(node);
 
 	return buf[0];
-	#else
-	res = mcu_sccb_readreg(&DevVi2c1, OV2640_DEVICE_READ_ADDRESS, Addr);
-	bus_i2c_close(node);
-	return res;
-	#endif
-  	//return bus_sccb_readreg(OV2640_DEVICE_READ_ADDRESS, Addr);
 }
 
 /** @addtogroup DCMI_CameraExample

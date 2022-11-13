@@ -1,6 +1,8 @@
 #ifndef _OV5640_H
 #define _OV5640_H
 
+
+#define OV5640_I2C_CLK			20
 #define OV5640_ID               0X5640  
 #define OV5640_ADDR        		0X3c		
 #define OV5640_CHIPIDH          0X300A  	
