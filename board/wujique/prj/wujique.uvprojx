@@ -1220,6 +1220,12 @@
             </File>
           </Files>
         </Group>
+        <Group>
+          <GroupName>lvgl</GroupName>
+        </Group>
+        <Group>
+          <GroupName>lvgl_port</GroupName>
+        </Group>
       </Groups>
     </Target>
   </Targets>

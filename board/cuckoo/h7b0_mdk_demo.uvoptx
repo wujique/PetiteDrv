@@ -3462,8 +3462,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\Utilities\lvgl\porting\lv_port_indev.c</PathWithFileName>
-      <FilenameWithoutPath>lv_port_indev.c</FilenameWithoutPath>
+      <PathWithFileName>.\User\lvgl_porting\lv_port_disp.c</PathWithFileName>
+      <FilenameWithoutPath>lv_port_disp.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -3474,7 +3474,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\Utilities\lvgl\porting\lv_port_fs.c</PathWithFileName>
+      <PathWithFileName>.\User\lvgl_porting\lv_port_fs.c</PathWithFileName>
       <FilenameWithoutPath>lv_port_fs.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -3486,8 +3486,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\Utilities\lvgl\porting\lv_port_disp.c</PathWithFileName>
-      <FilenameWithoutPath>lv_port_disp.c</FilenameWithoutPath>
+      <PathWithFileName>.\User\lvgl_porting\lv_port_indev.c</PathWithFileName>
+      <FilenameWithoutPath>lv_port_indev.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

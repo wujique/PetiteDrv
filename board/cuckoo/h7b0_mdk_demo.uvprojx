@@ -1759,19 +1759,19 @@
           <GroupName>mid/lvgl/port</GroupName>
           <Files>
             <File>
-              <FileName>lv_port_indev.c</FileName>
+              <FileName>lv_port_disp.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\porting\lv_port_indev.c</FilePath>
+              <FilePath>.\User\lvgl_porting\lv_port_disp.c</FilePath>
             </File>
             <File>
               <FileName>lv_port_fs.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\porting\lv_port_fs.c</FilePath>
+              <FilePath>.\User\lvgl_porting\lv_port_fs.c</FilePath>
             </File>
             <File>
-              <FileName>lv_port_disp.c</FileName>
+              <FileName>lv_port_indev.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\porting\lv_port_disp.c</FilePath>
+              <FilePath>.\User\lvgl_porting\lv_port_indev.c</FilePath>
             </File>
           </Files>
         </Group>

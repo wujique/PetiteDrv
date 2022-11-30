@@ -15,7 +15,7 @@
 #include "petite.h"
 
 #include "lvgl.h"
-#include "porting/lv_port_disp.h"
+#include "lvgl_porting/lv_port_disp.h"
 #include "demos/widgets/lv_demo_widgets.h"
 
 #include "drv_config.h"
@@ -218,7 +218,7 @@ void cuckoo_7b0_test(void)
 	注意，初始化LVGL的过程，会用到不少栈，
 	如果在rtos的任务中进行初始化，注意任务栈的大小，
 	防止溢出造成hardfault */
-	#if 0
+	#if 1
 	lv_init();
 	lv_port_disp_init();
 	lv_port_indev_init();
@@ -229,16 +229,16 @@ void cuckoo_7b0_test(void)
 	fun_sound_play("mtd0/0:sound/stereo_16bit_32k.wav", "wm8960");
 	//fun_sound_play("mtd0/0:sound/stereo_16bit_32k.wav", "wm8978");
 	#endif
-	camera_test();
+	//camera_test();
 
-	//tp_open();
+	tp_open();
 
 	while(1) {
 
 		osDelay(2);
 		
 		/* lvgl */
-		//lv_task_handler();
+		lv_task_handler();
 
 		a++;
 	
