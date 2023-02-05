@@ -52,7 +52,7 @@ s32 bus_i2c_register(const DevI2c * dev)
 	struct list_head *listp;
 	DevI2cNode *p;
 	
-	BUSI2C_DEBUG(LOG_INFO, "[register] i2c:%s!\r\n", dev->pnode.name);
+	BUSI2C_DEBUG(LOG_DEBUG, "i2c:%s!\r\n", dev->pnode.name);
 
 	/*	先要查询当前I2C控制器，防止重名	*/
 	listp = DevI2cGdRoot.next;
@@ -62,7 +62,7 @@ s32 bus_i2c_register(const DevI2c * dev)
 		p = list_entry(listp, DevI2cNode, list);
 		
 		if (strcmp(dev->pnode.name, p->dev.pnode.name) == 0) {
-			wjq_log(LOG_INFO, "i2c dev name err!\r\n");
+			wjq_log(LOG_ERR, "i2c dev name err!\r\n");
 			return -1;
 		}
 		
@@ -80,7 +80,7 @@ s32 bus_i2c_register(const DevI2c * dev)
 	p->gd = -1;
 	p->mutex = osMutexNew(NULL);
 	if (p->mutex == NULL) {
-		BUSI2C_DEBUG(LOG_DEBUG, "mutex new err!\r\n");
+		BUSI2C_DEBUG(LOG_ERR, "mutex new err!\r\n");
 	}
 	
 	if (dev->pnode.type == BUS_I2C_V)
@@ -130,7 +130,7 @@ DevI2cNode *bus_i2c_open (char *name, uint32_t wait, uint16_t clk)
 		res = osMutexAcquire(node->mutex, wait);
 
 		if ( osOK != res) {
-			//BUSI2C_DEBUG(LOG_INFO, "fail ");
+			BUSI2C_DEBUG(LOG_ERR, "fail ");
 			node = NULL;
 		} else {
 			node->clkkhz = 	clk;
@@ -176,7 +176,7 @@ s32 bus_i2c_transfer(DevI2cNode *node, u8 addr, u8 rw, u8* data, s32 datalen)
 	else if (node->dev.pnode.type == BUS_I2C_V)	
 		return bus_vi2c_transfer(node, addr, rw, data, datalen);
 	else {
-		wjq_log(LOG_DEBUG, "i2c dev type err\r\n");	
+		wjq_log(LOG_ERR, "i2c dev type err\r\n");	
 	}	
 	return -1;
 }

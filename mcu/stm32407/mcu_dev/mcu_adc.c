@@ -236,28 +236,28 @@ s32 mcu_adc_test(void)
 #ifndef MCU_ADC_IRQ/*查询模式*/
 	u16 adc_value;
 
-	wjq_log(LOG_FUN, "mcu_adc_test check\r\n");
+	wjq_log(LOG_DEBUG, "mcu_adc_test check\r\n");
 
 	while(1)
 	{
 		adc_value = mcu_adc_get_conv(ADC_Channel_8);
 	
-		wjq_log(LOG_FUN, "ADC_Channel_8:%d\r\n", adc_value);
+		wjq_log(LOG_DEBUG, "ADC_Channel_8:%d\r\n", adc_value);
 		Delay(1000);
 		
 		adc_value = mcu_adc_get_conv(ADC_Channel_9);
-		wjq_log(LOG_FUN, "ADC_Channel_9:%d\r\n", adc_value);
+		wjq_log(LOG_DEBUG, "ADC_Channel_9:%d\r\n", adc_value);
 		Delay(1000);
 	}
 #else/*中断模式*/
-	wjq_log(LOG_FUN, "mcu_adc_test int\r\n");
+	wjq_log(LOG_DEBUG, "mcu_adc_test int\r\n");
 
 	while(1)
 	{		
-		wjq_log(LOG_FUN, "r ");
+		wjq_log(LOG_DEBUG, "r ");
 		mcu_adc_start_conv(ADC_Channel_8);
 		Delay(1000);
-		wjq_log(LOG_FUN, "d ");
+		wjq_log(LOG_DEBUG, "d ");
 		mcu_adc_start_conv(ADC_Channel_9);
 		Delay(1000);
 	}

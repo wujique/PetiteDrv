@@ -53,7 +53,7 @@ s32 bus_spi_register(const DevSpi *dev)
 	struct list_head *listp;
 	DevSpiNode *p;
 	
-	wjq_log(LOG_INFO, "[register] spi :%s!\r\n", dev->pnode.name);
+	wjq_log(LOG_DEBUG, "spi :%s!\r\n", dev->pnode.name);
 
 	listp = DevSpiRoot.next;
 	while(1) {
@@ -62,7 +62,7 @@ s32 bus_spi_register(const DevSpi *dev)
 		p = list_entry(listp, DevSpiNode, list);
 
 		if (strcmp(dev->pnode.name, p->dev.pnode.name) == 0) {
-			wjq_log(LOG_INFO, "spi dev name repeat!\r\n");
+			wjq_log(LOG_ERR, "spi dev name redefine!\r\n");
 			return -1;
 		}
 		
@@ -83,7 +83,7 @@ s32 bus_spi_register(const DevSpi *dev)
 
 	p->mutex = osMutexNew(NULL);
 	if (p->mutex == NULL) {
-		BUSSPI_DEBUG(LOG_DEBUG, "mutex new err!\r\n");
+		BUSSPI_DEBUG(LOG_ERR, "mutex new err!\r\n");
 	}
 	
 	p->gd = -1;
@@ -105,7 +105,7 @@ s32 bus_spich_register(const DevSpiCh *dev)
 	DevSpiChNode *p;
 	DevSpiNode *p_spi;
 	
-	wjq_log(LOG_INFO, "[register] spi ch :%s!\r\n", dev->pnode.name);
+	wjq_log(LOG_DEBUG, "spi ch :%s!\r\n", dev->pnode.name);
 
 	/*
 		先要查询当前，防止重名
@@ -117,7 +117,7 @@ s32 bus_spich_register(const DevSpiCh *dev)
 		p = list_entry(listp, DevSpiChNode, list);
 		
 		if (strcmp(dev->pnode.name, p->dev.pnode.name) == 0) {
-			wjq_log(LOG_INFO, "         spi ch dev name err!\r\n");
+			wjq_log(LOG_ERR, "spi ch dev name err!\r\n");
 			return -1;
 		}
 		
@@ -128,7 +128,7 @@ s32 bus_spich_register(const DevSpiCh *dev)
 	listp = DevSpiRoot.next;
 	while(1) {
 		if (listp == &DevSpiRoot) {
-			wjq_log(LOG_INFO, "         spi ch reg err:no spi!\r\n");
+			wjq_log(LOG_ERR, "spi ch reg err:no spi device!\r\n");
 			return -1;
 		}
 
@@ -173,7 +173,7 @@ DevSpiChNode *bus_spich_open(char *name, SPI_MODE mode, u16 KHz,  uint32_t wait)
 	DevSpiChNode *node;
 	struct list_head *listp;
 	osStatus_t osres;
-	BUSSPI_DEBUG(LOG_INFO, "spi ch open:%s!\r\n", name);
+	BUSSPI_DEBUG(LOG_DEBUG, "spi ch open:%s!\r\n", name);
 
 	listp = DevSpiChRoot.next;
 	node = NULL;
@@ -182,10 +182,10 @@ DevSpiChNode *bus_spich_open(char *name, SPI_MODE mode, u16 KHz,  uint32_t wait)
 		if (listp == &DevSpiChRoot)	break;
 
 		node = list_entry(listp, DevSpiChNode, list);
-		BUSSPI_DEBUG(LOG_INFO, "spi ch name%s!\r\n", node->dev.spi);
+		BUSSPI_DEBUG(LOG_DEBUG, "spi ch name%s!\r\n", node->dev.spi);
 		
 		if (strcmp(name, node->dev.pnode.name) == 0) {
-			BUSSPI_DEBUG(LOG_INFO, "spi ch dev get ok!\r\n");
+			BUSSPI_DEBUG(LOG_DEBUG, "spi ch dev get ok!\r\n");
 			break;
 		} else {
 			node = NULL;
@@ -197,7 +197,7 @@ DevSpiChNode *bus_spich_open(char *name, SPI_MODE mode, u16 KHz,  uint32_t wait)
 	if (node != NULL) {
 		
 		if(node->gd == 0) {
-			BUSSPI_DEBUG(LOG_INFO, "spi ch open err:using!\r\n");
+			BUSSPI_DEBUG(LOG_ERR, "spi ch open err:using!\r\n");
 			node = NULL;
 		} else {
 			osres = osMutexAcquire(node->spi->mutex, wait);
@@ -216,17 +216,17 @@ DevSpiChNode *bus_spich_open(char *name, SPI_MODE mode, u16 KHz,  uint32_t wait)
 
 			if (res == 0) {
 				node->gd = 0;
-				BUSSPI_DEBUG(LOG_INFO, "spi dev open ok: %s!\r\n", name);
+				BUSSPI_DEBUG(LOG_DEBUG, "spi dev open ok: %s!\r\n", name);
 				mcu_io_output_resetbit(node->dev.csport, node->dev.cspin);
 			} else {
-				BUSSPI_DEBUG(LOG_INFO, "spi dev open err!\r\n");
+				BUSSPI_DEBUG(LOG_ERR, "spi dev open err!\r\n");
 				node = NULL;
 					osMutexRelease(node->spi->mutex);
 				}
 			}	
 		}
 	}else {
-		BUSSPI_DEBUG(LOG_INFO, "         spi ch no exist!\r\n");	
+		BUSSPI_DEBUG(LOG_ERR, "spi ch no exist!\r\n");	
 	}
 	
 	return node;
@@ -278,7 +278,7 @@ s32 bus_spich_transfer(DevSpiChNode * node, u8 *snd, u8 *rsv, s32 len)
 	else if (node->spi->dev.pnode.type == BUS_SPI_V)	
 		return bus_vspi_transfer(node->spi, snd, rsv, len);
 	else {
-		BUSSPI_DEBUG(LOG_DEBUG, "spi dev type err\r\n");	
+		BUSSPI_DEBUG(LOG_ERR, "spi dev type err\r\n");	
 	}
 	return -1;
 }

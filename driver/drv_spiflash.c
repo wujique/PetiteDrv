@@ -476,11 +476,11 @@ void dev_spiflash_test_fun(char *name)
 	DevSpiFlashNode *node;
 	
 	
-    wjq_log(LOG_FUN, ">:-------dev_spiflash_test-------\r\n");
+    wjq_log(LOG_DEBUG, ">:-------dev_spiflash_test-------\r\n");
     node = dev_spiflash_open(name);
-	wjq_log(LOG_FUN, ">:-------%s-------\r\n", node->dev.pnode.name);
+	wjq_log(LOG_DEBUG, ">:-------%s-------\r\n", node->dev.pnode.name);
 	if (node == NULL) {
-		wjq_log(LOG_FUN, "open spi flash ERR\r\n");
+		wjq_log(LOG_DEBUG, "open spi flash ERR\r\n");
 		while(1);
 	}
     i = 0;
@@ -489,41 +489,41 @@ void dev_spiflash_test_fun(char *name)
         i++;
     }
     //sector 1 进行擦除，然后写，校验。
-    wjq_log(LOG_FUN, ">:-------test sector erase-------\r\n", addr);
+    wjq_log(LOG_DEBUG, ">:-------test sector erase-------\r\n", addr);
     
     addr = 0;
     dev_spiflash_sector_erase(node, addr);
-    wjq_log(LOG_FUN, "erase...");
+    wjq_log(LOG_DEBUG, "erase...");
 
     dev_spiflash_sector_read(node, addr, rbuf);;//读一页回来
-    wjq_log(LOG_FUN, "read...");
+    wjq_log(LOG_DEBUG, "read...");
     
     for (tmp = 0; tmp < node->dev.pra->sectorsize; tmp++) {
         if (rbuf[tmp] != 0xff) {
-            wjq_log(LOG_FUN, "%x=%02X ", tmp, rbuf[tmp]);//擦除后不等于0XFF,坏块    
+            wjq_log(LOG_DEBUG, "%x=%02X ", tmp, rbuf[tmp]);//擦除后不等于0XFF,坏块    
             err_flag = 1;
         }
     }
 
     dev_spiflash_sector_write(node, addr, wbuf);
-    wjq_log(LOG_FUN, "write...");
+    wjq_log(LOG_DEBUG, "write...");
     
     dev_spiflash_sector_read(node, addr, rbuf);
-    wjq_log(LOG_FUN, "read...");
+    wjq_log(LOG_DEBUG, "read...");
     
-    wjq_log(LOG_FUN, "\r\n>:test wr..\r\n");
+    wjq_log(LOG_DEBUG, "\r\n>:test wr..\r\n");
     
     for (tmp = 0; tmp < node->dev.pra->sectorsize; tmp++) {
         if (rbuf[tmp] != wbuf[tmp]) {
-            wjq_log(LOG_FUN, "%x ", tmp);//读出来的跟写进去的不相等 
+            wjq_log(LOG_DEBUG, "%x ", tmp);//读出来的跟写进去的不相等 
             err_flag = 1;
         }
     }
 
     if (err_flag == 1)
-        wjq_log(LOG_FUN, "bad sector\r\n");
+        wjq_log(LOG_DEBUG, "bad sector\r\n");
     else
-        wjq_log(LOG_FUN, "OK sector\r\n");
+        wjq_log(LOG_DEBUG, "OK sector\r\n");
 
 	dev_spiflash_close(node);
 }
@@ -542,11 +542,11 @@ void dev_spiflash_test_chipcheck(char *name)
 
 	DevSpiFlashNode *node;
 	
-    wjq_log(LOG_FUN, ">:-------dev_spiflash_test-------\r\n");
+    wjq_log(LOG_DEBUG, ">:-------dev_spiflash_test-------\r\n");
     node = dev_spiflash_open(name);
-	wjq_log(LOG_FUN, ">:-------%s-------\r\n", node->dev.pnode.name);
+	wjq_log(LOG_DEBUG, ">:-------%s-------\r\n", node->dev.pnode.name);
 	if (node == NULL) {
-		wjq_log(LOG_FUN, "open spi flash ERR\r\n");
+		wjq_log(LOG_DEBUG, "open spi flash ERR\r\n");
 		while(1);
 	}
 
@@ -563,12 +563,12 @@ void dev_spiflash_test_chipcheck(char *name)
 	    
 	    addr = sector * (node->dev.pra->sectorsize);
 		
-		wjq_log(LOG_FUN, ">:sector:%d, addr:0x%08x,", sector, addr);
+		wjq_log(LOG_DEBUG, ">:sector:%d, addr:0x%08x,", sector, addr);
 	    dev_spiflash_sector_erase(node, sector);
-	    wjq_log(LOG_FUN, "erase...");
+	    wjq_log(LOG_DEBUG, "erase...");
 
 	    dev_spiflash_sector_read(node, sector, rbuf);;//读一页回来
-	    wjq_log(LOG_FUN, "read...");
+	    wjq_log(LOG_DEBUG, "read...");
 	    
 	    for (tmp = 0; tmp < node->dev.pra->sectorsize; tmp++) {
 	        if (rbuf[tmp] != 0xff) {
@@ -578,10 +578,10 @@ void dev_spiflash_test_chipcheck(char *name)
 	    }
 
 	    dev_spiflash_sector_write(node, sector, wbuf);
-	    wjq_log(LOG_FUN, "write...");
+	    wjq_log(LOG_DEBUG, "write...");
 	    
 	    dev_spiflash_sector_read(node, sector, rbuf);
-	    wjq_log(LOG_FUN, "read...");
+	    wjq_log(LOG_DEBUG, "read...");
 	    
 	    for (tmp = 0; tmp < node->dev.pra->sectorsize; tmp++) {
 	        if (rbuf[tmp] != wbuf[tmp]) {
@@ -591,9 +591,9 @@ void dev_spiflash_test_chipcheck(char *name)
 	    }
 
 	    if (err_flag == 1)
-	        wjq_log(LOG_FUN, "bad sector\r\n");
+	        wjq_log(LOG_DEBUG, "bad sector\r\n");
 	    else
-	        wjq_log(LOG_FUN, "OK sector\r\n");
+	        wjq_log(LOG_DEBUG, "OK sector\r\n");
 	}
 	dev_spiflash_close(node);
 
@@ -613,11 +613,11 @@ void dev_spiflash_test_chiperase(char *name)
 
 	DevSpiFlashNode *node;
 	
-    wjq_log(LOG_FUN, ">:-------dev_spiflash_test-------\r\n");
+    wjq_log(LOG_DEBUG, ">:-------dev_spiflash_test-------\r\n");
     node = dev_spiflash_open(name);
-	wjq_log(LOG_FUN, ">:-------%s-------\r\n", node->dev.pnode.name);
+	wjq_log(LOG_DEBUG, ">:-------%s-------\r\n", node->dev.pnode.name);
 	if (node == NULL) {
-		wjq_log(LOG_FUN, "open spi flash ERR\r\n");
+		wjq_log(LOG_DEBUG, "open spi flash ERR\r\n");
 		while(1);
 	}
 	
@@ -627,12 +627,12 @@ void dev_spiflash_test_chiperase(char *name)
 
 	    addr = sector * (node->dev.pra->sectorsize);
 		
-		wjq_log(LOG_FUN, ">:sector:%d, addr:0x%08x,", sector, addr);
+		wjq_log(LOG_DEBUG, ">:sector:%d, addr:0x%08x,", sector, addr);
 	    dev_spiflash_sector_erase(node, sector);
-	    wjq_log(LOG_FUN, "erase...");
+	    wjq_log(LOG_DEBUG, "erase...");
 
 	    dev_spiflash_sector_read(node, sector, rbuf);;//读一页回来
-	    wjq_log(LOG_FUN, "read...");
+	    wjq_log(LOG_DEBUG, "read...");
 	    
 	    for (tmp = 0; tmp < node->dev.pra->sectorsize; tmp++) {
 	        if (rbuf[tmp] != 0xff) {
@@ -642,9 +642,9 @@ void dev_spiflash_test_chiperase(char *name)
 	    }
 
 	    if(err_flag == 1)
-	        wjq_log(LOG_FUN, "bad sector\r\n");
+	        wjq_log(LOG_DEBUG, "bad sector\r\n");
 	    else
-	        wjq_log(LOG_FUN, "OK sector\r\n");
+	        wjq_log(LOG_DEBUG, "OK sector\r\n");
 	}
 	dev_spiflash_close(node);
 

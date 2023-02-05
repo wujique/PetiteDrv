@@ -197,7 +197,7 @@ int mcu_can_test(u8 mode)
 	          (CAN_GetFlagStatus(CANx, CAN_FLAG_RQCP1) !=RESET) || \
 	          (CAN_GetFlagStatus(CANx, CAN_FLAG_RQCP2) !=RESET));
 		
-		wjq_log(LOG_FUN, "can transmit :%02x\r\n", data);
+		wjq_log(LOG_DEBUG, "can transmit :%02x\r\n", data);
 		
 		while(1)
 		{
@@ -208,7 +208,7 @@ int mcu_can_test(u8 mode)
 				if ((RxMessage.StdId == 0x321)&&(RxMessage.IDE == CAN_ID_STD) && (RxMessage.DLC == 1))
 				{
 					
-					wjq_log(LOG_FUN, "can rep :%02x\r\n", RxMessage.Data[0]);
+					wjq_log(LOG_DEBUG, "can rep :%02x\r\n", RxMessage.Data[0]);
 					
 				}
 				
@@ -226,7 +226,7 @@ int mcu_can_test(u8 mode)
 			
 			if ((RxMessage.StdId == 0x321)&&(RxMessage.IDE == CAN_ID_STD) && (RxMessage.DLC == 1))
 			{
-				wjq_log(LOG_FUN, "can receive :%02x\r\n", RxMessage.Data[0]);
+				wjq_log(LOG_DEBUG, "can receive :%02x\r\n", RxMessage.Data[0]);
 				/* Transmit Structure preparation */
 				TxMessage.StdId = 0x321;
 				TxMessage.ExtId = 0x01;
@@ -243,7 +243,7 @@ int mcu_can_test(u8 mode)
 				      (CAN_GetFlagStatus(CANx, CAN_FLAG_RQCP2) !=RESET));
 						
 					}
-			    wjq_log(LOG_FUN, "can send rep ok\r\n");
+			    wjq_log(LOG_DEBUG, "can send rep ok\r\n");
 		}
 	}
   }

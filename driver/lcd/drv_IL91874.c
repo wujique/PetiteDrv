@@ -200,7 +200,7 @@ static s32 drv_IL91874_refresh_gram(DevLcdNode *lcd, u16 sc, u16 ec, u16 sp, u16
 	struct _epaper_drv_data *drvdata; 
 
 	DevLcdNode * node = lcd;
-	DevLcdBus *bus = lcd->dev.bus;
+	const DevLcdBus *bus = lcd->dev.bus;
 	
 	u32 cnt;
 	u32 gramsize;
@@ -359,7 +359,7 @@ s32 drv_IL91874_init(DevLcdNode *lcd)
 {
 	u16 data;
 	DevLcdNode * node = lcd;
-	DevLcdBus *bus = lcd->dev.bus;
+	const DevLcdBus *bus = lcd->dev.bus;
 	
 	u8 tmp[16];
 	u8 testbuf[2];

@@ -75,8 +75,7 @@ void uart_printf(s8 *fmt,...)
     va_start(ap,fmt);
     vsprintf((char *)string,(const char *)fmt,ap);
     pt = &string[0];
-    while(*pt!='\0')
-    {
+    while(*pt!='\0') {
         length++;
         pt++;
     }
@@ -85,26 +84,38 @@ void uart_printf(s8 *fmt,...)
     
     va_end(ap);
 }
+/*
+	字体颜色+背景色+方式
+	*/
+const char *log_color_tab[]={
+	"",
+	"\033[31;40;1m",
+	"\033[33;40;1m",
+	"\033[32;40;1m",
+	"\033[34;40;1m",
+
+};
 
 void wjq_log(LOG_L l, s8 *fmt,...)
 {
-	if(l > LogLevel)
-		return;
+	if(l > LogLevel) return;
 
 	s32 length = 0;
     va_list ap;
 
     s8 *pt;
-    
+
+	
     va_start(ap,fmt);
-    vsprintf((char *)string,(const char *)fmt,ap);
+    vsprintf((char *)&string[0],(const char *)fmt,ap);
+	
     pt = &string[0];
-    while(*pt!='\0')
-    {
+    while(*pt!='\0') {
         length++;
         pt++;
     }
-    
+
+	mcu_uart_write(PC_PORT, log_color_tab[l], 10);
     mcu_uart_write(PC_PORT, (u8*)&string[0], length);  //写串口
     
     va_end(ap);

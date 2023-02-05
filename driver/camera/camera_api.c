@@ -102,21 +102,21 @@ s32 camera_init(void)
 		res = OV2640_Init();
 		if (res == 0) {
 			Camera = OV2640_CAMERA;
-		} else uart_printf("no OV2640!\r\n");
+		} else wjq_log(LOG_WAR, "no OV2640!\r\n");
 	}
 
 	if (res == -1) {
 		res = OV5640_Init();
 		if (res == 0) {
-			uart_printf("OV5640 init!\r\n");
+			wjq_log(LOG_WAR, "OV5640 init!\r\n");
 			Camera = OV5640_CAMERA;
 		}
 	}
 
 	
 	if (res == -1) {
-		wjq_log(LOG_DEBUG, "Check the Camera HW and try again\r\n");
-		wjq_log(LOG_DEBUG, "check i2c oled and camera...\r\n");
+		wjq_log(LOG_WAR, "Check the Camera HW and try again\r\n");
+		wjq_log(LOG_WAR, "check i2c oled and camera...\r\n");
 		return -1;  
 	}
 	

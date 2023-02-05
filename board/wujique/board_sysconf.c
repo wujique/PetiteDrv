@@ -480,6 +480,66 @@ const DevLcd DevLcdCOG1	=	{
 	.buspra = (void *)&CogSpiSet,
 };
 
+const PraSpiSet TftSpiSet = {
+	.mode = SPI_MODE_3,
+	.KHz = 10000,
+};
+
+const DevLcd DevSpiLcdTFT	=	{
+
+	.pnode={
+				.name = "spitftlcd",
+				.type = DEV_LCD,
+		},
+		
+	/*1.44寸 中景园 128*128 tft lcd */
+	#if 0	
+	.id = 0x7735, 
+	.width = 128, 
+	.height = 128,
+	#endif
+	
+	#if 1	
+	/* 1.3寸，IPS，中景园，只有SCL&SDA的SPI接口LCD*/
+	.id = 0x7789, 
+	.width = 128, 
+	.height = 128,
+	#endif
+	
+	.bus = &BusLcdSpi3,  
+	.buspra = (void *)&TftSpiSet,
+};
+
+const PraSpiSet EpaperSpiSet = {
+	.mode = SPI_MODE_3,
+	.KHz = 10000,
+};
+
+const DevLcd DevEpaper	=	{
+
+	.pnode={
+				.name = "spiE-Paper",
+				.type = DEV_LCD,
+		},
+		
+	/* 大连佳显 spi 接口的三色墨水屏 GDEW027C44*/
+	#if 1	
+	.id = 0x9187, 
+	.width = 176, 
+	.height = 264,
+	#endif
+	
+	#if 0	
+	/* 大连佳显 spi 接口 黑白墨水屏 1.54寸 GDEH154D27*/
+	.id = 0x3820, 
+	.width = 200, 
+	.height = 200,
+	#endif
+	
+	.bus = &BusLcdSpi3,  
+	.buspra = (void *)&EpaperSpiSet,
+};
+
 /*fsmc接口的 tft lcd*/
 #if 1
 /* 屋脊雀2.8寸屏幕 */
@@ -495,8 +555,8 @@ const DevLcd DevLcdtTFT	=	{
 				*/	 
 	.id = NULL, 
 	/* 指定lcd 尺寸 */
-	.width = 240, 
-	.height = 320,
+	.width = 480, 
+	.height = 800,
 
 	.bus = &BusLcd8080,  
 	.buspra = (void *)&CogSpiSet,
@@ -506,16 +566,12 @@ const DevLcd DevLcdtTFT	=	{
 /*SPI接口的 tft lcd*/
 //const DevLcd DevLcdtTFT	=	{"spitftlcd", 		"BusLcdSpi3", 	0x9342, 240, 320};
 //const DevLcd DevLcdtTFT	=	{"spitftlcd", 		"BusLcdVSpi1CH2", 	0x9342, 240, 320};
-/*1.44寸 中景园*/
-//const DevLcd DevSpiLcdtTFT	=	{"spitftlcd",   "BusLcdSpi3", 	0x7735, 128, 128};
-/* 1.3寸，IPS，中景园，只有SCL&SDA的SPI接口LCD*/
-//const DevLcd DevLcdVSPITFT =	{"vspitftlcd",		"BusLcdVSpi3",	0x7789, 240, 240};
-/* spi 接口的三色墨水屏 */
-//const DevLcd DevLcdSPIEPaper =	{"spiE-Paper",		"BusLcdSpi3",	0x9187, 176, 264};
-/* spi 接口 黑白墨水屏 1.54寸 GDEH154D27*/
-//const DevLcd DevLcdSPIEPaper =	{"spiE-Paper",		"BusLcdSpi3",	0x3820, 200, 200};
 
 
+
+/*
+	简单设备树
+	*/
 void *PetiteDevTable[]={
 	/*注册I2C总线*/
 	(void *)(&DevVi2c0),
@@ -530,9 +586,10 @@ void *PetiteDevTable[]={
 		(void *)(&DevSpi3CH2),
 			(void *)(&DevSpiFlashCore),			
 		(void *)(&DevSpi3CH3),
-			//(void *)(&DevLcdSPIEPaper);
-			(void *)(&DevLcdCOG1),
+			(void *)(&DevEpaper),
+			//(void *)(&DevLcdCOG1),
 			//(void *)(&DevLcdSpiOled);
+			//(void *)(&DevSpiLcdTFT),
 		//(void *)(&DevSpi3CH4);
 	
 #if (SYS_USE_VSPI1 == 1)

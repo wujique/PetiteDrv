@@ -66,14 +66,14 @@ void list_test(void)
 	res = list_empty(&TestList);
 	if(res  == 1)
 	{
-		wjq_log(LOG_FUN, "list is empty\r\n");
+		wjq_log(LOG_DEBUG, "list is empty\r\n");
 	}
 	
 	list_add(&(t1.list), &TestList);
 
 	p = list_entry(TestList.next,struct test, list);
 	
-	wjq_log(LOG_FUN, "name:%s\r\n", p->name);
+	wjq_log(LOG_DEBUG, "name:%s\r\n", p->name);
 
 	while(1);
 	

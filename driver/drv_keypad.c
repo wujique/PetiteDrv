@@ -278,7 +278,7 @@ s32 dev_keypad_test(void)
 	s32 res;
 	res = dev_keypad_read(&key, 1);
 	if(res == 1){
-		wjq_log(LOG_FUN, "get a key:%02x\r\n", key);
+		wjq_log(LOG_DEBUG, "get a key:%02x\r\n", key);
 	}
 	return 0;
 }

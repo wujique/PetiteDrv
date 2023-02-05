@@ -250,7 +250,7 @@ static s32 dev_nrf24l01_openspi(void)
 	//res = mcu_spi_open(RF24L01_SPI, SPI_MODE_0, SPI_BaudRatePrescaler_32);
 	if(res == -1)
 	{
-		wjq_log(LOG_FUN, "rf open spi err\r\n");
+		wjq_log(LOG_DEBUG, "rf open spi err\r\n");
 		return -1;
 	}	
 	
@@ -275,7 +275,7 @@ u8 NRF_Tx_Dat(u8 *txbuf, u16 len)
     u8 state;    
 
 	
-	wjq_log(LOG_FUN, "%s\r\n", __FUNCTION__);
+	wjq_log(LOG_DEBUG, "%s\r\n", __FUNCTION__);
 
 	dev_nrf24l01_openspi();
 
@@ -291,12 +291,12 @@ u8 NRF_Tx_Dat(u8 *txbuf, u16 len)
 		 /*等待发送完成中断 */ 
 	    while(0 != dev_nrf24l01_irqsta()); 
 		
-		wjq_log(LOG_FUN, "NRF send data ok\r\n");
+		wjq_log(LOG_DEBUG, "NRF send data ok\r\n");
 	    dev_nrf24l01_read_reg(NRF_REG_STATUS, &state); /*读取状态寄存器的值 */   
 	    dev_nrf24l01_write_reg(NRF_WRITE_REG+NRF_REG_STATUS, state); /*清除TX_DS或MAX_RT中断标志*/      
 	    dev_nrf24l01_write_reg(NRF_FLUSH_TX, NRF_NOP);    //清除TX FIFO寄存器   
 
-	wjq_log(LOG_FUN, "NRF send data finish\r\n");
+	wjq_log(LOG_DEBUG, "NRF send data finish\r\n");
 	
 	dev_nrf24l01_closespi();
 	/*判断中断类型*/      
@@ -323,7 +323,7 @@ s32 NRF_Rx_Dat(u8 *rxb)
     dev_nrf24l01_read_reg(NRF_REG_STATUS, &state);    /*读取status寄存器的值*/    
     if(state&NRF_STA_BIT_RX_DR)  /*判断是否接收到数据*/  //接收到数据  
     {
-    	wjq_log(LOG_FUN, "nrf receive data\r\n");
+    	wjq_log(LOG_DEBUG, "nrf receive data\r\n");
 		
         dev_nrf24l01_write_reg(NRF_WRITE_REG+NRF_REG_STATUS,state);/* 清除中断标志*/   
         dev_nrf24l01_read_buf(NRF_RD_RX_PLOAD, rxb, RX_PLOAD_WIDTH);//读取数据  
@@ -404,20 +404,20 @@ s32 dev_nrf24l01_check(void)
     dev_nrf24l01_read_buf(NRF_REG_TX_ADDR, buf1, 5); /*读出写入的地址 */ 
 	dev_nrf24l01_closespi();
 	
-	wjq_log(LOG_FUN, "\r\n-------------\r\n");
+	wjq_log(LOG_DEBUG, "\r\n-------------\r\n");
 	PrintFormat(buf, sizeof(buf));
-	wjq_log(LOG_FUN, "\r\n-------------\r\n");
+	wjq_log(LOG_DEBUG, "\r\n-------------\r\n");
 	PrintFormat(buf1, sizeof(buf1));
-	wjq_log(LOG_FUN, "\r\n-------------\r\n");
+	wjq_log(LOG_DEBUG, "\r\n-------------\r\n");
 	
 	if(0 == memcmp(buf,buf1, sizeof(buf)))  
     {
-    	wjq_log(LOG_FUN, "nrf24l01 ok\r\n");
+    	wjq_log(LOG_DEBUG, "nrf24l01 ok\r\n");
     	return 0;
     }
 	else
 	{
-		wjq_log(LOG_FUN, "nrf24l01 err\r\n");
+		wjq_log(LOG_DEBUG, "nrf24l01 err\r\n");
 		return -1;
 	}
 }  
@@ -494,7 +494,7 @@ s32 dev_nrf24l01_test(void)
 	res = dev_nrf24l01_check();
 	if(res != 0)
 	{
-		wjq_log(LOG_FUN, "nrf 24l01 init err!\r\n");
+		wjq_log(LOG_DEBUG, "nrf 24l01 init err!\r\n");
 		while(1);
 	}
 	/*进入接收模式*/
@@ -502,7 +502,7 @@ s32 dev_nrf24l01_test(void)
 	while(1)
 	{
 		#if 1
-		wjq_log(LOG_FUN, "nrf write test\r\n");
+		wjq_log(LOG_DEBUG, "nrf write test\r\n");
 		dev_nrf24l01_write(TX_ADDRESS ,src, sizeof(src));	
 		Delay(1000);
 		#else

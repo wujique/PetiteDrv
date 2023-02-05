@@ -3526,14 +3526,14 @@ uint8_t vfs_explore_disk (char* path , uint8_t recu_level)
  
 
 			if (recu_level == 1) {
-				wjq_log(LOG_FUN, "   |__");
+				wjq_log(LOG_DEBUG, "   |__");
 			} else if(recu_level == 2)
 			{
-				wjq_log(LOG_FUN, "   |   |__");
+				wjq_log(LOG_DEBUG, "   |   |__");
 			}
 			else if(recu_level == 3)
 			{
-				wjq_log(LOG_FUN, "   |   |   |__");
+				wjq_log(LOG_DEBUG, "   |   |   |__");
 			}
 			
 			if((fno.fattrib & AM_MASK) == AM_DIR) {
@@ -3554,7 +3554,7 @@ uint8_t vfs_explore_disk (char* path , uint8_t recu_level)
 		}
 	} else {
 
-		wjq_log(LOG_FUN, "open dir err:%d\r\n", res);
+		wjq_log(LOG_DEBUG, "open dir err:%d\r\n", res);
 	}
 	return res;
 }

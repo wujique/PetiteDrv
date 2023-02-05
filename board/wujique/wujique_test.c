@@ -725,13 +725,13 @@ s32 test_touchkey(void)
 		{
 			if(tmp == DEV_TOUCHKEY_TOUCH)
 			{
-				wjq_log(LOG_FUN, "touch key test get a touch event!\r\n");
+				wjq_log(LOG_DEBUG, "touch key test get a touch event!\r\n");
 				display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 10, "      touch    ", BLACK);
 				lcd_update(WJQTestLcd);
 			}
 			else if(tmp == DEV_TOUCHKEY_RELEASE)
 			{
-				wjq_log(LOG_FUN, "touch key test get a release event!\r\n");
+				wjq_log(LOG_DEBUG, "touch key test get a release event!\r\n");
 				display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 10, "      release    ", BLACK);
 				lcd_update(WJQTestLcd);
 			}
@@ -1258,7 +1258,10 @@ void wujique_stm407_test(void)
 
 	//WJQTestLcd = lcd_open("tftlcd");
 	//WJQTestLcd = lcd_open("spicoglcd");
-	WJQTestLcd = lcd_open("i2coledlcd");
+	//WJQTestLcd = lcd_open("i2coledlcd");
+	//WJQTestLcd = lcd_open("spitftlcd");
+	WJQTestLcd = lcd_open("spiE-Paper");
+	
 	if (WJQTestLcd == NULL) {
 		wjq_log(LOG_DEBUG, "emenu open lcd err\r\n");
 	}

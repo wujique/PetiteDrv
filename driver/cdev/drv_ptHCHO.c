@@ -130,7 +130,7 @@ s32 dev_ptHCHO_test(void)
 	s32 ret;
 	u16 value;
 
-	wjq_log(LOG_FUN, "dev_ptHCHO_test\r\n");
+	wjq_log(LOG_DEBUG, "dev_ptHCHO_test\r\n");
 	
 	dev_ptHCHO_init();
 	uart_printf("0");
@@ -141,7 +141,7 @@ s32 dev_ptHCHO_test(void)
 		Delay(500);
 		uart_printf("2");
 		ret = dev_ptHCHO_write((u8*)HCHOAskCmd, 7);
-		wjq_log(LOG_FUN, "write:%d\r\n", ret);
+		wjq_log(LOG_DEBUG, "write:%d\r\n", ret);
 		
 		timeout = 0;
 		len = 0;
@@ -153,15 +153,15 @@ s32 dev_ptHCHO_test(void)
 				PrintFormat(hchobuf, len);
 				if((hchobuf[0] == 0x42) &&(hchobuf[1] == 0x4d)&&(hchobuf[2] == 0x08)) {
 					value = (hchobuf[6]<<8) +	hchobuf[7];
-					wjq_log(LOG_FUN, ">-%s:%d", numNameInx[hchobuf[3]],value/numKeysInx[hchobuf[5]]);
-					wjq_log(LOG_FUN, ".");
-					wjq_log(LOG_FUN, "%d%s---\r\n",value%(numKeysInx[hchobuf[5]]), numUnitInx[hchobuf[4]]);
+					wjq_log(LOG_DEBUG, ">-%s:%d", numNameInx[hchobuf[3]],value/numKeysInx[hchobuf[5]]);
+					wjq_log(LOG_DEBUG, ".");
+					wjq_log(LOG_DEBUG, "%d%s---\r\n",value%(numKeysInx[hchobuf[5]]), numUnitInx[hchobuf[4]]);
 				}
 			}
 			
 			timeout++;
 			if(timeout >= 100) {
-				wjq_log(LOG_FUN, "timeout---\r\n");
+				wjq_log(LOG_DEBUG, "timeout---\r\n");
 				break;
 			}
 		}

@@ -389,14 +389,14 @@ void wjq_malloc_test(void)
 	wjq_malloc(1024);
 
 	/*打印指针，看看是不是4字节对齐*/
-	wjq_log(LOG_FUN, "pointer :%08x\r\n", p);
+	wjq_log(LOG_DEBUG, "pointer :%08x\r\n", p);
 
 	memset(p, 0xf0, 1024);
-	wjq_log(LOG_FUN, "data:%02x\r\n", * (p+1023));
-	wjq_log(LOG_FUN, "data:%02x\r\n", * (p+1024));
+	wjq_log(LOG_DEBUG, "data:%02x\r\n", * (p+1023));
+	wjq_log(LOG_DEBUG, "data:%02x\r\n", * (p+1024));
 
 	wjq_free(p);
-	wjq_log(LOG_FUN, "alloc free ok\r\n");
+	wjq_log(LOG_DEBUG, "alloc free ok\r\n");
 
 	while(1)
 		;

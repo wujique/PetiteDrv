@@ -169,7 +169,7 @@ s32 dev_rs485_test(u8 mode)
 		{
 			Delay(1000);
 			res = dev_rs485_write("rs485 test\r\n", 13);
-			wjq_log(LOG_FUN, "dev rs485 write:%d\r\n", res);
+			wjq_log(LOG_DEBUG, "dev rs485 write:%d\r\n", res);
 		}
 	}
 	else//接收端测试
@@ -181,7 +181,7 @@ s32 dev_rs485_test(u8 mode)
 			if(len > 0)
 			{
 				buf[len] = 0;
-				wjq_log(LOG_FUN, "%s", buf);
+				wjq_log(LOG_DEBUG, "%s", buf);
 				memset(buf, 0, sizeof(buf));
 			}
 		}

@@ -156,7 +156,7 @@ s32 lcd_dev_register(const DevLcd *dev)
 		lcdnode = list_entry(listp, DevLcdNode, list);
 
 		if (strcmp(dev->pnode.name, lcdnode->dev.pnode.name) == 0) {
-			wjq_log(LOG_INFO, "            lcd dev name err!\r\n");
+			wjq_log(LOG_ERR, "lcd dev name err!\r\n");
 			return -1;
 		}
 	
@@ -196,15 +196,15 @@ s32 lcd_dev_register(const DevLcd *dev)
 		}
 	}else {
 		/* 设备指定了 id，根据id找驱动 */
-		LCD_DEBUG(LOG_DEBUG, "find lcd drv, id:%04x...", dev->id);
+		
 		
 		ret = -1;
 		lcdnode->drv = lcd_finddrv(dev->id);
 		if (lcdnode->drv != NULL) {
-			LCD_DEBUG(LOG_DEBUG, "suc!\r\n");
+			LCD_DEBUG(LOG_DEBUG, "find lcd drv, id:%04x...suc\r\n", dev->id);
 			ret = lcdnode->drv->init(lcdnode);
 		} else {
-			LCD_DEBUG(LOG_DEBUG, "fail!\r\n");
+			LCD_DEBUG(LOG_WAR, "find lcd drv, id:%04x...fail\r\n", dev->id);
 		}
 	}
 
@@ -222,10 +222,10 @@ s32 lcd_dev_register(const DevLcd *dev)
 		lcdnode->drv->color_fill(lcdnode, 0, lcdnode->width, 0, lcdnode->height, BLUE);
 		lcdnode->drv->update(lcdnode);
 		lcdnode->drv->backlight(lcdnode, 1);
-		wjq_log(LOG_INFO, "            lcd init OK\r\n");
+		wjq_log(LOG_INFO, "lcd init OK\r\n");
 	} else {
 		lcdnode->gd = -2;
-		wjq_log(LOG_INFO, "            lcd drv init err!\r\n");
+		wjq_log(LOG_ERR, "lcd drv init err!\r\n");
 	}
 	
 	return 0;

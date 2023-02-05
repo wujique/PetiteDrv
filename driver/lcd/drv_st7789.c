@@ -480,8 +480,7 @@ s32 drv_ST7789_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
 	tmp = (u8 *)wjq_malloc(width*2);
 
 	DevLcdNode * node = lcd;
-	DevLcdBus *bus = lcd->dev.bus;
-	
+
 	node = bus_lcd_open(lcd);
 	
 	pcc = color;

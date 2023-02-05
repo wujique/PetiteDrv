@@ -269,11 +269,11 @@ s32 dev_touchkey_test(void)
 	{
 		if(tmp == DEV_TOUCHKEY_TOUCH)
 		{
-			wjq_log(LOG_FUN, "touch key test get a touch event!\r\n");
+			wjq_log(LOG_DEBUG, "touch key test get a touch event!\r\n");
 		}
 		else if(tmp == DEV_TOUCHKEY_RELEASE)
 		{
-			wjq_log(LOG_FUN, "touch key test get a release event!\r\n");
+			wjq_log(LOG_DEBUG, "touch key test get a release event!\r\n");
 		}
 	}
 	return 0;

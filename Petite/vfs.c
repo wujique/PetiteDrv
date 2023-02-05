@@ -269,12 +269,12 @@ int vfs_mount(const VFSDIR *Mtd)
 					
 					res = f_mount(&VfsNodeList[i].pra.fatfs, Mtd->dir, 1);
 					if ( res == FR_OK )  {
-						wjq_log(LOG_FUN, "> vfs mount fatfs initialized.\r\n");
+						wjq_log(LOG_DEBUG, "> vfs mount fatfs initialized.\r\n");
 						return 0;
 					}
 					//vfs_explore_disk("1:/", 1);
 					
-					wjq_log(LOG_FUN, "> vfs mount fatfs err:%d\r\n", res);
+					wjq_log(LOG_DEBUG, "> vfs mount fatfs err:%d\r\n", res);
 					#endif
 					return -1;
 					

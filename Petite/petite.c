@@ -120,10 +120,10 @@ int petite_app(void)
 		/* Start scheduler */
   		osKernelStart();
 	}else{
-		wjq_log(LOG_INFO,"[    _app] xTaskCreate fail\r\n");
+		wjq_log(LOG_WAR,"[    _app] xTaskCreate fail\r\n");
 	}
 	
-	wjq_log(LOG_INFO,"while(1) err!\r\n");
+	wjq_log(LOG_ERR,"while(1) err!\r\n");
 	while(1);
   
 }
@@ -274,7 +274,7 @@ s32 petite_dev_register(void *DevTable[])
 	while(1){
 		if (DevTable[i] == NULL) break;
 		pnod =	(PetiteNode *)DevTable[i];
-		uart_printf("pnode name:%s\r\n", pnod->name);
+		wjq_log(LOG_DEBUG, "[register]:%s\r\n", pnod->name);
 		switch(pnod->type)
 		{
 			case BUS_I2C_V:
@@ -298,7 +298,7 @@ s32 petite_dev_register(void *DevTable[])
 				break;
 			
 			default:
-				wjq_log(LOG_DEBUG, "\r\n\r\n[register] not register!\r\n\r\n");
+				wjq_log(LOG_WAR, "\r\n\r\n[register] %s not register!\r\n\r\n", pnod->name);
 				break;
 		}
 		i++;
