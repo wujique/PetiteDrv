@@ -339,7 +339,7 @@
               <MiscControls>--locale=english</MiscControls>
               <Define>NDEBUG</Define>
               <Undefine></Undefine>
-              <IncludePath>.\Core\Inc;.\Drivers\STM32H7xx_HAL_Driver\Inc;.\User;.\Drivers\CMSIS\Include;.\Drivers\CMSIS\Device\ST\STM32H7xx\Include;.\Drivers\STM32H7xx_HAL_Driver\Inc\Legacy;..\..\mcu\stm32h7b0vb;..\..\Petite;..\..\driver;..\..\driver\touch;..\..\driver\lcd;..\..\Utilities\lvgl;..\..\Utilities\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\..\Utilities\FreeRTOS\Source\include;..\..\Utilities\FreeRTOS\Source\CMSIS_RTOS_V2;..\..\Utilities\FatFs;..\..\driver\sound;..\..\driver\touch\rtp\tslib;..\..\driver\touch\rtp;..\..\Petite\bus;..\..\Utilities\Freetype\include</IncludePath>
+              <IncludePath>.\Core\Inc;.\Drivers\STM32H7xx_HAL_Driver\Inc;.\User;.\Drivers\CMSIS\Include;.\Drivers\CMSIS\Device\ST\STM32H7xx\Include;.\Drivers\STM32H7xx_HAL_Driver\Inc\Legacy;..\..\mcu\stm32h7b0vb;..\..\Petite;..\..\driver;..\..\driver\touch;..\..\driver\lcd;..\..\components\lvgl;..\..\components\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\..\components\FreeRTOS\Source\include;..\..\components\FreeRTOS\Source\CMSIS_RTOS_V2;..\..\components\FatFs;..\..\driver\sound;..\..\driver\touch\rtp\tslib;..\..\driver\touch\rtp;..\..\Petite\bus;..\..\components\emenu</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -953,16 +953,6 @@
               <FileType>1</FileType>
               <FilePath>..\..\panel\audio_sample.c</FilePath>
             </File>
-            <File>
-              <FileName>emenu.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\panel\emenu.c</FilePath>
-            </File>
-            <File>
-              <FileName>emenu_test.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\panel\emenu_test.c</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
@@ -971,52 +961,52 @@
             <File>
               <FileName>croutine.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\FreeRTOS\Source\croutine.c</FilePath>
+              <FilePath>..\..\components\FreeRTOS\Source\croutine.c</FilePath>
             </File>
             <File>
               <FileName>event_groups.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\FreeRTOS\Source\event_groups.c</FilePath>
+              <FilePath>..\..\components\FreeRTOS\Source\event_groups.c</FilePath>
             </File>
             <File>
               <FileName>list.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\FreeRTOS\Source\list.c</FilePath>
+              <FilePath>..\..\components\FreeRTOS\Source\list.c</FilePath>
             </File>
             <File>
               <FileName>queue.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\FreeRTOS\Source\queue.c</FilePath>
+              <FilePath>..\..\components\FreeRTOS\Source\queue.c</FilePath>
             </File>
             <File>
               <FileName>stream_buffer.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\FreeRTOS\Source\stream_buffer.c</FilePath>
+              <FilePath>..\..\components\FreeRTOS\Source\stream_buffer.c</FilePath>
             </File>
             <File>
               <FileName>tasks.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\FreeRTOS\Source\tasks.c</FilePath>
+              <FilePath>..\..\components\FreeRTOS\Source\tasks.c</FilePath>
             </File>
             <File>
               <FileName>timers.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\FreeRTOS\Source\timers.c</FilePath>
+              <FilePath>..\..\components\FreeRTOS\Source\timers.c</FilePath>
             </File>
             <File>
               <FileName>heap_4.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\FreeRTOS\Source\portable\MemMang\heap_4.c</FilePath>
+              <FilePath>..\..\components\FreeRTOS\Source\portable\MemMang\heap_4.c</FilePath>
             </File>
             <File>
               <FileName>port.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\FreeRTOS\Source\portable\RVDS\ARM_CM4F\port.c</FilePath>
+              <FilePath>..\..\components\FreeRTOS\Source\portable\RVDS\ARM_CM4F\port.c</FilePath>
             </File>
             <File>
               <FileName>cmsis_os2.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\FreeRTOS\Source\CMSIS_RTOS_V2\cmsis_os2.c</FilePath>
+              <FilePath>..\..\components\FreeRTOS\Source\CMSIS_RTOS_V2\cmsis_os2.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1026,732 +1016,732 @@
             <File>
               <FileName>lv_arc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\widgets\lv_arc.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\widgets\lv_arc.c</FilePath>
             </File>
             <File>
               <FileName>lv_bar.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\widgets\lv_bar.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\widgets\lv_bar.c</FilePath>
             </File>
             <File>
               <FileName>lv_btn.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\widgets\lv_btn.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\widgets\lv_btn.c</FilePath>
             </File>
             <File>
               <FileName>lv_btnmatrix.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\widgets\lv_btnmatrix.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\widgets\lv_btnmatrix.c</FilePath>
             </File>
             <File>
               <FileName>lv_canvas.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\widgets\lv_canvas.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\widgets\lv_canvas.c</FilePath>
             </File>
             <File>
               <FileName>lv_checkbox.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\widgets\lv_checkbox.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\widgets\lv_checkbox.c</FilePath>
             </File>
             <File>
               <FileName>lv_dropdown.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\widgets\lv_dropdown.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\widgets\lv_dropdown.c</FilePath>
             </File>
             <File>
               <FileName>lv_img.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\widgets\lv_img.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\widgets\lv_img.c</FilePath>
             </File>
             <File>
               <FileName>lv_label.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\widgets\lv_label.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\widgets\lv_label.c</FilePath>
             </File>
             <File>
               <FileName>lv_line.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\widgets\lv_line.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\widgets\lv_line.c</FilePath>
             </File>
             <File>
               <FileName>lv_objx_templ.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\widgets\lv_objx_templ.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\widgets\lv_objx_templ.c</FilePath>
             </File>
             <File>
               <FileName>lv_roller.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\widgets\lv_roller.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\widgets\lv_roller.c</FilePath>
             </File>
             <File>
               <FileName>lv_slider.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\widgets\lv_slider.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\widgets\lv_slider.c</FilePath>
             </File>
             <File>
               <FileName>lv_switch.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\widgets\lv_switch.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\widgets\lv_switch.c</FilePath>
             </File>
             <File>
               <FileName>lv_table.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\widgets\lv_table.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\widgets\lv_table.c</FilePath>
             </File>
             <File>
               <FileName>lv_textarea.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\widgets\lv_textarea.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\widgets\lv_textarea.c</FilePath>
             </File>
             <File>
               <FileName>lv_anim.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\misc\lv_anim.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\misc\lv_anim.c</FilePath>
             </File>
             <File>
               <FileName>lv_anim_timeline.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\misc\lv_anim_timeline.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\misc\lv_anim_timeline.c</FilePath>
             </File>
             <File>
               <FileName>lv_area.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\misc\lv_area.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\misc\lv_area.c</FilePath>
             </File>
             <File>
               <FileName>lv_async.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\misc\lv_async.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\misc\lv_async.c</FilePath>
             </File>
             <File>
               <FileName>lv_bidi.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\misc\lv_bidi.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\misc\lv_bidi.c</FilePath>
             </File>
             <File>
               <FileName>lv_color.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\misc\lv_color.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\misc\lv_color.c</FilePath>
             </File>
             <File>
               <FileName>lv_fs.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\misc\lv_fs.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\misc\lv_fs.c</FilePath>
             </File>
             <File>
               <FileName>lv_gc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\misc\lv_gc.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\misc\lv_gc.c</FilePath>
             </File>
             <File>
               <FileName>lv_ll.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\misc\lv_ll.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\misc\lv_ll.c</FilePath>
             </File>
             <File>
               <FileName>lv_log.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\misc\lv_log.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\misc\lv_log.c</FilePath>
             </File>
             <File>
               <FileName>lv_lru.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\misc\lv_lru.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\misc\lv_lru.c</FilePath>
             </File>
             <File>
               <FileName>lv_math.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\misc\lv_math.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\misc\lv_math.c</FilePath>
             </File>
             <File>
               <FileName>lv_mem.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\misc\lv_mem.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\misc\lv_mem.c</FilePath>
             </File>
             <File>
               <FileName>lv_printf.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\misc\lv_printf.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\misc\lv_printf.c</FilePath>
             </File>
             <File>
               <FileName>lv_style.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\misc\lv_style.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\misc\lv_style.c</FilePath>
             </File>
             <File>
               <FileName>lv_style_gen.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\misc\lv_style_gen.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\misc\lv_style_gen.c</FilePath>
             </File>
             <File>
               <FileName>lv_templ.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\misc\lv_templ.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\misc\lv_templ.c</FilePath>
             </File>
             <File>
               <FileName>lv_timer.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\misc\lv_timer.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\misc\lv_timer.c</FilePath>
             </File>
             <File>
               <FileName>lv_tlsf.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\misc\lv_tlsf.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\misc\lv_tlsf.c</FilePath>
             </File>
             <File>
               <FileName>lv_txt.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\misc\lv_txt.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\misc\lv_txt.c</FilePath>
             </File>
             <File>
               <FileName>lv_txt_ap.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\misc\lv_txt_ap.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\misc\lv_txt_ap.c</FilePath>
             </File>
             <File>
               <FileName>lv_utils.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\misc\lv_utils.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\misc\lv_utils.c</FilePath>
             </File>
             <File>
               <FileName>lv_hal_disp.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\hal\lv_hal_disp.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\hal\lv_hal_disp.c</FilePath>
             </File>
             <File>
               <FileName>lv_hal_indev.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\hal\lv_hal_indev.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\hal\lv_hal_indev.c</FilePath>
             </File>
             <File>
               <FileName>lv_hal_tick.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\hal\lv_hal_tick.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\hal\lv_hal_tick.c</FilePath>
             </File>
             <File>
               <FileName>lv_font.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\font\lv_font.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\font\lv_font.c</FilePath>
             </File>
             <File>
               <FileName>lv_font_dejavu_16_persian_hebrew.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\font\lv_font_dejavu_16_persian_hebrew.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\font\lv_font_dejavu_16_persian_hebrew.c</FilePath>
             </File>
             <File>
               <FileName>lv_font_fmt_txt.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\font\lv_font_fmt_txt.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\font\lv_font_fmt_txt.c</FilePath>
             </File>
             <File>
               <FileName>lv_font_loader.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\font\lv_font_loader.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\font\lv_font_loader.c</FilePath>
             </File>
             <File>
               <FileName>lv_font_montserrat_8.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\font\lv_font_montserrat_8.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\font\lv_font_montserrat_8.c</FilePath>
             </File>
             <File>
               <FileName>lv_font_montserrat_10.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\font\lv_font_montserrat_10.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\font\lv_font_montserrat_10.c</FilePath>
             </File>
             <File>
               <FileName>lv_font_montserrat_12.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\font\lv_font_montserrat_12.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\font\lv_font_montserrat_12.c</FilePath>
             </File>
             <File>
               <FileName>lv_font_montserrat_12_subpx.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\font\lv_font_montserrat_12_subpx.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\font\lv_font_montserrat_12_subpx.c</FilePath>
             </File>
             <File>
               <FileName>lv_font_montserrat_14.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\font\lv_font_montserrat_14.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\font\lv_font_montserrat_14.c</FilePath>
             </File>
             <File>
               <FileName>lv_font_montserrat_16.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\font\lv_font_montserrat_16.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\font\lv_font_montserrat_16.c</FilePath>
             </File>
             <File>
               <FileName>lv_font_montserrat_18.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\font\lv_font_montserrat_18.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\font\lv_font_montserrat_18.c</FilePath>
             </File>
             <File>
               <FileName>lv_font_montserrat_20.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\font\lv_font_montserrat_20.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\font\lv_font_montserrat_20.c</FilePath>
             </File>
             <File>
               <FileName>lv_font_montserrat_22.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\font\lv_font_montserrat_22.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_font_montserrat_24.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\font\lv_font_montserrat_24.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_font_montserrat_26.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\font\lv_font_montserrat_26.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_font_montserrat_28.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\font\lv_font_montserrat_28.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_font_montserrat_28_compressed.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\font\lv_font_montserrat_28_compressed.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_font_montserrat_30.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\font\lv_font_montserrat_30.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_font_montserrat_32.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\font\lv_font_montserrat_32.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_font_montserrat_34.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\font\lv_font_montserrat_34.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_font_montserrat_36.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\font\lv_font_montserrat_36.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_font_montserrat_38.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\font\lv_font_montserrat_38.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_font_montserrat_40.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\font\lv_font_montserrat_40.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_font_montserrat_42.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\font\lv_font_montserrat_42.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_font_montserrat_44.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\font\lv_font_montserrat_44.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_font_montserrat_46.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\font\lv_font_montserrat_46.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_font_montserrat_48.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\font\lv_font_montserrat_48.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_font_simsun_16_cjk.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\font\lv_font_simsun_16_cjk.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_font_unscii_8.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\font\lv_font_unscii_8.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_font_unscii_16.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\font\lv_font_unscii_16.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\font\lv_font_montserrat_22.c</FilePath>
             </File>
             <File>
               <FileName>lv_extra.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\extra\lv_extra.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\extra\lv_extra.c</FilePath>
             </File>
             <File>
               <FileName>lv_draw.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\draw\lv_draw.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\draw\lv_draw.c</FilePath>
             </File>
             <File>
               <FileName>lv_draw_arc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\draw\lv_draw_arc.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\draw\lv_draw_arc.c</FilePath>
             </File>
             <File>
               <FileName>lv_draw_img.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\draw\lv_draw_img.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\draw\lv_draw_img.c</FilePath>
             </File>
             <File>
               <FileName>lv_draw_label.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\draw\lv_draw_label.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\draw\lv_draw_label.c</FilePath>
             </File>
             <File>
               <FileName>lv_draw_line.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\draw\lv_draw_line.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\draw\lv_draw_line.c</FilePath>
             </File>
             <File>
               <FileName>lv_draw_mask.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\draw\lv_draw_mask.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\draw\lv_draw_mask.c</FilePath>
             </File>
             <File>
               <FileName>lv_draw_rect.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\draw\lv_draw_rect.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\draw\lv_draw_rect.c</FilePath>
             </File>
             <File>
               <FileName>lv_draw_triangle.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\draw\lv_draw_triangle.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\draw\lv_draw_triangle.c</FilePath>
             </File>
             <File>
               <FileName>lv_img_buf.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\draw\lv_img_buf.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\draw\lv_img_buf.c</FilePath>
             </File>
             <File>
               <FileName>lv_img_cache.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\draw\lv_img_cache.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\draw\lv_img_cache.c</FilePath>
             </File>
             <File>
               <FileName>lv_img_decoder.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\draw\lv_img_decoder.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\draw\lv_img_decoder.c</FilePath>
             </File>
             <File>
               <FileName>lv_draw_sw.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\draw\sw\lv_draw_sw.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\draw\sw\lv_draw_sw.c</FilePath>
             </File>
             <File>
               <FileName>lv_draw_sw_arc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\draw\sw\lv_draw_sw_arc.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\draw\sw\lv_draw_sw_arc.c</FilePath>
             </File>
             <File>
               <FileName>lv_draw_sw_blend.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\draw\sw\lv_draw_sw_blend.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\draw\sw\lv_draw_sw_blend.c</FilePath>
             </File>
             <File>
               <FileName>lv_draw_sw_dither.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\draw\sw\lv_draw_sw_dither.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\draw\sw\lv_draw_sw_dither.c</FilePath>
             </File>
             <File>
               <FileName>lv_draw_sw_gradient.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\draw\sw\lv_draw_sw_gradient.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\draw\sw\lv_draw_sw_gradient.c</FilePath>
             </File>
             <File>
               <FileName>lv_draw_sw_img.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\draw\sw\lv_draw_sw_img.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\draw\sw\lv_draw_sw_img.c</FilePath>
             </File>
             <File>
               <FileName>lv_draw_sw_letter.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\draw\sw\lv_draw_sw_letter.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\draw\sw\lv_draw_sw_letter.c</FilePath>
             </File>
             <File>
               <FileName>lv_draw_sw_line.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\draw\sw\lv_draw_sw_line.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\draw\sw\lv_draw_sw_line.c</FilePath>
             </File>
             <File>
               <FileName>lv_draw_sw_polygon.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\draw\sw\lv_draw_sw_polygon.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\draw\sw\lv_draw_sw_polygon.c</FilePath>
             </File>
             <File>
               <FileName>lv_draw_sw_rect.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\draw\sw\lv_draw_sw_rect.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\draw\sw\lv_draw_sw_rect.c</FilePath>
             </File>
             <File>
               <FileName>lv_draw_sdl.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\draw\sdl\lv_draw_sdl.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\draw\sdl\lv_draw_sdl.c</FilePath>
             </File>
             <File>
               <FileName>lv_draw_sdl_arc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\draw\sdl\lv_draw_sdl_arc.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\draw\sdl\lv_draw_sdl_arc.c</FilePath>
             </File>
             <File>
               <FileName>lv_draw_sdl_bg.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\draw\sdl\lv_draw_sdl_bg.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\draw\sdl\lv_draw_sdl_bg.c</FilePath>
             </File>
             <File>
               <FileName>lv_draw_sdl_composite.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\draw\sdl\lv_draw_sdl_composite.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\draw\sdl\lv_draw_sdl_composite.c</FilePath>
             </File>
             <File>
               <FileName>lv_draw_sdl_img.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\draw\sdl\lv_draw_sdl_img.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\draw\sdl\lv_draw_sdl_img.c</FilePath>
             </File>
             <File>
               <FileName>lv_draw_sdl_label.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\draw\sdl\lv_draw_sdl_label.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\draw\sdl\lv_draw_sdl_label.c</FilePath>
             </File>
             <File>
               <FileName>lv_draw_sdl_line.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\draw\sdl\lv_draw_sdl_line.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\draw\sdl\lv_draw_sdl_line.c</FilePath>
             </File>
             <File>
               <FileName>lv_draw_sdl_mask.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\draw\sdl\lv_draw_sdl_mask.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\draw\sdl\lv_draw_sdl_mask.c</FilePath>
             </File>
             <File>
               <FileName>lv_draw_sdl_polygon.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\draw\sdl\lv_draw_sdl_polygon.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\draw\sdl\lv_draw_sdl_polygon.c</FilePath>
             </File>
             <File>
               <FileName>lv_draw_sdl_rect.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\draw\sdl\lv_draw_sdl_rect.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\draw\sdl\lv_draw_sdl_rect.c</FilePath>
             </File>
             <File>
               <FileName>lv_draw_sdl_stack_blur.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\draw\sdl\lv_draw_sdl_stack_blur.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\draw\sdl\lv_draw_sdl_stack_blur.c</FilePath>
             </File>
             <File>
               <FileName>lv_draw_sdl_texture_cache.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\draw\sdl\lv_draw_sdl_texture_cache.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\draw\sdl\lv_draw_sdl_texture_cache.c</FilePath>
             </File>
             <File>
               <FileName>lv_draw_sdl_utils.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\draw\sdl\lv_draw_sdl_utils.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\draw\sdl\lv_draw_sdl_utils.c</FilePath>
             </File>
             <File>
               <FileName>lv_disp.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\core\lv_disp.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\core\lv_disp.c</FilePath>
             </File>
             <File>
               <FileName>lv_event.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\core\lv_event.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\core\lv_event.c</FilePath>
             </File>
             <File>
               <FileName>lv_group.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\core\lv_group.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\core\lv_group.c</FilePath>
             </File>
             <File>
               <FileName>lv_indev.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\core\lv_indev.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\core\lv_indev.c</FilePath>
             </File>
             <File>
               <FileName>lv_indev_scroll.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\core\lv_indev_scroll.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\core\lv_indev_scroll.c</FilePath>
             </File>
             <File>
               <FileName>lv_obj.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\core\lv_obj.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\core\lv_obj.c</FilePath>
             </File>
             <File>
               <FileName>lv_obj_class.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\core\lv_obj_class.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\core\lv_obj_class.c</FilePath>
             </File>
             <File>
               <FileName>lv_obj_draw.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\core\lv_obj_draw.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\core\lv_obj_draw.c</FilePath>
             </File>
             <File>
               <FileName>lv_obj_pos.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\core\lv_obj_pos.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\core\lv_obj_pos.c</FilePath>
             </File>
             <File>
               <FileName>lv_obj_scroll.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\core\lv_obj_scroll.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\core\lv_obj_scroll.c</FilePath>
             </File>
             <File>
               <FileName>lv_obj_style.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\core\lv_obj_style.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\core\lv_obj_style.c</FilePath>
             </File>
             <File>
               <FileName>lv_obj_style_gen.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\core\lv_obj_style_gen.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\core\lv_obj_style_gen.c</FilePath>
             </File>
             <File>
               <FileName>lv_obj_tree.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\core\lv_obj_tree.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\core\lv_obj_tree.c</FilePath>
             </File>
             <File>
               <FileName>lv_refr.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\core\lv_refr.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\core\lv_refr.c</FilePath>
             </File>
             <File>
               <FileName>lv_theme.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\core\lv_theme.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\core\lv_theme.c</FilePath>
             </File>
             <File>
               <FileName>lv_grid.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\extra\layouts\grid\lv_grid.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\extra\layouts\grid\lv_grid.c</FilePath>
             </File>
             <File>
               <FileName>lv_flex.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\extra\layouts\flex\lv_flex.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\extra\layouts\flex\lv_flex.c</FilePath>
             </File>
             <File>
               <FileName>lv_theme_mono.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\extra\themes\mono\lv_theme_mono.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\extra\themes\mono\lv_theme_mono.c</FilePath>
             </File>
             <File>
               <FileName>lv_theme_default.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\extra\themes\default\lv_theme_default.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\extra\themes\default\lv_theme_default.c</FilePath>
             </File>
             <File>
               <FileName>lv_theme_basic.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\extra\themes\basic\lv_theme_basic.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\extra\themes\basic\lv_theme_basic.c</FilePath>
             </File>
             <File>
               <FileName>lv_animimg.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\extra\widgets\animimg\lv_animimg.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\extra\widgets\animimg\lv_animimg.c</FilePath>
             </File>
             <File>
               <FileName>lv_calendar.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\extra\widgets\calendar\lv_calendar.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\extra\widgets\calendar\lv_calendar.c</FilePath>
             </File>
             <File>
               <FileName>lv_calendar_header_arrow.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\extra\widgets\calendar\lv_calendar_header_arrow.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\extra\widgets\calendar\lv_calendar_header_arrow.c</FilePath>
             </File>
             <File>
               <FileName>lv_calendar_header_dropdown.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\extra\widgets\calendar\lv_calendar_header_dropdown.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\extra\widgets\calendar\lv_calendar_header_dropdown.c</FilePath>
             </File>
             <File>
               <FileName>lv_chart.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\extra\widgets\chart\lv_chart.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\extra\widgets\chart\lv_chart.c</FilePath>
             </File>
             <File>
               <FileName>lv_colorwheel.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\extra\widgets\colorwheel\lv_colorwheel.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\extra\widgets\colorwheel\lv_colorwheel.c</FilePath>
             </File>
             <File>
               <FileName>lv_imgbtn.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\extra\widgets\imgbtn\lv_imgbtn.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\extra\widgets\imgbtn\lv_imgbtn.c</FilePath>
             </File>
             <File>
               <FileName>lv_keyboard.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\extra\widgets\keyboard\lv_keyboard.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\extra\widgets\keyboard\lv_keyboard.c</FilePath>
             </File>
             <File>
               <FileName>lv_led.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\extra\widgets\led\lv_led.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\extra\widgets\led\lv_led.c</FilePath>
             </File>
             <File>
               <FileName>lv_list.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\extra\widgets\list\lv_list.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\extra\widgets\list\lv_list.c</FilePath>
             </File>
             <File>
               <FileName>lv_menu.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\extra\widgets\menu\lv_menu.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\extra\widgets\menu\lv_menu.c</FilePath>
             </File>
             <File>
               <FileName>lv_meter.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\extra\widgets\meter\lv_meter.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\extra\widgets\meter\lv_meter.c</FilePath>
             </File>
             <File>
               <FileName>lv_msgbox.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\extra\widgets\msgbox\lv_msgbox.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\extra\widgets\msgbox\lv_msgbox.c</FilePath>
             </File>
             <File>
               <FileName>lv_span.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\extra\widgets\span\lv_span.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\extra\widgets\span\lv_span.c</FilePath>
             </File>
             <File>
               <FileName>lv_spinbox.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\extra\widgets\spinbox\lv_spinbox.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\extra\widgets\spinbox\lv_spinbox.c</FilePath>
             </File>
             <File>
               <FileName>lv_spinner.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\extra\widgets\spinner\lv_spinner.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\extra\widgets\spinner\lv_spinner.c</FilePath>
             </File>
             <File>
               <FileName>lv_tabview.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\extra\widgets\tabview\lv_tabview.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\extra\widgets\tabview\lv_tabview.c</FilePath>
             </File>
             <File>
               <FileName>lv_tileview.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\extra\widgets\tileview\lv_tileview.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\extra\widgets\tileview\lv_tileview.c</FilePath>
             </File>
             <File>
               <FileName>lv_win.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\extra\widgets\win\lv_win.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\extra\widgets\win\lv_win.c</FilePath>
             </File>
             <File>
               <FileName>lv_gpu_stm32_dma2d.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\src\draw\stm32_dma2d\lv_gpu_stm32_dma2d.c</FilePath>
+              <FilePath>..\..\components\lvgl\src\draw\stm32_dma2d\lv_gpu_stm32_dma2d.c</FilePath>
+            </File>
+            <File>
+              <FileName>lv_font_montserrat_24.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\lvgl\src\font\lv_font_montserrat_24.c</FilePath>
+            </File>
+            <File>
+              <FileName>lv_font_montserrat_26.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\lvgl\src\font\lv_font_montserrat_26.c</FilePath>
+            </File>
+            <File>
+              <FileName>lv_font_montserrat_28.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\lvgl\src\font\lv_font_montserrat_28.c</FilePath>
+            </File>
+            <File>
+              <FileName>lv_font_montserrat_28_compressed.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\lvgl\src\font\lv_font_montserrat_28_compressed.c</FilePath>
+            </File>
+            <File>
+              <FileName>lv_font_montserrat_30.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\lvgl\src\font\lv_font_montserrat_30.c</FilePath>
+            </File>
+            <File>
+              <FileName>lv_font_montserrat_32.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\lvgl\src\font\lv_font_montserrat_32.c</FilePath>
+            </File>
+            <File>
+              <FileName>lv_font_montserrat_34.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\lvgl\src\font\lv_font_montserrat_34.c</FilePath>
+            </File>
+            <File>
+              <FileName>lv_font_montserrat_36.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\lvgl\src\font\lv_font_montserrat_36.c</FilePath>
+            </File>
+            <File>
+              <FileName>lv_font_montserrat_38.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\lvgl\src\font\lv_font_montserrat_38.c</FilePath>
+            </File>
+            <File>
+              <FileName>lv_font_montserrat_40.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\lvgl\src\font\lv_font_montserrat_40.c</FilePath>
+            </File>
+            <File>
+              <FileName>lv_font_montserrat_42.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\lvgl\src\font\lv_font_montserrat_42.c</FilePath>
+            </File>
+            <File>
+              <FileName>lv_font_montserrat_44.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\lvgl\src\font\lv_font_montserrat_44.c</FilePath>
+            </File>
+            <File>
+              <FileName>lv_font_montserrat_46.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\lvgl\src\font\lv_font_montserrat_46.c</FilePath>
+            </File>
+            <File>
+              <FileName>lv_font_montserrat_48.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\lvgl\src\font\lv_font_montserrat_48.c</FilePath>
+            </File>
+            <File>
+              <FileName>lv_font_simsun_16_cjk.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\lvgl\src\font\lv_font_simsun_16_cjk.c</FilePath>
+            </File>
+            <File>
+              <FileName>lv_font_unscii_8.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\lvgl\src\font\lv_font_unscii_8.c</FilePath>
+            </File>
+            <File>
+              <FileName>lv_font_unscii_16.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\lvgl\src\font\lv_font_unscii_16.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1781,22 +1771,22 @@
             <File>
               <FileName>lv_demo_widgets.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\demos\widgets\lv_demo_widgets.c</FilePath>
+              <FilePath>..\..\components\lvgl\demos\widgets\lv_demo_widgets.c</FilePath>
             </File>
             <File>
               <FileName>img_clothes.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\demos\widgets\assets\img_clothes.c</FilePath>
+              <FilePath>..\..\components\lvgl\demos\widgets\assets\img_clothes.c</FilePath>
             </File>
             <File>
               <FileName>img_demo_widgets_avatar.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\demos\widgets\assets\img_demo_widgets_avatar.c</FilePath>
+              <FilePath>..\..\components\lvgl\demos\widgets\assets\img_demo_widgets_avatar.c</FilePath>
             </File>
             <File>
               <FileName>img_lvgl_logo.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\lvgl\demos\widgets\assets\img_lvgl_logo.c</FilePath>
+              <FilePath>..\..\components\lvgl\demos\widgets\assets\img_lvgl_logo.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1806,22 +1796,22 @@
             <File>
               <FileName>diskio.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\FatFs\diskio.c</FilePath>
+              <FilePath>..\..\components\FatFs\diskio.c</FilePath>
             </File>
             <File>
               <FileName>ff.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\FatFs\ff.c</FilePath>
+              <FilePath>..\..\components\FatFs\ff.c</FilePath>
             </File>
             <File>
               <FileName>ff_gen_drv.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\FatFs\ff_gen_drv.c</FilePath>
+              <FilePath>..\..\components\FatFs\ff_gen_drv.c</FilePath>
             </File>
             <File>
               <FileName>ffunicode.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\FatFs\ffunicode.c</FilePath>
+              <FilePath>..\..\components\FatFs\ffunicode.c</FilePath>
             </File>
             <File>
               <FileName>sd_diskio.c</FileName>
@@ -1841,22 +1831,17 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>mid/freetype</GroupName>
+          <GroupName>mid/emenu</GroupName>
           <Files>
             <File>
-              <FileName>freetype_src.c</FileName>
+              <FileName>emenu.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\Freetype\freetype_src.c</FilePath>
+              <FilePath>..\..\components\emenu\emenu.c</FilePath>
             </File>
             <File>
-              <FileName>freetype_test.c</FileName>
+              <FileName>emenu_test.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Utilities\Freetype\freetype_test.c</FilePath>
-            </File>
-            <File>
-              <FileName>ftdebug.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Utilities\Freetype\ftdebug.c</FilePath>
+              <FilePath>..\..\components\emenu\emenu_test.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -1257,10 +1257,10 @@ void wujique_stm407_test(void)
 
 
 	//WJQTestLcd = lcd_open("tftlcd");
-	//WJQTestLcd = lcd_open("spicoglcd");
+	WJQTestLcd = lcd_open("spicoglcd");
 	//WJQTestLcd = lcd_open("i2coledlcd");
 	//WJQTestLcd = lcd_open("spitftlcd");
-	WJQTestLcd = lcd_open("spiE-Paper");
+	//WJQTestLcd = lcd_open("spiE-Paper");
 	
 	if (WJQTestLcd == NULL) {
 		wjq_log(LOG_DEBUG, "emenu open lcd err\r\n");

@@ -115,7 +115,7 @@ void wjq_log(LOG_L l, s8 *fmt,...)
         pt++;
     }
 
-	mcu_uart_write(PC_PORT, log_color_tab[l], 10);
+	mcu_uart_write(PC_PORT, (u8*)log_color_tab[l], 10);
     mcu_uart_write(PC_PORT, (u8*)&string[0], length);  //写串口
     
     va_end(ap);

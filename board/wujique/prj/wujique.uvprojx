@@ -339,7 +339,7 @@
               <MiscControls>--locale=english</MiscControls>
               <Define>NDEBUG</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\app;..\..\wujique;..\usb\inc;..\eth\inc;..\..\..\driver;..\..\..\driver\lcd;..\..\..\driver\cdev;..\..\..\mcu\stm32407\mcu_dev;..\..\..\mcu\stm32407\StLib\STM32F4xx_StdPeriph_Driver\inc;..\..\..\panel;..\..\..\Petite;..\..\..\Utilities\FatFs;..\eth\inc;..\..\..\Utilities\cmd\ubootcmd;..\..\..\Utilities\spiffs-0.3.7\src;..\..\..\Utilities\littlefs-master;..\usb\inc;..\..\..\mcu\stm32407;..\..\..\driver\camera;..\..\..\mcu\stm32407\StLib\CMSIS\Include;..\..\..\driver\touch;..\..\..\Utilities\FreeRTOS\Source\include;..\..\..\Utilities\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\..\..\Utilities\FreeRTOS\Source\CMSIS_RTOS_V2;..\..\..\driver\touch\rtp\tslib;..\..\..\driver\touch\rtp\tslib\tests;..\..\..\driver\sound;..\..\..\driver\touch;..\..\..\driver\touch\rtp;..\..\..\Petite\bus</IncludePath>
+              <IncludePath>..\..\..\app;..\..\wujique;..\usb\inc;..\eth\inc;..\..\..\driver;..\..\..\driver\lcd;..\..\..\driver\cdev;..\..\..\mcu\stm32407\mcu_dev;..\..\..\mcu\stm32407\StLib\STM32F4xx_StdPeriph_Driver\inc;..\..\..\panel;..\..\..\Petite;..\..\..\components\FatFs;..\eth\inc;..\..\..\components\cmd\ubootcmd;..\..\..\components\littlefs-master;..\usb\inc;..\..\..\mcu\stm32407;..\..\..\driver\camera;..\..\..\mcu\stm32407\StLib\CMSIS\Include;..\..\..\driver\touch;..\..\..\components\FreeRTOS\Source\include;..\..\..\components\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\..\..\components\FreeRTOS\Source\CMSIS_RTOS_V2;..\..\..\driver\touch\rtp\tslib;..\..\..\driver\touch\rtp\tslib\tests;..\..\..\driver\sound;..\..\..\driver\touch;..\..\..\driver\touch\rtp;..\..\..\Petite\bus;..\..\..\components\emenu</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1024,16 +1024,6 @@
               <FilePath>..\..\..\panel\audio_sample.c</FilePath>
             </File>
             <File>
-              <FileName>emenu.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\panel\emenu.c</FilePath>
-            </File>
-            <File>
-              <FileName>emenu_test.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\panel\emenu_test.c</FilePath>
-            </File>
-            <File>
               <FileName>soundplay.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\panel\soundplay.c</FilePath>
@@ -1046,137 +1036,107 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>Utilities/freertos</GroupName>
+          <GroupName>components/freertos</GroupName>
           <Files>
             <File>
               <FileName>croutine.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\FreeRTOS\Source\croutine.c</FilePath>
+              <FilePath>..\..\..\components\FreeRTOS\Source\croutine.c</FilePath>
             </File>
             <File>
               <FileName>event_groups.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\FreeRTOS\Source\event_groups.c</FilePath>
+              <FilePath>..\..\..\components\FreeRTOS\Source\event_groups.c</FilePath>
             </File>
             <File>
               <FileName>list.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\FreeRTOS\Source\list.c</FilePath>
+              <FilePath>..\..\..\components\FreeRTOS\Source\list.c</FilePath>
             </File>
             <File>
               <FileName>queue.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\FreeRTOS\Source\queue.c</FilePath>
+              <FilePath>..\..\..\components\FreeRTOS\Source\queue.c</FilePath>
             </File>
             <File>
               <FileName>stream_buffer.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\FreeRTOS\Source\stream_buffer.c</FilePath>
+              <FilePath>..\..\..\components\FreeRTOS\Source\stream_buffer.c</FilePath>
             </File>
             <File>
               <FileName>tasks.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\FreeRTOS\Source\tasks.c</FilePath>
+              <FilePath>..\..\..\components\FreeRTOS\Source\tasks.c</FilePath>
             </File>
             <File>
               <FileName>timers.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\FreeRTOS\Source\timers.c</FilePath>
+              <FilePath>..\..\..\components\FreeRTOS\Source\timers.c</FilePath>
             </File>
             <File>
               <FileName>heap_4.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\FreeRTOS\Source\portable\MemMang\heap_4.c</FilePath>
+              <FilePath>..\..\..\components\FreeRTOS\Source\portable\MemMang\heap_4.c</FilePath>
             </File>
             <File>
               <FileName>port.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\FreeRTOS\Source\portable\RVDS\ARM_CM4F\port.c</FilePath>
+              <FilePath>..\..\..\components\FreeRTOS\Source\portable\RVDS\ARM_CM4F\port.c</FilePath>
             </File>
             <File>
               <FileName>cmsis_os2.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\FreeRTOS\Source\CMSIS_RTOS_V2\cmsis_os2.c</FilePath>
+              <FilePath>..\..\..\components\FreeRTOS\Source\CMSIS_RTOS_V2\cmsis_os2.c</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>Utilities/spiffs</GroupName>
-          <Files>
-            <File>
-              <FileName>spiffs_cache.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\spiffs-0.3.7\src\spiffs_cache.c</FilePath>
-            </File>
-            <File>
-              <FileName>spiffs_check.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\spiffs-0.3.7\src\spiffs_check.c</FilePath>
-            </File>
-            <File>
-              <FileName>spiffs_gc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\spiffs-0.3.7\src\spiffs_gc.c</FilePath>
-            </File>
-            <File>
-              <FileName>spiffs_hydrogen.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\spiffs-0.3.7\src\spiffs_hydrogen.c</FilePath>
-            </File>
-            <File>
-              <FileName>spiffs_nucleus.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\spiffs-0.3.7\src\spiffs_nucleus.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>Utilities/littlefs</GroupName>
+          <GroupName>components/littlefs</GroupName>
           <Files>
             <File>
               <FileName>lfs_util.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\littlefs\lfs_util.c</FilePath>
+              <FilePath>..\..\..\components\littlefs\lfs_util.c</FilePath>
             </File>
             <File>
               <FileName>lfs.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\littlefs\lfs.c</FilePath>
+              <FilePath>..\..\..\components\littlefs\lfs.c</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>Utilities/fatfs</GroupName>
+          <GroupName>components/fatfs</GroupName>
           <Files>
             <File>
               <FileName>diskio.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\FatFs\diskio.c</FilePath>
+              <FilePath>..\..\..\components\FatFs\diskio.c</FilePath>
             </File>
             <File>
               <FileName>ff.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\FatFs\ff.c</FilePath>
+              <FilePath>..\..\..\components\FatFs\ff.c</FilePath>
             </File>
             <File>
               <FileName>ff_gen_drv.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\FatFs\ff_gen_drv.c</FilePath>
+              <FilePath>..\..\..\components\FatFs\ff_gen_drv.c</FilePath>
             </File>
             <File>
               <FileName>ffunicode.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\FatFs\ffunicode.c</FilePath>
+              <FilePath>..\..\..\components\FatFs\ffunicode.c</FilePath>
             </File>
             <File>
               <FileName>cc936.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\FatFs\option\cc936.c</FilePath>
+              <FilePath>..\..\..\components\FatFs\option\cc936.c</FilePath>
             </File>
             <File>
               <FileName>syscall.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Utilities\FatFs\option\syscall.c</FilePath>
+              <FilePath>..\..\..\components\FatFs\option\syscall.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1221,10 +1181,25 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>lvgl</GroupName>
+          <GroupName>components/lvgl</GroupName>
         </Group>
         <Group>
           <GroupName>lvgl_port</GroupName>
+        </Group>
+        <Group>
+          <GroupName>components/emenu</GroupName>
+          <Files>
+            <File>
+              <FileName>emenu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\emenu\emenu.c</FilePath>
+            </File>
+            <File>
+              <FileName>emenu_test.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\emenu\emenu_test.c</FilePath>
+            </File>
+          </Files>
         </Group>
       </Groups>
     </Target>
@@ -1235,5 +1210,14 @@
     <components/>
     <files/>
   </RTE>
+
+  <LayerInfo>
+    <Layers>
+      <Layer>
+        <LayName>wujique</LayName>
+        <LayPrjMark>1</LayPrjMark>
+      </Layer>
+    </Layers>
+  </LayerInfo>
 
 </Project>

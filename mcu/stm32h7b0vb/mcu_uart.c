@@ -163,7 +163,7 @@ void mcu_uart_test(void)
     s32 len = 0;
     s32 res;
 
-	wjq_log(LOG_FUN, "%s,%s,%d,%s\r\n", __FUNCTION__,__FILE__,__LINE__,__DATE__);
+	wjq_log(LOG_INFO, "%s,%s,%d,%s\r\n", __FUNCTION__,__FILE__,__LINE__,__DATE__);
 	while(1)
 	{
 	    //len =  mcu_uart_read (MCU_UART_4, buf, 10);

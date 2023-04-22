@@ -586,8 +586,8 @@ void *PetiteDevTable[]={
 		(void *)(&DevSpi3CH2),
 			(void *)(&DevSpiFlashCore),			
 		(void *)(&DevSpi3CH3),
-			(void *)(&DevEpaper),
-			//(void *)(&DevLcdCOG1),
+			//(void *)(&DevEpaper),
+			(void *)(&DevLcdCOG1),
 			//(void *)(&DevLcdSpiOled);
 			//(void *)(&DevSpiLcdTFT),
 		//(void *)(&DevSpi3CH4);
