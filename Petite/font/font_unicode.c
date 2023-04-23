@@ -1,13 +1,13 @@
 /*
-	本文件支持的字库说明
+	本文件支持的字库：
 	1 字库是用自主开发的工具生成，不是全字库，是需要哪个字符就包含哪个字符
-	2 字库结构4部分
-		1.block0: 头部说明,指明类型,版本，----struct _StrBitmapFontHead
+	2 字库结构4部分：
+		1.block0: 头部说明,指明类型,版本，对应：struct _StrBitmapFontHead
 		2.block1: 按序排列的unicode表，每个字符的unicode占两个自己
-		3.block2: 和unicode表顺序一致的bitmap参数表，------struct _strBitmapHead
-		4.block3: 字符bitmap数据，也就是点阵，字节数不定
+		3.block2: 和unicode表顺序一致的bitmap参数表，对应struct _strBitmapHead
+		4.block3: 字符bitmap数据，也就是点阵，字节数不定。
 
-	所谓的bitmap，就是用freetype将适量字体渲染后得到的点阵数据
+	所谓的bitmap，指用freetype将矢量字体渲染后得到的点阵数据
 	
 	本文件功能，根据输入的unicode码，获取字库文件读点阵的偏移和数据长度
 
@@ -30,19 +30,20 @@ struct _StrBitmapFontHead{
 	//int headlen;//头长度
 	char type[32];
 	char ver[32];
-	/* 字符宽度和高度，在进行渲染时设置freetype
+	/* 字符宽度和高度，在进行渲染时设置freetype的参数
 		需要注意的是，转换后得到的bitmap不一定是这个W和H*/
 	int pixelw;
 	int pixelh;
-	int total;//字符总个数
-	int unicode_tab;//unicode表起始位置
-	int bitmap_head;//bitmap参数起始位置，每个字符都有一个_strBitmapHead，长度固定
-	int bitmap;//字符点阵数据在文件中的起始位置
+	int total;///字符总个数
+	int unicode_tab;///unicode表偏移位置
+	int bitmap_head;///bitmap参数偏移位置，每个字符都有一个_strBitmapHead，长度固定
+	int bitmap;///字符点阵数据在文件中的起始位置
 
 	int rev[16-6];
 	
 };
-#if 0
+
+#if 0//在petitedrv工程中，本结构体改在font.h中定义
 /*
 	每个字符的bitmap都有一个头，
 	为了取点阵方便，头长度是固定的，所有将所有的头放在一起
@@ -61,15 +62,12 @@ struct _strBitmapHead{
 
 #endif
 /*
-	输入一个unicode内码取点阵的方法
+	根据unicode内码取点阵的方法
 	1 从block1:unicode tab中查询，得到位置索引------多次读文件-----是否可以用二分法提高速度？
 	2 使用位置索引从block2:bitmap_head中读取bitmap头信息
 		从而的到bitmap数据偏移和bitmap数据长度
 	3 从block3：bitmap data中读取点阵数据
 
-	如果，将block2和block3揉在一起：
-	1 从bloc1:unicode tab表中查询，得到bitmap偏移
-	2 根据偏移，读出bitmap head和bitmap data, 问题是bitmap data 的长度是要根据bitmap head算出的。
 	*/
 
 
@@ -85,6 +83,9 @@ struct _strBitmapHead{
 struct _StrBitmapFontHead BitmapFontHead;
 int fd_fontfile = 0;
 
+/*
+	初始化字库文件
+	*/
 int font_unicode_bitmap_init(void)
 {
 	int rlen = 0;
@@ -92,6 +93,7 @@ int font_unicode_bitmap_init(void)
 	fd_fontfile = vfs_open("mtd0/0:font/font_file.bin", O_RDONLY);
 	if (fd_fontfile == NULL) {
 		uart_printf("bitmap font open err!\r\n");
+		return -1;
 	}
 
 	rlen = vfs_read(fd_fontfile, &BitmapFontHead, sizeof(BitmapFontHead));
@@ -106,12 +108,12 @@ int font_unicode_bitmap_init(void)
 	uart_printf("\t unicode_tab:%d\r\n", BitmapFontHead.unicode_tab);
 	uart_printf("\t bitmap_head:%d\r\n", BitmapFontHead.bitmap_head);
 	uart_printf("\t bitmap:%d\r\n", BitmapFontHead.bitmap);
-
+	return 0;
 }
 /*
 	根据Unicode码找出点阵索引
 	*/
-int font_find_index(uint16_t unicode)
+static int font_find_index(uint16_t unicode)
 {
 
 	int rlen = 0;
@@ -141,7 +143,8 @@ int font_find_index(uint16_t unicode)
 }
 
 /*
-	输入UNICODE获取bitmap点阵数据
+	输入UNICODE获取bitmap点阵数据，
+	包含bitmaphead和bitmap dot数据
 	*/
 int font_bitmap_getdata(struct _strBitmapHead* head, uint8_t *dotbuf, uint16_t unicode)
 {
@@ -162,7 +165,9 @@ int font_bitmap_getdata(struct _strBitmapHead* head, uint8_t *dotbuf, uint16_t u
 
 	return 0;
 }
-
+/* 
+	根据unicode内码获取bitmap参数
+	*/
 int font_bitmap_get_head(struct _strBitmapHead* head, uint16_t unicode)
 {
 	int uindex;
@@ -179,7 +184,9 @@ int font_bitmap_get_head(struct _strBitmapHead* head, uint16_t unicode)
 	return 0;
 }
 
-
+/*
+	计算字符串的显示长度
+	*/
 int font_bitmap_get_str_width(uint16_t *unicodestr)
 {
 	uint16_t *pStr;
@@ -222,7 +229,11 @@ int font_bitmap_get_str_width(uint16_t *unicodestr)
 	return lcdx;
 }
 
-/*--------------------以下为测试程序 ------------------------*/
+/*--------------------
+
+					以下为测试程序 
+
+									------------------------*/
 #if 1
 
 /* 
@@ -306,22 +317,26 @@ int font_bitmap_showstr_unicode(DevLcdNode *lcd, uint16_t x, uint16_t y, uint16_
 	return 0;
 }
 
-#define UNICODE_NUM 44
+
+/*
+	测试直接从bin文件中读取字符，并将其显示到LCD上
+	*/
+#define UNICODE_NUM 44 ///读取的字符长度
 void font_test_utf16(DevLcdNode *lcd)
 {
 	int testfile;
 	int rlen;
 	uint16_t bitmaptmp[130];
-
-	font_unicode_bitmap_init();
 	
+	font_unicode_bitmap_init();
+	/* 读取要显示的字符 */
 	testfile = vfs_open("mtd0/0:bin_utf16/thailand.bin", O_RDONLY);
-
 	vfs_lseek(testfile, 0, 0);
 	rlen = vfs_read(testfile, (char *)bitmaptmp, UNICODE_NUM*2);
-	
 	bitmaptmp[UNICODE_NUM] = 0x0000;
 	//PrintFormat((char *)bitmaptmp, 66);
+
+	/* 在LCD上显示字符*/
 	font_bitmap_showstr_unicode(lcd, 0, 0, bitmaptmp);
 	
 	while(1){
@@ -477,12 +492,11 @@ void font_unicode_bitmap_test(DevLcdNode *lcd)
 
 	#if 1
 	while(1){
-		uart_printf("unicode index:%d\r\n", uindex);
+		//uart_printf("unicode index:%d\r\n", uindex);
 		res = vfs_lseek(fd_fontfile, BitmapFontHead.bitmap_head + (uindex * sizeof(BitmapHead)), 0);
-		uart_printf("lseek res:%d\r\n", res);
+		//uart_printf("lseek res:%d\r\n", res);
 		rlen = vfs_read(fd_fontfile, &BitmapHead, sizeof(BitmapHead));
-		
-		uart_printf("read res:%d\r\n", rlen);
+		//uart_printf("read res:%d\r\n", rlen);
 		{
 		#if 0
 		uart_printf("rows:%d\r\n", BitmapHead.rows);

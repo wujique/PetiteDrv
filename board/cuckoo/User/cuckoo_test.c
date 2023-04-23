@@ -186,6 +186,8 @@ const VFSDIR SdFatFs=
 	SYS_FS_FATFS_SD
 };
 
+#include "src/font/lv_font.h"
+#include "lv_tiny_ttf.h"
 
 void cuckoo_7b0_test(void)
 {
@@ -206,14 +208,62 @@ void cuckoo_7b0_test(void)
 	vfs_add_node(&SdFatFs);
 
 	//cuckoo_test_lcd();
-	//LcdOledI2C = lcd_open("spicoglcd");
-	LcdOledI2C = lcd_open("i2coledlcd");
+	LcdOledI2C = lcd_open("spicoglcd");
+	//LcdOledI2C = lcd_open("i2coledlcd");
 	//font_test_utf16(LcdOledI2C);
-	//font_bmp_test(LcdOledI2C);
-	//FreeTypeTest(LcdOledI2C);
 	//font_unicode_bitmap_test(LcdOledI2C);
 	//emenu_test(LcdOledI2C);
 	
+
+	#if 1
+
+	lv_font_t *font_t;
+	lv_font_glyph_dsc_t glyph_dsc;
+	const uint8_t *bitmap;
+	u16 unicode_ch[5] = {0x6211,0x662f, 0x4e2d, 0x56fd, 0x4eba};
+	uint8_t i=0;
+	int cnt = 0;
+	int row=0;
+	int col=0;
+	bool getres;
+	font_t = lv_tiny_ttf_create_file("mtd0/0:font/chuheisong.ttf", 24);
+	
+	while(1) {
+	
+		lcd_backlight(LcdOledI2C, 1);
+		font_t->get_glyph_dsc(font_t, &glyph_dsc, unicode_ch[i], NULL);
+		bitmap = font_t->get_glyph_bitmap(font_t, unicode_ch[i]);
+		lcd_backlight(LcdOledI2C, 0);
+		i++;
+		if(i>=5)i=0;
+		
+		wjq_log(LOG_INFO, "adv_w:%d\r\n", glyph_dsc.adv_w);
+		wjq_log(LOG_INFO, "box_w:%d\r\n", glyph_dsc.box_w);
+		wjq_log(LOG_INFO, "box_h:%d\r\n", glyph_dsc.box_h);
+		wjq_log(LOG_INFO, "ofs_x:%d\r\n", glyph_dsc.ofs_x);
+		wjq_log(LOG_INFO, "ofs_y:%d\r\n", glyph_dsc.ofs_y);
+		wjq_log(LOG_INFO, "bpp:%d\r\n", glyph_dsc.bpp);
+		PrintFormat((u8 *)bitmap, 64);
+		/* tinyttf 也就是stb_truetype库，生成的bitmap是8bit灰度值。
+			AWTK GUI 二值化参数
+			uint32_t threshold = font_size > 24? (font_size > 48 ? (font_size > 71 ? (font_size > 95 ? 195 : 175) : 160) : 118) : 95;
+			*/
+		cnt = 0;
+		for(row=0; row< glyph_dsc.box_h; row++){
+			for(col=0; col< glyph_dsc.box_w; col++){
+				if(*(bitmap+cnt) > 118){
+					uart_printf("*");
+				} else {
+					uart_printf(" ");
+				}
+				cnt++;
+			}
+			uart_printf("\r\n");
+		}
+		osDelay(1000);
+	}
+	#endif
+
 	/* 初始化lvgl 
 	注意，初始化LVGL的过程，会用到不少栈，
 	如果在rtos的任务中进行初始化，注意任务栈的大小，
