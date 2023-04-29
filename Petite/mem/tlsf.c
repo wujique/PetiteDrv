@@ -207,6 +207,8 @@ enum tlsf_public
 	/* log2 of number of linear subdivisions of block sizes. Larger
 	** values require more memory in the control structure. Values of
 	** 4 or 5 are typical.
+	** 这个其实可以根据管理的堆大小进行调整，
+	** 如果小于16K，3；16K~256K，4； >256K, 5;
 	*/
 	SL_INDEX_COUNT_LOG2 = 5,
 };
@@ -241,6 +243,8 @@ enum tlsf_private
 	*/
 	FL_INDEX_MAX = 32,
 #else
+	/* 这个其实也可以根据堆的大小进行调整，可以减少一定的RAM开销 
+		定义为30时，需要3168字节开销，也就是control_t结构体 */
 	FL_INDEX_MAX = 30,
 #endif
 	SL_INDEX_COUNT = (1 << SL_INDEX_COUNT_LOG2),
@@ -305,6 +309,8 @@ typedef struct block_header_t
 	struct block_header_t* prev_phys_block;
 
 	/* The size of this block, excluding the block header. */
+	/* bit 1 ：block_header_prev_free_bit， 置位，则说明上一块被使用
+	   bit 0：block_header_free_bit ，置位，则说明本块已使用 */
 	size_t size;
 
 	/* Next and previous free blocks. */
@@ -460,8 +466,11 @@ static void block_mark_as_free(block_header_t* block)
 
 static void block_mark_as_used(block_header_t* block)
 {
+	/* 虽然将block从free list取出，但block还是指向了next*/
 	block_header_t* next = block_next(block);
+	/* 在next block记录 block已被使用 */
 	block_set_prev_used(next);
+	/* block 设置为被使用 */
 	block_set_used(block);
 }
 
@@ -499,6 +508,7 @@ static size_t adjust_request_size(size_t size, size_t align)
 		/* aligned sized must not exceed block_size_max or we'll go out of bounds on sl_bitmap */
 		if (aligned < block_size_max) 
 		{
+			/* 不能小于block_size_min*/
 			adjust = tlsf_max(aligned, block_size_min);
 		}
 	}
@@ -521,7 +531,15 @@ static void mapping_insert(size_t size, int* fli, int* sli)
 	}
 	else
 	{
+		/* fls = find last set 也就是找到最后一个为1的bit的位置， 
+			例如 460 = 0x1cc, 那么fl就等于8 */
 		fl = tlsf_fls_sizet(size);
+		/* siez / （2的fl次方/2的SL_INDEX_COUNT_LOG2次方）- （1 << SL_INDEX_COUNT_LOG2）
+			意思是：size属于fl block， 这个block分成1<<SL_INDEX_COUNT_LOG2, 现在要算出size出于哪块
+			例如460， 属于8阶层，这个阶层就是256Byte， 分成1<<5，32块, 每块256/32 = 8
+			那么460/8=57， 57-32 = 15， 这就是sl。
+			这里有个隐含条件：2的(fl+1)次方 > size > 2的fl次方，
+			简化后算法：	(460>>(8-5))^(1<<5) */
 		sl = tlsf_cast(int, size >> (fl - SL_INDEX_COUNT_LOG2)) ^ (1 << SL_INDEX_COUNT_LOG2);
 		fl -= (FL_INDEX_SHIFT - 1);
 	}
@@ -559,7 +577,7 @@ static block_header_t* search_suitable_block(control_t* control, int* fli, int* 
 			/* No free blocks available, memory has been exhausted. */
 			return 0;
 		}
-
+		/* ffs = find first set bit ，例如0x02,则返回1 */
 		fl = tlsf_ffs(fl_map);
 		*fli = fl;
 		sl_map = control->sl_bitmap[fl];
@@ -577,8 +595,10 @@ static void remove_free_block(control_t* control, block_header_t* block, int fl,
 {
 	block_header_t* prev = block->prev_free;
 	block_header_t* next = block->next_free;
+	
 	tlsf_assert(prev && "prev_free field can not be null");
 	tlsf_assert(next && "next_free field can not be null");
+	/* 把block从双向链表中删除 */
 	next->prev_free = prev;
 	prev->next_free = next;
 
@@ -587,7 +607,8 @@ static void remove_free_block(control_t* control, block_header_t* block, int fl,
 	{
 		control->blocks[fl][sl] = next;
 
-		/* If the new head is null, clear the bitmap. */
+		/* If the new head is null, clear the bitmap. 
+			本链表已经没有空闲内存块，修改bitmap */
 		if (next == &control->block_null)
 		{
 			control->sl_bitmap[fl] &= ~(1U << sl);
@@ -678,6 +699,7 @@ static block_header_t* block_absorb(block_header_t* prev, block_header_t* block)
 /* Merge a just-freed block with an adjacent previous free block. */
 static block_header_t* block_merge_prev(control_t* control, block_header_t* block)
 {
+	/* 本block记录了prev block的状态 */
 	if (block_is_prev_free(block))
 	{
 		block_header_t* prev = block_prev(block);
@@ -757,6 +779,7 @@ static block_header_t* block_locate_free(control_t* control, size_t size)
 
 	if (size)
 	{
+		/* 计算到 fl 和 sl */
 		mapping_search(size, &fl, &sl);
 		
 		/*
@@ -766,7 +789,10 @@ static block_header_t* block_locate_free(control_t* control, size_t size)
 		** Note that we don't need to check sl, since it comes from a modulo operation that guarantees it's always in range.
 		*/
 		if (fl < FL_INDEX_COUNT)
-		{
+		{	
+			/* 根据fl和sl，找空闲块 ，如果当前fl和sl没有空闲块，
+				会往上(较大的block)继续找
+				返回的block是对应fl-sl的空闲块链表头指针 */
 			block = search_suitable_block(control, &fl, &sl);
 		}
 	}
@@ -774,6 +800,7 @@ static block_header_t* block_locate_free(control_t* control, size_t size)
 	if (block)
 	{
 		tlsf_assert(block_size(block) >= size);
+		/* 把block从链表中分出来，第一块 */
 		remove_free_block(control, block, fl, sl);
 	}
 
@@ -786,8 +813,12 @@ static void* block_prepare_used(control_t* control, block_header_t* block, size_
 	if (block)
 	{
 		tlsf_assert(size && "size must be non-zero");
+		/* 如有必要，切割 */
 		block_trim_free(control, block, size);
+		/* 将块设置为use，并将下一个block的pre标志也设置，
+			以便通知下一个block */
 		block_mark_as_used(block);
+		/* 把真正给用户使用的内存指针返回给用户 */
 		p = block_to_ptr(block);
 	}
 	return p;
@@ -1114,9 +1145,13 @@ pool_t tlsf_get_pool(tlsf_t tlsf)
 
 void* tlsf_malloc(tlsf_t tlsf, size_t size)
 {
+	/*强制类型转换*/
 	control_t* control = tlsf_cast(control_t*, tlsf);
+	/* 调整size, 四字节对齐，并且不能小于最小块 */
 	const size_t adjust = adjust_request_size(size, ALIGN_SIZE);
+	/* 找到一块内存， 并将其从对应的空闲链表中拿出来 */
 	block_header_t* block = block_locate_free(control, adjust);
+	/* 将block配置为use，如有必要，进行切割 */
 	return block_prepare_used(control, block, adjust);
 }
 
@@ -1183,11 +1218,17 @@ void tlsf_free(tlsf_t tlsf, void* ptr)
 	if (ptr)
 	{
 		control_t* control = tlsf_cast(control_t*, tlsf);
+		/* 根据用户指针找到当前block指针，也就是指针后移（减） block_start_offset*/
 		block_header_t* block = block_from_ptr(ptr);
 		tlsf_assert(!block_is_free(block) && "block already marked as free");
+
+		/* 把block和下一个block 链 起来 ，
+			并把当前块和下一块的相关标志清*/
 		block_mark_as_free(block);
+		/* 判断是否能和前后块合并 */
 		block = block_merge_prev(control, block);
 		block = block_merge_next(control, block);
+		/* 根据block的size，获取fl 和 sl， 插入对应链表 */
 		block_insert(control, block);
 	}
 }
