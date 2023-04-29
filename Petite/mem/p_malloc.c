@@ -7,12 +7,39 @@
 
 #include "log.h"
 #include "mem/alloc.h"
+#include "mem/tlsf.h"
 
 int wjq_alloc_init(void);
 void wjq_free_m(void*ap);
 
 uint8_t WjqAllocGd = 0;
 
+typedef struct
+{
+	void *(*init_pool)(void* mem, size_t bytes);
+	void *(*imalloc)(void* node, size_t size);
+	void (*ifree)(void *node, void* ptr);
+	void *(*irealloc)(void *node, void* ptr, size_t size);
+}MallocInterface;
+
+MallocInterface TlsfInterface={
+	.init_pool = tlsf_create_with_pool,
+	.imalloc = tlsf_malloc,
+	.ifree = tlsf_free,
+	.irealloc = tlsf_realloc,
+	};
+
+MallocInterface KRallocInterface={
+	.init_pool = kr_create_with_pool,
+	.imalloc = kr_malloc,
+	.ifree =  kr_free,
+	.irealloc = kr_realloc,
+	};
+
+//MallocInterface *WJQInterface = &KRallocInterface;
+MallocInterface *WJQInterface = &TlsfInterface;
+
+void *WjqMalloc;
 
 /*
 	二次封装，如果需要做互斥，在_m后缀的函数内实现。
@@ -26,7 +53,7 @@ void*wjq_malloc_m(unsigned nbytes, const char *f, int l)
 		wjq_alloc_init();
 		WjqAllocGd = 1;
 	}
-	p = kr_malloc(nbytes);
+	p = WJQInterface->imalloc(WjqMalloc, nbytes);
 
 	if (p ==NULL) {
 		/*对于嵌入式来说，没有机制整理内存，因此，不允许内存分配失败*/
@@ -46,7 +73,7 @@ void*wjq_calloc_m(size_t n, size_t size)
 		WjqAllocGd = 1;
 	}
 	
-	p = kr_malloc(n*size);
+	p = WJQInterface->imalloc(WjqMalloc, n*size);
 
 	if(p!=NULL) {
 		memset((char*) p, 0, n*size);
@@ -56,107 +83,23 @@ void*wjq_calloc_m(size_t n, size_t size)
 
 void *wjq_realloc_m(void *ap, unsigned int newsize)
 {
-	//ALLOC_HDR*bp, *p, *np;
 	void *p;
-	unsigned nunits;
-	unsigned aunits;
-
+	
 	if (WjqAllocGd == 0) {
 		wjq_alloc_init();
 		WjqAllocGd = 1;
 	}
 	
-	//wjq_log(LOG_DEBUG, "wjq_realloc: %d\r\n", newsize);
-	if(ap == NULL) {
-		p = kr_malloc(newsize);
-		return p;	
-	}
-
-	if (newsize == 0) {
-		wjq_free_m(ap);
-		return NULL;
-	}
-
-	#if 0
-	/*计算要申请的内存块数*/
-	nunits = ((newsize + sizeof(ALLOC_HDR)-1) / sizeof(ALLOC_HDR))+1;
-	/* 函数传入的ap是可使用内存的指针，往前退一个结构体位置，
-		也就是下面的bp，才是记录内存信息的位置*/
-	bp = (ALLOC_HDR*)ap-1;	/* point to block header */
-	if (nunits <= bp->s.size) {
-		/* 	新的申请数不比原来的大，暂时不处理
-		浪费点内存。 		*/
-		return ap;
-	}
-	#endif
-	
-	#if 1
-	/*无论如何都直接申请内存然后拷贝数据*/
-	p = kr_malloc(newsize);
-	memcpy(p, ap, newsize);/* need fix bug*/
-	wjq_free_m(ap);
-	
+	p = WJQInterface->irealloc(WjqMalloc, ap, newsize);
 	return p;
-	#else
-	/*
-	  找到需要释放的内存的前后空闲块
-	  其实就是比较内存块位置的地址大小
-	*/
-	for(p = freep; ! ((bp>p)&&(bp<p->s.ptr)); p = p->s.ptr)
-	{
-		if((p>=p->s.ptr)&&((bp>p)||(bp<p->s.ptr)))
-		{
-			/*
-				当一个块，
-				p>=p->s.ptr 本身起始地址指针大于下一块地址指针
-				bp>p 要释放的块，地址大于P
-				bp<p->s.ptr 要释放的块，地址小于下一块
-			*/
-			break;		/* freed block at start or end of arena */
-		}
-	}
-
-	/**/
-	if((bp + bp->s.size) == p->s.ptr)
-	{
-		/*增加的内存块*/
-		aunits = (nunits - bp->s.size);
-		if( aunits == p->s.ptr->s.size)
-		{	
-			/*刚刚好相等*/
-			p->s.ptr = p->s.ptr->s.ptr;
-			bp->s.size = nunits;
-			return ap;
-		}
-		else if(aunits < p->s.ptr->s.size)
-		{
-			np = p->s.ptr + aunits;//切割aunits分出去，np就是剩下块的地址
-			np->s.ptr = p->s.ptr->s.ptr;
-			np->s.size = p->s.ptr->s.size - aunits;
-				
-			p->s.ptr = np;
-
-			bp->s.size = nunits;
-			return ap;
-		}
-		
-	}
-	
-	/*需要重新申请内存*/
-	bp = wjq_malloc_t(newsize);
-	memcpy(bp, ap, newsize);
-	wjq_free(ap);
-	
-	return bp;
-	#endif
-	
 }
 
 void wjq_free_m(void*ap)
 {
 	if(ap==NULL) return;
 	
-	kr_free(ap);
+	WJQInterface->ifree(WjqMalloc, ap);
+	return;
 }
 
 #include "p_malloc.h"
@@ -215,7 +158,8 @@ void wjq_malloc_test(void)
 	*/
 int wjq_alloc_init(void)
 {
-	kr_alloc_create_with_pool((void *)AllocArray, AllocArraySize);	
+	WjqMalloc = WJQInterface->init_pool((void *)AllocArray, AllocArraySize);	
+	return 0;
 }
 
 

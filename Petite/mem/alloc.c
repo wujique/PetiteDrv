@@ -9,12 +9,16 @@
  */
 #include "stdlib.h"
 
-#include "mcu.h"
-#include "petite_config.h"
+/*
+	单链表管理空闲内存的动态内存分配算法。
 
-//#include "log.h"
-//#include "mem/alloc.h"
-
+	缺点：
+	1 分配时间不定，最慢则为轮询整个链表。
+	2 内存精度16字节，一块内存最小16+16字节，
+	  当申请小内存时，效率只有n/32，非常低。
+	  比如频繁申请4字节内存，1K次，实际有效内存4K，
+	  但却暂用32K内存，利用率4/32 = 12.5%
+*/
 
 
 /* 
@@ -57,10 +61,10 @@ typedef struct ALLOC_HDR
 static ALLOC_HDR base; /*空闲内存链表头结点*/
 static ALLOC_HDR*freep = NULL;
 
-static u32 AllocCnt = 0;
+static unsigned int AllocCnt = 0;
 
 /*-------------------------------------------------------------------*/
-void kr_free(void*ap)
+void kr_free(void *node, void*ap)
 {
 	ALLOC_HDR*bp, *p;
 
@@ -110,7 +114,7 @@ void kr_free(void*ap)
 
 
 /*---------------------------------------------------------*/
-void*kr_malloc(unsigned nbytes)
+void*kr_malloc(void *node, unsigned nbytes)
 {
 
 	ALLOC_HDR*p, *prevp;
@@ -188,7 +192,102 @@ void*kr_malloc(unsigned nbytes)
 	}
 }
 
-int kr_alloc_create_with_pool(void* mem, size_t bytes)
+void *kr_realloc(void *node, void* ptr, size_t size)
+{
+	//ALLOC_HDR*bp, *p, *np;
+	void *p;
+	unsigned nunits;
+	unsigned aunits;
+	
+	//wjq_log(LOG_DEBUG, "wjq_realloc: %d\r\n", newsize);
+		if(ptr == NULL) {
+			p = kr_malloc(node, size);
+			return p;	
+		}
+	
+		if (size == 0) {
+			kr_free(node, ptr);
+			return NULL;
+		}
+	
+	#if 0
+		/*计算要申请的内存块数*/
+		nunits = ((newsize + sizeof(ALLOC_HDR)-1) / sizeof(ALLOC_HDR))+1;
+		/* 函数传入的ap是可使用内存的指针，往前退一个结构体位置，
+			也就是下面的bp，才是记录内存信息的位置*/
+		bp = (ALLOC_HDR*)ap-1;	/* point to block header */
+		if (nunits <= bp->s.size) {
+			/*	新的申请数不比原来的大，暂时不处理
+			浪费点内存。		*/
+			return ap;
+		}
+	#endif
+		
+	#if 1
+		/*无论如何都直接申请内存然后拷贝数据*/
+		p = kr_malloc(node, size);
+		memcpy(p, ptr, size);/* need fix bug*/
+		wjq_free_m(node, ptr);
+		
+		return p;
+	#else
+		/*
+		  找到需要释放的内存的前后空闲块
+		  其实就是比较内存块位置的地址大小
+		*/
+		for(p = freep; ! ((bp>p)&&(bp<p->s.ptr)); p = p->s.ptr)
+		{
+			if((p>=p->s.ptr)&&((bp>p)||(bp<p->s.ptr)))
+			{
+				/*
+					当一个块，
+					p>=p->s.ptr 本身起始地址指针大于下一块地址指针
+					bp>p 要释放的块，地址大于P
+					bp<p->s.ptr 要释放的块，地址小于下一块
+				*/
+				break;		/* freed block at start or end of arena */
+			}
+		}
+	
+		/**/
+		if((bp + bp->s.size) == p->s.ptr)
+		{
+			/*增加的内存块*/
+			aunits = (nunits - bp->s.size);
+			if( aunits == p->s.ptr->s.size)
+			{	
+				/*刚刚好相等*/
+				p->s.ptr = p->s.ptr->s.ptr;
+				bp->s.size = nunits;
+				return ap;
+			}
+			else if(aunits < p->s.ptr->s.size)
+			{
+				np = p->s.ptr + aunits;//切割aunits分出去，np就是剩下块的地址
+				np->s.ptr = p->s.ptr->s.ptr;
+				np->s.size = p->s.ptr->s.size - aunits;
+					
+				p->s.ptr = np;
+	
+				bp->s.size = nunits;
+				return ap;
+			}
+			
+		}
+		
+		/*需要重新申请内存*/
+		bp = wjq_malloc_t(newsize);
+		memcpy(bp, ap, newsize);
+		wjq_free(ap);
+		
+		return bp;
+	#endif
+
+
+}
+
+
+void *kr_create_with_pool(void* mem, size_t bytes)
 {
 	ALLOC_HDR*p;
 	
@@ -200,7 +299,7 @@ int kr_alloc_create_with_pool(void* mem, size_t bytes)
 	freep =&base;
 
 	/*经过初始化后，只有一块空闲块*/
-	return 0;
+	return (void *)&base;
 }
 
 
