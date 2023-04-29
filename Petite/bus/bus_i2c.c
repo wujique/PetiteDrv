@@ -25,7 +25,8 @@
 #include "mem/p_list.h"
 #include "bus/bus_i2c.h"
 #include "bus/bus_vi2c.h"
-#include "mem/alloc.h"
+#include "mem/p_malloc.h"
+
 
 //#define BUS_I2C_DEBUG
 

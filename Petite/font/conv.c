@@ -5,7 +5,8 @@
 //#include "gb2312.h"
 //#include "gb18030.h"
 
-#include "mem/alloc.h"
+#include "mem/p_malloc.h"
+
 
 extern const unsigned short int gb2312_lookup[];
 extern const unsigned short int gb18030_twobyte_lookup[];

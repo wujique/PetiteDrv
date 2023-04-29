@@ -111,6 +111,7 @@ int petite_app(void)
   /* Infinite loop 
 	尽快启动RTOS， 进入start_task再做其他设备初始化 */
 	wjq_log(LOG_INFO,"ccreate start task!\r\n");
+
   	/* Init scheduler */
   	osKernelInitialize();
 	defaultTaskHandle = osThreadNew(petite_task, NULL, &defaultTask_attributes);

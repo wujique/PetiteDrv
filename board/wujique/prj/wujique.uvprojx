@@ -983,6 +983,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\Petite\font\conv.c</FilePath>
             </File>
+            <File>
+              <FileName>p_malloc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Petite\mem\p_malloc.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

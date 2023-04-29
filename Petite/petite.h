@@ -8,7 +8,8 @@
 #include "stimer.h"
 #include "vfs.h"
 
-#include "mem/alloc.h"
+#include "mem/p_malloc.h"
+
 #include "mem/p_kfifo.h"
 #include "mem/p_list.h"
 

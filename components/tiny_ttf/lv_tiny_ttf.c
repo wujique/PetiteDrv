@@ -28,7 +28,8 @@
 #define TTF_MALLOC(x)  (lv_malloc(x))
 #define TTF_FREE(x)    (lv_free(x))
 #else
-#include "mem/alloc.h"
+#include "mem/p_malloc.h"
+
 #define STBTT_malloc(x,u)  ((void)(u),wjq_malloc(x))
 #define STBTT_free(x,u)    ((void)(u),wjq_free(x))
 #define TTF_CACHE_MALLOC(x)  (wjq_malloc(x))
