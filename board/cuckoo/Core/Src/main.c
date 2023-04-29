@@ -555,7 +555,7 @@ void MX_OCTOSPI1_Init(void)
   hospi1.Init.DelayHoldQuarterCycle = HAL_OSPI_DHQC_DISABLE;
   hospi1.Init.ChipSelectBoundary = 0;
   
-  hospi1.Init.ClkChipSelectHighTime = 0;// 通信结束后 0 个CLK周期CS设置为高
+  //hospi1.Init.ClkChipSelectHighTime = 0;// 通信结束后 0 个CLK周期CS设置为高
   hospi1.Init.DelayBlockBypass = HAL_OSPI_DELAY_BLOCK_BYPASSED;
   hospi1.Init.MaxTran = 0;
   hospi1.Init.Refresh = 0;
