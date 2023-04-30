@@ -1,6 +1,4 @@
 /**
-¸ÃÇý¶¯ÒÆÖ²ÓÚ stm32h743i_eval °å¿¨µÄÀý³Ì
-·´¿Í¿Æ¼¼  2020-11-16
   ******************************************************************************
   * @file    stm32h743i_eval_sd.c
   * @author  MCD Application Team
@@ -320,9 +318,9 @@ __weak HAL_StatusTypeDef MX_SDMMC1_SD_Init(SD_HandleTypeDef *hsd)
   hsd->Init.BusWide             = SDMMC_BUS_WIDE_4B;
   hsd->Init.HardwareFlowControl = SDMMC_HARDWARE_FLOW_CONTROL_DISABLE;
 
-//  SDMMC_CK £¨Êä³öÊ±ÖÓ£©=  sdmmc_ker_ck £¨SDMMC ÄÚºËÊ±ÖÓ£© / [2 * CLKDIV]
-// ÔÚ±¾Àý³ÌÖÐ£¬sdmmc_ker_ck = 280M
-// ÎªÁË¼æÈÝÐÔºÍÎÈ¶¨ÐÔ£¬ÕâÀïÉèÖÃÎª SDMMC_CK =  sdmmc_ker_ck / (2*6) = 20M
+//  SDMMC_CK ï¼ˆè¾“å‡ºæ—¶é’Ÿï¼‰=  sdmmc_ker_ck ï¼ˆSDMMC å†…æ ¸æ—¶é’Ÿï¼‰ / [2 * CLKDIV]
+// åœ¨æœ¬ä¾‹ç¨‹ä¸­ï¼Œsdmmc_ker_ck = 280M
+// ä¸ºäº†å…¼å®¹æ€§å’Œç¨³å®šæ€§ï¼Œè¿™é‡Œè®¾ç½®ä¸º SDMMC_CK =  sdmmc_ker_ck / (2*6) = 20M
   hsd->Init.ClockDiv            = 7;   
 
 	
@@ -527,8 +525,11 @@ int32_t BSP_SD_ReadBlocks(uint32_t Instance, uint32_t *pData, uint32_t BlockIdx,
   }
   else
   {
-    if(HAL_SD_ReadBlocks(&hsd_sdmmc[Instance], (uint8_t *)pData, BlockIdx, BlocksNbr, timeout) != HAL_OK)
+  	HAL_StatusTypeDef res;
+	res = HAL_SD_ReadBlocks(&hsd_sdmmc[Instance], (uint8_t *)pData, BlockIdx, BlocksNbr, timeout);
+    if( res != HAL_OK)
     {
+    	uart_printf("rres:%d\r\n", res);
       ret = BSP_ERROR_PERIPH_FAILURE;
     }
   }
@@ -556,8 +557,11 @@ int32_t BSP_SD_WriteBlocks(uint32_t Instance, uint32_t *pData, uint32_t BlockIdx
   }
   else
   {
-    if(HAL_SD_WriteBlocks(&hsd_sdmmc[Instance], (uint8_t *)pData, BlockIdx, BlocksNbr, timeout) != HAL_OK)
+  	HAL_StatusTypeDef res;
+	res = HAL_SD_WriteBlocks(&hsd_sdmmc[Instance], (uint8_t *)pData, BlockIdx, BlocksNbr, timeout);
+    if( res != HAL_OK)
     {
+    	uart_printf("wres:%d\r\n", res);
       ret = BSP_ERROR_PERIPH_FAILURE;
     }
   }
@@ -998,7 +1002,7 @@ static void SD_MspInit(SD_HandleTypeDef *hsd)
     __HAL_RCC_SDMMC1_RELEASE_RESET();
 
     /* NVIC configuration for SDIO interrupts   */
-    HAL_NVIC_SetPriority(SDMMC1_IRQn, 14, 0);
+    HAL_NVIC_SetPriority(SDMMC1_IRQn, 3, 0);
     HAL_NVIC_EnableIRQ(SDMMC1_IRQn);
   }
 }

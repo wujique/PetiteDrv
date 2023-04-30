@@ -125,17 +125,23 @@ DRESULT SD_read(BYTE lun, BYTE *buff, DWORD sector, UINT count)
 {
   DRESULT res = RES_ERROR;
 
-  if(BSP_SD_ReadBlocks(0, (uint32_t*)buff,
+  int32_t sdres;
+	/* 锁住整个SD卡通信过程，
+  		实际项目不能这么粗暴 */
+  	osKernelLock();
+	sdres = BSP_SD_ReadBlocks(0, (uint32_t*)buff,
                        (uint32_t) (sector),
-                       count) == BSP_ERROR_NONE)
-  {
+                       count);
+	osKernelUnlock();
+	//uart_printf("sd read:%d\r\n", sdres);	
+  if( sdres == BSP_ERROR_NONE) {
     /* wait until the read operation is finished */
-    while(BSP_SD_GetCardState(0)!= BSP_ERROR_NONE)
-    {
+    while(BSP_SD_GetCardState(0) != BSP_ERROR_NONE) {
+		
     }
     res = RES_OK;
   }
-
+  
   return res;
 }
 
@@ -151,18 +157,25 @@ DRESULT SD_read(BYTE lun, BYTE *buff, DWORD sector, UINT count)
 DRESULT SD_write(BYTE lun, const BYTE *buff, DWORD sector, UINT count)
 {
   DRESULT res = RES_ERROR;
+  int32_t sdres;
 
-  if(BSP_SD_WriteBlocks(0, (uint32_t*)buff,
+	/* 锁住整个SD卡通信过程，
+  		实际项目不能这么粗暴 */
+  osKernelLock();	
+  sdres =  BSP_SD_WriteBlocks(0, (uint32_t*)buff,
                         (uint32_t)(sector),
-                        count) == BSP_ERROR_NONE)
-  {
+                        count);
+  osKernelUnlock();
+  //uart_printf("sd write:%d\r\n", sdres);
+ 
+  if( sdres == BSP_ERROR_NONE) {
 	/* wait until the Write operation is finished */
-    while(BSP_SD_GetCardState(0) != BSP_ERROR_NONE)
-    {
+    while(BSP_SD_GetCardState(0) != BSP_ERROR_NONE) {
+		
     }
     res = RES_OK;
   }
-
+	
   return res;
 }
 #endif /* _USE_WRITE == 1 */
