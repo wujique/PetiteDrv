@@ -44,7 +44,7 @@ void *WjqMalloc;
 /*
 	二次封装，如果需要做互斥，在_m后缀的函数内实现。
 */
-void*wjq_malloc_m(unsigned nbytes, const char *f, int l)
+void *wjq_malloc_m(unsigned nbytes, const char *f, int l)
 {
 	void*p;
 	//uart_printf("malloc:%d, %s, %d\r\n", nbytes, f, l);
@@ -63,7 +63,7 @@ void*wjq_malloc_m(unsigned nbytes, const char *f, int l)
 	return p;
 }
 
-void*wjq_calloc_m(size_t n, size_t size)
+void *wjq_calloc_m(size_t n, size_t size)
 {
 	void *p;
 

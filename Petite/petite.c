@@ -3,14 +3,10 @@
 /* Includes ------------------------------------------------------------------*/
 #include "mcu.h"
 #include "petite_config.h"
-
 #include "petite.h"
 #include "petite_def.h"
-
 #include "cmsis_os.h"
-
 #include "board_sysconf.h"
-
 #include "drv_lcd.h"
 
 /** @addtogroup Template_Project
@@ -56,7 +52,7 @@ void petite_task(void *pvParameters)
 	wjq_log(LOG_INFO,"[    _app] petite_task\r\n");
 
 	/* 初始化petite模块状态*/
-	vfs_init();
+	//vfs_init();
 	font_init();
 	
 	board_init();

@@ -9,6 +9,10 @@
 #define VFS_DIR_LEN  8//目录长度，一般都是mtd0 mtd1
 #define VFS_NAME_LEN 32//文件名长度
 
+#define VFS_STR_FATFS 		"fatfs"
+#define VFS_STR_LITTLEFS 	"littlefs"
+#define VFS_STR_CONSTFS 	"constfs"
+
 typedef enum 
 {
 	FS_TYPE_FATFS = 1,
@@ -16,10 +20,7 @@ typedef enum
 	FS_TYPE_LITTLEFS,
 	FS_TYPE_CONSTFS
 }FS_TYPE;
-/*
-	vfs 目录，
-	也就是vfs mount需要的信息
-*/
+
 typedef struct _strMtdPra
 {
     u8 vfsdir[8];     //盘符名
@@ -31,17 +32,17 @@ typedef struct _strMtdPra
 #define O_WRONLY	2
 #define O_RDWR		3
 #define O_APPEND	4
-#define O_CREAT		5
+#define O_CREAT		5//不存在时创建新文件
 #define O_EXTC		6
 #define O_NOBLOCK	7
 #define O_TRUNC		8
 
 extern void vfs_init(void);
-extern int vfs_mount(const VFSDIR *Mtd);
+extern int vfs_mount(void *part);
 extern int vfs_creat(const char *filename, int mode);
 extern int vfs_open(const char *pathname, int oflags);
-extern int vfs_read(int fd, const void *buf, size_t length);
-extern int vfs_write(int fd, const void *buf, size_t length);
+extern int vfs_read(int fd,  void *buf, size_t length);
+extern int vfs_write(int fd, void *buf, size_t length);
 extern int vfs_lseek(int fd, int offset, int whence);
 extern int vfs_close(int fd);
 
@@ -51,8 +52,6 @@ typedef struct
 	int na;
 }ft_file_struct;
 
-
-extern ft_file_struct * vfs_node_open(const char * pathname, char * oflags);
 
 
 #endif

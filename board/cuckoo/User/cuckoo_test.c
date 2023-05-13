@@ -179,15 +179,11 @@ void cuckoo_test_lcdtask(uint8_t b)
 }
 
 
-const VFSDIR SdFatFs=
-{
-	VFS_SD_DIR,
-	FS_TYPE_FATFS,
-	SYS_FS_FATFS_SD
-};
-
 #include "src/font/lv_font.h"
 #include "lv_tiny_ttf.h"
+
+extern int flashdb_demo(void);
+extern void petite_partition_test(void);
 
 void cuckoo_7b0_test(void)
 {
@@ -197,16 +193,35 @@ void cuckoo_7b0_test(void)
 	uint8_t lampsta = 0;
 	wjq_log(LOG_DEBUG,"run app\r\n");
 
+	sd_fatfs_init();
 	#if 0//test
 	esp8266_io_init();
 	esp8266_uart_test();
 	dev_ptHCHO_test();
+
+	petite_partition_test();
 	#endif
 	
-	sd_fatfs_init();
-	/* 将SD卡文件系统挂载到VFS上 */
-	vfs_add_node(&SdFatFs);
+	//flashdb_demo();
 
+	#if 1
+	int filefd;
+	filefd = vfs_open("/mtd0/bootcnt", O_CREAT);
+	if(filefd > 0) {
+		uint32_t bootcnt = 0;
+		
+		vfs_read(filefd, &bootcnt, sizeof(bootcnt));
+		wjq_log(LOG_INFO, "boot cnt:%d\r\n", bootcnt);
+		
+		bootcnt++;
+		
+		vfs_lseek(filefd, 0, SEEK_SET);
+		vfs_write(filefd, &bootcnt, sizeof(bootcnt));
+		vfs_close(filefd);
+
+	}
+	#endif
+	
 	//cuckoo_test_lcd();
 	LcdOledI2C = lcd_open("spicoglcd");
 	//LcdOledI2C = lcd_open("i2coledlcd");
@@ -214,9 +229,7 @@ void cuckoo_7b0_test(void)
 	//font_unicode_bitmap_test(LcdOledI2C);
 	//emenu_test(LcdOledI2C);
 	
-
 	#if 1
-
 	lv_font_t *font_t;
 	lv_font_glyph_dsc_t glyph_dsc;
 	const uint8_t *bitmap;
@@ -226,16 +239,14 @@ void cuckoo_7b0_test(void)
 	int row=0;
 	int col=0;
 	bool getres;
-	font_t = lv_tiny_ttf_create_file("mtd0/0:font/chuheisong.ttf", 24);
-	
+	font_t = lv_tiny_ttf_create_file("/0:/font/chuheisong.ttf", 24);
+	i = 0;
 	while(1) {
 	
 		lcd_backlight(LcdOledI2C, 1);
 		font_t->get_glyph_dsc(font_t, &glyph_dsc, unicode_ch[i], NULL);
 		bitmap = font_t->get_glyph_bitmap(font_t, unicode_ch[i]);
 		lcd_backlight(LcdOledI2C, 0);
-		i++;
-		if(i>=5)i=0;
 		
 		wjq_log(LOG_INFO, "adv_w:%d\r\n", glyph_dsc.adv_w);
 		wjq_log(LOG_INFO, "box_w:%d\r\n", glyph_dsc.box_w);
@@ -260,7 +271,11 @@ void cuckoo_7b0_test(void)
 			}
 			uart_printf("\r\n");
 		}
-		osDelay(1000);
+		i++;
+		if(i>=5) break;
+		
+		//osDelay(1000);
+		
 	}
 	#endif
 

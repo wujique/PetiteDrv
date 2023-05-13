@@ -11,10 +11,12 @@
 #include "ff_gen_drv.h"
 #include "sd_diskio.h"
 
+#include "board_sysconf.h"
+
 
 FATFS 	SD_FatFs; 
 FRESULT 	MyFile_Res;    
-char SDPath[4]="0:";
+
 
 /* sdcard init and mount fatfs */
 void sdcard_fatfs_init(void)	
@@ -63,7 +65,7 @@ BYTE	MyFile_WriteBuffer[32] = "STM32H7B0 SD test fatfs";
 FIL MyFile; 		
 
 /*  测试读写文件 */
-#define TEST_FILE_NAME "0:FatFs_Test.txt"
+#define TEST_FILE_NAME "0:/FatFs_Test.txt"
 uint8_t  FatFs_FileTest(void)	//文件创建和写入测试
 {
 	uint8_t i = 0;
@@ -127,7 +129,8 @@ uint8_t  FatFs_FileTest(void)	//文件创建和写入测试
 	*/
 void sd_fatfs_init(void)
 {
-	sdcard_fatfs_init();			
+	sdcard_fatfs_init();
+
 	FatFs_GetVolume();	
 	FatFs_FileTest();
 	

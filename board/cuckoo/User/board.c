@@ -10,7 +10,7 @@
 #include "board_sysconf.h"
 
 #include "touch.h"
-
+#include "partition.h"
 
 extern const TouchDev CtpGt9147;
 extern const TouchDev CtpGt1151;
@@ -19,6 +19,7 @@ extern const TouchDev RtpXpt2046;
 extern void DCMI_PWDN_RESET_Init(void);
 
 extern void *PetiteDevTable[];
+extern PartitionDef PetitePartitonTable[];
 
 /*
 	板级初始化
@@ -29,7 +30,11 @@ s32 board_init(void)
 	
 	wjq_log(LOG_DEBUG, "[   board] cuckoo other dev init!\r\n");
 
+	/* 初始化设备*/
 	petite_dev_register(PetiteDevTable);
+
+	/* 初始化存储空间与分区*/
+	petite_partition_init(PetitePartitonTable);
 	
     lcd_reset();
     LCD_Config();
@@ -68,12 +73,14 @@ const BusUartPra Uart4Pra = {
 };
 
 
+
 void board_main(void)
 {
 	bus_uart_init();
 	bus_uart_open("uart4", &Uart4Pra);
 	wjq_log(LOG_INFO, "------Cuckoo (stm32h7b0vb) run! 20220306------\r\n");
-	
+
+
 	/*  尽早初始化 Flash，并使其进入map模式，因为后续有代码是保存在 QSPI Flash上 
 		在执行到这里之前已经开了systick中断，中断中调用的函数都需要放到内部Flash        		*/
    	W25Qxx_init();

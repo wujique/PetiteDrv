@@ -334,7 +334,7 @@ struct list_head DevSpiFlashRoot = {&DevSpiFlashRoot, &DevSpiFlashRoot};
  *@param[out]  无
  *@retval:     
  */
-DevSpiFlashNode *dev_spiflash_open(char* name)
+void *dev_spiflash_open(char* name)
 {
 
 	DevSpiFlashNode *node;
@@ -374,7 +374,7 @@ DevSpiFlashNode *dev_spiflash_open(char* name)
 		}
 	}
 	
-	return node;
+	return (void *)node;
 }
 
 /**
@@ -394,7 +394,6 @@ s32 dev_spiflash_close(DevSpiFlashNode *node)
 	node->gd = -1;
 	return 0;
 }
-
 
 
 s32 dev_spiflash_register(const DevSpiFlash *dev)
@@ -659,6 +658,50 @@ s32 dev_spiflash_test(void)
 	dev_spiflash_test_fun("core_spiflash");
 	return 0;
 }
+
+
+
+
+
+int storage_spiflash_read(void *dev, uint32_t offset, uint8_t *buf, size_t size)
+{
+	return dev_spiflash_read((DevSpiFlashNode *)dev, offset, size, buf);	
+
+}
+int storage_spiflash_write(void *dev, uint32_t offset, const uint8_t *buf, size_t size)
+{
+	return dev_spiflash_write((DevSpiFlashNode *)dev, offset, size, (uint8_t *)buf);
+}
+int storage_spiflash_erase(void *dev, uint32_t offset, size_t size)
+{
+	size_t esize=0;
+	DevSpiFlashNode *flashnode = dev;
+	
+	while(1) {
+		if(esize >= size) break;
+		
+		dev_spiflash_erase(flashnode, offset+esize);
+		esize +=flashnode->dev.pra->sectorsize; 
+	}
+	return 0;
+}
+
+
+#include "partition.h"
+
+StorageDev StorageExSpiFlash ={
+	
+	.blksize = 4096,
+	.size=8*1024*1024,
+	
+	.open = dev_spiflash_open,	
+	.read = storage_spiflash_read,
+	.write = storage_spiflash_write,
+	.erase = storage_spiflash_erase,
+	.close = dev_spiflash_close,
+};
+
+
 
 #endif
 

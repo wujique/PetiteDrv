@@ -275,7 +275,7 @@ int font_getdot(void *fontstr_in, char *Ch, FontBitMap *Dot, char *CodeType)
 	if(addr < 0) {return -1;}
 	
 	res = vfs_lseek(fontstr->fd, addr, SEEK_SET);
-	res = vfs_read(fontstr->fd, (const void *)Dot->dot, font->datac);
+	res = vfs_read(fontstr->fd, (void *)Dot->dot, font->datac);
 
 	Dot->head.rows = font->bitmap.rows;
 	Dot->head.width = font->bitmap.width;

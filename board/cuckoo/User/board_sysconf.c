@@ -19,7 +19,7 @@
 
 
 /* cuckoo 小板， SAI接口和外扩I2C接口的其他信号共用，
-	需要注意，特别是外界OLED等外设*/
+	需要注意，特别是外接OLED等外设*/
 const DevI2c DevVi2c1={
 		.pnode={
 				.name = "VI2C1",
@@ -319,5 +319,53 @@ const FontHead *FontListN[FONT_LIST_MAX] = {
 	&WQYST16H18030,
 	&WQYST12H18030,
 	};
+
+
+/*
+	定义板存储与分区。
+	1.在进行 partition初始化之前，设备要先完成初始化。
+	2.非系统映射Flash，最好映射到芯片保留地址上。
+	3.partition会判断分区格式，有需要则进行初始化
+		app:程序
+		data:纯数据，无指定格式
+		par: partiton表
+		flashdb：KV数据库
+		constfs: 资源文件系统
+		littlefs: flash文件系统
+	*/
+#if 1
+#include "partition.h"
+/*
+	 先定义sto设备，在定义par分区
+	*/ 
+PartitionDef PetitePartitonTable[] =
+{
+	#if 0
+	/* 7b0 芯片内部Flash，128K */
+	{"sto","onchip","7b0_flash",      0x8000000,  0x20000},
+		{"par","app","boot",    	0x8000000,  0x10000},
+		{"par","flashdb","boot",    0x8010000,  0x10000},
+
+	/*主板上的qspi flash */
+	{"sto","xip_flash","xip_qflash", 0x90000000, 0x20000},
+		{"par","app","core",    	0x90000000, 0x20000},
+		//{"par","par","def",    		0x90000000, 0x20000},
+		{"par","app","app",     	0x90020000, 0x20000},
+	#endif
+	
+	/* 外扩SPI 接口的 flash */
+	{"sto","spiflash","ex_spiflash", 0x50000000, 0x800000},
+		{"par","FlashDB","flashdb",     0x50000000, 0x20000},//128K的kv
+		{"par", VFS_STR_LITTLEFS, "mtd0",     0x50000000+0x20000, 0x100000},//1M 文件系统，sqlite基于文件系统
+		
+	/* 把sd卡也放到partiton，以便将其初始化为fatfs后挂载到vfs中 
+		目前sdmmc并不归 partition管理。
+		addr 和 size， 和实际不符，32位寻址最大才4G，sd卡早超出了 */
+	{"sto", "sdmmc",  "socket1", 0x60000000, 0},
+		{"par",VFS_STR_FATFS, SDPath,     0x60000000, 0},
+	/*--------------------------------------------------*/
+	{NULL,NULL,NULL,0,0},
+};
+#endif
 
 

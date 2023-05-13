@@ -53,7 +53,7 @@
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>1</CreateHexFile>
-          <DebugInformation>0</DebugInformation>
+          <DebugInformation>1</DebugInformation>
           <BrowseInformation>0</BrowseInformation>
           <ListingPath>.\Listings\</ListingPath>
           <HexFormatSelection>1</HexFormatSelection>
@@ -339,7 +339,7 @@
               <MiscControls>--locale=english</MiscControls>
               <Define>NDEBUG</Define>
               <Undefine></Undefine>
-              <IncludePath>.\Core\Inc;.\Drivers\STM32H7xx_HAL_Driver\Inc;.\User;.\Drivers\CMSIS\Include;.\Drivers\CMSIS\Device\ST\STM32H7xx\Include;.\Drivers\STM32H7xx_HAL_Driver\Inc\Legacy;..\..\mcu\stm32h7b0vb;..\..\Petite;..\..\driver;..\..\driver\touch;..\..\driver\lcd;..\..\components\lvgl;..\..\components\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\..\components\FreeRTOS\Source\include;..\..\components\FreeRTOS\Source\CMSIS_RTOS_V2;..\..\components\FatFs;..\..\driver\sound;..\..\driver\touch\rtp\tslib;..\..\driver\touch\rtp;..\..\Petite\bus;..\..\components\emenu;..\..\components\tiny_ttf</IncludePath>
+              <IncludePath>.\Core\Inc;.\Drivers\STM32H7xx_HAL_Driver\Inc;.\User;.\Drivers\CMSIS\Include;.\Drivers\CMSIS\Device\ST\STM32H7xx\Include;.\Drivers\STM32H7xx_HAL_Driver\Inc\Legacy;..\..\mcu\stm32h7b0vb;..\..\Petite;..\..\driver;..\..\driver\touch;..\..\driver\lcd;..\..\components\lvgl;..\..\components\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\..\components\FreeRTOS\Source\include;..\..\components\FreeRTOS\Source\CMSIS_RTOS_V2;..\..\components\FatFs;..\..\driver\sound;..\..\driver\touch\rtp\tslib;..\..\driver\touch\rtp;..\..\Petite\bus;..\..\components\emenu;..\..\components\tiny_ttf;..\..\components\FlashDB\inc;..\..\components\FlashDB\porting;..\..\components\littlefs;..\..\components\CmBacktrace\cm_backtrace</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -762,6 +762,11 @@
               <FileName>tlsf.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\Petite\mem\tlsf.c</FilePath>
+            </File>
+            <File>
+              <FileName>partition.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Petite\partition.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1862,6 +1867,91 @@
               <FileName>lv_tiny_ttf.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\components\tiny_ttf\lv_tiny_ttf.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>mid/flashdb</GroupName>
+          <Files>
+            <File>
+              <FileName>fal.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\FlashDB\porting\fal.c</FilePath>
+            </File>
+            <File>
+              <FileName>flashdb_demo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\FlashDB\porting\flashdb_demo.c</FilePath>
+            </File>
+            <File>
+              <FileName>kvdb_basic_sample.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\FlashDB\samples\kvdb_basic_sample.c</FilePath>
+            </File>
+            <File>
+              <FileName>kvdb_type_blob_sample.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\FlashDB\samples\kvdb_type_blob_sample.c</FilePath>
+            </File>
+            <File>
+              <FileName>kvdb_type_string_sample.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\FlashDB\samples\kvdb_type_string_sample.c</FilePath>
+            </File>
+            <File>
+              <FileName>tsdb_sample.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\FlashDB\samples\tsdb_sample.c</FilePath>
+            </File>
+            <File>
+              <FileName>fdb.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\FlashDB\src\fdb.c</FilePath>
+            </File>
+            <File>
+              <FileName>fdb_file.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\FlashDB\src\fdb_file.c</FilePath>
+            </File>
+            <File>
+              <FileName>fdb_kvdb.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\FlashDB\src\fdb_kvdb.c</FilePath>
+            </File>
+            <File>
+              <FileName>fdb_tsdb.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\FlashDB\src\fdb_tsdb.c</FilePath>
+            </File>
+            <File>
+              <FileName>fdb_utils.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\FlashDB\src\fdb_utils.c</FilePath>
+            </File>
+            <File>
+              <FileName>fdb_kvdb_tc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\FlashDB\tests\fdb_kvdb_tc.c</FilePath>
+            </File>
+            <File>
+              <FileName>fdb_tsdb_tc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\FlashDB\tests\fdb_tsdb_tc.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>mid/littlefs</GroupName>
+          <Files>
+            <File>
+              <FileName>lfs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\littlefs\lfs.c</FilePath>
+            </File>
+            <File>
+              <FileName>lfs_util.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\littlefs\lfs_util.c</FilePath>
             </File>
           </Files>
         </Group>

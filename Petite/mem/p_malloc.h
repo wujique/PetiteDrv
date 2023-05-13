@@ -3,7 +3,7 @@
 
 
 extern void wjq_free_m( void *ap );
-extern void* wjq_malloc_m( unsigned nbytes , const char *f, int l);
+extern void *wjq_malloc_m( unsigned nbytes , const char *f, int l);
 extern void *wjq_realloc_m(void *mem_address, unsigned int newsize);
 extern void* wjq_calloc_m(unsigned int n, unsigned int size);
 
