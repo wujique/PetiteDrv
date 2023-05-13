@@ -204,6 +204,7 @@ void cuckoo_7b0_test(void)
 	
 	//flashdb_demo();
 
+	/* 测试littlefs */
 	#if 1
 	int filefd;
 	filefd = vfs_open("/mtd0/bootcnt", O_CREAT);
@@ -221,14 +222,15 @@ void cuckoo_7b0_test(void)
 
 	}
 	#endif
-	
+
 	//cuckoo_test_lcd();
 	LcdOledI2C = lcd_open("spicoglcd");
 	//LcdOledI2C = lcd_open("i2coledlcd");
 	//font_test_utf16(LcdOledI2C);
 	//font_unicode_bitmap_test(LcdOledI2C);
 	//emenu_test(LcdOledI2C);
-	
+
+	/* 测试tiny ttf 适量字库引擎 */
 	#if 1
 	lv_font_t *font_t;
 	lv_font_glyph_dsc_t glyph_dsc;

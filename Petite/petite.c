@@ -88,6 +88,10 @@ void petite_task(void *pvParameters)
 	}
 }
 
+#include <cm_backtrace.h>
+#define HARDWARE_VERSION "V1.0.0" 
+#define SOFTWARE_VERSION "V0.1.0" 
+
 /**
   * @brief  Main program
   * @param  None
@@ -103,6 +107,8 @@ int petite_app(void)
 	wjq_log(LOG_INFO,"*/ ___/  __/ |_| | ||  __// /_//| |   \\ V /              \r\n");
 	wjq_log(LOG_INFO,"*\\/    \\___|\\__|_|\\__\\___/___,' |_|    \\_/www.wujique.com\r\n");
 	wjq_log(LOG_INFO,"*********************************************************\r\n\r\n");
+
+	cm_backtrace_init("PetiteDrv", HARDWARE_VERSION, SOFTWARE_VERSION);
 
   /* Infinite loop 
 	尽快启动RTOS， 进入start_task再做其他设备初始化 */
