@@ -204,8 +204,11 @@ void cuckoo_7b0_test(void)
 	
 	//flashdb_demo();
 
+	/*把sd卡的矢量字库文件拷贝到spi flash*/
+	
+
 	/* 测试littlefs */
-	#if 1
+	#if 0
 	int filefd;
 	filefd = vfs_open("/mtd0/bootcnt", O_CREAT);
 	if(filefd > 0) {
@@ -231,7 +234,7 @@ void cuckoo_7b0_test(void)
 	//emenu_test(LcdOledI2C);
 
 	/* 测试tiny ttf 适量字库引擎 */
-	#if 1
+	#if 0
 	lv_font_t *font_t;
 	lv_font_glyph_dsc_t glyph_dsc;
 	const uint8_t *bitmap;

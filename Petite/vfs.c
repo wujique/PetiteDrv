@@ -110,6 +110,9 @@ typedef struct _VfsMountNode{
  */
 typedef struct _strFileNode
 {
+	/* 是否考虑加一个TAG，防止胡乱close*/
+	//uint32_t tag;//0x7666736C 
+
 	union _uFilePra pra;///不同文件系统的文件句柄	
 	
 	VfsMountNode *vfsnode;///指向文件所属文件系统
@@ -736,14 +739,14 @@ int vfs_close(int fd)
 
 		FRESULT res;
 		res = f_close(&filenode->pra.fatfd);
-		if(res != FR_OK) {
-			return 0;
-		}
+
 #endif
 
 	}else {
-		return vfs_node->close(filenode);
+		vfs_node->close(filenode);
 	}
+
+	wjq_free(filenode);
 
 	return NULL;
 }
@@ -786,7 +789,42 @@ int vfs_tell(int fd)
 	return NULL;
 }
 
+#if 0
+int vfs_file_copy(char *srcname, char *dstname)
+{
+	int srcfilefd, dstfilefd;
+	int res;
+	
+	srcfilefd = vfs_open("srcname", O_RDONLY);
+	if(srcfilefd <= 0)  {
+		return -1;
+	}
 
+	dstfilefd = vfs_open("srcname", O_CREAT | O_WRONLY);
+	if(dstfilefd <= 0)  {
+		vfs_close(srcfilefd)
+		return -1;
+	}
+
+	uint8_t *tmpbuf;
+
+	tmp_buf = wjq_malloc(4096);
+	
+	while(1){
+		res = vfs_read(srcfilefd, tmp_buf, 4096);
+		if (res <= 0) break;
+		
+		vfs_write(dstfilefd, tmp_buf, 4096);
+		wjq_log(LOG_INFO, "*");
+	}
+	wjq_log(LOG_INFO, "\r\ncppy finish!\r\n*");
+		
+	vfs_close(srcfilefd);
+	vfs_close(dstfilefd);
+
+	}	
+}
+#endif
 
 #if 0
 ft_file_struct * vfs_node_open(const char *pathname, char* oflags)
