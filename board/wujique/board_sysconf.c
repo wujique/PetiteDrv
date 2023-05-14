@@ -629,7 +629,7 @@ FontHead SYSongTi1212 ={
 
 	.name = "SYsongti_12",//名字
 	.size = 12,
-	.path = "mtd0/1:font/songti1212.DZK",//路径
+	.path = "/1:/font/songti1212.DZK",//路径
 		//"mtd0/1:/shscn1212.DZK",
 		
 	.type = FONT_DOT_YMY,
@@ -654,7 +654,7 @@ FontHead SYSongTi1616 ={
 
 	.name = "SYsongti_16",//名字
 	.size = 16,
-	.path = "mtd0/1:font/shscn1616.DZK",//路径
+	.path = "/1:/font/shscn1616.DZK",//路径
 			//"mtd0/1:/songti1616.DZK",
 
 	.type = FONT_DOT_YMY,
@@ -681,7 +681,7 @@ FontHead SYSongTiM1616 ={
 
 	.name = "SYST_16_m",//名字
 	.size = 16,
-	.path = "mtd0/1:font/syst_m_16.bin",//路径
+	.path = "/1:/font/syst_m_16.bin",//路径
 	
 	.type = FONT_DOT_WJQ,
 	.st = FONT_ST_GB18030,
@@ -703,7 +703,7 @@ FontHead SYSongTiM2424 ={
 
 	.name = "SYST_24_m",//名字
 	.size = 24,
-	.path = "mtd0/1:font/syst_m_24.bin",//路径
+	.path = "/1:/font/syst_m_24.bin",//路径
 
 	.type = FONT_DOT_WJQ,
 	.st = FONT_ST_GB18030,
@@ -728,7 +728,7 @@ FontHead WQYST16H18030 ={
 
 	.name = "WQY_ST_16_H",//名字
 	.size = 16,
-	.path = "mtd0/1:font/wqy16h18030.bin",//路径
+	.path = "/1:/font/wqy16h18030.bin",//路径
 	
 	.type = FONT_DOT_WJQ,
 	.st = FONT_ST_GB18030,
@@ -751,7 +751,7 @@ FontHead WQYST12H18030 ={
 
 	.name = "WQY_ST_12_H",//名字
 	.size = 12,
-	.path = "mtd0/1:font/wqy12h18030.bin",//路径
+	.path = "/1:/font/wqy12h18030.bin",//路径
 	
 	.type = FONT_DOT_WJQ,
 	.st = FONT_ST_GB18030,
@@ -778,5 +778,54 @@ FontHead *FontListN[FONT_LIST_MAX] = {
 	&WQYST16H18030,
 	&WQYST12H18030,
 	};
+
+	/*
+		定义板存储与分区。
+		1.在进行 partition初始化之前，设备要先完成初始化。
+		2.非系统映射Flash，最好映射到芯片保留地址上。
+		3.partition会判断分区格式，有需要则进行初始化
+			app:程序
+			data:纯数据，无指定格式
+			par: partiton表
+			flashdb：KV数据库
+			constfs: 资源文件系统
+			littlefs: flash文件系统
+		*/
+#if 1
+#include "partition.h"
+	/*
+		 先定义sto设备，再定义par分区
+		*/ 
+	PartitionDef PetitePartitonTable[] =
+	{
+	#if 0
+		/* 407 芯片内部Flash */
+		{"sto","onchip","7b0_flash",	  0x8000000,  0x20000},
+			{"par","app","boot",		0x8000000,	0x10000},
+			{"par","flashdb","boot",	0x8010000,	0x10000},
+	
+	#endif
+		
+		/* 底板SPI  flash */
+		{"sto","spiflash","board_spiflash", 0x50000000, 0x800000},
+			{"par", VFS_STR_LITTLEFS, "mtd1",	  0x50000000, 0x100000},//1M 文件系统，sqlite基于文件系统
+			
+		/* 核心板 SPI flash */
+		{"sto","spiflash","core_spiflash", 0x60000000, 0x800000},
+			{"par","FlashDB","flashdb", 	0x60000000, 0x20000},//128K的kv
+			{"par", VFS_STR_LITTLEFS, "mtd0",	  0x60000000+0x20000, 0x100000},//1M 文件系统，sqlite基于文件系统
+			
+		/* 把sd卡也放到partiton，以便将其初始化为fatfs后挂载到vfs中 
+			目前sdmmc并不归 partition管理。
+			addr 和 size， 和实际不符，32位寻址最大才4G，sd卡早超出了 */
+		{"sto", "sdmmc",  "socket1", 0x70000000, 0},
+			{"par",VFS_STR_FATFS, SYS_FS_FATFS_SD,	  0x70000000, 0},
+		/*   如何实现热插拔？*/	
+		{"sto", "usbmsc",  "socket0", 0x80000000, 0},
+			{"par",VFS_STR_FATFS, SYS_FS_FATFS_USB,	  0x80000000, 0},
+		/*--------------------------------------------------*/
+		{NULL,NULL,NULL,0,0},
+	};
+#endif
 
 

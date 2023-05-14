@@ -339,7 +339,7 @@
               <MiscControls>--locale=english</MiscControls>
               <Define>NDEBUG</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\app;..\..\wujique;..\usb\inc;..\eth\inc;..\..\..\driver;..\..\..\driver\lcd;..\..\..\driver\cdev;..\..\..\mcu\stm32407\mcu_dev;..\..\..\mcu\stm32407\StLib\STM32F4xx_StdPeriph_Driver\inc;..\..\..\panel;..\..\..\Petite;..\..\..\components\FatFs;..\eth\inc;..\..\..\components\cmd\ubootcmd;..\..\..\components\littlefs-master;..\usb\inc;..\..\..\mcu\stm32407;..\..\..\driver\camera;..\..\..\mcu\stm32407\StLib\CMSIS\Include;..\..\..\driver\touch;..\..\..\components\FreeRTOS\Source\include;..\..\..\components\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\..\..\components\FreeRTOS\Source\CMSIS_RTOS_V2;..\..\..\driver\touch\rtp\tslib;..\..\..\driver\touch\rtp\tslib\tests;..\..\..\driver\sound;..\..\..\driver\touch;..\..\..\driver\touch\rtp;..\..\..\Petite\bus;..\..\..\components\emenu</IncludePath>
+              <IncludePath>..\..\..\app;..\..\wujique;..\usb\inc;..\eth\inc;..\..\..\driver;..\..\..\driver\lcd;..\..\..\driver\cdev;..\..\..\mcu\stm32407\mcu_dev;..\..\..\mcu\stm32407\StLib\STM32F4xx_StdPeriph_Driver\inc;..\..\..\panel;..\..\..\Petite;..\..\..\components\FatFs;..\eth\inc;..\..\..\components\cmd\ubootcmd;..\..\..\components\littlefs-master;..\usb\inc;..\..\..\mcu\stm32407;..\..\..\driver\camera;..\..\..\mcu\stm32407\StLib\CMSIS\Include;..\..\..\driver\touch;..\..\..\components\FreeRTOS\Source\include;..\..\..\components\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\..\..\components\FreeRTOS\Source\CMSIS_RTOS_V2;..\..\..\driver\touch\rtp\tslib;..\..\..\driver\touch\rtp\tslib\tests;..\..\..\driver\sound;..\..\..\driver\touch;..\..\..\driver\touch\rtp;..\..\..\Petite\bus;..\..\..\components\emenu;..\..\..\components\CmBacktrace\cm_backtrace;..\..\..\components\FlashDB\inc;..\..\..\components\FlashDB\porting;..\..\..\components\littlefs</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -988,6 +988,21 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\Petite\mem\p_malloc.c</FilePath>
             </File>
+            <File>
+              <FileName>storage.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Petite\storage.c</FilePath>
+            </File>
+            <File>
+              <FileName>partition.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Petite\partition.c</FilePath>
+            </File>
+            <File>
+              <FileName>tlsf.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Petite\mem\tlsf.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1203,6 +1218,141 @@
               <FileName>emenu_test.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\components\emenu\emenu_test.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>component/FlashDB</GroupName>
+          <Files>
+            <File>
+              <FileName>fal.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\FlashDB\porting\fal.c</FilePath>
+            </File>
+            <File>
+              <FileName>flashdb_demo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\FlashDB\porting\flashdb_demo.c</FilePath>
+            </File>
+            <File>
+              <FileName>kvdb_basic_sample.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\FlashDB\samples\kvdb_basic_sample.c</FilePath>
+            </File>
+            <File>
+              <FileName>kvdb_type_blob_sample.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\FlashDB\samples\kvdb_type_blob_sample.c</FilePath>
+            </File>
+            <File>
+              <FileName>kvdb_type_string_sample.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\FlashDB\samples\kvdb_type_string_sample.c</FilePath>
+            </File>
+            <File>
+              <FileName>tsdb_sample.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\FlashDB\samples\tsdb_sample.c</FilePath>
+            </File>
+            <File>
+              <FileName>fdb.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\FlashDB\src\fdb.c</FilePath>
+            </File>
+            <File>
+              <FileName>fdb_file.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\FlashDB\src\fdb_file.c</FilePath>
+            </File>
+            <File>
+              <FileName>fdb_kvdb.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\FlashDB\src\fdb_kvdb.c</FilePath>
+            </File>
+            <File>
+              <FileName>fdb_tsdb.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\FlashDB\src\fdb_tsdb.c</FilePath>
+            </File>
+            <File>
+              <FileName>fdb_utils.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\FlashDB\src\fdb_utils.c</FilePath>
+            </File>
+            <File>
+              <FileName>fdb_kvdb_tc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\FlashDB\tests\fdb_kvdb_tc.c</FilePath>
+            </File>
+            <File>
+              <FileName>fdb_tsdb_tc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\FlashDB\tests\fdb_tsdb_tc.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>cmbacktrace</GroupName>
+          <Files>
+            <File>
+              <FileName>cm_backtrace.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\CmBacktrace\cm_backtrace\cm_backtrace.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmb_fault.S</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\..\..\components\CmBacktrace\cm_backtrace\fault_handler\keil\cmb_fault.S</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>cmd</GroupName>
+          <Files>
+            <File>
+              <FileName>cmd_display.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\cmd\cmd_display.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_port.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\cmd\cmd_port.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_sys.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\cmd\cmd_sys.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\cmd\ubootcmd\cmd.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_nvedit.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\cmd\ubootcmd\cmd_nvedit.c</FilePath>
+            </File>
+            <File>
+              <FileName>commnad.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\cmd\ubootcmd\commnad.c</FilePath>
+            </File>
+            <File>
+              <FileName>console.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\cmd\ubootcmd\console.c</FilePath>
+            </File>
+            <File>
+              <FileName>env.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\cmd\ubootcmd\env.c</FilePath>
+            </File>
+            <File>
+              <FileName>uif.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\cmd\ubootcmd\uif.c</FilePath>
             </File>
           </Files>
         </Group>

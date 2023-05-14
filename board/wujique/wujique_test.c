@@ -254,7 +254,7 @@ s32 test_lcd_spi_128128(void)
 						lcd_update(lcd);
 						break;
 					case 3:
-						dev_lcd_show_bmp(lcd, 1, 1, 240, 240, "mtd0/1:pic/pic128.bmp");
+						dev_lcd_show_bmp(lcd, 1, 1, 240, 240, "/1:/pic/pic128.bmp");
 						break;
 					default:
 						break;
@@ -299,20 +299,20 @@ s32 test_lcd_pic(void)
 	lcd_setdir(lcd, W_LCD, L2R_D2U);
 	
 	wjq_test_showstr((char *)__FUNCTION__);
-	dev_lcd_show_bmp(lcd, 1, 1, 320, 240, "mtd0/1:pic/girl_black.bmp");
+	dev_lcd_show_bmp(lcd, 1, 1, 320, 240, "/1:/pic/girl_black.bmp");
 	wjq_wait_key(16);
-	dev_lcd_show_bmp(lcd, 1, 1, 320, 240, "mtd0/1:pic/girl16.bmp");//调色板
+	dev_lcd_show_bmp(lcd, 1, 1, 320, 240, "/1:/pic/girl16.bmp");//调色板
 	wjq_wait_key(16);
-	dev_lcd_show_bmp(lcd, 1, 1, 320, 240, "mtd0/1:pic/girl256.bmp");//调色板
+	dev_lcd_show_bmp(lcd, 1, 1, 320, 240, "/1:/pic/girl256.bmp");//调色板
 	wjq_wait_key(16);
-	dev_lcd_show_bmp(lcd, 1, 1, 320, 240, "mtd0/1:pic/girl24.bmp");//真彩色
+	dev_lcd_show_bmp(lcd, 1, 1, 320, 240, "/1:/pic/girl24.bmp");//真彩色
 	wjq_wait_key(16);
 	/*
-	dev_lcd_show_bmp(lcd, 1, 1, 128, 128, "mtd0/1:/pic/pic128.bmp");
+	dev_lcd_show_bmp(lcd, 1, 1, 128, 128, "/1:/pic/pic128.bmp");
 	wjq_wait_key(16);
-	dev_lcd_show_bmp(lcd, 1, 1, 128, 64, "mtd0/1:/pic/PIC12864.bmp");
+	dev_lcd_show_bmp(lcd, 1, 1, 128, 64, "/1:/pic/PIC12864.bmp");
 	wjq_wait_key(16);
-	dev_lcd_show_bmp(lcd, 1, 1, 240, 240, "mtd0/1:/pic/pic240240.bmp");
+	dev_lcd_show_bmp(lcd, 1, 1, 240, 240, "/1:/pic/pic240240.bmp");
 	wjq_wait_key(16);
 	*/
 	lcd_setdir(lcd, W_LCD, L2R_U2D);
@@ -372,7 +372,7 @@ s32 test_sound_wm8978(void)
 	lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
 	display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
 	lcd_update(WJQTestLcd);
-	fun_sound_play("mtd0/1:stereo_16bit_32k.wav", "wm8978");
+	fun_sound_play("/1:/stereo_16bit_32k.wav", "wm8978");
 	wjq_wait_key(16);
 	fun_sound_stop();
 	wjq_log(LOG_DEBUG,"wm8978 test out\r\n");
@@ -384,7 +384,7 @@ s32 test_sound_dac(void)
 	lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
 	display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
 	lcd_update(WJQTestLcd);
-	fun_sound_play("mtd0/1:mono_16bit_8k.wav", "dacsound");
+	fun_sound_play("/1:/mono_16bit_8k.wav", "dacsound");
 	wjq_wait_key(16);
 	fun_sound_stop();
 	wjq_log(LOG_DEBUG,"dac test out\r\n");
@@ -398,7 +398,7 @@ s32 test_sound_rec(void)
 	//fun_sound_rec("mtd0/1:rec8.wav");
 	wjq_wait_key(16);
 	//fun_rec_stop();
-	fun_sound_play("mtd0/1:rec8.wav", "wm8978");	
+	fun_sound_play("/1:/rec8.wav", "wm8978");	
 	while(1) {
 		if(SOUND_IDLE == fun_sound_get_sta())
 			break;

@@ -52,6 +52,8 @@ const static BusUartPra PcPortPra={
 	.bufsize = 256,
 	};
 
+BusUartNode *LogUartNode;
+
 /*
 	cpu初始化
 */
@@ -70,7 +72,7 @@ s32 board_mcu_preinit(void)
 	/*IO跟串口是调试信息的依赖，所以最早初始化*/
 	mcu_io_init();
 	bus_uart_init();
-	bus_uart_open(PC_PORT_STR, &PcPortPra);
+	LogUartNode = bus_uart_open(PC_PORT_STR, &PcPortPra);
 	log_init();
 	
 	wjq_log(LOG_INFO, "\r\n\r\n\r\n****************************************\r\n");

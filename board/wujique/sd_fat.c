@@ -53,7 +53,6 @@ const Diskio_drvTypeDef  SD_Driver =
 
 FATFS 	SD_FatFs; 
 FRESULT 	MyFile_Res;    
-char SDPath[4] = "1:";	//指定路径
 
 
 
@@ -62,16 +61,16 @@ void sdcard_fatfs_init(void)
 {
 	BYTE work[FF_MAX_SS]; 
 	
-	FATFS_LinkDriver(&SD_Driver, SDPath);
+	FATFS_LinkDriver(&SD_Driver, SYS_FS_FATFS_SD);
 	uart_printf("\r\nmount...");
-	MyFile_Res = f_mount(&SD_FatFs, SDPath, 1);	
+	MyFile_Res = f_mount(&SD_FatFs, SYS_FS_FATFS_SD, 1);	
 	
 	if (MyFile_Res == FR_OK) {
 		uart_printf("ok\r\n");
 	} else {
 		uart_printf("format...\r\n");
 		
-		MyFile_Res = f_mkfs(SDPath, FM_FAT32,0,work,sizeof work);
+		MyFile_Res = f_mkfs(SYS_FS_FATFS_SD, FM_FAT32, 0, work,sizeof work);
 		
 		if (MyFile_Res == FR_OK)
 			uart_printf("ok！\r\n");
@@ -87,7 +86,7 @@ void FatFs_GetVolume(void)
 	uint32_t SD_FreeCapacity = 0;		//SD卡空闲容量
 	DWORD fre_clust, fre_sect, tot_sect; 	//空闲簇，空闲扇区数，总扇区数
 
-	f_getfree(SDPath, &fre_clust,&fs);			//获取SD卡剩余的簇
+	f_getfree(SYS_FS_FATFS_SD, &fre_clust,&fs);			//获取SD卡剩余的簇
 
 	tot_sect = (fs->n_fatent-2) * fs->csize;	//总扇区数量 = 总的簇 * 每个簇包含的扇区数
 	fre_sect = fre_clust * fs->csize;			//计算剩余的可用扇区数	   

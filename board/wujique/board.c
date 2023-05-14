@@ -40,22 +40,7 @@ KeyPadIO KeyPadIOList[KEY_PAD_ROW_NUM+KEY_PAD_COL_NUM]=
 			{MCU_PORT_F, MCU_IO_9},
 			{MCU_PORT_F, MCU_IO_8},
 		};
-/*
-	定义文件系统节点
-			*/
-const VFSDIR SdFatFs=
-{
-	VFS_SD_DIR,
-	FS_TYPE_FATFS,
-	SYS_FS_FATFS_SD
-};
 
-const VFSDIR USBFatFs=
-{
-	VFS_USB_DIR,
-	FS_TYPE_FATFS,
-	SYS_FS_FATFS_USB
-};
 /**/
 DevBuzzer BoardBuzzer={
 		MCU_PORT_D,
@@ -145,11 +130,6 @@ s32 bsp_exuart_wifi_write(u8 *buf, s32 len)
 	return res;
 }
 
-int board_mount_udisk_2_vfs(void)
-{
-	vfs_add_node(&USBFatFs);
-	return 0;
-}
 /**/
 #include "cmsis_os.h"
 
@@ -172,7 +152,27 @@ void board_app_task(void)
 
 	/* 初始化文件系统 */
 	sd_fatfs_init();
-	vfs_add_node(&SdFatFs);
+	
+	flashdb_demo();
+
+	/* 测试littlefs */
+	#if 1
+	int filefd;
+	filefd = vfs_open("/mtd0/bootcnt", O_CREAT);
+	if(filefd > 0) {
+		uint32_t bootcnt = 0;
+		
+		vfs_read(filefd, &bootcnt, sizeof(bootcnt));
+		wjq_log(LOG_INFO, "boot cnt:%d\r\n", bootcnt);
+		
+		bootcnt++;
+		
+		vfs_lseek(filefd, 0, SEEK_SET);
+		vfs_write(filefd, &bootcnt, sizeof(bootcnt));
+		vfs_close(filefd);
+
+	}
+	#endif
 	
 	wujique_stm407_test();
 	while(1){}
@@ -192,6 +192,7 @@ s32 board_app_init(void)
 }
 
 extern void *PetiteDevTable[];
+extern PartitionDef PetitePartitonTable[];
 
 /*
 	板级初始化
@@ -203,6 +204,9 @@ s32 board_init(void)
 	/* 注册总线的驱动 ：I2C/SPI/BUS LCD...*/
 	mcu_fsmc_lcd_Init();
 	petite_dev_register(PetiteDevTable);
+
+	/* 初始化存储空间与分区*/
+	petite_partition_init(PetitePartitonTable);
 
 	/* 以下是未归纳到总线系统的去驱动 
 		要将这些驱动改为字符驱动架构 

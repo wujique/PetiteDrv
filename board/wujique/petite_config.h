@@ -49,8 +49,8 @@
 /* 文件系统 */
 #define SYS_USE_VFS		1
 #define SYS_FS_FATFS	1
-#define SYS_FS_LITTLEFS	0
-#define SYS_FS_SPIFS	0
+#define SYS_FS_LITTLEFS	1
+//#define SYS_FS_SPIFS	0
 
 
 /*定义alloc.c内存管理数组*/

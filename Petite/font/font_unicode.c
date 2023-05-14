@@ -90,7 +90,7 @@ int font_unicode_bitmap_init(void)
 {
 	int rlen = 0;
 	
-	fd_fontfile = vfs_open("mtd0/0:font/font_file.bin", O_RDONLY);
+	fd_fontfile = vfs_open("/0:/font/font_file.bin", O_RDONLY);
 	if (fd_fontfile == NULL) {
 		uart_printf("bitmap font open err!\r\n");
 		return -1;

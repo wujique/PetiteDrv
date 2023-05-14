@@ -6,6 +6,7 @@
 #include "petite_def.h"
 #include "pfsm.h"
 #include "stimer.h"
+#include "partition.h"
 #include "vfs.h"
 
 #include "mem/p_malloc.h"
