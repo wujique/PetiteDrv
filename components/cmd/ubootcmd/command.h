@@ -5,6 +5,11 @@
 /*包含系统平台的定义，主要是变量类型*/
 #include "mcu.h"
 
+#define uint8 uint8_t
+#define uint16 uint16_t
+#define uint32 uint32_t
+
+
 /* 调试开关 */
 #define DEBUG_PARSER
 #undef DEBUG_PARSER
@@ -23,7 +28,7 @@
 #define CONFIG_SYS_LONGHELP     1
 #define CONFIG_SYS_MAXARGS		12
 
-#define CONFIG_SYS_PROMPT		"root@PetiteDrv: "	  /* prompt string	     */
+#define CONFIG_SYS_PROMPT		"root@PetiteDrv:"	  /* prompt string	     */
 #define CONFIG_AUTO_COMPLETE	1	/* 自动补齐功能 */
 #define CONFIG_CMD_TABLE_SIZE	7
 

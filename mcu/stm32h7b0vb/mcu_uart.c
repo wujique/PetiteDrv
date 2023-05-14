@@ -141,6 +141,9 @@ void mcu_uart_rec(UART_HandleTypeDef *huart, uint8_t data)
 	
 	if (huart == &huart4) {
 		//uart_printf("%c", data);
+		node = (BusUartNode *)BusUartGd[MCU_UART_4];
+		pfifo = &node->Kfifo;
+		PKFIFO_IN_1U8(pfifo, data);
 	}else if (huart == &huart7) {
 		node = (BusUartNode *)BusUartGd[MCU_UART_7];
 		pfifo = &node->Kfifo;
@@ -149,7 +152,6 @@ void mcu_uart_rec(UART_HandleTypeDef *huart, uint8_t data)
 	}
 }
 
-
 /**
  *@brief:      mcu_dev_uart_test
  *@details:    串口测试
@@ -157,6 +159,7 @@ void mcu_uart_rec(UART_HandleTypeDef *huart, uint8_t data)
  *@param[out]  无
  *@retval:     
  */
+#if 0
 void mcu_uart_test(void)
 {
     u8 buf[12];
@@ -166,7 +169,7 @@ void mcu_uart_test(void)
 	wjq_log(LOG_INFO, "%s,%s,%d,%s\r\n", __FUNCTION__,__FILE__,__LINE__,__DATE__);
 	while(1)
 	{
-	    //len =  mcu_uart_read (MCU_UART_4, buf, 10);
+	    len =  mcu_uart_read (MCU_UART_4, buf, 10);
 		if(len != 0)
 		{
 	    	//wjq_log(LOG_FUN, "mcu_dev_uart_read :%d\r\n", len);
@@ -176,4 +179,6 @@ void mcu_uart_test(void)
 	}
     
 }
+
+#endif
 

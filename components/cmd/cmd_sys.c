@@ -47,8 +47,8 @@ int do_system_info( cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
 
 	cmd_printf("IMAGE VERSION: %s \r\n", "0.1.1");
 
-	temp = mcu_tempreate_get_tempreate();
-	cmd_printf("CPU TEMPREATE: %d.%d \r\n", temp/100,temp%100);
+	//temp = mcu_tempreate_get_tempreate();
+	//cmd_printf("CPU TEMPREATE: %d.%d \r\n", temp/100,temp%100);
 	
 	return 0;
 }

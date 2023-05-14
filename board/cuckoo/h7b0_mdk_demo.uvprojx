@@ -339,7 +339,7 @@
               <MiscControls>--locale=english</MiscControls>
               <Define>NDEBUG</Define>
               <Undefine></Undefine>
-              <IncludePath>.\Core\Inc;.\Drivers\STM32H7xx_HAL_Driver\Inc;.\User;.\Drivers\CMSIS\Include;.\Drivers\CMSIS\Device\ST\STM32H7xx\Include;.\Drivers\STM32H7xx_HAL_Driver\Inc\Legacy;..\..\mcu\stm32h7b0vb;..\..\Petite;..\..\driver;..\..\driver\touch;..\..\driver\lcd;..\..\components\lvgl;..\..\components\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\..\components\FreeRTOS\Source\include;..\..\components\FreeRTOS\Source\CMSIS_RTOS_V2;..\..\components\FatFs;..\..\driver\sound;..\..\driver\touch\rtp\tslib;..\..\driver\touch\rtp;..\..\Petite\bus;..\..\components\emenu;..\..\components\tiny_ttf;..\..\components\FlashDB\inc;..\..\components\FlashDB\porting;..\..\components\littlefs;..\..\components\CmBacktrace\cm_backtrace</IncludePath>
+              <IncludePath>.\Core\Inc;.\Drivers\STM32H7xx_HAL_Driver\Inc;.\User;.\Drivers\CMSIS\Include;.\Drivers\CMSIS\Device\ST\STM32H7xx\Include;.\Drivers\STM32H7xx_HAL_Driver\Inc\Legacy;..\..\mcu\stm32h7b0vb;..\..\Petite;..\..\driver;..\..\driver\touch;..\..\driver\lcd;..\..\components\lvgl;..\..\components\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\..\components\FreeRTOS\Source\include;..\..\components\FreeRTOS\Source\CMSIS_RTOS_V2;..\..\components\FatFs;..\..\driver\sound;..\..\driver\touch\rtp\tslib;..\..\driver\touch\rtp;..\..\Petite\bus;..\..\components\emenu;..\..\components\tiny_ttf;..\..\components\FlashDB\inc;..\..\components\FlashDB\porting;..\..\components\littlefs;..\..\components\CmBacktrace\cm_backtrace;..\..\components\cmd\ubootcmd</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1967,6 +1967,56 @@
               <FileName>cmb_fault.S</FileName>
               <FileType>2</FileType>
               <FilePath>..\..\components\CmBacktrace\cm_backtrace\fault_handler\keil\cmb_fault.S</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>component/cmd</GroupName>
+          <Files>
+            <File>
+              <FileName>cmd_display.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\cmd\cmd_display.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_port.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\cmd\cmd_port.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\cmd\ubootcmd\cmd.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_nvedit.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\cmd\ubootcmd\cmd_nvedit.c</FilePath>
+            </File>
+            <File>
+              <FileName>commnad.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\cmd\ubootcmd\commnad.c</FilePath>
+            </File>
+            <File>
+              <FileName>console.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\cmd\ubootcmd\console.c</FilePath>
+            </File>
+            <File>
+              <FileName>env.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\cmd\ubootcmd\env.c</FilePath>
+            </File>
+            <File>
+              <FileName>uif.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\cmd\ubootcmd\uif.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_sys.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\cmd\cmd_sys.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -54,6 +54,9 @@ void petite_task(void *pvParameters)
 	/* 初始化petite模块状态*/
 	//vfs_init();
 	font_init();
+
+	/* 初始化命令行 */
+	fun_cmd_init();
 	
 	board_init();
 
@@ -74,9 +77,9 @@ void petite_task(void *pvParameters)
 			//uart_printf("  name         state priority   stack   NUM\r\n");
 			//uart_printf("%s", TaskListBuf);
 			
-			vTaskGetRunTimeStats(TaskListBuf);
+			//vTaskGetRunTimeStats(TaskListBuf);
 			//uart_printf("  name count per\r\n");
-			uart_printf("%s", TaskListBuf);
+			//uart_printf("%s", TaskListBuf);
 
 			/* 栈的水位线，指栈剩余多少个 U32 */
 			//stackHWM = uxTaskGetStackHighWaterMark(defaultTaskHandle);

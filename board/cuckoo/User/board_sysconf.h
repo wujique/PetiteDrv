@@ -25,6 +25,10 @@
 #define CUCKOO_TASK_STK_SIZE (1024*16)
 #define CUCKOO_TASK_PRIO	1
 
+#define CMD_TASK_STK_SIZE (1024*4)
+#define CMD_TASK_PRIO	2
+
+
 #define START_TASK_STK_SIZE (1024)
 #define START_TASK_PRIO	3//
 

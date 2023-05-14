@@ -10,17 +10,15 @@
 	
 */
 #include "board_sysconf.h"
-#include "FreeRtos.h"
-
+#include "cmsis_os.h"
+#include "log.h"
 
 #include <command.h>
 #include "console.h"
 
 extern int do_system_info( cmd_tbl_t *cmdtp, int flag, int argc, char *argv[]);
-extern int cmd_spiffs_ls( cmd_tbl_t *cmdtp, int flag, int argc, char *argv[]);
 extern int do_version (cmd_tbl_t *cmdtp, int flag, int argc, char *argv[]);
 extern int do_help (cmd_tbl_t * cmdtp, int flag, int argc, char *argv[]);
-extern int cmd_spiffs_format( cmd_tbl_t *cmdtp, int flag, int argc, char *argv[]);
 extern int cmd_display( cmd_tbl_t *cmdtp, int flag, int argc, char *argv[]);
 
 /*
@@ -30,9 +28,6 @@ extern int cmd_display( cmd_tbl_t *cmdtp, int flag, int argc, char *argv[]);
 	*/
 const cmd_tbl_t static_cmd_table[CONFIG_CMD_TABLE_SIZE]={
 		{"sysinfo", 1, 1, do_system_info, "systeminfo", "\t display system info "},
-
-		{"spiffs_ls", 2 , 1, cmd_spiffs_ls,	"spiffs ls",	"\t ls spiffs file "},
-		{"spiffs_format", 2 , 1, cmd_spiffs_format,	"spiffs format",	"\t ls spiffs file "},
 
 		{"display", 4 , 1, cmd_display,	"lcd display",	"\t lcd display test "},
 		
@@ -49,22 +44,23 @@ const cmd_tbl_t static_cmd_table[CONFIG_CMD_TABLE_SIZE]={
 
 extern void cli_main_loop (void* p);
 
-TaskHandle_t  FunCmdTaskHandle;
-/**
- *@brief:      fun_cmd_init
- *@details:    初始化命令行，建立命令行任务
- *@param[in]   void  
- *@param[out]  无
- *@retval:     
- */
+
+osThreadId_t CmdTaskHandle;
+const osThreadAttr_t CmdTask_attributes = {
+  .name = "CMD",
+  .stack_size = CMD_TASK_STK_SIZE,
+  .priority = (osPriority_t) CMD_TASK_PRIO,//osPriorityNormal,
+};
+
+
 s32 fun_cmd_init(void)
 {
-	xTaskCreate(	(TaskFunction_t) cli_main_loop,
-					(const char *)"cmd task",		/*lint !e971 Unqualified char types are allowed for strings and single characters only. */
-					(const configSTACK_DEPTH_TYPE) UBOOTCMD_TASK_STK_SIZE,
-					(void *) NULL,
-					(UBaseType_t) UBOOTCMD_TASK_PRIO,
-					(TaskHandle_t *) &FunCmdTaskHandle );	
+	CmdTaskHandle = osThreadNew(cli_main_loop, NULL, &CmdTask_attributes);
+					
+	if(NULL == CmdTaskHandle){
+		wjq_log(LOG_INFO, "[    _cmd] xTaskCreate fail\r\n");
+	}
+	return 0;
 }
 
 /*-----------------------串口交互接口--------------------------*/
@@ -79,7 +75,7 @@ int serial_getc (void)
 	while(1) {
 		ret = bus_uart_read(LogUartNode, &ch, 1);
 		if(0 == ret) {
-			Delay(1);
+			osDelay(2);
 		}else return (int)ch;
 	}
 	//return getchar();

@@ -4213,10 +4213,15 @@ static void UART_RxISR_8BIT(UART_HandleTypeDef *huart)
   if (huart->RxState == HAL_UART_STATE_BUSY_RX)
   {
     uhdata = (uint16_t) READ_REG(huart->Instance->RDR);
+
+	/* 改一下HAL库，我们串口接受用FIFO */
+	#if 1
+	mcu_uart_rec(huart, uhdata);
+	#else
     *huart->pRxBuffPtr = (uint8_t)(uhdata & (uint8_t)uhMask);
     huart->pRxBuffPtr++;
     huart->RxXferCount--;
-
+	#endif
     if (huart->RxXferCount == 0U)
     {
       /* Disable the UART Parity Error Interrupt and RXNE interrupts */

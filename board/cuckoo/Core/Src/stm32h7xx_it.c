@@ -64,6 +64,7 @@ extern DMA2D_HandleTypeDef hdma2d;
 extern DMA_HandleTypeDef hdma_sai2_b;
 extern SAI_HandleTypeDef hsai_BlockB2;
 extern UART_HandleTypeDef huart7;
+extern UART_HandleTypeDef huart4;
 
 /* USER CODE BEGIN EV */
 
@@ -273,6 +274,19 @@ void DCMI_PSSI_IRQHandler(void)
   /* USER CODE BEGIN DCMI_PSSI_IRQn 1 */
 
   /* USER CODE END DCMI_PSSI_IRQn 1 */
+}
+/**
+  * @brief This function handles UART4 global interrupt.
+  */
+void UART4_IRQHandler(void)
+{
+  /* USER CODE BEGIN UART4_IRQn 0 */
+
+  /* USER CODE END UART4_IRQn 0 */
+  HAL_UART_IRQHandler(&huart4);
+  /* USER CODE BEGIN UART4_IRQn 1 */
+
+  /* USER CODE END UART4_IRQn 1 */
 }
 
 /**

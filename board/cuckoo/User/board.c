@@ -69,17 +69,17 @@ s32 board_init(void)
 const BusUartPra Uart4Pra = {
 	.BaudRate = 115200, //波特率			 
 
-	.bufsize = 16,//接收缓冲长度
+	.bufsize = 128,//接收缓冲长度, 如不使用交互，可设置为8
 };
 
+BusUartNode *LogUartNode;
 
 
 void board_main(void)
 {
 	bus_uart_init();
-	bus_uart_open("uart4", &Uart4Pra);
+	LogUartNode = bus_uart_open("uart4", &Uart4Pra);
 	wjq_log(LOG_INFO, "------Cuckoo (stm32h7b0vb) run! 20220306------\r\n");
-
 
 	/*  尽早初始化 Flash，并使其进入map模式，因为后续有代码是保存在 QSPI Flash上 
 		在执行到这里之前已经开了systick中断，中断中调用的函数都需要放到内部Flash        		*/
