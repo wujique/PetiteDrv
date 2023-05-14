@@ -29,7 +29,7 @@
 #define CMD_TASK_PRIO	2
 
 
-#define START_TASK_STK_SIZE (1024)
+#define START_TASK_STK_SIZE (1024*2)
 #define START_TASK_PRIO	3//
 
 

@@ -204,11 +204,8 @@ void cuckoo_7b0_test(void)
 	
 	//flashdb_demo();
 
-	/*把sd卡的矢量字库文件拷贝到spi flash*/
-	
-
 	/* 测试littlefs */
-	#if 0
+	#if 1
 	int filefd;
 	filefd = vfs_open("/mtd0/bootcnt", O_CREAT);
 	if(filefd > 0) {
@@ -225,7 +222,10 @@ void cuckoo_7b0_test(void)
 
 	}
 	#endif
-
+	
+	/*把sd卡的矢量字库文件拷贝到spi flash*/
+	//vfs_file_copy("/0:/font/chuheisong.ttf", "/mtd0/chuheisong.ttf");
+	
 	//cuckoo_test_lcd();
 	LcdOledI2C = lcd_open("spicoglcd");
 	//LcdOledI2C = lcd_open("i2coledlcd");
@@ -234,7 +234,7 @@ void cuckoo_7b0_test(void)
 	//emenu_test(LcdOledI2C);
 
 	/* 测试tiny ttf 适量字库引擎 */
-	#if 0
+	#if 1
 	lv_font_t *font_t;
 	lv_font_glyph_dsc_t glyph_dsc;
 	const uint8_t *bitmap;
@@ -244,7 +244,7 @@ void cuckoo_7b0_test(void)
 	int row=0;
 	int col=0;
 	bool getres;
-	font_t = lv_tiny_ttf_create_file("/0:/font/chuheisong.ttf", 24);
+	font_t = lv_tiny_ttf_create_file("/mtd0/chuheisong.ttf", 24);
 	i = 0;
 	while(1) {
 	

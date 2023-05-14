@@ -149,11 +149,11 @@ int vfs_fatfs_file_open(FileNode *file, const char *pathname, int oflags)
 		
 	res = f_open(&(file->pra.fatfd), pathname + i, mode);
 	if(res == FR_OK) {
-		wjq_log(LOG_INFO, "open file :%s ok!\r\n", pathname);	
+		wjq_log(LOG_INFO, "fatfs open file :%s ok!\r\n", pathname);	
 		return 0;
 		
 	} else {
-		wjq_log(LOG_INFO, "open file:%s,err\r\n", pathname);
+		wjq_log(LOG_INFO, "fatfs open file:%s,err\r\n", pathname);
 		return -1;
 	}
 
@@ -283,8 +283,12 @@ int vfs_lfs_file_open(FileNode *file, const char *path, int oflags)
 	lfsfile = &file->pra.lfsfd;
 	
 	ret = lfs_file_open(lfs, lfsfile, path, flags);
-	if (ret != LFS_ERR_OK) return -1;
-	
+	if (ret != LFS_ERR_OK) {
+		wjq_log(LOG_INFO, "lfs open file:%s,err\r\n", path);
+		return -1;
+
+	}
+	wjq_log(LOG_INFO, "lfs open file:%s,ok\r\n", path);
 	return 0;
 }
 
@@ -789,42 +793,43 @@ int vfs_tell(int fd)
 	return NULL;
 }
 
-#if 0
+
 int vfs_file_copy(char *srcname, char *dstname)
 {
 	int srcfilefd, dstfilefd;
 	int res;
 	
-	srcfilefd = vfs_open("srcname", O_RDONLY);
+	srcfilefd = vfs_open(srcname, O_RDONLY);
 	if(srcfilefd <= 0)  {
 		return -1;
 	}
 
-	dstfilefd = vfs_open("srcname", O_CREAT | O_WRONLY);
+	dstfilefd = vfs_open(dstname, O_CREAT);
 	if(dstfilefd <= 0)  {
-		vfs_close(srcfilefd)
+		vfs_close(srcfilefd);
 		return -1;
 	}
 
 	uint8_t *tmpbuf;
 
-	tmp_buf = wjq_malloc(4096);
+	tmpbuf = wjq_malloc(4096);
 	
 	while(1){
-		res = vfs_read(srcfilefd, tmp_buf, 4096);
+		res = vfs_read(srcfilefd, tmpbuf, 4096);
 		if (res <= 0) break;
 		
-		vfs_write(dstfilefd, tmp_buf, 4096);
+		vfs_write(dstfilefd, tmpbuf, 4096);
 		wjq_log(LOG_INFO, "*");
 	}
-	wjq_log(LOG_INFO, "\r\ncppy finish!\r\n*");
-		
+	wjq_log(LOG_INFO, "\r\ncppy finish!\r\n");
+
+	wjq_free(tmpbuf);
+	
 	vfs_close(srcfilefd);
 	vfs_close(dstfilefd);
-
-	}	
+	
 }
-#endif
+
 
 #if 0
 ft_file_struct * vfs_node_open(const char *pathname, char* oflags)
