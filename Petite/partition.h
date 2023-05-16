@@ -25,8 +25,8 @@ typedef struct _PartitionDef {
  * 
  */
 typedef struct _StorageDev{
-	uint32_t blksize;///块大小，一般Flash 4096
-	uint32_t size;///分区容量
+	int (*getblksize)(void *dev);
+	int (*getsize)(void *dev);
 	
 	void *(*open)(const char *name);	
 	int (*read)(void *dev, uint32_t offset, uint8_t *buf, size_t size);
@@ -45,7 +45,7 @@ typedef struct _PartitionNode {
 
 	union{
 		struct _PartitionNode *sto;///分区指向storage
-		StorageDev *dev;///storage指向设备
+		const StorageDev *dev;///storage指向设备 操作结构体
 	}base;
 	/* 不同的partiton，不同的格式，初始化后需要的定义 
 		比如初始化为littlefs后，需要一些参数变量，可以挂在这个指针上 */

@@ -338,7 +338,7 @@ const FontHead *FontListN[FONT_LIST_MAX] = {
 /*
 	 先定义sto设备，在定义par分区
 	*/ 
-PartitionDef PetitePartitonTable[] =
+const PartitionDef PetitePartitonTable[] =
 {
 	#if 0
 	/* 7b0 芯片内部Flash，128K */
@@ -353,8 +353,8 @@ PartitionDef PetitePartitonTable[] =
 		{"par","app","app",     	0x90020000, 0x20000},
 	#endif
 	
-	/* 外扩SPI 接口的 flash */
-	{"sto","spiflash","ex_spiflash", 0x50000000, 0x800000},
+	/* 外扩SPI 接口的 flash, sto 空间大小通过设备获取 */
+	{"sto","spiflash","ex_spiflash", 0x50000000, 0},
 		{"par","FlashDB","flashdb",     0x50000000, 0x20000},//128K的kv
 		{"par", VFS_STR_LITTLEFS, "mtd0",     0x50000000+0x100000, 0x400000},//4M 文件系统，sqlite基于文件系统
 		

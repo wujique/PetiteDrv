@@ -34,6 +34,96 @@ extern int vfs_mount(void *par);
 
 PartitionNode *PartitionRoot = NULL;
 
+/*
+
+	定义一个空存储设备，用来初始化SD卡和USB等没有实际管理的 设备
+
+	通常情况下这些回调函数不会执行
+
+*/
+int storage_empty_getblksize(void *dev)
+{
+	wjq_log(LOG_WAR, "storage_empty_getblksize\r\n");
+	return 0;
+}
+
+int storage_empty_getsize(void *dev)
+{
+	wjq_log(LOG_WAR, "storage_empty_getsize\r\n");
+	return 0;
+}
+
+void *storage_empty_open(const char *name)
+{
+	wjq_log(LOG_WAR, "storage_empty_open\r\n");
+	return (void *)1;/// @node   这是假的
+}
+
+int storage_empty_read(void *dev, uint32_t offset, uint8_t *buf, size_t size)
+{
+	wjq_log(LOG_WAR, "storage_empty_read\r\n");
+	return 0;
+}
+
+int storage_empty_write(void *dev, uint32_t offset, const uint8_t *buf, size_t size)
+{
+	wjq_log(LOG_WAR, "storage_empty_write\r\n");
+	return 0;
+}
+
+int storage_empty_erase(void *dev, uint32_t offset, size_t size)
+{
+	wjq_log(LOG_WAR, "storage_empty_erase\r\n");
+	return 0;
+}
+
+int storage_empty_close(void *dev)
+{
+	wjq_log(LOG_WAR, "storage_empty_close\r\n");
+	return 0;
+}
+
+
+const StorageDev StorageEmpty  ={
+		
+		.getblksize = storage_empty_getblksize,
+		.getsize = storage_empty_getsize,
+		
+		.open = storage_empty_open,	
+		.read = storage_empty_read,
+		.write = storage_empty_write,
+		.erase = storage_empty_erase,
+		.close = storage_empty_close,
+};
+
+
+
+int petite_storage_getlen(void *part)
+{
+	PartitionNode *sto;
+	int storage_len;
+	void *dev;
+	
+	sto = part;
+
+	storage_len = sto->def->size;
+
+	//wjq_log(LOG_DEBUG, "sto getlen: %s\r\n", sto->def->name);
+	
+
+	if (storage_len == 0) {
+
+		dev = sto->base.dev->open(sto->def->name);
+		if(dev == NULL) return -1;
+		storage_len = sto->base.dev->getsize(dev);
+		sto->base.dev->close(dev);
+	}
+	wjq_log(LOG_INFO, "sto len: 0x%x\r\n", storage_len);
+	return storage_len;
+}
+
+
+
 /**
  * @brief   根据分区名获取分区节点指针
  * 
@@ -45,7 +135,7 @@ void *petite_partition_get(const char *parname)
 {
 	PartitionNode *par;
 
-	wjq_log(LOG_WAR, "part find: %s\r\n", parname);
+	wjq_log(LOG_DEBUG, "part find: %s\r\n", parname);
 	
 	par = PartitionRoot;
 
@@ -71,11 +161,14 @@ void *petite_partition_get(const char *parname)
 uint32_t petite_partition_getlen(void *part)
 {
 	PartitionNode *par;
-
+	
+	uint32_t partition_len;
+	
 	par = (PartitionNode *)part;
-
-	wjq_log(LOG_INFO, "part size: 0x%x\r\n", par->def->size);
-	return par->def->size;
+	partition_len = par->def->size;
+	
+	wjq_log(LOG_INFO, "part size: 0x%x\r\n", partition_len);
+	return partition_len;
 }
 /**
  * @brief   获取分区所在设备的块大小
@@ -88,12 +181,20 @@ uint32_t petite_partition_getblksize(void *part)
 {
 	PartitionNode *par;
 	PartitionNode *sto;
+	uint32_t blksize;
+	void *dev;
 	
 	par = (PartitionNode *)part;
 	sto  = par->base.sto;
-
-	wjq_log(LOG_INFO, "part getblksize: 0x%x\r\n", sto->base.dev->blksize);
-	return sto->base.dev->blksize;
+	
+	dev = sto->base.dev->open(sto->def->name);
+	if(dev == NULL) return -1;
+	blksize = sto->base.dev->getblksize(dev);
+	sto->base.dev->close(dev);
+	
+	wjq_log(LOG_INFO, "part getblksize: 0x%x\r\n", blksize);
+	
+	return blksize;
 }
 
 /**
@@ -202,10 +303,9 @@ int petite_partition_erase(void *part, uint32_t addr, size_t size)
 }
 
 /**
- * @brief spi flash驱动  
- * 
+ * @brief spi flash storage  
  */
-extern StorageDev StorageExSpiFlash;
+extern const StorageDev StorageExSpiFlash;
 
 /**
  * @brief   根据分区表进行分区初始化
@@ -241,13 +341,19 @@ int petite_partition_init(PartitionDef *Partable)
 			sto = node;
 			if (strcmp(node->def->type, "spiflash") == 0 ) {
 				node->base.dev = &StorageExSpiFlash;
+			} else {
+				node->base.dev = &StorageEmpty;
 			}
 			
 		} else if (strcmp(pardef->maptype, "par") == 0) {
 			/* par 分区，指明空间用途，在初始化时，将par与sto绑定，
 				并根据par类型进行初始化，如挂载对应文件系统。*/
+			uint32_t sto_size;
+
+			sto_size = petite_storage_getlen(sto);
+			
 			if (pardef->addr >= sto->def->addr
-				&& pardef->addr +  pardef->size <= sto->def->addr + sto->def->size) {
+				&& pardef->addr +  pardef->size <= sto->def->addr + sto_size) {
 				/* 把分区和storage关联 */
 				node->base.sto = sto;
 

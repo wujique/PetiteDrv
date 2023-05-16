@@ -27,7 +27,7 @@ typedef struct
 	
 	char *spich;//挂载在哪条SPI通道
 	
-	_strSpiFlash *pra;//设备信息
+	const _strSpiFlash *pra;//设备信息
 }DevSpiFlash;
 
 /*设备节点定义*/

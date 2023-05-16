@@ -99,7 +99,9 @@ typedef struct xSTATIC_TCB中添加
 
 
 
-程序死机报错后，在工程Objects目录打开windows命令行（powershell），执行下面指令
+程序死机报错后，在工程Objects目录打开windows命令行（powershell），根据提示执行命令
+
+例如：
 
 F:\PetiteDrv\prog\PetiteDrv\components\CmBacktrace\tools\addr2line\win64\addr2line.exe -e h7b0_mdk_demo.axf -a -f 08000430 08011caa 08014170 08014740 08014a56 080188e6 0800de6a 0801714c
 

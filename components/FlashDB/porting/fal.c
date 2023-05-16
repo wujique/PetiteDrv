@@ -34,7 +34,7 @@ uint32_t fal_partition_getlen(void *part)
 	*/
 uint32_t fal_partition_getblksize(void *part)
 {
-	return petite_partition_getblksize(part);;
+	return petite_partition_getblksize(part);
 }
 
 int fal_partition_read(void *part, uint32_t addr, uint8_t *buf, size_t size)
