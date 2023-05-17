@@ -151,6 +151,7 @@ const DevLcdBus BusLcdSpi3={
 	.stapin = MCU_IO_14,
 };
 
+/*-----------------------------------------------------------*/
 /*SPI接口的 COG LCD*/
 const PraSpiSet CogSpiSet = {
 	.mode = SPI_MODE_3,
@@ -164,12 +165,12 @@ const DevLcd DevLcdCOG1	=	{
 				.type = DEV_LCD,
 		},
 	
+	.bus = (DevLcdBus *)&BusLcdSpi3,
+	.buspra = (void *)&CogSpiSet,
+
 	.id = 0X7565, 
 	.width = 64, 
 	.height = 128,
-
-	.bus = (DevLcdBus *)&BusLcdSpi3,
-	.buspra = (void *)&CogSpiSet,
 };
 				
 /* spi 接口 黑白墨水屏 1.54寸 GDEH154D27*/
@@ -193,7 +194,8 @@ const DevSpiFlash DevSpiFlashEx={
 				.type = DEV_SPIFLASH,
 			},
 	
-	.spich ="SPI3_CH4", 
+	.bus ="SPI3_CH4", 
+	.buspra = NULL,
 	.pra = NULL,
 };
 

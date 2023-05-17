@@ -371,7 +371,7 @@ void *dev_spiflash_open(char* name)
 			SPIFLASH_DEBUG(LOG_INFO, "spi flash open err:using!\r\n");
 			node = NULL;
 		} else {
-			node->spichnode = bus_spich_open(node->dev.spich, SPI_MODE_3, 20000, 0xffffffff);
+			node->spichnode = bus_spich_open(node->dev.bus, SPI_MODE_3, 20000, 0xffffffff);
 			if(node->spichnode == NULL)	node = NULL;
 			else node->gd = 0;
 		}
@@ -435,7 +435,7 @@ s32 dev_spiflash_register(const DevSpiFlash *dev)
 	node->gd = -1;
 
 	/*读 ID，超找FLASH信息*/
-	node->spichnode = bus_spich_open(dev->spich, SPI_MODE_3, 10000, 0xffffffff); //打开spi
+	node->spichnode = bus_spich_open(dev->bus, SPI_MODE_3, 10000, 0xffffffff); //打开spi
 
 	if (node->spichnode != NULL) {
 		JID = dev_spiflash_readJTD(node);

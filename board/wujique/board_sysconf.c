@@ -402,7 +402,9 @@ const DevSpiFlash DevSpiFlashCore={
 				.type = DEV_SPIFLASH,
 			},
 	
-	.spich ="SPI3_CH2", 
+	.bus ="SPI3_CH2",
+	.buspra = NULL,
+			
 	.pra = NULL,
 };
 
@@ -412,7 +414,8 @@ const DevSpiFlash DevSpiFlashBoard={
 				.type = DEV_SPIFLASH,
 			},
 	
-	.spich ="SPI3_CH1", 
+	.bus ="SPI3_CH1",
+  .buspra = NULL,
 	.pra = NULL,
 };
 

@@ -25,7 +25,8 @@ typedef struct
 {
 	PetiteNode pnode;
 	
-	char *spich;//挂载在哪条SPI通道
+	char *bus;//挂载在哪条SPI通道
+	void *buspra;//bus配置信息，如果是spi ch，就是模式 频率等信息
 	
 	const _strSpiFlash *pra;//设备信息
 }DevSpiFlash;
