@@ -23,6 +23,7 @@
 #include "log.h"
 #include "bus/bus_spi.h"
 #include "board_sysconf.h"
+#include "petite_dev.h"
 
 #define MCU_SPI_DEBUG
 
@@ -91,8 +92,7 @@ s32 mcu_hspi_init(const DevSpi *dev)
 
 
     //配置引脚复用映射
-    if(strcmp(dev->pnode.name, "SPI3") == 0)
-    {
+    if(strcmp(dev->pdev.name, "SPI3") == 0) {
 		GPIO_AF = GPIO_AF_SPI3;
 		RCC_CLK = RCC_APB1Periph_SPI3;
     }
@@ -122,15 +122,10 @@ s32 mcu_hspi_open(DevSpiNode *node, SPI_MODE mode, u16 KHz)
 {
 	SPI_InitTypeDef SPI_InitStruct;
 	SPI_TypeDef* SPIC;
-	
-	if (node->gd != -1) {
-		//SPI_DEBUG(LOG_DEBUG, "spi dev busy\r\n");
-		return -1;
-	}
-	
+		
 	if (mode >= SPI_MODE_MAX) return -1;
 
-	if (strcmp(node->dev.pnode.name, "SPI3") == 0) {
+	if (strcmp(node->pnode.pdev->name, "SPI3") == 0) {
 		SPIC = SPI3;
     }
 
@@ -152,9 +147,7 @@ s32 mcu_hspi_open(DevSpiNode *node, SPI_MODE mode, u16 KHz)
     SPI_Init(SPIC, &SPI_InitStruct);
 
 	SPI_Cmd(SPIC, ENABLE);
-	
-	node->gd = 0;
-		
+			
     return 0;
 }
 /**
@@ -167,16 +160,12 @@ s32 mcu_hspi_open(DevSpiNode *node, SPI_MODE mode, u16 KHz)
 s32 mcu_hspi_close(DevSpiNode *node)
 {
     SPI_TypeDef* SPIC;
-	
-	if (node->gd != 0)
-		return -1;
-	
-	if (strcmp(node->dev.pnode.name, "SPI3") == 0) {
+		
+	if (strcmp(node->pnode.pdev->name, "SPI3") == 0) {
 		SPIC = SPI3;
     }
 	
 	SPI_Cmd(SPIC, DISABLE);
-	node->gd = -1;
     return 0;
 }
 /**
@@ -196,19 +185,13 @@ s32 mcu_hspi_transfer(DevSpiNode *node, u8 *snd, u8 *rsv, s32 len)
     u16 ch;
 	SPI_TypeDef* SPIC;
 	
-	if (node == NULL)
-		return -1;
-
-	if (node->gd != 0) {
-		SPI_DEBUG(LOG_DEBUG, "spi dev no open\r\n");
-		return -1;
-	}
+	if (node == NULL) return -1;
 	
     if ( ((snd == NULL) && (rsv == NULL)) || (len < 0) ) {
         return -1;
     }
 	
-    if (strcmp(node->dev.pnode.name, "SPI3") == 0) {
+    if (strcmp(node->pnode.pdev->name, "SPI3") == 0) {
 		SPIC = SPI3;
     }
     /* 忙等待 */

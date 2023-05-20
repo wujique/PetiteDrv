@@ -63,7 +63,7 @@ extern void Delay(__IO uint32_t nTime);
 	LCD总共有264page，竖屏(0,0)是page0第1个字节的bit7。
 
 */
-#define IL91874_PAGE_SIZE ((lcd->dev.width+7)/8)
+#define IL91874_PAGE_SIZE ((dev->width+7)/8)
 
 struct _epaper_drv_data
 {
@@ -200,13 +200,17 @@ static s32 drv_IL91874_refresh_gram(DevLcdNode *lcd, u16 sc, u16 ec, u16 sp, u16
 	struct _epaper_drv_data *drvdata; 
 
 	DevLcdNode * node = lcd;
-	const DevLcdBus *bus = lcd->dev.bus;
 	
 	u32 cnt;
 	u32 gramsize;
 	u16 i,j;
 	u8 data;
 	u16 w,l;
+
+	PDevNode *pnode;
+	DevLcd *dev;
+	pnode = (PDevNode *)lcd;
+	dev = (DevLcd *)pnode->pdev;
 	
 	drvdata = (struct _epaper_drv_data *)lcd->pri;
 	node = bus_lcd_open(lcd);
@@ -302,7 +306,7 @@ static s32 drv_IL91874_refresh_gram(DevLcdNode *lcd, u16 sc, u16 ec, u16 sp, u16
 	#if 1 /*全刷*/
 	/*注意，要用dev中的w和h，因为gram跟横屏竖屏调换没关系，
 	只和定义一致*/
-	gramsize = lcd->dev.height * IL91874_PAGE_SIZE;
+	gramsize = dev->height * IL91874_PAGE_SIZE;
 	//wjq_log(LOG_DEBUG, "gram size: %d\r\n ", gramsize);
 
 
@@ -322,13 +326,11 @@ static s32 drv_IL91874_refresh_gram(DevLcdNode *lcd, u16 sc, u16 ec, u16 sp, u16
 	Delay(1);//!!!The delay here is necessary, 200uS at least!!!  
 	
 	unsigned char busy;
-	do
-	{
+	do {
 		drv_il91874_write_cmd(node, (0x71));
-		busy = mcu_io_input_readbit(bus->staport, bus->stapin);
+		busy = mcu_io_input_readbit(dev->ctrlio->staport, dev->ctrlio->stapin);
 		busy =!(busy & 0x01);        
-	}
-	while(busy);  
+	} while(busy);  
 	wjq_log(LOG_DEBUG, "IL91874 refresh finish\r\n ");
 	bus_lcd_close(node);
 	
@@ -359,14 +361,18 @@ s32 drv_IL91874_init(DevLcdNode *lcd)
 {
 	u16 data;
 	DevLcdNode * node = lcd;
-	const DevLcdBus *bus = lcd->dev.bus;
-	
+
 	u8 tmp[16];
 	u8 testbuf[2];
+
+	PDevNode *pnode;
+	DevLcd *dev;
+	pnode = (PDevNode *)lcd;
+	dev = (DevLcd *)pnode->pdev;
 	
 	node = bus_lcd_open(lcd);
 
-	mcu_io_config_in(bus->staport, bus->stapin);
+	mcu_io_config_in(dev->ctrlio->staport, dev->ctrlio->stapin);
 
 	bus_lcd_rst(node, 1);
 	Delay(50);
@@ -387,13 +393,12 @@ s32 drv_IL91874_init(DevLcdNode *lcd)
 	drv_il91874_write_cmd(node, (0x04)); 
 	
 	unsigned char busy;
-	do
-	{
+	do {
 		drv_il91874_write_cmd(node, (0x71));
-		busy = mcu_io_input_readbit(bus->staport, bus->stapin);
+		busy = mcu_io_input_readbit(dev->ctrlio->staport, dev->ctrlio->stapin);
 		busy =!(busy & 0x01);        
-	}
-	while(busy);   
+	}while(busy);
+	
 	Delay(200); 
 
 	drv_il91874_write_cmd(node, (0x00));//panel setting	
@@ -438,7 +443,7 @@ s32 drv_IL91874_init(DevLcdNode *lcd)
 	/*三色电子纸，要两个缓冲*/
 	p = (struct _epaper_drv_data *)lcd->pri;
 
-	gramsize = lcd->dev.height * IL91874_PAGE_SIZE;
+	gramsize = dev->height * IL91874_PAGE_SIZE;
 	wjq_log(LOG_DEBUG, "gram size: %d\r\n ", gramsize);
 
 	
@@ -495,41 +500,40 @@ s32 drv_IL91874_color_fill(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey, u16 
 	
 	struct _epaper_drv_data *drvdata;
 
+	PDevNode *pnode;
+	DevLcd *dev;
+	pnode = (PDevNode *)lcd;
+	dev = (DevLcd *)pnode->pdev;
+
 	wjq_log(LOG_DEBUG, " drv_IL91874_color_fill\r\n ");
 
 	drvdata = (struct _epaper_drv_data *)lcd->pri;
 
 	/*防止坐标溢出*/
-	if(sy >= lcd->height)
-	{
+	if(sy >= lcd->height) {
 		sy = lcd->height-1;
 	}
-	if(sx >= lcd->width)
-	{
+	if(sx >= lcd->width) {
 		sx = lcd->width-1;
 	}
 	
-	if(ey >= lcd->height)
-	{
+	if(ey >= lcd->height) {
 		ey = lcd->height-1;
 	}
-	if(ex >= lcd->width)
-	{
+	if(ex >= lcd->width) {
 		ex = lcd->width-1;
 	}
 
 	/*求出被改动的page和cloum*/
-	if(lcd->dir == H_LCD)
-	{
+	if(lcd->dir == H_LCD) {
 		sp = sy;
 		ep = ey;
 
 		sc = sx;
 		ec = ex;
 			
-	}
-	else//如果是竖屏，XY轴跟显存的映射要对调
-	{
+	} else {
+		//如果是竖屏，XY轴跟显存的映射要对调
 		sp = sx;
 		ep = ex;
 
@@ -537,20 +541,16 @@ s32 drv_IL91874_color_fill(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey, u16 
 		sc = (lcd->height - ey);
 	}
 
-	for(j=sy;j<=ey;j++)
-	{
+	for(j=sy;j<=ey;j++) {
 		//wjq_log(LOG_DEBUG, "\r\n");
 		
-		for(i=sx;i<=ex;i++)
-		{
+		for(i=sx;i<=ex;i++) {
 
-			if(lcd->dir == H_LCD)
-			{
+			if(lcd->dir == H_LCD) {
 				xtmp = i;
 				ytmp = j;
-			}
-			else//如果是竖屏，XY轴跟显存的映射要对调
-			{
+			} else {
+				//如果是竖屏，XY轴跟显存的映射要对调
 				/* 不同的算法，相当于不同的扫描方式*/
 			
 				//xtmp = j;
@@ -564,20 +564,15 @@ s32 drv_IL91874_color_fill(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey, u16 
 			colum = xtmp/8;//列地址
 		
 
-			if(color == RED)
-			{
+			if(color == RED) {
 				drvdata->rgram[page*IL91874_PAGE_SIZE + colum] |= (0x80>>(xtmp%8));
 				drvdata->bgram[page*IL91874_PAGE_SIZE + colum] &= ~(0x80>>(xtmp%8));
 				//uart_printf("*");
-			}
-			else if(color == BLACK)
-			{
+			} else if(color == BLACK) {
 				drvdata->bgram[page*IL91874_PAGE_SIZE + colum] |= (0x80>>(xtmp%8));
 				drvdata->rgram[page*IL91874_PAGE_SIZE + colum] &= ~(0x80>>(xtmp%8));
 				//uart_printf("*");
-			}	
-			else
-			{
+			} else {
 				drvdata->bgram[page*IL91874_PAGE_SIZE + colum] &= ~(0x80>>(xtmp%8));
 				drvdata->rgram[page*IL91874_PAGE_SIZE + colum] &= ~(0x80>>(xtmp%8));
 				//uart_printf("-");
@@ -619,6 +614,11 @@ s32 drv_IL91874_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
 	struct _epaper_drv_data *drvdata;
 
 	wjq_log(LOG_DEBUG, " drv_IL91874_fill:%d,%d,%d,%d\r\n", sx,ex,sy,ey);
+
+	PDevNode *pnode;
+	DevLcd *dev;
+	pnode = (PDevNode *)lcd;
+	dev = (DevLcd *)pnode->pdev;
 	
 	drvdata = (struct _epaper_drv_data *)lcd->pri;
 
@@ -627,37 +627,31 @@ s32 drv_IL91874_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
 	ylen = ey-sy+1;
 
 	/*防止坐标溢出*/
-	if(sy >= lcd->height)
-	{
+	if(sy >= lcd->height) {
 		sy = lcd->height-1;
 	}
 	
-	if(sx >= lcd->width)
-	{
+	if(sx >= lcd->width) {
 		sx = lcd->width-1;
 	}
 	
-	if(ey >= lcd->height)
-	{
+	if(ey >= lcd->height) {
 		ey = lcd->height-1;
 	}
-	if(ex >= lcd->width)
-	{
+	if(ex >= lcd->width) {
 		ex = lcd->width-1;
 	}
 
 	/*求出被改动的page和cloum*/
-	if(lcd->dir == H_LCD)
-	{
+	if(lcd->dir == H_LCD) {
 		sp = sy;
 		ep = ey;
 
 		sc = sx;
 		ec = ex;
 			
-	}
-	else//如果是竖屏，XY轴跟显存的映射要对调
-	{
+	} else {
+		//如果是竖屏，XY轴跟显存的映射要对调
 		sp = sx;
 		ep = ex;
 
@@ -665,22 +659,17 @@ s32 drv_IL91874_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
 		sc = (lcd->height - ey);
 	}
 	
-	for(j=sy;j<=ey;j++)
-	{
+	for(j=sy;j<=ey;j++) {
 		//uart_printf("\r\n");
 
 		index = (j-sy)*xlen;
 		
-		for(i=sx;i<=ex;i++)
-		{
+		for(i=sx;i<=ex;i++) {
 
-			if(lcd->dir == H_LCD)
-			{
+			if(lcd->dir == H_LCD) {
 				xtmp = i;
 				ytmp = j;
-			}
-			else
-			{
+			} else {
 				xtmp = lcd->height - 1 - j;
 				ytmp = i;
 			}
@@ -690,20 +679,15 @@ s32 drv_IL91874_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
 			
 			cdata = *(color+index+i-sx);
 
-			if(cdata == RED)
-			{
+			if(cdata == RED) {
 				drvdata->rgram[page*IL91874_PAGE_SIZE + colum] |= (0x80>>(xtmp%8));
 				drvdata->bgram[page*IL91874_PAGE_SIZE + colum] &= ~(0x80>>(xtmp%8));
 				//uart_printf("*");
-			}
-			else if(cdata == BLACK)
-			{
+			} else if(cdata == BLACK) {
 				drvdata->bgram[page*IL91874_PAGE_SIZE + colum] |= (0x80>>(xtmp%8));
 				drvdata->rgram[page*IL91874_PAGE_SIZE + colum] &= ~(0x80>>(xtmp%8));
 				//uart_printf("*");
-			}	
-			else
-			{
+			} else {
 				drvdata->bgram[page*IL91874_PAGE_SIZE + colum] &= ~(0x80>>(xtmp%8));
 				drvdata->rgram[page*IL91874_PAGE_SIZE + colum] &= ~(0x80>>(xtmp%8));
 				//uart_printf("-");

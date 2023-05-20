@@ -2,6 +2,9 @@
 #define __PETITE_CONFIG_H__
 
 /* 配置PetiteDrv */
+#define CM_BACKTRACE_AXF_NAME "wujique"
+#define HARDWARE_VERSION "V1.0.0" 
+#define SOFTWARE_VERSION "V0.1.0" 
 
 /* 设备名长度 */
 #define DEV_NAME_SIZE	16

@@ -26,10 +26,14 @@
 	I2C控制器
 -------------------------------*/
 const DevI2c DevVi2c0={
-		.pnode={
+		.pdev={
 				.name = "VI2C0",
 				.type = BUS_I2C_V,
-				},
+
+				.basebus = NULL,
+				.busconf = NULL,
+				.basetype = DEV_NULL,
+		},
 		
 		.sclport = MCU_PORT_F,
 		.sclpin = MCU_IO_1,
@@ -41,10 +45,13 @@ const DevI2c DevVi2c0={
 /* 	IO口模拟的I2C1
 	WM8978、TEA5767、外扩接口的I2C使用 */
 const DevI2c DevVi2c1={
-		.pnode={
+		.pdev={
 				.name = "VI2C1",
 				.type = BUS_I2C_V,
-				},
+				.basebus = NULL,
+				.busconf = NULL,
+				.basetype = DEV_NULL,
+			},
 		
 		.sclport = MCU_PORT_D,
 		.sclpin = MCU_IO_6,
@@ -60,9 +67,12 @@ const DevI2c DevVi2c1={
 /* 	VSPI1，核心板上的LCD接口中的4根IO模拟SPI，
 	用于XPT2046方案触摸处理，可读可写。*/					
 const DevSpi DevVSpi1IO={
-		.pnode={
+		.pdev={
 				.name = "VSPI1",
 				.type = BUS_SPI_V,
+				.basebus = NULL,
+				.busconf = NULL,
+				.basetype = DEV_NULL,
 			},
 		/*clk*/
 		.clkport = MCU_PORT_B,
@@ -125,9 +135,12 @@ const DevSpi DevVspi2IO={
 	如果添加其他控制器，请修改mcu_spi.c中的硬件SPI控制器初始化代码
 */
 const DevSpi DevSpi3IO={
-		.pnode={
+		.pdev={
 				.name = "SPI3",
 				.type = BUS_SPI_H,
+				.basebus = NULL,
+				.busconf = NULL,
+				.basetype = DEV_NULL,
 		},
 		/*clk*/
 		.clkport = MCU_PORT_B,
@@ -145,11 +158,14 @@ const DevSpi DevSpi3IO={
 -------------------------*/
 /* 	FLASH用  */
 const DevSpiCh DevSpi3CH1={
-		.pnode={
-				.name = "SPI3_CH1",
-				.type = BUS_SPI_CH,
+		.pdev={
+			.name = "SPI3_CH1",
+			.type = BUS_SPI_CH,
+
+			.basebus = "SPI3",
+			.busconf = NULL,
+			.basetype = BUS_SPI_H,
 		},					
-		.spi = "SPI3",
 		
 		.csport = MCU_PORT_B,
 		.cspin = MCU_IO_14,
@@ -157,12 +173,13 @@ const DevSpiCh DevSpi3CH1={
 	};		
 /*	FLASH用 */
 const DevSpiCh DevSpi3CH2={
-		.pnode={
+		.pdev={
 				.name = "SPI3_CH2",
 				.type = BUS_SPI_CH,
+				.basebus = "SPI3",
+				.busconf = NULL,
+				.basetype = BUS_SPI_H,
 			},		
-	
-		.spi = "SPI3",
 		
 		.csport = MCU_PORT_G,
 		.cspin = MCU_IO_15,
@@ -170,13 +187,14 @@ const DevSpiCh DevSpi3CH2={
 	};
 /* 	外扩接口的SPI，可接COG、OLED、SPI TFT、RF24L01 */			
 const DevSpiCh DevSpi3CH3={
-		.pnode={
+		.pdev={
 				.name = "SPI3_CH3",
 				.type = BUS_SPI_CH,
+				.basebus = "SPI3",
+				.busconf = NULL,
+				.basetype = BUS_SPI_H,
 			},
 			
-		.spi = "SPI3",
-		
 		.csport = MCU_PORT_G,
 		.cspin = MCU_IO_6,
 		
@@ -223,12 +241,13 @@ const DevSpiCh DevVSpi3CH1={
 
 /* 	LCD座子中的触摸屏接口, IO模拟SPI*/
 const DevSpiCh DevVSpi1CH1={
-		.pnode={
+		.pdev={
 				.name = "VSPI1_CH1",
 				.type = BUS_SPI_CH,
+				.basebus = "VSPI1",
+				.busconf = NULL,
+				.basetype = BUS_SPI_V,
 			},
-		
-		.spi = "VSPI1",
 		
 		.csport = MCU_PORT_B,
 		.cspin = MCU_IO_1,
@@ -266,28 +285,7 @@ const DevSpiCh DevVSpi2CH1={
 	LCD硬件接口包含一个基本通信接口basebus、A0管脚，复位管脚，背光管脚。
 ---------------------------------------*/
 #if 1
-/*	spi cog/oled LCD接口，使用真正的SPI控制
-	外扩接口中的SPI接口 */
-const DevLcdBus BusLcdSpi3={
-	.pnode={
-				.name = "BusLcdSpi3",
-				.type = BUS_LCD_SPI,
-			},
-	
-	.basebus = "SPI3_CH3",
 
-	.A0port = MCU_PORT_G,
-	.A0pin = MCU_IO_4,
-
-	.rstport = MCU_PORT_G,
-	.rstpin = MCU_IO_7,
-
-	.blport = MCU_PORT_G,
-	.blpin = MCU_IO_9,
-
-	.staport = MCU_PORT_F, 
-	.stapin = MCU_IO_2,
-};
 #else
 /*
 	用来接没有CS和MISO的1.33寸LCD屏
@@ -308,36 +306,9 @@ const DevLcdBus BusLcdVSpi3={
 };
 
 #endif 
-/*	I2C接口的LCD总线*/
-const DevLcdBus BusLcdI2C1={
-	.pnode={
-				.name = "BusLcdI2C1",
-				.type = BUS_LCD_I2C,
-			},
-			
-	.basebus = "VI2C1",
 
-	/*I2C接口的LCD总线，不需要其他IO*/
-	.A0port = MCU_PORT_NULL,
-	.A0pin = NULL,
-
-	.rstport = MCU_PORT_NULL,
-	.rstpin = NULL,
-
-	.blport = MCU_PORT_NULL,
-	.blpin = NULL,
-
-	.staport = MCU_PORT_NULL, 
-	.stapin = NULL,
-};
 /*	8080接口的LCD总线 */	
-const DevLcdBus BusLcd8080={
-	.pnode={
-				.name = "BusLcd8080",
-				.type = BUS_LCD_8080,
-			},
-	
-	.basebus = "8080",//无意义，8080操作直接嵌入在LCD BUS代码内
+const DevLcdCtrlIO BusLcd8080={
 
 	/* 8080 不用A0*/
 	.A0port = MCU_PORT_NULL,
@@ -397,25 +368,26 @@ const DevLcdBus BusLcdVSpi1CH2={
 -----------------------------*/
 const DevSpiFlash DevSpiFlashCore={
 	/*有一个叫做board_spiflash的SPI FLASH挂在DEV_SPI_3_2上，型号未知*/
-	.pnode={
+	.pdev={
 				.name = "board_spiflash",
 				.type = DEV_SPIFLASH,
+				.basebus = "SPI3_CH2",
+				.busconf = NULL,
+				.basetype = BUS_SPI_H,
 			},
-	
-	.bus ="SPI3_CH2",
-	.buspra = NULL,
-			
+
 	.pra = NULL,
 };
 
 const DevSpiFlash DevSpiFlashBoard={
-	.pnode={
+	.pdev={
 				.name = "core_spiflash",
 				.type = DEV_SPIFLASH,
+				.basebus = "SPI3_CH1",
+				.busconf = NULL,
+				.basetype = BUS_SPI_H,
 			},
 	
-	.bus ="SPI3_CH1",
-  .buspra = NULL,
 	.pra = NULL,
 };
 
@@ -423,6 +395,22 @@ const DevSpiFlash DevSpiFlashBoard={
 	lcd设备树定义
 	指明系统有多少个LCD设备，
 --------------------------------*/
+/*	I2C接口的LCD总线*/
+const DevLcdCtrlIO BusLcdI2C1={
+
+	/*I2C接口的LCD总线，不需要其他IO*/
+	.A0port = MCU_PORT_NULL,
+	.A0pin = NULL,
+
+	.rstport = MCU_PORT_NULL,
+	.rstpin = NULL,
+
+	.blport = MCU_PORT_NULL,
+	.blpin = NULL,
+
+	.staport = MCU_PORT_NULL, 
+	.stapin = NULL,
+};
 
 /*I2C接口的 OLED*/
 const I2CPra OledLcdI2cPra ={
@@ -431,20 +419,41 @@ const I2CPra OledLcdI2cPra ={
 };
 
 const DevLcd DevLcdOled1={
-	.pnode={
+	.pdev={
 				.name = "i2coledlcd",
 				.type = DEV_LCD,
+
+				.basebus = "VI2C1",
+				.busconf = (void *)&OledLcdI2cPra,
+				.basetype = BUS_I2C_V,
 		},
-		  
+
+	.ctrlio = &BusLcdI2C1,
+	
 	.id = 0X1315, 
 	.width = 64, 
 	.height = 128,
 
-	.bus = &BusLcdI2C1,  
-	.buspra = (void *)&OledLcdI2cPra,
-
 	.i2c_cmd_reg = 0x00,
 	.i2c_data_reg = 0x40,
+};
+
+
+/*	spi cog/oled LCD接口，使用真正的SPI控制
+	外扩接口中的SPI接口 */
+const DevLcdCtrlIO BusLcdSpi3={
+
+	.A0port = MCU_PORT_G,
+	.A0pin = MCU_IO_4,
+
+	.rstport = MCU_PORT_G,
+	.rstpin = MCU_IO_7,
+
+	.blport = MCU_PORT_G,
+	.blpin = MCU_IO_9,
+
+	.staport = MCU_PORT_F, 
+	.stapin = MCU_IO_2,
 };
 
 /*SPI接口的 OLED*/
@@ -452,7 +461,8 @@ const PraSpiSet CogSpiSet = {
 	.mode = SPI_MODE_3,
 	.KHz = 10000,
 };
-
+	
+#if 0
 DevLcd DevLcdSpiOled	=	{	
 	.pnode={
 				.name = "spioledlcd",
@@ -466,23 +476,26 @@ DevLcd DevLcdSpiOled	=	{
 	.bus = &BusLcdSpi3,  
 	.buspra = (void *)&CogSpiSet,
 };
-
+#endif
 /*SPI接口的 COG LCD*/
 const DevLcd DevLcdCOG1	=	{
-
-	.pnode={
+	.pdev={
 				.name = "spicoglcd",
 				.type = DEV_LCD,
+
+				.basebus = "SPI3_CH3",
+				.busconf = (void *)&CogSpiSet,
+				.basetype = BUS_SPI_CH,
 		},
-		
+
+	.ctrlio = &BusLcdSpi3,
+	
 	.id = 0X7565, 
 	.width = 64, 
 	.height = 128,
 
-	.bus = &BusLcdSpi3,  
-	.buspra = (void *)&CogSpiSet,
 };
-
+#if 0
 const PraSpiSet TftSpiSet = {
 	.mode = SPI_MODE_3,
 	.KHz = 10000,
@@ -542,27 +555,29 @@ const DevLcd DevEpaper	=	{
 	.bus = &BusLcdSpi3,  
 	.buspra = (void *)&EpaperSpiSet,
 };
-
+#endif
 /*fsmc接口的 tft lcd*/
 #if 1
 /* 屋脊雀2.8寸屏幕 */
 const DevLcd DevLcdtTFT	=	{
-	.pnode={
+	.pdev={
 				.name = "tftlcd",
 				.type = DEV_LCD,
+
+				.basebus = "bus_8080",
+				.busconf = NULL,
+				.basetype = BUS_8080,
 			},
+
+	.ctrlio = &BusLcd8080,
 	/* 可以指定id为：
 		0x9325，WJQ, 320 240
 		0x9341, WJQ, 320 240
-		0x1408, 好巨润, 480 800, 4.0寸的IPS屏幕，r61408驱动芯片
-				*/	 
+		0x1408, 好巨润, 480 800, 4.0寸的IPS屏幕，r61408驱动芯片 */	 
 	.id = NULL, 
 	/* 指定lcd 尺寸 */
 	.width = 480, 
 	.height = 800,
-
-	.bus = &BusLcd8080,  
-	.buspra = (void *)&CogSpiSet,
 };
 #endif	
 
@@ -570,11 +585,7 @@ const DevLcd DevLcdtTFT	=	{
 //const DevLcd DevLcdtTFT	=	{"spitftlcd", 		"BusLcdSpi3", 	0x9342, 240, 320};
 //const DevLcd DevLcdtTFT	=	{"spitftlcd", 		"BusLcdVSpi1CH2", 	0x9342, 240, 320};
 
-
-
-/*
-	简单设备树
-	*/
+/* 	简单设备树   	*/
 void *PetiteDevTable[]={
 	/*注册I2C总线*/
 	(void *)(&DevVi2c0),

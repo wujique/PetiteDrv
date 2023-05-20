@@ -143,7 +143,6 @@ DevLcdNode *bus_lcd_open(DevLcdNode *lcd)
 		
 		lcd->basenode = bus_i2c_open(busname, 0xffffffff, bus_clk);
 	} else if (type == BUS_8080) {
-		wjq_log(LOG_DEBUG, "lcd bus 8080!\r\n");
 		#if (PETITE_BUS_LCD_8080 == 1)
 		/*8080特殊处理*/
 		lcd->basenode = (void *)1;
@@ -158,7 +157,7 @@ DevLcdNode *bus_lcd_open(DevLcdNode *lcd)
 		wjq_log(LOG_INFO, "lcd bus open base bus err!\r\n");	
 
 	} else {
-		wjq_log(LOG_DEBUG, "lcd bus open base bus OK!\r\n");
+		//wjq_log(LOG_DEBUG, "lcd bus open base bus OK!\r\n");
 	}
 
 	return lcd;

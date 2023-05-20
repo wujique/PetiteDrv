@@ -53,8 +53,8 @@
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>1</CreateHexFile>
-          <DebugInformation>0</DebugInformation>
-          <BrowseInformation>0</BrowseInformation>
+          <DebugInformation>1</DebugInformation>
+          <BrowseInformation>1</BrowseInformation>
           <ListingPath>.\Listings\</ListingPath>
           <HexFormatSelection>1</HexFormatSelection>
           <Merge32K>0</Merge32K>
@@ -1002,6 +1002,11 @@
               <FileName>tlsf.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\Petite\mem\tlsf.c</FilePath>
+            </File>
+            <File>
+              <FileName>petite_dev.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Petite\petite_dev.c</FilePath>
             </File>
           </Files>
         </Group>
