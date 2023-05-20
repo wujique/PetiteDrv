@@ -26,19 +26,16 @@
 #include "bus/bus_i2c.h"
 #include "bus/bus_vi2c.h"
 #include "mem/p_malloc.h"
+#include "petite_dev.h"
 
 
-//#define BUS_I2C_DEBUG
+#define BUS_I2C_DEBUG
 
 #ifdef BUS_I2C_DEBUG
 #define BUSI2C_DEBUG	wjq_log 
 #else
 #define BUSI2C_DEBUG(a, ...)
 #endif
-
-
-/*	I2C模块维护一个链表，记录有当前初始化的I2C控制器*/
-struct list_head DevI2cGdRoot = {&DevI2cGdRoot, &DevI2cGdRoot};
 
 /**
  *@brief:      bus_i2c_register
@@ -47,49 +44,33 @@ struct list_head DevI2cGdRoot = {&DevI2cGdRoot, &DevI2cGdRoot};
  *@param[out]  无
  *@retval:     
  */
-s32 bus_i2c_register(const DevI2c * dev)
+PDevNode *bus_i2c_register(const DevI2c * dev)
 {
     
 	struct list_head *listp;
-	DevI2cNode *p;
+	DevI2cNode *pnode;
 	
-	BUSI2C_DEBUG(LOG_DEBUG, "i2c:%s!\r\n", dev->pnode.name);
+	BUSI2C_DEBUG(LOG_DEBUG, "[register] i2c:%s!\r\n", dev->pdev.name);
 
-	/*	先要查询当前I2C控制器，防止重名	*/
-	listp = DevI2cGdRoot.next;
-	while(1) {
-		if (listp == &DevI2cGdRoot) break;
-
-		p = list_entry(listp, DevI2cNode, list);
-		
-		if (strcmp(dev->pnode.name, p->dev.pnode.name) == 0) {
-			wjq_log(LOG_ERR, "i2c dev name err!\r\n");
-			return -1;
-		}
-		
-		listp = listp->next;
-	}
 
 	/* 申请一个节点空间   并插入链表     	*/
-	p = (DevI2cNode *) wjq_malloc(sizeof(DevI2cNode));
-	list_add(&(p->list), &DevI2cGdRoot);
+	pnode = (DevI2cNode *) wjq_malloc(sizeof(DevI2cNode));
 	
-	/*	初始化设备节点 	*/
-	memcpy((u8 *)&p->dev, (u8 *)dev, sizeof(DevI2c));
+	petite_dev_init_node((PDevNode *)pnode, (PetiteDev *) dev);
 
 	/*初始化互斥 */
-	p->gd = -1;
-	p->mutex = osMutexNew(NULL);
-	if (p->mutex == NULL) {
+	pnode->gd = -1;
+	pnode->mutex = osMutexNew(NULL);
+	if (pnode->mutex == NULL) {
 		BUSI2C_DEBUG(LOG_ERR, "mutex new err!\r\n");
 	}
 	
-	if (dev->pnode.type == BUS_I2C_V)
-		bus_vi2c_init(&p->dev);
-	else if (dev->pnode.type == BUS_I2C_H)
-		return -1;//mcu_hi2c_init(&p->dev);
+	if (dev->pdev.type == BUS_I2C_V)
+		bus_vi2c_init(dev);
+	else if (dev->pdev.type == BUS_I2C_H)
+		return 0;//mcu_hi2c_init(&p->dev);
 	
-	return 0;
+	return (PDevNode *)pnode;
 }
 /**
  *@brief:      bus_i2c_open
@@ -104,26 +85,12 @@ DevI2cNode *bus_i2c_open (char *name, uint32_t wait, uint16_t clk)
 {
 
 	DevI2cNode *node;
-	struct list_head *listp;
+
 	osStatus_t res;
+	
 	//BUSI2C_DEBUG(LOG_INFO, "i2c open:%s!\r\n", name);
-
-	listp = DevI2cGdRoot.next;
-	node = NULL;
-	
-	while(1) {
-		if (listp == &DevI2cGdRoot) break;
-
-		node = list_entry(listp, DevI2cNode, list);
-		 
-		if (strcmp(name, node->dev.pnode.name) == 0) {
-			//BUSI2C_DEBUG(LOG_INFO, "i2c dev find!\r\n");
-			break;
-		}
+	node = (DevI2cNode *)petite_dev_get_node(name);
 		
-		listp = listp->next;
-	}
-	
 	if (node != NULL) {
 		/* 判断互斥是否可用          osWaitForever*/
 
@@ -170,11 +137,15 @@ s32 bus_i2c_close(DevI2cNode *node)
  */
 s32 bus_i2c_transfer(DevI2cNode *node, u8 addr, u8 rw, u8* data, s32 datalen)
 {
+	PetiteDevType type;
+	
 	if (node == NULL) return -1;
 
-	if(node->dev.pnode.type == BUS_I2C_H)
+	type = node->pnode.pdev->type;
+	
+	if( type== BUS_I2C_H)
 		return 0;//mcu_hi2c_transfer (node, addr, rw, data, datalen);
-	else if (node->dev.pnode.type == BUS_I2C_V)	
+	else if (type == BUS_I2C_V)	
 		return bus_vi2c_transfer(node, addr, rw, data, datalen);
 	else {
 		wjq_log(LOG_ERR, "i2c dev type err\r\n");	

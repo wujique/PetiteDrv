@@ -36,10 +36,7 @@
 #define BUSSPI_DEBUG(a, ...)
 #endif
 
-/*
-	所有SPI统一对外接口
-*/
-struct list_head DevSpiRoot = {&DevSpiRoot, &DevSpiRoot};
+
 /**
  *@brief:      mcu_spi_register
  *@details:    注册SPI控制器设备
@@ -47,51 +44,37 @@ struct list_head DevSpiRoot = {&DevSpiRoot, &DevSpiRoot};
  *@param[out]  无
  *@retval:     
  */
-s32 bus_spi_register(const DevSpi *dev)
+PDevNode *bus_spi_register(const DevSpi *dev)
 {
 
 	struct list_head *listp;
-	DevSpiNode *p;
+	DevSpiNode *pnode;
 	
-	wjq_log(LOG_DEBUG, "spi :%s!\r\n", dev->pnode.name);
-
-	listp = DevSpiRoot.next;
-	while(1) {
-		if (listp == &DevSpiRoot) break;
-
-		p = list_entry(listp, DevSpiNode, list);
-
-		if (strcmp(dev->pnode.name, p->dev.pnode.name) == 0) {
-			wjq_log(LOG_ERR, "spi dev name redefine!\r\n");
-			return -1;
-		}
-		
-		listp = listp->next;
-	}
-
+	//wjq_log(LOG_DEBUG, "[register]:%s!\r\n", dev->pdev.name);
 	/*  申请一个节点空间    	*/
-	p = (DevSpiNode *)wjq_malloc(sizeof(DevSpiNode));
-	list_add(&(p->list), &DevSpiRoot);
-
-	memcpy((u8 *)&p->dev, (u8 *)dev, sizeof(DevSpi));
-
+	pnode = (DevSpiNode *)wjq_malloc(sizeof(DevSpiNode));
+	petite_dev_init_node((PDevNode *)pnode, (PetiteDev *) dev);
+	
 	/*初始化*/
-	if (dev->pnode.type == BUS_SPI_V)
+	if (dev->pdev.type == BUS_SPI_V)
 		bus_vspi_init(dev);
-	else if (dev->pnode.type == BUS_SPI_H)
+	else if (dev->pdev.type == BUS_SPI_H)
 		mcu_hspi_init(dev);
-
-	p->mutex = osMutexNew(NULL);
-	if (p->mutex == NULL) {
-		BUSSPI_DEBUG(LOG_ERR, "mutex new err!\r\n");
+	else {
+		wjq_log(LOG_ERR, "spi register type err!\r\n");	
 	}
 	
-	p->gd = -1;
+	pnode->mutex = osMutexNew(NULL);
+	if (pnode->mutex == NULL) {
+		BUSSPI_DEBUG(LOG_ERR, "mutex new err!\r\n");
+	} else {
+		BUSSPI_DEBUG(LOG_WAR, "mutex new 0x%x!\r\n", pnode->mutex);	
+	}
 	
-	return 0;
+	
+	return (PDevNode *)pnode;
 }
 
-struct list_head DevSpiChRoot = {&DevSpiChRoot, &DevSpiChRoot};
 /**
  *@brief:      mcu_spich_register
  *@details:    注册SPI通道
@@ -99,65 +82,31 @@ struct list_head DevSpiChRoot = {&DevSpiChRoot, &DevSpiChRoot};
  *@param[out]  无
  *@retval:     
  */
-s32 bus_spich_register(const DevSpiCh *dev)
+PDevNode *bus_spich_register(const DevSpiCh *dev)
 {
 	struct list_head *listp;
-	DevSpiChNode *p;
-	DevSpiNode *p_spi;
-	
-	wjq_log(LOG_DEBUG, "spi ch :%s!\r\n", dev->pnode.name);
+	DevSpiChNode *pnode;
 
-	/*
-		先要查询当前，防止重名
-	*/
-	listp = DevSpiChRoot.next;
-	while(1) {
-		if (listp == &DevSpiChRoot)	break;
+	wjq_log(LOG_DEBUG, "register spi ch :%s!\r\n", dev->pdev.name);
 
-		p = list_entry(listp, DevSpiChNode, list);
-		
-		if (strcmp(dev->pnode.name, p->dev.pnode.name) == 0) {
-			wjq_log(LOG_ERR, "spi ch dev name err!\r\n");
-			return -1;
-		}
-		
-		listp = listp->next;
-	}
-
-	/* 寻找SPI控制器*/
-	listp = DevSpiRoot.next;
-	while(1) {
-		if (listp == &DevSpiRoot) {
-			wjq_log(LOG_ERR, "spi ch reg err:no spi device!\r\n");
-			return -1;
-		}
-
-		p_spi = list_entry(listp, DevSpiNode, list);
-
-		if (strcmp(dev->spi, p_spi->dev.pnode.name) == 0) {
-			//wjq_log(LOG_INFO, "spi ch find spi!\r\n");
-			break;
-		}
-		
-		listp = listp->next;
-	}
 	/* 申请一个节点空间 	*/
-	p = (DevSpiChNode *)wjq_malloc(sizeof(DevSpiChNode));
-	list_add(&(p->list), &DevSpiChRoot);
-	memcpy((u8 *)&p->dev, (u8 *)dev, sizeof(DevSpiCh));
-	p->gd = -1;
-	p->spi = p_spi;
+	pnode = (DevSpiChNode *)wjq_malloc(sizeof(DevSpiChNode));
+	
+	petite_dev_init_node((PDevNode *)pnode, (PetiteDev *) dev);
+
+	
+	pnode->gd = -1;
 
 	/* 初始化管脚 */
 	mcu_io_config_out(dev->csport,dev->cspin);
 	mcu_io_output_setbit(dev->csport,dev->cspin);
 
-	return 0;
+	return (PDevNode *)pnode;
 }
 
 
 /**
- *@brief:      mcu_spi_open
+ *@brief:      bus_spi_open
  *@details:    打开SPI通道
  *@param[in]   DevSpiChNode * node
                u8 mode      模式
@@ -168,60 +117,58 @@ s32 bus_spich_register(const DevSpiCh *dev)
  */
 DevSpiChNode *bus_spich_open(char *name, SPI_MODE mode, u16 KHz,  uint32_t wait)
 {
-
 	s32 res;
-	DevSpiChNode *node;
-	struct list_head *listp;
-	osStatus_t osres;
-	BUSSPI_DEBUG(LOG_DEBUG, "spi ch open:%s!\r\n", name);
+	PDevNode *pnode;
 
-	listp = DevSpiChRoot.next;
-	node = NULL;
+	PDevNode *pbasenode;
+	DevSpiChNode *chnode;
+
+	DevSpiNode *spinode;
+	DevSpiCh *devspich;
 	
-	while(1) {
-		if (listp == &DevSpiChRoot)	break;
+	osStatus_t osres;
+	
+	pnode = petite_dev_get_node(name);
+	chnode = (DevSpiChNode *)pnode;
+	devspich = (DevSpiCh *)pnode->pdev;
+		
+	pbasenode = pnode->basenode;
+	spinode = (DevSpiNode *)pbasenode;
 
-		node = list_entry(listp, DevSpiChNode, list);
-		BUSSPI_DEBUG(LOG_DEBUG, "spi ch name%s!\r\n", node->dev.spi);
+	BUSSPI_DEBUG(LOG_DEBUG, "dev spi ch name:%s!\r\n", pnode->pdev->name);
+	BUSSPI_DEBUG(LOG_DEBUG, "dev spi name:%s!\r\n", pbasenode->pdev->name);
+	
+	if (chnode != NULL) {
 		
-		if (strcmp(name, node->dev.pnode.name) == 0) {
-			BUSSPI_DEBUG(LOG_DEBUG, "spi ch dev get ok!\r\n");
-			break;
+		if(chnode->gd == 0) {
+			wjq_log(LOG_ERR, "spi ch open err:using!\r\n");
+			chnode = NULL;
 		} else {
-			node = NULL;
-		}
-		
-		listp = listp->next;
-	}
-
-	if (node != NULL) {
-		
-		if(node->gd == 0) {
-			BUSSPI_DEBUG(LOG_ERR, "spi ch open err:using!\r\n");
-			node = NULL;
-		} else {
-			osres = osMutexAcquire(node->spi->mutex, wait);
+			osres = osMutexAcquire(spinode->mutex, wait);
 			if ( osOK != osres) {
-				node = NULL;
+				chnode = NULL;
 			} else {
-				node->spi->clk = KHz;
-				node->spi->mode = mode;
+				spinode->clk = KHz;
+				spinode->mode = mode;
 
 				/*打开SPI控制器*/
-				if (node->spi->dev.pnode.type == BUS_SPI_H) {
-					res = mcu_hspi_open(node->spi, mode, KHz);	
-				} else if(node->spi->dev.pnode.type == BUS_SPI_V) {
-					res = bus_vspi_open(node->spi, mode, KHz);	
+				res = -1;
+				if (pbasenode->pdev->type == BUS_SPI_H) {
+					res = mcu_hspi_open(spinode, mode, KHz);	
+				} else if(pbasenode->pdev->type == BUS_SPI_V) {
+					res = bus_vspi_open(spinode, mode, KHz);	
+				} else {
+					BUSSPI_DEBUG(LOG_ERR, "spi type err!\r\n");		
 				}
 
-			if (res == 0) {
-				node->gd = 0;
-				BUSSPI_DEBUG(LOG_DEBUG, "spi dev open ok: %s!\r\n", name);
-				mcu_io_output_resetbit(node->dev.csport, node->dev.cspin);
-			} else {
-				BUSSPI_DEBUG(LOG_ERR, "spi dev open err!\r\n");
-				node = NULL;
-					osMutexRelease(node->spi->mutex);
+				if (res == 0) {
+					chnode->gd = 0;
+					BUSSPI_DEBUG(LOG_DEBUG, "spi dev open ok: %s!\r\n", pbasenode->pdev->name);
+					mcu_io_output_resetbit(devspich->csport, devspich->cspin);
+				} else {
+					BUSSPI_DEBUG(LOG_ERR, "spi dev open err!\r\n");
+					chnode = NULL;
+					osMutexRelease(spinode->mutex);
 				}
 			}	
 		}
@@ -229,8 +176,86 @@ DevSpiChNode *bus_spich_open(char *name, SPI_MODE mode, u16 KHz,  uint32_t wait)
 		BUSSPI_DEBUG(LOG_ERR, "spi ch no exist!\r\n");	
 	}
 	
-	return node;
+	return chnode;
 }
+
+
+/**
+ *@brief:      bus_spi_opennode
+ *@details:    打开SPI通道
+ *@param[in]   DevSpiChNode * node
+               u8 mode      模式
+               u16 pre      预分频
+ *@param[out]  无
+ *@retval:     
+ 			   打开一次SPI，在F407上大概要2us
+ */
+DevSpiChNode *bus_spich_opennode(DevSpiChNode *node, SPI_MODE mode, u16 KHz,  uint32_t wait)
+{
+
+	s32 res;
+	PDevNode *pnode;
+
+	PDevNode *pbasenode;
+	DevSpiChNode *chnode;
+
+	DevSpiNode *spinode;
+	DevSpiCh *devspich;
+	
+	osStatus_t osres;
+	
+	pnode = (PDevNode *)node;
+	
+	chnode = node;
+	devspich = (DevSpiCh *)pnode->pdev;
+		
+	pbasenode = pnode->basenode;
+	spinode = (DevSpiNode *)pbasenode;
+
+	BUSSPI_DEBUG(LOG_DEBUG, "dev spi ch name:%s!\r\n", pnode->pdev->name);
+	BUSSPI_DEBUG(LOG_DEBUG, "dev spi name:%s!\r\n", pbasenode->pdev->name);
+	
+	if (chnode != NULL) {
+		
+		if(chnode->gd == 0) {
+			wjq_log(LOG_ERR, "spi ch open err:using!\r\n");
+			chnode = NULL;
+		} else {
+			osres = osMutexAcquire(spinode->mutex, wait);
+			if ( osOK != osres) {
+				chnode = NULL;
+			} else {
+				spinode->clk = KHz;
+				spinode->mode = mode;
+
+				/*打开SPI控制器*/
+				res = -1;
+				if (pbasenode->pdev->type == BUS_SPI_H) {
+					res = mcu_hspi_open(spinode, mode, KHz);	
+				} else if(pbasenode->pdev->type == BUS_SPI_V) {
+					res = bus_vspi_open(spinode, mode, KHz);	
+				} else {
+					BUSSPI_DEBUG(LOG_ERR, "spi type err!\r\n");		
+				}
+
+				if (res == 0) {
+					chnode->gd = 0;
+					BUSSPI_DEBUG(LOG_DEBUG, "spi dev open ok: %s!\r\n", pbasenode->pdev->name);
+					mcu_io_output_resetbit(devspich->csport, devspich->cspin);
+				} else {
+					BUSSPI_DEBUG(LOG_ERR, "spi dev open err!\r\n");
+					chnode = NULL;
+					osMutexRelease(spinode->mutex);
+				}
+			}	
+		}
+	}else {
+		BUSSPI_DEBUG(LOG_ERR, "spi ch no exist!\r\n");	
+	}
+	
+	return chnode;
+}
+
 /**
  *@brief:      mcu_spi_close
  *@details:    关闭SPI 通道
@@ -240,22 +265,41 @@ DevSpiChNode *bus_spich_open(char *name, SPI_MODE mode, u16 KHz,  uint32_t wait)
  */
 s32 bus_spich_close(DevSpiChNode * node)
 {
-	//wjq_log(LOG_INFO, "[c:%s]", node->dev.pnode.name);
+	PDevNode *pnode;
+	DevSpiChNode *chnode;
 
-	if (node == NULL) return -1;
-	if(node->gd != 0) return -1;
-
-	if(node->spi->dev.pnode.type == BUS_SPI_H){
-		mcu_hspi_close(node->spi);
-	}else
-		bus_vspi_close(node->spi);
+	PDevNode *pbasenode;
+	DevSpiNode *spinode;
 	
+	DevSpiCh *devspich;
+	
+	
+	chnode = node;
+	pnode = (PDevNode *)chnode;
+	devspich = (DevSpiCh *)pnode->pdev;
+	pbasenode = pnode->basenode;
+	spinode = (DevSpiNode *)pbasenode;
+
+	//wjq_log(LOG_INFO, "close spi ch:%s\r\n", pnode->pdev->name);
+	//wjq_log(LOG_INFO, "close spi:%s\r\n", pbasenode->pdev->name);
+	
+	if (chnode == NULL) return -1;
+	if(chnode->gd != 0) return -1;
+
+	if(pbasenode->pdev->type == BUS_SPI_H){
+		mcu_hspi_close(spinode);
+	} else if(pbasenode->pdev->type == BUS_SPI_V) { 
+		bus_vspi_close(spinode);
+	} else {
+		wjq_log(LOG_WAR, "close spi type err!\r\n");
+	}
 	/*拉高CS*/
-	mcu_io_output_setbit(node->dev.csport, node->dev.cspin);
 
-	node->gd = -1;
+	mcu_io_output_setbit(devspich->csport, devspich->cspin);
+
+	chnode->gd = -1;
 	
- 	osMutexRelease(node->spi->mutex);
+ 	osMutexRelease(spinode->mutex);
 
 	return 0;
 }
@@ -271,12 +315,26 @@ s32 bus_spich_close(DevSpiChNode * node)
  */
 s32 bus_spich_transfer(DevSpiChNode * node, u8 *snd, u8 *rsv, s32 len)
 {
+	PDevNode *pnode;
+
+	PDevNode *pbasenode;
+	DevSpiChNode *chnode;
+
+	DevSpiNode *spinode;
+	DevSpiCh *devspich;
+	
+	chnode = node;
+	pnode = (PDevNode *)chnode;
+
+	pbasenode = pnode->basenode;
+	spinode = (DevSpiNode *)pbasenode;
+	
 	if (node == NULL) return -1;
 
-	if (node->spi->dev.pnode.type == BUS_SPI_H)
-		return mcu_hspi_transfer(node->spi, snd, rsv, len);
-	else if (node->spi->dev.pnode.type == BUS_SPI_V)	
-		return bus_vspi_transfer(node->spi, snd, rsv, len);
+	if (pbasenode->pdev->type == BUS_SPI_H)
+		return mcu_hspi_transfer(spinode, snd, rsv, len);
+	else if (pbasenode->pdev->type == BUS_SPI_V)	
+		return bus_vspi_transfer(spinode, snd, rsv, len);
 	else {
 		BUSSPI_DEBUG(LOG_ERR, "spi dev type err\r\n");	
 	}
@@ -292,14 +350,18 @@ s32 bus_spich_transfer(DevSpiChNode * node, u8 *snd, u8 *rsv, s32 len)
  */
 s32 bus_spich_cs(DevSpiChNode * node, u8 sta)
 {
+	DevSpiCh *devspich;
+
+	devspich = (DevSpiCh *)node->pnode.pdev;
+	
 	switch(sta)
 	{
 		case 1:
-			mcu_io_output_setbit(node->dev.csport, node->dev.cspin);
+			mcu_io_output_setbit(devspich->csport, devspich->cspin);
 			break;
 			
 		case 0:
-			mcu_io_output_resetbit(node->dev.csport, node->dev.cspin);
+			mcu_io_output_resetbit(devspich->csport, devspich->cspin);
 			break;
 			
 		default:

@@ -3,6 +3,8 @@
 
 
 #include "petite_def.h"
+#include "petite_dev.h"
+
 #include "petite.h"
 
 typedef struct _strDevLcdNode DevLcdNode;
@@ -36,17 +38,11 @@ typedef struct
 
 }_lcd_drv; 
 
-/*LCD 总线定义 */
+/*LCD 控制IO定义  */
 typedef struct
-{
-	PetiteNode pnode;
-	
-	/*依赖总线名字*/
-	char basebus[DEV_NAME_SIZE];
-
+{	
 	/*	3根线：A0-命令数据，rst-复位，bl-背光
 		I2C总线的LCD不需要这三根线    	*/
-
 	MCU_PORT A0port;
 	u16 A0pin;
 
@@ -59,41 +55,34 @@ typedef struct
 	/* 电子纸 91874 需要一个busy状态脚*/
 	MCU_PORT staport;
 	u16 stapin;
-}DevLcdBus;
+}DevLcdCtrlIO;
 
 
 /*
-	设备定义
-	包含挂载方式定义
-	也就是说明有一什么ID的设备挂载什么地方
-	例如定义一个COG LCD挂载在SPI3上
-	用什么驱动？LCD具体参数是什么？通过ID匹配
-	同一个类型的LCD，驱动相同，只是像素大小不一样，如何处理？
-	可以重生一个驱动结构体，函数一样，ID不一样。
+
 */
 typedef struct
 {
-	PetiteNode pnode;
-
-	/* */
+	PetiteDev pdev;
+		
 	u16 id;
 	u16 width;	//LCD 宽度   竖屏
 	u16 height;	//LCD 高度    竖屏
 
-	DevLcdBus const *bus;
-	void *buspra;//总线参数，如果是I2C，则包含I2C地址和时钟频率，如果是SPI，则包含时钟频率等信息
-
 	uint8_t i2c_cmd_reg;
 	uint8_t i2c_data_reg;
+
+	const DevLcdCtrlIO *ctrlio;
 }DevLcd;
 
 /* 设备节点*/
 struct _strDevLcdNode
 {
+	PDevNode pnode;
+
+	/*-------------------------------*/
 	s32 gd;//句柄，控制是否可以打开
 	
-	DevLcd	dev;
-
 	/* LCD驱动 */
 	_lcd_drv *drv;
 
@@ -106,9 +95,8 @@ struct _strDevLcdNode
 	
 	void *pri;//私有数据，黑白屏跟OLED屏在初始化的时候会开辟显存
 
-	void *basenode;
-	
-	struct list_head list;
+	void *basenode;// openbus时需要记录其设备节点
+
 };
 
 #define LCD_HAVE_FRAMEBUFF 0X55
@@ -165,7 +153,7 @@ struct _strDevLcdNode
 #define LGRAYBLUE        0XA651 //浅灰蓝色(中间层颜色)
 #define LBBLUE           0X2B12 //浅棕蓝色(选择条目的反色)
 
-extern s32 lcd_dev_register(const DevLcd *dev);
+extern PDevNode *lcd_dev_register(const DevLcd *dev);
 extern DevLcdNode *lcd_open(char *name);
 extern s32 lcd_close(DevLcdNode *node);
 extern s32 lcd_drawpoint(DevLcdNode *lcd, u16 x, u16 y, u16 color);

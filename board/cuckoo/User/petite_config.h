@@ -3,6 +3,10 @@
 
 /* 配置PetiteDrv */
 
+#define CM_BACKTRACE_AXF_NAME "h7b0_mdk_demo"
+#define HARDWARE_VERSION "V1.0.0" 
+#define SOFTWARE_VERSION "V0.1.0" 
+
 /* 设备名长度 */
 #define DEV_NAME_SIZE	16
 

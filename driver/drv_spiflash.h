@@ -2,13 +2,14 @@
 #define __DEV_SPIFLASH_H_
 
 #include "petite_def.h"
+#include "petite_dev.h"
 #include "mem/p_list.h"
 
 #include "bus/bus_spi.h"
 
-/*SPI FLASH 信息*/
-typedef struct
-{
+/*SPI FLASH 设备规格*/
+
+typedef struct{
 	char *name;
 	u32 JID;
 	u32 MID;
@@ -16,41 +17,36 @@ typedef struct
 	u32 sectornum;//总块数
 	u32 sectorsize;//块大小
 	u32 structure;//总容量
-	
-}_strSpiFlash;
+}NorFlashPra;
 
-
-/*SPI FLASH设备定义*/
+/* 设备定义 */
 typedef struct
 {
-	PetiteNode pnode;
-	
-	char *bus;//挂载在哪条SPI通道
-	void *buspra;//bus配置信息，如果是spi ch，就是模式 频率等信息
-	
-	const _strSpiFlash *pra;//设备信息
+	PetiteDev pdev;
+
+	const NorFlashPra *pra;
 }DevSpiFlash;
 
-/*设备节点定义*/
+/* 设备节点 
+   此处定义的是驱动需要的全局变量 
+   是程序执行需要的参数 不同的设备需要不同的变量 
+   本结构体在注册设备是创建，挂载到petite dev链表中 */
 typedef struct
 {
+	PDevNode pnode;
 	/**/
-	s32 gd;
-	/*设备信息*/
-	DevSpiFlash dev;
-	
-	/*spi 通道节点*/
+	s32 gd;	
 	DevSpiChNode *spichnode;
+	const NorFlashPra *pra;///如有需要，根据dev中的pra和实际情况，创建新的设备规格
 	
-	struct list_head list;
 }DevSpiFlashNode;
 
+extern PDevNode *dev_spiflash_register(const DevSpiFlash *dev);
 extern s32 dev_spiflash_sector_erase(DevSpiFlashNode *node, u32 sector);
 extern s32 dev_spiflash_sector_read(DevSpiFlashNode *node, u32 sector, u8 *dst);	
 extern s32 dev_spiflash_sector_write(DevSpiFlashNode *node, u32 sector, u8 *src);
 extern void *dev_spiflash_open(char* name);
 extern s32 dev_spiflash_close(DevSpiFlashNode *node);
-
 extern s32 dev_spiflash_test(void);
 
 #endif

@@ -25,14 +25,17 @@ typedef struct _PartitionDef {
  * 
  */
 typedef struct _StorageDev{
+	
 	int (*getblksize)(void *dev);
 	int (*getsize)(void *dev);
-	
-	void *(*open)(const char *name);	
+
+	void *(*getnode)(const char *name);
+	void *(*open)(void *node);	
 	int (*read)(void *dev, uint32_t offset, uint8_t *buf, size_t size);
 	int (*write)(void *dev, uint32_t offset, const uint8_t *buf, size_t size);
 	int (*erase)(void *dev, uint32_t offset, size_t size);
 	int (*close)(void *dev);
+	
 }StorageDev;
 
 /**
@@ -43,15 +46,16 @@ typedef struct _StorageDev{
 typedef struct _PartitionNode {
 	PartitionDef *def;///指向对应分区定义
 
-	union{
-		struct _PartitionNode *sto;///分区指向storage
-		const StorageDev *dev;///storage指向设备 操作结构体
-	}base;
+	const StorageDev *drv;///storage指向设备操作结构体
+
+	struct _PartitionNode *base;///分区指向storage, storage指向设备，例如DevSpiFlashNode
+
 	/* 不同的partiton，不同的格式，初始化后需要的定义 
 		比如初始化为littlefs后，需要一些参数变量，可以挂在这个指针上 */
 	void *context;
 
 	struct _PartitionNode *next;///所有partition node组成单向链表
+	
 }PartitionNode;
 
 

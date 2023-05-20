@@ -43,7 +43,7 @@
 /*
 	常用的SPI FLASH 参数信息
 */
-const _strSpiFlash SpiFlashPraList[]=
+const NorFlashPra SpiFlashPraList[]=
 {
 	{"default",    0Xef4017, 0Xef16, 2048, 4096, 8388608},
 	{"MX25L3206E", 0XC22016, 0XC215, 1024, 4096, 4194304},
@@ -222,10 +222,10 @@ s32 dev_spiflash_sector_erase(DevSpiFlashNode *node, u32 sector)
 {
 	u32 addr;
 
-	if(sector >= node->dev.pra->sectornum)
+	if(sector >= node->pra->sectornum)
 		return -1;
 	
-	addr = sector*(node->dev.pra->sectorsize);
+	addr = sector*(node->pra->sectorsize);
 
 	dev_spiflash_erase(node, addr);
 	
@@ -243,10 +243,10 @@ s32 dev_spiflash_sector_erase(DevSpiFlashNode *node, u32 sector)
  */
 s32 dev_spiflash_sector_read(DevSpiFlashNode *node, u32 sector, u8 *dst)	
 {
-	if(sector >= node->dev.pra->sectornum)
+	if(sector >= node->pra->sectornum)
 		return -1;
 	
-	return dev_spiflash_read(node, sector*(node->dev.pra->sectorsize), node->dev.pra->sectorsize, dst);
+	return dev_spiflash_read(node, sector*(node->pra->sectorsize), node->pra->sectorsize, dst);
 }
 /**
  *@brief:      dev_spiflash_sector_write
@@ -261,10 +261,10 @@ s32 dev_spiflash_sector_write(DevSpiFlashNode *node, u32 sector, u8 *src)
 {
 	u16 sector_size;
 
-	if(sector >= node->dev.pra->sectornum)
+	if(sector >= node->pra->sectornum)
 		return -1;
 	
-	sector_size = node->dev.pra->sectorsize;
+	sector_size = node->pra->sectorsize;
 	dev_spiflash_write(node, sector*sector_size, sector_size, src);
 	return 0;
 }
@@ -325,9 +325,6 @@ static u32 dev_spiflash_readJTD(DevSpiFlashNode *node)
     return JID;
 }
 
-struct list_head DevSpiFlashRoot = {&DevSpiFlashRoot, &DevSpiFlashRoot};
-	
-
 /**
  *@brief:      SpiFlashOpen
  *@details:    打开SPI FLASH
@@ -339,31 +336,17 @@ void *dev_spiflash_open(char* name)
 {
 
 	DevSpiFlashNode *node;
-	struct list_head *listp;
+	PDevNode *pnode;	
+	PetiteDev *pdev;
 	
 	SPIFLASH_DEBUG(LOG_INFO, "spi flash open:%s!\r\n", name);
 
-	listp = DevSpiFlashRoot.next;
 	node = NULL;
 
-	/* 寻找设备 */
-	while(1) {
-		if(listp == &DevSpiFlashRoot)
-			break;
-
-		node = list_entry(listp, DevSpiFlashNode, list);
-		SPIFLASH_DEBUG(LOG_INFO, "spi flash name:%s!\r\n", node->dev.pnode.name);
-		
-		if (strcmp(name, node->dev.pnode.name) == 0) {
-			SPIFLASH_DEBUG(LOG_INFO, "dev get ok\r\n");
-			break;
-		} else {
-			node = NULL;
-		}
-		
-		listp = listp->next;
-	}
-
+	pnode = petite_dev_get_node(name);
+	node = (DevSpiFlashNode *)pnode;
+	pdev = pnode->pdev;
+	
 	/* 打开设备 */
 	if (node != NULL) {
 		
@@ -371,7 +354,8 @@ void *dev_spiflash_open(char* name)
 			SPIFLASH_DEBUG(LOG_INFO, "spi flash open err:using!\r\n");
 			node = NULL;
 		} else {
-			node->spichnode = bus_spich_open(node->dev.bus, SPI_MODE_3, 20000, 0xffffffff);
+			node->spichnode = bus_spich_opennode((DevSpiChNode *)pnode->basenode, SPI_MODE_3, 20000, 0xffffffff);
+			//node->spichnode = bus_spich_open(pdev->basebus, SPI_MODE_3, 20000, 0xffffffff);
 			if(node->spichnode == NULL)	node = NULL;
 			else node->gd = 0;
 		}
@@ -381,6 +365,61 @@ void *dev_spiflash_open(char* name)
 	
 	return (void *)node;
 }
+
+/*
+	获取设备节点，后续通过节点操作，
+	避免查找节点浪费时间
+	*/
+void *dev_spiflash_getnode(char* name)
+{
+	DevSpiFlashNode *node;
+	PDevNode *pnode;	
+	
+	SPIFLASH_DEBUG(LOG_INFO, "spi flash open:%s!\r\n", name);
+
+	pnode = petite_dev_get_node(name);
+	node = (DevSpiFlashNode *)pnode;
+
+	return (void *)node;
+}
+
+
+/**
+ *@brief:      SpiFlashOpennode
+ *@details:    	通过节点打开设备
+ *@param[in]   void  
+ *@param[out]  无
+ *@retval:     
+ */
+void *dev_spiflash_opennode(void *devnode)
+{
+	DevSpiFlashNode *node;
+	PDevNode *pnode;	
+	PetiteDev *pdev;
+	
+	node = (DevSpiFlashNode *)devnode;
+	pnode =(PDevNode *)node;
+	pdev = pnode->pdev;
+	
+	/* 打开设备 */
+	if (node != NULL) {
+		
+		if (node->gd == 0) {
+			SPIFLASH_DEBUG(LOG_INFO, "spi flash open err:using!\r\n");
+			node = NULL;
+		} else {
+			node->spichnode = bus_spich_opennode((DevSpiChNode *)pnode->basenode, SPI_MODE_3, 20000, 0xffffffff);
+			//node->spichnode = bus_spich_open(pdev->basebus, SPI_MODE_3, 20000, 0xffffffff);
+			if(node->spichnode == NULL)	node = NULL;
+			else node->gd = 0;
+		}
+	}
+
+	SPIFLASH_DEBUG(LOG_INFO, "spi flash open :%d!\r\n", node);
+	
+	return (void *)node;
+}
+
 
 /**
  *@brief:      dev_spiflash_close
@@ -401,62 +440,50 @@ s32 dev_spiflash_close(DevSpiFlashNode *node)
 }
 
 
-s32 dev_spiflash_register(const DevSpiFlash *dev)
+PDevNode *dev_spiflash_register(const DevSpiFlash *dev)
 {
-	struct list_head *listp;
-	DevSpiFlashNode *node;
+	DevSpiFlashNode *flashnode;
+
+	PetiteDev *pdev;
+
+	pdev = (PetiteDev *)dev;
 
 	u32 JID = 0;
 	u32 MID = 0;
 	u8 index = 0;
 	
-	wjq_log(LOG_INFO, "[register] spi flash :%s!\r\n", dev->pnode.name);
+	wjq_log(LOG_INFO, "[register] spi flash :%s!\r\n", pdev->name);
 
-	/* 先要查询当前，防止重名       	*/
-	listp = DevSpiFlashRoot.next;
-	while(1) {
-		if (listp == &DevSpiFlashRoot) break;
+	/* 申请一个节点空间 */
+	flashnode = (DevSpiFlashNode *)wjq_malloc(sizeof(DevSpiFlashNode));
+	petite_dev_init_node((PDevNode *)flashnode, (PetiteDev *) dev);
+	
 
-		node = list_entry(listp, DevSpiFlashNode, list);
-		
-		if (strcmp(dev->pnode.name, node->dev.pnode.name) == 0) {
-			wjq_log(LOG_INFO, "spi flash dev name repeat!\r\n");
-			return -1;
-		}
-		
-		listp = listp->next;
-	}
-
-	/* 
-		申请一个节点空间    	*/
-	node = (DevSpiFlashNode *)wjq_malloc(sizeof(DevSpiFlashNode));
-	list_add(&(node->list), &DevSpiFlashRoot);
-	memcpy((u8 *)&node->dev, (u8 *)dev, sizeof(DevSpiFlash));
-	node->gd = -1;
+	flashnode->gd = -1;
 
 	/*读 ID，超找FLASH信息*/
-	node->spichnode = bus_spich_open(dev->bus, SPI_MODE_3, 10000, 0xffffffff); //打开spi
+	flashnode->spichnode = bus_spich_open(pdev->basebus, SPI_MODE_3, 10000, 0xffffffff); //打开spi
 
-	if (node->spichnode != NULL) {
-		JID = dev_spiflash_readJTD(node);
-		wjq_log(LOG_DEBUG, "\t\t%s jid:0x%x\r\n", dev->pnode.name, JID);
+	if (flashnode->spichnode != NULL) {
+		JID = dev_spiflash_readJTD(flashnode);
+		wjq_log(LOG_DEBUG, "\t\t%s jid:0x%x\r\n", pdev->name, JID);
 		
 		//MID  = dev_spiflash_readMTD(node);
 		//wjq_log(LOG_DEBUG, "%s mid:0x%x\r\n", dev->pnode.name, MID);
 		
 		/*根据JID查找设备信息*/
-		node->dev.pra = &(SpiFlashPraList[0]);
-		for (index = 1; index<(sizeof(SpiFlashPraList)/sizeof(_strSpiFlash));index++) {
+		flashnode->pra = &(SpiFlashPraList[0]);
+		for (index = 1; index<(sizeof(SpiFlashPraList)/sizeof(NorFlashPra));index++) {
 			if (SpiFlashPraList[index].JID == JID) {
-				node->dev.pra = &(SpiFlashPraList[index]);
-				wjq_log(LOG_DEBUG, "\t\tflash name %s\r\n", node->dev.pra->name);
+				flashnode->pra = &(SpiFlashPraList[index]);
+				wjq_log(LOG_DEBUG, "\t\tflash name %s\r\n", flashnode->pra->name);
 				break;
 			}
 		}
 		
-		bus_spich_close(node->spichnode);
+		bus_spich_close(flashnode->spichnode);
 	}
-	return 0;
+	return (PDevNode *)flashnode;
 }
 
 #include "petite.h"
@@ -482,7 +509,7 @@ void dev_spiflash_test_fun(char *name)
 	
     wjq_log(LOG_DEBUG, ">:-------dev_spiflash_test-------\r\n");
     node = dev_spiflash_open(name);
-	wjq_log(LOG_DEBUG, ">:-------%s-------\r\n", node->dev.pnode.name);
+	//wjq_log(LOG_DEBUG, ">:-------%s-------\r\n", node->dev.pnode.name);
 	if (node == NULL) {
 		wjq_log(LOG_DEBUG, "open spi flash ERR\r\n");
 		while(1);
@@ -502,7 +529,7 @@ void dev_spiflash_test_fun(char *name)
     dev_spiflash_sector_read(node, addr, rbuf);;//读一页回来
     wjq_log(LOG_DEBUG, "read...");
     
-    for (tmp = 0; tmp < node->dev.pra->sectorsize; tmp++) {
+    for (tmp = 0; tmp < node->pra->sectorsize; tmp++) {
         if (rbuf[tmp] != 0xff) {
             wjq_log(LOG_DEBUG, "%x=%02X ", tmp, rbuf[tmp]);//擦除后不等于0XFF,坏块    
             err_flag = 1;
@@ -517,7 +544,7 @@ void dev_spiflash_test_fun(char *name)
     
     wjq_log(LOG_DEBUG, "\r\n>:test wr..\r\n");
     
-    for (tmp = 0; tmp < node->dev.pra->sectorsize; tmp++) {
+    for (tmp = 0; tmp < node->pra->sectorsize; tmp++) {
         if (rbuf[tmp] != wbuf[tmp]) {
             wjq_log(LOG_DEBUG, "%x ", tmp);//读出来的跟写进去的不相等 
             err_flag = 1;
@@ -548,24 +575,24 @@ void dev_spiflash_test_chipcheck(char *name)
 	
     wjq_log(LOG_DEBUG, ">:-------dev_spiflash_test-------\r\n");
     node = dev_spiflash_open(name);
-	wjq_log(LOG_DEBUG, ">:-------%s-------\r\n", node->dev.pnode.name);
+
 	if (node == NULL) {
 		wjq_log(LOG_DEBUG, "open spi flash ERR\r\n");
 		while(1);
 	}
 
-	rbuf = (u8*)wjq_malloc(node->dev.pra->sectorsize);
-	wbuf = (u8*)wjq_malloc(node->dev.pra->sectorsize);
+	rbuf = (u8*)wjq_malloc(node->pra->sectorsize);
+	wbuf = (u8*)wjq_malloc(node->pra->sectorsize);
 
-	for (sector = 0; sector < node->dev.pra->sectornum; sector++) {
+	for (sector = 0; sector < node->pra->sectornum; sector++) {
 	    i = sector%0xff;
 		
-	    for (tmp = 0; tmp < node->dev.pra->sectorsize; tmp++) {
+	    for (tmp = 0; tmp < node->pra->sectorsize; tmp++) {
 	        wbuf[tmp] = i;
 	        i++;
 	    }
 	    
-	    addr = sector * (node->dev.pra->sectorsize);
+	    addr = sector * (node->pra->sectorsize);
 		
 		wjq_log(LOG_DEBUG, ">:sector:%d, addr:0x%08x,", sector, addr);
 	    dev_spiflash_sector_erase(node, sector);
@@ -574,7 +601,7 @@ void dev_spiflash_test_chipcheck(char *name)
 	    dev_spiflash_sector_read(node, sector, rbuf);;//读一页回来
 	    wjq_log(LOG_DEBUG, "read...");
 	    
-	    for (tmp = 0; tmp < node->dev.pra->sectorsize; tmp++) {
+	    for (tmp = 0; tmp < node->pra->sectorsize; tmp++) {
 	        if (rbuf[tmp] != 0xff) {
 	            //wjq_log(LOG_FUN, "%x=%02X ", tmp, rbuf[tmp]);//擦除后不等于0XFF,坏块    
 	            err_flag = 1;
@@ -587,7 +614,7 @@ void dev_spiflash_test_chipcheck(char *name)
 	    dev_spiflash_sector_read(node, sector, rbuf);
 	    wjq_log(LOG_DEBUG, "read...");
 	    
-	    for (tmp = 0; tmp < node->dev.pra->sectorsize; tmp++) {
+	    for (tmp = 0; tmp < node->pra->sectorsize; tmp++) {
 	        if (rbuf[tmp] != wbuf[tmp]) {
 	            //wjq_log(LOG_FUN, "%x ", tmp);//读出来的跟写进去的不相等 
 	            err_flag = 1;
@@ -619,17 +646,17 @@ void dev_spiflash_test_chiperase(char *name)
 	
     wjq_log(LOG_DEBUG, ">:-------dev_spiflash_test-------\r\n");
     node = dev_spiflash_open(name);
-	wjq_log(LOG_DEBUG, ">:-------%s-------\r\n", node->dev.pnode.name);
+
 	if (node == NULL) {
 		wjq_log(LOG_DEBUG, "open spi flash ERR\r\n");
 		while(1);
 	}
 	
-	rbuf = (u8*)wjq_malloc(node->dev.pra->sectorsize);
+	rbuf = (u8*)wjq_malloc(node->pra->sectorsize);
 
-	for (sector = 0; sector < node->dev.pra->sectornum; sector++) {
+	for (sector = 0; sector < node->pra->sectornum; sector++) {
 
-	    addr = sector * (node->dev.pra->sectorsize);
+	    addr = sector * (node->pra->sectorsize);
 		
 		wjq_log(LOG_DEBUG, ">:sector:%d, addr:0x%08x,", sector, addr);
 	    dev_spiflash_sector_erase(node, sector);
@@ -638,7 +665,7 @@ void dev_spiflash_test_chiperase(char *name)
 	    dev_spiflash_sector_read(node, sector, rbuf);;//读一页回来
 	    wjq_log(LOG_DEBUG, "read...");
 	    
-	    for (tmp = 0; tmp < node->dev.pra->sectorsize; tmp++) {
+	    for (tmp = 0; tmp < node->pra->sectorsize; tmp++) {
 	        if (rbuf[tmp] != 0xff) {
 	            //wjq_log(LOG_FUN, "%x=%02X ", tmp, rbuf[tmp]);//擦除后不等于0XFF,坏块    
 	            err_flag = 1;
@@ -665,57 +692,60 @@ s32 dev_spiflash_test(void)
 }
 
 
-
-
-
-int storage_spiflash_read(void *dev, uint32_t offset, uint8_t *buf, size_t size)
+int storage_spiflash_read(void *node, uint32_t offset, uint8_t *buf, size_t size)
 {
-	return dev_spiflash_read((DevSpiFlashNode *)dev, offset, size, buf);	
+	return dev_spiflash_read((DevSpiFlashNode *)node, offset, size, buf);	
 
 }
-int storage_spiflash_write(void *dev, uint32_t offset, const uint8_t *buf, size_t size)
+int storage_spiflash_write(void *node, uint32_t offset, const uint8_t *buf, size_t size)
 {
-	return dev_spiflash_write((DevSpiFlashNode *)dev, offset, size, (uint8_t *)buf);
+	return dev_spiflash_write((DevSpiFlashNode *)node, offset, size, (uint8_t *)buf);
 }
-int storage_spiflash_erase(void *dev, uint32_t offset, size_t size)
+int storage_spiflash_erase(void *node, uint32_t offset, size_t size)
 {
 	size_t esize=0;
-	DevSpiFlashNode *flashnode = dev;
+	DevSpiFlashNode *flashnode = node;
 	
 	while(1) {
 		if(esize >= size) break;
 		
 		dev_spiflash_erase(flashnode, offset+esize);
-		esize +=flashnode->dev.pra->sectorsize; 
+		esize +=flashnode->pra->sectorsize; 
 	}
 	return 0;
 }
 
 
-int storage_spiflash_getblksize(void *dev)
+int storage_spiflash_getblksize(void *node)
 {
 	int blksize;
 
-	DevSpiFlashNode *flashnode = dev;
+	DevSpiFlashNode *flashnode = node;
 
-	blksize = flashnode->dev.pra->sectorsize;
-	SPIFLASH_DEBUG(LOG_DEBUG, "%s, sectorsize:0x%xByte\r\n",flashnode->dev.pra->name, blksize);
+	blksize = flashnode->pra->sectorsize;
+	SPIFLASH_DEBUG(LOG_DEBUG, "%s, sectorsize:0x%xByte\r\n",flashnode->pra->name, blksize);
 	
 	return blksize;	
 
 }
 
 
-int storage_spiflash_getsize(void *dev)
+int storage_spiflash_getsize(void *node)
 {
 	int structure_size;
 
-	DevSpiFlashNode *flashnode = dev;
-
-	SPIFLASH_DEBUG(LOG_DEBUG, "get size %s\r\n",flashnode->dev.pnode.name);
-	SPIFLASH_DEBUG(LOG_DEBUG, "get size %s\r\n",flashnode->dev.pra->name);
+	DevSpiFlashNode *flashnode;
 	
-	structure_size = flashnode->dev.pra->structure;
+
+	flashnode = node;
+
+	PetiteDev *pdev;
+	pdev = flashnode->pnode.pdev;
+	SPIFLASH_DEBUG(LOG_DEBUG, "get size %s\r\n",pdev->name);
+	
+	SPIFLASH_DEBUG(LOG_DEBUG, "get size %s\r\n",flashnode->pra->name);
+	
+	structure_size = flashnode->pra->structure;
 	SPIFLASH_DEBUG(LOG_DEBUG, "structure size:0x%xByte\r\n", structure_size);
 	return structure_size;	
 
@@ -728,8 +758,9 @@ const StorageDev StorageExSpiFlash ={
 	
 	.getblksize = storage_spiflash_getblksize,
 	.getsize = storage_spiflash_getsize,
-	
-	.open = dev_spiflash_open,	
+
+	.getnode = dev_spiflash_getnode,
+	.open = dev_spiflash_opennode,	
 	.read = storage_spiflash_read,
 	.write = storage_spiflash_write,
 	.erase = storage_spiflash_erase,

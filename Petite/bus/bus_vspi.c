@@ -91,15 +91,6 @@ u32 VspiDelay = 0;
  */
 s32 bus_vspi_open(DevSpiNode *node, SPI_MODE mode, u16 KHz)
 {
-
-	if (node == NULL) return -1;
-	
-	if (node->gd != -1) {
-		//VSPI_DEBUG(LOG_DEBUG, "vspi dev busy\r\n");
-		return -1;
-	}
-	
-	node->gd = 0;
 		
     return 0;
 }
@@ -112,10 +103,7 @@ s32 bus_vspi_open(DevSpiNode *node, SPI_MODE mode, u16 KHz)
  */
 s32 bus_vspi_close(DevSpiNode *node)
 {
-	if (node->gd != 0) return -1;
-	//VSPI_DEBUG(LOG_DEBUG, "vc-");
-	node->gd = -1;
-	
+
     return 0;
 }
 /**
@@ -140,23 +128,20 @@ s32 bus_vspi_transfer(DevSpiNode *node, u8 *snd, u8 *rsv, s32 len)
 	volatile u16 delay;
 	
 	DevSpi *dev;
+	PDevNode *pnode;
+
+	pnode = (PDevNode *)node;
+	dev = (DevSpi *)pnode->pdev;
 	
 	if (node == NULL) {
 		VSPI_DEBUG(LOG_DEBUG, "vspi dev err\r\n");
 		return -1;
 	}
 
-	if (node->gd != 0) {
-		VSPI_DEBUG(LOG_DEBUG, "vspi dev no open\r\n");
-		return -1;
-	}
-	
     if ( ((snd == NULL) && (rsv == NULL)) || (len < 0) ) {
         return -1;
     }
-
-	dev = &(node->dev);
-
+	
 	slen = 0;
 
 	while(1) {

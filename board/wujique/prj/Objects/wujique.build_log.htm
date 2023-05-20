@@ -1,0 +1,976 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Tool Versions:</h2>
+IDE-Version: ¦ÌVision V5.34.0.0
+Copyright (C) 2021 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: xuejia huang, wujique, LIC=BUURY-IZDHD-GK2BG-VM25I-YHSEV-8L81P
+ 
+Tool Versions:
+Toolchain:       MDK-ARM Plus  Version: 5.34.0.0
+Toolchain Path:  C:\Keil_v5\ARM\ARMCC\Bin
+C Compiler:      Armcc.exe V5.06 update 7 (build 960)
+Assembler:       Armasm.exe V5.06 update 7 (build 960)
+Linker/Locator:  ArmLink.exe V5.06 update 7 (build 960)
+Library Manager: ArmAr.exe V5.06 update 7 (build 960)
+Hex Converter:   FromElf.exe V5.06 update 7 (build 960)
+CPU DLL:         SARMCM3.DLL V5.34.0.0
+Dialog DLL:      DCM.DLL V1.17.3.0
+Target DLL:      CMSIS_AGDI.dll V1.32.13.0
+Dialog DLL:      TCM.DLL V1.48.0.0
+ 
+<h2>Project:</h2>
+F:\PetiteDrv\prog\PetiteDrv\board\wujique\prj\wujique.uvprojx
+Project File Date:  05/14/2023
+
+<h2>Output:</h2>
+*** Using Compiler 'V5.06 update 7 (build 960)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
+Build target 'wujique'
+compiling mcu_spi.c...
+..\..\..\mcu\stm32407\mcu_dev\mcu_spi.c(94): warning:  #223-D: function "strcmp" declared implicitly
+      if(strcmp(dev->pnode.name, "SPI3") == 0)
+..\..\..\mcu\stm32407\mcu_dev\mcu_spi.c(94): error:  #136: struct "<unnamed>"  has no field "pnode"
+      if(strcmp(dev->pnode.name, "SPI3") == 0)
+..\..\..\mcu\stm32407\mcu_dev\mcu_spi.c(100): warning:  #223-D: function "math_log2" declared implicitly
+  	pinsource = math_log2(dev->clkpin);
+..\..\..\mcu\stm32407\mcu_dev\mcu_spi.c(65): warning:  #177-D: variable "SPI_InitStruct"  was declared but never referenced
+      SPI_InitTypeDef SPI_InitStruct;
+..\..\..\mcu\stm32407\mcu_dev\mcu_spi.c(126): error:  #136: struct "<unnamed>"  has no field "gd"
+  	if (node->gd != -1) {
+..\..\..\mcu\stm32407\mcu_dev\mcu_spi.c(133): warning:  #223-D: function "strcmp" declared implicitly
+  	if (strcmp(node->dev.pnode.name, "SPI3") == 0) {
+..\..\..\mcu\stm32407\mcu_dev\mcu_spi.c(133): error:  #136: struct "<unnamed>"  has no field "dev"
+  	if (strcmp(node->dev.pnode.name, "SPI3") == 0) {
+..\..\..\mcu\stm32407\mcu_dev\mcu_spi.c(156): error:  #136: struct "<unnamed>"  has no field "gd"
+  	node->gd = 0;
+..\..\..\mcu\stm32407\mcu_dev\mcu_spi.c(171): error:  #136: struct "<unnamed>"  has no field "gd"
+  	if (node->gd != 0)
+..\..\..\mcu\stm32407\mcu_dev\mcu_spi.c(174): warning:  #223-D: function "strcmp" declared implicitly
+  	if (strcmp(node->dev.pnode.name, "SPI3") == 0) {
+..\..\..\mcu\stm32407\mcu_dev\mcu_spi.c(174): error:  #136: struct "<unnamed>"  has no field "dev"
+  	if (strcmp(node->dev.pnode.name, "SPI3") == 0) {
+..\..\..\mcu\stm32407\mcu_dev\mcu_spi.c(179): error:  #136: struct "<unnamed>"  has no field "gd"
+  	node->gd = -1;
+..\..\..\mcu\stm32407\mcu_dev\mcu_spi.c(202): error:  #136: struct "<unnamed>"  has no field "gd"
+  	if (node->gd != 0) {
+..\..\..\mcu\stm32407\mcu_dev\mcu_spi.c(211): warning:  #223-D: function "strcmp" declared implicitly
+      if (strcmp(node->dev.pnode.name, "SPI3") == 0) {
+..\..\..\mcu\stm32407\mcu_dev\mcu_spi.c(211): error:  #136: struct "<unnamed>"  has no field "dev"
+      if (strcmp(node->dev.pnode.name, "SPI3") == 0) {
+..\..\..\mcu\stm32407\mcu_dev\mcu_spi.c: 6 warnings, 9 errors
+compiling drv_spiflash.c...
+..\..\..\Petite\partition.h(66): warning:  #1295-D: Deprecated declaration petite_partition_init - give arg types
+  extern int petite_partition_init();
+..\..\..\driver\drv_spiflash.c(347): warning:  #223-D: function "petite_dev_get_node" declared implicitly
+  	pnode = petite_dev_get_node(name);
+..\..\..\driver\drv_spiflash.c(347): error:  #513: a value of type "int" cannot be assigned to an entity of type "PDevNode *"
+  	pnode = petite_dev_get_node(name);
+..\..\..\driver\drv_spiflash.c(348): error:  #513: a value of type "PDevNode *" cannot be assigned to an entity of type "DevSpiFlashNode *"
+  	node = pnode;
+..\..\..\driver\drv_spiflash.c(381): error:  #154: expression must have struct or union type
+  	bus_spich_close(node.spichnode); 
+..\..\..\driver\drv_spiflash.c(394): error:  #513: a value of type "const DevSpiFlash *" cannot be assigned to an entity of type "PetiteDev *"
+  	pdev = dev;
+..\..\..\driver\drv_spiflash.c(410): error:  #154: expression must have struct or union type
+  	flashnode.spichnode = bus_spich_open(pdev->basebus, SPI_MODE_3, 10000, 0xffffffff); //?????€spi
+..\..\..\driver\drv_spiflash.c(412): error:  #154: expression must have struct or union type
+  	if (flashnode.spichnode != NULL) {
+..\..\..\driver\drv_spiflash.c(413): error:  #20: identifier "node" is undefined
+  		JID = dev_spiflash_readJTD(node);
+..\..\..\driver\drv_spiflash.c(420): error:  #513: a value of type "const NorFlashPra *" cannot be assigned to an entity of type "NorFlashPra *"
+  		flashnode->pra = &(SpiFlashPraList[0]);
+..\..\..\driver\drv_spiflash.c(421): error:  #20: identifier "_strSpiFlash" is undefined
+  		for (index = 1; index<(sizeof(SpiFlashPraList)/sizeof(_strSpiFlash));index++) {
+..\..\..\driver\drv_spiflash.c(423): error:  #513: a value of type "const NorFlashPra *" cannot be assigned to an entity of type "NorFlashPra *"
+  				flashnode->pra = &(SpiFlashPraList[index]);
+..\..\..\driver\drv_spiflash.c(429): error:  #154: expression must have struct or union type
+  		bus_spich_close(flashnode.spichnode);
+..\..\..\driver\drv_spiflash.c(397): warning:  #177-D: variable "MID"  was declared but never referenced
+  	u32 MID = 0;
+..\..\..\driver\drv_spiflash.c(585): warning:  #177-D: variable "i"  was declared but never referenced
+      u8 i = 1;
+..\..\..\driver\drv_spiflash.c(587): warning:  #177-D: variable "wbuf"  was declared but never referenced
+      u8 *wbuf;
+..\..\..\driver\drv_spiflash.c(687): warning:  #550-D: variable "pdev"  was set but never used
+  	PetiteDev *pdev;
+..\..\..\driver\drv_spiflash.c(707): warning:  #144-D: a value of type "void *(*)(char *)" cannot be used to initialize an entity of type "void *(*)(const char *)"
+  	.open = dev_spiflash_open,	
+..\..\..\driver\drv_spiflash.c(711): warning:  #144-D: a value of type "s32 (*)(DevSpiFlashNode *)" cannot be used to initialize an entity of type "int (*)(void *)"
+  	.close = dev_spiflash_close,
+..\..\..\driver\drv_spiflash.c(278): warning:  #177-D: function "dev_spiflash_readMTD"  was declared but never referenced
+  static u32 dev_spiflash_readMTD(DevSpiFlashNode *node)
+..\..\..\driver\drv_spiflash.c: 9 warnings, 11 errors
+compiling drv_nt35510.c...
+..\..\..\Petite\partition.h(66): warning:  #1295-D: Deprecated declaration petite_partition_init - give arg types
+  extern int petite_partition_init();
+..\..\..\driver\lcd\drv_nt35510.c(578): warning:  #223-D: function "bus_lcd_w_data" declared implicitly
+  	bus_lcd_w_data(node, color, cnt);
+..\..\..\driver\lcd\drv_nt35510.c(560): warning:  #177-D: variable "i"  was declared but never referenced
+  	u16 i,j;
+..\..\..\driver\lcd\drv_nt35510.c(560): warning:  #177-D: variable "j"  was declared but never referenced
+  	u16 i,j;
+..\..\..\driver\lcd\drv_nt35510.c(600): warning:  #177-D: variable "i"  was declared but never referenced
+  	u32 i,j;
+..\..\..\driver\lcd\drv_nt35510.c(600): warning:  #177-D: variable "j"  was declared but never referenced
+  	u32 i,j;
+..\..\..\driver\lcd\drv_nt35510.c: 6 warnings, 0 errors
+compiling mcu_i2c.c...
+compiling drv_rf24l01.c...
+..\..\..\driver\drv_rf24l01.c(133): warning:  #223-D: function "mcu_io_config_out" declared implicitly
+  	mcu_io_config_out(RF24L01_CE_PORT, RF24L01_CE_PIN);
+..\..\..\driver\drv_rf24l01.c(136): warning:  #223-D: function "mcu_io_config_in" declared implicitly
+  	mcu_io_config_in(RF24L01_IRQ_PORT, RF24L01_IRQ_PIN);
+..\..\..\driver\drv_rf24l01.c(138): warning:  #223-D: function "mcu_io_output_resetbit" declared implicitly
+  	mcu_io_output_resetbit(RF24L01_CE_PORT, RF24L01_CE_PIN);
+..\..\..\driver\drv_rf24l01.c(130): warning:  #177-D: variable "GPIO_InitStructure"  was declared but never referenced
+  	GPIO_InitTypeDef  GPIO_InitStructure;
+..\..\..\driver\drv_rf24l01.c(153): warning:  #223-D: function "mcu_io_output_setbit" declared implicitly
+  		mcu_io_output_setbit(RF24L01_CE_PORT, RF24L01_CE_PIN);	
+..\..\..\driver\drv_rf24l01.c(157): warning:  #223-D: function "mcu_io_output_resetbit" declared implicitly
+  		mcu_io_output_resetbit(RF24L01_CE_PORT, RF24L01_CE_PIN);	
+..\..\..\driver\drv_rf24l01.c(172): warning:  #223-D: function "mcu_io_input_readbit" declared implicitly
+  	sta = mcu_io_input_readbit(RF24L01_IRQ_PORT, RF24L01_IRQ_PIN);	
+..\..\..\driver\drv_rf24l01.c(182): warning:  #550-D: variable "cmd"  was set but never used
+  	u8 cmd[2];
+..\..\..\driver\drv_rf24l01.c(183): warning:  #177-D: variable "res"  was declared but never referenced
+  	s32 res;
+..\..\..\driver\drv_rf24l01.c(215): warning:  #177-D: variable "tmp"  was declared but never referenced
+  	u8 tmp = reg;
+..\..\..\driver\drv_rf24l01.c(232): warning:  #550-D: variable "tmp"  was set but never used
+  	u8 tmp;
+..\..\..\driver\drv_rf24l01.c(413): warning:  #223-D: function "memcmp" declared implicitly
+  	if(0 == memcmp(buf,buf1, sizeof(buf)))  
+..\..\..\driver\drv_rf24l01.c(483): warning:  #177-D: variable "buf"  was declared but never referenced
+  	u8 buf[32];
+..\..\..\driver\drv_rf24l01.c: 13 warnings, 0 errors
+compiling drv_tea5767.c...
+compiling mcu_uart.c...
+..\..\..\Petite\partition.h(66): warning:  #1295-D: Deprecated declaration petite_partition_init - give arg types
+  extern int petite_partition_init();
+..\..\..\mcu\stm32407\mcu_dev\mcu_uart.c(142): warning:  #940-D: missing return statement at end of non-void function "mcu_uart_open" 
+  }
+..\..\..\mcu\stm32407\mcu_dev\mcu_uart.c: 2 warnings, 0 errors
+compiling drv_r61408.c...
+..\..\..\Petite\partition.h(66): warning:  #1295-D: Deprecated declaration petite_partition_init - give arg types
+  extern int petite_partition_init();
+..\..\..\driver\lcd\drv_r61408.c(532): warning:  #223-D: function "bus_lcd_w_data" declared implicitly
+  	bus_lcd_w_data(node, color, cnt);
+..\..\..\driver\lcd\drv_r61408.c(514): warning:  #177-D: variable "i"  was declared but never referenced
+  	u16 i,j;
+..\..\..\driver\lcd\drv_r61408.c(514): warning:  #177-D: variable "j"  was declared but never referenced
+  	u16 i,j;
+..\..\..\driver\lcd\drv_r61408.c(554): warning:  #177-D: variable "i"  was declared but never referenced
+  	u32 i,j;
+..\..\..\driver\lcd\drv_r61408.c(554): warning:  #177-D: variable "j"  was declared but never referenced
+  	u32 i,j;
+..\..\..\driver\lcd\drv_r61408.c: 6 warnings, 0 errors
+compiling drv_IL3820.c...
+..\..\..\Petite\partition.h(66): warning:  #1295-D: Deprecated declaration petite_partition_init - give arg types
+  extern int petite_partition_init();
+..\..\..\driver\lcd\drv_IL3820.c(188): error:  #20: identifier "DevLcdBus" is undefined
+  	DevLcdBus const*bus = lcd->dev.bus;
+..\..\..\driver\lcd\drv_IL3820.c(188): error:  #65: expected a ";"
+  	DevLcdBus const*bus = lcd->dev.bus;
+..\..\..\driver\lcd\drv_IL3820.c(203): error:  #136: struct "_strDevLcdNode"  has no field "dev"
+  	gramsize = lcd->dev.height * IL3820_PAGE_SIZE;
+..\..\..\driver\lcd\drv_IL3820.c(203): error:  #136: struct "_strDevLcdNode"  has no field "dev"
+  	gramsize = lcd->dev.height * IL3820_PAGE_SIZE;
+..\..\..\driver\lcd\drv_IL3820.c(221): warning:  #223-D: function "mcu_io_input_readbit" declared implicitly
+  		busy = mcu_io_input_readbit(bus->staport, bus->stapin);
+..\..\..\driver\lcd\drv_IL3820.c(221): error:  #20: identifier "bus" is undefined
+  		busy = mcu_io_input_readbit(bus->staport, bus->stapin);
+..\..\..\driver\lcd\drv_IL3820.c(192): warning:  #177-D: variable "i"  was declared but never referenced
+  	u16 i,j;
+..\..\..\driver\lcd\drv_IL3820.c(192): warning:  #177-D: variable "j"  was declared but never referenced
+  	u16 i,j;
+..\..\..\driver\lcd\drv_IL3820.c(194): warning:  #177-D: variable "w"  was declared but never referenced
+  	u16 w,l;
+..\..\..\driver\lcd\drv_IL3820.c(194): warning:  #177-D: variable "l"  was declared but never referenced
+  	u16 w,l;
+..\..\..\driver\lcd\drv_IL3820.c(261): warning:  #177-D: variable "tmp"  was declared but never referenced
+  	u8 tmp[16];
+..\..\..\driver\lcd\drv_IL3820.c(282): error:  #20: identifier "DevLcdBus" is undefined
+  	DevLcdBus const*bus = lcd->dev.bus;
+..\..\..\driver\lcd\drv_IL3820.c(282): error:  #65: expected a ";"
+  	DevLcdBus const*bus = lcd->dev.bus;
+..\..\..\driver\lcd\drv_IL3820.c(291): warning:  #223-D: function "mcu_io_config_in" declared implicitly
+  	mcu_io_config_in(bus->staport, bus->stapin);
+..\..\..\driver\lcd\drv_IL3820.c(291): error:  #20: identifier "bus" is undefined
+  	mcu_io_config_in(bus->staport, bus->stapin);
+..\..\..\driver\lcd\drv_IL3820.c(362): warning:  #223-D: function "mcu_io_input_readbit" declared implicitly
+  		busy = mcu_io_input_readbit(bus->staport, bus->stapin);
+..\..\..\driver\lcd\drv_IL3820.c(375): warning:  #223-D: function "memset" declared implicitly
+  	memset((char*)lcd->pri, 0x00, sizeof(struct _epaper3820_drv_data));
+..\..\..\driver\lcd\drv_IL3820.c(383): error:  #136: struct "_strDevLcdNode"  has no field "dev"
+  	gramsize = lcd->dev.height * IL3820_PAGE_SIZE;
+..\..\..\driver\lcd\drv_IL3820.c(383): error:  #136: struct "_strDevLcdNode"  has no field "dev"
+  	gramsize = lcd->dev.height * IL3820_PAGE_SIZE;
+..\..\..\driver\lcd\drv_IL3820.c(280): warning:  #177-D: variable "data"  was declared but never referenced
+  	u16 data;
+..\..\..\driver\lcd\drv_IL3820.c(285): warning:  #177-D: variable "testbuf"  was declared but never referenced
+  	u8 testbuf[2];
+..\..\..\driver\lcd\drv_IL3820.c(491): error:  #136: struct "_strDevLcdNode"  has no field "dev"
+  				xtmp = lcd->dev.width- 1 - j;
+..\..\..\driver\lcd\drv_IL3820.c(496): error:  #136: struct "_strDevLcdNode"  has no field "dev"
+  			page =  lcd->dev.height - 1 - ytmp; //????????€
+..\..\..\driver\lcd\drv_IL3820.c(501): error:  #136: struct "_strDevLcdNode"  has no field "dev"
+  				drvdata->bgram[page*IL3820_PAGE_SIZE + colum] |= (0x80>>(xtmp%8));
+..\..\..\driver\lcd\drv_IL3820.c(504): error:  #136: struct "_strDevLcdNode"  has no field "dev"
+  				drvdata->bgram[page*IL3820_PAGE_SIZE + colum] &= ~(0x80>>(xtmp%8));
+..\..\..\driver\lcd\drv_IL3820.c(434): warning:  #177-D: variable "sp"  was declared but never referenced
+  	u16 sp, ep, sc, ec;
+..\..\..\driver\lcd\drv_IL3820.c(434): warning:  #177-D: variable "ep"  was declared but never referenced
+  	u16 sp, ep, sc, ec;
+..\..\..\driver\lcd\drv_IL3820.c(434): warning:  #177-D: variable "sc"  was declared but never referenced
+  	u16 sp, ep, sc, ec;
+..\..\..\driver\lcd\drv_IL3820.c(434): warning:  #177-D: variable "ec"  was declared but never referenced
+  	u16 sp, ep, sc, ec;
+..\..\..\driver\lcd\drv_IL3820.c(599): error:  #136: struct "_strDevLcdNode"  has no field "dev"
+  				xtmp = lcd->dev.width - j;
+..\..\..\driver\lcd\drv_IL3820.c(604): error:  #136: struct "_strDevLcdNode"  has no field "dev"
+  			page =  lcd->dev.height - ytmp; //????????€
+..\..\..\driver\lcd\drv_IL3820.c(610): error:  #136: struct "_strDevLcdNode"  has no field "dev"
+  				drvdata->bgram[page*IL3820_PAGE_SIZE + colum] |= (0x80>>(xtmp%8));
+..\..\..\driver\lcd\drv_IL3820.c(613): error:  #136: struct "_strDevLcdNode"  has no field "dev"
+  				drvdata->bgram[page*IL3820_PAGE_SIZE + colum] &= ~(0x80>>(xtmp%8));
+..\..\..\driver\lcd\drv_IL3820.c(534): warning:  #550-D: variable "ylen"  was set but never used
+  	u16 xlen,ylen;
+..\..\..\driver\lcd\drv_IL3820.c(538): warning:  #177-D: variable "sp"  was declared but never referenced
+  	u16 sp, ep, sc, ec;
+..\..\..\driver\lcd\drv_IL3820.c(538): warning:  #177-D: variable "ep"  was declared but never referenced
+  	u16 sp, ep, sc, ec;
+..\..\..\driver\lcd\drv_IL3820.c(538): warning:  #177-D: variable "sc"  was declared but never referenced
+  	u16 sp, ep, sc, ec;
+..\..\..\driver\lcd\drv_IL3820.c(538): warning:  #177-D: variable "ec"  was declared but never referenced
+  	u16 sp, ep, sc, ec;
+..\..\..\driver\lcd\drv_IL3820.c: 21 warnings, 18 errors
+compiling drv_IL91874.c...
+..\..\..\Petite\partition.h(66): warning:  #1295-D: Deprecated declaration petite_partition_init - give arg types
+  extern int petite_partition_init();
+..\..\..\driver\lcd\drv_IL91874.c(203): error:  #20: identifier "DevLcdBus" is undefined
+  	const DevLcdBus *bus = lcd->dev.bus;
+..\..\..\driver\lcd\drv_IL91874.c(203): error:  #136: struct "_strDevLcdNode"  has no field "dev"
+  	const DevLcdBus *bus = lcd->dev.bus;
+..\..\..\driver\lcd\drv_IL91874.c(305): error:  #136: struct "_strDevLcdNode"  has no field "dev"
+  	gramsize = lcd->dev.height * IL91874_PAGE_SIZE;
+..\..\..\driver\lcd\drv_IL91874.c(305): error:  #136: struct "_strDevLcdNode"  has no field "dev"
+  	gramsize = lcd->dev.height * IL91874_PAGE_SIZE;
+..\..\..\driver\lcd\drv_IL91874.c(328): warning:  #223-D: function "mcu_io_input_readbit" declared implicitly
+  		busy = mcu_io_input_readbit(bus->staport, bus->stapin);
+..\..\..\driver\lcd\drv_IL91874.c(207): warning:  #177-D: variable "i"  was declared but never referenced
+  	u16 i,j;
+..\..\..\driver\lcd\drv_IL91874.c(207): warning:  #177-D: variable "j"  was declared but never referenced
+  	u16 i,j;
+..\..\..\driver\lcd\drv_IL91874.c(208): warning:  #177-D: variable "data"  was declared but never referenced
+  	u8 data;
+..\..\..\driver\lcd\drv_IL91874.c(209): warning:  #177-D: variable "w"  was declared but never referenced
+  	u16 w,l;
+..\..\..\driver\lcd\drv_IL91874.c(209): warning:  #177-D: variable "l"  was declared but never referenced
+  	u16 w,l;
+..\..\..\driver\lcd\drv_IL91874.c(362): error:  #20: identifier "DevLcdBus" is undefined
+  	const DevLcdBus *bus = lcd->dev.bus;
+..\..\..\driver\lcd\drv_IL91874.c(362): error:  #136: struct "_strDevLcdNode"  has no field "dev"
+  	const DevLcdBus *bus = lcd->dev.bus;
+..\..\..\driver\lcd\drv_IL91874.c(369): warning:  #223-D: function "mcu_io_config_in" declared implicitly
+  	mcu_io_config_in(bus->staport, bus->stapin);
+..\..\..\driver\lcd\drv_IL91874.c(393): warning:  #223-D: function "mcu_io_input_readbit" declared implicitly
+  		busy = mcu_io_input_readbit(bus->staport, bus->stapin);
+..\..\..\driver\lcd\drv_IL91874.c(433): warning:  #223-D: function "memset" declared implicitly
+  	memset((char*)lcd->pri, 0x00, sizeof(struct _epaper_drv_data));
+..\..\..\driver\lcd\drv_IL91874.c(441): error:  #136: struct "_strDevLcdNode"  has no field "dev"
+  	gramsize = lcd->dev.height * IL91874_PAGE_SIZE;
+..\..\..\driver\lcd\drv_IL91874.c(441): error:  #136: struct "_strDevLcdNode"  has no field "dev"
+  	gramsize = lcd->dev.height * IL91874_PAGE_SIZE;
+..\..\..\driver\lcd\drv_IL91874.c(360): warning:  #177-D: variable "data"  was declared but never referenced
+  	u16 data;
+..\..\..\driver\lcd\drv_IL91874.c(365): warning:  #177-D: variable "testbuf"  was declared but never referenced
+  	u8 testbuf[2];
+..\..\..\driver\lcd\drv_IL91874.c(569): error:  #136: struct "_strDevLcdNode"  has no field "dev"
+  				drvdata->rgram[page*IL91874_PAGE_SIZE + colum] |= (0x80>>(xtmp%8));
+..\..\..\driver\lcd\drv_IL91874.c(570): error:  #136: struct "_strDevLcdNode"  has no field "dev"
+  				drvdata->bgram[page*IL91874_PAGE_SIZE + colum] &= ~(0x80>>(xtmp%8));
+..\..\..\driver\lcd\drv_IL91874.c(575): error:  #136: struct "_strDevLcdNode"  has no field "dev"
+  				drvdata->bgram[page*IL91874_PAGE_SIZE + colum] |= (0x80>>(xtmp%8));
+..\..\..\driver\lcd\drv_IL91874.c(576): error:  #136: struct "_strDevLcdNode"  has no field "dev"
+  				drvdata->rgram[page*IL91874_PAGE_SIZE + colum] &= ~(0x80>>(xtmp%8));
+..\..\..\driver\lcd\drv_IL91874.c(581): error:  #136: struct "_strDevLcdNode"  has no field "dev"
+  				drvdata->bgram[page*IL91874_PAGE_SIZE + colum] &= ~(0x80>>(xtmp%8));
+..\..\..\driver\lcd\drv_IL91874.c(582): error:  #136: struct "_strDevLcdNode"  has no field "dev"
+  				drvdata->rgram[page*IL91874_PAGE_SIZE + colum] &= ~(0x80>>(xtmp%8));
+..\..\..\driver\lcd\drv_IL91874.c(494): warning:  #550-D: variable "sp"  was set but never used
+  	u16 sp, ep, sc, ec;
+..\..\..\driver\lcd\drv_IL91874.c(494): warning:  #550-D: variable "ep"  was set but never used
+  	u16 sp, ep, sc, ec;
+..\..\..\driver\lcd\drv_IL91874.c(494): warning:  #550-D: variable "sc"  was set but never used
+  	u16 sp, ep, sc, ec;
+..\..\..\driver\lcd\drv_IL91874.c(494): warning:  #550-D: variable "ec"  was set but never used
+  	u16 sp, ep, sc, ec;
+..\..\..\driver\lcd\drv_IL91874.c(695): error:  #136: struct "_strDevLcdNode"  has no field "dev"
+  				drvdata->rgram[page*IL91874_PAGE_SIZE + colum] |= (0x80>>(xtmp%8));
+..\..\..\driver\lcd\drv_IL91874.c(696): error:  #136: struct "_strDevLcdNode"  has no field "dev"
+  				drvdata->bgram[page*IL91874_PAGE_SIZE + colum] &= ~(0x80>>(xtmp%8));
+..\..\..\driver\lcd\drv_IL91874.c(701): error:  #136: struct "_strDevLcdNode"  has no field "dev"
+  				drvdata->bgram[page*IL91874_PAGE_SIZE + colum] |= (0x80>>(xtmp%8));
+..\..\..\driver\lcd\drv_IL91874.c(702): error:  #136: struct "_strDevLcdNode"  has no field "dev"
+  				drvdata->rgram[page*IL91874_PAGE_SIZE + colum] &= ~(0x80>>(xtmp%8));
+..\..\..\driver\lcd\drv_IL91874.c(707): error:  #136: struct "_strDevLcdNode"  has no field "dev"
+  				drvdata->bgram[page*IL91874_PAGE_SIZE + colum] &= ~(0x80>>(xtmp%8));
+..\..\..\driver\lcd\drv_IL91874.c(708): error:  #136: struct "_strDevLcdNode"  has no field "dev"
+  				drvdata->rgram[page*IL91874_PAGE_SIZE + colum] &= ~(0x80>>(xtmp%8));
+..\..\..\driver\lcd\drv_IL91874.c(613): warning:  #550-D: variable "ylen"  was set but never used
+  	u16 xlen,ylen;
+..\..\..\driver\lcd\drv_IL91874.c(617): warning:  #550-D: variable "sp"  was set but never used
+  	u16 sp, ep, sc, ec;
+..\..\..\driver\lcd\drv_IL91874.c(617): warning:  #550-D: variable "ep"  was set but never used
+  	u16 sp, ep, sc, ec;
+..\..\..\driver\lcd\drv_IL91874.c(617): warning:  #550-D: variable "sc"  was set but never used
+  	u16 sp, ep, sc, ec;
+..\..\..\driver\lcd\drv_IL91874.c(617): warning:  #550-D: variable "ec"  was set but never used
+  	u16 sp, ep, sc, ec;
+..\..\..\driver\lcd\drv_IL91874.c: 21 warnings, 20 errors
+compiling drv_ILI9325.c...
+..\..\..\Petite\partition.h(66): warning:  #1295-D: Deprecated declaration petite_partition_init - give arg types
+  extern int petite_partition_init();
+..\..\..\driver\lcd\drv_ILI9325.c(683): warning:  #223-D: function "bus_lcd_w_data" declared implicitly
+  	bus_lcd_w_data(node, color, cnt);
+..\..\..\driver\lcd\drv_ILI9325.c(665): warning:  #177-D: variable "i"  was declared but never referenced
+  	u16 i,j;
+..\..\..\driver\lcd\drv_ILI9325.c(665): warning:  #177-D: variable "j"  was declared but never referenced
+  	u16 i,j;
+..\..\..\driver\lcd\drv_ILI9325.c(707): warning:  #177-D: variable "i"  was declared but never referenced
+  	u16 i,j;
+..\..\..\driver\lcd\drv_ILI9325.c(707): warning:  #177-D: variable "j"  was declared but never referenced
+  	u16 i,j;
+..\..\..\driver\lcd\drv_ILI9325.c: 6 warnings, 0 errors
+compiling drv_lcd.c...
+..\..\..\Petite\partition.h(66): warning:  #1295-D: Deprecated declaration petite_partition_init - give arg types
+  extern int petite_partition_init();
+..\..\..\driver\lcd\drv_lcd.c(145): error:  #147: declaration is incompatible with "s32 lcd_dev_register(const DevLcd *)"  (declared at line 156 of "..\..\..\driver\lcd\drv_lcd.h")
+  PDevNode * lcd_dev_register(const DevLcd *dev)
+..\..\..\driver\lcd\drv_lcd.c(158): warning:  #223-D: function "bus_lcd_IO_init" declared implicitly
+  	bus_lcd_IO_init(dev->ctrlio);
+..\..\..\driver\lcd\drv_lcd.c(147): warning:  #177-D: variable "listp"  was declared but never referenced
+  	struct list_head *listp;
+..\..\..\driver\lcd\drv_lcd.c(228): warning:  #223-D: function "petite_dev_get_node" declared implicitly
+  	node = (DevLcdNode *)petite_dev_get_node(name);	
+..\..\..\driver\lcd\drv_lcd.c: 4 warnings, 1 error
+compiling drv_ILI9341.c...
+..\..\..\Petite\partition.h(66): warning:  #1295-D: Deprecated declaration petite_partition_init - give arg types
+  extern int petite_partition_init();
+..\..\..\driver\lcd\drv_ILI9341.c(525): warning:  #223-D: function "bus_lcd_w_data" declared implicitly
+  	bus_lcd_w_data(node, color, cnt);
+..\..\..\driver\lcd\drv_ILI9341.c(507): warning:  #177-D: variable "i"  was declared but never referenced
+  	u16 i,j;
+..\..\..\driver\lcd\drv_ILI9341.c(507): warning:  #177-D: variable "j"  was declared but never referenced
+  	u16 i,j;
+..\..\..\driver\lcd\drv_ILI9341.c(548): warning:  #177-D: variable "i"  was declared but never referenced
+  	u32 i,j;
+..\..\..\driver\lcd\drv_ILI9341.c(548): warning:  #177-D: variable "j"  was declared but never referenced
+  	u32 i,j;
+..\..\..\driver\lcd\drv_ILI9341.c: 6 warnings, 0 errors
+compiling drv_st7735r.c...
+..\..\..\Petite\partition.h(66): warning:  #1295-D: Deprecated declaration petite_partition_init - give arg types
+  extern int petite_partition_init();
+..\..\..\driver\lcd\drv_st7735r.c(83): warning:  #177-D: variable "regval"  was declared but never referenced
+  	u16 regval=0;
+..\..\..\driver\lcd\drv_st7735r.c(211): warning:  #177-D: variable "data"  was declared but never referenced
+  	u16 data;
+..\..\..\driver\lcd\drv_st7735r.c: 3 warnings, 0 errors
+compiling drv_st7789.c...
+..\..\..\Petite\partition.h(66): warning:  #1295-D: Deprecated declaration petite_partition_init - give arg types
+  extern int petite_partition_init();
+..\..\..\driver\lcd\drv_st7789.c(84): warning:  #177-D: variable "regval"  was declared but never referenced
+  	u16 regval=0;
+..\..\..\driver\lcd\drv_st7789.c(212): warning:  #177-D: variable "data"  was declared but never referenced
+  	u16 data;
+..\..\..\driver\lcd\drv_st7789.c: 3 warnings, 0 errors
+compiling drv_str7565.c...
+..\..\..\Petite\partition.h(66): warning:  #1295-D: Deprecated declaration petite_partition_init - give arg types
+  extern int petite_partition_init();
+..\..\..\driver\lcd\drv_str7565.c(217): warning:  #223-D: function "memset" declared implicitly
+  	memset((char*)lcd->pri, 0x00, sizeof(struct _cog_drv_data));
+..\..\..\driver\lcd\drv_str7565.c(255): warning:  #177-D: variable "node"  was declared but never referenced
+  	DevLcdNode * node = lcd;
+..\..\..\driver\lcd\drv_str7565.c(367): warning:  #550-D: variable "ylen"  was set but never used
+  	u16 xlen,ylen;
+..\..\..\driver\lcd\drv_str7565.c(447): warning:  #177-D: variable "i"  was declared but never referenced
+  	u16 i,j;
+..\..\..\driver\lcd\drv_str7565.c(447): warning:  #177-D: variable "j"  was declared but never referenced
+  	u16 i,j;
+..\..\..\driver\lcd\drv_str7565.c(531): error:  #136: struct "_strDevLcdNode"  has no field "dev"
+  	drv_ST7565_refresh_gram(lcd, 0, lcd->dev.height-1, 0, lcd->dev.width-1);
+..\..\..\driver\lcd\drv_str7565.c(531): error:  #136: struct "_strDevLcdNode"  has no field "dev"
+  	drv_ST7565_refresh_gram(lcd, 0, lcd->dev.height-1, 0, lcd->dev.width-1);
+..\..\..\driver\lcd\drv_str7565.c(601): warning:  #223-D: function "memset" declared implicitly
+  	memset((char*)lcd->pri, 0x00, sizeof(struct _cog_drv_data));
+..\..\..\driver\lcd\drv_str7565.c: 7 warnings, 2 errors
+compiling bus_lcd.c...
+..\..\..\Petite\partition.h(66): warning:  #1295-D: Deprecated declaration petite_partition_init - give arg types
+  extern int petite_partition_init();
+..\..\..\driver\lcd\bus_lcd.c(46): warning:  #223-D: function "mcu_io_config_out" declared implicitly
+  		mcu_io_config_out(CtrlIO->A0port, CtrlIO->A0pin);
+..\..\..\driver\lcd\bus_lcd.c(47): warning:  #223-D: function "mcu_io_output_setbit" declared implicitly
+  		mcu_io_output_setbit(CtrlIO->A0port, CtrlIO->A0pin);
+..\..\..\driver\lcd\bus_lcd.c(51): warning:  #223-D: function "mcu_io_config_out" declared implicitly
+  		mcu_io_config_out(CtrlIO->rstport, CtrlIO->rstpin);
+..\..\..\driver\lcd\bus_lcd.c(52): warning:  #223-D: function "mcu_io_output_setbit" declared implicitly
+  		mcu_io_output_setbit(CtrlIO->rstport, CtrlIO->rstpin);
+..\..\..\driver\lcd\bus_lcd.c(56): warning:  #223-D: function "mcu_io_config_out" declared implicitly
+  		mcu_io_config_out(CtrlIO->blport, CtrlIO->blpin);
+..\..\..\driver\lcd\bus_lcd.c(57): warning:  #223-D: function "mcu_io_output_setbit" declared implicitly
+  		mcu_io_output_setbit(CtrlIO->blport, CtrlIO->blpin);
+..\..\..\driver\lcd\bus_lcd.c(72): error:  #44: expression must have pointer type
+  	dev = lcd->pnode->pdev;
+..\..\..\driver\lcd\bus_lcd.c(76): warning:  #223-D: function "mcu_io_output_setbit" declared implicitly
+  		mcu_io_output_setbit(CtrlIO->blport, CtrlIO->blpin);
+..\..\..\driver\lcd\bus_lcd.c(78): warning:  #223-D: function "mcu_io_output_resetbit" declared implicitly
+  		mcu_io_output_resetbit(CtrlIO->blport, CtrlIO->blpin);	
+..\..\..\driver\lcd\bus_lcd.c(94): error:  #44: expression must have pointer type
+  	dev = lcd->pnode->pdev;
+..\..\..\driver\lcd\bus_lcd.c(98): warning:  #223-D: function "mcu_io_output_setbit" declared implicitly
+  		mcu_io_output_setbit(CtrlIO->rstport, CtrlIO->rstpin);
+..\..\..\driver\lcd\bus_lcd.c(100): warning:  #223-D: function "mcu_io_output_resetbit" declared implicitly
+  		mcu_io_output_resetbit(CtrlIO->rstport, CtrlIO->rstpin);	
+..\..\..\driver\lcd\bus_lcd.c(229): warning:  #223-D: function "memcpy" declared implicitly
+  			memcpy(&tmp[1], data, len);
+..\..\..\driver\lcd\bus_lcd.c(361): warning:  #223-D: function "mcu_io_output_resetbit" declared implicitly
+  			mcu_io_output_resetbit(dev->ctrlio->A0port, dev->ctrlio->A0pin);
+..\..\..\driver\lcd\bus_lcd.c(364): warning:  #223-D: function "mcu_io_output_setbit" declared implicitly
+  			mcu_io_output_setbit(dev->ctrlio->A0port, dev->ctrlio->A0pin);
+..\..\..\driver\lcd\bus_lcd.c: 14 warnings, 2 errors
+compiling camera_api.c...
+..\..\..\Petite\petite_dev.h(40): error:  #70: incomplete type is not allowed
+  	struct list_head list;
+..\..\..\Petite\partition.h(66): warning:  #1295-D: Deprecated declaration petite_partition_init - give arg types
+  extern int petite_partition_init();
+..\..\..\driver\camera\camera_api.c(102): warning:  #223-D: function "OV2640_Init" declared implicitly
+  		res = OV2640_Init();
+..\..\..\driver\camera\camera_api.c(109): warning:  #223-D: function "OV5640_Init" declared implicitly
+  		res = OV5640_Init();
+..\..\..\driver\camera\camera_api.c(131): warning:  #940-D: missing return statement at end of non-void function "camera_prob" 
+  }
+..\..\..\driver\camera\camera_api.c(170): warning:  #223-D: function "OV5640_Flash_Lamp" declared implicitly
+  		OV5640_Flash_Lamp(sw);
+..\..\..\driver\camera\camera_api.c: 5 warnings, 1 error
+compiling drv_ov2640.c...
+..\..\..\driver\camera\drv_ov2640.c(90): warning:  #177-D: variable "res"  was declared but never referenced
+  	uint8_t res;
+..\..\..\driver\camera\drv_ov2640.c: 1 warning, 0 errors
+compiling ov5640.c...
+..\..\..\driver\camera\ov5640.c(90): warning:  #223-D: function "Delay" declared implicitly
+      HAL_Delay(30); 
+..\..\..\driver\camera\ov5640.c(389): warning:  #223-D: function "Delay" declared implicitly
+  		HAL_Delay(20);
+..\..\..\driver\camera\ov5640.c(425): warning:  #223-D: function "Delay" declared implicitly
+  		HAL_Delay(5);
+..\..\..\driver\camera\ov5640.c(447): warning:  #223-D: function "Delay" declared implicitly
+  		HAL_Delay(5);
+..\..\..\driver\camera\ov5640.c(461): warning:  #223-D: function "Delay" declared implicitly
+  		HAL_Delay(5);
+..\..\..\driver\camera\ov5640.c(479): warning:  #223-D: function "Delay" declared implicitly
+  	HAL_Delay(20);
+..\..\..\driver\camera\ov5640.c: 6 warnings, 0 errors
+compiling wm8978.c...
+compiling audio_pipeline.c...
+..\..\..\Petite\partition.h(66): warning:  #1295-D: Deprecated declaration petite_partition_init - give arg types
+  extern int petite_partition_init();
+..\..\..\driver\sound\audio_pipeline.c(91): warning:  #223-D: function "strcmp" declared implicitly
+  	if(0 == strcmp(anode->pipname, "wm8978")) {
+..\..\..\driver\sound\audio_pipeline.c(95): warning:  #223-D: function "dev_wm8978_inout" declared implicitly
+  		dev_wm8978_inout(WM8978_INPUT_DAC|WM8978_INPUT_AUX|WM8978_INPUT_ADC,
+..\..\..\driver\sound\audio_pipeline.c(98): warning:  #223-D: function "dev_wm8978_set_dataformat" declared implicitly
+  		dev_wm8978_set_dataformat(AUDIO_I2S_Phillips, anode->BitsPerSample);
+..\..\..\driver\sound\audio_pipeline.c(100): warning:  #223-D: function "mcu_i2s_dataformat" declared implicitly
+  		mcu_i2s_dataformat(anode->nSamplesPerSec, AUDIO_I2S_Phillips, anode->BitsPerSample);
+..\..\..\driver\sound\audio_pipeline.c(101): warning:  #223-D: function "mcu_i2s_dma_init" declared implicitly
+  		mcu_i2s_dma_init(anode->buf, anode->buflen);
+..\..\..\driver\sound\audio_pipeline.c(102): warning:  #223-D: function "mcu_i2s_dma_start" declared implicitly
+  		mcu_i2s_dma_start();//??????I2S??????	
+..\..\..\driver\sound\audio_pipeline.c(107): warning:  #223-D: function "dev_wm8960_open" declared implicitly
+  		dev_wm8960_open();
+..\..\..\driver\sound\audio_pipeline.c(109): warning:  #223-D: function "dev_wm8960_inout" declared implicitly
+  		dev_wm8960_inout(WM8978_INPUT_DAC|WM8978_INPUT_AUX|WM8978_INPUT_ADC,
+..\..\..\driver\sound\audio_pipeline.c(112): warning:  #223-D: function "dev_wm8960_set_dataformat" declared implicitly
+  		dev_wm8960_set_dataformat(AUDIO_I2S_Phillips, anode->BitsPerSample);
+..\..\..\driver\sound\audio_pipeline.c(115): warning:  #223-D: function "mcu_i2s_dataformat" declared implicitly
+  		mcu_i2s_dataformat(anode->nSamplesPerSec, AUDIO_I2S_Phillips, anode->BitsPerSample);
+..\..\..\driver\sound\audio_pipeline.c(116): warning:  #223-D: function "mcu_i2s_dma_init" declared implicitly
+  		mcu_i2s_dma_init(anode->buf, anode->buflen);
+..\..\..\driver\sound\audio_pipeline.c(118): warning:  #223-D: function "mcu_i2s_dma_start" declared implicitly
+  		mcu_i2s_dma_start();//??????I2S??????	
+..\..\..\driver\sound\audio_pipeline.c(130): warning:  #940-D: missing return statement at end of non-void function "audio_pipe_run" 
+  }
+..\..\..\driver\sound\audio_pipeline.c(135): warning:  #223-D: function "strcmp" declared implicitly
+  	if(0 == strcmp(anode->pipname, "wm8978")) {
+..\..\..\driver\sound\audio_pipeline.c(136): warning:  #223-D: function "mcu_i2s_dma_stop" declared implicitly
+  		mcu_i2s_dma_stop(); 
+..\..\..\driver\sound\audio_pipeline.c(142): warning:  #940-D: missing return statement at end of non-void function "audio_pipe_close" 
+  }
+..\..\..\driver\sound\audio_pipeline.c: 17 warnings, 0 errors
+compiling wm8960.c...
+..\..\..\driver\sound\wm8960.c(119): warning:  #940-D: missing return statement at end of non-void function "dev_wm8960_set_dataformat" 
+  }
+..\..\..\driver\sound\wm8960.c(402): warning:  #940-D: missing return statement at end of non-void function "dev_wm8960_inout" 
+  }
+..\..\..\driver\sound\wm8960.c: 2 warnings, 0 errors
+compiling xpt2046.c...
+..\..\..\driver\touch\rtp\xpt2046.c(227): warning:  #223-D: function "rtp_fill_buff" declared implicitly
+  		rtp_fill_buff(&tss,1);
+..\..\..\driver\touch\rtp\xpt2046.c(238): warning:  #223-D: function "rtp_fill_buff" declared implicitly
+  			rtp_fill_buff(&tss,1);
+..\..\..\driver\touch\rtp\xpt2046.c: 2 warnings, 0 errors
+compiling ts_calibrate.c...
+..\..\..\Petite\petite_dev.h(40): error:  #70: incomplete type is not allowed
+  	struct list_head list;
+..\..\..\Petite\partition.h(66): warning:  #1295-D: Deprecated declaration petite_partition_init - give arg types
+  extern int petite_partition_init();
+..\..\..\driver\touch\rtp\tslib\tests\ts_calibrate.c(50): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+          n += 1.0;
+..\..\..\driver\touch\rtp\tslib\tests\ts_calibrate.c(59): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+      if (det < 0.1 && det > -0.1) {
+..\..\..\driver\touch\rtp\tslib\tests\ts_calibrate.c(134): warning:  #223-D: function "ts_set_cal" declared implicitly
+  	ts_set_cal(&cal);
+..\..\..\driver\touch\rtp\tslib\tests\ts_calibrate.c: 4 warnings, 1 error
+compiling touch.c...
+..\..\..\Petite\partition.h(66): warning:  #1295-D: Deprecated declaration petite_partition_init - give arg types
+  extern int petite_partition_init();
+..\..\..\driver\touch\touch.c(212): warning:  #550-D: variable "ts"  was set but never used
+  	struct tsdev *ts;
+..\..\..\driver\touch\touch.c: 2 warnings, 0 errors
+compiling petite.c...
+..\..\..\Petite\partition.h(66): warning:  #1295-D: Deprecated declaration petite_partition_init - give arg types
+  extern int petite_partition_init();
+..\..\..\Petite\petite.c(59): warning:  #223-D: function "fun_cmd_init" declared implicitly
+  	fun_cmd_init();
+..\..\..\Petite\petite.c(65): warning:  #223-D: function "memset" declared implicitly
+  	memset(TaskListBuf, 0, sizeof(TaskListBuf));
+..\..\..\Petite\petite.c(70): warning:  #223-D: function "board_low_task" declared implicitly
+  		board_low_task(5);
+..\..\..\Petite\petite.c(50): warning:  #177-D: variable "stackHWM"  was declared but never referenced
+  	UBaseType_t stackHWM;
+..\..\..\Petite\petite.c: 5 warnings, 0 errors
+compiling vfs.c...
+..\..\..\Petite\partition.h(66): warning:  #1295-D: Deprecated declaration petite_partition_init - give arg types
+  extern int petite_partition_init();
+..\..\..\Petite\vfs.c(446): warning:  #167-D: argument of type "const u8 *" is incompatible with parameter of type "const char *"
+  	while(index < strlen(lpPath)){
+..\..\..\Petite\vfs.c(452): warning:  #167-D: argument of type "const u8 *" is incompatible with parameter of type "const char *"
+  	while(index < strlen(lpPath)){
+..\..\..\Petite\vfs.c(461): warning:  #167-D: argument of type "const u8 *" is incompatible with parameter of type "const char *"
+  	name_len = 	strlen(lpPath) - name_index;
+..\..\..\Petite\vfs.c(437): warning:  #177-D: variable "str_len"  was declared but never referenced
+      u8 str_len, dir_len, name_len;
+..\..\..\Petite\vfs.c(438): warning:  #177-D: variable "flag"  was declared but never referenced
+      u8 flag = 0;
+..\..\..\Petite\vfs.c(536): warning:  #167-D: argument of type "const char *" is incompatible with parameter of type "const u8 *"
+  	vfs_get_dir_name(pathname, &dir[0], &name[0]);
+..\..\..\Petite\vfs.c(540): warning:  #167-D: argument of type "u8 *" is incompatible with parameter of type "const char *"
+  	part = petite_partition_get(dir);
+..\..\..\Petite\vfs.c(555): warning:  #167-D: argument of type "u8 *" is incompatible with parameter of type "const char *"
+  		ret = vfs_node->open(filenode, name, oflags);
+..\..\..\Petite\vfs.c(609): warning:  #111-D: statement is unreachable
+  	return -2;
+..\..\..\Petite\vfs.c(654): warning:  #111-D: statement is unreachable
+  	return -2;
+..\..\..\Petite\vfs.c(716): warning:  #111-D: statement is unreachable
+  	return -2;
+..\..\..\Petite\vfs.c(671): warning:  #177-D: variable "len"  was declared but never referenced
+  	unsigned int len;
+..\..\..\Petite\vfs.c(744): warning:  #550-D: variable "res"  was set but never used
+  		FRESULT res;
+..\..\..\Petite\vfs.c(727): warning:  #177-D: variable "len"  was declared but never referenced
+  	unsigned int len;
+..\..\..\Petite\vfs.c(793): warning:  #111-D: statement is unreachable
+  	return NULL;
+..\..\..\Petite\vfs.c(767): warning:  #177-D: variable "len"  was declared but never referenced
+  	unsigned int len;
+..\..\..\Petite\vfs.c(831): warning:  #940-D: missing return statement at end of non-void function "vfs_file_copy" 
+  }
+..\..\..\Petite\vfs.c: 18 warnings, 0 errors
+compiling bus_i2c.c...
+..\..\..\Petite\mem/p_list.h(9): warning:  #47-D: incompatible redefinition of macro "offsetof"  (declared at line 91 of "C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h")
+  #define offsetof(type,  member)    ((size_t) &((type *)0)-> member)
+..\..\..\Petite\bus\bus_i2c.c(66): warning:  #223-D: function "bus_vi2c_init" declared implicitly
+  		bus_vi2c_init(dev);
+..\..\..\Petite\bus\bus_i2c.c(70): error:  #120: return value type does not match the function type
+  	return pnode;
+..\..\..\Petite\bus\bus_i2c.c(49): warning:  #177-D: variable "listp"  was declared but never referenced
+  	struct list_head *listp;
+..\..\..\Petite\bus\bus_i2c.c(89): warning:  #223-D: function "petite_dev_get_node" declared implicitly
+  	node = petite_dev_get_node(name);
+..\..\..\Petite\bus\bus_i2c.c(89): error:  #513: a value of type "int" cannot be assigned to an entity of type "DevI2cNode *"
+  	node = petite_dev_get_node(name);
+..\..\..\Petite\bus\bus_i2c.c: 4 warnings, 2 errors
+compiling bus_spi.c...
+..\..\..\Petite\partition.h(66): warning:  #1295-D: Deprecated declaration petite_partition_init - give arg types
+  extern int petite_partition_init();
+..\..\..\Petite\mem/p_list.h(9): warning:  #47-D: incompatible redefinition of macro "offsetof"  (declared at line 91 of "C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h")
+  #define offsetof(type,  member)    ((size_t) &((type *)0)-> member)
+..\..\..\Petite\bus\bus_spi.c(63): warning:  #223-D: function "mcu_hspi_init" declared implicitly
+  		mcu_hspi_init(dev);
+..\..\..\Petite\bus\bus_spi.c(70): error:  #136: struct "<unnamed>"  has no field "gd"
+  	pnode->gd = -1;
+..\..\..\Petite\bus\bus_spi.c(72): error:  #120: return value type does not match the function type
+  	return pnode;
+..\..\..\Petite\bus\bus_spi.c(50): warning:  #177-D: variable "listp"  was declared but never referenced
+  	struct list_head *listp;
+..\..\..\Petite\bus\bus_spi.c(94): warning:  #223-D: function "mcu_io_config_out" declared implicitly
+  	mcu_io_config_out(dev->csport,dev->cspin);
+..\..\..\Petite\bus\bus_spi.c(95): warning:  #223-D: function "mcu_io_output_setbit" declared implicitly
+  	mcu_io_output_setbit(dev->csport,dev->cspin);
+..\..\..\Petite\bus\bus_spi.c(97): error:  #120: return value type does not match the function type
+  	return pnode;
+..\..\..\Petite\bus\bus_spi.c(84): warning:  #177-D: variable "listp"  was declared but never referenced
+  	struct list_head *listp;
+..\..\..\Petite\bus\bus_spi.c(127): warning:  #223-D: function "petite_dev_get_node" declared implicitly
+  	pnode = petite_dev_get_node(name);
+..\..\..\Petite\bus\bus_spi.c(127): error:  #513: a value of type "int" cannot be assigned to an entity of type "PDevNode *"
+  	pnode = petite_dev_get_node(name);
+..\..\..\Petite\bus\bus_spi.c(128): error:  #513: a value of type "PDevNode *" cannot be assigned to an entity of type "DevSpiChNode *"
+  	chnode = pnode;
+..\..\..\Petite\bus\bus_spi.c(129): error:  #513: a value of type "PetiteDev *" cannot be assigned to an entity of type "DevSpiCh *"
+  	devspich = pnode->pdev;
+..\..\..\Petite\bus\bus_spi.c(132): error:  #65: expected a ";"
+  	spinode = pbasenode;
+..\..\..\Petite\bus\bus_spi.c(149): warning:  #223-D: function "mcu_hspi_open" declared implicitly
+  					res = mcu_hspi_open(spinode, mode, KHz);	
+..\..\..\Petite\bus\bus_spi.c(157): warning:  #223-D: function "mcu_io_output_resetbit" declared implicitly
+  					mcu_io_output_resetbit(devspich->csport, devspich->cspin);
+..\..\..\Petite\bus\bus_spi.c(190): error:  #513: a value of type "DevSpiChNode *" cannot be assigned to an entity of type "PDevNode *"
+  	pnode = chnode;
+..\..\..\Petite\bus\bus_spi.c(193): error:  #513: a value of type "PDevNode *" cannot be assigned to an entity of type "DevSpiNode *"
+  	spinode = pbasenode;
+..\..\..\Petite\bus\bus_spi.c(199): warning:  #223-D: function "mcu_hspi_close" declared implicitly
+  		mcu_hspi_close(spinode);
+..\..\..\Petite\bus\bus_spi.c(204): warning:  #223-D: function "mcu_io_output_setbit" declared implicitly
+  	mcu_io_output_setbit(devspich->csport, devspich->cspin);
+..\..\..\Petite\bus\bus_spi.c(233): error:  #513: a value of type "DevSpiChNode *" cannot be assigned to an entity of type "PDevNode *"
+  	pnode = chnode;
+..\..\..\Petite\bus\bus_spi.c(236): error:  #513: a value of type "PDevNode *" cannot be assigned to an entity of type "DevSpiNode *"
+  	spinode = pbasenode;
+..\..\..\Petite\bus\bus_spi.c(241): warning:  #223-D: function "mcu_hspi_transfer" declared implicitly
+  		return mcu_hspi_transfer(spinode, snd, rsv, len);
+..\..\..\Petite\bus\bus_spi.c(230): warning:  #177-D: variable "devspich"  was declared but never referenced
+  	DevSpiCh *devspich;
+..\..\..\Petite\bus\bus_spi.c(261): error:  #44: expression must have pointer type
+  	devspich = node->pnode->pdev;
+..\..\..\Petite\bus\bus_spi.c(266): warning:  #223-D: function "mcu_io_output_setbit" declared implicitly
+  			mcu_io_output_setbit(devspich->csport, devspich->cspin);
+..\..\..\Petite\bus\bus_spi.c(270): warning:  #223-D: function "mcu_io_output_resetbit" declared implicitly
+  			mcu_io_output_resetbit(devspich->csport, devspich->cspin);
+..\..\..\Petite\bus\bus_spi.c(311): warning:  #111-D: statement is unreachable
+  	bus_spich_close(spichnode);
+..\..\..\Petite\bus\bus_spi.c: 17 warnings, 12 errors
+compiling bus_vi2c.c...
+..\..\..\Petite\bus\bus_vi2c.c(58): warning:  #223-D: function "mcu_vi2c_io_config_in" declared implicitly
+  	mcu_vi2c_io_config_in(dev->sdaport, dev->sdapin);
+..\..\..\Petite\bus\bus_vi2c.c(69): warning:  #223-D: function "mcu_vi2c_io_config_out" declared implicitly
+  	mcu_vi2c_io_config_out(dev->sdaport, dev->sdapin);
+..\..\..\Petite\bus\bus_vi2c.c(81): warning:  #188-D: enumerated type mixed with another type
+      if (MCU_IO_STA_1 == mcu_io_input_readbit(dev->sdaport, dev->sdapin))
+..\..\..\Petite\bus\bus_vi2c.c(97): warning:  #188-D: enumerated type mixed with another type
+  		mcu_io_output_setbit(dev->sdaport, dev->sdapin);
+..\..\..\Petite\bus\bus_vi2c.c(99): warning:  #188-D: enumerated type mixed with another type
+      	mcu_io_output_resetbit(dev->sdaport, dev->sdapin);
+..\..\..\Petite\bus\bus_vi2c.c(115): warning:  #188-D: enumerated type mixed with another type
+  		mcu_io_output_setbit(dev->sclport, dev->sclpin);
+..\..\..\Petite\bus\bus_vi2c.c(117): warning:  #188-D: enumerated type mixed with another type
+      	mcu_io_output_resetbit(dev->sclport, dev->sclpin);
+..\..\..\Petite\bus\bus_vi2c.c(294): warning:  #188-D: enumerated type mixed with another type
+  	mcu_io_config_out(dev->sclport, dev->sclpin);
+..\..\..\Petite\bus\bus_vi2c.c(296): warning:  #223-D: function "mcu_vi2c_io_config_out" declared implicitly
+  	mcu_vi2c_io_config_out(dev->sdaport, dev->sdapin);
+..\..\..\Petite\bus\bus_vi2c.c(298): warning:  #188-D: enumerated type mixed with another type
+  	mcu_io_output_setbit(dev->sdaport, dev->sdapin);
+..\..\..\Petite\bus\bus_vi2c.c(299): warning:  #188-D: enumerated type mixed with another type
+  	mcu_io_output_setbit(dev->sclport, dev->sclpin); 
+..\..\..\Petite\bus\bus_vi2c.c(306): warning:  #940-D: missing return statement at end of non-void function "bus_vi2c_open" 
+  }
+..\..\..\Petite\bus\bus_vi2c.c(311): warning:  #940-D: missing return statement at end of non-void function "bus_vi2c_close" 
+  }
+..\..\..\Petite\bus\bus_vi2c.c(334): error:  #136: struct "<unnamed>"  has no field "dev"
+  	dev = &node->dev;
+..\..\..\Petite\bus\bus_vi2c.c: 13 warnings, 1 error
+compiling bus_uart.c...
+..\..\..\Petite\partition.h(66): warning:  #1295-D: Deprecated declaration petite_partition_init - give arg types
+  extern int petite_partition_init();
+..\..\..\Petite\bus\bus_uart.c(34): warning:  #223-D: function "memset" declared implicitly
+  	memset(BusUartGd, 0, sizeof(BusUartGd));
+..\..\..\Petite\bus\bus_uart.c(50): warning:  #223-D: function "strcmp" declared implicitly
+  	if(strcmp(name, "uart1") == 0) {
+..\..\..\Petite\bus\bus_uart.c(80): warning:  #223-D: function "mcu_uart_open" declared implicitly
+  	res = mcu_uart_open(comport, node, Pra);
+..\..\..\Petite\bus\bus_uart.c(114): warning:  #940-D: missing return statement at end of non-void function "bus_uart_tcflush" 
+  }
+..\..\..\Petite\bus\bus_uart.c(151): warning:  #223-D: function "mcu_uart_write" declared implicitly
+  	return mcu_uart_send(node->comport, buf, len);
+..\..\..\Petite\bus\bus_uart.c(171): warning:  #550-D: variable "res"  was set but never used
+      s32 res;
+..\..\..\Petite\bus\bus_uart.c: 7 warnings, 0 errors
+compiling bus_vspi.c...
+..\..\..\Petite\bus\bus_vspi.c(50): warning:  #223-D: function "mcu_io_config_out" declared implicitly
+  	mcu_io_config_out(dev->clkport, dev->clkpin);
+..\..\..\Petite\bus\bus_vspi.c(51): warning:  #223-D: function "mcu_io_output_setbit" declared implicitly
+  	mcu_io_output_setbit(dev->clkport,dev->clkpin);
+..\..\..\Petite\bus\bus_vspi.c(57): warning:  #223-D: function "mcu_io_config_in" declared implicitly
+  	mcu_io_config_in(dev->misoport, dev->misopin);
+..\..\..\Petite\bus\bus_vspi.c(133): error:  #513: a value of type "DevSpiNode *" cannot be assigned to an entity of type "PDevNode"
+  	pnode = node;
+..\..\..\Petite\bus\bus_vspi.c(134): error:  #44: expression must have pointer type
+  	dev = pnode->pdev;
+..\..\..\Petite\bus\bus_vspi.c(156): warning:  #223-D: function "mcu_io_output_resetbit" declared implicitly
+  			mcu_io_output_resetbit(dev->clkport, dev->clkpin);
+..\..\..\Petite\bus\bus_vspi.c(164): warning:  #223-D: function "mcu_io_output_setbit" declared implicitly
+  				mcu_io_output_setbit(dev->mosiport, dev->mosipin);
+..\..\..\Petite\bus\bus_vspi.c(174): warning:  #223-D: function "mcu_io_output_setbit" declared implicitly
+  			mcu_io_output_setbit(dev->clkport, dev->clkpin);
+..\..\..\Petite\bus\bus_vspi.c(181): warning:  #223-D: function "mcu_io_input_readbit" declared implicitly
+  			misosta = mcu_io_input_readbit(dev->misoport, dev->misopin);
+..\..\..\Petite\bus\bus_vspi.c: 7 warnings, 2 errors
+compiling soundplay.c...
+..\..\..\Petite\partition.h(66): warning:  #1295-D: Deprecated declaration petite_partition_init - give arg types
+  extern int petite_partition_init();
+..\..\..\panel\soundplay.c(147): warning:  #223-D: function "strcpy" declared implicitly
+  	strcpy(pipenode.pipname, dev);
+..\..\..\panel\soundplay.c(150): warning:  #223-D: function "audio_pipe_open" declared implicitly
+  	res = audio_pipe_open(&pipenode);
+..\..\..\panel\soundplay.c(163): warning:  #223-D: function "audio_pipe_run" declared implicitly
+  	audio_pipe_run(&pipenode);
+..\..\..\panel\soundplay.c(246): warning:  #223-D: function "audio_pipe_close" declared implicitly
+  		audio_pipe_close(&pipenode);
+..\..\..\panel\soundplay.c: 5 warnings, 0 errors
+compiling board_sysconf.c...
+..\..\..\Petite\partition.h(66): warning:  #1295-D: Deprecated declaration petite_partition_init - give arg types
+  extern int petite_partition_init();
+..\board_sysconf.c(29): error:  #136: struct "<unnamed>"  has no field "pnode"
+  		.pnode={
+..\board_sysconf.c(44): error:  #136: struct "<unnamed>"  has no field "pnode"
+  		.pnode={
+..\board_sysconf.c(63): error:  #136: struct "<unnamed>"  has no field "pnode"
+  		.pnode={
+..\board_sysconf.c(128): error:  #136: struct "<unnamed>"  has no field "pnode"
+  		.pnode={
+..\board_sysconf.c(148): error:  #136: struct "<unnamed>"  has no field "pnode"
+  		.pnode={
+..\board_sysconf.c(160): error:  #136: struct "<unnamed>"  has no field "pnode"
+  		.pnode={
+..\board_sysconf.c(173): error:  #136: struct "<unnamed>"  has no field "pnode"
+  		.pnode={
+..\board_sysconf.c(226): error:  #136: struct "<unnamed>"  has no field "pnode"
+  		.pnode={
+..\board_sysconf.c(271): error:  #20: identifier "DevLcdBus" is undefined
+  const DevLcdBus BusLcdSpi3={
+..\board_sysconf.c(274): error:  #20: identifier "BUS_LCD_SPI" is undefined
+  				.type = BUS_LCD_SPI,
+..\board_sysconf.c(312): error:  #20: identifier "DevLcdBus" is undefined
+  const DevLcdBus BusLcdI2C1={
+..\board_sysconf.c(315): error:  #20: identifier "BUS_LCD_I2C" is undefined
+  				.type = BUS_LCD_I2C,
+..\board_sysconf.c(334): error:  #20: identifier "DevLcdBus" is undefined
+  const DevLcdBus BusLcd8080={
+..\board_sysconf.c(337): error:  #20: identifier "BUS_LCD_8080" is undefined
+  				.type = BUS_LCD_8080,
+..\board_sysconf.c(400): error:  #136: struct "<unnamed>"  has no field "pnode"
+  	.pnode={
+..\board_sysconf.c(412): error:  #136: struct "<unnamed>"  has no field "pnode"
+  	.pnode={
+..\board_sysconf.c(434): error:  #136: struct "<unnamed>"  has no field "pnode"
+  	.pnode={
+..\board_sysconf.c(457): error:  #136: struct "<unnamed>"  has no field "pnode"
+  	.pnode={
+..\board_sysconf.c(473): error:  #136: struct "<unnamed>"  has no field "pnode"
+  	.pnode={
+..\board_sysconf.c(493): error:  #136: struct "<unnamed>"  has no field "pnode"
+  	.pnode={
+..\board_sysconf.c(523): error:  #136: struct "<unnamed>"  has no field "pnode"
+  	.pnode={
+..\board_sysconf.c(550): error:  #136: struct "<unnamed>"  has no field "pnode"
+  	.pnode={
+..\board_sysconf.c: 1 warning, 22 errors
+compiling display.c...
+..\..\..\Petite\partition.h(66): warning:  #1295-D: Deprecated declaration petite_partition_init - give arg types
+  extern int petite_partition_init();
+..\..\..\panel\display.c(57): warning:  #223-D: function "abs" declared implicitly
+  	if (abs (dx) < abs (dy)) {
+..\..\..\panel\display.c(174): warning:  #223-D: function "strlen" declared implicitly
+  	int sl = strlen (s);
+..\..\..\panel\display.c(231): warning:  #223-D: function "strlen" declared implicitly
+  	slen = strlen(s);
+..\..\..\panel\display.c(236): warning:  #223-D: function "utf8_2_gbk" declared implicitly
+  	utf8_2_gbk(s, chbuf, slen);
+..\..\..\panel\display.c(245): warning:  #513-D: a value of type "u8 *" cannot be assigned to an entity of type "char *"
+  	bitmap.dot = dotbuf;
+..\..\..\panel\display.c(330): warning:  #223-D: function "strlen" declared implicitly
+  	slen = strlen(s);
+..\..\..\panel\display.c(334): warning:  #223-D: function "utf8_2_gbk" declared implicitly
+  	utf8_2_gbk(s, chbuf, slen);
+..\..\..\panel\display.c(351): warning:  #513-D: a value of type "u8 *" cannot be assigned to an entity of type "char *"
+  	bitmap.dot = dotbuf;
+..\..\..\panel\display.c(414): warning:  #223-D: function "memcpy" declared implicitly
+  			memcpy(framebuff+row*col, framebuff+ row*xlen, 2*col);
+..\..\..\panel\display.c(463): warning:  #550-D: variable "res"  was set but never used
+  	s32 res;
+..\..\..\panel\display.c(543): warning:  #550-D: variable "rlen"  was set but never used
+  	int rlen;
+..\..\..\panel\display.c(808): warning:  #167-D: argument of type "s8 *" is incompatible with parameter of type "char *"
+  	res = bmp_parse_open(pbmpparse, BmpFileName);
+..\..\..\panel\display.c(829): warning:  #223-D: function "lcd_flush" declared implicitly
+  			lcd_flush(lcd, pdata + k* pbmpparse->bi.biWidth, xlen);
+..\..\..\panel\display.c: 14 warnings, 0 errors
+compiling board.c...
+..\..\..\Petite\petite_dev.h(40): error:  #70: incomplete type is not allowed
+  	struct list_head list;
+..\..\..\Petite\partition.h(66): warning:  #1295-D: Deprecated declaration petite_partition_init - give arg types
+  extern int petite_partition_init();
+..\board.c(56): warning:  #188-D: enumerated type mixed with another type
+  		NULL,
+..\board.c(119): warning:  #223-D: function "bus_uart_read" declared implicitly
+  	res = bus_uart_read(Esp8266UartNode, buf, len);	
+..\board.c(128): warning:  #223-D: function "bus_uart_write" declared implicitly
+  	res = bus_uart_write(Esp8266UartNode, buf, len);
+..\board.c(154): warning:  #223-D: function "sd_fatfs_init" declared implicitly
+  	sd_fatfs_init();
+..\board.c(156): warning:  #223-D: function "flashdb_demo" declared implicitly
+  	flashdb_demo();
+..\board.c(183): warning:  #167-D: argument of type "void (*)(void)" is incompatible with parameter of type "osThreadFunc_t"
+  	TestTaskHandle = osThreadNew(board_app_task, NULL, &TestTask_attributes);
+..\board.c(205): warning:  #223-D: function "mcu_fsmc_lcd_Init" declared implicitly
+  	mcu_fsmc_lcd_Init();
+..\board.c(206): warning:  #223-D: function "petite_dev_register" declared implicitly
+  	petite_dev_register(PetiteDevTable);
+..\board.c(221): warning:  #223-D: function "dev_key_init" declared implicitly
+  	dev_key_init();
+..\board.c(225): warning:  #223-D: function "tp_init" declared implicitly
+  	tp_init(&RtpXpt2046);
+..\board.c(230): warning:  #223-D: function "dev_touchkey_init" declared implicitly
+  	dev_touchkey_init();
+..\board.c(232): warning:  #223-D: function "mcu_adc_temprate_init" declared implicitly
+  	mcu_adc_temprate_init();
+..\board.c(243): warning:  #223-D: function "bus_dcmi_init" declared implicitly
+  	bus_dcmi_init();
+..\board.c(246): warning:  #223-D: function "camera_init" declared implicitly
+  	camera_init();
+..\board.c(250): warning:  #223-D: function "dev_tea5767_init" declared implicitly
+  	dev_tea5767_init(DEV_TEA5767_I2CBUS);
+..\board.c(253): warning:  #223-D: function "mcu_i2s_init" declared implicitly
+  	mcu_i2s_init();//?????????I2S??????
+..\board.c(254): warning:  #223-D: function "dev_wm8978_init" declared implicitly
+  	dev_wm8978_init();
+..\board.c(281): warning:  #223-D: function "dev_key_scan" declared implicitly
+  	dev_key_scan();
+..\board.c(293): warning:  #223-D: function "fun_sound_task" declared implicitly
+  	fun_sound_task();
+..\board.c(296): warning:  #223-D: function "dev_touchkey_task" declared implicitly
+  	dev_touchkey_task();
+..\board.c(343): warning:  #223-D: function "OV2640_Config" declared implicitly
+  	OV2640_Config(ImageFormat);
+..\board.c(346): warning:  #223-D: function "mcu_dcmi_captruce" declared implicitly
+  	mcu_dcmi_captruce(0, FSMC_LCD_ADDRESS, 4);
+..\board.c(349): warning:  #223-D: function "mcu_dcmi_get_sta" declared implicitly
+  		mcu_dcmi_get_sta(&sta);
+..\board.c(355): warning:  #223-D: function "mcu_dcmi_start" declared implicitly
+  			mcu_dcmi_start();
+..\board.c(358): warning:  #111-D: statement is unreachable
+  	return 0;
+..\board.c: 26 warnings, 1 error
+compiling emenu.c...
+..\..\..\Petite\petite_dev.h(40): error:  #70: incomplete type is not allowed
+  	struct list_head list;
+..\..\..\Petite\partition.h(66): warning:  #1295-D: Deprecated declaration petite_partition_init - give arg types
+  extern int petite_partition_init();
+..\..\..\components\emenu\emenu.c(219): warning:  #223-D: function "strlen" declared implicitly
+  	dislen = strlen(menu_ctrl.fa->cha)*menu_ctrl.fontw;
+..\..\..\components\emenu\emenu.c(249): warning:  #223-D: function "memset" declared implicitly
+  						memset(disbuf,0,sizeof(disbuf));
+..\..\..\components\emenu\emenu.c(252): warning:  #223-D: function "sprintf" declared implicitly
+  							sprintf(disbuf, ">%d.", menu_num);
+..\..\..\components\emenu\emenu.c(254): warning:  #223-D: function "sprintf" declared implicitly
+  							sprintf(disbuf, "%d.", menu_num);	
+..\..\..\components\emenu\emenu.c(256): warning:  #223-D: function "strcat" declared implicitly
+  						strcat(disbuf, p->cha + lang);
+..\..\..\components\emenu\emenu.c(305): warning:  #223-D: function "memset" declared implicitly
+  					memset(disbuf,0,sizeof(disbuf));
+..\..\..\components\emenu\emenu.c(306): warning:  #223-D: function "sprintf" declared implicitly
+  					sprintf(disbuf, "%d.", menu_num);	
+..\..\..\components\emenu\emenu.c(307): warning:  #223-D: function "strcat" declared implicitly
+  					strcat(disbuf, p->cha + lang);
+..\..\..\components\emenu\emenu.c(460): warning:  #546-D: transfer of control bypasses initialization of:
+            variable "i"  (declared at line 472)
+  	switch(key)
+  	^
+..\..\..\components\emenu\emenu.c: 10 warnings, 1 error
+compiling wujique_test.c...
+..\..\..\Petite\partition.h(66): warning:  #1295-D: Deprecated declaration petite_partition_init - give arg types
+  extern int petite_partition_init();
+..\wujique_test.c(257): warning:  #223-D: function "dev_lcd_show_bmp" declared implicitly
+  						dev_lcd_show_bmp(lcd, 1, 1, 240, 240, "/1:/pic/pic128.bmp");
+..\wujique_test.c(302): warning:  #223-D: function "dev_lcd_show_bmp" declared implicitly
+  	dev_lcd_show_bmp(lcd, 1, 1, 320, 240, "/1:/pic/girl_black.bmp");
+..\wujique_test.c(286): warning:  #177-D: variable "step"  was declared but never referenced
+  	u8 step = 0;
+..\wujique_test.c(287): warning:  #177-D: variable "dis"  was declared but never referenced
+  	u8 dis = 1;
+..\wujique_test.c(343): warning:  #223-D: function "dev_buzzer_open" declared implicitly
+  				dev_buzzer_open();	
+..\wujique_test.c(345): warning:  #223-D: function "dev_buzzer_close" declared implicitly
+  				dev_buzzer_close();
+..\wujique_test.c(360): warning:  #223-D: function "dev_wm8978_inout" declared implicitly
+  	dev_wm8978_inout(WM8978_INPUT_DAC|WM8978_INPUT_AUX|WM8978_INPUT_ADC,
+..\wujique_test.c(363): warning:  #223-D: function "dev_tea5767_open" declared implicitly
+  	dev_tea5767_open();
+..\wujique_test.c(364): warning:  #223-D: function "dev_tea5767_setfre" declared implicitly
+  	dev_tea5767_setfre(105700);
+..\wujique_test.c(403): warning:  #223-D: function "fun_sound_get_sta" declared implicitly
+  		if(SOUND_IDLE == fun_sound_get_sta())
+..\wujique_test.c(433): warning:  #223-D: function "tp_open" declared implicitly
+  		tp_open();
+..\wujique_test.c(434): warning:  #223-D: function "ts_calibrate" declared implicitly
+  		ts_calibrate(lcd);
+..\wujique_test.c(435): warning:  #223-D: function "tp_close" declared implicitly
+  		tp_close();
+..\wujique_test.c(459): warning:  #223-D: function "tp_open" declared implicitly
+  		tp_open();	
+..\wujique_test.c(465): warning:  #223-D: function "rtp_get_point" declared implicitly
+  			ret = rtp_get_point(samp, 10);
+..\wujique_test.c(496): warning:  #223-D: function "tp_close" declared implicitly
+  		tp_close();
+..\wujique_test.c(552): warning:  #223-D: function "camera_open" declared implicitly
+  		if (-1 == camera_open()) {
+..\wujique_test.c(557): warning:  #223-D: function "board_camera_show" declared implicitly
+  		board_camera_show(lcd);
+..\wujique_test.c(560): warning:  #223-D: function "camera_close" declared implicitly
+  		camera_close();
+..\wujique_test.c(594): warning:  #223-D: function "memset" declared implicitly
+  			memset(buf, 0, sizeof(buf));
+..\wujique_test.c(645): warning:  #177-D: variable "buf"  was declared but never referenced
+  	u8 buf[12];
+..\wujique_test.c(693): warning:  #223-D: function "dev_spiflash_test_chipcheck" declared implicitly
+  	dev_spiflash_test_chipcheck("board_spiflash");
+..\wujique_test.c(704): warning:  #223-D: function "dev_spiflash_test_chiperase" declared implicitly
+  	dev_spiflash_test_chiperase("core_spiflash");
+..\wujique_test.c: 24 warnings, 0 errors
+compiling emenu_test.c...
+..\..\..\Petite\petite_dev.h(40): error:  #70: incomplete type is not allowed
+  	struct list_head list;
+..\..\..\Petite\partition.h(66): warning:  #1295-D: Deprecated declaration petite_partition_init - give arg types
+  extern int petite_partition_init();
+..\..\..\components\emenu\emenu_test.c: 1 warning, 1 error
+".\Objects\wujique.axf" - 107 Error(s), 318 Warning(s).
+
+<h2>Software Packages used:</h2>
+
+Package Vendor: Keil
+                http://www.keil.com/pack/Keil.STM32F4xx_DFP.2.13.0.pack
+                Keil.STM32F4xx_DFP.2.13.0
+                STMicroelectronics STM32F4 Series Device Support, Drivers and Examples
+
+<h2>Collection of Component include folders:</h2>
+  C:\Users\Administrator\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include
+
+<h2>Collection of Component Files used:</h2>
+Target not created.
+Build Time Elapsed:  00:00:12
+</pre>
+</body>
+</html>

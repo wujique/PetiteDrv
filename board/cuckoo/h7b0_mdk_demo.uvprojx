@@ -768,6 +768,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\Petite\partition.c</FilePath>
             </File>
+            <File>
+              <FileName>petite_dev.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Petite\petite_dev.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

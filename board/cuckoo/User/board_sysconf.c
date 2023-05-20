@@ -19,29 +19,72 @@
 
 
 /* cuckoo 小板， SAI接口和外扩I2C接口的其他信号共用，
-	需要注意，特别是外接OLED等外设*/
+	需要注意，特别是外接OLED等外设 */
 const DevI2c DevVi2c1={
-		.pnode={
-				.name = "VI2C1",
-				.type = BUS_I2C_V,
-				},
-		
-		.sclport = MCU_PORT_C,
-		.sclpin = MCU_IO_4,
+	.pdev={
+			.name = "VI2C1",
+			.type = BUS_I2C_V,
 
-		.sdaport = MCU_PORT_A,
-		.sdapin = MCU_IO_5,
-		};
+			.basebus = NULL,
+			.busconf = NULL,
+			.basetype = DEV_NULL,
+		},
+
+	.sclport = MCU_PORT_C,
+	.sclpin = MCU_IO_4,
+
+	.sdaport = MCU_PORT_A,
+	.sdapin = MCU_IO_5,
+};
+
 /*
-	I2C接口的LCD总线 */
-const DevLcdBus BusLcdI2C1={
-	.pnode={
-				.name = "BusLcdI2C1",
-				.type = BUS_LCD_I2C,
-			},
-			
-	.basebus = "VI2C1",
+	硬件SPI控制器：SPI3
+	SPI驱动暂时支持SPI3，
+	如果添加其他控制器，请修改mcu_spi.c中的硬件SPI控制器初始化代码
+*/
+const DevSpi DevSpi3IO={
+	.pdev={
+		.name = "SPI3",
+		.type = BUS_SPI_H,
 
+		.basebus = NULL,
+		.busconf = NULL,
+		.basetype = DEV_NULL,
+	},
+	
+};
+/*	外扩接口的SPI，可接COG、OLED、SPI TFT、RF24L01*/		
+const DevSpiCh DevSpi3CH3={	
+	.pdev={
+		.name = "SPI3_CH3",
+		.type = BUS_SPI_CH,
+
+		.basebus = "SPI3",
+		.busconf = NULL,
+		.basetype = BUS_SPI_H,
+	},
+	
+	.csport = MCU_PORT_A,
+	.cspin = MCU_IO_15,
+};
+		
+const DevSpiCh DevSpi3CH4={	
+	.pdev={
+		.name = "SPI3_CH4",
+		.type = BUS_SPI_CH,
+
+		.basebus = "SPI3",
+		.busconf = NULL,
+		.basetype = BUS_SPI_H,
+	},	
+	
+	.csport = MCU_PORT_E,
+	.cspin = MCU_IO_14,		
+};
+
+/*-----------------------------------------------------------*/
+/* 	I2C接口的LCD总线 */
+const DevLcdCtrlIO BusLcdI2C1={
 	/*I2C接口的LCD总线，不需要其他IO*/
 	.A0port = MCU_PORT_NULL,
 	.A0pin = NULL,
@@ -52,92 +95,41 @@ const DevLcdBus BusLcdI2C1={
 	.staport = MCU_PORT_NULL, 
 	.stapin = NULL,
 };
-				
-/*I2C接口的 OLED*/
+		
+/* I2C接口的 OLED */
 const I2CPra OledLcdI2cPra ={
 	.addr = 0x3D, /* 0X3C OR 0X3D */
 	.fkhz = 200,/* 时钟频率，单位KHz */
 };
 
-const DevLcd DevLcdOled1={
-	.pnode={
-				.name = "i2coledlcd",
-				.type = DEV_LCD,
-		},
+const DevLcd DevLcdOled1 =	{
+	.pdev = {
+		.name = "i2coledlcd",
+		.type = DEV_LCD,
 		
+		.basebus = "VI2C1",
+		.busconf = (void *)&OledLcdI2cPra,
+		.basetype = BUS_I2C_V,
+	},
+	
+	.ctrlio = &BusLcdI2C1,
+
 	.id = 0X1315, 
 	.width = 64, 
 	.height = 128,
-
-	.bus = &BusLcdI2C1,  
-	.buspra = (void *)&OledLcdI2cPra,
 
 	.i2c_cmd_reg = 0x00,
 	.i2c_data_reg = 0x40,
 };
 
-/*
-	硬件SPI控制器：SPI3
-	SPI驱动暂时支持SPI3，
-	如果添加其他控制器，请修改mcu_spi.c中的硬件SPI控制器初始化代码
-*/
-const DevSpi DevSpi3IO={
-		.pnode={
-				.name = "SPI3",
-				.type = BUS_SPI_H,
-		},
 
-		/* 硬件SPI 直接放到 mcu中初始化 根据name来判断初始化 写死*/		
-		#if 0
-		/*clk*/
-		.clkport = MCU_PORT_B,
-		.clkpin = MCU_IO_3,
-		
-		/*mosi*/
-		.mosiport = MCU_PORT_B,
-		.mosipin = MCU_IO_5,
+/*SPI接口的 COG LCD*/
+const PraSpiSet CogSpiSet = {
+	.mode = SPI_MODE_3,
+	.KHz = 10000,
+};
 
-		/*miso*/
-		.misoport = MCU_PORT_B,
-		.misopin = MCU_IO_4,
-		#endif
-	};
-/*	外扩接口的SPI，可接COG、OLED、SPI TFT、RF24L01*/			
-const DevSpiCh DevSpi3CH3={
-		.pnode={
-				.name = "SPI3_CH3",
-				.type = BUS_SPI_CH,
-			},
-			
-		.spi = "SPI3",
-		
-		.csport = MCU_PORT_A,
-		.cspin = MCU_IO_15,
-		
-	};
-const DevSpiCh DevSpi3CH4={
-		.pnode={
-				.name = "SPI3_CH4",
-				.type = BUS_SPI_CH,
-			},
-			
-		.spi = "SPI3",
-		
-		.csport = MCU_PORT_E,
-		.cspin = MCU_IO_14,
-		
-	};
-
-/*	串行LCD接口，使用真正的SPI控制
-	外扩接口中的SPI接口*/
-const DevLcdBus BusLcdSpi3={
-	.pnode={
-				.name = "BusLcdSpi3",
-				.type = BUS_LCD_SPI,
-			},
-	
-	.basebus = "SPI3_CH3",
-
+const DevLcdCtrlIO BusLcdSpi3={
 	.A0port = MCU_PORT_B,
 	.A0pin = MCU_IO_13,
 
@@ -151,51 +143,50 @@ const DevLcdBus BusLcdSpi3={
 	.stapin = MCU_IO_14,
 };
 
-/*-----------------------------------------------------------*/
-/*SPI接口的 COG LCD*/
-const PraSpiSet CogSpiSet = {
-	.mode = SPI_MODE_3,
-	.KHz = 10000,
-};
-
-const DevLcd DevLcdCOG1	=	{
-
-	.pnode={
-				.name = "spicoglcd",
-				.type = DEV_LCD,
-		},
+const DevLcd DevLcdCOG1 =	{
+	.pdev = {
+		.name = "spicoglcd",
+		.type = DEV_LCD,
+		
+		.basebus = "SPI3_CH3",
+		.busconf = (void *)&CogSpiSet,
+		.basetype = BUS_SPI_CH,
+	},
 	
-	.bus = (DevLcdBus *)&BusLcdSpi3,
-	.buspra = (void *)&CogSpiSet,
+	.ctrlio = &BusLcdSpi3,
 
 	.id = 0X7565, 
 	.width = 64, 
 	.height = 128,
 };
-				
-/* spi 接口 黑白墨水屏 1.54寸 GDEH154D27*/
-const DevLcd DevLcdSPIEPaper =	{
-	.pnode={
-				.name = "spiE-Paper",
-				.type = DEV_LCD,
-		},
-		 
+
+/* spi 接口 黑白墨水屏 1.54寸 GDEH154D27 */
+const DevLcd DevLcdEpaper	=	{
+	.pdev = {
+		.name = "spiE-Paper",
+		.type = DEV_LCD,
+		
+		.basebus = "SPI3_CH3",
+		.busconf = (void *)&CogSpiSet,
+		.basetype = BUS_SPI_CH,
+	},
+	
+	.ctrlio = &BusLcdSpi3,
 	.id = 0x3820, 
 	.width = 200, 
 	.height = 200,
-	
-	.bus = &BusLcdSpi3,
-	.buspra = (void *)&CogSpiSet,
 };
-				
+		
 const DevSpiFlash DevSpiFlashEx={
-	.pnode={
-				.name = "ex_spiflash",
-				.type = DEV_SPIFLASH,
-			},
-	
-	.bus ="SPI3_CH4", 
-	.buspra = NULL,
+	.pdev = {
+		.name = "ex_spiflash",
+		.type = DEV_SPIFLASH,
+		
+		.basebus = "SPI3_CH4",
+		.busconf = (void *)&CogSpiSet,
+		.basetype = BUS_SPI_H,
+	},
+
 	.pra = NULL,
 };
 
@@ -203,7 +194,7 @@ const DevSpiFlash DevSpiFlashEx={
 void *PetiteDevTable[]={
 	/*注册I2C总线，将oled1挂载此 I2C总线上 */
 	(void *)&DevVi2c1,
-	//	(void *)&DevLcdOled1,
+		(void *)&DevLcdOled1,
 	/*硬SPI3控制器，外扩接口的SPI口，并定义一个BusLcd在此总线上 
 		可将一些LCD设备挂在本总线上 */
 	(void *)&DevSpi3IO,
@@ -213,7 +204,7 @@ void *PetiteDevTable[]={
 			(void *)&DevSpiFlashEx,
 	/* dont move*/
 	NULL,
-	};
+};
 
 
 /*	字库定义		*/

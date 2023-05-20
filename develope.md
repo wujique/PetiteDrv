@@ -1,5 +1,15 @@
 ## 修改记录
 
+
+
+#### 2023.05.17
+
+增加 partition层，将存储设备（spi flash等）进行分区管理，并将分区和虚拟文件系统关联。
+
+添加组件：
+
+​	cm backtrace，FlashDB，littlefs，tiny ttf，
+
 #### 2022.10.19
 
 改bus_lcd，每个LCD BUS，通常只有一个LCD，因此，不需要做bus管理。
@@ -31,9 +41,9 @@ bus_lcd层，归到lcd驱动，只做函数封装，不再有bus管理。
 3. F407摄像头I2C改为VI2C，不用SCCB了。并加上互斥。
 4. board wujique增加msp文件，放一些硬件相关配置代码。
 
-#### 2022.03.27
+### **PetiteDrv 2.0**
 
-PetiteDrv 2.0
+2022.03.27
 
 1. 适配 cuckoo板（stm32h7b0vb），主要功能lvgl，音频播放。
 2. board/wujique 删除网络、USB功能，源码未动。
@@ -44,7 +54,7 @@ PetiteDrv 2.0
 6. 字库系统优化，减少获取一个字符点阵的开销。
 7. fatfs更新，并且整理注册disk的接口。
 8. freertos更新，使用cmsis v2接口。
-9. 与平台相关的代码，全部放到board工程目录下。
+9. 与应用相关的代码，全部放到board工程目录下。
 
 ## 开发计划
 
@@ -83,5 +93,4 @@ AT指令解析架构，串口WIFI模块驱动
 #### 外设驱动
 
 环境检测传感器系列
-
 

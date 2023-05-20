@@ -75,12 +75,14 @@ _lcd_drv CogLcdST7565Drv = {
 							.update = drv_ST7565_update,
 							};
 
+
 void drv_ST7565_lcd_bl(DevLcdNode *lcd, u8 sta)
 {
-	DevLcdNode * node = lcd;
-	node = bus_lcd_open(lcd);
-	bus_lcd_bl(node, sta);
-	bus_lcd_close(node);
+	/*  背光而已，不用依赖bus， 简单处理 */
+	//DevLcdNode * node = lcd;
+	//node = bus_lcd_open(lcd);
+	bus_lcd_bl(lcd, sta);
+	//bus_lcd_close(node);
 }
 	
 /**
@@ -527,8 +529,14 @@ s32 drv_ST7565_flush(DevLcdNode *lcd, u16 *color, u32 len)
 
 s32 drv_ST7565_update(DevLcdNode *lcd)
 {
+	PDevNode *pnode;
+	DevLcd *dev;
+
+	pnode = (PDevNode *)lcd;
+	dev = (DevLcd *)pnode->pdev;
+
 	/*刷全屏*/
-	drv_ST7565_refresh_gram(lcd, 0, lcd->dev.height-1, 0, lcd->dev.width-1);
+	drv_ST7565_refresh_gram(lcd, 0, dev->height-1, 0, dev->width-1);
 	return 0;	
 }
 

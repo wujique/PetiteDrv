@@ -18,6 +18,8 @@ extern const TouchDev RtpXpt2046;
 
 extern void DCMI_PWDN_RESET_Init(void);
 
+extern s32 petite_dev_register(void *DevTable[]);
+
 extern void *PetiteDevTable[];
 extern PartitionDef PetitePartitonTable[];
 

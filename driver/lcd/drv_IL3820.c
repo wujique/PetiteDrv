@@ -57,7 +57,7 @@ extern void Delay(__IO uint32_t nTime);
 	我们定义坐标(0,0)， 是page199的第1个字节第8个bit。
 
 */
-#define IL3820_PAGE_SIZE ((lcd->dev.width+7)/8)
+#define IL3820_PAGE_SIZE ((lcd->width+7)/8)
 
 struct _epaper3820_drv_data
 {
@@ -185,7 +185,13 @@ static s32 drv_IL3820_refresh_gram(DevLcdNode *lcd, u16 sc, u16 ec, u16 sp, u16 
 	struct _epaper3820_drv_data *drvdata; 
 
 	DevLcdNode * node = lcd;
-	DevLcdBus const*bus = lcd->dev.bus;
+	PDevNode *pnode = (PDevNode *)lcd;
+	
+	DevLcd *dev;
+	const DevLcdCtrlIO *ctrlio;
+
+	dev = (DevLcd *)pnode->pdev;
+	ctrlio = dev->ctrlio;
 	
 	u32 cnt;
 	u32 gramsize;
@@ -200,7 +206,7 @@ static s32 drv_IL3820_refresh_gram(DevLcdNode *lcd, u16 sc, u16 ec, u16 sp, u16 
 
 	/*注意，要用dev中的w和h，因为gram跟横屏竖屏调换没关系，
 	只和定义一致*/
-	gramsize = lcd->dev.height * IL3820_PAGE_SIZE;
+	gramsize = dev->height * IL3820_PAGE_SIZE;
 	//wjq_log(LOG_DEBUG, "gram size: %d\r\n ", gramsize);
 
 	drv_il3820_write_cmd(node, (0x24));
@@ -218,7 +224,7 @@ static s32 drv_IL3820_refresh_gram(DevLcdNode *lcd, u16 sc, u16 ec, u16 sp, u16 
 	unsigned char busy;
 	
 	do	{
-		busy = mcu_io_input_readbit(bus->staport, bus->stapin);
+		busy = mcu_io_input_readbit(ctrlio->staport, ctrlio->stapin);
 		busy = (busy & 0x01);        
 	} while(busy); 
 
@@ -278,8 +284,15 @@ void EPD_select_LUT(DevLcdNode *node, const unsigned char * wave_data)
 s32 drv_IL3820_init(DevLcdNode *lcd)
 {
 	u16 data;
+	
 	DevLcdNode * node = lcd;
-	DevLcdBus const*bus = lcd->dev.bus;
+	PDevNode *pnode = (PDevNode *)lcd;
+	
+	DevLcd *dev;
+	const DevLcdCtrlIO *ctrlio;
+
+	dev = (DevLcd *)pnode->pdev;
+	ctrlio = dev->ctrlio;
 	
 	u8 tmp[16];
 	u8 testbuf[2];
@@ -288,7 +301,7 @@ s32 drv_IL3820_init(DevLcdNode *lcd)
 	
 	node = bus_lcd_open(lcd);
 
-	mcu_io_config_in(bus->staport, bus->stapin);
+	mcu_io_config_in(ctrlio->staport, ctrlio->stapin);
 
 	bus_lcd_rst(node, 1);
 	Delay(50);
@@ -359,7 +372,7 @@ s32 drv_IL3820_init(DevLcdNode *lcd)
 	
 	unsigned char busy;
 	do	{
-		busy = mcu_io_input_readbit(bus->staport, bus->stapin);
+		busy = mcu_io_input_readbit(ctrlio->staport, ctrlio->stapin);
 		busy =(busy & 0x01);        
 	}while(busy); 
 	
@@ -380,7 +393,7 @@ s32 drv_IL3820_init(DevLcdNode *lcd)
 	/*三色电子纸，要两个缓冲*/
 	p = (struct _epaper3820_drv_data *)lcd->pri;
 
-	gramsize = lcd->dev.height * IL3820_PAGE_SIZE;
+	gramsize = dev->height * IL3820_PAGE_SIZE;
 	wjq_log(LOG_DEBUG, "gram size: %d\r\n ", gramsize);
 
 	p->bgram = (u8 *)wjq_malloc(gramsize);
@@ -488,12 +501,12 @@ s32 drv_IL3820_color_fill(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey, u16 c
 			} else {//如果是竖屏，XY轴跟显存的映射要对调
 			
 				/* 不同的算法，相当于不同的扫描方式*/
-				xtmp = lcd->dev.width- 1 - j;
+				xtmp = lcd->width- 1 - j;
 				ytmp = i;
 			}
 
 			/*从竖屏的角度算出page和colum*/
-			page =  lcd->dev.height - 1 - ytmp; //页地址
+			page =  lcd->height - 1 - ytmp; //页地址
 			colum = xtmp/8;//列地址
 		
 			
@@ -596,12 +609,12 @@ s32 drv_IL3820_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
 				xtmp = i;
 				ytmp = j;
 			} else {
-				xtmp = lcd->dev.width - j;
+				xtmp = lcd->width - j;
 				ytmp = i;
 			}
 
 			/*从竖屏的角度算出page和colum*/
-			page =  lcd->dev.height - ytmp; //页地址
+			page =  lcd->height - ytmp; //页地址
 			colum = xtmp/8;//列地址
 			
 			cdata = *(color+index+i-sx);

@@ -53,10 +53,16 @@ int storage_empty_getsize(void *dev)
 	return 0;
 }
 
-void *storage_empty_open(const char *name)
+void *storage_empty_getdev(char *name)
 {
 	wjq_log(LOG_WAR, "storage_empty_open\r\n");
 	return (void *)1;/// @node   这是假的
+}
+
+void *storage_empty_open(void *dev)
+{
+	wjq_log(LOG_WAR, "storage_empty_open\r\n");
+	return (void *)1;/// @node   这�q�假的
 }
 
 int storage_empty_read(void *dev, uint32_t offset, uint8_t *buf, size_t size)
@@ -88,7 +94,8 @@ const StorageDev StorageEmpty  ={
 		
 		.getblksize = storage_empty_getblksize,
 		.getsize = storage_empty_getsize,
-		
+
+		.getnode = storage_empty_getdev,
 		.open = storage_empty_open,	
 		.read = storage_empty_read,
 		.write = storage_empty_write,
@@ -109,14 +116,13 @@ int petite_storage_getlen(void *part)
 	storage_len = sto->def->size;
 
 	//wjq_log(LOG_DEBUG, "sto getlen: %s\r\n", sto->def->name);
-	
-
+	dev = (void *)sto->base;
 	if (storage_len == 0) {
 
-		dev = sto->base.dev->open(sto->def->name);
+		dev = sto->drv->open(dev);
 		if(dev == NULL) return -1;
-		storage_len = sto->base.dev->getsize(dev);
-		sto->base.dev->close(dev);
+		storage_len = sto->drv->getsize(dev);
+		sto->drv->close(dev);
 	}
 	wjq_log(LOG_INFO, "sto len: 0x%x\r\n", storage_len);
 	return storage_len;
@@ -185,12 +191,13 @@ uint32_t petite_partition_getblksize(void *part)
 	void *dev;
 	
 	par = (PartitionNode *)part;
-	sto  = par->base.sto;
+	sto  = par->base;
 	
-	dev = sto->base.dev->open(sto->def->name);
+	dev = (void *)sto->base;
+	dev = sto->drv->open(dev);
 	if(dev == NULL) return -1;
-	blksize = sto->base.dev->getblksize(dev);
-	sto->base.dev->close(dev);
+	blksize = sto->drv->getblksize(dev);
+	sto->drv->close(dev);
 	
 	wjq_log(LOG_INFO, "part getblksize: 0x%x\r\n", blksize);
 	
@@ -216,17 +223,17 @@ int petite_partition_read(void *part, uint32_t addr, uint8_t *dst , size_t size)
 	uint32_t dev_addr;
 	
 	par = (PartitionNode *)part;
-	sto  = par->base.sto;
+	sto  = par->base;
 
 	dev_addr = addr + par->def->addr - sto->def->addr;
 	//wjq_log(LOG_INFO, "part read: %s 0x%x(0x%x), 0x%x\r\n", 
 	//					sto->def->name, dev_addr, addr, size);
-	
-	dev = sto->base.dev->open(sto->def->name);
+	dev = (void *)sto->base;
+	dev = sto->drv->open(dev);
 	if(dev == NULL) return -1;
-	res = sto->base.dev->read(dev, dev_addr, dst, size);
+	res = sto->drv->read(dev, dev_addr, dst, size);
 	
-	sto->base.dev->close(dev);
+	sto->drv->close(dev);
 
 	return res;
 }
@@ -250,16 +257,17 @@ int petite_partition_write(void *part, uint32_t addr, const uint8_t *src, size_t
 	uint32_t dev_addr;
 	
 	par = (PartitionNode *)part;
-	sto  = par->base.sto;
+	sto  = par->base;
 
 	dev_addr = addr + par->def->addr - sto->def->addr;
 	//wjq_log(LOG_INFO, "part write: %s 0x%x(0x%x), 0x%x\r\n", 
 	//					sto->def->name, dev_addr, addr, size);
-	dev = sto->base.dev->open(sto->def->name);
+	dev = (void *)sto->base;
+	dev = sto->drv->open(dev);
 	if(dev == NULL) return -1;
-	res = sto->base.dev->write(dev, dev_addr, src, size);
+	res = sto->drv->write(dev, dev_addr, src, size);
 	
-	sto->base.dev->close(dev);
+	sto->drv->close(dev);
 
 	return res;
 }
@@ -286,18 +294,18 @@ int petite_partition_erase(void *part, uint32_t addr, size_t size)
 	//wjq_log(LOG_INFO, "part erase: 0x%x, 0x%x\r\n", addr, size);
 
 	par = (PartitionNode *)part;
-	sto  = par->base.sto;
+	sto  = par->base;
 
 	dev_addr = addr + par->def->addr - sto->def->addr;
 	
 	//wjq_log(LOG_INFO, "part erase: %s 0x%x(0x%x), 0x%x\r\n", 
 	//					sto->def->name, dev_addr, addr, size);
-	
-	dev = sto->base.dev->open(sto->def->name);
+	dev = (void *)sto->base;
+	dev = sto->drv->open(dev);
 	if(dev == NULL) return -1;
-	sto->base.dev->erase(dev, dev_addr, size);
+	sto->drv->erase(dev, dev_addr, size);
 	
-	sto->base.dev->close(dev);
+	sto->drv->close(dev);
 
 	return 0;
 }
@@ -340,10 +348,13 @@ int petite_partition_init(PartitionDef *Partable)
 				并将设备信息与设备驱动绑定在一起 */
 			sto = node;
 			if (strcmp(node->def->type, "spiflash") == 0 ) {
-				node->base.dev = &StorageExSpiFlash;
+				node->drv = &StorageExSpiFlash;
 			} else {
-				node->base.dev = &StorageEmpty;
+				node->drv = &StorageEmpty;
 			}
+			
+			/* 获取设备节点，后续通过节点open设备，如果用name open设备，需要频繁进行字符串比较 */
+			node->base = (struct _PartitionNode *)node->drv->getnode(node->def->name);
 			
 		} else if (strcmp(pardef->maptype, "par") == 0) {
 			/* par 分区，指明空间用途，在初始化时，将par与sto绑定，
@@ -355,7 +366,7 @@ int petite_partition_init(PartitionDef *Partable)
 			if (pardef->addr >= sto->def->addr
 				&& pardef->addr +  pardef->size <= sto->def->addr + sto_size) {
 				/* 把分区和storage关联 */
-				node->base.sto = sto;
+				node->base = sto;
 
 				if (strcmp(pardef->type, "littlefs") == 0) {
 					vfs_mount(node);

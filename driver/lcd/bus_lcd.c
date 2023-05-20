@@ -39,25 +39,22 @@ extern volatile u16 *LcdData;
  *@param[out]  无
  *@retval:     
  */
-void bus_lcd_IO_init(const DevLcdBus *bus) 
+void bus_lcd_IO_init(const DevLcdCtrlIO *CtrlIO) 
 {
-
-	if (bus->pnode.type == BUS_LCD_I2C) return;
-
 	/* 初始化管脚 */
-	if (bus->A0port != NULL) {
-		mcu_io_config_out(bus->A0port,bus->A0pin);
-		mcu_io_output_setbit(bus->A0port,bus->A0pin);
+	if (CtrlIO->A0port != NULL) {
+		mcu_io_config_out(CtrlIO->A0port, CtrlIO->A0pin);
+		mcu_io_output_setbit(CtrlIO->A0port, CtrlIO->A0pin);
 	}
 	
-	if (bus->rstport != NULL) {
-		mcu_io_config_out(bus->rstport,bus->rstpin);
-		mcu_io_output_setbit(bus->rstport,bus->rstpin);
+	if (CtrlIO->rstport != NULL) {
+		mcu_io_config_out(CtrlIO->rstport, CtrlIO->rstpin);
+		mcu_io_output_setbit(CtrlIO->rstport, CtrlIO->rstpin);
 	}
 	
-	if (bus->blport != NULL) {
-		mcu_io_config_out(bus->blport,bus->blpin);
-		mcu_io_output_setbit(bus->blport,bus->blpin);
+	if (CtrlIO->blport != NULL) {
+		mcu_io_config_out(CtrlIO->blport, CtrlIO->blpin);
+		mcu_io_output_setbit(CtrlIO->blport, CtrlIO->blpin);
 	}
 }
 /**
@@ -69,13 +66,16 @@ void bus_lcd_IO_init(const DevLcdBus *bus)
  */
 s32 bus_lcd_bl(DevLcdNode *lcd, u8 sta)
 {
-	DevLcdBus const*bus;
-	bus = lcd->dev.bus;
+	const DevLcdCtrlIO *CtrlIO;
+	DevLcd *dev;
+
+	dev = (DevLcd *)lcd->pnode.pdev;
+	CtrlIO = dev->ctrlio;
 	
 	if (sta ==MCU_IO_STA_1) {
-		mcu_io_output_setbit(bus->blport, bus->blpin);
+		mcu_io_output_setbit(CtrlIO->blport, CtrlIO->blpin);
 	} else {
-		mcu_io_output_resetbit(bus->blport, bus->blpin);	
+		mcu_io_output_resetbit(CtrlIO->blport, CtrlIO->blpin);	
 	}
 	return 0;
 }
@@ -88,13 +88,19 @@ s32 bus_lcd_bl(DevLcdNode *lcd, u8 sta)
  */
 s32 bus_lcd_rst(DevLcdNode *lcd, u8 sta)
 {
-	DevLcdBus const*bus;
-	bus = lcd->dev.bus;
+	const DevLcdCtrlIO *CtrlIO;
+	DevLcd *dev;
+
+	dev = (DevLcd *)lcd->pnode.pdev;
 	
+	wjq_log(LOG_DEBUG, "dev name:%s\r\n", dev->pdev.name);
+	
+	CtrlIO = dev->ctrlio;
+
 	if (sta ==MCU_IO_STA_1) {
-		mcu_io_output_setbit(bus->rstport, bus->rstpin);
+		mcu_io_output_setbit(CtrlIO->rstport, CtrlIO->rstpin);
 	} else {
-		mcu_io_output_resetbit(bus->rstport, bus->rstpin);	
+		mcu_io_output_resetbit(CtrlIO->rstport, CtrlIO->rstpin);	
 	}
 	return 0;
 }
@@ -113,37 +119,46 @@ DevLcdNode *bus_lcd_open(DevLcdNode *lcd)
 	I2CPra *i2c_pra;
 	PraSpiSet *spi_pra;
 	SPI_MODE spi_mode;
+	PDevNode *pnode;
+
+	pnode = (PDevNode *)lcd;
 	
-	type = lcd->dev.bus->pnode.type;
-	busname = (char *)lcd->dev.bus->basebus;
+	type = pnode->pdev->basetype;
+	busname = pnode->pdev->basebus;
 	
-	if (type == BUS_LCD_SPI) {
-		spi_pra = (PraSpiSet *)lcd->dev.buspra;
+	if (type == BUS_SPI_CH) {
+		wjq_log(LOG_DEBUG, "lcd bus spi ch!\r\n");
+		
+		spi_pra = (PraSpiSet *)pnode->pdev->busconf;
 		bus_clk = spi_pra->KHz;
 		spi_mode = spi_pra->mode;
 		
 		lcd->basenode = (void *)bus_spich_open(busname, spi_mode, bus_clk, 0xffffffff);
 
-	} else if (type == BUS_LCD_I2C) {
+	} else if ((type == BUS_I2C_V) || (type == BUS_I2C_H) ) {
+		wjq_log(LOG_DEBUG, "lcd bus i2c!\r\n");
 		/*todo I2C频率配置 */
-		i2c_pra = (I2CPra *)lcd->dev.buspra;
+		i2c_pra = (I2CPra *)pnode->pdev->busconf;
 		bus_clk = i2c_pra->fkhz;
 		
 		lcd->basenode = bus_i2c_open(busname, 0xffffffff, bus_clk);
-	} else if (type == BUS_LCD_8080) {
+	} else if (type == BUS_8080) {
+		wjq_log(LOG_DEBUG, "lcd bus 8080!\r\n");
 		#if (PETITE_BUS_LCD_8080 == 1)
 		/*8080特殊处理*/
 		lcd->basenode = (void *)1;
 		#else
 		wjq_log(LOG_INFO, "lcd bus unsuport 8080 !\r\n");
 		#endif
+	} else {
+		wjq_log(LOG_WAR, "lcd bus open base bus unsupport!\r\n");
 	}
 	
 	if (lcd->basenode == NULL) {
 		wjq_log(LOG_INFO, "lcd bus open base bus err!\r\n");	
 
 	} else {
-
+		wjq_log(LOG_DEBUG, "lcd bus open base bus OK!\r\n");
 	}
 
 	return lcd;
@@ -159,19 +174,26 @@ DevLcdNode *bus_lcd_open(DevLcdNode *lcd)
 s32 bus_lcd_close(DevLcdNode *lcd)
 {
 	PetiteDevType type;
-	type = lcd->dev.bus->pnode.type;
+	PDevNode *pnode;
 
-	if(type == BUS_LCD_SPI){
+	pnode = (PDevNode *)lcd;
+	type = pnode->pdev->basetype;
+
+	if(type == BUS_SPI_CH){
 		bus_spich_close((DevSpiChNode *)lcd->basenode);
-	}else if(type == BUS_LCD_I2C){
+		wjq_log(LOG_DEBUG, "lcd bus close spi ch!\r\n");
+	
+	}else if ((type == BUS_I2C_V) || (type == BUS_I2C_H) ){
 		bus_i2c_close((DevI2cNode *)lcd->basenode);	
-	}else if(type == BUS_LCD_8080){	
+	}else if(type == BUS_8080){	
 		#if (PETITE_BUS_LCD_8080 == 1)
 		/*8080特殊处理*/
 		lcd->basenode = NULL;
 		#else
 		wjq_log(LOG_INFO, "lcd bus unsuport 8080 !\r\n");
 		#endif
+	} else {
+		wjq_log(LOG_WAR, "lcd bus open base bus unsupport!\r\n");		
 	}
 	
 	return 0;
@@ -195,35 +217,39 @@ s32 bus_lcd_write_data(DevLcdNode *lcd, u8 *data, u32 len)
 	I2CPra *i2c_pra;
 	
 	PetiteDevType type;
+	PDevNode *pnode;
 
-	type = lcd->dev.bus->pnode.type;
+	pnode = (PDevNode *)lcd;
+	type = pnode->pdev->basetype;
 
 	switch(type)
 	{
-		case BUS_LCD_SPI:
+		case BUS_SPI_CH:
 		{
 			bus_spich_transfer((DevSpiChNode *)lcd->basenode,  data, NULL, len);
 		}
 		break;
-		
-		case BUS_LCD_I2C:
+
+		case BUS_I2C_V:
+		case BUS_I2C_H:
 		{
-			i2c_pra = (I2CPra *)lcd->dev.buspra;
+			i2c_pra = (I2CPra *)pnode->pdev->busconf;
 			i2c_addr = i2c_pra->addr;
+
+			DevLcd *dev = (DevLcd *)lcd->pnode.pdev;
 			
-			tmp[0] = lcd->dev.i2c_data_reg;//写入数据	
+			tmp[0] = dev->i2c_data_reg;//写入数据	
 			memcpy(&tmp[1], data, len);
 			bus_i2c_transfer((DevI2cNode *)lcd->basenode, i2c_addr, MCU_I2C_MODE_W, tmp, len+1);
 		}
 		break;
 		
-		case BUS_LCD_8080:			
+		case BUS_8080:			
 		{
 			#if (PETITE_BUS_LCD_8080 == 1)
 			u16 *p;
 			p = (u16 *)data;
-			for(i=0; i<len; i++)
-			{
+			for (i=0; i<len; i++) {
 				*LcdData = *(p+i);	
 			}
 			#else
@@ -245,13 +271,16 @@ s32 bus_lcd_write_data(DevLcdNode *lcd, u8 *data, u32 len)
 s32 bus_lcd_w_data(DevLcdNode *lcd, u16 color, u32 len)
 {
 	u32 i;
-	PetiteDevType type;
 	
-	type = lcd->dev.bus->pnode.type;
+	PetiteDevType type;
+	PDevNode *pnode;
+
+	pnode = (PDevNode *)lcd;
+	type = pnode->pdev->basetype;
 
 	switch(type)
 	{
-		case BUS_LCD_8080:			
+		case BUS_8080:			
 		{
 			#if (PETITE_BUS_LCD_8080 == 1)
 			for(i=len; i>0; i--) {
@@ -259,8 +288,7 @@ s32 bus_lcd_w_data(DevLcdNode *lcd, u16 color, u32 len)
 			}
 			#else
 			wjq_log(LOG_INFO, "lcd bus unsuport 8080 !\r\n");
-			#endif
-			
+			#endif	
 		}
 		break;
 		default:
@@ -280,18 +308,22 @@ s32 bus_lcd_w_data(DevLcdNode *lcd, u16 color, u32 len)
 s32 bus_lcd_read_data(DevLcdNode *lcd, u8 *data, u32 len)
 {
 	u32 i;
+	
 	PetiteDevType type;
-	type = lcd->dev.bus->pnode.type;
+	PDevNode *pnode;
+
+	pnode = (PDevNode *)lcd;
+	type = pnode->pdev->basetype;
 	
 	switch(type)
 	{
-		case BUS_LCD_SPI:
+		case BUS_SPI_CH:
 		{	
 			bus_spich_transfer((DevSpiChNode *)lcd->basenode,  NULL, data, len);
 		}
 		break;
 		
-		case BUS_LCD_8080:
+		case BUS_8080:
 		{
 			
 			#if (PETITE_BUS_LCD_8080 == 1)
@@ -307,7 +339,8 @@ s32 bus_lcd_read_data(DevLcdNode *lcd, u8 *data, u32 len)
 		}
 		break;
 
-		case BUS_LCD_I2C:
+		case BUS_I2C_V:
+		case BUS_I2C_H:
 		default:
 			break;
 	}
@@ -328,34 +361,37 @@ s32 bus_lcd_write_cmd(DevLcdNode *lcd, u16 cmd)
 	I2CPra *i2c_pra;
 	
 	PetiteDevType type;
-	DevLcdBus const*bus;
+	PDevNode *pnode;
+
+	pnode = (PDevNode *)lcd;
+	type = pnode->pdev->basetype;
+	DevLcd *dev = (DevLcd *)lcd->pnode.pdev;
 	
-	type = lcd->dev.bus->pnode.type;
-	bus = lcd->dev.bus;
 	switch(type)
 	{
-		case BUS_LCD_SPI:
+		case BUS_SPI_CH:
 		{	
-			mcu_io_output_resetbit(bus->A0port, bus->A0pin);
+			mcu_io_output_resetbit(dev->ctrlio->A0port, dev->ctrlio->A0pin);
 			tmp[0] = cmd;
 			bus_spich_transfer((DevSpiChNode *)lcd->basenode,  &tmp[0], NULL, 1);
-			mcu_io_output_setbit(bus->A0port, bus->A0pin);
+			mcu_io_output_setbit(dev->ctrlio->A0port, dev->ctrlio->A0pin);
 		}
 		break;
 		
-		case BUS_LCD_I2C:
+		case BUS_I2C_V:
+		case BUS_I2C_H:
 		{	
-			i2c_pra = (I2CPra *)lcd->dev.buspra;
+			i2c_pra = (I2CPra *)pnode->pdev->busconf;
 			i2c_addr = i2c_pra->addr;
 			
-			tmp[0] = lcd->dev.i2c_cmd_reg;//写入命令
+			tmp[0] = dev->i2c_cmd_reg;//写入命令
 			tmp[1] = cmd;
 			
 			bus_i2c_transfer((DevI2cNode *)lcd->basenode, i2c_addr, MCU_I2C_MODE_W, tmp, 2);
 		}
 		break;
 		
-		case BUS_LCD_8080:
+		case BUS_8080:
 		{
 			#if (PETITE_BUS_LCD_8080 == 1)
 			*LcdReg = cmd;

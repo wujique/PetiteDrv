@@ -328,10 +328,13 @@ s32 bus_vi2c_transfer(DevI2cNode *node, u8 addr, u8 rw, u8* data, s32 datalen)
 	DevI2c *dev;
 	uint16_t clk;
 	s32 res;
+	PDevNode *pnode;
 	
 	if (node == NULL) return -1;
 
-	dev = &node->dev;
+	pnode = (PDevNode *)node;
+
+	dev = (DevI2c *)pnode->pdev;
 	clk = node->clkkhz;
 	//I2C_DEBUG(LOG_DEBUG, "i2c trf %s\r\n", dev->name);
     //发送起始

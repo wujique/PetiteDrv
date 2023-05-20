@@ -133,7 +133,6 @@ s32 mcu_hspi_transfer(DevSpiNode *node, u8 *snd, u8 *rsv, s32 len)
         return -1;
     }
 
-	
 	if ( snd == NULL ) {
 		HAL_SPI_Receive(&hspi1, rsv, len, 100);	
 		SPI_DEBUG("HAL_SPI_Receive!\r\n");

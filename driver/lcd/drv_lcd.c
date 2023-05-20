@@ -135,7 +135,6 @@ static _lcd_drv *lcd_finddrv(u16 id)
 	}
 }
 
-struct list_head DevLcdRoot = {&DevLcdRoot, &DevLcdRoot};	
 /**
  *@brief:      dev_lcd_register
  *@details:    注册LCD设备
@@ -143,37 +142,23 @@ struct list_head DevLcdRoot = {&DevLcdRoot, &DevLcdRoot};
  *@param[out]  
  *@retval:     
  */
-s32 lcd_dev_register(const DevLcd *dev)
+PDevNode *lcd_dev_register(const DevLcd *dev)
 {
 	struct list_head *listp;
 	DevLcdNode *lcdnode;
 	s32 ret;
 	
-	listp = DevLcdRoot.next;
-	while(1) {
-		if (listp == &DevLcdRoot) break;
-
-		lcdnode = list_entry(listp, DevLcdNode, list);
-
-		if (strcmp(dev->pnode.name, lcdnode->dev.pnode.name) == 0) {
-			wjq_log(LOG_ERR, "lcd dev name err!\r\n");
-			return -1;
-		}
+	//wjq_log(LOG_INFO, "[register] LCD:%s\r\n", dev->pdev.name);
 	
-		listp = listp->next;
-	}
-
-	/*  申请一个节点空间      	*/
+	/* 申请一个节点空间 	*/
 	lcdnode = (DevLcdNode *)wjq_malloc(sizeof(DevLcdNode));
-	list_add(&(lcdnode->list), &DevLcdRoot);
-	
-	/*复制设备信息*/
-	memcpy((u8 *)&lcdnode->dev, (u8 *)dev, sizeof(DevLcd));
+	petite_dev_init_node((PDevNode *)lcdnode, (PetiteDev *) dev);
+
 	lcdnode->gd = -1;
 	lcdnode->fb = 0;
 
 	/* 进行bus初始化 */
-	bus_lcd_IO_init(dev->bus);
+	bus_lcd_IO_init(dev->ctrlio);
 	
 	if (dev->id == NULL) {
 		/* 没有指定lcd id，通过porb 初始化 */
@@ -196,8 +181,6 @@ s32 lcd_dev_register(const DevLcd *dev)
 		}
 	}else {
 		/* 设备指定了 id，根据id找驱动 */
-		
-		
 		ret = -1;
 		lcdnode->drv = lcd_finddrv(dev->id);
 		if (lcdnode->drv != NULL) {
@@ -213,8 +196,8 @@ s32 lcd_dev_register(const DevLcd *dev)
 		
 		lcdnode->dir = H_LCD;
 		
-		lcdnode->height = lcdnode->dev.height;
-		lcdnode->width = lcdnode->dev.width;
+		lcdnode->height = dev->height;
+		lcdnode->width = dev->width;
 		
 		lcd_setdir(lcdnode, W_LCD, L2R_U2D);
 		
@@ -228,7 +211,7 @@ s32 lcd_dev_register(const DevLcd *dev)
 		wjq_log(LOG_ERR, "lcd drv init err!\r\n");
 	}
 	
-	return 0;
+	return (PDevNode *)lcdnode;
 }
 
 
@@ -241,30 +224,11 @@ s32 lcd_dev_register(const DevLcd *dev)
  */
 DevLcdNode *lcd_open(char *name)
 {
-
 	DevLcdNode *node;
-	struct list_head *listp;
-	
+
 	//LCD_DEBUG(LOG_INFO, "lcd open:%s!\r\n", name);
 
-	listp = DevLcdRoot.next;
-	node = NULL;
-	
-	while(1) {
-		if (listp == &DevLcdRoot) break;
-
-		node = list_entry(listp, DevLcdNode, list);
-		//LCD_DEBUG(LOG_INFO, "lcd name:%s!\r\n", node->dev.name);
-		
-		if (strcmp(name, node->dev.pnode.name) == 0) {
-			//LCD_DEBUG(LOG_INFO, "lcd dev get ok!\r\n");
-			break;
-		} else {
-			node = NULL;
-		}
-		
-		listp = listp->next;
-	}
+	node = (DevLcdNode *)petite_dev_get_node(name);	
 
 	if (node != NULL) {
 		if (node->gd > (-2)) node->gd++;
@@ -318,12 +282,14 @@ s32 lcd_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
 	
 	return lcd->drv->fill(lcd, sx-1,ex-1,sy-1,ey-1,color);
 }
+
 s32 lcd_color_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 color)
 {
 	if(lcd == NULL)	return -1;
 	
 	return lcd->drv->color_fill(lcd, sx-1,ex-1,sy-1,ey-1,color);
 }
+
 s32 lcd_backlight(DevLcdNode *lcd, u8 sta)
 {
 	if(lcd == NULL)	return -1;

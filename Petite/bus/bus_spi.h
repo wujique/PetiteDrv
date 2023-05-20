@@ -3,6 +3,8 @@
 
 #include "mem/p_list.h"
 #include "petite_def.h"
+#include "petite_dev.h"
+
 #include "cmsis_os.h"
 
 /*
@@ -13,7 +15,7 @@
 /*	SPI 设备定义 */
 typedef struct
 {
-	PetiteNode pnode;
+	PetiteDev pdev;
 	
 	MCU_PORT clkport;
 	u16 clkpin;
@@ -29,29 +31,22 @@ typedef struct
 /*	SPI控制器设备节点 */
 typedef struct
 {
-	/*句柄，空闲为-1，打开为0，spi控制器不能重复打开*/
-	s32 gd;
-	/*控制器硬件信息，初始化控制器时拷贝设备树的信息到此*/
-	DevSpi dev;	
-
+	PDevNode pnode;
+	
 	osMutexId_t mutex;
 	
 	/*模拟SPI的时钟分频设置*/
 	u16 clk;
 	SPI_MODE mode;
-	/*链表*/
-	struct list_head list;
+
 }DevSpiNode;
 
 /*	SPI 通道定义
 	一个SPI通道，有一个SPI控制器+一根CS引脚组成*/
 typedef struct
 {
-	PetiteNode pnode;
+	PetiteDev pdev;
 	
-	/*SPI控制器名称*/
-	char spi[DEV_NAME_SIZE];
-
 	/*cs脚*/
 	MCU_PORT csport;
 	u16 cspin;
@@ -60,13 +55,10 @@ typedef struct
 /*SPI通道节点*/
 typedef struct
 {
+	PDevNode pnode;
+	
 	s32 gd;
-	
-	DevSpiCh dev;
-	
-	DevSpiNode *spi;//控制器节点指针
-	
-	struct list_head list;
+
 }DevSpiChNode;
 
 /*	SPI 参数，在打开spi时配置到spi
@@ -76,10 +68,12 @@ typedef struct{
 	u16 KHz;
 }PraSpiSet;
 
-extern s32 bus_spi_register(const DevSpi *dev);
-extern s32 bus_spich_register(const DevSpiCh *dev);
+extern PDevNode * bus_spi_register(const DevSpi *dev);
+extern PDevNode * bus_spich_register(const DevSpiCh *dev);
 
 extern DevSpiChNode *bus_spich_open(char *name, SPI_MODE mode, u16 KHz,  uint32_t wait);
+extern DevSpiChNode *bus_spich_opennode(DevSpiChNode *node, SPI_MODE mode, u16 KHz,  uint32_t wait);
+
 extern s32 bus_spich_close(DevSpiChNode * node);
 extern s32 bus_spich_transfer(DevSpiChNode * node, u8 *snd, u8 *rsv, s32 len);
 extern s32 bus_spich_cs(DevSpiChNode * node, u8 sta);
