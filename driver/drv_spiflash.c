@@ -101,6 +101,7 @@ static s32 dev_spiflash_waitwriteend(DevSpiFlashNode *node)
 	bus_spich_cs(node->spichnode, 0);
     bus_spich_transfer(node->spichnode, &command, NULL, len);
     do{
+		
         bus_spich_transfer(node->spichnode, NULL, &flash_status, len);
     }
     while ((flash_status & 0x01) != 0); 

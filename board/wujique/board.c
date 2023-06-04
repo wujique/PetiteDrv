@@ -13,8 +13,8 @@
 #include "drv_lcd.h"
 #include "camera_api.h"
 
-#include "font/gb18030.h"
-#include "font/gb2312.h"
+#include "gb18030.h"
+#include "gb2312.h"
 
 
 /* 硬件相关的都在board.c定义

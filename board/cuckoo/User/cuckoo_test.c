@@ -19,6 +19,7 @@
 #include "demos/widgets/lv_demo_widgets.h"
 
 #include "drv_config.h"
+#include "display.h"
 
 extern ADC_HandleTypeDef hadc2;
 
@@ -77,8 +78,12 @@ void cpu_rtc(void)
 
 DevLcdNode *LcdOledI2C = NULL;
 
+petite_font_t *wjqwqyst1212;
+petite_font_t *wjqunicode1212;
+
 void cuckoo_test_lcd(void)
 {
+	
 	#if 0//test
 	wjq_log(LOG_FUN, "dev_i2coledlcd_test\r\n");
 	LcdOledI2C = dev_lcd_open("i2coledlcd");
@@ -94,21 +99,26 @@ void cuckoo_test_lcd(void)
 
 	#endif
 
-	#if 0//test
+	#if 1//test
 	DevLcdNode *LcdCogSpi = NULL;
-	wjq_log(LOG_FUN, "cog lcd test\r\n");
+	wjq_log(LOG_INFO, "cog lcd test\r\n");
 	LcdCogSpi = lcd_open("spicoglcd");
 	if (LcdCogSpi==NULL)
-		wjq_log(LOG_FUN, "open spi cog-lcd err\r\n");
+		wjq_log(LOG_INFO, "open spi cog-lcd err\r\n");
 	else
-		wjq_log(LOG_FUN, "open spi cog-lcd suc\r\n");
+		wjq_log(LOG_INFO, "open spi cog-lcd suc\r\n");
 	/*打开背光*/
 	lcd_backlight(LcdCogSpi, 1);
-	display_lcd_put_string(LcdCogSpi, "WQY_ST_12_H", 10,1, "cog lcd", BLACK);
-	display_lcd_put_string(LcdCogSpi, "WQY_ST_12_H", 10,30, "www.wujique.com", BLACK);
+	/*登录,登錄,Login,Login,로그인,Anmeldung,S'identifier,Accesso,Iniciar sesión,Đăng nhập,Логин,Entrar,Masuk,Oturum aç,เข้าสู่ระบบ*/
+	display_lcd_put_string(LcdCogSpi, wjqwqyst1212, 10,1, "中国www.wujique.com", BLACK);
+	display_lcd_put_string(LcdCogSpi, wjqunicode1212, 10,14, "登录登錄로그인Accesso", BLACK);
+	display_lcd_put_string(LcdCogSpi, wjqunicode1212, 10,27, "Iniciar sesión Đăng nhập", BLACK);
+	display_lcd_put_string(LcdCogSpi, wjqunicode1212, 10,40, "Логин Entrar เข้าสู่ระบบ", BLACK);
+	display_lcd_put_string(LcdCogSpi, &FontVga6X12, 10,52, "The font g test!", BLACK);
 	lcd_update(LcdCogSpi);
 	#endif
-	#if 0
+	
+	#if 0//电子纸
 	DevLcdNode *LcdEpaper = NULL;
 	wjq_log(LOG_FUN, "e paper test\r\n");
 	LcdEpaper = dev_lcd_open("spiE-Paper");
@@ -182,59 +192,9 @@ void cuckoo_test_lcdtask(uint8_t b)
 #include "src/font/lv_font.h"
 #include "lv_tiny_ttf.h"
 
-extern int flashdb_demo(void);
-extern void petite_partition_test(void);
-
-void cuckoo_7b0_test(void)
+void tiny_tty_test(void)
 {
-	
-	uint32_t tickstart,tmp;
-  	uint32_t a,b;
-	uint8_t lampsta = 0;
-	wjq_log(LOG_DEBUG,"run app\r\n");
-
-	sd_fatfs_init();
-	#if 0//test
-	esp8266_io_init();
-	esp8266_uart_test();
-	dev_ptHCHO_test();
-
-	petite_partition_test();
-	#endif
-	
-	//flashdb_demo();
-
-	/* 测试littlefs */
-	#if 1
-	int filefd;
-	filefd = vfs_open("/mtd0/bootcnt", O_CREAT);
-	if(filefd > 0) {
-		uint32_t bootcnt = 0;
-		
-		vfs_read(filefd, &bootcnt, sizeof(bootcnt));
-		wjq_log(LOG_INFO, "boot cnt:%d\r\n", bootcnt);
-		
-		bootcnt++;
-		
-		vfs_lseek(filefd, 0, SEEK_SET);
-		vfs_write(filefd, &bootcnt, sizeof(bootcnt));
-		vfs_close(filefd);
-
-	}
-	#endif
-	
-	/*把sd卡的矢量字库文件拷贝到spi flash*/
-	//vfs_file_copy("/0:/font/chuheisong.ttf", "/mtd0/chuheisong.ttf");
-	
-	//cuckoo_test_lcd();
-	LcdOledI2C = lcd_open("spicoglcd");
-	//LcdOledI2C = lcd_open("i2coledlcd");
-	//font_test_utf16(LcdOledI2C);
-	//font_unicode_bitmap_test(LcdOledI2C);
-	//emenu_test(LcdOledI2C);
-
-	/* 测试tiny ttf 适量字库引擎 */
-	#if 1
+#if 1
 	lv_font_t *font_t;
 	lv_font_glyph_dsc_t glyph_dsc;
 	const uint8_t *bitmap;
@@ -244,6 +204,8 @@ void cuckoo_7b0_test(void)
 	int row=0;
 	int col=0;
 	bool getres;
+	/* 使用字体文件创建一个lvgl定义的font_t，
+		后续就用这个字体指针获取字符点阵。*/
 	font_t = lv_tiny_ttf_create_file("/mtd0/chuheisong.ttf", 24);
 	i = 0;
 	while(1) {
@@ -282,7 +244,67 @@ void cuckoo_7b0_test(void)
 		//osDelay(1000);
 		
 	}
+#endif
+}
+
+
+extern int flashdb_demo(void);
+extern void petite_partition_test(void);
+
+void cuckoo_7b0_test(void)
+{
+	
+	uint32_t tickstart,tmp;
+  	uint32_t a,b;
+	uint8_t lampsta = 0;
+	wjq_log(LOG_DEBUG,"run app\r\n");
+
+	sd_fatfs_init();
+	
+	#if 0//test
+	esp8266_io_init();
+	esp8266_uart_test();
+	dev_ptHCHO_test();
+	petite_partition_test();
+	flashdb_demo();
 	#endif
+
+	/* 测试littlefs */
+	#if 1
+	int filefd;
+	filefd = vfs_open("/mtd0/bootcnt", O_CREAT);
+	if(filefd > 0) {
+		uint32_t bootcnt = 0;
+		
+		vfs_read(filefd, &bootcnt, sizeof(bootcnt));
+		wjq_log(LOG_INFO, "boot cnt:%d\r\n", bootcnt);
+		
+		bootcnt++;
+		
+		vfs_lseek(filefd, 0, SEEK_SET);
+		vfs_write(filefd, &bootcnt, sizeof(bootcnt));
+		vfs_close(filefd);
+
+	}
+	#endif
+	
+	/*把sd卡的矢量字库文件拷贝到spi flash*/
+	//vfs_file_copy("/0:/font/chuheisong.ttf", "/mtd0/chuheisong.ttf");
+
+	wjqwqyst1212 = font_wjq_create_from_file("0:/font/wqy12h18030.bin", 12);
+	wjqunicode1212 = bitmapfont_create_from_file("0:/font/font_file.bin", 12);
+
+	cuckoo_test_lcd();
+	while(1);
+
+	LcdOledI2C = lcd_open("spicoglcd");
+	//LcdOledI2C = lcd_open("i2coledlcd");
+	//font_test_utf16(LcdOledI2C);
+	//font_unicode_bitmap_test(LcdOledI2C);//把整个bitmap字库在 COG lcd上顺序显示 
+	emenu_test(LcdOledI2C, wjqwqyst1212);
+
+	/* 测试tiny ttf 适量字库引擎 */
+	//tiny_tty_test();
 
 	/* 初始化lvgl 
 	注意，初始化LVGL的过程，会用到不少栈，

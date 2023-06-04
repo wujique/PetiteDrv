@@ -440,6 +440,7 @@ static lv_font_t * lv_tiny_ttf_create(const char * path, const void * data, size
 #endif
 
     float scale = stbtt_ScaleForPixelHeight(&dsc->info, line_height);
+
     lv_font_t * out_font = (lv_font_t *)TTF_MALLOC(sizeof(lv_font_t));
     if(out_font == NULL) {
         ttf_cache_destroy(dsc->cache);

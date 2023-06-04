@@ -339,7 +339,7 @@
               <MiscControls>--locale=english</MiscControls>
               <Define>NDEBUG</Define>
               <Undefine></Undefine>
-              <IncludePath>.\Core\Inc;.\Drivers\STM32H7xx_HAL_Driver\Inc;.\User;.\Drivers\CMSIS\Include;.\Drivers\CMSIS\Device\ST\STM32H7xx\Include;.\Drivers\STM32H7xx_HAL_Driver\Inc\Legacy;..\..\mcu\stm32h7b0vb;..\..\Petite;..\..\driver;..\..\driver\touch;..\..\driver\lcd;..\..\components\lvgl;..\..\components\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\..\components\FreeRTOS\Source\include;..\..\components\FreeRTOS\Source\CMSIS_RTOS_V2;..\..\components\FatFs;..\..\driver\sound;..\..\driver\touch\rtp\tslib;..\..\driver\touch\rtp;..\..\Petite\bus;..\..\components\emenu;..\..\components\tiny_ttf;..\..\components\FlashDB\inc;..\..\components\FlashDB\porting;..\..\components\littlefs;..\..\components\CmBacktrace\cm_backtrace;..\..\components\cmd\ubootcmd</IncludePath>
+              <IncludePath>.\Core\Inc;.\Drivers\STM32H7xx_HAL_Driver\Inc;.\User;.\Drivers\CMSIS\Include;.\Drivers\CMSIS\Device\ST\STM32H7xx\Include;.\Drivers\STM32H7xx_HAL_Driver\Inc\Legacy;..\..\mcu\stm32h7b0vb;..\..\Petite;..\..\driver;..\..\driver\touch;..\..\driver\lcd;..\..\components\lvgl;..\..\components\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\..\components\FreeRTOS\Source\include;..\..\components\FreeRTOS\Source\CMSIS_RTOS_V2;..\..\components\FatFs;..\..\driver\sound;..\..\driver\touch\rtp\tslib;..\..\driver\touch\rtp;..\..\Petite\bus;..\..\components\emenu;..\..\components\tiny_ttf;..\..\components\FlashDB\inc;..\..\components\FlashDB\porting;..\..\components\littlefs;..\..\components\CmBacktrace\cm_backtrace;..\..\components\cmd\ubootcmd;..\..\components\Petitefont;..\..\panel</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -689,36 +689,6 @@
               <FilePath>..\..\Petite\mem\alloc.c</FilePath>
             </File>
             <File>
-              <FileName>font.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Petite\font\font.c</FilePath>
-            </File>
-            <File>
-              <FileName>font_6x12.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Petite\font\font_6x12.c</FilePath>
-            </File>
-            <File>
-              <FileName>font_8x8.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Petite\font\font_8x8.c</FilePath>
-            </File>
-            <File>
-              <FileName>font_8x16.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Petite\font\font_8x16.c</FilePath>
-            </File>
-            <File>
-              <FileName>font_wjq.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Petite\font\font_wjq.c</FilePath>
-            </File>
-            <File>
-              <FileName>font_ymy.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Petite\font\font_ymy.c</FilePath>
-            </File>
-            <File>
               <FileName>bus_i2c.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\Petite\bus\bus_i2c.c</FilePath>
@@ -742,16 +712,6 @@
               <FileName>bus_vspi.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\Petite\bus\bus_vspi.c</FilePath>
-            </File>
-            <File>
-              <FileName>font_unicode.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Petite\font\font_unicode.c</FilePath>
-            </File>
-            <File>
-              <FileName>conv.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Petite\font\conv.c</FilePath>
             </File>
             <File>
               <FileName>p_malloc.c</FileName>
@@ -2022,6 +1982,66 @@
               <FileName>cmd_sys.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\components\cmd\cmd_sys.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>petitefont</GroupName>
+          <Files>
+            <File>
+              <FileName>petite_font.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\Petitefont\petite_font.c</FilePath>
+            </File>
+            <File>
+              <FileName>gb18030.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\components\Petitefont\gb18030.h</FilePath>
+            </File>
+            <File>
+              <FileName>gb2312.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\components\Petitefont\gb2312.h</FilePath>
+            </File>
+            <File>
+              <FileName>font_wjq.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\Petitefont\font_wjq.c</FilePath>
+            </File>
+            <File>
+              <FileName>font_asc_6x12.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\Petitefont\font_asc_6x12.c</FilePath>
+            </File>
+            <File>
+              <FileName>conv.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\Petitefont\conv.c</FilePath>
+            </File>
+            <File>
+              <FileName>font_8x8.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\Petitefont\font_8x8.c</FilePath>
+            </File>
+            <File>
+              <FileName>font_6x12.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\Petitefont\font_6x12.c</FilePath>
+            </File>
+            <File>
+              <FileName>font_8x16.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\Petitefont\font_8x16.c</FilePath>
+            </File>
+            <File>
+              <FileName>font_unicode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\Petitefont\font_unicode.c</FilePath>
+            </File>
+            <File>
+              <FileName>font_ymy.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\Petitefont\font_ymy.c</FilePath>
             </File>
           </Files>
         </Group>

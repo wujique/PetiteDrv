@@ -5,7 +5,7 @@
 /**********************************************/
 #include "mcu.h"
 
-#include "font/font.h"
+#include "petite_font.h"
 
 
 #define FONTDATAMAX 2048
@@ -2582,3 +2582,62 @@ struct fbcon_font_desc font_vga_8x8 = {
 	8,
 	8
 };
+
+
+bool FontVga8x8_get_glyph_dsc(const struct _petite_font_t *pfont, petite_font_glyph_dsc_t *glyph, uint32_t letter, uint32_t letter_next)
+{
+
+	glyph->adv_w = 8;
+	glyph->box_w = 8;
+
+	glyph->box_h = 8;
+	
+	glyph->ofs_x = 0;
+	glyph->ofs_y = 0;
+
+	glyph->bpp = 1;
+
+	return true;
+}
+
+
+const uint8_t *FontVga8x8_get_glyph_bitmap(const petite_font_t * pfont, uint32_t letter)
+{
+	uint32_t shift;
+	uint16_t code;
+
+	//uart_printf("get bmp font:%04x\r\n", letter);
+	/* */
+	if (letter >0x7f) return NULL;
+		
+	shift = letter * 8;
+
+	return (const uint8_t *)&fontdata_8x8[shift];
+}
+
+PetiteFontDsc FontVga8x8Pfd={
+	.fdt = FONT_H_H_L_R_U_D,
+	.st = FONT_ST_ASC,
+	.stc = NULL,
+};
+
+
+petite_font_t FontVga8x8 ={
+
+	.get_glyph_dsc = FontVga8x8_get_glyph_dsc,
+	.get_glyph_bitmap = FontVga8x8_get_glyph_bitmap,
+
+	.line_height = 8,
+	.base_line = 6,
+	.subpx = 0,
+
+	.underline_position = 7,
+	.underline_thickness = 1,
+
+	.dsc = (void *)&FontVga8x8Pfd,
+
+	.fallback = NULL,
+	.user_data = NULL,
+};
+
+

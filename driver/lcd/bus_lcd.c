@@ -263,10 +263,8 @@ s32 bus_lcd_write_data(DevLcdNode *lcd, u8 *data, u32 len)
 	return 0;
 }
 
-/*
-	  当需要连续写同一个数值时，调用本函数。
-	  当前专门给8080接口的LCD驱动使用
-	*/
+/*	  当需要连续写同一个数值时，调用本函数。
+	  当前专门给8080接口的LCD驱动使用        	*/
 s32 bus_lcd_w_data(DevLcdNode *lcd, u16 color, u32 len)
 {
 	u32 i;

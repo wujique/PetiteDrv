@@ -22,8 +22,8 @@ u8 test_qpi_run_fun(u8 num)
 /* 把图片放到QSPI FALSH，map之后直接读数据 */
 //#include "RGB565_480x272.h"
 
-#include "font/gb18030.h"
-#include "font/gb2312.h"
+#include "gb18030.h"
+#include "gb2312.h"
 
 /*
 	测试在QSPI上执行程序时是否能写QSPI Flash

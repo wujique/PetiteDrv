@@ -9,33 +9,27 @@ typedef struct
 	u8 addr;///7bit地址
 	u8 pagesize;///
 	u16 structure;///总容量 Byte
-}_strI2CEeprom;
+}I2CEepromPra;
 
 
 /*设备定义*/
 typedef struct
 {
 	PetiteDev pdev;
-	const _strI2CEeprom *pra;//设备规格
+	I2CEepromPra pra;//设备规格
 }DevI2cEeprom;
 
 
 /* 设备节点 */
 typedef struct
 {
+	PDevNode pnode;
+	
 	s32 gd;
-	
-	/* 设备规格， 设备定义也定义了一个设备规格。
-		注册设备时会进行拷贝，如有需要，会根据实际情况进行修改 */
-	_strI2CEeprom *pra;
-	/*spi 通道节点*/
-	DevSpiChNode *spichnode;
 
-	/*设备定义 */
-	const DevI2cEeprom *dev;
-	
-	struct list_head list;
-}DevI2cEepromNode;
+	DevI2cNode *basenode;
+	const DevI2cEeprom *dev;	
+}I2cEepromNode;
 
 
 #endif

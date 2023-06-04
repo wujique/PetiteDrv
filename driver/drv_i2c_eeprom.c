@@ -192,3 +192,22 @@ void mc24c_test(void)
 }
 
 
+
+
+#include "partition.h"
+
+const StorageDev StorageI2cEeprom ={
+	
+	.getblksize = storage_spiflash_getblksize,
+	.getsize = storage_spiflash_getsize,
+
+	.getnode = dev_spiflash_getnode,
+	.open = dev_spiflash_opennode,	
+	.read = storage_spiflash_read,
+	.write = storage_spiflash_write,
+	.erase = storage_spiflash_erase,
+	.close = dev_spiflash_close,
+};
+
+
+

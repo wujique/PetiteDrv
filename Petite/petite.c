@@ -45,7 +45,7 @@ extern osThreadId_t TestTaskHandle;
 
 void petite_task(void *pvParameters)
 {
-	char TaskListBuf[256];
+	//char TaskListBuf[256];
 	uint16_t tcnt=0;
 	UBaseType_t stackHWM;
 	
@@ -53,8 +53,7 @@ void petite_task(void *pvParameters)
 
 	/* 初始化petite模块状态*/
 	//vfs_init();
-	font_init();
-
+	
 	/* 初始化命令行 */
 	fun_cmd_init();
 	
@@ -62,7 +61,7 @@ void petite_task(void *pvParameters)
 
 	/* 测试内存溢出 rtos检测 ，溢出后HOOK函数会被调用
 		vApplicationStackOverflowHook */
-	memset(TaskListBuf, 0, sizeof(TaskListBuf));
+	//memset(TaskListBuf, 0, sizeof(TaskListBuf));
 	
 	for(;;) {
 		

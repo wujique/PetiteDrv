@@ -5,7 +5,7 @@
 
 #include "mcu.h"
 #include "petite_config.h"
-#include "font/font.h"
+#include "petite_font.h"
 
 #include "log.h"
 #include "board_sysconf.h"
@@ -19,6 +19,7 @@
 	输入汉字双字节内码，
 	返回汉字在点阵字库文件中的索引
 */
+#if 0
 int32_t font_pos_1_gbk(FontHzArea area, unsigned char c1, unsigned char c2, unsigned char c3, unsigned char c4)
 {
 	uint8_t hcode,lcode;
@@ -99,5 +100,5 @@ int font_dot_ymy_addr(FontHead * font, char *Ch, FontHzArea area)
 
 	return addr;
 }
-
+#endif
 

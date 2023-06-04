@@ -283,14 +283,14 @@ const MENU EMenuListTest[]=
 };
 	
 
-s32 emenu_test(DevLcdNode *lcd)
+s32 emenu_test(DevLcdNode *lcd, petite_font_t *font)
 {
 	emenulcd = lcd;
 	if (emenulcd == NULL) {
 		wjq_log(LOG_DEBUG, "open lcd err\r\n");
 	}
 	
-	emenu_run(emenulcd, (MENU *)&EMenuListTest[0], sizeof(EMenuListTest)/sizeof(MENU), "WQY_ST_12_H", 1, MENU_LANG_CHA);	
+	emenu_run(emenulcd, (MENU *)&EMenuListTest[0], sizeof(EMenuListTest)/sizeof(MENU), font, 1, MENU_LANG_CHA);	
 	
 	return 0;
 }

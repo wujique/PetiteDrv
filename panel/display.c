@@ -202,13 +202,15 @@ void rect (DevLcdNode *lcd, int x1, int y1, int x2, int y2, unsigned colidx)
 
 /*
 	在framebuff中填充字符,
-	
-	*/
-#define BASE_LINE 10
-	/* 字号行高 */
-#define LINE_HIGHT 12
 
-s32 display_put_str_to_framebuff(DevLcdNode *lcd, char *font, int x, int y, char *s, unsigned colidx)
+	用户需求：
+		在指定LCD的某个位置，用指定的字体，显示一串字符。
+	冰山下需求：
+		1.都有什么样的LCD？
+		2.字体，有GBK排布的点阵字库，也有UNICODE排布的矢量字库。
+		3.输入的字符串有GBK编码，也有utf8编码。
+	*/
+s32 display_put_str_to_framebuff(DevLcdNode *lcd, petite_font_t *font, int x, int y, char *s, unsigned colidx)
 {
 	u16 slen;
 	
@@ -218,59 +220,81 @@ s32 display_put_str_to_framebuff(DevLcdNode *lcd, char *font, int x, int y, char
 	u16 col,row,lcdx,lcdy,yshift;
 	
 	char tmp;;
-	void  *fontstr;
 	
-	FontBitMap bitmap;
-	u8 *dotbuf;//字符点阵缓冲
+	const uint8_t *bitmap;
 	unsigned color;
 
-	char *chbuf;
+	char *chbuf=NULL;
+	char *disstr;
+		
+	petite_font_glyph_dsc_t glyph_dsc;
+	FontDotType fdt;	//取模方式
+	FontSt	st;	
+	PetiteFontDsc *pfdsc;
 	
 	if (lcd == NULL) return -1;
+
+	pfdsc = (PetiteFontDsc *)font->dsc;
+	fdt = pfdsc->fdt;
+	st = pfdsc->st;
 	
-	slen = strlen(s);
-	//uart_printf("str len:%d\r\n", slen);
-
-	#if 1//utf-8
-	chbuf = wjq_malloc(slen*2);
-	utf8_2_gbk(s, chbuf, slen);
-	#else
-	chbuf = s;
-	#endif
-	/* 设置字库 */
-	fontstr= font_find_font(font);
-	if (fontstr == NULL) return -2;
-
-	dotbuf = (u8*)wjq_malloc(72);//要改为根据字库类型申请
-	bitmap.dot = dotbuf;
+	/* 如果指定的字库编码方式和字符串编码方式不一致，则进行编码转换 */
+	if (st == FONT_ST_GBK) {
+		slen = strlen(s);
+		chbuf = wjq_malloc(slen*2);
+		memset(chbuf, 0, slen*2);
+		utf8_2_gbk(s, chbuf, slen);
+		slen = strlen(chbuf);
+		disstr = chbuf;
+	} else if (st == FONT_ST_UNICODE){
+		slen = strlen(s);
+		chbuf = wjq_malloc(slen*2);
+		memset(chbuf, 0, slen*2);
+		slen = utf8_2_utf16(s, chbuf, slen);
+		disstr = chbuf;
+		
+	} else {
+		disstr = s;
+		slen = strlen(s);
+	}
 	
 	sidx = 0;
 	lcdx = x;
 	lcdy = y;
 	/*获取点阵，并转化为LCD像素*/
 	while(1) {
-		if (sidx >= slen) break;
-
-		chr = font_getdot(fontstr, chbuf+sidx, &bitmap, "GBK");	
-
-		/* 填点 left 和 top 两个参数都会出现负数 */
-		lcdx += bitmap.head.left;
-		
-		if (bitmap.head.top > BASE_LINE) yshift = 0;
-		else yshift = BASE_LINE - bitmap.head.top;
-		//uart_printf("yshift:%d\r\n", yshift);
-		if (yshift >= LINE_HIGHT) yshift = LINE_HIGHT-1;
+		if (sidx >= slen) {
+			uart_printf("sidx %d, slen %d\r\n", sidx, slen);
+			break;
+		}
+		uint32_t chcode;
 	
-		for (row = 0; row<bitmap.head.rows; row++) {
-			for (col = 0; col < bitmap.head.width ;col++) {
+		/* 从字符串中取一个字符出来 */
+		chr = font_get_ch_from_str(disstr+sidx, &chcode, st);
+		uart_printf("chr %d, %x", chr, chcode);
+
+		font->get_glyph_dsc(font, &glyph_dsc, chcode, NULL);
+		bitmap = font->get_glyph_bitmap(font, chcode);
+		
+		/* 填点 left 和 top 两个参数都会出现负数 */
+		lcdx += glyph_dsc.ofs_x;
+		
+		if (glyph_dsc.ofs_y > font->base_line) yshift = 0;
+		else yshift = glyph_dsc.ofs_y;
+		
+		if (yshift >= font->line_height) yshift = font->line_height-1;
+	
+		for (row = 0; row < glyph_dsc.box_h; row++) {
+			for (col = 0; col < glyph_dsc.box_w ;col++) {
 				
-				if(bitmap.dt == FONT_V_H_U_D_L_R) {
-					tmp = dotbuf[col*2+row/8]&(0x80>>(row%8));
-				} else if(bitmap.dt == FONT_V_L_L_R_U_D) {
-					tmp = dotbuf[col+row/8*bitmap.head.width]&(0x01<<(row%8));
-				} else if(bitmap.dt == FONT_H_H_L_R_U_D) {
-					tmp = dotbuf[col/8 + row*((bitmap.head.width+7)/8)]&(0x80>>(col%8));
+				if(fdt == FONT_V_H_U_D_L_R) {
+					tmp = bitmap[col*2+row/8]&(0x80>>(row%8));
+				} else if(fdt == FONT_V_L_L_R_U_D) {
+					tmp = bitmap[col+row/8*glyph_dsc.box_w]&(0x01<<(row%8));
+				} else if(fdt == FONT_H_H_L_R_U_D) {
+					tmp = bitmap[col/8 + row*((glyph_dsc.box_w+7)/8)]&(0x80>>(col%8));
 				}
+				
 				
 				if (tmp != 0) {
 					color = colidx;
@@ -283,33 +307,27 @@ s32 display_put_str_to_framebuff(DevLcdNode *lcd, char *font, int x, int y, char
 
 		}	
 
-		lcdx += bitmap.head.width;
+		lcdx += glyph_dsc.box_w;
 		sidx += chr;
 	}
-
-	/* 是不是由用户进行lcd刷新更高效率，例如要显示5行内容的时候 */
-	//lcd_update(lcd);
-	
-	wjq_free(dotbuf);
-	
-	wjq_free(chbuf);
+	if( chbuf != NULL)
+		wjq_free(chbuf);
 	return 0;	
 }
 
 /*
 	没有framebuff的lcd的显示方法
-
 	未测试，
-
 	针对8080接口的，没有framebuff的LCD
 	*/
-s32 display_put_str_to_lcd(DevLcdNode *lcd, char *font, int x, int y, char *s, unsigned colidx)
+s32 display_put_str_to_lcd(DevLcdNode *lcd, petite_font_t *font, int x, int y, char *s, unsigned colidx)
 {
 	u16 slen;
 
 	int chr;
 	u16 sidx;
-	u16 col,row,lcdx,lcdy,yshift;
+	u16 col,row,lcdx,lcdy;
+	s16 yshift;
 	u16 buff_index = 0;
 
 	u16 xlen,ylen;
@@ -317,71 +335,97 @@ s32 display_put_str_to_lcd(DevLcdNode *lcd, char *font, int x, int y, char *s, u
 	u16 *framebuff;//样点缓冲，按照L2R_U2D格式填充
 	
 	char tmp;;
-	void  *fontstr;
 	
-	FontBitMap bitmap;
+	const uint8_t *bitmap;
 	u8 *dotbuf;//字符点阵缓冲
 	unsigned color;
 
-	char *chbuf;
+	char *chbuf = NULL;
+	char *disstr;
+	
+	petite_font_glyph_dsc_t glyph_dsc;
+	FontDotType fdt;	//取模方式
+	FontSt	st;	
+	PetiteFontDsc *pfdsc;
 	
 	if (lcd == NULL) return -1;
 	
-	slen = strlen(s);
-	//uart_printf("str len:%d\r\n", slen);
-#if 1//utf-8
-	chbuf = wjq_malloc(slen*2);
-	utf8_2_gbk(s, chbuf, slen);
-#else
-	chbuf = s;
-#endif
+	pfdsc = (PetiteFontDsc *)font->dsc;
+	fdt = pfdsc->fdt;
+	st = pfdsc->st;
+	
+	/* 如果指定的字库编码方式和字符串编码方式不一致，则进行编码转换 */
+	if (st == FONT_ST_GBK) {
+		slen = strlen(s);
+		chbuf = wjq_malloc(slen*2);
+		memset(chbuf, 0, slen*2);
+		utf8_2_gbk(s, chbuf, slen);
+		slen = strlen(chbuf);
+		disstr = chbuf;
+	} else if (st == FONT_ST_UNICODE){
+		slen = strlen(s);
+		chbuf = wjq_malloc(slen*2);
+		memset(chbuf, 0, slen*2);
+		slen = utf8_2_utf16(s, chbuf, slen);
+		disstr = chbuf;
+		
+	} else {
+		disstr = s;
+		slen = strlen(s);
+	}
 
-	/* 设置字库 */
-	fontstr= font_find_font(font);
-	if (fontstr == NULL) return -2;
-
-
-	font_get_hw(font, &fonth, &fontw);
+	fonth = font->line_height;
+	fontw = font->line_height/2;
 	/*	根据字符串长度计算刷新区域长宽	*/
 	xlen = slen*fontw;
 	ylen = fonth;
-	framebuff = (u16*)wjq_malloc(xlen*ylen*sizeof(u16));//样点缓冲
+	uart_printf("framebuff %d, %d, %d\r\n", fonth, fontw, slen);
+	uart_printf("framebuff %d, %d\r\n", xlen, ylen);
 	
-	dotbuf = (u8*)wjq_malloc(72);//要改为根据字库类型申请
-	bitmap.dot = dotbuf;
+	framebuff = (u16*)wjq_malloc(xlen*ylen*sizeof(u16));//样点缓冲
 	
 	sidx = 0;
 	/* framebuff 坐标*/
-	lcdx = 0;
-	lcdy = 0;
+	s16 fbx, fby;
+	fbx = 0;
+	fby = 0;
+	
 	/*获取点阵，并转化为LCD像素*/
 	while(1) {
 		if (sidx >= slen) break;
 
-		chr = font_getdot(fontstr, chbuf+sidx, &bitmap, "GBK");	
+		uint32_t chcode;
+	
+		/* 从字符串中取一个字符出来 */
+		chr = font_get_ch_from_str(disstr+sidx, &chcode, st);
+		uart_printf("chr %d, %x", chr, chcode);
+
+		font->get_glyph_dsc(font, &glyph_dsc, chcode, NULL);
+		bitmap = font->get_glyph_bitmap(font, chcode);
 
 		/* 填点 left 和 top 两个参数都会出现负数 */
-		lcdx += bitmap.head.left;
+		fbx += glyph_dsc.ofs_x;
 		
-		if (bitmap.head.top > BASE_LINE) yshift = 0;
-		else yshift = BASE_LINE - bitmap.head.top;
-		//uart_printf("yshift:%d\r\n", yshift);
-		if (yshift >= LINE_HIGHT) yshift = LINE_HIGHT-1;
-	
+		if (glyph_dsc.ofs_y > font->base_line) yshift = 0;
+		else yshift = glyph_dsc.ofs_y;
+		if (yshift >= font->line_height) yshift = font->line_height-1;
+		
+		uart_printf("yshift %d", yshift);
+		
+		for (row = 0; row < glyph_dsc.box_h; row++) {
+			
+			buff_index = (row + yshift)*xlen + fbx;
 
-		for (row = 0; row<bitmap.head.rows; row++) {
-			
-			buff_index = (lcdy + row + yshift)*xlen + lcdx;
-			
-			for (col = 0; col < bitmap.head.width ; col++) {
+			for (col = 0; col < glyph_dsc.box_w ; col++) {
 				
-				if(bitmap.dt == FONT_V_H_U_D_L_R) {
+				if(fdt == FONT_V_H_U_D_L_R) {
 					tmp = dotbuf[col*2+row/8]&(0x80>>(row%8));
-				} else if(bitmap.dt == FONT_V_L_L_R_U_D) {
-					tmp = dotbuf[col+row/8*bitmap.head.width]&(0x01<<(row%8));
-				} else if(bitmap.dt == FONT_H_H_L_R_U_D) {
-					tmp = dotbuf[col/8 + row*((bitmap.head.width+7)/8)]&(0x80>>(col%8));
+				} else if(fdt == FONT_V_L_L_R_U_D) {
+					tmp = dotbuf[col+row/8*glyph_dsc.box_w]&(0x01<<(row%8));
+				} else if(fdt == FONT_H_H_L_R_U_D) {
+					tmp = dotbuf[col/8 + row*((glyph_dsc.box_w+7)/8)]&(0x80>>(col%8));
 				}
+
 				
 				if (tmp != 0) {
 					color = colidx;
@@ -393,7 +437,7 @@ s32 display_put_str_to_lcd(DevLcdNode *lcd, char *font, int x, int y, char *s, u
 			}
 		}	
 
-		lcdx += bitmap.head.width;
+		fbx += glyph_dsc.box_w;
 		
 		sidx += chr;
 	}
@@ -411,7 +455,7 @@ s32 display_put_str_to_lcd(DevLcdNode *lcd, char *font, int x, int y, char *s, u
 		row = 1;
 		while(1) {
 			if (row >= ylen) break;
-			memcpy(framebuff+row*col, framebuff+ row*xlen, 2*col);
+			memcpy(framebuff + row*col, framebuff+ row*xlen, 2*col);
 			row++;
 		}
 		xlen = col;
@@ -420,8 +464,10 @@ s32 display_put_str_to_lcd(DevLcdNode *lcd, char *font, int x, int y, char *s, u
 	lcd_fill(lcd, x, x + xlen-1, y, y + ylen-1, framebuff);
 
 	wjq_free(framebuff);
-	wjq_free(dotbuf);
-	wjq_free(chbuf);
+	
+	if (chbuf != NULL)
+		wjq_free(chbuf);
+
 	return 0;
 }
 
@@ -430,44 +476,20 @@ s32 display_put_str_to_lcd(DevLcdNode *lcd, char *font, int x, int y, char *s, u
  *@details:    显示字符串，支持中文
  *@param[in]   无
  *@param[out]  无
- *@retval:     	
+ *@retval:       
+ *@note          
  */
-s32 display_lcd_put_string(DevLcdNode *lcd, char *font, int x, int y, char *s, unsigned colidx)
+s32 display_lcd_put_string(DevLcdNode *lcd, petite_font_t *font, int x, int y, char *str, unsigned colidx)
 {
-	/*
-		备注：
-			在LCD上显示字符串，
-			如果lcd开辟有 framebuff，例如cog/oled  小屏，或者RGB屏，
-			则直接在framebuff上填点，然后再update。
-			如果是没有开辟 framebuff的方案，则临时申请一个区域的block，
-			填完点后，在用fill方法将数据刷新到lcd上
-		*/
-
-	/*	头脑风暴
-		
-		先创建一个framebuff，将点阵填入这个buff，
-		再将这个buff中的内容，fill到lcd驱动。
-		这样的操作方式，对于8080接口这种屏幕，能提高速度。
-		因为8080接口的屏幕通常在mcu端没有开辟显存。
-
-		cog/oled这种小屏幕，有显存。
-		RGB接口的也有显存。
-
-		2022.10.17 bitmap类型点阵问题
-		bitmap点阵，非等宽字符，如何判断该申请多少framebuff？
-		如果根据字号thai语会有风险。
-		填点阵只是知道左上角原点，bitmap的高度宽度都是未知的。
-		但是肯定不会高于两倍高度吧？
-		宽度会不会大于字号？
-		*/
 	s32 res;
 
 	if (lcd->fb == LCD_HAVE_FRAMEBUFF) {
 		//uart_printf("lcd have framebuff!\r\n");
-		display_put_str_to_framebuff(lcd, font, x, y, s, colidx);
+		display_put_str_to_framebuff(lcd, font, x, y, str, colidx);
 	} else {
 		//uart_printf("lcd no framebuff!\r\n");
-		res = display_put_str_to_lcd(lcd, font, x, y, s, colidx);
+		display_put_str_to_framebuff(lcd, font, x, y, str, colidx);
+		//res = display_put_str_to_lcd(lcd, font, x, y, str, colidx);
 	}
 	return 0;	
 }

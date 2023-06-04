@@ -15,7 +15,7 @@
 #include "mem/p_list.h"
 
 
-#include "font/font.h"
+#include "petite_font.h"
 
 
 #include "bus/bus_i2c.h"

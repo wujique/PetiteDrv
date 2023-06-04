@@ -130,7 +130,7 @@ typedef struct _strMenuCtrl
 	/*	LCD跟字体规格	*/
 	u16 lcdh;
 	u16 lcdw;
-	char *font;
+	petite_font_t *font;
 	u16 fonth;
 	u16 fontw;
 
@@ -565,7 +565,7 @@ s32 emenu_deal_key_2col(u8 key)
  *@param[out]  无
  *@retval:     
  */
-s32 emenu_run(DevLcdNode *lcd, MENU *p, u16 len, char *font, u8 spaced, u8 lang)
+s32 emenu_run(DevLcdNode *lcd, MENU *p, u16 len, petite_font_t *font, u8 spaced, u8 lang)
 {
 	u8 disflag = 1;
 	s32 ret;
@@ -584,7 +584,12 @@ s32 emenu_run(DevLcdNode *lcd, MENU *p, u16 len, char *font, u8 spaced, u8 lang)
 	menu_ctrl.lcdw = lcd->width;
 	menu_ctrl.lcdh = lcd->height;
 	menu_ctrl.font = font;
-	font_get_hw(font, &(menu_ctrl.fonth), &(menu_ctrl.fontw));
+
+	/* 此处如此设计，不合理，只有使用等宽点阵字体的时候才是合理的*/
+	///@buf needfix emenu font err!
+	menu_ctrl.fonth = font->line_height;
+	menu_ctrl.fontw = font->line_height/2;
+	///end
 	
 	menu_ctrl.spaced = spaced;
 	

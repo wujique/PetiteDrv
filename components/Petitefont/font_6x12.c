@@ -6,9 +6,9 @@
 
 #include "mcu.h"
 
-#include "font/font.h"
+#include "petite_font.h"
 
-/* 本点阵字符大小写基线不一样 */
+/* 本点阵字符大小写基线不一样 ， 显示效果差强人意 */
 
 #define FONTDATAMAX (12*0x80)
 
@@ -283,4 +283,63 @@ struct fbcon_font_desc font_vga_6x12 = {
 	12,
 	12
 };
+
+
+bool FontVga6X12_get_glyph_dsc(const struct _petite_font_t *pfont, petite_font_glyph_dsc_t *glyph, uint32_t letter, uint32_t letter_next)
+{
+
+	glyph->adv_w = 6;
+	glyph->box_w = 6;
+
+	glyph->box_h = 12;
 	
+	glyph->ofs_x = 0;
+	glyph->ofs_y = 0;
+
+	glyph->bpp = 1;
+
+	return true;
+}
+
+
+const uint8_t *FontVga6X12_get_glyph_bitmap(const petite_font_t * pfont, uint32_t letter)
+{
+	uint32_t shift;
+	uint16_t code;
+
+	//uart_printf("get bmp font:%04x\r\n", letter);
+	/* */
+	if (letter >0x7f) return NULL;
+		
+	shift = letter * 12;
+
+	return (const uint8_t *)&fontdata_6x12[shift];
+}
+
+
+PetiteFontDsc FontVga6x12Pfd={
+	.fdt = FONT_H_H_L_R_U_D,
+	.st = FONT_ST_ASC,
+	.stc = NULL,
+};
+
+
+petite_font_t FontVga6X12 ={
+
+	.get_glyph_dsc = FontVga6X12_get_glyph_dsc,
+	.get_glyph_bitmap = FontVga6X12_get_glyph_bitmap,
+
+	.line_height = 12,
+	.base_line = 10,
+	.subpx = 0,
+
+	.underline_position = 11,
+	.underline_thickness = 1,
+
+	.dsc = (void *)&FontVga6x12Pfd,
+
+	.fallback = NULL,
+	.user_data = NULL,
+};
+
+

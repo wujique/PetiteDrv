@@ -141,6 +141,20 @@ void PrintFormat(u8 *wbuf, s32 wlen)
     }
     uart_printf("\r\n");
 }
+
+void PrintFormatCarray(u8 *wbuf, s32 wlen)
+{   
+    s32 i;
+    for(i=0; i<wlen; i++) {
+        if((0 == (i&0x0f)))//&&(0 != i))
+        {
+            uart_printf("\r\n");
+        }
+        uart_printf("0x%02x, ", wbuf[i]);
+    }
+    uart_printf("\r\n");
+}
+
 void PrintFormatU16(u16 *wbuf, s32 wlen)
 {   
     s32 i;

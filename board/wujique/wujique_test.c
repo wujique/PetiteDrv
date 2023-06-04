@@ -27,21 +27,17 @@
 #include "drv_keypad.h"
 #include "drv_key.h"
 
+extern petite_font_t *font_wjq_create_from_file(const char * path, uint16_t line_height);
+extern petite_font_t FontVga6X12;
+petite_font_t *WjqTestFont;
+petite_font_t *WjqTestFont12;
+petite_font_t *WjqTestFont16;
+petite_font_t *WjqTestFont24;
+petite_font_t *wjqunicode1212;
+
 extern u16 PenColor;
 extern u16 BackColor;
 
-//#define TEST_FONG "SYsongti_12"
-//#define TEST_FONG "SYsongti_16"
-//#define TEST_FONG "SYST_16_m"
-//#define TEST_FONG "SYST_24_m"
-
-//#define TEST_FONG "WQY_ST_16_H"
-#define TEST_FONG "WQY_ST_12_H"
-
-//#define TEST_FONG "ZYST_12_V_18030"
-//#define TEST_FONG "ZYST_12_H_18030"
-//#define TEST_FONG "ZYST_24_H_2312"
-//#define TEST_FONG "ZYST_16_H_18030"
 
 DevLcdNode * WJQTestLcd;
 
@@ -66,7 +62,7 @@ s32 wjq_test_showstr(char *s)
 	lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, BackColor);
 	
 	/*顶行居中显示父菜单*/
-	display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, s, PenColor);
+	display_lcd_put_string(WJQTestLcd, WjqTestFont, 1, 32, s, PenColor);
 	lcd_update(WJQTestLcd);
 	wjq_wait_key(0);
 	
@@ -88,7 +84,7 @@ s32 test_tft_display(void)
 	lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
 	
 	/*顶行居中显示父菜单*/
-	display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
+	display_lcd_put_string(WJQTestLcd, WjqTestFont, 1, 32, (char *)__FUNCTION__, BLACK);
 	lcd_update(WJQTestLcd);
 	
 	lcd = lcd_open("tftlcd");
@@ -110,7 +106,7 @@ s32 test_tft_display(void)
 						break;
 					case 2:
 						lcd_color_fill(lcd, 1, 1000, 1, 1000, BLUE);
-						display_lcd_put_string(lcd, TEST_FONG, 1, 120, "abc屋脊雀ADC123工作室12345678901234屋脊雀工作室", RED);
+						display_lcd_put_string(lcd, WjqTestFont, 1, 120, "abc屋脊雀ADC123工作室12345678901234屋脊雀工作室", RED);
 						lcd_update(lcd);
 
 						break;
@@ -162,7 +158,7 @@ s32 test_cogoled_lcd_display(char *name)
 						lcd_update(lcd);
 						break;
 					case 2:
-						display_lcd_put_string(lcd, TEST_FONG, 1, 56, "abc屋脊雀ADC123工作室", BLACK);
+						display_lcd_put_string(lcd, WjqTestFont, 1, 56, "abc屋脊雀ADC123工作室", BLACK);
 						lcd_update(lcd);
 						break;
 						
@@ -194,7 +190,7 @@ s32 test_i2c_oled_display(void)
 {
 	lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
 	/*顶行居中显示父菜单*/
-	display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
+	display_lcd_put_string(WJQTestLcd, WjqTestFont, 1, 32, (char *)__FUNCTION__, BLACK);
 	lcd_update(WJQTestLcd);
 	return 	test_cogoled_lcd_display("i2coledlcd");
 }
@@ -202,7 +198,7 @@ s32 test_vspi_oled_display(void)
 {
 	lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
 	/*顶行居中显示父菜单*/
-	display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
+	display_lcd_put_string(WJQTestLcd, WjqTestFont, 1, 32, (char *)__FUNCTION__, BLACK);
 	lcd_update(WJQTestLcd);
 	return 	test_cogoled_lcd_display("vspioledlcd");
 }
@@ -211,7 +207,7 @@ s32 test_spi_cog_display(void)
 {
 	lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
 	/*顶行居中显示父菜单*/
-	display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
+	display_lcd_put_string(WJQTestLcd, WjqTestFont, 1, 32, (char *)__FUNCTION__, BLACK);
 	lcd_update(WJQTestLcd);
 	return 	test_cogoled_lcd_display("spicoglcd");
 }
@@ -226,7 +222,7 @@ s32 test_lcd_spi_128128(void)
 	
 	lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
 	/*顶行居中显示父菜单*/
-	display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
+	display_lcd_put_string(WJQTestLcd, WjqTestFont, 1, 32, (char *)__FUNCTION__, BLACK);
 	lcd_update(WJQTestLcd);
 	
 	lcd = lcd_open("spitftlcd");
@@ -250,7 +246,7 @@ s32 test_lcd_spi_128128(void)
 						break;
 					case 2:
 						lcd_color_fill(lcd, 1, 1000, 1, 1000, BLUE);
-						display_lcd_put_string(lcd, TEST_FONG, 1, 120, "abc屋脊雀ADC123工作室12345678901234屋脊雀工作室", RED);
+						display_lcd_put_string(lcd, WjqTestFont, 1, 120, "abc屋脊雀ADC123工作室12345678901234屋脊雀工作室", RED);
 						lcd_update(lcd);
 						break;
 					case 3:
@@ -288,7 +284,7 @@ s32 test_lcd_pic(void)
 	
 	lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
 	/*顶行居中显示父菜单*/
-	display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
+	display_lcd_put_string(WJQTestLcd, WjqTestFont, 1, 32, (char *)__FUNCTION__, BLACK);
 	lcd_update(WJQTestLcd);
 	lcd = lcd_open("tftlcd");
 	if (lcd == NULL)	{
@@ -331,7 +327,7 @@ s32 test_sound_buzzer(void)
 {
 	lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
 	/*顶行居中显示父菜单*/
-	display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
+	display_lcd_put_string(WJQTestLcd, WjqTestFont, 1, 32, (char *)__FUNCTION__, BLACK);
 	lcd_update(WJQTestLcd);
 	while(1) {
 		u8 keyvalue;
@@ -355,7 +351,7 @@ s32 test_sound_buzzer(void)
 s32 test_sound_fm(void)
 {
 	lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
-	display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
+	display_lcd_put_string(WJQTestLcd, WjqTestFont, 1, 32, (char *)__FUNCTION__, BLACK);
 	lcd_update(WJQTestLcd);
 	dev_wm8978_inout(WM8978_INPUT_DAC|WM8978_INPUT_AUX|WM8978_INPUT_ADC,
 					WM8978_OUTPUT_PHONE|WM8978_OUTPUT_SPK);
@@ -370,7 +366,7 @@ s32 test_sound_fm(void)
 s32 test_sound_wm8978(void)
 {
 	lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
-	display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
+	display_lcd_put_string(WJQTestLcd, WjqTestFont, 1, 32, (char *)__FUNCTION__, BLACK);
 	lcd_update(WJQTestLcd);
 	fun_sound_play("/1:/stereo_16bit_32k.wav", "wm8978");
 	wjq_wait_key(16);
@@ -382,7 +378,7 @@ s32 test_sound_wm8978(void)
 s32 test_sound_dac(void)
 {
 	lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
-	display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
+	display_lcd_put_string(WJQTestLcd, WjqTestFont, 1, 32, (char *)__FUNCTION__, BLACK);
 	lcd_update(WJQTestLcd);
 	fun_sound_play("/1:/mono_16bit_8k.wav", "dacsound");
 	wjq_wait_key(16);
@@ -393,7 +389,7 @@ s32 test_sound_dac(void)
 s32 test_sound_rec(void)
 {
 	lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
-	display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
+	display_lcd_put_string(WJQTestLcd, WjqTestFont, 1, 32, (char *)__FUNCTION__, BLACK);
 	lcd_update(WJQTestLcd);
 	//fun_sound_rec("mtd0/1:rec8.wav");
 	wjq_wait_key(16);
@@ -423,7 +419,7 @@ s32 test_tp_calibrate(void)
 
 	lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
 	/*顶行居中显示父菜单*/
-	display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
+	display_lcd_put_string(WJQTestLcd, WjqTestFont, 1, 32, (char *)__FUNCTION__, BLACK);
 	lcd_update(WJQTestLcd);
 	lcd = lcd_open("tftlcd");
 	if(lcd == NULL) {
@@ -449,7 +445,7 @@ s32 test_tp_test(void)
 
 	lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
 	/*顶行居中显示父菜单*/
-	display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
+	display_lcd_put_string(WJQTestLcd, WjqTestFont, 1, 32, (char *)__FUNCTION__, BLACK);
 	lcd_update(WJQTestLcd);
 	lcd = lcd_open("tftlcd");
 	if (lcd == NULL)	{
@@ -506,7 +502,7 @@ s32 test_key(void)
 	u8 keyvalue;
 		
 	lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
-	display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
+	display_lcd_put_string(WJQTestLcd, WjqTestFont, 1, 32, (char *)__FUNCTION__, BLACK);
 	lcd_update(WJQTestLcd);
 	dev_key_open();
 
@@ -514,10 +510,10 @@ s32 test_key(void)
 		res = dev_key_read(&tmp, 1);
 		if(1 == res) {
 			if (tmp == DEV_KEY_PRESS) {
-				display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 10, "	   press	", BLACK);
+				display_lcd_put_string(WJQTestLcd, WjqTestFont, 1, 10, "	   press	", BLACK);
 				lcd_update(WJQTestLcd);
 			} else if(tmp == DEV_KEY_REL) {
-				display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 10, "	 release	  ", BLACK);
+				display_lcd_put_string(WJQTestLcd, WjqTestFont, 1, 10, "	 release	  ", BLACK);
 				lcd_update(WJQTestLcd);
 			}
 		}
@@ -574,7 +570,7 @@ s32 test_rs485_rec(void)
 	s32 res;
 	
 	lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
-	display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
+	display_lcd_put_string(WJQTestLcd, WjqTestFont, 1, 32, (char *)__FUNCTION__, BLACK);
 	lcd_update(WJQTestLcd);
 	//dev_rs485_open();
 
@@ -605,7 +601,7 @@ s32 test_rs485_snd(void)
 	s32 res;
 	
 	lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
-	display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
+	display_lcd_put_string(WJQTestLcd, WjqTestFont, 1, 32, (char *)__FUNCTION__, BLACK);
 	lcd_update(WJQTestLcd);
 	//dev_rs485_open();
 
@@ -647,7 +643,7 @@ s32 test_uart(void)
     s32 res;
 	
 	lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
-	display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
+	display_lcd_put_string(WJQTestLcd, WjqTestFont, 1, 32, (char *)__FUNCTION__, BLACK);
 	lcd_update(WJQTestLcd);
 	while(1) {
 		
@@ -687,7 +683,7 @@ s32 wjq_test(void)
 s32 test_spiflash_board(void)
 {
 	lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
-	display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
+	display_lcd_put_string(WJQTestLcd, WjqTestFont, 1, 32, (char *)__FUNCTION__, BLACK);
 	lcd_update(WJQTestLcd);
 	
 	dev_spiflash_test_chipcheck("board_spiflash");
@@ -698,7 +694,7 @@ s32 test_spiflash_board(void)
 s32 test_spiflash_core(void)
 {
 	lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
-	display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
+	display_lcd_put_string(WJQTestLcd, WjqTestFont, 1, 32, (char *)__FUNCTION__, BLACK);
 	lcd_update(WJQTestLcd);
 	
 	dev_spiflash_test_chiperase("core_spiflash");
@@ -713,7 +709,7 @@ s32 test_touchkey(void)
 	u8 keyvalue;
 		
 	lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
-	display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 32, (char *)__FUNCTION__, BLACK);
+	display_lcd_put_string(WJQTestLcd, WjqTestFont, 1, 32, (char *)__FUNCTION__, BLACK);
 	lcd_update(WJQTestLcd);
 	
 	dev_touchkey_open();
@@ -726,13 +722,13 @@ s32 test_touchkey(void)
 			if(tmp == DEV_TOUCHKEY_TOUCH)
 			{
 				wjq_log(LOG_DEBUG, "touch key test get a touch event!\r\n");
-				display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 10, "      touch    ", BLACK);
+				display_lcd_put_string(WJQTestLcd, WjqTestFont, 1, 10, "      touch    ", BLACK);
 				lcd_update(WJQTestLcd);
 			}
 			else if(tmp == DEV_TOUCHKEY_RELEASE)
 			{
 				wjq_log(LOG_DEBUG, "touch key test get a release event!\r\n");
-				display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 10, "      release    ", BLACK);
+				display_lcd_put_string(WJQTestLcd, WjqTestFont, 1, 10, "      release    ", BLACK);
 				lcd_update(WJQTestLcd);
 			}
 		}
@@ -772,11 +768,11 @@ s32 test_keypad(void)
 		if(dis_flag == 1)
 		{
 			lcd_color_fill(WJQTestLcd, 1, 1000, 1, 1000, WHITE);
-			display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 1, (char *)__FUNCTION__, BLACK);
-			display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 13, testkeypad1, BLACK);
-			display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 26, testkeypad2, BLACK);
-			display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 39, testkeypad3, BLACK);
-			display_lcd_put_string(WJQTestLcd, TEST_FONG, 1, 52, testkeypad4, BLACK);
+			display_lcd_put_string(WJQTestLcd, WjqTestFont, 1, 1, (char *)__FUNCTION__, BLACK);
+			display_lcd_put_string(WJQTestLcd, WjqTestFont, 1, 13, testkeypad1, BLACK);
+			display_lcd_put_string(WJQTestLcd, WjqTestFont, 1, 26, testkeypad2, BLACK);
+			display_lcd_put_string(WJQTestLcd, WjqTestFont, 1, 39, testkeypad3, BLACK);
+			display_lcd_put_string(WJQTestLcd, WjqTestFont, 1, 52, testkeypad4, BLACK);
 			lcd_update(WJQTestLcd);
 			dis_flag = 0;
 		}
@@ -1255,9 +1251,15 @@ void wujique_stm407_test(void)
 {
 	wjq_log(LOG_DEBUG,"\r\n\r\n\r\n---run board test\r\n\r\n\r\n\r\n");
 
+	/* 这四个字库是 WJQ GBK 排布 */
+	WjqTestFont = font_wjq_create_from_file("1:/font/wqy12h18030.bin", 12);
+	WjqTestFont16 = font_wjq_create_from_file("1:/font/wqy16h18030.bin", 16);
+	WjqTestFont24 = font_wjq_create_from_file("1:/font/syst_m_2424_18030.bin", 24);//syst_m_2424_big5
 
-	//WJQTestLcd = lcd_open("tftlcd");
-	WJQTestLcd = lcd_open("spicoglcd");
+	wjqunicode1212 = bitmapfont_create_from_file("1:/font/font_file.bin", 12);
+	
+	WJQTestLcd = lcd_open("tftlcd");
+	//WJQTestLcd = lcd_open("spicoglcd");
 	//WJQTestLcd = lcd_open("i2coledlcd");
 	//WJQTestLcd = lcd_open("spitftlcd");
 	//WJQTestLcd = lcd_open("spiE-Paper");
@@ -1265,20 +1267,25 @@ void wujique_stm407_test(void)
 	if (WJQTestLcd == NULL) {
 		wjq_log(LOG_DEBUG, "emenu open lcd err\r\n");
 	}
-	#if 0
+	#if 1
 	lcd_backlight(WJQTestLcd, 1);
-	dev_lcd_put_string(WJQTestLcd, "WQY_ST_12_H", 10,1, "oled test", BLACK);
-	dev_lcd_put_string(WJQTestLcd, "WQY_ST_12_H", 10,30, "www.wujique.com", BLACK);
-	dev_lcd_put_string(WJQTestLcd, "WQY_ST_12_H", 10,46, "屋脊雀工作室", BLACK);
+	/*登录,登錄,Login,Login,로그인,Anmeldung,S'identifier,Accesso,Iniciar sesión,Đăng nhập,Логин,Entrar,Masuk,Oturum aç,เข้าสู่ระบบ*/
+	display_lcd_put_string(WJQTestLcd, WjqTestFont, 10,1, "中国www.wujique.com", BLACK);
+	display_lcd_put_string(WJQTestLcd, wjqunicode1212, 10,14, "登录登錄로그인Accesso", BLACK);
+	display_lcd_put_string(WJQTestLcd, wjqunicode1212, 10,27, "Iniciar sesión Đăng nhập", BLACK);
+	display_lcd_put_string(WJQTestLcd, wjqunicode1212, 10,40, "Логин Entrar เข้าสู่ระบบ", BLACK);
+	display_lcd_put_string(WJQTestLcd, &FontVga6X12, 10,52, "The font g test!", BLACK);
+	
 	lcd_update(WJQTestLcd);
+	while(1);
 	#endif
 	
 	dev_key_open();
 	dev_keypad_open();
 
 	//dev_wm8978_test();
-		
-	emenu_run(WJQTestLcd, (MENU *)&WJQTestList[0], sizeof(WJQTestList)/sizeof(MENU), TEST_FONG, 1, MENU_LANG_CHA);	
+
+	emenu_run(WJQTestLcd, (MENU *)&WJQTestList[0], sizeof(WJQTestList)/sizeof(MENU), WjqTestFont24, 1, MENU_LANG_CHA);	
 	while(1) { }
 }
 

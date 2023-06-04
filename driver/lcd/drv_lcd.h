@@ -164,9 +164,6 @@ extern s32 lcd_backlight(DevLcdNode *lcd, u8 sta);
 extern s32 lcd_display_onoff(DevLcdNode *lcd, u8 sta);
 extern s32 lcd_setdir(DevLcdNode *node, u8 dir, u8 scan_dir);
 
-extern s32 display_lcd_put_string(DevLcdNode *lcd, char *font, int x, int y, char *s, unsigned colidx);
-
-extern void put_string_center(DevLcdNode *lcd, int x, int y, char *s, unsigned colidx);
 extern s32 lcd_setdir(DevLcdNode *lcd, u8 dir, u8 scan_dir);
 extern s32 lcd_update(DevLcdNode *lcd);
 
