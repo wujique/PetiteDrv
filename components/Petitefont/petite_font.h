@@ -139,8 +139,8 @@ typedef struct _petite_font_t {
 
 extern petite_font_t FontAsc6X12;
 extern petite_font_t FontVga6X12;
-extern petite_font_t FontVga8X16;
-extern petite_font_t FontVga8X8;
+extern petite_font_t FontVGA8x16;
+extern petite_font_t FontVga8x8;
 
 extern petite_font_t *font_wjq_create_from_file(const char * path, uint16_t line_height);
 extern petite_font_t *bitmapfont_create_from_file(const char * path, uint16_t line_height);

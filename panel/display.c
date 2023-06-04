@@ -264,14 +264,14 @@ s32 display_put_str_to_framebuff(DevLcdNode *lcd, petite_font_t *font, int x, in
 	/*获取点阵，并转化为LCD像素*/
 	while(1) {
 		if (sidx >= slen) {
-			uart_printf("sidx %d, slen %d\r\n", sidx, slen);
+			//uart_printf("sidx %d, slen %d\r\n", sidx, slen);
 			break;
 		}
 		uint32_t chcode;
 	
 		/* 从字符串中取一个字符出来 */
 		chr = font_get_ch_from_str(disstr+sidx, &chcode, st);
-		uart_printf("chr %d, %x", chr, chcode);
+		//uart_printf("chr %d, %x", chr, chcode);
 
 		font->get_glyph_dsc(font, &glyph_dsc, chcode, NULL);
 		bitmap = font->get_glyph_bitmap(font, chcode);
@@ -398,7 +398,7 @@ s32 display_put_str_to_lcd(DevLcdNode *lcd, petite_font_t *font, int x, int y, c
 	
 		/* 从字符串中取一个字符出来 */
 		chr = font_get_ch_from_str(disstr+sidx, &chcode, st);
-		uart_printf("chr %d, %x", chr, chcode);
+		//uart_printf("chr %d, %x", chr, chcode);
 
 		font->get_glyph_dsc(font, &glyph_dsc, chcode, NULL);
 		bitmap = font->get_glyph_bitmap(font, chcode);
@@ -410,7 +410,7 @@ s32 display_put_str_to_lcd(DevLcdNode *lcd, petite_font_t *font, int x, int y, c
 		else yshift = glyph_dsc.ofs_y;
 		if (yshift >= font->line_height) yshift = font->line_height-1;
 		
-		uart_printf("yshift %d", yshift);
+		//uart_printf("yshift %d", yshift);
 		
 		for (row = 0; row < glyph_dsc.box_h; row++) {
 			

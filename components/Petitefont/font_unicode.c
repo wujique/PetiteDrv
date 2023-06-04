@@ -104,14 +104,14 @@ static int bitmapfont_get_bitmaphead(BitmapFontDsc *dsc, uint16_t unicode)
 	PetiteFontDsc *pfdsc;
 	pfdsc = (PetiteFontDsc *)dsc;
 	
-	uart_printf("unicode: %04x\r\n", unicode);
+	//uart_printf("unicode: %04x\r\n", unicode);
 	while(uindex_f <= uindex_l){
 		uindex = uindex_f + (uindex_l - uindex_f)/2;
 		vfs_lseek(pfdsc->fd, dsc->BitmapFontHead.unicode_tab + uindex*2, 0);
 		rlen = vfs_read(pfdsc->fd, &utmp, 2);
 		if(utmp == unicode){
 
-			uart_printf("index: %d\r\n\r\n", uindex);
+			//uart_printf("index: %d\r\n\r\n", uindex);
 			vfs_lseek(pfdsc->fd, dsc->BitmapFontHead.bitmap_head + uindex*sizeof(struct _strBitmapHead), 0);
 			rlen = vfs_read(pfdsc->fd, (void *)&(dsc->headcache), sizeof(struct _strBitmapHead));
 			
