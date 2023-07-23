@@ -130,6 +130,8 @@ s32 mcu_uart_write(McuUartNum comport, u8 *buf, s32 len)
 	
 	return(0);
 }
+
+
 /*
 	在HAL库函数中回调，将中断接收到的数据填入接收缓冲
 	*/
@@ -151,6 +153,13 @@ void mcu_uart_rec(UART_HandleTypeDef *huart, uint8_t data)
 		//uart_printf("%c", data);
 	}
 }
+
+///@bug need fix
+s32 mcu_uart_read(McuUartNum comport, u8 *buf, s32 len)
+{
+
+}
+
 
 /**
  *@brief:      mcu_dev_uart_test

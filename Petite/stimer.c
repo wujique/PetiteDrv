@@ -86,3 +86,11 @@ uint32_t stime_get_passtime(uint32_t StrTime)
 }
 
 
+#include "time.h"
+///@bug need fix
+time_t time(time_t *t)
+{
+
+	return LocalTime;
+}
+

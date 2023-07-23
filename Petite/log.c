@@ -35,7 +35,7 @@ LOG_L LogLevel = LOG_DEBUG;//系统调试信息等级
 */
 s8 string[256];//调试信息缓冲，输出调试信息一次不可以大于256
 
-#if 0
+#if 1
 #ifdef __GNUC__
 /* With GCC/RAISONANCE, small printf (option LD Linker->Libraries->Small printf
      set to 'Yes') calls __io_putchar() */
@@ -46,12 +46,20 @@ s8 string[256];//调试信息缓冲，输出调试信息一次不可以大于256
 
 PUTCHAR_PROTOTYPE
 {
+	#if 0
     /* Place your implementation of fputc here */
     /* e.g. write a character to the USART */
     USART_SendData(USART3, (uint8_t) ch);
 
     /* Loop until the end of transmission */
     while (USART_GetFlagStatus(USART1, USART_FLAG_TC) == RESET);
+	#else
+	/* 用hal库实现putc，效率很低*/
+	char tmp[2];
+	tmp[0] = ch;
+	mcu_uart_write(PC_PORT, (u8*)&tmp[0], 1);
+	#endif
+	
     return ch;
 }
 

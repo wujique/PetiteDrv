@@ -1,0 +1,52 @@
+
+1 不需要lua.c和luac.c
+2 修改lauxlib.c中的l_alloc函数中的free，relloc等内存申请函数为自定义的函数。
+3 lint.c
+4 luaconf.h配置
+5 定义缺少的time,exit,system三个空函数。
+6 LUA依赖fputc，需要用串口方式重定义fputc。
+
+/*  测试LUA */
+/* 测试的Lua代码字符串 */
+
+#include "lua.h"
+#include "lualib.h"
+#include "lauxlib.h"
+
+const char lua_test[] = {
+
+    "print(\"Hello,I am lua!\\n--this is newline printf\")\n"
+    "function foo()\n"
+    "  local i = 0\n"
+    "  local sum = 1\n"
+    "  while i <= 10 do\n"
+    "    sum = sum * 2\n"
+    "    i = i + 1\n"
+    "  end\n"
+    "return sum\n"
+    "end\n"
+    "print(\"sum =\", foo())\n"
+    "print(\"and sum = 2^11 =\", 2 ^ 11)\n"
+    "print(\"exp(200) =\", math.exp(200))\n"
+    "print(\"lua test end!\")\n"
+};
+
+/* 运行Lua */
+int do_file_script(void)
+{
+	int res;
+    lua_State *L;
+    L = luaL_newstate(); /* 建立Lua运行环境 */
+    luaL_openlibs(L);
+    luaopen_base(L);
+    //res = luaL_loadstring(L, lua_test); /* 运行Lua脚本 */
+	res = luaL_loadfile(L, "/spiffs/lua_test.lua"); /* 运行Lua脚本 */
+	if (res != 0) {
+		printf("\r\n%s\r\n", lua_tostring(L, -1));
+	}
+	ESP_LOGI("LUA", "load file=%d", res);
+	res = lua_pcall(L, 0, LUA_MULTRET, 0);
+	ESP_LOGI("LUA", "pcall = %d", res);
+    lua_close(L);
+    return 0;
+}

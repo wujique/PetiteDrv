@@ -21,6 +21,11 @@
 #include "drv_config.h"
 #include "display.h"
 
+#include "lua.h"
+#include "lualib.h"
+#include "lauxlib.h"
+
+
 extern ADC_HandleTypeDef hadc2;
 
 __align(8) double adcx;/*双精度浮点数*/
@@ -247,6 +252,45 @@ void tiny_tty_test(void)
 #endif
 }
 
+#if 1
+const char lua_test[] = {
+
+    "print(\"Hello,I am lua!\\n--this is newline printf\")\n"\
+    "function foo()\n"\
+    "  local i = 0\n"\
+    "  local sum = 1\n"\
+    "  while i <= 10 do\n"\
+    "    sum = sum * 2\n"\
+    "    i = i + 1\n"\
+    "  end\n"\
+    "return sum\n"\
+    "end\n"\
+    "print(\"sum =\", foo())\n"\
+    "print(\"and sum = 2^11 =\", 2 ^ 11)\n"\
+    "print(\"exp(200) =\", math.exp(200))\n"\
+    "print(\"lua test end!\")\n"
+};
+
+/* 运行Lua */
+int do_lua_file_script(void)
+{
+	int res;
+    lua_State *L;
+    L = luaL_newstate(); /* 建立Lua运行环境 */
+    luaL_openlibs(L);
+    luaopen_base(L);
+    res = luaL_loadstring(L, lua_test); /* 运行Lua脚本 */
+	//res = luaL_loadfile(L, "/spiffs/lua_test.lua"); /* 运行Lua脚本 */
+	if (res != 0) {
+		wjq_log(LOG_DEBUG, "\r\n%s\r\n", lua_tostring(L, -1));
+	}
+	wjq_log(LOG_DEBUG, "load file=%d", res);
+	res = lua_pcall(L, 0, LUA_MULTRET, 0);
+	wjq_log(LOG_DEBUG, "pcall = %d", res);
+    lua_close(L);
+    return 0;
+}
+#endif
 
 extern int flashdb_demo(void);
 extern void petite_partition_test(void);
@@ -287,6 +331,9 @@ void cuckoo_7b0_test(void)
 
 	}
 	#endif
+
+	do_lua_file_script();
+	while(1);
 	
 	/*把sd卡的矢量字库文件拷贝到spi flash*/
 	//vfs_file_copy("/0:/font/chuheisong.ttf", "/mtd0/chuheisong.ttf");
