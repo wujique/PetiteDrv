@@ -211,7 +211,9 @@ void tiny_tty_test(void)
 	bool getres;
 	/* 使用字体文件创建一个lvgl定义的font_t，
 		后续就用这个字体指针获取字符点阵。*/
-	font_t = lv_tiny_ttf_create_file("/mtd0/chuheisong.ttf", 24);
+	//font_t = lv_tiny_ttf_create_file("/mtd0/chuheisong.ttf", 24);
+	font_t = lv_tiny_ttf_create_file("0:/font/chuheisong.ttf", 24);
+	
 	i = 0;
 	while(1) {
 	
@@ -244,9 +246,11 @@ void tiny_tty_test(void)
 			uart_printf("\r\n");
 		}
 		i++;
-		if(i>=5) break;
+		if(i>=5) {
+			i = 0;
+		}
 		
-		//osDelay(1000);
+		osDelay(1000);
 		
 	}
 #endif
@@ -332,27 +336,37 @@ void cuckoo_7b0_test(void)
 	}
 	#endif
 
+	#if 0//测试lua脚本
 	do_lua_file_script();
 	while(1);
+	#endif
 	
-	/*把sd卡的矢量字库文件拷贝到spi flash*/
-	//vfs_file_copy("/0:/font/chuheisong.ttf", "/mtd0/chuheisong.ttf");
-
+	#if 0
+	/* 测试屋脊雀制作的多国语言字库在COG lcd上显示 */
 	wjqwqyst1212 = font_wjq_create_from_file("0:/font/wqy12h18030.bin", 12);
 	wjqunicode1212 = bitmapfont_create_from_file("0:/font/font_file.bin", 12);
-
 	cuckoo_test_lcd();
 	while(1);
+	#endif
 
+
+	#if 0
+	/* 使用文泉驿转的1212点阵字库在 COG LCD上显示菜单*/
 	LcdOledI2C = lcd_open("spicoglcd");
-	//LcdOledI2C = lcd_open("i2coledlcd");
-	//font_test_utf16(LcdOledI2C);
-	//font_unicode_bitmap_test(LcdOledI2C);//把整个bitmap字库在 COG lcd上顺序显示 
+	wjqwqyst1212 = font_wjq_create_from_file("0:/font/wqy12h18030.bin", 12);
 	emenu_test(LcdOledI2C, wjqwqyst1212);
+	#endif
 
-	/* 测试tiny ttf 适量字库引擎 */
-	//tiny_tty_test();
-
+	#if 1
+	/* 测试tiny ttf 适量字库引擎, 用LCD 背光通过示波器测试渲染时间 */
+	/*把sd卡的矢量字库文件拷贝到spi flash
+		因为外扩的SPI FALSH时钟只有20M，跟放在SD卡差不多。
+		猜测只有放到板上的QSPI Flash，矢量字体渲染速度才能快起来。
+		*/
+	//vfs_file_copy("/0:/font/chuheisong.ttf", "/mtd0/chuheisong.ttf");
+	tiny_tty_test();
+	#endif
+	
 	/* 初始化lvgl 
 	注意，初始化LVGL的过程，会用到不少栈，
 	如果在rtos的任务中进行初始化，注意任务栈的大小，
