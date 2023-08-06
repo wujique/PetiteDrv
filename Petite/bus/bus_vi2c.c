@@ -300,12 +300,12 @@ s32 bus_vi2c_init(DevI2c * dev)
 	return 0;
 }
 
-s32 bus_vi2c_open()
+s32 bus_vi2c_open(void)
 {
 
 }
 
-s32 bus_vi2c_close()
+s32 bus_vi2c_close(void)
 {
 
 }

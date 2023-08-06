@@ -803,6 +803,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\driver\drv_spiflash.c</FilePath>
             </File>
+            <File>
+              <FileName>drv_i2c_eeprom.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\driver\drv_i2c_eeprom.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

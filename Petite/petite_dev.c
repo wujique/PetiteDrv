@@ -32,7 +32,7 @@ PDevNode *petite_dev_get_node(char *name)
 		node = list_entry(listp, PDevNode, list);
 		
 		if (strcmp(name, node->pdev->name) == 0) {
-			wjq_log(LOG_INFO, "pnode find:%s!\r\n", name);
+			//wjq_log(LOG_INFO, "pnode find:%s!\r\n", name);
 			return node;
 		}
 		

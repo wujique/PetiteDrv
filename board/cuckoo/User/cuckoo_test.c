@@ -298,6 +298,7 @@ int do_lua_file_script(void)
 
 extern int flashdb_demo(void);
 extern void petite_partition_test(void);
+extern void mc24c_test(void);
 
 void cuckoo_7b0_test(void)
 {
@@ -336,6 +337,10 @@ void cuckoo_7b0_test(void)
 	}
 	#endif
 
+	#if 1
+	mc24c_test();
+	#endif
+	
 	#if 0//测试lua脚本
 	do_lua_file_script();
 	while(1);
