@@ -203,7 +203,7 @@
             <NoZi4>0</NoZi4>
             <NoZi5>0</NoZi5>
             <Ro1Chk>1</Ro1Chk>
-            <Ro2Chk>0</Ro2Chk>
+            <Ro2Chk>1</Ro2Chk>
             <Ro3Chk>0</Ro3Chk>
             <Ir1Chk>1</Ir1Chk>
             <Ir2Chk>0</Ir2Chk>
@@ -261,12 +261,12 @@
               <OCR_RVCT1>
                 <Type>1</Type>
                 <StartAddress>0x90000000</StartAddress>
-                <Size>0x200000</Size>
+                <Size>0x400000</Size>
               </OCR_RVCT1>
               <OCR_RVCT2>
                 <Type>1</Type>
-                <StartAddress>0x0</StartAddress>
-                <Size>0x0</Size>
+                <StartAddress>0x90400000</StartAddress>
+                <Size>0x400000</Size>
               </OCR_RVCT2>
               <OCR_RVCT3>
                 <Type>1</Type>

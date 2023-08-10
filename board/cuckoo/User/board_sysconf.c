@@ -221,6 +221,7 @@ void *PetiteDevTable[]={
 	*/
 #if 1
 #include "partition.h"
+
 /*
 	 先定义sto设备，在定义par分区
 	*/ 
@@ -231,13 +232,12 @@ const PartitionDef PetitePartitonTable[] =
 	{"sto","onchip","7b0_flash",      0x8000000,  0x20000},
 		{"par","app","boot",    	0x8000000,  0x10000},
 		{"par","flashdb","boot",    0x8010000,  0x10000},
-
-	/*主板上的qspi flash */
-	{"sto","xip_flash","xip_qflash", 0x90000000, 0x20000},
-		{"par","app","core",    	0x90000000, 0x20000},
-		//{"par","par","def",    		0x90000000, 0x20000},
-		{"par","app","app",     	0x90020000, 0x20000},
 	#endif
+	/*主板上的qspi flash */
+	{"sto","xip_flash","xip_qflash", 0x90000000, 0x800000},
+		{"par",VFS_STR_LITTLEFS,"mtd1",  0x90400000, 0x300000},
+		//{"par","par","def",    		0x90000000, 0x20000},
+		//{"par","app","app",     	0x90020000, 0x20000},
 	
 	/* (flash和eprom在同一块板子上)外扩SPI 接口的 flash, sto 空间大小通过设备获取 */
 	{"sto","spiflash","ex_spiflash", 0x50000000, 0},

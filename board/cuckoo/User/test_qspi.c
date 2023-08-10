@@ -28,19 +28,35 @@ u8 test_qpi_run_fun(u8 num)
 /*
 	测试在QSPI上执行程序时是否能写QSPI Flash
 	实测，好像可以。
+	test_iap 函数是放在 QSPI Flash
+	但是uart_printf、w25qxx_test_wr、是放在内部的
+	test_qpi_run_fun是放在外部的，
+	本测试是：
+	从内部Flash，调用外部Flash的test_iap函数，
+	函数中调用内部uart_printf等函数，然后执行
+	内部函数w25qxx_test_wr进行外部Flash读写操作，
+	完成后回到外部Flash，执行外部Flash中的函数test_qpi_run_fun。
+
+
+	本测试未通过
 	*/
+extern void OSPI_reinit(void);
+
 void test_iap(void)
 {
 	uint32_t tickstart, tmp;
+	u8 a;
 	
 	uart_printf("run test_iap\r\n");
 	
 	tickstart = HAL_GetTick();
+	//OSPI_reinit();
 	w25qxx_test_wr();
+	//w25qxx_map();
 	tmp = HAL_GetTick();
 	
-	test_qpi_run_fun(2);
-	uart_printf("run test_iap finish :%d\r\n", tmp-tickstart);
+	a = test_qpi_run_fun(2);
+	uart_printf("run test_iap finish :%d ms, add:%d\r\n", tmp-tickstart, a);
 	
 }
 

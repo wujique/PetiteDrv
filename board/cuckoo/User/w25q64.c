@@ -931,6 +931,7 @@ int w25qxx_map(void)
 	return 0;
 }
 
+
 #if 1
 char w25qxx_testbuf_r[4096];
 char w25qxx_testbuf_w[4096];
@@ -975,7 +976,7 @@ void w25qxx_test_wr(void)
 
 /*
 	修改分散加载文件，把test_qspi.o放到外部flash，
-	调用本函数将其读出来 */
+	调用本函数将其读出来，用这个而函数时，QSPI没有进入map模式*/
 void w25qxx_test_read_exdata(void)
 {
 	u32 addr;
@@ -1010,4 +1011,77 @@ void w25qxx_test_map_read_exdata(void)
 	
 }
 #endif
+
+#if 1
+/* 7B0 qspi FLASH, map之后，只能读，
+	所以，挂载的也是一个只读文件系统 */
+#include "partition.h"
+
+int storage_qspiflash_getblksize(void *dev)
+{
+	//wjq_log(LOG_WAR, "storage_empty_getblksize\r\n");
+	return 4096;
+}
+
+int storage_qspiflash_getsize(void *dev)
+{
+	//wjq_log(LOG_WAR, "storage_empty_getsize\r\n");
+	return 0x800000;
+}
+
+void *storage_qspiflash_getdev(char *name)
+{
+	//wjq_log(LOG_WAR, "storage_empty_open\r\n");
+	return (void *)1;/// @node   这是假的
+}
+
+void *storage_qspiflash_open(void *dev)
+{
+	//wjq_log(LOG_WAR, "storage_empty_open\r\n");
+	return (void *)1;/// @node   这是假的
+}
+
+int storage_qspiflash_read(void *dev, uint32_t offset, uint8_t *buf, size_t size)
+{
+	//wjq_log(LOG_WAR, "storage_empty_read\r\n");
+	//uart_printf("storage_qspiflash_read:0x%08x\r\n", offset);
+	memcpy(buf, (uint8_t *)(0x90000000+offset), size);
+	
+	return 0;
+}
+
+int storage_qspiflash_write(void *dev, uint32_t offset, const uint8_t *buf, size_t size)
+{
+	//wjq_log(LOG_WAR, "storage_empty_write\r\n");
+	return 0;
+}
+
+int storage_qspiflash_erase(void *dev, uint32_t offset, size_t size)
+{
+	//wjq_log(LOG_WAR, "storage_empty_erase\r\n");
+	return 0;
+}
+
+int storage_qspiflash_close(void *dev)
+{
+	//wjq_log(LOG_WAR, "storage_empty_close\r\n");
+	return 0;
+}
+
+
+const StorageDev StorageExQspiFlash ={
+	
+	.getblksize = storage_qspiflash_getblksize,
+	.getsize = storage_qspiflash_getsize,
+
+	.getnode = storage_qspiflash_getdev,
+	.open = storage_qspiflash_open,	
+	.read = storage_qspiflash_read,
+	.write = storage_qspiflash_write,
+	.erase = storage_qspiflash_erase,
+	.close = storage_qspiflash_close,
+};
+
+#endif
+
 

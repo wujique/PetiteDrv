@@ -140,7 +140,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>CMSIS_AGDI</Key>
-          <Name>-X"Any" -UAny -O206 -S0 -C0 -P00000000 -N00("ARM CoreSight SW-DP") -D00(6BA02477) -L00(0) -TO65554 -TC10000000 -TT10000000 -TP20 -TDS8007 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -FO7 -FD20000000 -FCFFF4 -FN2 -FF0STM32H7B0_Flash.FLM -FS08000000 -FL020000 -FP0($$Device:STM32H7B0VBTx$CMSIS\Flash\STM32H7B0_Flash.FLM) -FF1Cuckoo_8m_V1 -FS190000000 -FL1800000</Name>
+          <Name>-X"Any" -UAny -O206 -S8 -C0 -P00000000 -N00("ARM CoreSight SW-DP") -D00(6BA02477) -L00(0) -TO65554 -TC10000000 -TT10000000 -TP20 -TDS8007 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -FO7 -FD20000000 -FCFFF4 -FN2 -FF0STM32H7B0_Flash.FLM -FS08000000 -FL020000 -FP0($$Device:STM32H7B0VBTx$CMSIS\Flash\STM32H7B0_Flash.FLM) -FF1Cuckoo_8m_V1 -FS190000000 -FL1800000</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -196,7 +196,7 @@
         <EnableFlashSeq>0</EnableFlashSeq>
         <EnableLog>0</EnableLog>
         <Protocol>2</Protocol>
-        <DbgClock>1000000</DbgClock>
+        <DbgClock>10000000</DbgClock>
       </DebugDescription>
     </TargetOption>
   </Target>
@@ -723,7 +723,7 @@
 
   <Group>
     <GroupName>User</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>

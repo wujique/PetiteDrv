@@ -212,7 +212,8 @@ void tiny_tty_test(void)
 	/* 使用字体文件创建一个lvgl定义的font_t，
 		后续就用这个字体指针获取字符点阵。*/
 	//font_t = lv_tiny_ttf_create_file("/mtd0/chuheisong.ttf", 24);
-	font_t = lv_tiny_ttf_create_file("0:/font/chuheisong.ttf", 24);
+	//font_t = lv_tiny_ttf_create_file("0:/font/chuheisong.ttf", 24);//1个字符5ms
+	font_t = lv_tiny_ttf_create_file("/mtd1/chuheisong.ttf", 24);// 1个字符300us
 	
 	i = 0;
 	while(1) {
@@ -299,7 +300,7 @@ int do_lua_file_script(void)
 extern int flashdb_demo(void);
 extern void petite_partition_test(void);
 extern void mc24c_test(void);
-
+uint8_t lrt[64];
 void cuckoo_7b0_test(void)
 {
 	
@@ -319,7 +320,7 @@ void cuckoo_7b0_test(void)
 	#endif
 
 	/* 测试littlefs */
-	#if 1
+	#if 0
 	int filefd;
 	filefd = vfs_open("/mtd0/bootcnt", O_CREAT);
 	if(filefd > 0) {
@@ -336,8 +337,20 @@ void cuckoo_7b0_test(void)
 
 	}
 	#endif
+	
+	/* 测试littlefs, 通过烧录放到QSPI flash的只读文件系统 */
+	#if 0
+	int filefd2;
+	filefd2 = vfs_open("/mtd1/chuheisong.ttf", O_RDONLY);
+	if(filefd2 > 0) {		
+		vfs_read(filefd2, lrt, 64);
+		PrintFormat(lrt, 64);
+		vfs_close(filefd2);
 
-	#if 1
+	}
+	#endif
+
+	#if 0
 	mc24c_test();
 	#endif
 	
@@ -369,8 +382,11 @@ void cuckoo_7b0_test(void)
 		猜测只有放到板上的QSPI Flash，矢量字体渲染速度才能快起来。
 		*/
 	//vfs_file_copy("/0:/font/chuheisong.ttf", "/mtd0/chuheisong.ttf");
+	LcdOledI2C = lcd_open("spicoglcd");
 	tiny_tty_test();
 	#endif
+
+	while(1);
 	
 	/* 初始化lvgl 
 	注意，初始化LVGL的过程，会用到不少栈，

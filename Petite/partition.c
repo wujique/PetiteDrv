@@ -124,7 +124,7 @@ int petite_storage_getlen(void *part)
 		storage_len = sto->drv->getsize(dev);
 		sto->drv->close(dev);
 	}
-	wjq_log(LOG_INFO, "sto len: 0x%x\r\n", storage_len);
+	//wjq_log(LOG_INFO, "sto len: 0x%x\r\n", storage_len);
 	return storage_len;
 }
 
@@ -173,7 +173,7 @@ uint32_t petite_partition_getlen(void *part)
 	par = (PartitionNode *)part;
 	partition_len = par->def->size;
 	
-	wjq_log(LOG_INFO, "part size: 0x%x\r\n", partition_len);
+	//wjq_log(LOG_INFO, "part size: 0x%x\r\n", partition_len);
 	return partition_len;
 }
 /**
@@ -199,7 +199,7 @@ uint32_t petite_partition_getblksize(void *part)
 	blksize = sto->drv->getblksize(dev);
 	sto->drv->close(dev);
 	
-	wjq_log(LOG_INFO, "part getblksize: 0x%x\r\n", blksize);
+	//wjq_log(LOG_INFO, "part getblksize: 0x%x\r\n", blksize);
 	
 	return blksize;
 }
@@ -314,6 +314,10 @@ int petite_partition_erase(void *part, uint32_t addr, size_t size)
  * @brief spi flash storage  
  */
 extern const StorageDev StorageExSpiFlash;
+/**
+ * @brief qspi flash storage  
+ */
+extern const StorageDev StorageExQspiFlash;
 
 /**
  * @brief   根据分区表进行分区初始化
@@ -334,7 +338,8 @@ int petite_partition_init(PartitionDef *Partable)
 	
 	while(1) {
 		if (pardef->maptype == NULL) break;
-
+		wjq_log(LOG_INFO, "partiton init:%s, %s, %s, 0x%08x, 0x%x\r\n", 
+					pardef->maptype, pardef->type, pardef->name, pardef->addr, pardef->size);
 		/* 申请一个节点 */
 		node = (PartitionNode *)wjq_malloc(sizeof(PartitionNode));
 		/* 登记分区信息 */
@@ -349,7 +354,9 @@ int petite_partition_init(PartitionDef *Partable)
 			sto = node;
 			if (strcmp(node->def->type, "spiflash") == 0 ) {
 				node->drv = &StorageExSpiFlash;
-			} else {
+			} else if (strcmp(node->def->type, "xip_flash") == 0) {
+				node->drv = &StorageExQspiFlash;
+			}else {
 				node->drv = &StorageEmpty;
 			}
 			

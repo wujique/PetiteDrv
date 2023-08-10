@@ -75,17 +75,24 @@ const BusUartPra Uart4Pra = {
 };
 
 BusUartNode *LogUartNode;
-
-
+#if 0
+extern const unsigned char elfsimage[];
+extern const unsigned long elfsimage_length;
+#else
+const unsigned char *elfsimage = (unsigned char *)0x90400000;
+const unsigned long elfsimage_length = 0x300000;
+#endif
 void board_main(void)
 {
 	bus_uart_init();
 	LogUartNode = bus_uart_open("uart4", &Uart4Pra);
-	wjq_log(LOG_INFO, "------Cuckoo (stm32h7b0vb) run! 20220306------\r\n");
+	wjq_log(LOG_INFO, "------Cuckoo (stm32h7b0vb) run! 20220809------\r\n");
 
 	/*  尽早初始化 Flash，并使其进入map模式，因为后续有代码是保存在 QSPI Flash上 
-		在执行到这里之前已经开了systick中断，中断中调用的函数都需要放到内部Flash        		*/
+		在执行到这里之前已经开了systick中断，中断中调用的函数都需要放到内部Flash        		
+		@note 如果使用不同的flash，如何兼容呢？*/
    	W25Qxx_init();
+	w25qxx_test_wr();
   	w25qxx_map();
 
 	#if 1
@@ -96,7 +103,14 @@ void board_main(void)
 		uart_printf("run qpi err!\r\n");
 		while(1);
 	}
+
 	#endif
+	#if 1
+	/* 测试 将一个littlefs镜像链接到外部QSPI FLASH */
+	uart_printf("elfs addr:0x%08x, len:0x%x", elfsimage, elfsimage_length);
+	PrintFormat((u8 *)elfsimage, 128);
+	#endif
+
 	
   	petite_app();
 }

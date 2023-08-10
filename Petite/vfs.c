@@ -493,17 +493,20 @@ int vfs_mount(void *par)
 	
 	if (strcmp(part->def->type, VFS_STR_FATFS)==0){
 		#if (SYS_FS_FATFS == 1)
-		VfsDebug(LOG_DEBUG, "mount FS_TYPE_FATFS\r\n");
+		wjq_log(LOG_INFO, "mount FS_TYPE_FATFS:%s\r\n", part->def->name);
 		return vfs_fatfs_mount(vfs_node);
 		#else
 		wjq_log(LOG_ERR, "unsuport fatfs\r\n");
 		#endif
 	} else if (strcmp(part->def->type, VFS_STR_LITTLEFS)==0){
 		#if (SYS_FS_FATFS == 1)
+		wjq_log(LOG_INFO, "mount VFS_STR_LITTLEFS:%s\r\n", part->def->name);
 		return vfs_mount_lfs(vfs_node);
 		#else
 		wjq_log(LOG_ERR, "unsuport littlefs\r\n");
 		#endif
+	} else {
+		wjq_log(LOG_INFO, "mount unknow:%s\r\n", part->def->name);
 	}
 
 	return -1;
