@@ -235,7 +235,7 @@ const PartitionDef PetitePartitonTable[] =
 	#endif
 	/*主板上的qspi flash */
 	{"sto","xip_flash","xip_qflash", 0x90000000, 0x800000},
-		{"par",VFS_STR_LITTLEFS,"mtd1",  0x90400000, 0x300000},
+		{"par",VFS_STR_LITTLEFS, QSPI_FLASH_LITTLEFS_DIR,  QSPI_FLASH_LITTLEFS_ADDR, QSPI_FLASH_LITTLEFS_SIZE},
 		//{"par","par","def",    		0x90000000, 0x20000},
 		//{"par","app","app",     	0x90020000, 0x20000},
 	

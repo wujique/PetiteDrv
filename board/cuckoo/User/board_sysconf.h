@@ -37,6 +37,10 @@
 //sd卡 fatfs盘符， 数字可以变，格式不能变
 #define SDPath "0:"
 
+#define QSPI_FLASH_LITTLEFS_DIR "mtd1"
+#define QSPI_FLASH_LITTLEFS_ADDR	0x90400000
+#define QSPI_FLASH_LITTLEFS_SIZE 	0x300000
+
 /*-----------------------------------------------------------*/
 
 /*	字体类型定义 */

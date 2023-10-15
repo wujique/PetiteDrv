@@ -79,8 +79,8 @@ BusUartNode *LogUartNode;
 extern const unsigned char elfsimage[];
 extern const unsigned long elfsimage_length;
 #else
-const unsigned char *elfsimage = (unsigned char *)0x90400000;
-const unsigned long elfsimage_length = 0x300000;
+const unsigned char *elfsimage = (unsigned char *)QSPI_FLASH_LITTLEFS_ADDR;
+const unsigned long elfsimage_length = QSPI_FLASH_LITTLEFS_SIZE;
 #endif
 void board_main(void)
 {
