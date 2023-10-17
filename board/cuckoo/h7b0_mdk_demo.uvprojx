@@ -2053,6 +2053,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\components\Petitefont\font_ymy.c</FilePath>
             </File>
+            <File>
+              <FileName>font_asc_8x16.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\Petitefont\font_asc_8x16.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
