@@ -654,11 +654,6 @@
               <FilePath>..\..\Petite\petite.c</FilePath>
             </File>
             <File>
-              <FileName>pfsm.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Petite\pfsm.c</FilePath>
-            </File>
-            <File>
               <FileName>stimer.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\Petite\stimer.c</FilePath>

@@ -62,7 +62,7 @@ void *storage_empty_getdev(char *name)
 void *storage_empty_open(void *dev)
 {
 	wjq_log(LOG_WAR, "storage_empty_open\r\n");
-	return (void *)1;/// @node   这�q�假的
+	return (void *)1;/// @node   这�q�假的
 }
 
 int storage_empty_read(void *dev, uint32_t offset, uint8_t *buf, size_t size)
@@ -314,6 +314,7 @@ int petite_partition_erase(void *part, uint32_t addr, size_t size)
  * @brief spi flash storage  
  */
 extern const StorageDev StorageExSpiFlash;
+
 /**
  * @brief qspi flash storage  
  */

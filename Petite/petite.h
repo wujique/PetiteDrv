@@ -4,7 +4,6 @@
 #include "log.h"
 #include "maths.h"
 #include "petite_def.h"
-#include "pfsm.h"
 #include "stimer.h"
 #include "partition.h"
 #include "vfs.h"

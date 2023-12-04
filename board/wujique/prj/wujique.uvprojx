@@ -924,11 +924,6 @@
               <FilePath>..\..\..\Petite\stimer.c</FilePath>
             </File>
             <File>
-              <FileName>pfsm.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Petite\pfsm.c</FilePath>
-            </File>
-            <File>
               <FileName>alloc.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\Petite\mem\alloc.c</FilePath>
