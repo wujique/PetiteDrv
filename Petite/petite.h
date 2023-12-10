@@ -25,6 +25,9 @@
 
 #include "bus/bus_uart.h"
 
+#define LOG_PETITE_TAG "PETITE"
+#define LogPetite(l,args...) petite_log(l, LOG_PETITE_TAG, NULL,__FUNCTION__, __LINE__, ##args);
+
 
 #endif
 

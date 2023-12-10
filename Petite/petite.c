@@ -49,7 +49,7 @@ void petite_task(void *pvParameters)
 	uint16_t tcnt=0;
 	UBaseType_t stackHWM;
 	
-	wjq_log(LOG_INFO,"[    _app] petite_task\r\n");
+	LogPetite(LOG_INFO,"[    _app] petite_task\r\n");
 
 	/* 初始化petite模块状态*/
 	//vfs_init();
@@ -101,33 +101,33 @@ void petite_task(void *pvParameters)
 int petite_app(void)
 {	
 	/*           http://www.network-science.de/ascii/   */
-	wjq_log(LOG_INFO,"\r\n*********************************************************\r\n");
-	wjq_log(LOG_INFO,"*   ___     _   _ _          ___                        \r\n");       
-	wjq_log(LOG_INFO,"*  / _ \\___| |_(_) |_ ___   /   \\_ ____   __             \r\n");
-	wjq_log(LOG_INFO,"* / /_)/ _ \\ __| | __/ _ \\ / /\\ / '__\\ \\ / /             \r\n");
-	wjq_log(LOG_INFO,"*/ ___/  __/ |_| | ||  __// /_//| |   \\ V /              \r\n");
-	wjq_log(LOG_INFO,"*\\/    \\___|\\__|_|\\__\\___/___,' |_|    \\_/www.wujique.com\r\n");
-	wjq_log(LOG_INFO,"*********************************************************\r\n\r\n");
+	printf("\r\n*********************************************************\r\n");
+	printf("*   ___     _   _ _          ___                        \r\n");       
+	printf("*  / _ \\___| |_(_) |_ ___   /   \\_ ____   __             \r\n");
+	printf("* / /_)/ _ \\ __| | __/ _ \\ / /\\ / '__\\ \\ / /             \r\n");
+	printf("*/ ___/  __/ |_| | ||  __// /_//| |   \\ V /              \r\n");
+	printf("*\\/    \\___|\\__|_|\\__\\___/___,' |_|    \\_/www.wujique.com\r\n");
+	printf("*********************************************************\r\n\r\n");
 
 	cm_backtrace_init(CM_BACKTRACE_AXF_NAME, HARDWARE_VERSION, SOFTWARE_VERSION);
 
   /* Infinite loop 
 	尽快启动RTOS， 进入start_task再做其他设备初始化 */
-	wjq_log(LOG_INFO,"ccreate start task!\r\n");
+	LogPetite(LOG_INFO,"ccreate start task!\r\n");
 
   	/* Init scheduler */
   	osKernelInitialize();
 	defaultTaskHandle = osThreadNew(petite_task, NULL, &defaultTask_attributes);
 					
 	if(NULL != defaultTaskHandle){
-		wjq_log(LOG_INFO,"[    _app] freertos Scheduler\r\n");
+		LogPetite(LOG_INFO,"p] freertos Scheduler\r\n");
 		/* Start scheduler */
   		osKernelStart();
 	}else{
-		wjq_log(LOG_WAR,"[    _app] xTaskCreate fail\r\n");
+		LogPetite(LOG_WAR,"xTaskCreate fail\r\n");
 	}
 	
-	wjq_log(LOG_ERR,"while(1) err!\r\n");
+	LogPetite(LOG_ERR,"while(1) err!\r\n");
 	while(1);
   
 }
@@ -142,7 +142,7 @@ int petite_app(void)
 -----------------------------------*/
 void vApplicationStackOverflowHook (TaskHandle_t xTask, signed char *pcTaskName)
 {
-	uart_printf("stack overflow %s\r\n", pcTaskName);
+	LogPetite(LOG_ERR, "stack overflow %s\r\n", pcTaskName);
 	
 }
 

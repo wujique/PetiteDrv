@@ -31,7 +31,7 @@
 //#define BUS_SPI_DEBUG
 
 #ifdef BUS_SPI_DEBUG
-#define BUSSPI_DEBUG	wjq_log 
+#define BUSSPI_DEBUG(l, args...) petite_log(l, "BUS SPI", NULL,__FUNCTION__, __LINE__, ##args); 
 #else
 #define BUSSPI_DEBUG(a, ...)
 #endif
@@ -87,7 +87,7 @@ PDevNode *bus_spich_register(const DevSpiCh *dev)
 	struct list_head *listp;
 	DevSpiChNode *pnode;
 
-	wjq_log(LOG_DEBUG, "register spi ch :%s!\r\n", dev->pdev.name);
+	BUSSPI_DEBUG(LOG_DEBUG, "register spi ch :%s!\r\n", dev->pdev.name);
 
 	/* 申请一个节点空间 	*/
 	pnode = (DevSpiChNode *)wjq_malloc(sizeof(DevSpiChNode));
@@ -141,7 +141,7 @@ DevSpiChNode *bus_spich_open(char *name, SPI_MODE mode, u16 KHz,  uint32_t wait)
 	if (chnode != NULL) {
 		
 		if(chnode->gd == 0) {
-			wjq_log(LOG_ERR, "spi ch open err:using!\r\n");
+			BUSSPI_DEBUG(LOG_ERR, "spi ch open err:using!\r\n");
 			chnode = NULL;
 		} else {
 			osres = osMutexAcquire(spinode->mutex, wait);
@@ -218,7 +218,7 @@ DevSpiChNode *bus_spich_opennode(DevSpiChNode *node, SPI_MODE mode, u16 KHz,  ui
 	if (chnode != NULL) {
 		
 		if(chnode->gd == 0) {
-			wjq_log(LOG_ERR, "spi ch open err:using!\r\n");
+			BUSSPI_DEBUG(LOG_ERR, "spi ch open err:using!\r\n");
 			chnode = NULL;
 		} else {
 			osres = osMutexAcquire(spinode->mutex, wait);
@@ -280,8 +280,8 @@ s32 bus_spich_close(DevSpiChNode * node)
 	pbasenode = pnode->basenode;
 	spinode = (DevSpiNode *)pbasenode;
 
-	//wjq_log(LOG_INFO, "close spi ch:%s\r\n", pnode->pdev->name);
-	//wjq_log(LOG_INFO, "close spi:%s\r\n", pbasenode->pdev->name);
+	//BUSSPI_DEBUG(LOG_INFO, "close spi ch:%s\r\n", pnode->pdev->name);
+	//BUSSPI_DEBUG(LOG_INFO, "close spi:%s\r\n", pbasenode->pdev->name);
 	
 	if (chnode == NULL) return -1;
 	if(chnode->gd != 0) return -1;
@@ -291,7 +291,7 @@ s32 bus_spich_close(DevSpiChNode * node)
 	} else if(pbasenode->pdev->type == BUS_SPI_V) { 
 		bus_vspi_close(spinode);
 	} else {
-		wjq_log(LOG_WAR, "close spi type err!\r\n");
+		BUSSPI_DEBUG(LOG_WAR, "close spi type err!\r\n");
 	}
 	/*拉高CS*/
 
@@ -372,7 +372,7 @@ s32 bus_spich_cs(DevSpiChNode * node, u8 sta)
 	return 0;
 }
 
-#if 1
+#if 0
 void spi_example(void)
 {
 	DevSpiChNode *spichnode;

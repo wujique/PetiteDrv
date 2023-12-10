@@ -26,13 +26,13 @@ PDevNode *petite_dev_get_node(char *name)
 	listp = PetiteDevRoot.next;
 	while(1) {
 		if (listp == &PetiteDevRoot) {
-			wjq_log(LOG_INFO, "pnode cant find:%s!\r\n", name);	
+			LogPetite(LOG_INFO, "pnode cant find:%s!\r\n", name);	
 			break;
 		}
 		node = list_entry(listp, PDevNode, list);
 		
 		if (strcmp(name, node->pdev->name) == 0) {
-			//wjq_log(LOG_INFO, "pnode find:%s!\r\n", name);
+			//LogPetite(LOG_INFO, "pnode find:%s!\r\n", name);
 			return node;
 		}
 		
@@ -54,7 +54,7 @@ int petite_dev_init_node(PDevNode *pnode, PetiteDev *pdev)
 		if (pdev->basebus != NULL){
 			PDevNode *basenode = petite_dev_get_node(pdev->basebus);
 			if (basenode == NULL) {
-				wjq_log(LOG_WAR, "base bus not exist!\r\n");
+				LogPetite(LOG_WAR, "base bus not exist!\r\n");
 				pnode->basenode = NULL;
 			} else {
 				/* 记录依赖节点，以便后续open时不再需要通过名字寻找 */
@@ -80,7 +80,7 @@ s32 petite_dev_register(void *DevTable[])
 	while(1){
 		if (DevTable[i] == NULL) break;
 		pdev =	(PetiteDev *)DevTable[i];
-		wjq_log(LOG_DEBUG, "\r\n\t[register]:%s\r\n", pdev->name);
+		LogPetite(LOG_DEBUG, "register:%s\r\n", pdev->name);
 
 		switch(pdev->type)
 		{
@@ -106,7 +106,7 @@ s32 petite_dev_register(void *DevTable[])
 				break;
 			
 			default:
-				wjq_log(LOG_WAR, "\r\n\r\n[register] %s not register!\r\n\r\n", pdev->name);
+				LogPetite(LOG_WAR, "register %s not register!\r\n\r\n", pdev->name);
 				break;
 		}
 
@@ -114,7 +114,7 @@ s32 petite_dev_register(void *DevTable[])
 		i++;
 	}
 	
-	wjq_log(LOG_DEBUG, "\r\n[register] petite_dev_register: %d device!\r\n\r\n", i);	
+	LogPetite(LOG_DEBUG, "register: %d device!\r\n\r\n", i);	
 	
 	return 0;
 }

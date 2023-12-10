@@ -94,7 +94,8 @@ s32 mcu_hspi_init(const DevSpi *dev)
     //配置引脚复用映射
     if(strcmp(dev->pdev.name, "SPI3") == 0) {
 		GPIO_AF = GPIO_AF_SPI3;
-		RCC_CLK = RCC_APB1Periph_SPI3;
+    } else if(strcmp(dev->pdev.name, "SPI1") == 0) {
+		GPIO_AF = GPIO_AF_SPI1;
     }
 	
 	pinsource = math_log2(dev->clkpin);
@@ -104,8 +105,12 @@ s32 mcu_hspi_init(const DevSpi *dev)
     pinsource = math_log2(dev->mosipin);
     GPIO_PinAFConfig((GPIO_TypeDef *)Stm32PortList[dev->mosiport], pinsource, GPIO_AF); //复用
 
-    RCC_APB1PeriphClockCmd(RCC_CLK, ENABLE);// ---使能时钟
-   
+    // ---使能时钟
+    if(strcmp(dev->pdev.name, "SPI3") == 0) {
+		RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI3, ENABLE);
+    } else if(strcmp(dev->pdev.name, "SPI1") == 0) {
+        RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1, ENABLE);
+    }
     return 0;
 }
 
@@ -127,6 +132,8 @@ s32 mcu_hspi_open(DevSpiNode *node, SPI_MODE mode, u16 KHz)
 
 	if (strcmp(node->pnode.pdev->name, "SPI3") == 0) {
 		SPIC = SPI3;
+    } else if (strcmp(node->pnode.pdev->name, "SPI1") == 0) {
+		SPIC = SPI1;
     }
 
 	SPI_I2S_DeInit(SPIC);
@@ -163,6 +170,8 @@ s32 mcu_hspi_close(DevSpiNode *node)
 		
 	if (strcmp(node->pnode.pdev->name, "SPI3") == 0) {
 		SPIC = SPI3;
+    } else if (strcmp(node->pnode.pdev->name, "SPI1") == 0) {
+		SPIC = SPI1;
     }
 	
 	SPI_Cmd(SPIC, DISABLE);
@@ -193,6 +202,8 @@ s32 mcu_hspi_transfer(DevSpiNode *node, u8 *snd, u8 *rsv, s32 len)
 	
     if (strcmp(node->pnode.pdev->name, "SPI3") == 0) {
 		SPIC = SPI3;
+    } else if (strcmp(node->pnode.pdev->name, "SPI1") == 0) {
+		SPIC = SPI1;
     }
     /* 忙等待 */
     time_out = 0;

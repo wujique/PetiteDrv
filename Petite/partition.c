@@ -9,7 +9,7 @@
  * @copyright Copyright (c) 2023..
  */
 #include "mcu.h"
-#include "log.h"
+#include "petite.h"
 #include "partition.h"
 #include "mem/p_malloc.h"
 
@@ -43,49 +43,49 @@ PartitionNode *PartitionRoot = NULL;
 */
 int storage_empty_getblksize(void *dev)
 {
-	wjq_log(LOG_WAR, "storage_empty_getblksize\r\n");
+	LogPetite(LOG_WAR, "storage_empty_getblksize\r\n");
 	return 0;
 }
 
 int storage_empty_getsize(void *dev)
 {
-	wjq_log(LOG_WAR, "storage_empty_getsize\r\n");
+	LogPetite(LOG_WAR, "storage_empty_getsize\r\n");
 	return 0;
 }
 
 void *storage_empty_getdev(char *name)
 {
-	wjq_log(LOG_WAR, "storage_empty_open\r\n");
+	LogPetite(LOG_WAR, "storage_empty_open\r\n");
 	return (void *)1;/// @node   这是假的
 }
 
 void *storage_empty_open(void *dev)
 {
-	wjq_log(LOG_WAR, "storage_empty_open\r\n");
+	LogPetite(LOG_WAR, "storage_empty_open\r\n");
 	return (void *)1;/// @node   这�q�假的
 }
 
 int storage_empty_read(void *dev, uint32_t offset, uint8_t *buf, size_t size)
 {
-	wjq_log(LOG_WAR, "storage_empty_read\r\n");
+	LogPetite(LOG_WAR, "storage_empty_read\r\n");
 	return 0;
 }
 
 int storage_empty_write(void *dev, uint32_t offset, const uint8_t *buf, size_t size)
 {
-	wjq_log(LOG_WAR, "storage_empty_write\r\n");
+	LogPetite(LOG_WAR, "storage_empty_write\r\n");
 	return 0;
 }
 
 int storage_empty_erase(void *dev, uint32_t offset, size_t size)
 {
-	wjq_log(LOG_WAR, "storage_empty_erase\r\n");
+	LogPetite(LOG_WAR, "storage_empty_erase\r\n");
 	return 0;
 }
 
 int storage_empty_close(void *dev)
 {
-	wjq_log(LOG_WAR, "storage_empty_close\r\n");
+	LogPetite(LOG_WAR, "storage_empty_close\r\n");
 	return 0;
 }
 
@@ -115,7 +115,7 @@ int petite_storage_getlen(void *part)
 
 	storage_len = sto->def->size;
 
-	//wjq_log(LOG_DEBUG, "sto getlen: %s\r\n", sto->def->name);
+	//LogPetite(LOG_DEBUG, "sto getlen: %s\r\n", sto->def->name);
 	dev = (void *)sto->base;
 	if (storage_len == 0) {
 
@@ -124,7 +124,7 @@ int petite_storage_getlen(void *part)
 		storage_len = sto->drv->getsize(dev);
 		sto->drv->close(dev);
 	}
-	//wjq_log(LOG_INFO, "sto len: 0x%x\r\n", storage_len);
+	//LogPetite(LOG_INFO, "sto len: 0x%x\r\n", storage_len);
 	return storage_len;
 }
 
@@ -141,7 +141,7 @@ void *petite_partition_get(const char *parname)
 {
 	PartitionNode *par;
 
-	wjq_log(LOG_DEBUG, "part find: %s\r\n", parname);
+	LogPetite(LOG_DEBUG, "part find: %s\r\n", parname);
 	
 	par = PartitionRoot;
 
@@ -154,7 +154,7 @@ void *petite_partition_get(const char *parname)
 		par = par->next;
 	}
 
-	wjq_log(LOG_WAR, "part no foud: %s\r\n", parname);
+	LogPetite(LOG_WAR, "part no foud: %s\r\n", parname);
 	return NULL;
 }
 /**
@@ -173,7 +173,7 @@ uint32_t petite_partition_getlen(void *part)
 	par = (PartitionNode *)part;
 	partition_len = par->def->size;
 	
-	//wjq_log(LOG_INFO, "part size: 0x%x\r\n", partition_len);
+	//LogPetite(LOG_INFO, "part size: 0x%x\r\n", partition_len);
 	return partition_len;
 }
 /**
@@ -199,7 +199,7 @@ uint32_t petite_partition_getblksize(void *part)
 	blksize = sto->drv->getblksize(dev);
 	sto->drv->close(dev);
 	
-	//wjq_log(LOG_INFO, "part getblksize: 0x%x\r\n", blksize);
+	//LogPetite(LOG_INFO, "part getblksize: 0x%x\r\n", blksize);
 	
 	return blksize;
 }
@@ -226,7 +226,7 @@ int petite_partition_read(void *part, uint32_t addr, uint8_t *dst , size_t size)
 	sto  = par->base;
 
 	dev_addr = addr + par->def->addr - sto->def->addr;
-	//wjq_log(LOG_INFO, "part read: %s 0x%x(0x%x), 0x%x\r\n", 
+	//LogPetite(LOG_INFO, "part read: %s 0x%x(0x%x), 0x%x\r\n", 
 	//					sto->def->name, dev_addr, addr, size);
 	dev = (void *)sto->base;
 	dev = sto->drv->open(dev);
@@ -260,7 +260,7 @@ int petite_partition_write(void *part, uint32_t addr, const uint8_t *src, size_t
 	sto  = par->base;
 
 	dev_addr = addr + par->def->addr - sto->def->addr;
-	//wjq_log(LOG_INFO, "part write: %s 0x%x(0x%x), 0x%x\r\n", 
+	//LogPetite(LOG_INFO, "part write: %s 0x%x(0x%x), 0x%x\r\n", 
 	//					sto->def->name, dev_addr, addr, size);
 	dev = (void *)sto->base;
 	dev = sto->drv->open(dev);
@@ -291,14 +291,14 @@ int petite_partition_erase(void *part, uint32_t addr, size_t size)
 	PartitionNode *sto;
 	void *dev;
 	uint32_t dev_addr;
-	//wjq_log(LOG_INFO, "part erase: 0x%x, 0x%x\r\n", addr, size);
+	//LogPetite(LOG_INFO, "part erase: 0x%x, 0x%x\r\n", addr, size);
 
 	par = (PartitionNode *)part;
 	sto  = par->base;
 
 	dev_addr = addr + par->def->addr - sto->def->addr;
 	
-	//wjq_log(LOG_INFO, "part erase: %s 0x%x(0x%x), 0x%x\r\n", 
+	//LogPetite(LOG_INFO, "part erase: %s 0x%x(0x%x), 0x%x\r\n", 
 	//					sto->def->name, dev_addr, addr, size);
 	dev = (void *)sto->base;
 	dev = sto->drv->open(dev);
@@ -339,7 +339,7 @@ int petite_partition_init(PartitionDef *Partable)
 	
 	while(1) {
 		if (pardef->maptype == NULL) break;
-		wjq_log(LOG_INFO, "partiton init:%s, %s, %s, 0x%08x, 0x%x\r\n", 
+		LogPetite(LOG_INFO, "partiton init:%s, %s, %s, 0x%08x, 0x%x\r\n", 
 					pardef->maptype, pardef->type, pardef->name, pardef->addr, pardef->size);
 		/* 申请一个节点 */
 		node = (PartitionNode *)wjq_malloc(sizeof(PartitionNode));
@@ -383,7 +383,7 @@ int petite_partition_init(PartitionDef *Partable)
 					vfs_mount(node);
 				}
 			} else  {
-				wjq_log(LOG_ERR, "partiton addr over storage!\r\n");
+				LogPetite(LOG_ERR, "partiton addr over storage!\r\n");
 			}
 				
 		}
