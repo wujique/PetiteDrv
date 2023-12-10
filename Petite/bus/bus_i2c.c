@@ -32,7 +32,7 @@
 #define BUS_I2C_DEBUG
 
 #ifdef BUS_I2C_DEBUG
-#define BUSI2C_DEBUG	wjq_log 
+#define BUSI2C_DEBUG(l, args...) petite_log(l, "BUS I2C", NULL,__FUNCTION__, __LINE__, ##args); 
 #else
 #define BUSI2C_DEBUG(a, ...)
 #endif
@@ -50,7 +50,7 @@ PDevNode *bus_i2c_register(const DevI2c * dev)
 	struct list_head *listp;
 	DevI2cNode *pnode;
 	
-	BUSI2C_DEBUG(LOG_DEBUG, "[register] i2c:%s!\r\n", dev->pdev.name);
+	BUSI2C_DEBUG(LOG_DEBUG, "i2c:%s!\r\n", dev->pdev.name);
 
 
 	/* 申请一个节点空间   并插入链表     	*/

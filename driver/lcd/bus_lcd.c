@@ -93,7 +93,7 @@ s32 bus_lcd_rst(DevLcdNode *lcd, u8 sta)
 
 	dev = (DevLcd *)lcd->pnode.pdev;
 	
-	wjq_log(LOG_DEBUG, "dev name:%s\r\n", dev->pdev.name);
+	//wjq_log(LOG_DEBUG, "dev name:%s\r\n", dev->pdev.name);
 	
 	CtrlIO = dev->ctrlio;
 

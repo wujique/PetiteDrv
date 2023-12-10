@@ -31,10 +31,12 @@
 //#define DEV_SPIFLASH_DEBUG
 
 #ifdef DEV_SPIFLASH_DEBUG
-#define SPIFLASH_DEBUG	wjq_log 
+#define SPIFLASH_DEBUG(l, args...) petite_log(l, "SPI FLASH", NULL,__FUNCTION__, __LINE__, ##args); 
 #else
 #define SPIFLASH_DEBUG(a, ...)
 #endif
+
+#define LogSpiFlash(l, args...) petite_log(l, "SPI FLASH", NULL,__FUNCTION__, __LINE__, ##args); 
 
 /*
 	SPI FLASH，命令的开始是从CS下降沿开始，所以每次操作都需要进行CS操作
@@ -453,7 +455,7 @@ PDevNode *dev_spiflash_register(const DevSpiFlash *dev)
 	u32 MID = 0;
 	u8 index = 0;
 	
-	wjq_log(LOG_INFO, "[register] spi flash :%s!\r\n", pdev->name);
+	LogSpiFlash(LOG_INFO, "name:%s!\r\n", pdev->name);
 
 	/* 申请一个节点空间 */
 	flashnode = (DevSpiFlashNode *)wjq_malloc(sizeof(DevSpiFlashNode));
@@ -467,17 +469,17 @@ PDevNode *dev_spiflash_register(const DevSpiFlash *dev)
 
 	if (flashnode->spichnode != NULL) {
 		JID = dev_spiflash_readJTD(flashnode);
-		wjq_log(LOG_DEBUG, "\t\t%s jid:0x%x\r\n", pdev->name, JID);
+		LogSpiFlash(LOG_DEBUG, "%s jid:0x%x\r\n", pdev->name, JID);
 		
 		//MID  = dev_spiflash_readMTD(node);
-		//wjq_log(LOG_DEBUG, "%s mid:0x%x\r\n", dev->pnode.name, MID);
+		//LogSpiFlash(LOG_DEBUG, "%s mid:0x%x\r\n", dev->pnode.name, MID);
 		
 		/*根据JID查找设备信息*/
 		flashnode->pra = &(SpiFlashPraList[0]);
 		for (index = 1; index<(sizeof(SpiFlashPraList)/sizeof(NorFlashPra));index++) {
 			if (SpiFlashPraList[index].JID == JID) {
 				flashnode->pra = &(SpiFlashPraList[index]);
-				wjq_log(LOG_DEBUG, "\t\tflash name %s\r\n", flashnode->pra->name);
+				LogSpiFlash(LOG_DEBUG, "flash name %s\r\n", flashnode->pra->name);
 				break;
 			}
 		}
@@ -489,6 +491,7 @@ PDevNode *dev_spiflash_register(const DevSpiFlash *dev)
 
 #include "petite.h"
 
+#if 0
 /**
  *@brief:      dev_spiflash_test_fun
  *@details:    测试FLASH,擦除写读，调试时使用，量产存数据后不要测试
@@ -691,7 +694,9 @@ s32 dev_spiflash_test(void)
 	dev_spiflash_test_fun("core_spiflash");
 	return 0;
 }
+#endif
 
+/**------------------------------封装接口给partition使用-----------------------------------------*/
 
 int storage_spiflash_read(void *node, uint32_t offset, uint8_t *buf, size_t size)
 {

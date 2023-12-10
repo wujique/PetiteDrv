@@ -136,12 +136,18 @@ static char logbuf[128];
 
 void petite_log(LOG_L l, char *tag, const char *file, const char *fun, int line, s8 *fmt,...)
 {
+    uint32_t systime;
+
 	if(l > LogLevel) return;
 
 	mcu_uart_write(PC_PORT, (u8*)log_color_tab[l], 10);
 
+
+    systime = Stime_get_localtime();
+
     memset(logbuf, 0, sizeof(logbuf));
 
+    sprintf(logbuf, "[%010d]", systime);
     if (tag != NULL) {
         strcat(logbuf, "[");
         strcat(logbuf, tag);
@@ -159,7 +165,7 @@ void petite_log(LOG_L l, char *tag, const char *file, const char *fun, int line,
         strcat(logbuf, "]");
     }
 
-    sprintf(logbuf+strlen(logbuf), "[%d]:", line);
+    sprintf(logbuf+strlen(logbuf), "[%d]: ", line);
     mcu_uart_write(PC_PORT, (u8*)logbuf, strlen(logbuf));
 
     mcu_uart_write(PC_PORT, (u8*)log_color_tab[5], 10);

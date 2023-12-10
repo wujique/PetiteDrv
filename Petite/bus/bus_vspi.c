@@ -27,7 +27,7 @@
 #define BUS_VSPI_DEBUG
 
 #ifdef BUS_VSPI_DEBUG
-#define VSPI_DEBUG	wjq_log 
+#define VSPI_DEBUG(l, args...) petite_log(l, "BUS VSPI", NULL,__FUNCTION__, __LINE__, ##args);  
 #else
 #define VSPI_DEBUG(a, ...)
 #endif

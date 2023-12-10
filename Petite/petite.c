@@ -49,7 +49,7 @@ void petite_task(void *pvParameters)
 	uint16_t tcnt=0;
 	UBaseType_t stackHWM;
 	
-	LogPetite(LOG_INFO,"[    _app] petite_task\r\n");
+	LogPetite(LOG_INFO,"petite_task\r\n");
 
 	/* 初始化petite模块状态*/
 	//vfs_init();
