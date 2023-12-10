@@ -32,7 +32,7 @@ void board_app_task(void)
 	LogBoard(LOG_DEBUG, "run app task! 2023.12.10\r\n");
 
 	/* 初始化文件系统 */
-	sd_fatfs_init();
+	//sd_fatfs_init();
 	
 	flashdb_demo();
 
@@ -95,7 +95,7 @@ s32 board_init(void)
 
 	/*---------------------------------------*/
 	/* 创建目标板应用程序 */
-	//board_app_init();
+	board_app_init();
 
 	return 0;
 }
