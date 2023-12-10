@@ -954,21 +954,21 @@ void w25qxx_test_wr(void)
 
 	w25qxx_read_any(W25QXX_TEST_ADDR, 4096, w25qxx_testbuf_r);
 	uart_printf("read...\r\n");
-	PrintFormat(w25qxx_testbuf_r, 128);
+	PrintFDUMP_HEX_16BYTEormat(w25qxx_testbuf_r, 128);
 	
 	uart_printf("erase_sector...\r\n");
 	w25qxx_erase_sector(W25QXX_TEST_ADDR);
 
 	uart_printf("read...\r\n");
 	w25qxx_read_any(W25QXX_TEST_ADDR, 4096, w25qxx_testbuf_r);
-	PrintFormat(w25qxx_testbuf_r, 128);
+	DUMP_HEX_16BYTE(w25qxx_testbuf_r, 128);
 	
 	uart_printf("write_any...\r\n");
 	w25qxx_write_any(W25QXX_TEST_ADDR, 4096, w25qxx_testbuf_w);
 
 	uart_printf("read...\r\n");
 	w25qxx_read_any(W25QXX_TEST_ADDR, 4096, w25qxx_testbuf_r);
-	PrintFormat(w25qxx_testbuf_r, 128);
+	DUMP_HEX_16BYTE(w25qxx_testbuf_r, 128);
 	
 	uart_printf("finish\r\n");
 
@@ -987,7 +987,7 @@ void w25qxx_test_read_exdata(void)
 	/*此处是直接读，地址从0开始*/
 	w25qxx_read_any(addr-0x90000000, 4096, w25qxx_testbuf_r);
 	uart_printf("read...\r\n");
-	PrintFormat(w25qxx_testbuf_r, 128);
+	DUMP_HEX_16BYTE(w25qxx_testbuf_r, 128);
 }
 /*
 	w25qxx_map之后调用本函数进行测试
@@ -996,9 +996,9 @@ void w25qxx_test_map_read_exdata(void)
 {
 	uart_printf("dr read...\r\n");
 	mem_addr = (__IO uint8_t *)(0x90000000);
-	PrintFormat(mem_addr, 256);
+	DUMP_HEX_16BYTE(mem_addr, 256);
 	
-	PrintFormat((uint8_t *)test_qspi_tab, 32);
+	DUMP_HEX_16BYTE((uint8_t *)test_qspi_tab, 32);
 	
 	uart_printf("run ex flash code...\r\n");
 	u8 cnt = 0;

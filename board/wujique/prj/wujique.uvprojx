@@ -339,7 +339,7 @@
               <MiscControls>--locale=english</MiscControls>
               <Define>NDEBUG</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\app;..\..\wujique;..\usb\inc;..\eth\inc;..\..\..\driver;..\..\..\driver\lcd;..\..\..\driver\cdev;..\..\..\mcu\stm32407\mcu_dev;..\..\..\mcu\stm32407\StLib\STM32F4xx_StdPeriph_Driver\inc;..\..\..\panel;..\..\..\Petite;..\..\..\components\FatFs;..\eth\inc;..\..\..\components\cmd\ubootcmd;..\..\..\components\littlefs-master;..\usb\inc;..\..\..\mcu\stm32407;..\..\..\driver\camera;..\..\..\mcu\stm32407\StLib\CMSIS\Include;..\..\..\driver\touch;..\..\..\components\FreeRTOS\Source\include;..\..\..\components\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\..\..\components\FreeRTOS\Source\CMSIS_RTOS_V2;..\..\..\driver\touch\rtp\tslib;..\..\..\driver\touch\rtp\tslib\tests;..\..\..\driver\sound;..\..\..\driver\touch;..\..\..\driver\touch\rtp;..\..\..\Petite\bus;..\..\..\components\emenu;..\..\..\components\CmBacktrace\cm_backtrace;..\..\..\components\FlashDB\inc;..\..\..\components\FlashDB\porting;..\..\..\components\littlefs;..\..\..\components\Petitefont</IncludePath>
+              <IncludePath>..\..\..\app;..\..\wujique;..\usb\inc;..\eth\inc;..\..\..\driver;..\..\..\driver\lcd;..\..\..\driver\cdev;..\..\..\mcu\stm32407\mcu_dev;..\..\..\mcu\stm32407\StLib\STM32F4xx_StdPeriph_Driver\inc;..\..\..\panel;..\..\..\Petite;..\..\..\components\FatFs;..\eth\inc;..\..\..\components\cmd\ubootcmd;..\..\..\components\littlefs-master;..\usb\inc;..\..\..\mcu\stm32407;..\..\..\driver\camera;..\..\..\mcu\stm32407\StLib\CMSIS\Include;..\..\..\driver\touch;..\..\..\components\FreeRTOS\Source\include;..\..\..\components\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\..\..\components\FreeRTOS\Source\CMSIS_RTOS_V2;..\..\..\driver\touch\rtp\tslib;..\..\..\driver\touch\rtp\tslib\tests;..\..\..\driver\sound;..\..\..\driver\touch;..\..\..\driver\touch\rtp;..\..\..\Petite\bus;..\..\..\components\emenu;..\..\..\components\CmBacktrace\cm_backtrace;..\..\..\components\FlashDB\inc;..\..\..\components\FlashDB\porting;..\..\..\components\littlefs;..\..\..\components\Petitefont;..\mcu</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -384,14 +384,14 @@
           <GroupName>mcu</GroupName>
           <Files>
             <File>
-              <FileName>system_stm32f4xx.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\mcu\stm32407\system_stm32f4xx.c</FilePath>
-            </File>
-            <File>
               <FileName>startup_stm32f40_41xxx.s</FileName>
               <FileType>2</FileType>
-              <FilePath>..\..\..\mcu\stm32407\startup_stm32f40_41xxx.s</FilePath>
+              <FilePath>..\mcu\startup_stm32f40_41xxx.s</FilePath>
+            </File>
+            <File>
+              <FileName>system_stm32f4xx.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\mcu\system_stm32f4xx.c</FilePath>
             </File>
           </Files>
         </Group>

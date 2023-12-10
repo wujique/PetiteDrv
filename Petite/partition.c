@@ -356,7 +356,8 @@ int petite_partition_init(PartitionDef *Partable)
 			if (strcmp(node->def->type, "spiflash") == 0 ) {
 				node->drv = &StorageExSpiFlash;
 			} else if (strcmp(node->def->type, "xip_flash") == 0) {
-				node->drv = &StorageExQspiFlash;
+				//node->drv = &StorageExQspiFlash;
+				node->drv = &StorageEmpty;
 			}else {
 				node->drv = &StorageEmpty;
 			}
@@ -418,7 +419,7 @@ void petite_partition_test(void)
 
 	petite_partition_read(part, 0, rbuf, 64);
 
-	PrintFormat(rbuf, 64);
+	DUMP_HEX_16BYTE(rbuf, 64);
 
 	petite_partition_erase(part, 0,  64);
 	
@@ -428,7 +429,7 @@ void petite_partition_test(void)
 	petite_partition_write(part, 0, wbuf, 64);
 	
 	petite_partition_read(part, 0, rbuf, 64);
-	PrintFormat(rbuf, 64);
+	DUMP_HEX_16BYTE(rbuf, 64);
 	
 }
 #endif

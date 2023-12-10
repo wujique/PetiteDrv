@@ -6,7 +6,7 @@
 */
 #include "main.h"
 #include "board_sysconf.h"
-
+#include "log.h"
 
 #include "ff.h"
 #include "ff_gen_drv.h"
@@ -140,7 +140,7 @@ int  FatFs_FileTest(void)
 	MyFile_Res = f_read(&MyFile,MyFile_ReadBuffer,rlen,&MyFile_Num);	
 	if(MyFile_Res == FR_OK) {
 		uart_printf("ok, verify...\r\n");
-		PrintFormat(MyFile_ReadBuffer, rlen);
+		DUMP_HEX_16BYTE(MyFile_ReadBuffer, rlen);
 		for(i=0;i<rlen;i++) {
 			if(MyFile_WriteBuffer[i] != MyFile_ReadBuffer[i]) {
 				uart_printf("err!\r\n");

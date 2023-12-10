@@ -229,7 +229,7 @@ void tiny_tty_test(void)
 		wjq_log(LOG_INFO, "ofs_x:%d\r\n", glyph_dsc.ofs_x);
 		wjq_log(LOG_INFO, "ofs_y:%d\r\n", glyph_dsc.ofs_y);
 		wjq_log(LOG_INFO, "bpp:%d\r\n", glyph_dsc.bpp);
-		PrintFormat((u8 *)bitmap, 64);
+		DUMP_HEX_16BYTE((u8 *)bitmap, 64);
 		/* tinyttf 也就是stb_truetype库，生成的bitmap是8bit灰度值。
 			AWTK GUI 二值化参数
 			uint32_t threshold = font_size > 24? (font_size > 48 ? (font_size > 71 ? (font_size > 95 ? 195 : 175) : 160) : 118) : 95;
@@ -344,7 +344,7 @@ void cuckoo_7b0_test(void)
 	filefd2 = vfs_open("/mtd1/chuheisong.ttf", O_RDONLY);
 	if(filefd2 > 0) {		
 		vfs_read(filefd2, lrt, 64);
-		PrintFormat(lrt, 64);
+		DUMP_HEX_16BYTE(lrt, 64);
 		vfs_close(filefd2);
 
 	}

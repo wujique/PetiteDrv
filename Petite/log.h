@@ -26,7 +26,11 @@ typedef enum
 
 extern void uart_printf(s8 *fmt,...);
 extern void wjq_log(LOG_L l, s8 *fmt,...);
-extern void PrintFormat(u8 *wbuf, s32 wlen);
+extern void petite_log(LOG_L l, char *tag, const char *file, const char *fun, int line, s8 *fmt,...);
+
+void dump_hex(const uint8_t *buf, uint32_t size, uint32_t number);
+
+#define DUMP_HEX_16BYTE(buf,size) dump_hex(buf,size,16);
 
 #define Uprintf uart_printf
 

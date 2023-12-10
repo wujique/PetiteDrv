@@ -108,7 +108,7 @@ void board_main(void)
 	#if 1
 	/* 测试 将一个littlefs镜像链接到外部QSPI FLASH */
 	uart_printf("elfs addr:0x%08x, len:0x%x", elfsimage, elfsimage_length);
-	PrintFormat((u8 *)elfsimage, 128);
+	DUMP_HEX_16BYTE((u8 *)elfsimage, 128);
 	#endif
 
 	

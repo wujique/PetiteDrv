@@ -97,10 +97,11 @@ void uart_printf(s8 *fmt,...)
 	*/
 const char *log_color_tab[]={
 	"",
-	"\033[31;40;1m",
-	"\033[33;40;1m",
-	"\033[32;40;1m",
-	"\033[34;40;1m",
+	"\033[31;40;1m",//red
+	"\033[33;40;1m",//orange
+	"\033[32;40;1m",//green
+	"\033[34;40;1m",//blue
+    "\033[39;40;1m",//default,white
 
 };
 
@@ -128,53 +129,78 @@ void wjq_log(LOG_L l, s8 *fmt,...)
     
     va_end(ap);
 }
+
+void petite_log(LOG_L l, char *tag, const char *file, const char *fun, int line, s8 *fmt,...)
+{
+	if(l > LogLevel) return;
+
+	mcu_uart_write(PC_PORT, (u8*)log_color_tab[l], 10);
+    if (tag != NULL)
+        uart_printf("[%s]", tag);
+    if (file != NULL)
+        uart_printf("[%s]", file);
+    if (fun != NULL)
+        uart_printf("[%s]", fun);
+    if (line != NULL)
+        uart_printf("[%d]", line);
+
+    mcu_uart_write(PC_PORT, (u8*)log_color_tab[5], 10);
+
+    s32 length = 0;
+    va_list ap;
+    s8 *pt;
+    va_start(ap,fmt);
+    vsprintf((char *)&string[0],(const char *)fmt,ap);
+    pt = &string[0];
+    while(*pt!='\0') {
+        length++;
+        pt++;
+    }
+    mcu_uart_write(PC_PORT, (u8*)&string[0], length);  //写串口
+    va_end(ap);
+}
+
+#define __is_print(ch) ((unsigned int)((ch) - ' ') < 127u - ' ')
+
 /**
- *@brief:      PrintFormat
- *@details:    格式化输出BUF中的数据
- *@param[in]   u8 *wbuf  
-               s32 wlen  
- *@param[out]  无
- *@retval:     
- */
-void PrintFormat(u8 *wbuf, s32 wlen)
-{   
-    s32 i;
-    for(i=0; i<wlen; i++)
-    {
-        if((0 == (i&0x0f)))//&&(0 != i))
-        {
-            uart_printf("\r\n");
-        }
-        uart_printf("%02x ", wbuf[i]);
-    }
-    uart_printf("\r\n");
-}
+ * dump_hex
+ * 
+ * @brief dump data in hex format
+ * 
+ * @param buf: User buffer
+ * @param size: Dump data size
+ * @param number: The number of outputs per line
+ * 
+ * @return void
+*/
+void dump_hex(const uint8_t *buf, uint32_t size, uint32_t number)
+{
+    int i, j;
 
-void PrintFormatCarray(u8 *wbuf, s32 wlen)
-{   
-    s32 i;
-    for(i=0; i<wlen; i++) {
-        if((0 == (i&0x0f)))//&&(0 != i))
-        {
-            uart_printf("\r\n");
-        }
-        uart_printf("0x%02x, ", wbuf[i]);
-    }
-    uart_printf("\r\n");
-}
+    ///@todo 一个字符调一次printf太慢了，有空要优化，组织一行字符在printf
+    for (i = 0; i < size; i += number) {
+        uart_printf("%08X: ", i);
 
-void PrintFormatU16(u16 *wbuf, s32 wlen)
-{   
-    s32 i;
-    for(i=0; i<wlen; i++)
-    {
-        if((0 == (i&0x0f)))//&&(0 != i))
-        {
-            uart_printf("\r\n");
+        for (j = 0; j < number; j++) {
+            if (j % 8 == 0) {
+                uart_printf(" ");
+            }
+            if (i + j < size)
+                uart_printf("%02X ", buf[i + j]);
+            else
+                uart_printf("   ");
         }
-        uart_printf("%04x ", wbuf[i]);
+        uart_printf(" ");
+
+        for (j = 0; j < number; j++)
+        {
+            if (i + j < size)
+            {
+                uart_printf("%c", __is_print(buf[i + j]) ? buf[i + j] : '.');
+            }
+        }
+        uart_printf("\r\n");
     }
-    uart_printf("\r\n");
 }
 
 void cmd_uart_printf(s8 *fmt,...)

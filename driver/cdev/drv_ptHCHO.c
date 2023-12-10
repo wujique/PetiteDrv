@@ -150,7 +150,7 @@ s32 dev_ptHCHO_test(void)
 			memset(hchobuf, 0, sizeof(hchobuf));
 			len = dev_ptHCHO_read(hchobuf, sizeof(hchobuf));
 			if(len != 0) {
-				PrintFormat(hchobuf, len);
+				DUMP_HEX_16BYTE(hchobuf, len);
 				if((hchobuf[0] == 0x42) &&(hchobuf[1] == 0x4d)&&(hchobuf[2] == 0x08)) {
 					value = (hchobuf[6]<<8) +	hchobuf[7];
 					wjq_log(LOG_DEBUG, ">-%s:%d", numNameInx[hchobuf[3]],value/numKeysInx[hchobuf[5]]);

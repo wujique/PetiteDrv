@@ -101,7 +101,7 @@ const uint8_t *font_wjq_get_glyph_bitmap(const petite_font_t * pfont, uint32_t l
 		uart_printf("wjq read font err!\r\n");	
 	}
 
-	//PrintFormat(dotbuf, bitmap_size);
+	//DUMP_HEX_16BYTE(dotbuf, bitmap_size);
 
 	return (const uint8_t *)dotbuf;
 

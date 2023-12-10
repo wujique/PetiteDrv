@@ -219,7 +219,7 @@ const uint8_t *bitmapfont_get_glyph_bitmap(const petite_font_t * pfont, uint32_t
 	vfs_lseek(pfdsc->fd, dsc->BitmapFontHead.bitmap +  head->index, 0);
 	rlen = vfs_read(pfdsc->fd, dotbuf, bitmap_size);
 
-	//PrintFormat(dotbuf, bitmap_size);
+	//DUMP_HEX_16BYTE(dotbuf, bitmap_size);
 
 	return (const uint8_t *)dotbuf;
 

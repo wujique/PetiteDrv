@@ -399,7 +399,7 @@ void spi_example(void)
 		bus_spich_cs(spichnode, 0);
 		bus_spich_transfer(spichnode, src, rsv, 128);
 		bus_spich_cs(spichnode, 1);
-		PrintFormat(rsv, 128);
+		DUMP_HEX_16BYTE(rsv, 128);
 		Delay(1000);
 	}
 	bus_spich_close(spichnode);
