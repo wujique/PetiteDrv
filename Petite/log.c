@@ -64,6 +64,8 @@ PUTCHAR_PROTOTYPE
 }
 
 #endif 
+
+
 extern int vsprintf(char * s, const char * format, __va_list arg);
 /**
  *@brief:      uart_printf
