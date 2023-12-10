@@ -132,19 +132,35 @@ void wjq_log(LOG_L l, s8 *fmt,...)
     va_end(ap);
 }
 
+static char logbuf[128];
+
 void petite_log(LOG_L l, char *tag, const char *file, const char *fun, int line, s8 *fmt,...)
 {
 	if(l > LogLevel) return;
 
 	mcu_uart_write(PC_PORT, (u8*)log_color_tab[l], 10);
-    if (tag != NULL)
-        uart_printf("[%s]", tag);
-    if (file != NULL)
-        uart_printf("[%s]", file);
-    if (fun != NULL)
-        uart_printf("[%s]", fun);
-    if (line != NULL)
-        uart_printf("[%d]", line);
+
+    memset(logbuf, 0, sizeof(logbuf));
+
+    if (tag != NULL) {
+        strcat(logbuf, "[");
+        strcat(logbuf, tag);
+        strcat(logbuf, "]");
+    }
+
+    if (file != NULL) {
+        strcat(logbuf, "[");
+        strcat(logbuf, file);
+        strcat(logbuf, "]");
+    }
+    if (fun != NULL) {
+        strcat(logbuf, "[");
+        strcat(logbuf, fun);
+        strcat(logbuf, "]");
+    }
+
+    sprintf(logbuf+strlen(logbuf), "[%d]:", line);
+    mcu_uart_write(PC_PORT, (u8*)logbuf, strlen(logbuf));
 
     mcu_uart_write(PC_PORT, (u8*)log_color_tab[5], 10);
 

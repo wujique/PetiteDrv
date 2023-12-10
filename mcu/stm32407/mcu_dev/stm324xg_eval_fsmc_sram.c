@@ -63,6 +63,7 @@
 /**
   * @brief  FSMC Bank 1 NOR/SRAM2
   */
+#if 0
 #define Bank1_SRAM2_ADDR  ((uint32_t)0x64000000)  
 
 /**
@@ -295,12 +296,31 @@ void SRAM_ReadBuffer(uint16_t* pBuffer, uint32_t ReadAddr, uint32_t NumHalfwordT
     ReadAddr += 2;
   }
 }
+#endif
+
+typedef struct{
+  GPIO_TypeDef* port;
+  uint16_t pinsrc;
+  uint32_t pin;
+
+}Stm32F407IoCnf;
+
+
+typedef struct{
+  uint32_t reg_addr;
+  uint32_t data_addr;
+  uint32_t ne;// 区域，通过NE选择，1,2,3,4
+  uint16_t ionum; // 要配置的IO数
+  Stm32F407IoCnf ioconf[20];
+}Stm32FsmcLcdDef;
+
+
 /*
 	写寄存器要两步
 	*LcdReg = LCD_Reg; //写入要写的寄存器序号
 	*LcdData = LCD_RegValue; //写入数据 
 
-	FSMC bank1地址0x6000 0000
+	FSMC bank1地址0x6000 0000, 通过NE管脚选择
 	分四个区域,每个区域64M，偏移地址分别是
 		0x000 0000
 		0X400 0000
@@ -311,8 +331,67 @@ void SRAM_ReadBuffer(uint16_t* pBuffer, uint32_t ReadAddr, uint32_t NumHalfwordT
 	用来区分命令还是数据的管脚接在地址线上，如果是16位宽，内部FSMC会对地址进行右移一位。
 	因此，如果接在A15上，在地址上就应该选A16位。
 */
-volatile u16 *LcdReg = (u16*)0x6C000000;
-volatile u16 *LcdData = (u16*)0x6C010000;
+/** 配置1，在STM32F407ZGT，wujique板*/
+Stm32FsmcLcdDef Stm32FsmcLcd_1 = {
+  .reg_addr =  0x6C000000,
+  .data_addr = 0x6C010000,//A15
+  .ne = FSMC_Bank1_NORSRAM4,
+  .ionum = 20,
+  .ioconf = {
+      {GPIOD, GPIO_PinSource0, GPIO_Pin_0}, //PD0	<-> FSMC_D2 
+      {GPIOD, GPIO_PinSource1, GPIO_Pin_1}, //PD1	<-> FSMC_D3  
+      {GPIOD, GPIO_PinSource4, GPIO_Pin_4}, //PD4	<-> FSMC_NOE 
+      {GPIOD, GPIO_PinSource5, GPIO_Pin_5}, //PD5	<-> FSMC_NWE 
+      {GPIOD, GPIO_PinSource8, GPIO_Pin_8}, //PD8	<-> FSMC_D13 
+      {GPIOD, GPIO_PinSource9, GPIO_Pin_9}, //PD9	<-> FSMC_D14 
+      {GPIOD, GPIO_PinSource10, GPIO_Pin_10}, //PD10 <-> FSMC_D15 
+      {GPIOD, GPIO_PinSource14, GPIO_Pin_14}, //PD14 <-> FSMC_D0  
+      {GPIOD, GPIO_PinSource15, GPIO_Pin_15}, //PD15 <-> FSMC_D1   
+      {GPIOE, GPIO_PinSource7 , GPIO_Pin_7}, //PE7	<-> FSMC_D4  
+      {GPIOE, GPIO_PinSource8 , GPIO_Pin_8}, //PE8	<-> FSMC_D5  
+      {GPIOE, GPIO_PinSource9 , GPIO_Pin_9}, //PE9	<-> FSMC_D6  
+      {GPIOE, GPIO_PinSource10 , GPIO_Pin_10}, //PE10 <-> FSMC_D7 
+      {GPIOE, GPIO_PinSource11 , GPIO_Pin_11}, //PE11 <-> FSMC_D8   
+      {GPIOE, GPIO_PinSource12 , GPIO_Pin_12}, //PE12 <-> FSMC_D9 
+      {GPIOE, GPIO_PinSource13 , GPIO_Pin_13}, //PE13 <-> FSMC_D10  
+      {GPIOE, GPIO_PinSource14 , GPIO_Pin_14}, //PE14 <-> FSMC_D11  
+      {GPIOE, GPIO_PinSource15 , GPIO_Pin_15}, //PE15 <-> FSMC_D12
+      {GPIOG, GPIO_PinSource5 , GPIO_Pin_5}, //PG5 <-> FSMC_A15 |
+      {GPIOG, GPIO_PinSource12 , GPIO_Pin_12}, //PG12 <-> FSMC_NE4 |
+  },
+};
+/** 配置2，在stm32f407vgt pochard板 */
+Stm32FsmcLcdDef Stm32FsmcLcd_2 = {
+  .reg_addr =  0x60000000,
+  .data_addr = 0x60100000,//A19
+  .ne = FSMC_Bank1_NORSRAM1,
+  .ionum = 20,
+  .ioconf = {
+      {GPIOE, GPIO_PinSource3 , GPIO_Pin_3}, //  PE3   ------> FSMC_A19
+      {GPIOE, GPIO_PinSource7 , GPIO_Pin_7}, //  PE7   ------> FSMC_D4
+      {GPIOE, GPIO_PinSource8 , GPIO_Pin_8}, //  PE8   ------> FSMC_D5
+      {GPIOE, GPIO_PinSource9 , GPIO_Pin_9}, //  PE9   ------> FSMC_D6
+      {GPIOE, GPIO_PinSource10 , GPIO_Pin_10}, //  PE10   ------> FSMC_D7
+      {GPIOE, GPIO_PinSource11 , GPIO_Pin_11}, //  PE11   ------> FSMC_D8
+      {GPIOE, GPIO_PinSource12 , GPIO_Pin_12}, //  PE12   ------> FSMC_D9
+      {GPIOE, GPIO_PinSource13 , GPIO_Pin_13}, //  PE13   ------> FSMC_D10
+      {GPIOE, GPIO_PinSource14 , GPIO_Pin_14}, //  PE14   ------> FSMC_D11
+      {GPIOE, GPIO_PinSource15 , GPIO_Pin_15}, //  PE15   ------> FSMC_D12
+      {GPIOD, GPIO_PinSource0, GPIO_Pin_0}, //  PD0   ------> FSMC_D2
+      {GPIOD, GPIO_PinSource1, GPIO_Pin_1}, //   PD1   ------> FSMC_D3
+      {GPIOD, GPIO_PinSource4, GPIO_Pin_4}, //   PD4   ------> FSMC_NOE
+      {GPIOD, GPIO_PinSource5, GPIO_Pin_5}, //   PD5   ------> FSMC_NWE
+      {GPIOD, GPIO_PinSource7, GPIO_Pin_7}, //   PD7   ------> FSMC_NE1
+      {GPIOD, GPIO_PinSource8, GPIO_Pin_8}, //   PD8   ------> FSMC_D13
+      {GPIOD, GPIO_PinSource9, GPIO_Pin_9},  //  PD9   ------> FSMC_D14
+      {GPIOD, GPIO_PinSource10, GPIO_Pin_10}, //  PD10   ------> FSMC_D15
+      {GPIOD, GPIO_PinSource14, GPIO_Pin_14}, //  PD14   ------> FSMC_D0
+      {GPIOD, GPIO_PinSource15, GPIO_Pin_15}, //  PD15   ------> FSMC_D1
+  },
+};
+
+volatile u16 *LcdReg = NULL;
+volatile u16 *LcdData = NULL;
 
 /**
  *@brief:      mcu_fsmc_lcd_Init
@@ -321,91 +400,48 @@ volatile u16 *LcdData = (u16*)0x6C010000;
  *@param[out]  无
  *@retval:     
  */
-void mcu_fsmc_lcd_Init(void)
+void mcu_fsmc_lcd_Init(uint8_t conf_num)
 {
   FSMC_NORSRAMInitTypeDef  FSMC_NORSRAMInitStructure;
   FSMC_NORSRAMTimingInitTypeDef  w,r;
   GPIO_InitTypeDef GPIO_InitStructure; 
-  
+  Stm32FsmcLcdDef *fsmc_conf;
+
+  if(conf_num == 1) {
+    fsmc_conf = &Stm32FsmcLcd_1;
+  } else if(conf_num == 2) {
+    fsmc_conf = &Stm32FsmcLcd_2;
+  } 
+
+  LcdReg = (uint16_t *)fsmc_conf->reg_addr;
+  LcdData = (uint16_t *)fsmc_conf->data_addr;
   /* Enable GPIOs clock */
-  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD | RCC_AHB1Periph_GPIOE |
-						 RCC_AHB1Periph_GPIOG, ENABLE);
+  //RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD | RCC_AHB1Periph_GPIOE |
+		//				 RCC_AHB1Periph_GPIOG, ENABLE);
 
   /* Enable FSMC clock */
   RCC_AHB3PeriphClockCmd(RCC_AHB3Periph_FSMC, ENABLE); 
   
-/*-- GPIOs Configuration -----------------------------------------------------*/
-/*
- +-------------------+--------------------+------------------+------------------+
-PD0	<-> FSMC_D2  
-PD1	<-> FSMC_D3  
-PD4	<-> FSMC_NOE 
-PD5	<-> FSMC_NWE 
-PD8	<-> FSMC_D13  
-PD9	<-> FSMC_D14 
-PD10 <-> FSMC_D15 
-PD14 <-> FSMC_D0   
-PD15 <-> FSMC_D1   
-
-PE7	<-> FSMC_D4    
-PE8	<-> FSMC_D5   
-PE9	<-> FSMC_D6  
-PE10 <-> FSMC_D7   
-PE11 <-> FSMC_D8   
-PE12 <-> FSMC_D9   
-PE13 <-> FSMC_D10  
-PE14 <-> FSMC_D11  
-PE15 <-> FSMC_D12  
-
-PG5 <-> FSMC_A15 |	
-PG12 <-> FSMC_NE4 |
-*/
 
   /* GPIOD configuration */
-  GPIO_PinAFConfig(GPIOD, GPIO_PinSource0, GPIO_AF_FSMC);
-  GPIO_PinAFConfig(GPIOD, GPIO_PinSource1, GPIO_AF_FSMC);
-  GPIO_PinAFConfig(GPIOD, GPIO_PinSource4, GPIO_AF_FSMC);
-  GPIO_PinAFConfig(GPIOD, GPIO_PinSource5, GPIO_AF_FSMC);
-  GPIO_PinAFConfig(GPIOD, GPIO_PinSource8, GPIO_AF_FSMC);
-  GPIO_PinAFConfig(GPIOD, GPIO_PinSource9, GPIO_AF_FSMC);
-  GPIO_PinAFConfig(GPIOD, GPIO_PinSource10, GPIO_AF_FSMC);
-  GPIO_PinAFConfig(GPIOD, GPIO_PinSource14, GPIO_AF_FSMC);
-  GPIO_PinAFConfig(GPIOD, GPIO_PinSource15, GPIO_AF_FSMC);
+  uint16_t index = 0;
+  Stm32F407IoCnf *p_io_conf = &fsmc_conf->ioconf[0];
 
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0	| GPIO_Pin_1  | GPIO_Pin_4	| GPIO_Pin_5  | 
-								GPIO_Pin_8	| GPIO_Pin_9  | GPIO_Pin_10 |GPIO_Pin_14 | GPIO_Pin_15;
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
   GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
   GPIO_InitStructure.GPIO_PuPd	= GPIO_PuPd_NOPULL;
 
-  GPIO_Init(GPIOD, &GPIO_InitStructure);
+  while(1) {
+    if (index >= fsmc_conf->ionum)
+      break;
 
-
-  /* GPIOE configuration */
-  GPIO_PinAFConfig(GPIOE, GPIO_PinSource7 , GPIO_AF_FSMC);
-  GPIO_PinAFConfig(GPIOE, GPIO_PinSource8 , GPIO_AF_FSMC);
-  GPIO_PinAFConfig(GPIOE, GPIO_PinSource9 , GPIO_AF_FSMC);
-  GPIO_PinAFConfig(GPIOE, GPIO_PinSource10 , GPIO_AF_FSMC);
-  GPIO_PinAFConfig(GPIOE, GPIO_PinSource11 , GPIO_AF_FSMC);
-  GPIO_PinAFConfig(GPIOE, GPIO_PinSource12 , GPIO_AF_FSMC);
-  GPIO_PinAFConfig(GPIOE, GPIO_PinSource13 , GPIO_AF_FSMC);
-  GPIO_PinAFConfig(GPIOE, GPIO_PinSource14 , GPIO_AF_FSMC);
-  GPIO_PinAFConfig(GPIOE, GPIO_PinSource15 , GPIO_AF_FSMC);
-
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7 |
-								GPIO_Pin_8	| GPIO_Pin_9  | GPIO_Pin_10 | GPIO_Pin_11|
-								GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15;
-
-  GPIO_Init(GPIOE, &GPIO_InitStructure);
-
-  /* GPIOG configuration */
-  GPIO_PinAFConfig(GPIOG, GPIO_PinSource5 , GPIO_AF_FSMC);
-  GPIO_PinAFConfig(GPIOG, GPIO_PinSource12 , GPIO_AF_FSMC);
-
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5  |GPIO_Pin_12;		
-
-  GPIO_Init(GPIOG, &GPIO_InitStructure);
+    GPIO_PinAFConfig(p_io_conf->port, p_io_conf->pinsrc, GPIO_AF_FSMC);  
+    GPIO_InitStructure.GPIO_Pin = p_io_conf->pin;
+    GPIO_Init(p_io_conf->port, &GPIO_InitStructure);
+    p_io_conf++;
+    index++;
+  }
 
 /*-- FSMC Configuration ------------------------------------------------------*/
   w.FSMC_AddressSetupTime = 10;
@@ -424,7 +460,7 @@ PG12 <-> FSMC_NE4 |
   r.FSMC_DataLatency = 0;
   r.FSMC_AccessMode = FSMC_AccessMode_A;
 
-  FSMC_NORSRAMInitStructure.FSMC_Bank = FSMC_Bank1_NORSRAM4;
+  FSMC_NORSRAMInitStructure.FSMC_Bank = fsmc_conf->ne;
   FSMC_NORSRAMInitStructure.FSMC_DataAddressMux = FSMC_DataAddressMux_Disable;
   FSMC_NORSRAMInitStructure.FSMC_MemoryType = FSMC_MemoryType_SRAM;
   FSMC_NORSRAMInitStructure.FSMC_MemoryDataWidth = FSMC_MemoryDataWidth_16b;
@@ -443,7 +479,7 @@ PG12 <-> FSMC_NE4 |
   FSMC_NORSRAMInit(&FSMC_NORSRAMInitStructure); 
 
   /*!< Enable FSMC Bank1_SRAM4 Bank */
-  FSMC_NORSRAMCmd(FSMC_Bank1_NORSRAM4, ENABLE); 
+  FSMC_NORSRAMCmd(fsmc_conf->ne, ENABLE); 
 
 }
 

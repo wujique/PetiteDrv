@@ -97,11 +97,11 @@ const DevLcdCtrlIO BusLcd8080={
 	.A0port = MCU_PORT_NULL,
 	.A0pin = NULL,
 
-	.rstport = MCU_PORT_A,
-	.rstpin = MCU_IO_15,
+	.rstport = MCU_PORT_D,
+	.rstpin = MCU_IO_3,
 	
 	.blport = MCU_PORT_B,
-	.blpin = MCU_IO_15,
+	.blpin = MCU_IO_0,
 
 };
 
@@ -136,14 +136,11 @@ const DevLcd DevLcdtTFT	=	{
 			},
 
 	.ctrlio = &BusLcd8080,
-	/* 可以指定id为：
-		0x9325，WJQ, 320 240
-		0x9341, WJQ, 320 240
-		0x1408, 好巨润, 480 800, 4.0寸的IPS屏幕，r61408驱动芯片 */	 
+ 
 	.id = NULL, 
 	/* 指定lcd 尺寸 */
-	.width = 480, 
-	.height = 800,
+	.width = 320, 
+	.height = 480,
 };
 #endif	
 

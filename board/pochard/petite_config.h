@@ -48,6 +48,7 @@
 #define LCD_DRIVER_3820			1/* e paper */
 #define LCD_DRIVER_NT35510		1
 #define LCD_DRIVER_R61408		1
+#define LCD_DRIVER_ST7796U		1
 
 /* 文件系统 */
 #define SYS_USE_VFS		1

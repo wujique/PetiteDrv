@@ -793,6 +793,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\driver\lcd\bus_lcd.c</FilePath>
             </File>
+            <File>
+              <FileName>drv_st7796u.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\driver\lcd\drv_st7796u.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

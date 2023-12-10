@@ -34,6 +34,7 @@
 #include "drv_st7735r.h"
 #include "drv_nt35510.h"
 #include "drv_r61408.h"
+#include "drv_st7796u.h"
 
 //#define DEV_LCD_DEBUG
 
@@ -45,6 +46,8 @@
 
 /*	LCD驱动列表 */
 _lcd_drv *LcdDrvList[] = {
+				&TftLcdSt7796uDrv,
+
 				/* tft lcd ILI9341 */
 				#if( LCD_DRIVER_9341 == 1 )
 					&TftLcdILI9341Drv,   
@@ -95,6 +98,8 @@ _lcd_drv *LcdDrvList[] = {
 };
 /*	可自动识别ID的驱动*/
 _lcd_drv *LcdProbDrvList[] = {
+				&TftLcdSt7796uDrv,
+				
 				#if( LCD_DRIVER_9341 == 1 )
 					&TftLcdILI9341Drv,
 				#endif

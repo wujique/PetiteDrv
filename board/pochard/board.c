@@ -87,7 +87,7 @@ s32 board_init(void)
 	LogBoard(LOG_DEBUG, "pochar other dev init!***\r\n");
 
 	/* 注册总线的驱动 ：I2C/SPI/BUS LCD...*/
-	//mcu_fsmc_lcd_Init();
+	mcu_fsmc_lcd_Init(2);
 	petite_dev_register(PetiteDevTable);
 
 	/* 初始化存储空间与分区*/

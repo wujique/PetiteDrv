@@ -78,14 +78,14 @@
   * @{
   */      
 
-void SRAM_Init(void);
-void SRAM_WriteBuffer(uint16_t* pBuffer, uint32_t WriteAddr, uint32_t NumHalfwordToWrite);
-void SRAM_ReadBuffer(uint16_t* pBuffer, uint32_t ReadAddr, uint32_t NumHalfwordToRead);
+//void SRAM_Init(void);
+//void SRAM_WriteBuffer(uint16_t* pBuffer, uint32_t WriteAddr, uint32_t NumHalfwordToWrite);
+//void SRAM_ReadBuffer(uint16_t* pBuffer, uint32_t ReadAddr, uint32_t NumHalfwordToRead);
 
 extern volatile u16 *LcdReg;
 extern volatile u16 *LcdData;
 
-void mcu_fsmc_lcd_Init(void);
+void mcu_fsmc_lcd_Init(uint8_t conf_num);
 
 #ifdef __cplusplus
 }

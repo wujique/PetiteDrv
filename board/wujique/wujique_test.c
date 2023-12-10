@@ -1267,7 +1267,7 @@ void wujique_stm407_test(void)
 	if (WJQTestLcd == NULL) {
 		wjq_log(LOG_DEBUG, "emenu open lcd err\r\n");
 	}
-	#if 1
+	#if 0
 	lcd_backlight(WJQTestLcd, 1);
 	/*登录,登錄,Login,Login,로그인,Anmeldung,S'identifier,Accesso,Iniciar sesión,Đăng nhập,Логин,Entrar,Masuk,Oturum aç,เข้าสู่ระบบ*/
 	display_lcd_put_string(WJQTestLcd, WjqTestFont, 10,1, "中国www.wujique.com", BLACK);
