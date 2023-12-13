@@ -491,7 +491,7 @@ PDevNode *dev_spiflash_register(const DevSpiFlash *dev)
 
 #include "petite.h"
 
-#if 0
+#if 1
 /**
  *@brief:      dev_spiflash_test_fun
  *@details:    测试FLASH,擦除写读，调试时使用，量产存数据后不要测试

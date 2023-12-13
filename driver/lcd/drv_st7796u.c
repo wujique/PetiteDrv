@@ -11,25 +11,23 @@
 #include "petite_config.h"
 #include "petite.h"
 
-#define LCD_DRIVER_ST7796U  1
-/*	ST7796U驱动, 3.5寸 IPS 勤 致远 320*480*/
-#if( LCD_DRIVER_ST7796U == 1 )
 
-#include "log.h"
+/*	ST7796U驱动, 3.5寸 IPS 勤 致远 320*480*/
+#if 1
 #include "drv_lcd.h"
 #include "drv_st7796u.h"
 
 #define DEV_ST7796U_DEBUG
 
 #ifdef DEV_ST7796U_DEBUG
-#define ST7796U_DEBUG(l,args...) petite_log(l, "ST7796U", NULL,__FUNCTION__, __LINE__, ##args);
+#define ST7796U_DEBUG LogLcdDrv
 #else
 #define ST7796U_DEBUG(a, ...)
 #endif
 
 extern void Delay(__IO uint32_t nTime);
 
-/*9341命令定义*/
+/*7796命令定义*/
 #define ST7796U_CMD_WRAM 0x2c
 #define ST7796U_CMD_SETX 0x2a
 #define ST7796U_CMD_SETY 0x2b
@@ -68,11 +66,11 @@ _lcd_drv TftLcdSt7796uDrv = {
 
 void drv_ST7796U_lcd_bl(DevLcdNode *lcd, u8 sta)
 {
-	DevLcdNode * node;
+	//DevLcdNode * node;
 	
-	node = bus_lcd_open(lcd);
-	bus_lcd_bl(node, sta);
-	bus_lcd_close(node);
+	//node = lcd->busdrv->open(lcd);
+	lcd->busdrv->bl(lcd, sta);
+	//lcd->busdrv->close(node);
 }	
 /**
  *@brief:      drv_ST7796U_scan_dir
@@ -128,13 +126,13 @@ static void drv_ST7796U_scan_dir(DevLcdNode *lcd, u8 dir)
 	regval|=(1<<3);
 
 	DevLcdNode * node;
-	node = bus_lcd_open(lcd);
+	node = lcd->busdrv->open(lcd);
 	
-	bus_lcd_write_cmd(node, (0x36));
+	lcd->busdrv->write_cmd(node, (0x36));
 	u16 tmp[2];
 	tmp[0] = regval;
-	bus_lcd_write_data(node, (u8*)tmp, 1);
-	bus_lcd_close(node);
+	lcd->busdrv->write_data(node, (u8*)tmp, 1);
+	lcd->busdrv->close(node);
 
 }
 
@@ -154,25 +152,25 @@ s32 drv_ST7796U_set_cp_addr(DevLcdNode *lcd, u16 sc, u16 ec, u16 sp, u16 ep)
 	DevLcdNode * node;
 	u16 tmp[4];
 
-	node = bus_lcd_open(lcd);
+	node = lcd->busdrv->open(lcd);
 
-	bus_lcd_write_cmd(node, ST7796U_CMD_SETX);
+	lcd->busdrv->write_cmd(node, ST7796U_CMD_SETX);
 	tmp[0] = (sc>>8);
 	tmp[1] = (sc&0XFF);
 	tmp[2] = (ec>>8);
 	tmp[3] = (ec&0XFF);
-	bus_lcd_write_data(node, (u8*)tmp, 4);
+	lcd->busdrv->write_data(node, (u8*)tmp, 4);
 
-	bus_lcd_write_cmd(node, (ST7796U_CMD_SETY));
+	lcd->busdrv->write_cmd(node, (ST7796U_CMD_SETY));
 	tmp[0] = (sp>>8);
 	tmp[1] = (sp&0XFF);
 	tmp[2] = (ep>>8);
 	tmp[3] = (ep&0XFF);
-	bus_lcd_write_data(node, (u8*)tmp, 4);
+	lcd->busdrv->write_data(node, (u8*)tmp, 4);
 
-	bus_lcd_write_cmd(node, (ST7796U_CMD_WRAM));
+	lcd->busdrv->write_cmd(node, (ST7796U_CMD_WRAM));
 	
-	bus_lcd_close(node);
+	lcd->busdrv->close(node);
 	
 	return 0;
 }
@@ -187,14 +185,14 @@ s32 drv_ST7796U_set_cp_addr(DevLcdNode *lcd, u16 sc, u16 ec, u16 sp, u16 ep)
 static s32 drv_ST7796U_display_onoff(DevLcdNode *lcd, u8 sta)
 {
 	DevLcdNode * node;
-	node = bus_lcd_open(lcd);
+	node = lcd->busdrv->open(lcd);
 	///@todo  cmd 确认
 	if(sta == 1)
-		bus_lcd_write_cmd(node, (0x29));
+		lcd->busdrv->write_cmd(node, (0x29));
 	else
-		bus_lcd_write_cmd(node, (0x28));
+		lcd->busdrv->write_cmd(node, (0x28));
 
-	bus_lcd_close(node);
+	lcd->busdrv->close(node);
 	
 	return 0;
 }
@@ -208,22 +206,25 @@ static s32 drv_ST7796U_display_onoff(DevLcdNode *lcd, u8 sta)
  */
 s32 drv_ST7796U_init(DevLcdNode *lcd)
 {
+	BusLcdDrv *busdrv;
 	u16 data;
 	DevLcdNode * node;
 	u16 tmp[16];
 	
-	node = bus_lcd_open(lcd);
+	busdrv = lcd->busdrv;
 
-	bus_lcd_rst(node, 1);
+	node = busdrv->open(lcd);
+	
+	busdrv->rst(node, 1);
 	Delay(50);
-	bus_lcd_rst(node, 0);
+	busdrv->rst(node, 0);
 	Delay(50);
-	bus_lcd_rst(node, 1);
+	busdrv->rst(node, 1);
 	Delay(50);
 
-	bus_lcd_write_cmd(node, (0xd3));
+	busdrv->write_cmd(node, (0xd3));
 	/*读4个字节，第一个字节是dummy read， 第二字节是0x00， 第三字节是93，第四字节是41*/
-	bus_lcd_read_data(node, (u8*)tmp, 4);
+	busdrv->read_data(node, (u8*)tmp, 4);
 	
 	data = tmp[2]; 
 	data<<=8;
@@ -234,92 +235,92 @@ s32 drv_ST7796U_init(DevLcdNode *lcd)
 	if(data != TftLcdSt7796uDrv.id)
 	{
 		ST7796U_DEBUG(LOG_DEBUG, "lcd drive no 9341\r\n");	
-		bus_lcd_close(node);
+		busdrv->close(node);
 		return -1;
 	}
 
 	Delay(120);                
-	bus_lcd_write_cmd(node, (0x11));    
+	busdrv->write_cmd(node, (0x11));    
 	Delay(120);
 
-	bus_lcd_write_cmd(node, (0x36));
+	busdrv->write_cmd(node, (0x36));
 	tmp[0] = 0x48;
-	bus_lcd_write_data(node, (u8*)tmp, 1);
+	busdrv->write_data(node, (u8*)tmp, 1);
 
-	bus_lcd_write_cmd(node, (0x3a));
+	busdrv->write_cmd(node, (0x3a));
 	tmp[0] = 0x55;
-	bus_lcd_write_data(node, (u8*)tmp, 1);
+	busdrv->write_data(node, (u8*)tmp, 1);
 
-	bus_lcd_write_cmd(node, (0xf0));
+	busdrv->write_cmd(node, (0xf0));
 	tmp[0] = 0xc3;
-	bus_lcd_write_data(node, (u8*)tmp, 1);
+	busdrv->write_data(node, (u8*)tmp, 1);
 
-	bus_lcd_write_cmd(node, (0xf0));
+	busdrv->write_cmd(node, (0xf0));
 	tmp[0] = 0x96;
-	bus_lcd_write_data(node, (u8*)tmp, 1);
+	busdrv->write_data(node, (u8*)tmp, 1);
 
-	bus_lcd_write_cmd(node, (0xb4));
+	busdrv->write_cmd(node, (0xb4));
 	tmp[0] = 0x01;
-	bus_lcd_write_data(node, (u8*)tmp, 1);
+	busdrv->write_data(node, (u8*)tmp, 1);
 
-	bus_lcd_write_cmd(node, (0xb7));
+	busdrv->write_cmd(node, (0xb7));
 	tmp[0] = 0xc6;
-	bus_lcd_write_data(node, (u8*)tmp, 1);
+	busdrv->write_data(node, (u8*)tmp, 1);
 
-	bus_lcd_write_cmd(node, (0xc0));
+	busdrv->write_cmd(node, (0xc0));
 	tmp[0] = 0x80;
 	tmp[1] = 0x45;
-	bus_lcd_write_data(node, (u8*)tmp, 1);
+	busdrv->write_data(node, (u8*)tmp, 1);
 
-	bus_lcd_write_cmd(node, (0xc1));
+	busdrv->write_cmd(node, (0xc1));
 	tmp[0] = 0x13;
-	bus_lcd_write_data(node, (u8*)tmp, 1);
+	busdrv->write_data(node, (u8*)tmp, 1);
 
-	bus_lcd_write_cmd(node, (0xc2));
+	busdrv->write_cmd(node, (0xc2));
 	tmp[0] = 0x07;
-	bus_lcd_write_data(node, (u8*)tmp, 1);
+	busdrv->write_data(node, (u8*)tmp, 1);
 
-	bus_lcd_write_cmd(node, (0xc5));
+	busdrv->write_cmd(node, (0xc5));
 	tmp[0] = 0x0a;
-	bus_lcd_write_data(node, (u8*)tmp, 1);
+	busdrv->write_data(node, (u8*)tmp, 1);
 
-	bus_lcd_write_cmd(node, (0xE8));
+	busdrv->write_cmd(node, (0xE8));
 	tmp[0] = 0x40; tmp[1] = 0x8A; tmp[2] = 0x00; tmp[3] = 0x00;
 	tmp[4] = 0x29; tmp[5] = 0x19; tmp[6] = 0xa5; tmp[7] = 0x33;
-	bus_lcd_write_data(node, (u8*)tmp, 8);
+	busdrv->write_data(node, (u8*)tmp, 8);
 
-	bus_lcd_write_cmd(node, (0xE0));
+	busdrv->write_cmd(node, (0xE0));
 	tmp[0] = 0xd0; tmp[1] = 0x08; tmp[2] = 0x0f; tmp[3] = 0x06;
 	tmp[4] = 0x06; tmp[5] = 0x33; tmp[6] = 0x30; tmp[7] = 0x33;
 	tmp[8] = 0x47; tmp[9] = 0x17; tmp[10] = 0x13; tmp[11] = 0x13;
 	tmp[12] = 0x2b; tmp[13] = 0x31; 
-	bus_lcd_write_data(node, (u8*)tmp, 14);
+	busdrv->write_data(node, (u8*)tmp, 14);
 
-	bus_lcd_write_cmd(node, (0xE1));
+	busdrv->write_cmd(node, (0xE1));
 	tmp[0] = 0xd0; tmp[1] = 0x0a; tmp[2] = 0x11; tmp[3] = 0x0b;
 	tmp[4] = 0x09; tmp[5] = 0x07; tmp[6] = 0x2f; tmp[7] = 0x33;
 	tmp[8] = 0x47; tmp[9] = 0x38; tmp[10] = 0x15; tmp[11] = 0x16;
 	tmp[12] = 0x2c; tmp[13] = 0x32; 
-	bus_lcd_write_data(node, (u8*)tmp, 14);
+	busdrv->write_data(node, (u8*)tmp, 14);
 
-	bus_lcd_write_cmd(node, (0xf0));
+	busdrv->write_cmd(node, (0xf0));
 	tmp[0] = 0x3c;
-	bus_lcd_write_data(node, (u8*)tmp, 1);
+	busdrv->write_data(node, (u8*)tmp, 1);
 
-	bus_lcd_write_cmd(node, (0xf0));
+	busdrv->write_cmd(node, (0xf0));
 	tmp[0] = 0x69;
-	bus_lcd_write_data(node, (u8*)tmp, 1);
+	busdrv->write_data(node, (u8*)tmp, 1);
 
 	Delay(120);
-	bus_lcd_write_cmd(node, (0x21));
-	bus_lcd_write_cmd(node, (0x29));
-	bus_lcd_write_cmd(node, (0x2c));
+	busdrv->write_cmd(node, (0x21));
+	busdrv->write_cmd(node, (0x29));
+	busdrv->write_cmd(node, (0x2c));
 
-	bus_lcd_write_cmd(node, (0x360));
+	busdrv->write_cmd(node, (0x360));
 	tmp[0] = 0x48;
-	bus_lcd_write_data(node, (u8*)tmp, 1);
+	busdrv->write_data(node, (u8*)tmp, 1);
 
-	bus_lcd_close(node);
+	busdrv->close(node);
 	
 	Delay(50);
 	
@@ -390,12 +391,12 @@ static s32 drv_ST7796U_drawpoint(DevLcdNode *lcd, u16 x, u16 y, u16 color)
 	drv_ST7796U_set_cp_addr(lcd, sc, ec, sp, ep);
 
 	DevLcdNode * node;
-	node = bus_lcd_open(lcd);
+	node = lcd->busdrv->open(lcd);
 	
 	u16 tmp[2];
 	tmp[0] = color;
-	bus_lcd_write_data(node, (u8*)tmp, 1);
-	bus_lcd_close(node);
+	lcd->busdrv->write_data(node, (u8*)tmp, 1);
+	lcd->busdrv->close(node);
  
 	return 0;
 }
@@ -440,18 +441,18 @@ s32 drv_ST7796U_color_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 colo
 	
 	cnt = height*width;
 	
-	node = bus_lcd_open(lcd->dev.buslcd);
+	node = lcd->busdrv->open(lcd->dev.buslcd);
 
 	while(1)
 	{
 		if(cnt < TMP_BUF_SIZE)
 		{
-			bus_lcd_write_data(node, (u8 *)tmp, cnt);
+			lcd->busdrv->write_data(node, (u8 *)tmp, cnt);
 			cnt -= cnt;
 		}
 		else
 		{
-			bus_lcd_write_data(node, (u8 *)tmp, TMP_BUF_SIZE);
+			lcd->busdrv->write_data(node, (u8 *)tmp, TMP_BUF_SIZE);
 			cnt -= TMP_BUF_SIZE;
 		}
 
@@ -459,7 +460,7 @@ s32 drv_ST7796U_color_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 colo
 			break;
 	}
 	
-	bus_lcd_close(node);
+	lcd->busdrv->close(node);
 
 	return 0;
 
@@ -484,11 +485,11 @@ s32 drv_ST7796U_color_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 colo
 	
 	cnt = height*width;
 	
-	node = bus_lcd_open(lcd);
+	node = lcd->busdrv->open(lcd);
 	
-	bus_lcd_w_data(node, color, cnt);
+	lcd->busdrv->w_data(node, color, cnt);
 
-	bus_lcd_close(node);
+	lcd->busdrv->close(node);
 	return 0;
 
 }
@@ -512,19 +513,24 @@ s32 drv_ST7796U_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
 	u32 i,j;
 	u16 sc,ec,sp,ep;
 
+	//ST7796U_DEBUG(LOG_DEBUG, "%d %d %d %d\r\n",  sx, ex, sy, ey);
+
 	drv_ST7796U_xy2cp(lcd, sx, ex, sy, ey, &sc,&ec,&sp,&ep);
+
+	//ST7796U_DEBUG(LOG_DEBUG, "%d %d %d %d\r\n",  sc,ec,sp,ep);
+
 	drv_ST7796U_set_cp_addr(lcd, sc, ec, sp, ep);
 
 	width=(ec+1)-sc;
 	height=(ep+1)-sp;
 
-	ST7796U_DEBUG(LOG_DEBUG, "fill width:%d, height:%d\r\n", width, height);
+	//ST7796U_DEBUG(LOG_DEBUG, "fill width:%d, height:%d\r\n", width, height);
 	
 	DevLcdNode * node;
 
-	node = bus_lcd_open(lcd);
-	bus_lcd_write_data(node, (u8 *)color, height*width);	
-	bus_lcd_close(node);	 
+	node = lcd->busdrv->open(lcd);
+	lcd->busdrv->write_data(node, (u8 *)color, height*width);	
+	lcd->busdrv->close(node);	 
 	
 	return 0;
 
@@ -546,9 +552,9 @@ s32 drv_ST7796U_flush(DevLcdNode *lcd, u16 *color, u32 len)
 {
 	DevLcdNode * node = lcd;
 
-	node = bus_lcd_open(lcd);
-	bus_lcd_write_data(node, (u8 *)color,  len);	
-	bus_lcd_close(node);
+	node = lcd->busdrv->open(lcd);
+	lcd->busdrv->write_data(node, (u8 *)color,  len);	
+	lcd->busdrv->close(node);
 	return 0;
 } 
 

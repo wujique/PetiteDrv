@@ -26,7 +26,7 @@
 #include "petite_config.h"
 #include "petite.h"
 
-#if ( LCD_DRIVER_91874 == 1 )
+#if 1
 #include "log.h"
 #include "drv_lcd.h"
 #include "drv_IL91874.h"
@@ -34,7 +34,7 @@
 #define DEV_IL91874_DEBUG
 
 #ifdef DEV_IL91874_DEBUG
-#define IL91874_DEBUG	wjq_log 
+#define IL91874_DEBUG	LogLcdDrv 
 #else
 #define IL91874_DEBUG(a, ...)
 #endif
@@ -128,19 +128,19 @@ void SPI_Delay(unsigned char xrate)
 
 	mcu_spi_cs
 */
-s32 drv_il91874_write_cmd(DevLcdNode *node, u8 cmd)
+static s32 drv_il91874_write_cmd(DevLcdNode *lcd, u8 cmd)
 {
-	bus_spich_cs((DevSpiChNode *)node->basenode, 0);
-	bus_lcd_write_cmd(node, cmd);
-	bus_spich_cs((DevSpiChNode *)node->basenode, 1);
+	bus_spich_cs((DevSpiChNode *)lcd->basenode, 0);
+	lcd->busdrv->write_cmd(lcd, cmd);
+	bus_spich_cs((DevSpiChNode *)lcd->basenode, 1);
 	return 0;
 }
 
-s32 drv_il91874_write_data(DevLcdNode *node, u8 *data, u32 len)
+static s32 drv_il91874_write_data(DevLcdNode *lcd, u8 *data, u32 len)
 {
-	bus_spich_cs((DevSpiChNode *)node->basenode, 0);
-	bus_lcd_write_data(node, data, len);
-	bus_spich_cs((DevSpiChNode *)node->basenode, 1);
+	bus_spich_cs((DevSpiChNode *)lcd->basenode, 0);
+	lcd->busdrv->write_data(lcd, data, len);
+	bus_spich_cs((DevSpiChNode *)lcd->basenode, 1);
 	return 0;
 }
 
@@ -150,11 +150,11 @@ s32 drv_il91874_write_data(DevLcdNode *node, u8 *data, u32 len)
 */
 void drv_IL91874_lcd_bl(DevLcdNode *lcd, u8 sta)
 {
-	DevLcdNode * node;
+	//DevLcdNode * node;
 	
-	node = bus_lcd_open(lcd);
-	bus_lcd_bl(node, sta);
-	bus_lcd_close(node);
+	//node = lcd->busdrv->open(lcd);
+	lcd->busdrv->bl(lcd, sta);
+	//lcd->busdrv->close(node);
 
 }
 	
@@ -213,9 +213,9 @@ static s32 drv_IL91874_refresh_gram(DevLcdNode *lcd, u16 sc, u16 ec, u16 sp, u16
 	dev = (DevLcd *)pnode->pdev;
 	
 	drvdata = (struct _epaper_drv_data *)lcd->pri;
-	node = bus_lcd_open(lcd);
+	node = lcd->busdrv->open(lcd);
 
-	wjq_log(LOG_DEBUG, "drv_IL91874_refresh_gram: %d, %d, %d, %d\r\n ", sc, ec, sp, ep);
+	LogLcdDrv(LOG_DEBUG, "drv_IL91874_refresh_gram: %d, %d, %d, %d\r\n ", sc, ec, sp, ep);
 	
 	#if 0 /*局部刷*/
 	/* 对SC和w进行校正，必须是8的整数倍 */
@@ -224,90 +224,90 @@ static s32 drv_IL91874_refresh_gram(DevLcdNode *lcd, u16 sc, u16 ec, u16 sp, u16
 	l = ep-sp+1;
 	w = w&0xfff8;
 	
-	wjq_log(LOG_DEBUG, "drv_IL91874_refresh_gram: %d, %d, %d, %d\r\n ", sc, sp, w, l);
+	LogLcdDrv(LOG_DEBUG, "drv_IL91874_refresh_gram: %d, %d, %d, %d\r\n ", sc, sp, w, l);
 	
 	
-	bus_lcd_write_cmd(node, (0x14));
+	lcd->busdrv->write_cmd(node, (0x14));
 	data = sc>>8;
-	bus_lcd_write_data(node, &data, 1);
+	lcd->busdrv->write_data(node, &data, 1);
 	data = sc&0xff;
-	bus_lcd_write_data(node, &data, 1);
+	lcd->busdrv->write_data(node, &data, 1);
 
 	data = sp>>8;
-	bus_lcd_write_data(node, &data, 1);
+	lcd->busdrv->write_data(node, &data, 1);
 	data = sp&0xff;
-	bus_lcd_write_data(node, &data, 1);
+	lcd->busdrv->write_data(node, &data, 1);
 
 	data = w>>8;
-	bus_lcd_write_data(node, &data, 1);
+	lcd->busdrv->write_data(node, &data, 1);
 	data = w&0xff;
-	bus_lcd_write_data(node, &data, 1);
+	lcd->busdrv->write_data(node, &data, 1);
 	
 	data = l>>8;
-	bus_lcd_write_data(node, &data, 1);
+	lcd->busdrv->write_data(node, &data, 1);
 	data = l&0xff;
-	bus_lcd_write_data(node, &data, 1);
+	lcd->busdrv->write_data(node, &data, 1);
 
 
 	for(j=0;j < l;j++)
 		for(i=0;i < w/8;i++)
-			bus_lcd_write_data(node, (u8 *)&drvdata->bgram[j*IL91874_PAGE_SIZE + i], 1);
+			lcd->busdrv->write_data(node, (u8 *)&drvdata->bgram[j*IL91874_PAGE_SIZE + i], 1);
 		
-	bus_lcd_write_cmd(node, (0x15));
+	lcd->busdrv->write_cmd(node, (0x15));
 	data = sc>>8;
-	bus_lcd_write_data(node, &data, 1);
+	lcd->busdrv->write_data(node, &data, 1);
 	data = sc&0xff;
-	bus_lcd_write_data(node, &data, 1);
+	lcd->busdrv->write_data(node, &data, 1);
 
 	data = sp>>8;
-	bus_lcd_write_data(node, &data, 1);
+	lcd->busdrv->write_data(node, &data, 1);
 	data = sp&0xff;
-	bus_lcd_write_data(node, &data, 1);
+	lcd->busdrv->write_data(node, &data, 1);
 
 	data = w>>8;
-	bus_lcd_write_data(node, &data, 1);
+	lcd->busdrv->write_data(node, &data, 1);
 	data = w&0xff;
-	bus_lcd_write_data(node, &data, 1);
+	lcd->busdrv->write_data(node, &data, 1);
 	
 	data = l>>8;
-	bus_lcd_write_data(node, &data, 1);
+	lcd->busdrv->write_data(node, &data, 1);
 	data = l&0xff;
-	bus_lcd_write_data(node, &data, 1);
+	lcd->busdrv->write_data(node, &data, 1);
 	
 	for(j=0;j < l;j++)
 		for(i=0;i < w/8;i++)
-			bus_lcd_write_data(node, (u8 *)&drvdata->rgram[j*IL91874_PAGE_SIZE + i], 1);
+			lcd->busdrv->write_data(node, (u8 *)&drvdata->rgram[j*IL91874_PAGE_SIZE + i], 1);
 
 		
-	wjq_log(LOG_DEBUG, " DISPLAY REFRESH\r\n ");
+	LogLcdDrv(LOG_DEBUG, " DISPLAY REFRESH\r\n ");
 
-	bus_lcd_write_cmd(node, (0x16));//DISPLAY REFRESH 	
+	lcd->busdrv->write_cmd(node, (0x16));//DISPLAY REFRESH 	
 	data = sc>>8;
-	bus_lcd_write_data(node, &data, 1);
+	lcd->busdrv->write_data(node, &data, 1);
 	data = sc&0xff;
-	bus_lcd_write_data(node, &data, 1);
+	lcd->busdrv->write_data(node, &data, 1);
 
 	data = sp>>8;
-	bus_lcd_write_data(node, &data, 1);
+	lcd->busdrv->write_data(node, &data, 1);
 	data = sp&0xff;
-	bus_lcd_write_data(node, &data, 1);
+	lcd->busdrv->write_data(node, &data, 1);
 
 	data = w>>8;
-	bus_lcd_write_data(node, &data, 1);
+	lcd->busdrv->write_data(node, &data, 1);
 	data = w&0xff;
-	bus_lcd_write_data(node, &data, 1);
+	lcd->busdrv->write_data(node, &data, 1);
 	
 	data = l>>8;
-	bus_lcd_write_data(node, &data, 1);
+	lcd->busdrv->write_data(node, &data, 1);
 	data = l&0xff;
-	bus_lcd_write_data(node, &data, 1);
+	lcd->busdrv->write_data(node, &data, 1);
 	#endif
 
 	#if 1 /*全刷*/
 	/*注意，要用dev中的w和h，因为gram跟横屏竖屏调换没关系，
 	只和定义一致*/
 	gramsize = dev->height * IL91874_PAGE_SIZE;
-	//wjq_log(LOG_DEBUG, "gram size: %d\r\n ", gramsize);
+	//LogLcdDrv(LOG_DEBUG, "gram size: %d\r\n ", gramsize);
 
 
 	drv_il91874_write_cmd(node, (0x10));
@@ -318,7 +318,7 @@ static s32 drv_IL91874_refresh_gram(DevLcdNode *lcd, u16 sc, u16 ec, u16 sp, u16
 	for(cnt = 0; cnt <gramsize; cnt++)
 		drv_il91874_write_data(node, (u8 *)&drvdata->rgram[cnt], 1);
 	
-	wjq_log(LOG_DEBUG, " DISPLAY REFRESH\r\n ");
+	LogLcdDrv(LOG_DEBUG, " DISPLAY REFRESH\r\n ");
 
 	drv_il91874_write_cmd(node, (0x12));//DISPLAY REFRESH 	
 	#endif
@@ -331,8 +331,8 @@ static s32 drv_IL91874_refresh_gram(DevLcdNode *lcd, u16 sc, u16 ec, u16 sp, u16
 		busy = mcu_io_input_readbit(dev->ctrlio->staport, dev->ctrlio->stapin);
 		busy =!(busy & 0x01);        
 	} while(busy);  
-	wjq_log(LOG_DEBUG, "IL91874 refresh finish\r\n ");
-	bus_lcd_close(node);
+	LogLcdDrv(LOG_DEBUG, "IL91874 refresh finish\r\n ");
+	lcd->busdrv->close(node);
 	
 	return 0;
 }
@@ -346,7 +346,7 @@ static s32 drv_IL91874_refresh_gram(DevLcdNode *lcd, u16 sc, u16 ec, u16 sp, u16
  */
 static s32 drv_IL91874_display_onoff(DevLcdNode *lcd, u8 sta)
 {
-	wjq_log(LOG_DEBUG, " drv_IL91874_display_onoff\r\n ");	
+	LogLcdDrv(LOG_DEBUG, " drv_IL91874_display_onoff\r\n ");	
 	return 0;
 }
 
@@ -370,15 +370,15 @@ s32 drv_IL91874_init(DevLcdNode *lcd)
 	pnode = (PDevNode *)lcd;
 	dev = (DevLcd *)pnode->pdev;
 	
-	node = bus_lcd_open(lcd);
+	node = lcd->busdrv->open(lcd);
 
 	mcu_io_config_in(dev->ctrlio->staport, dev->ctrlio->stapin);
 
-	bus_lcd_rst(node, 1);
+	lcd->busdrv->rst(node, 1);
 	Delay(50);
-	bus_lcd_rst(node, 0);
+	lcd->busdrv->rst(node, 0);
 	Delay(1000);
-	bus_lcd_rst(node, 1);
+	lcd->busdrv->rst(node, 1);
 	Delay(1000);
 
 	
@@ -428,7 +428,7 @@ s32 drv_IL91874_init(DevLcdNode *lcd)
 	tmp[0] = 0x00;
 	drv_il91874_write_data(node, (u8*)tmp, 1);
 	
-	bus_lcd_close(node);
+	lcd->busdrv->close(node);
 	
 	Delay(50);
 
@@ -444,13 +444,13 @@ s32 drv_IL91874_init(DevLcdNode *lcd)
 	p = (struct _epaper_drv_data *)lcd->pri;
 
 	gramsize = dev->height * IL91874_PAGE_SIZE;
-	wjq_log(LOG_DEBUG, "gram size: %d\r\n ", gramsize);
+	LogLcdDrv(LOG_DEBUG, "gram size: %d\r\n ", gramsize);
 
 	
 	p->bgram = (u8 *)wjq_malloc(gramsize);
 	p->rgram = (u8 *)wjq_malloc(gramsize);
 	
-	wjq_log(LOG_DEBUG, "drv_IL91874_init finish\r\n ");
+	LogLcdDrv(LOG_DEBUG, "drv_IL91874_init finish\r\n ");
 
 	return 0;
 }
@@ -477,7 +477,7 @@ s32 drv_IL91874_xy2cp(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey, u16 *sc, 
  */
 static s32 drv_IL91874_drawpoint(DevLcdNode *lcd, u16 x, u16 y, u16 color)
 {
-	wjq_log(LOG_DEBUG, " drv_IL91874_drawpoint------\r\n ");
+	LogLcdDrv(LOG_DEBUG, " drv_IL91874_drawpoint------\r\n ");
 	return 0;
 }
 /**
@@ -505,7 +505,7 @@ s32 drv_IL91874_color_fill(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey, u16 
 	pnode = (PDevNode *)lcd;
 	dev = (DevLcd *)pnode->pdev;
 
-	wjq_log(LOG_DEBUG, " drv_IL91874_color_fill\r\n ");
+	LogLcdDrv(LOG_DEBUG, " drv_IL91874_color_fill\r\n ");
 
 	drvdata = (struct _epaper_drv_data *)lcd->pri;
 
@@ -542,7 +542,7 @@ s32 drv_IL91874_color_fill(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey, u16 
 	}
 
 	for(j=sy;j<=ey;j++) {
-		//wjq_log(LOG_DEBUG, "\r\n");
+		//LogLcdDrv(LOG_DEBUG, "\r\n");
 		
 		for(i=sx;i<=ex;i++) {
 
@@ -585,7 +585,7 @@ s32 drv_IL91874_color_fill(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey, u16 
 		坐标范围是横屏模式
 	*/
 	//drv_IL91874_refresh_gram(lcd, sc, ec, sp, ep);
-	wjq_log(LOG_DEBUG, " drv_IL91874_color_fill finish\r\n ");
+	LogLcdDrv(LOG_DEBUG, " drv_IL91874_color_fill finish\r\n ");
 
 	return 0;
 }
@@ -613,7 +613,7 @@ s32 drv_IL91874_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
 	
 	struct _epaper_drv_data *drvdata;
 
-	wjq_log(LOG_DEBUG, " drv_IL91874_fill:%d,%d,%d,%d\r\n", sx,ex,sy,ey);
+	LogLcdDrv(LOG_DEBUG, " drv_IL91874_fill:%d,%d,%d,%d\r\n", sx,ex,sy,ey);
 
 	PDevNode *pnode;
 	DevLcd *dev;
@@ -707,13 +707,13 @@ s32 drv_IL91874_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
 
 s32 drv_IL91874_prepare_display(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey)
 {
-	wjq_log(LOG_DEBUG, " drv_IL91874_prepare_display\r\n ");
+	LogLcdDrv(LOG_DEBUG, " drv_IL91874_prepare_display\r\n ");
 	return 0;
 }
 
 s32 drv_IL91874_flush(DevLcdNode *lcd, u16 *color, u32 len)
 {
-	wjq_log(LOG_DEBUG, " drv_IL91874_flush\r\n ");
+	LogLcdDrv(LOG_DEBUG, " drv_IL91874_flush\r\n ");
 	return 0;
 } 
 

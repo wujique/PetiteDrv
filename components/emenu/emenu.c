@@ -199,8 +199,8 @@ MENU *emunu_find_next(MENU *fp, u8 mode)
 s32 emenu_display(DevLcdNode *lcd)
 {
 	MENU *p;
-	u16 disy = 1;
-	u16 disx;
+	u16 disy = 0;
+	u16 disx = 0;
 	u16 dislen;
 	u8 discol = 0;
 	char disbuf[32];
@@ -213,11 +213,11 @@ s32 emenu_display(DevLcdNode *lcd)
 	
 	//EMENU_DEBUG(LOG_DEBUG,"emenu display:%s\r\n", menu_ctrl.fa->cha + lang);
 	
-	lcd_color_fill(lcd, 1, menu_ctrl.lcdw, 1, menu_ctrl.lcdh, BackColor);
+	lcd_color_fill(lcd, 0, menu_ctrl.lcdw, 0, menu_ctrl.lcdh, BackColor);
 	
 	/*顶行居中显示父菜单*/
 	dislen = strlen(menu_ctrl.fa->cha)*menu_ctrl.fontw;
-	if (dislen >= menu_ctrl.lcdw) disx = 1;
+	if (dislen >= menu_ctrl.lcdw) disx = 0;
 	else disx = (menu_ctrl.lcdw - dislen)/2;//居中显示
 
 	display_lcd_put_string(lcd, menu_ctrl.font, disx, disy, menu_ctrl.fa->cha + lang, PenColor);
@@ -586,7 +586,7 @@ s32 emenu_run(DevLcdNode *lcd, MENU *p, u16 len, petite_font_t *font, u8 spaced,
 	menu_ctrl.font = font;
 
 	/* 此处如此设计，不合理，只有使用等宽点阵字体的时候才是合理的*/
-	///@buf needfix emenu font err!
+	///@bug needfix emenu font err!
 	menu_ctrl.fonth = font->line_height;
 	menu_ctrl.fontw = font->line_height/2;
 	///end

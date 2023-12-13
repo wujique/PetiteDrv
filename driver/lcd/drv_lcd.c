@@ -39,15 +39,16 @@
 //#define DEV_LCD_DEBUG
 
 #ifdef DEV_LCD_DEBUG
-#define LCD_DEBUG	wjq_log 
+#define LCD_DEBUG	LogLcdDrv 
 #else
 #define LCD_DEBUG(a, ...)
 #endif
 
 /*	LCD驱动列表 */
 _lcd_drv *LcdDrvList[] = {
-				&TftLcdSt7796uDrv,
-
+				#if (LCD_DRIVER_ST7796U == 1) 
+				&TftLcdSt7796uDrv, 
+				#endif
 				/* tft lcd ILI9341 */
 				#if( LCD_DRIVER_9341 == 1 )
 					&TftLcdILI9341Drv,   
@@ -153,7 +154,7 @@ PDevNode *lcd_dev_register(const DevLcd *dev)
 	DevLcdNode *lcdnode;
 	s32 ret;
 	
-	//wjq_log(LOG_INFO, "[register] LCD:%s\r\n", dev->pdev.name);
+	//LogLcdDrv(LOG_INFO, "[register] LCD:%s\r\n", dev->pdev.name);
 	
 	/* 申请一个节点空间 	*/
 	lcdnode = (DevLcdNode *)wjq_malloc(sizeof(DevLcdNode));
@@ -164,6 +165,17 @@ PDevNode *lcd_dev_register(const DevLcd *dev)
 
 	/* 进行bus初始化 */
 	bus_lcd_IO_init(dev->ctrlio);
+
+	if (dev->pdev.basetype == BUS_8080) {
+		lcdnode->busdrv = &BusLcd8080Drv;
+	} else if (dev->pdev.basetype == BUS_SPI_CH) {
+		lcdnode->busdrv = &BusLcdSpiDrv;
+	} else if (dev->pdev.basetype == BUS_I2C_H 
+				|| dev->pdev.basetype == BUS_I2C_V) {
+		lcdnode->busdrv = &BusLcdI2cDrv;
+	}
+
+
 	
 	if (dev->id == NULL) {
 		/* 没有指定lcd id，通过porb 初始化 */
@@ -210,10 +222,10 @@ PDevNode *lcd_dev_register(const DevLcd *dev)
 		lcdnode->drv->color_fill(lcdnode, 0, lcdnode->width, 0, lcdnode->height, BLUE);
 		lcdnode->drv->update(lcdnode);
 		lcdnode->drv->backlight(lcdnode, 1);
-		wjq_log(LOG_INFO, "lcd init OK\r\n");
+		LogLcdDrv(LOG_INFO, "lcd init OK\r\n");
 	} else {
 		lcdnode->gd = -2;
-		wjq_log(LOG_ERR, "lcd drv init err!\r\n");
+		LogLcdDrv(LOG_ERR, "lcd drv init err!\r\n");
 	}
 	
 	return (PDevNode *)lcdnode;
@@ -258,26 +270,19 @@ s32 lcd_close(DevLcdNode *node)
 		return 0;
 	}
 }
-/*
-	坐标-1 是坐标原点的变化，
 
-	在APP层，原点是（1，1），这样更符合常人逻辑。
-
-	到驱动层就换为(0,0)，无论程序还是控制器显存，都是从（0，0）开始
-
-*/
 s32 lcd_drawpoint(DevLcdNode *lcd, u16 x, u16 y, u16 color)
 {
 	if (lcd == NULL)	return -1;
 	
-	return lcd->drv->draw_point(lcd, x-1, y-1, color);
+	return lcd->drv->draw_point(lcd, x, y, color);
 }
 
 s32 lcd_prepare_display(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey)
 {
 	if(lcd == NULL)	return -1;
 	
-	return lcd->drv->prepare_display(lcd, sx-1, ex-1, sy-1, ey-1);
+	return lcd->drv->prepare_display(lcd, sx, ex, sy, ey);
 }
 
 
@@ -285,14 +290,14 @@ s32 lcd_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
 {	
 	if(lcd == NULL)	return -1;
 	
-	return lcd->drv->fill(lcd, sx-1,ex-1,sy-1,ey-1,color);
+	return lcd->drv->fill(lcd, sx,ex,sy,ey,color);
 }
 
 s32 lcd_color_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 color)
 {
 	if(lcd == NULL)	return -1;
 	
-	return lcd->drv->color_fill(lcd, sx-1,ex-1,sy-1,ey-1,color);
+	return lcd->drv->color_fill(lcd, sx,ex,sy,ey,color);
 }
 
 s32 lcd_backlight(DevLcdNode *lcd, u8 sta)
@@ -398,19 +403,19 @@ void dev_lcd_test(void)
 	/*  打开三个设备 */
 	LcdCog = dev_lcd_open("spicoglcd");
 	if (LcdCog==NULL)
-		wjq_log(LOG_FUN, "open cog lcd err\r\n");
+		LogLcdDrv(LOG_FUN, "open cog lcd err\r\n");
 
 	LcdOled = dev_lcd_open("vspioledlcd");
 	if (LcdOled==NULL)
-		wjq_log(LOG_FUN, "open oled lcd err\r\n");
+		LogLcdDrv(LOG_FUN, "open oled lcd err\r\n");
 	
 	LcdTft = dev_lcd_open("tftlcd");
 	if (LcdTft==NULL)
-		wjq_log(LOG_FUN, "open tft lcd err\r\n");
+		LogLcdDrv(LOG_FUN, "open tft lcd err\r\n");
 
 	LcdOledI2C = dev_lcd_open("i2coledlcd");
 	if (LcdOledI2C==NULL)
-		wjq_log(LOG_FUN, "open oled i2c lcd err\r\n");
+		LogLcdDrv(LOG_FUN, "open oled i2c lcd err\r\n");
 	
 	/*打开背光*/
 	dev_lcd_backlight(LcdCog, 1);
@@ -458,13 +463,13 @@ void dev_i2coledlcd_test(void)
 
 	DevLcdNode *LcdOledI2C = NULL;
 
-	wjq_log(LOG_FUN, "dev_i2coledlcd_test\r\n");
+	LogLcdDrv(LOG_FUN, "dev_i2coledlcd_test\r\n");
 
 	LcdOledI2C = dev_lcd_open("i2coledlcd");
 	if (LcdOledI2C==NULL)
-		wjq_log(LOG_FUN, "open oled i2c lcd err\r\n");
+		LogLcdDrv(LOG_FUN, "open oled i2c lcd err\r\n");
 	else
-		wjq_log(LOG_FUN, "open oled i2c lcd suc\r\n");
+		LogLcdDrv(LOG_FUN, "open oled i2c lcd suc\r\n");
 	/*打开背光*/
 	dev_lcd_backlight(LcdOledI2C, 1);
 
@@ -476,7 +481,7 @@ void dev_i2coledlcd_test(void)
 
 	LcdOledI2C = dev_lcd_open("i2coledlcd2");
 	if (LcdOledI2C==NULL)
-		wjq_log(LOG_FUN, "open oled i2c2 lcd err\r\n");
+		LogLcdDrv(LOG_FUN, "open oled i2c2 lcd err\r\n");
 	
 	/*打开背光*/
 	dev_lcd_backlight(LcdOledI2C, 1);

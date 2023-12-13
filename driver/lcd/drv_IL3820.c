@@ -26,16 +26,14 @@
 #include "petite_config.h"
 #include "petite.h"
 
-#if( LCD_DRIVER_3820 == 1 )	
-
-#include "log.h"
+#if 1
 #include "drv_lcd.h"
 #include "drv_IL3820.h"
 
 //#define DEV_IL3820_DEBUG
 
 #ifdef DEV_IL3820_DEBUG
-#define IL3820_DEBUG	wjq_log 
+#define IL3820_DEBUG	LogLcdDrv 
 #else
 #define IL3820_DEBUG(a, ...)
 #endif
@@ -111,21 +109,21 @@ _lcd_drv TftLcdIL3820Drv = {
 
 	mcu_spi_cs
 */
-s32 drv_il3820_write_cmd(DevLcdNode * lcd, u8 cmd)
+static s32 drv_il3820_write_cmd(DevLcdNode * lcd, u8 cmd)
 {
-	DevLcdNode * node = lcd;
-	
-	bus_spich_cs((DevSpiChNode *)node->basenode, 0);
-	bus_lcd_write_cmd(node, cmd);
-	bus_spich_cs((DevSpiChNode *)node->basenode, 1);
+	bus_spich_cs((DevSpiChNode *)lcd->basenode, 0);
+	lcd->busdrv->write_cmd(lcd, cmd);
+	bus_spich_cs((DevSpiChNode *)lcd->basenode, 1);
 	return 0;
 }
 
-s32 drv_il3820_write_data(DevLcdNode *node, u8 *data, u32 len)
+static s32 drv_il3820_write_data(DevLcdNode *lcd, u8 *data, u32 len)
 {
-	bus_spich_cs((DevSpiChNode *)node->basenode, 0);
-	bus_lcd_write_data(node, data, len);
-	bus_spich_cs((DevSpiChNode *)node->basenode, 1);
+	bus_spich_cs((DevSpiChNode *)lcd->basenode, 0);
+	
+	lcd->busdrv->write_data(lcd, data, len);
+	bus_spich_cs((DevSpiChNode *)lcd->basenode, 1);
+	
 	return 0;
 }
 
@@ -135,11 +133,11 @@ s32 drv_il3820_write_data(DevLcdNode *node, u8 *data, u32 len)
 */
 void drv_IL3820_lcd_bl(DevLcdNode *lcd, u8 sta)
 {
-	DevLcdNode * node = lcd;
+	//DevLcdNode * node = lcd;
 	
-	node = bus_lcd_open(lcd);
-	bus_lcd_bl(node, sta);
-	bus_lcd_close(node);
+	//node = lcd->busdrv->open(lcd);
+	lcd->busdrv->bl(lcd, sta);
+	//lcd->busdrv->close(node);
 
 }
 	
@@ -200,21 +198,21 @@ static s32 drv_IL3820_refresh_gram(DevLcdNode *lcd, u16 sc, u16 ec, u16 sp, u16 
 	u16 w,l;
 	
 	drvdata = (struct _epaper3820_drv_data *)lcd->pri;
-	node = bus_lcd_open(lcd);
+	node = lcd->busdrv->open(lcd);
 
-	wjq_log(LOG_DEBUG, "drv_IL3820_refresh_gram: %d, %d, %d, %d\r\n ", sc, ec, sp, ep);
+	LogLcdDrv(LOG_DEBUG, "drv_IL3820_refresh_gram: %d, %d, %d, %d\r\n ", sc, ec, sp, ep);
 
 	/*注意，要用dev中的w和h，因为gram跟横屏竖屏调换没关系，
 	只和定义一致*/
 	gramsize = dev->height * IL3820_PAGE_SIZE;
-	//wjq_log(LOG_DEBUG, "gram size: %d\r\n ", gramsize);
+	//LogLcdDrv(LOG_DEBUG, "gram size: %d\r\n ", gramsize);
 
 	drv_il3820_write_cmd(node, (0x24));
 	for(cnt = 0; cnt <gramsize; cnt++) {
 		drv_il3820_write_data(node, (u8 *)&drvdata->bgram[cnt], 1);
 	}
 	
-	wjq_log(LOG_DEBUG, " DISPLAY REFRESH\r\n ");
+	LogLcdDrv(LOG_DEBUG, " DISPLAY REFRESH\r\n ");
 
 	drv_il3820_write_cmd(node, 0x22); 
 	data = 0xC7;
@@ -228,8 +226,8 @@ static s32 drv_IL3820_refresh_gram(DevLcdNode *lcd, u16 sc, u16 ec, u16 sp, u16 
 		busy = (busy & 0x01);        
 	} while(busy); 
 
-	wjq_log(LOG_DEBUG, "IL3820 refresh finish\r\n ");
-	bus_lcd_close(node);
+	LogLcdDrv(LOG_DEBUG, "IL3820 refresh finish\r\n ");
+	lcd->busdrv->close(node);
 
 	return 0;
 }
@@ -243,7 +241,7 @@ static s32 drv_IL3820_refresh_gram(DevLcdNode *lcd, u16 sc, u16 ec, u16 sp, u16 
  */
 static s32 drv_IL3820_display_onoff(DevLcdNode *lcd, u8 sta)
 {
-	wjq_log(LOG_DEBUG, " drv_IL3820_display_onoff\r\n ");	
+	LogLcdDrv(LOG_DEBUG, " drv_IL3820_display_onoff\r\n ");	
 	return 0;
 }
 
@@ -297,17 +295,17 @@ s32 drv_IL3820_init(DevLcdNode *lcd)
 	u8 tmp[16];
 	u8 testbuf[2];
 
-	wjq_log(LOG_DEBUG, "drv_IL3820_init\r\n ");
+	LogLcdDrv(LOG_DEBUG, "drv_IL3820_init\r\n ");
 	
-	node = bus_lcd_open(lcd);
+	node = lcd->busdrv->open(lcd);
 
 	mcu_io_config_in(ctrlio->staport, ctrlio->stapin);
 
-	bus_lcd_rst(node, 1);
+	lcd->busdrv->rst(node, 1);
 	Delay(50);
-	bus_lcd_rst(node, 0);
+	lcd->busdrv->rst(node, 0);
 	Delay(1000);
-	bus_lcd_rst(node, 1);
+	lcd->busdrv->rst(node, 1);
 	Delay(1000);
 
 	drv_il3820_write_cmd(node, 0x01); //Driver output control  
@@ -381,7 +379,7 @@ s32 drv_IL3820_init(DevLcdNode *lcd)
 	/* LUT 设置 */
 	EPD_select_LUT(node, LUT_DATA); 
 
-	bus_lcd_close(node);
+	lcd->busdrv->close(node);
 	
 	/*申请显存，永不释放*/
 	lcd->pri = (void *)wjq_malloc(sizeof(struct _epaper3820_drv_data));
@@ -394,11 +392,11 @@ s32 drv_IL3820_init(DevLcdNode *lcd)
 	p = (struct _epaper3820_drv_data *)lcd->pri;
 
 	gramsize = dev->height * IL3820_PAGE_SIZE;
-	wjq_log(LOG_DEBUG, "gram size: %d\r\n ", gramsize);
+	LogLcdDrv(LOG_DEBUG, "gram size: %d\r\n ", gramsize);
 
 	p->bgram = (u8 *)wjq_malloc(gramsize);
 
-	wjq_log(LOG_DEBUG, "drv_IL3820_init finish\r\n ");
+	LogLcdDrv(LOG_DEBUG, "drv_IL3820_init finish\r\n ");
 
 	return 0;
 }
@@ -425,7 +423,7 @@ s32 drv_IL3820_xy2cp(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey, u16 *sc, u
  */
 static s32 drv_IL3820_drawpoint(DevLcdNode *lcd, u16 x, u16 y, u16 color)
 {
-	wjq_log(LOG_DEBUG, " drv_IL3820_drawpoint------\r\n ");
+	LogLcdDrv(LOG_DEBUG, " drv_IL3820_drawpoint------\r\n ");
 	return 0;
 }
 /**
@@ -448,7 +446,7 @@ s32 drv_IL3820_color_fill(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey, u16 c
 	
 	struct _epaper3820_drv_data *drvdata;
 
-	wjq_log(LOG_DEBUG, " drv_IL3820_color_fill\r\n ");
+	LogLcdDrv(LOG_DEBUG, " drv_IL3820_color_fill\r\n ");
 
 	drvdata = (struct _epaper3820_drv_data *)lcd->pri;
 
@@ -489,9 +487,9 @@ s32 drv_IL3820_color_fill(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey, u16 c
 		sc = (lcd->height - ey);
 	}
 	#endif
-	wjq_log(LOG_DEBUG, " %d, %d, %d, %d\r\n ", sx, ex, sy, ey);
+	LogLcdDrv(LOG_DEBUG, " %d, %d, %d, %d\r\n ", sx, ex, sy, ey);
 	for(j=sy;j<=ey;j++) {
-		//wjq_log(LOG_DEBUG, "\r\n");
+		//LogLcdDrv(LOG_DEBUG, "\r\n");
 		
 		for(i=sx;i<=ex;i++) {
 
@@ -525,7 +523,7 @@ s32 drv_IL3820_color_fill(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey, u16 c
 		坐标范围是横屏模式
 	*/
 	//drv_IL3820_refresh_gram(lcd, sc, ec, sp, ep);
-	wjq_log(LOG_DEBUG, " drv_IL91874_color_fill finish\r\n ");
+	LogLcdDrv(LOG_DEBUG, " drv_IL91874_color_fill finish\r\n ");
 	return 0;
 }
 
@@ -552,7 +550,7 @@ s32 drv_IL3820_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
 	
 	struct _epaper3820_drv_data *drvdata;
 
-	wjq_log(LOG_DEBUG, " drv_IL91874_fill:%d,%d,%d,%d\r\n", sx,ex,sy,ey);
+	LogLcdDrv(LOG_DEBUG, " drv_IL91874_fill:%d,%d,%d,%d\r\n", sx,ex,sy,ey);
 	
 	drvdata = (struct _epaper3820_drv_data *)lcd->pri;
 
@@ -641,13 +639,13 @@ s32 drv_IL3820_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
 
 s32 drv_IL3820_prepare_display(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey)
 {
-	wjq_log(LOG_DEBUG, " drv_IL91874_prepare_display\r\n ");
+	LogLcdDrv(LOG_DEBUG, " drv_IL91874_prepare_display\r\n ");
 	return 0;
 }
 
 s32 drv_IL3820_flush(DevLcdNode *lcd, u16 *color, u32 len)
 {
-	wjq_log(LOG_DEBUG, " drv_IL91874_flush\r\n ");
+	LogLcdDrv(LOG_DEBUG, " drv_IL91874_flush\r\n ");
 	return 0;
 } 
 

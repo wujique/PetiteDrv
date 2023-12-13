@@ -2,7 +2,7 @@
 #define __PETITE_CONFIG_H__
 
 /* 配置PetiteDrv */
-#define CM_BACKTRACE_AXF_NAME "wujique"
+#define CM_BACKTRACE_AXF_NAME "pochard"
 #define HARDWARE_VERSION "V1.0.0" 
 #define SOFTWARE_VERSION "V0.1.0" 
 
@@ -58,7 +58,7 @@
 
 
 /*定义alloc.c内存管理数组*/
-#define AllocArraySize (90*1024)
+#define AllocArraySize (64*1024)
 
 
 #endif

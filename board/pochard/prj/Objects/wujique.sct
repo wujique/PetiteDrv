@@ -20,6 +20,7 @@ LR_IROM1 0x08000000 0x00100000  {    ; load region size_region
    touch.o (+RW +ZI)
    mcu_uart.o (+RW +ZI)
    heap_4.o (+RW +ZI)
+   lv_port_disp.o (+RW +ZI)
   }
 }
 

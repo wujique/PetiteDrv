@@ -12,15 +12,13 @@
 #include "petite_config.h"
 #include "petite.h"
 
-#if( LCD_DRIVER_NT35510 == 1 )
-
-#include "log.h"
+#if 1
 #include "drv_lcd.h"
 
 #define DRV_NT35510_DEBUG
 
 #ifdef DRV_NT35510_DEBUG
-#define NT35510_DEBUG	wjq_log 
+#define NT35510_DEBUG	LogLcdDrv 
 #else
 #define NT35510_DEBUG(a, ...)
 #endif
@@ -61,11 +59,11 @@ _lcd_drv TftLcdNT35510Drv = {
 
 void drv_NT35510_lcd_bl(DevLcdNode *lcd, u8 sta)
 {
-	DevLcdNode * node;
+	//DevLcdNode * node;
 	
-	node = bus_lcd_open(lcd);
-	bus_lcd_bl(node, sta);
-	bus_lcd_close(node);
+	//node = lcd->busdrv->open(lcd);
+	lcd->busdrv->bl(lcd, sta);
+	//lcd->busdrv->close(node);
 
 }
 	
@@ -123,14 +121,14 @@ static void drv_NT35510_scan_dir(DevLcdNode *lcd, u8 dir)
 	//regval|=(1<<3);//1:GBR,0:RGB 不同驱动IC有差异
 
 	DevLcdNode * node;
-	node = bus_lcd_open(lcd);
+	node = lcd->busdrv->open(lcd);
 	
-	bus_lcd_write_cmd(node, (NT35510_CMD_DIR));
+	lcd->busdrv->write_cmd(node, (NT35510_CMD_DIR));
 	
 	u16 tmp[2];
 	tmp[0] = regval;
-	bus_lcd_write_data(node, (u8*)tmp, 1);
-	bus_lcd_close(node);
+	lcd->busdrv->write_data(node, (u8*)tmp, 1);
+	lcd->busdrv->close(node);
 
 }
 
@@ -150,39 +148,39 @@ s32 drv_NT35510_set_cp_addr(DevLcdNode *lcd, u16 sc, u16 ec, u16 sp, u16 ep)
 	DevLcdNode * node;
 	u16 tmp[4];
 
-	node = bus_lcd_open(lcd);
+	node = lcd->busdrv->open(lcd);
 
 	tmp[0] = (sc>>8);
 	tmp[1] = (sc&0XFF);
 	tmp[2] = (ec>>8);
 	tmp[3] = (ec&0XFF);
 	
-	bus_lcd_write_cmd(node, NT35510_CMD_SETX);
-	bus_lcd_write_data(node, (u8*)&tmp[0], 1);
-	bus_lcd_write_cmd(node, NT35510_CMD_SETX+1);
-	bus_lcd_write_data(node, (u8*)&tmp[1], 1);
-	bus_lcd_write_cmd(node, NT35510_CMD_SETX+2);
-	bus_lcd_write_data(node, (u8*)&tmp[2], 1);
-	bus_lcd_write_cmd(node, NT35510_CMD_SETX+3);
-	bus_lcd_write_data(node, (u8*)&tmp[3], 1);
+	lcd->busdrv->write_cmd(node, NT35510_CMD_SETX);
+	lcd->busdrv->write_data(node, (u8*)&tmp[0], 1);
+	lcd->busdrv->write_cmd(node, NT35510_CMD_SETX+1);
+	lcd->busdrv->write_data(node, (u8*)&tmp[1], 1);
+	lcd->busdrv->write_cmd(node, NT35510_CMD_SETX+2);
+	lcd->busdrv->write_data(node, (u8*)&tmp[2], 1);
+	lcd->busdrv->write_cmd(node, NT35510_CMD_SETX+3);
+	lcd->busdrv->write_data(node, (u8*)&tmp[3], 1);
 
 	
 	tmp[0] = (sp>>8);
 	tmp[1] = (sp&0XFF);
 	tmp[2] = (ep>>8);
 	tmp[3] = (ep&0XFF);
-	bus_lcd_write_cmd(node, (NT35510_CMD_SETY));
-	bus_lcd_write_data(node, (u8*)&tmp[0], 1);
-	bus_lcd_write_cmd(node, (NT35510_CMD_SETY+1));
-	bus_lcd_write_data(node, (u8*)&tmp[1], 1);
-	bus_lcd_write_cmd(node, (NT35510_CMD_SETY+2));
-	bus_lcd_write_data(node, (u8*)&tmp[2], 1);
-	bus_lcd_write_cmd(node, (NT35510_CMD_SETY+3));
-	bus_lcd_write_data(node, (u8*)&tmp[3], 1);
+	lcd->busdrv->write_cmd(node, (NT35510_CMD_SETY));
+	lcd->busdrv->write_data(node, (u8*)&tmp[0], 1);
+	lcd->busdrv->write_cmd(node, (NT35510_CMD_SETY+1));
+	lcd->busdrv->write_data(node, (u8*)&tmp[1], 1);
+	lcd->busdrv->write_cmd(node, (NT35510_CMD_SETY+2));
+	lcd->busdrv->write_data(node, (u8*)&tmp[2], 1);
+	lcd->busdrv->write_cmd(node, (NT35510_CMD_SETY+3));
+	lcd->busdrv->write_data(node, (u8*)&tmp[3], 1);
 
-	bus_lcd_write_cmd(node, (NT35510_CMD_WRAM));
+	lcd->busdrv->write_cmd(node, (NT35510_CMD_WRAM));
 	
-	bus_lcd_close(node);
+	lcd->busdrv->close(node);
 	
 	return 0;
 }
@@ -196,15 +194,15 @@ s32 drv_NT35510_set_cp_addr(DevLcdNode *lcd, u16 sc, u16 ec, u16 sp, u16 ep)
 static s32 drv_NT35510_display_onoff(DevLcdNode *lcd, u8 sta)
 {
 	DevLcdNode * node;
-	node = bus_lcd_open(lcd);
+	node = lcd->busdrv->open(lcd);
 
 	#if 0
 	if(sta == 1)
-		bus_lcd_write_cmd(node, (0x29));
+		lcd->busdrv->write_cmd(node, (0x29));
 	else
-		bus_lcd_write_cmd(node, (0x28));
+		lcd->busdrv->write_cmd(node, (0x28));
 	#endif
-	bus_lcd_close(node);
+	lcd->busdrv->close(node);
 	
 	return 0;
 }
@@ -408,31 +406,31 @@ s32 drv_NT35510_init(DevLcdNode *lcd)
 	
 	NT35510_DEBUG(LOG_DEBUG, "%s\r\n", __FUNCTION__);
 	
-	node = bus_lcd_open(lcd);
+	node = lcd->busdrv->open(lcd);
 
-	bus_lcd_rst(node, 1);
+	lcd->busdrv->rst(node, 1);
 	Delay(50);
-	bus_lcd_rst(node, 0);
+	lcd->busdrv->rst(node, 0);
 	Delay(50);
-	bus_lcd_rst(node, 1);
+	lcd->busdrv->rst(node, 1);
 	Delay(50);
 
 	/*  初始化 读ID */
-	bus_lcd_write_cmd(node, (0xF000));
-	bus_lcd_write_data(node, "\x55", 1);
-	bus_lcd_write_cmd(node, (0xF001));
-	bus_lcd_write_data(node, "\xaa", 1);
-	bus_lcd_write_cmd(node, (0xF002));
-	bus_lcd_write_data(node, "\x52", 1);
-	bus_lcd_write_cmd(node, (0xF003));
-	bus_lcd_write_data(node, "\x08", 1);
-	bus_lcd_write_cmd(node, (0xF004));
-	bus_lcd_write_data(node, "\x01", 1);
+	lcd->busdrv->write_cmd(node, (0xF000));
+	lcd->busdrv->write_data(node, "\x55", 1);
+	lcd->busdrv->write_cmd(node, (0xF001));
+	lcd->busdrv->write_data(node, "\xaa", 1);
+	lcd->busdrv->write_cmd(node, (0xF002));
+	lcd->busdrv->write_data(node, "\x52", 1);
+	lcd->busdrv->write_cmd(node, (0xF003));
+	lcd->busdrv->write_data(node, "\x08", 1);
+	lcd->busdrv->write_cmd(node, (0xF004));
+	lcd->busdrv->write_data(node, "\x01", 1);
 
-	bus_lcd_write_cmd(node, (0xC500));
-	bus_lcd_read_data(node, (u8*)tmp, 1);
-	bus_lcd_write_cmd(node, (0xC501));
-	bus_lcd_read_data(node, (u8*)&tmp[1], 1);
+	lcd->busdrv->write_cmd(node, (0xC500));
+	lcd->busdrv->read_data(node, (u8*)tmp, 1);
+	lcd->busdrv->write_cmd(node, (0xC501));
+	lcd->busdrv->read_data(node, (u8*)&tmp[1], 1);
 	
 	data = tmp[0]; 
 	data<<=8;
@@ -443,7 +441,7 @@ s32 drv_NT35510_init(DevLcdNode *lcd)
 	if(data != TftLcdNT35510Drv.id)
 	{
 		NT35510_DEBUG(LOG_DEBUG, "lcd drive no NT35510\r\n");	
-		bus_lcd_close(node);
+		lcd->busdrv->close(node);
 		return -1;
 	}
 
@@ -452,16 +450,16 @@ s32 drv_NT35510_init(DevLcdNode *lcd)
 		if(i >= sizeof(NT35510_Init_List)/sizeof(NT35510_Init_CMD))
 			break;
 
-		bus_lcd_write_cmd(node, NT35510_Init_List[i].cmd);
-		bus_lcd_write_data(node, &(NT35510_Init_List[i].data), 1);
+		lcd->busdrv->write_cmd(node, NT35510_Init_List[i].cmd);
+		lcd->busdrv->write_data(node, &(NT35510_Init_List[i].data), 1);
 		i++;
 	}
-	bus_lcd_write_cmd(node, (0x1100));
+	lcd->busdrv->write_cmd(node, (0x1100));
 	Delay(120); 
-	bus_lcd_write_cmd(node, (0x2900));
-	bus_lcd_write_cmd(node, (0x2c00));
+	lcd->busdrv->write_cmd(node, (0x2900));
+	lcd->busdrv->write_cmd(node, (0x2c00));
 
-	bus_lcd_close(node);
+	lcd->busdrv->close(node);
 	
 	Delay(50);
 	
@@ -533,12 +531,12 @@ static s32 drv_NT35510_drawpoint(DevLcdNode *lcd, u16 x, u16 y, u16 color)
 	drv_NT35510_set_cp_addr(lcd, sc, ec, sp, ep);
 
 	DevLcdNode * node;
-	node = bus_lcd_open(lcd);
+	node = lcd->busdrv->open(lcd);
 	
 	u16 tmp[2];
 	tmp[0] = color;
-	bus_lcd_write_data(node, (u8*)tmp, 1);
-	bus_lcd_close(node);
+	lcd->busdrv->write_data(node, (u8*)tmp, 1);
+	lcd->busdrv->close(node);
  
 	return 0;
 }
@@ -573,11 +571,11 @@ s32 drv_NT35510_color_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 colo
 	
 	cnt = height*width;
 	
-	node = bus_lcd_open(lcd);
+	node = lcd->busdrv->open(lcd);
 	
-	bus_lcd_w_data(node, color, cnt);
+	lcd->busdrv->w_data(node, color, cnt);
 
-	bus_lcd_close(node);
+	lcd->busdrv->close(node);
 	return 0;
 
 }
@@ -606,13 +604,13 @@ s32 drv_NT35510_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
 	width=(ec+1)-sc;
 	height=(ep+1)-sp;
 
-	wjq_log(LOG_DEBUG, "fill width:%d, height:%d\r\n", width, height);
+	LogLcdDrv(LOG_DEBUG, "fill width:%d, height:%d\r\n", width, height);
 	
 	DevLcdNode * node;
 
-	node = bus_lcd_open(lcd);
-	bus_lcd_write_data(node, (u8 *)color, height*width);	
-	bus_lcd_close(node);	 
+	node = lcd->busdrv->open(lcd);
+	lcd->busdrv->write_data(node, (u8 *)color, height*width);	
+	lcd->busdrv->close(node);	 
 	
 	return 0;
 
@@ -622,10 +620,10 @@ s32 drv_NT35510_prepare_display(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey)
 {
 	u16 sc,ec,sp,ep;
 	
-	wjq_log(LOG_DEBUG, "XY:-%d-%d-%d-%d-\r\n", sx, ex, sy, ey);
+	LogLcdDrv(LOG_DEBUG, "XY:-%d-%d-%d-%d-\r\n", sx, ex, sy, ey);
 	drv_NT35510_xy2cp(lcd, sx, ex, sy, ey, &sc,&ec,&sp,&ep);
 	
-	wjq_log(LOG_DEBUG, "cp:-%d-%d-%d-%d-\r\n", sc, ec, sp, ep);
+	LogLcdDrv(LOG_DEBUG, "cp:-%d-%d-%d-%d-\r\n", sc, ec, sp, ep);
 	drv_NT35510_set_cp_addr(lcd, sc, ec, sp, ep);	
 	return 0;
 }
@@ -634,9 +632,9 @@ s32 drv_NT35510_flush(DevLcdNode *lcd, u16 *color, u32 len)
 {
 	DevLcdNode * node = lcd;
 
-	node = bus_lcd_open(lcd);
-	bus_lcd_write_data(node, (u8 *)color,  len);	
-	bus_lcd_close(node);
+	node = lcd->busdrv->open(lcd);
+	lcd->busdrv->write_data(node, (u8 *)color,  len);	
+	lcd->busdrv->close(node);
 	return 0;
 } 
 s32 drv_NT35510_update(DevLcdNode *lcd)

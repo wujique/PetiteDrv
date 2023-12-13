@@ -7,10 +7,16 @@
 
 #include "petite.h"
 
+
 typedef struct _strDevLcdNode DevLcdNode;
-/*
-	LCD驱动定义
-*/
+
+#include "bus_lcd.h"
+
+/**
+ * @brief   LCD驱动接口定义
+ * 
+ * 
+ */
 typedef struct  
 {	
 	u16 id;
@@ -38,7 +44,11 @@ typedef struct
 
 }_lcd_drv; 
 
-/*LCD 控制IO定义  */
+/**
+ * @brief   LCD接口附加IO定义
+ * @note	通常包含 A0/rst/backlight
+ * 
+ */
 typedef struct
 {	
 	/*	3根线：A0-命令数据，rst-复位，bl-背光
@@ -58,9 +68,11 @@ typedef struct
 }DevLcdCtrlIO;
 
 
-/*
-
-*/
+/**
+ * @brief   lcd设备定义
+ * 
+ * 
+ */
 typedef struct
 {
 	PetiteDev pdev;
@@ -75,7 +87,11 @@ typedef struct
 	const DevLcdCtrlIO *ctrlio;
 }DevLcd;
 
-/* 设备节点*/
+/**
+ * @brief   LCD 设备节点
+ * 
+ * 
+ */
 struct _strDevLcdNode
 {
 	PDevNode pnode;
@@ -95,6 +111,8 @@ struct _strDevLcdNode
 	
 	void *pri;//私有数据，黑白屏跟OLED屏在初始化的时候会开辟显存
 
+	/**   总线接口*/
+	BusLcdDrv *busdrv;//不同接口的操作接口，目前有spi，I2C， 8080三种接口
 	void *basenode;// openbus时需要记录其设备节点
 
 };
@@ -163,11 +181,10 @@ extern s32 lcd_color_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 color
 extern s32 lcd_backlight(DevLcdNode *lcd, u8 sta);
 extern s32 lcd_display_onoff(DevLcdNode *lcd, u8 sta);
 extern s32 lcd_setdir(DevLcdNode *node, u8 dir, u8 scan_dir);
-
-extern s32 lcd_setdir(DevLcdNode *lcd, u8 dir, u8 scan_dir);
 extern s32 lcd_update(DevLcdNode *lcd);
 
-#include "bus_lcd.h"
+
+#define LogLcdDrv(l,args...) petite_log(l, "LCD DRV", NULL,__FUNCTION__, __LINE__, ##args);
 
 #endif
 

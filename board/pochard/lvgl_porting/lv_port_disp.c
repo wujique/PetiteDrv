@@ -15,13 +15,17 @@
 #include "mcu.h"
 #include "board_sysconf.h"
 
-#define MY_DISP_HOR_RES   LCD_WIDTH
-#define MY_DISP_VER_RES   LCD_HEIGHT
+#include "drv_lcd.h"
+
+extern DevLcdNode *lvgllcd;
+
+#define MY_DISP_HOR_RES   480//LCD_WIDTH
+#define MY_DISP_VER_RES   320//LCD_HEIGHT
 
 /*********************
  *      DEFINES
  *********************/
-extern uint32_t RGB565_480x272[LCD_WIDTH*LCD_HEIGHT/2];
+
 
 /**********************
  *      TYPEDEFS
@@ -80,14 +84,14 @@ void lv_port_disp_init(void)
      */
 
     /* Example for 1) */
-	#if 0
+	#if 1
     static lv_disp_draw_buf_t draw_buf_dsc_1;
-    static lv_color_t buf_1[MY_DISP_HOR_RES * 80];                          /*A buffer for 10 rows*/
-    lv_disp_draw_buf_init(&draw_buf_dsc_1, buf_1, NULL, MY_DISP_HOR_RES * 80);   /*Initialize the display buffer*/
+    static lv_color_t buf_1[MY_DISP_HOR_RES * 30];                          /*A buffer for 10 rows*/
+    lv_disp_draw_buf_init(&draw_buf_dsc_1, buf_1, NULL, MY_DISP_HOR_RES * 30);   /*Initialize the display buffer*/
 	#endif
 	
     /* Example for 2) */
-	#if 1
+	#if 0
     static lv_disp_draw_buf_t draw_buf_dsc_2;
     static lv_color_t buf_2_1[MY_DISP_HOR_RES * 30];                        /*A buffer for 10 rows*/
     static lv_color_t buf_2_2[MY_DISP_HOR_RES * 30];                        /*An other buffer for 10 rows*/
@@ -110,14 +114,14 @@ void lv_port_disp_init(void)
     /*Set up the functions to access to your display*/
 
     /*Set the resolution of the display*/
-    disp_drv.hor_res = LCD_WIDTH;
-    disp_drv.ver_res = LCD_HEIGHT;
+    disp_drv.hor_res = MY_DISP_HOR_RES;
+    disp_drv.ver_res = MY_DISP_VER_RES;
 
     /*Used to copy the buffer's content to the display*/
     disp_drv.flush_cb = disp_flush;
 
     /*Set a display buffer*/
-    disp_drv.draw_buf = &draw_buf_dsc_2;
+    disp_drv.draw_buf = &draw_buf_dsc_1;
 
     /*Required for Example 3)*/
     //disp_drv.full_refresh = 1
@@ -134,23 +138,10 @@ void lv_port_disp_init(void)
 /**********************
  *   STATIC FUNCTIONS
  **********************/
-lv_disp_drv_t *g_disp_drv;
-volatile uint8_t g_gpu_state = 0;
-// DMA2D传输完成回调
-void lv_stm32_dma2d_callback(DMA2D_HandleTypeDef *hdma2d)
-{
-	 if(g_gpu_state==1){
-		 lv_disp_flush_ready(g_disp_drv);
-		 g_gpu_state = 0;
-	 }
-}
-
-
 /*Initialize your display and the required peripherals.*/
 static void disp_init(void)
 {
     /*You code here*/
-	//dma2d_set_int_callback(lv_stm32_dma2d_callback);
 }
 
 /*Flush the content of the internal buffer the specific area on the display
@@ -160,27 +151,15 @@ static void disp_flush(lv_disp_drv_t * disp_drv, const lv_area_t * area, lv_colo
 {
 	
     /*The most simple case (but also the slowest) to put all pixels to the screen one-by-one*/
-	#if 0
+
     int32_t x;
     int32_t y;
 
-	lv_color_t *p;
+    //DevLcdNode *lvgllcd;
+    //lvgllcd = lcd_open("tftlcd");
+    lcd_fill(lvgllcd, area->x1, area->x2, area->y1, area->y2, (u16 *)color_p);
+    //lcd_close(lvgllcd);
 
-	p = (lv_color_t *)RGB565_480x272;
-    for(y = area->y1; y <= area->y2; y++) {
-        for(x = area->x1; x <= area->x2; x++) {
-            /*Put a pixel to the display. For example:*/
-            /*put_px(x, y, *color_p)*/
-			*(p + y*LCD_WIDTH + x) = *color_p;
-            color_p++;
-        }
-    }
-	#else
-
-	g_disp_drv = disp_drv;
-	DMA2D_cpy_framebuff(area->x1, area->y1, area->x2 - area->x1+1, area->y2 - area->y1 +1,(uint32_t*)color_p);	
-	#endif
-	
     /*IMPORTANT!!!
      *Inform the graphics library that you are ready with the flushing*/
     lv_disp_flush_ready(disp_drv);

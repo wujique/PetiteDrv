@@ -122,8 +122,7 @@ const DevSpiFlash DevSpiFlashCore={
 	.pra = NULL,
 };
 
-/*fsmc接口的 tft lcd*/
-#if 1
+
 /* 屋脊雀2.8寸屏幕 */
 const DevLcd DevLcdtTFT	=	{
 	.pdev={
@@ -142,7 +141,7 @@ const DevLcd DevLcdtTFT	=	{
 	.width = 320, 
 	.height = 480,
 };
-#endif	
+
 
 
 /* 	简单设备树   	*/

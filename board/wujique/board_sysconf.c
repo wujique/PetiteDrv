@@ -571,13 +571,13 @@ const DevLcd DevLcdtTFT	=	{
 
 	.ctrlio = &BusLcd8080,
 	/* 可以指定id为：
-		0x9325，WJQ, 320 240
-		0x9341, WJQ, 320 240
+		0x9325，WJQ, 240, 320
+		0x9341, WJQ, 240, 320 
 		0x1408, 好巨润, 480 800, 4.0寸的IPS屏幕，r61408驱动芯片 */	 
 	.id = NULL, 
 	/* 指定lcd 尺寸 */
-	.width = 480, 
-	.height = 800,
+	.width = 240, 
+	.height = 320,
 };
 #endif	
 

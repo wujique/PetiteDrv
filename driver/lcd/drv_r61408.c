@@ -3,17 +3,13 @@
 #include "petite_config.h"
 #include "petite.h"
 
-#if( LCD_DRIVER_R61408 == 1 )
-#include "mcu_fsmc.h"
-
-#include "log.h"
-
+#if 1
 #include "drv_lcd.h"
 
 #define DRV_R61408_DEBUG
 
 #ifdef DRV_R61408_DEBUG
-#define R61408_DEBUG	wjq_log 
+#define R61408_DEBUG	LogLcdDrv 
 #else
 #define R61408_DEBUG(a, ...)
 #endif
@@ -54,11 +50,11 @@ _lcd_drv TftLcdR61408Drv = {
 
 void drv_R61408_lcd_bl(DevLcdNode *lcd, u8 sta)
 {
-	DevLcdNode * node;
+	//DevLcdNode * node;
 	
-	node = bus_lcd_open(lcd);
-	bus_lcd_bl(node, sta);
-	bus_lcd_close(node);
+	//node = lcd->busdrv->open(lcd);
+	lcd->busdrv->bl(lcd, sta);
+	//lcd->busdrv->close(node);
 
 }
 	
@@ -117,14 +113,14 @@ static void drv_R61408_scan_dir(DevLcdNode *lcd, u8 dir)
 	//regval|=(1<<3);//1:GBR,0:RGB 不同驱动IC有差异
 
 	DevLcdNode * node;
-	node = bus_lcd_open(lcd);
+	node = lcd->busdrv->open(lcd);
 	
-	bus_lcd_write_cmd(node, (R61408_CMD_DIR));
+	lcd->busdrv->write_cmd(node, (R61408_CMD_DIR));
 	
 	u16 tmp[2];
 	tmp[0] = regval;
-	bus_lcd_write_data(node, (u8*)tmp, 1);
-	bus_lcd_close(node);
+	lcd->busdrv->write_data(node, (u8*)tmp, 1);
+	lcd->busdrv->close(node);
 	#endif
 }
 
@@ -144,26 +140,26 @@ s32 drv_R61408_set_cp_addr(DevLcdNode *lcd, u16 sc, u16 ec, u16 sp, u16 ep)
 	DevLcdNode * node;
 	u16 tmp[4];
 
-	node = bus_lcd_open(lcd);
+	node = lcd->busdrv->open(lcd);
 
 	tmp[0] = (sc>>8);
 	tmp[1] = (sc&0XFF);
 	tmp[2] = (ec>>8);
 	tmp[3] = (ec&0XFF);
 	
-	bus_lcd_write_cmd(node, R61408_CMD_SETX);
-	bus_lcd_write_data(node, (u8*)&tmp[0], 4);
+	lcd->busdrv->write_cmd(node, R61408_CMD_SETX);
+	lcd->busdrv->write_data(node, (u8*)&tmp[0], 4);
 
 	tmp[0] = (sp>>8);
 	tmp[1] = (sp&0XFF);
 	tmp[2] = (ep>>8);
 	tmp[3] = (ep&0XFF);
-	bus_lcd_write_cmd(node, (R61408_CMD_SETY));
-	bus_lcd_write_data(node, (u8*)&tmp[0], 4);
+	lcd->busdrv->write_cmd(node, (R61408_CMD_SETY));
+	lcd->busdrv->write_data(node, (u8*)&tmp[0], 4);
 
-	bus_lcd_write_cmd(node, (R61408_CMD_WRAM));
+	lcd->busdrv->write_cmd(node, (R61408_CMD_WRAM));
 	
-	bus_lcd_close(node);
+	lcd->busdrv->close(node);
 
 	return 0;
 }
@@ -177,15 +173,15 @@ s32 drv_R61408_set_cp_addr(DevLcdNode *lcd, u16 sc, u16 ec, u16 sp, u16 ep)
 static s32 drv_R61408_display_onoff(DevLcdNode *lcd, u8 sta)
 {
 	DevLcdNode * node;
-	node = bus_lcd_open(lcd);
+	node = lcd->busdrv->open(lcd);
 
 	#if 0
 	if(sta == 1)
-		bus_lcd_write_cmd(node, (0x29));
+		lcd->busdrv->write_cmd(node, (0x29));
 	else
-		bus_lcd_write_cmd(node, (0x28));
+		lcd->busdrv->write_cmd(node, (0x28));
 	#endif
-	bus_lcd_close(node);
+	lcd->busdrv->close(node);
 	
 	return 0;
 }
@@ -355,26 +351,26 @@ s32 drv_R61408_init(DevLcdNode *lcd)
 	
 	R61408_DEBUG(LOG_DEBUG, "%s\r\n", __FUNCTION__);
 	
-	node = bus_lcd_open(lcd);
+	node = lcd->busdrv->open(lcd);
 
-	bus_lcd_rst(node, 1);
+	lcd->busdrv->rst(node, 1);
 	Delay(10);
-	bus_lcd_rst(node, 0);
+	lcd->busdrv->rst(node, 0);
 	Delay(55);
-	bus_lcd_rst(node, 1);
+	lcd->busdrv->rst(node, 1);
 	Delay(55);
 
 	//exit_sleep_mode
-	bus_lcd_write_cmd(node, (0x11));
-	bus_lcd_write_data(node, "\x00", 1);
+	lcd->busdrv->write_cmd(node, (0x11));
+	lcd->busdrv->write_data(node, "\x00", 1);
 	Delay(40);
 	
 	//Manufacturer Command Access Protect 解锁一些命令
-	bus_lcd_write_cmd(node, (0xB0));
-	bus_lcd_write_data(node, "\x04", 1);
+	lcd->busdrv->write_cmd(node, (0xB0));
+	lcd->busdrv->write_data(node, "\x04", 1);
 	
-	bus_lcd_write_cmd(node, (0x00bf));
-	bus_lcd_read_data(node, (u8*)tmp, 5);
+	lcd->busdrv->write_cmd(node, (0x00bf));
+	lcd->busdrv->read_data(node, (u8*)tmp, 5);
 	
 	data = tmp[3]; 
 	data<<=8;
@@ -385,15 +381,15 @@ s32 drv_R61408_init(DevLcdNode *lcd)
 	if(data != TftLcdR61408Drv.id)
 	{
 		R61408_DEBUG(LOG_DEBUG, "lcd drive no R61408\r\n");	
-		bus_lcd_close(node);
+		lcd->busdrv->close(node);
 		return -1;
 	}
 
 	i=0;
 	while(1) {
 
-		bus_lcd_write_cmd(node, (R61408Init[i].cmd));
-		bus_lcd_write_data(node, (u8*)R61408Init[i].data, R61408Init[i].len);
+		lcd->busdrv->write_cmd(node, (R61408Init[i].cmd));
+		lcd->busdrv->write_data(node, (u8*)R61408Init[i].data, R61408Init[i].len);
 		i++;
 		if(i>= 36) break;
 	}
@@ -401,21 +397,21 @@ s32 drv_R61408_init(DevLcdNode *lcd)
 	Delay(100);
 	while(1) {
 
-		bus_lcd_write_cmd(node, (R61408Init[i].cmd));
-		bus_lcd_write_data(node, (u8*)R61408Init[i].data, R61408Init[i].len);
+		lcd->busdrv->write_cmd(node, (R61408Init[i].cmd));
+		lcd->busdrv->write_data(node, (u8*)R61408Init[i].data, R61408Init[i].len);
 		i++;
 		if(i>= 43) break;
 	}    
 
 	#if 1
 	Delay(180);
-	bus_lcd_write_cmd(node, (0x2c));
-	bus_lcd_write_data(node, "\x00", 1);
+	lcd->busdrv->write_cmd(node, (0x2c));
+	lcd->busdrv->write_data(node, "\x00", 1);
 	Delay(10);
-	bus_lcd_write_cmd(node, (0x36));
-	bus_lcd_write_data(node, "\x68", 1);
+	lcd->busdrv->write_cmd(node, (0x36));
+	lcd->busdrv->write_data(node, "\x68", 1);
 	#endif
-	bus_lcd_close(node);
+	lcd->busdrv->close(node);
 	
 	Delay(50);
 	
@@ -487,12 +483,12 @@ static s32 drv_R61408_drawpoint(DevLcdNode *lcd, u16 x, u16 y, u16 color)
 	drv_R61408_set_cp_addr(lcd, sc, ec, sp, ep);
 
 	DevLcdNode * node;
-	node = bus_lcd_open(lcd);
+	node = lcd->busdrv->open(lcd);
 	
 	u16 tmp[2];
 	tmp[0] = color;
-	bus_lcd_write_data(node, (u8*)tmp, 1);
-	bus_lcd_close(node);
+	lcd->busdrv->write_data(node, (u8*)tmp, 1);
+	lcd->busdrv->close(node);
  
 	return 0;
 }
@@ -527,11 +523,11 @@ s32 drv_R61408_color_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 color
 	
 	cnt = height*width;
 	
-	node = bus_lcd_open(lcd);
+	node = lcd->busdrv->open(lcd);
 	
-	bus_lcd_w_data(node, color, cnt);
+	lcd->busdrv->w_data(node, color, cnt);
 
-	bus_lcd_close(node);
+	lcd->busdrv->close(node);
 	return 0;
 
 }
@@ -560,13 +556,13 @@ s32 drv_R61408_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
 	width=(ec+1)-sc;
 	height=(ep+1)-sp;
 
-	wjq_log(LOG_DEBUG, "fill width:%d, height:%d\r\n", width, height);
+	LogLcdDrv(LOG_DEBUG, "fill width:%d, height:%d\r\n", width, height);
 	
 	DevLcdNode * node;
 
-	node = bus_lcd_open(lcd);
-	bus_lcd_write_data(node, (u8 *)color, height*width);	
-	bus_lcd_close(node);	 
+	node = lcd->busdrv->open(lcd);
+	lcd->busdrv->write_data(node, (u8 *)color, height*width);	
+	lcd->busdrv->close(node);	 
 	
 	return 0;
 
@@ -576,10 +572,10 @@ s32 drv_R61408_prepare_display(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey)
 {
 	u16 sc,ec,sp,ep;
 	
-	wjq_log(LOG_DEBUG, "XY:-%d-%d-%d-%d-\r\n", sx, ex, sy, ey);
+	LogLcdDrv(LOG_DEBUG, "XY:-%d-%d-%d-%d-\r\n", sx, ex, sy, ey);
 	drv_R61408_xy2cp(lcd, sx, ex, sy, ey, &sc,&ec,&sp,&ep);
 	
-	wjq_log(LOG_DEBUG, "cp:-%d-%d-%d-%d-\r\n", sc, ec, sp, ep);
+	LogLcdDrv(LOG_DEBUG, "cp:-%d-%d-%d-%d-\r\n", sc, ec, sp, ep);
 	drv_R61408_set_cp_addr(lcd, sc, ec, sp, ep);	
 	return 0;
 }
@@ -587,9 +583,9 @@ s32 drv_R61408_prepare_display(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey)
 s32 drv_R61408_flush(DevLcdNode *lcd, u16 *color, u32 len)
 {
 	DevLcdNode * node = lcd;
-	node = bus_lcd_open(lcd);
-	bus_lcd_write_data(node, (u8 *)color,  len);	
-	bus_lcd_close(node);
+	node = lcd->busdrv->open(lcd);
+	lcd->busdrv->write_data(node, (u8 *)color,  len);	
+	lcd->busdrv->close(node);
 	return 0;
 } 
 s32 drv_R61408_update(DevLcdNode *lcd)

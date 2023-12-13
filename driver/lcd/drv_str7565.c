@@ -24,9 +24,7 @@
 #include "petite_config.h"
 #include "petite.h"
 
-#if( (LCD_DRIVER_ST7565 == 1) || (LCD_DRIVER_SSD1615 == 1 ))
-
-#include "log.h"
+#if 1
 #include "drv_lcd.h"
 #include "drv_str7565.h"
 
@@ -80,9 +78,9 @@ void drv_ST7565_lcd_bl(DevLcdNode *lcd, u8 sta)
 {
 	/*  背光而已，不用依赖bus， 简单处理 */
 	//DevLcdNode * node = lcd;
-	//node = bus_lcd_open(lcd);
-	bus_lcd_bl(lcd, sta);
-	//bus_lcd_close(node);
+	//node = lcd->busdrv->open(lcd);
+	lcd->busdrv->bl(lcd, sta);
+	//lcd->busdrv->close(node);
 }
 	
 /**
@@ -130,20 +128,20 @@ static s32 drv_ST7565_refresh_gram(DevLcdNode *lcd, u16 sc, u16 ec, u16 sp, u16 
 	u8 i;
 	DevLcdNode * node = lcd;
 	
-	node = bus_lcd_open(lcd);
+	node = lcd->busdrv->open(lcd);
 
 	//uart_printf("drv_ST7565_refresh:%d,%d,%d,%d\r\n", sc,ec,sp,ep);
 	drvdata = (struct _cog_drv_data *)lcd->pri;
 	
     for(i=sp/8; i <= ep/8; i++) {
-        bus_lcd_write_cmd (node, 0xb0+i);    //设置页地址（0~7）
-        bus_lcd_write_cmd(node, ((sc>>4)&0x0f)+0x10);      //设置显示位置—列高地址
-        bus_lcd_write_cmd(node, sc&0x0f);      //设置显示位置—列低地址
+        lcd->busdrv->write_cmd (node, 0xb0+i);    //设置页地址（0~7）
+        lcd->busdrv->write_cmd(node, ((sc>>4)&0x0f)+0x10);      //设置显示位置—列高地址
+        lcd->busdrv->write_cmd(node, sc&0x0f);      //设置显示位置—列低地址
 
-        bus_lcd_write_data(node, &(drvdata->gram[i][sc]), ec-sc+1);
+        lcd->busdrv->write_data(node, &(drvdata->gram[i][sc]), ec-sc+1);
 	}
 	
-	bus_lcd_close(node);
+	lcd->busdrv->close(node);
 	
 	return 0;
 }
@@ -159,14 +157,14 @@ static s32 drv_ST7565_display_onoff(DevLcdNode *lcd, u8 sta)
 {
 	DevLcdNode * node = lcd;
 	
-	node = bus_lcd_open(lcd);
-
+	node = lcd->busdrv->open(lcd);
+	
 	if (sta == 1) {
-		bus_lcd_write_cmd (node, 0XCF);  //DISPLAY ON
+		lcd->busdrv->write_cmd (node, 0XCF);  //DISPLAY ON
 	} else {
-		bus_lcd_write_cmd (node, 0XCE);  //DISPLAY OFF	
+		lcd->busdrv->write_cmd (node, 0XCE);  //DISPLAY OFF	
 	}
-	bus_lcd_close(node);
+	lcd->busdrv->close(node);
 	return 0;
 }
 
@@ -181,36 +179,36 @@ s32 drv_ST7565_init(DevLcdNode *lcd)
 {
 	DevLcdNode * node = lcd;
 	
-	bus_lcd_open(node);
-	bus_lcd_rst(node, 1);
+	lcd->busdrv->open(node);
+	lcd->busdrv->rst(node, 1);
 	Delay(50);
-	bus_lcd_rst(node, 0);
+	lcd->busdrv->rst(node, 0);
 	Delay(50);
-	bus_lcd_rst(node, 1);
-	Delay(50);
-	
-	bus_lcd_write_cmd (node, 0xe2);//软复位
-	Delay(50);
-	bus_lcd_write_cmd (node, 0x2c);//升压步骤1
-	Delay(50);
-	bus_lcd_write_cmd (node, 0x2e);//升压步骤2
-	Delay(50);
-	bus_lcd_write_cmd (node, 0x2f);//升压步骤3
+	lcd->busdrv->rst(node, 1);
 	Delay(50);
 	
-	bus_lcd_write_cmd (node, 0x24);//对比度粗调，范围0X20，0X27
-	bus_lcd_write_cmd (node, 0x81);//对比度微调
-	bus_lcd_write_cmd (node, 0x25);//对比度微调值 0x00-0x3f
+	lcd->busdrv->write_cmd (node, 0xe2);//软复位
+	Delay(50);
+	lcd->busdrv->write_cmd (node, 0x2c);//升压步骤1
+	Delay(50);
+	lcd->busdrv->write_cmd (node, 0x2e);//升压步骤2
+	Delay(50);
+	lcd->busdrv->write_cmd (node, 0x2f);//升压步骤3
+	Delay(50);
 	
-	bus_lcd_write_cmd (node, 0xa2);// 偏压比
-	bus_lcd_write_cmd (node, 0xc8);//行扫描，从上到下
-	bus_lcd_write_cmd (node, 0xa0);//列扫描，从左到右
-	bus_lcd_write_cmd (node, 0x40);//起始行，第一行
-	bus_lcd_write_cmd (node, 0xaf);//开显示
+	lcd->busdrv->write_cmd (node, 0x24);//对比度粗调，范围0X20，0X27
+	lcd->busdrv->write_cmd (node, 0x81);//对比度微调
+	lcd->busdrv->write_cmd (node, 0x25);//对比度微调值 0x00-0x3f
+	
+	lcd->busdrv->write_cmd (node, 0xa2);// 偏压比
+	lcd->busdrv->write_cmd (node, 0xc8);//行扫描，从上到下
+	lcd->busdrv->write_cmd (node, 0xa0);//列扫描，从左到右
+	lcd->busdrv->write_cmd (node, 0x40);//起始行，第一行
+	lcd->busdrv->write_cmd (node, 0xaf);//开显示
 
-	bus_lcd_close(node);
+	lcd->busdrv->close(node);
 	
-	wjq_log(LOG_INFO, "drv_ST7565_init finish\r\n");
+	LogLcdDrv(LOG_INFO, "drv_ST7565_init finish\r\n");
 
 	/*申请显存，永不释放*/
 	lcd->pri = (void *)wjq_malloc(sizeof(struct _cog_drv_data));
@@ -486,7 +484,7 @@ s32 drv_ST7565_flush(DevLcdNode *lcd, u16 *color, u32 len)
 				ytmp = lcd->width-drvdata->disx;
 			}
 
-			//wjq_log(LOG_DEBUG, " %d, %d \r\n", xtmp,ytmp);
+			//LogLcdDrv(LOG_DEBUG, " %d, %d \r\n", xtmp,ytmp);
 			
 			page = ytmp/8; //页地址
 			colum = xtmp;//列地址
@@ -559,48 +557,48 @@ s32 drv_ssd1615_init(DevLcdNode *lcd)
 {
 	DevLcdNode * node = lcd;
 
-	wjq_log(LOG_INFO, "drv_ssd1615_init\r\n");
+	LogLcdDrv(LOG_INFO, "drv_ssd1615_init\r\n");
 	
-	node = bus_lcd_open(lcd);
+	node = lcd->busdrv->open(lcd);
 
-	bus_lcd_rst(node, 1);
+	lcd->busdrv->rst(node, 1);
 	Delay(50);
-	bus_lcd_rst(node, 0);
+	lcd->busdrv->rst(node, 0);
 	Delay(50);
-	bus_lcd_rst(node, 1);
+	lcd->busdrv->rst(node, 1);
 	Delay(50);
 	
-	bus_lcd_write_cmd (node, 0xAE);//--turn off oled panel
-	bus_lcd_write_cmd (node, 0x00);//---set low column address
-	bus_lcd_write_cmd (node, 0x10);//---set high column address
-	bus_lcd_write_cmd (node, 0x40);//--set start line address  Set Mapping RAM Display Start Line (0x00~0x3F)
-	bus_lcd_write_cmd (node, 0x81);//--set contrast control register
-	bus_lcd_write_cmd (node, 0xCF); // Set SEG Output Current Brightness
-	bus_lcd_write_cmd (node, 0xA1);//--Set SEG/Column Mapping	  0xa0左右反置 0xa1正常
-	bus_lcd_write_cmd (node, 0xC8);//Set COM/Row Scan Direction   0xc0上下反置 0xc8正常
-	bus_lcd_write_cmd (node, 0xA6);//--set normal display
-	bus_lcd_write_cmd (node, 0xA8);//--set multiplex ratio(1 to 64)
-	bus_lcd_write_cmd (node, 0x3f);//--1/64 duty
-	bus_lcd_write_cmd (node, 0xD3);//-set display offset	Shift Mapping RAM Counter (0x00~0x3F)
-	bus_lcd_write_cmd (node, 0x00);//-not offset
-	bus_lcd_write_cmd (node, 0xd5);//--set display clock divide ratio/oscillator frequency
-	bus_lcd_write_cmd (node, 0x80);//--set divide ratio, Set Clock as 100 Frames/Sec
-	bus_lcd_write_cmd (node, 0xD9);//--set pre-charge period
-	bus_lcd_write_cmd (node, 0xF1);//Set Pre-Charge as 15 Clocks & Discharge as 1 Clock
-	bus_lcd_write_cmd (node, 0xDA);//--set com pins hardware configuration
-	bus_lcd_write_cmd (node, 0x12);
-	bus_lcd_write_cmd (node, 0xDB);//--set vcomh
-	bus_lcd_write_cmd (node, 0x40);//Set VCOM Deselect Level
-	bus_lcd_write_cmd (node, 0x20);//-Set Page Addressing Mode (0x00/0x01/0x02)
-	bus_lcd_write_cmd (node, 0x02);//
-	bus_lcd_write_cmd (node, 0x8D);//--set Charge Pump enable/disable
-	bus_lcd_write_cmd (node, 0x14);//--set(0x10) disable
-	bus_lcd_write_cmd (node, 0xA4);// Disable Entire Display On (0xa4/0xa5)
-	bus_lcd_write_cmd (node, 0xA6);// Disable Inverse Display On (0xa6/a7) 
-	bus_lcd_write_cmd (node, 0xAF);//--turn on oled panel
+	lcd->busdrv->write_cmd (node, 0xAE);//--turn off oled panel
+	lcd->busdrv->write_cmd (node, 0x00);//---set low column address
+	lcd->busdrv->write_cmd (node, 0x10);//---set high column address
+	lcd->busdrv->write_cmd (node, 0x40);//--set start line address  Set Mapping RAM Display Start Line (0x00~0x3F)
+	lcd->busdrv->write_cmd (node, 0x81);//--set contrast control register
+	lcd->busdrv->write_cmd (node, 0xCF); // Set SEG Output Current Brightness
+	lcd->busdrv->write_cmd (node, 0xA1);//--Set SEG/Column Mapping	  0xa0左右反置 0xa1正常
+	lcd->busdrv->write_cmd (node, 0xC8);//Set COM/Row Scan Direction   0xc0上下反置 0xc8正常
+	lcd->busdrv->write_cmd (node, 0xA6);//--set normal display
+	lcd->busdrv->write_cmd (node, 0xA8);//--set multiplex ratio(1 to 64)
+	lcd->busdrv->write_cmd (node, 0x3f);//--1/64 duty
+	lcd->busdrv->write_cmd (node, 0xD3);//-set display offset	Shift Mapping RAM Counter (0x00~0x3F)
+	lcd->busdrv->write_cmd (node, 0x00);//-not offset
+	lcd->busdrv->write_cmd (node, 0xd5);//--set display clock divide ratio/oscillator frequency
+	lcd->busdrv->write_cmd (node, 0x80);//--set divide ratio, Set Clock as 100 Frames/Sec
+	lcd->busdrv->write_cmd (node, 0xD9);//--set pre-charge period
+	lcd->busdrv->write_cmd (node, 0xF1);//Set Pre-Charge as 15 Clocks & Discharge as 1 Clock
+	lcd->busdrv->write_cmd (node, 0xDA);//--set com pins hardware configuration
+	lcd->busdrv->write_cmd (node, 0x12);
+	lcd->busdrv->write_cmd (node, 0xDB);//--set vcomh
+	lcd->busdrv->write_cmd (node, 0x40);//Set VCOM Deselect Level
+	lcd->busdrv->write_cmd (node, 0x20);//-Set Page Addressing Mode (0x00/0x01/0x02)
+	lcd->busdrv->write_cmd (node, 0x02);//
+	lcd->busdrv->write_cmd (node, 0x8D);//--set Charge Pump enable/disable
+	lcd->busdrv->write_cmd (node, 0x14);//--set(0x10) disable
+	lcd->busdrv->write_cmd (node, 0xA4);// Disable Entire Display On (0xa4/0xa5)
+	lcd->busdrv->write_cmd (node, 0xA6);// Disable Inverse Display On (0xa6/a7) 
+	lcd->busdrv->write_cmd (node, 0xAF);//--turn on oled panel
 
-	bus_lcd_write_cmd (node, 0xAF);//--turn on oled panel 
-	bus_lcd_close (node);
+	lcd->busdrv->write_cmd (node, 0xAF);//--turn on oled panel 
+	lcd->busdrv->close (node);
 	
 
 	lcd->pri = (void *)wjq_malloc(sizeof(struct _cog_drv_data));
@@ -608,7 +606,7 @@ s32 drv_ssd1615_init(DevLcdNode *lcd)
 	
 	memset((char*)lcd->pri, 0x00, sizeof(struct _cog_drv_data));
 	
-	wjq_log(LOG_INFO, "dev_ssd1615_init finish\r\n");
+	LogLcdDrv(LOG_INFO, "dev_ssd1615_init finish\r\n");
 	return 0;
 }
 
@@ -624,18 +622,18 @@ s32 drv_ssd1615_display_onoff(DevLcdNode *lcd, u8 sta)
 {
 	DevLcdNode * node = lcd;
 	
-	node = bus_lcd_open(lcd);
+	node = lcd->busdrv->open(lcd);
 
 	if(sta == 1) {
-    	bus_lcd_write_cmd (node, 0X8D);  //SET DCDC命令
-    	bus_lcd_write_cmd (node, 0X14);  //DCDC ON
-    	bus_lcd_write_cmd (node, 0XAF);  //DISPLAY ON
+    	lcd->busdrv->write_cmd (node, 0X8D);  //SET DCDC命令
+    	lcd->busdrv->write_cmd (node, 0X14);  //DCDC ON
+    	lcd->busdrv->write_cmd (node, 0XAF);  //DISPLAY ON
 	} else {
-		bus_lcd_write_cmd (node, 0X8D);  //SET DCDC命令
-    	bus_lcd_write_cmd (node, 0X10);  //DCDC OFF
-    	bus_lcd_write_cmd (node, 0XAE);  //DISPLAY OFF	
+		lcd->busdrv->write_cmd (node, 0X8D);  //SET DCDC命令
+    	lcd->busdrv->write_cmd (node, 0X10);  //DCDC OFF
+    	lcd->busdrv->write_cmd (node, 0XAE);  //DISPLAY OFF	
 	}
-	bus_lcd_close (node);
+	lcd->busdrv->close (node);
 	
 	return 0;
 }

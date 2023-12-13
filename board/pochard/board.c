@@ -18,6 +18,12 @@
 
 #include "cmsis_os.h"
 
+#include "lvgl.h"
+#include "lvgl_porting/lv_port_disp.h"
+#include "demos/benchmark/lv_demo_benchmark.h"
+
+DevLcdNode *lvgllcd;
+
 osThreadId_t TestTaskHandle;
 const osThreadAttr_t TestTask_attributes = {
   .name = "TestTask",
@@ -55,10 +61,26 @@ void board_app_task(void)
 	}
 	#endif
 	
+		/* 初始化lvgl 
+	注意，初始化LVGL的过程，会用到不少栈，
+	如果在rtos的任务中进行初始化，注意任务栈的大小，
+	防止溢出造成hardfault */
+	#if 1
+	
+    lvgllcd = lcd_open("tftlcd");
+	lcd_setdir(lvgllcd, W_LCD, R2L_U2D);
+
+	lv_init();
+	lv_port_disp_init();
+	lv_port_indev_init();
+	lv_demo_benchmark();
+	#endif
 
 	while(1){
-		printf("board app loop\r\n");
-		osDelay(1000);
+		osDelay(2);
+		
+		/* lvgl */
+		lv_task_handler();
 
 	}
 }
