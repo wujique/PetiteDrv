@@ -18,6 +18,7 @@
 #include "log.h"	
 #include "drv_spiflash.h"
 #include "drv_lcd.h"
+#include "touch.h"
 
 /*
 	本文件用于配置系统有哪些设备和资源
@@ -630,6 +631,29 @@ void *PetiteDevTable[]={
 	NULL,
 	};
 
+
+const DevTouch BoardDevTp = {
+	.name = "board_rtp_xtp2046",
+
+	/** 触摸屏像素 */
+	.w = 320,
+	.h = 240,
+
+	/* 电阻屏或电容屏*/
+	.type = TP_TYPE_RTP,
+	/* 用于匹配 驱动*/
+	.icid = 0x2046,
+
+	.rstport = MCU_PORT_NULL,
+	.rstpin = NULL,
+
+	.intport = MCU_PORT_NULL,
+	.intpin = NULL,
+
+	.basebus = "VSPI1_CH1",
+
+
+};
 /*
 	定义板存储与分区。
 	1.在进行 partition初始化之前，设备要先完成初始化。

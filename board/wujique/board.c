@@ -21,8 +21,7 @@
 	调用对应的驱动进行初始化。
 	不能在驱动中包含硬件相关信息。
 */
-extern const TouchDrv RtpXpt2046;
-extern const TouchDrv RtpAdc;
+
 /*
 	矩阵按键硬件定义
 	row输出，放前面
@@ -193,7 +192,7 @@ s32 board_app_init(void)
 
 extern void *PetiteDevTable[];
 extern PartitionDef PetitePartitonTable[];
-
+extern const DevTouch BoardDevTp;
 /*
 	板级初始化
 */
@@ -221,9 +220,11 @@ s32 board_init(void)
 	dev_key_init();
 	//dev_rs485_init();
 	//mcu_adc_test();
+
 	#if (SYS_USE_TS_IC_CASE == 1)
-	tp_init(&RtpXpt2046);
+	tp_init(&BoardDevTp);
 	#endif
+
 	#if (SYS_USE_TS_ADC_CASE == 1)
 	tp_init(&RtpAdc);
 	#endif
@@ -272,7 +273,6 @@ s32 board_init(void)
 /*
 	低优先级轮训任务
 */
-extern void (*tp_task)(void);
 
 void board_low_task(int tick)
 {
@@ -280,11 +280,9 @@ void board_low_task(int tick)
 	
 	dev_key_scan();
 	
-	if (tp_task != NULL) {
-			//wjq_log(LOG_DEBUG, "1");
-			tp_task();
-		}
-	
+
+	tp_task_loop(tick);
+
 	#if (SYS_USE_KEYPAD == 1)
 	dev_keypad_scan();
 	#endif

@@ -903,6 +903,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\driver\touch\rtp\rtp_adc.c</FilePath>
             </File>
+            <File>
+              <FileName>gt1151.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\driver\touch\ctp\gt1151.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

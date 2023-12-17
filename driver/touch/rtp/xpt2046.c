@@ -68,7 +68,7 @@
 s32 DevXpt2046Gd = -2;
 DevSpiChNode *Xpt2046SpiCHNode;
 
-void dev_xpt2046_task(void);
+void dev_xpt2046_task(const DevTouch *TpDev);
 
 
 /**
@@ -145,7 +145,7 @@ s32 dev_xpt2046_close(void)
  *@param[out]  无
  *@retval:     
  */
-void dev_xpt2046_task(void)
+void dev_xpt2046_task(const DevTouch *TpDev)
 {
 
 	static u16 pre_y, pre_x;
@@ -246,7 +246,7 @@ void dev_xpt2046_task(void)
 }
 
 
-void xpt2046_task(void)
+void xpt2046_task(const DevTouch *TpDev)
 {
 	return;
 }

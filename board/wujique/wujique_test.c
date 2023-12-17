@@ -428,7 +428,7 @@ s32 test_tp_calibrate(void)
 		wjq_test_showstr("open lcd err!");	
 	} else	{
 		lcd_setdir(lcd, H_LCD, L2R_U2D);
-		tp_open();
+		tp_open("board_rtp_xtp2046");
 		ts_calibrate(lcd);
 		tp_close();
 	}
@@ -454,7 +454,7 @@ s32 test_tp_test(void)
 		wjq_test_showstr("open lcd err!");	
 	} else {
 		lcd_setdir(lcd, H_LCD, L2R_U2D);
-		tp_open();	
+		tp_open("board_rtp_xtp2046");	
 	
 		TouchPoint samp[10];
 		int ret;
