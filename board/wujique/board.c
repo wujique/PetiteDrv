@@ -21,8 +21,8 @@
 	调用对应的驱动进行初始化。
 	不能在驱动中包含硬件相关信息。
 */
-extern const TouchDev RtpXpt2046;
-extern const TouchDev RtpAdc;
+extern const TouchDrv RtpXpt2046;
+extern const TouchDrv RtpAdc;
 /*
 	矩阵按键硬件定义
 	row输出，放前面

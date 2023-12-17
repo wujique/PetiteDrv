@@ -50,6 +50,8 @@
 #define LCD_DRIVER_NT35510		0
 #define LCD_DRIVER_R61408		0
 
+#define STO_EX_QSPI_FLASH 1
+
 /* 文件系统 */
 #define SYS_USE_VFS		1
 #define SYS_FS_FATFS	1

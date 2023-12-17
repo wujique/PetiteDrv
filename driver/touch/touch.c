@@ -18,34 +18,8 @@
 
 int16_t TouchPointBufW = 0;
 int16_t TouchPointBufR = 0;
-
 #define TouchPointBufSize 1024
 TouchPoint TouchPointBuf[TouchPointBufSize];
-
-const TouchDev *gdTpDev = NULL;
-
-
-extern int gt1151_task(void);
-extern int gt9147_task(void);
-
-void cap_touch_task_idle(void) 
-{
-	return;
-}
-
-void (*tp_task)(void) = cap_touch_task_idle;
-//void (*cap_touch_task)(void) = NULL;
-
-
-/*
-	touch buff have data return 1
-	
-	*/
-int tp_is_press(void)
-{
-	if (TouchPointBufW != TouchPointBufR) return 1;	
-	else return 0;
-}
 
 /*
 	底层将触摸点填入缓冲
@@ -59,6 +33,7 @@ int ctp_fill_buf(int16_t x, int16_t y)
 	//uart_printf("w: x=%d, y=%d\r\n",  x, y);
 	return 1;
 }
+
 int ctp_get_point(TouchPoint *samp, int nr)
 {
 	int i = 0;
@@ -84,9 +59,7 @@ int ctp_get_point(TouchPoint *samp, int nr)
 	
 	return i;
 }
-
-
-
+/*---------------------------电阻屏样点处理----------------------------------------*/
 /**
  *@brief:      rtp_fill_buff
  *@details:    将样点写入缓冲，底层调用
@@ -177,6 +150,13 @@ int rtp_get_point(TouchPoint *rtpsamp, int nr)
 }
 
 /*----------------------------------------------------------------------------*/
+//extern const TouchDrv CtpGt9147;
+extern const TouchDrv CtpGt1151;
+extern const TouchDrv RtpXpt2046;
+
+
+static NodeTouch TouchDevNode;
+
 /**
  *@brief:      dev_touchscreen_init
  *@details:    
@@ -184,33 +164,53 @@ int rtp_get_point(TouchPoint *rtpsamp, int nr)
  *@param[out]  无
  *@retval:     
  */
-int tp_init(const TouchDev *TpDev)
+int tp_init(const DevTouch *TpDev)
 {
 	int res;
 
 	if (TpDev == NULL) return -1;
 	
 	uart_printf("init tp:%s\r\n", TpDev->name);
-	res = TpDev->init();
-	if (res == 0) {
-		tp_task = TpDev->task;
-		gdTpDev = TpDev;
-		return 0;
+
+	TouchDevNode.dev = TpDev;
+
+	if (TpDev->icid == 0x1158) {
+		TouchDevNode.drv = &CtpGt1151;
+
+	} else if (TpDev->icid == 0x9147) {
+		//TouchDevNode.drv = &CtpGt9147;
+
+	} else if (TpDev->icid == 0x2046) {
+		TouchDevNode.drv = &RtpXpt2046;
+
+	} else {
+		return -1;
 	}
 
-	return -1;
+	const TouchDrv *drv = TouchDevNode.drv;
+
+	res = drv->init(TpDev);
+	TouchDevNode.rotate = 0;
+	return res;
 }
 
-
-int tp_open(void)
+/**
+ * @brief   描述
+ * 
+ * @param   name        参数描述
+ * @return  int 
+ * 
+ */
+int tp_open(char *name)
 {
 	int res;
-	
-	res = gdTpDev->open();	
+	const TouchDrv *drv = TouchDevNode.drv;
+
+	res = drv->open();	
 
 	/* 电阻屏，需要用到 tslib */
 	struct tsdev *ts;
-	if (gdTpDev->type == 1) {
+	if (drv->type == TP_TYPE_RTP) {
 		ts = ts_open_module();
 	}
 
@@ -219,18 +219,24 @@ int tp_open(void)
 
 int tp_close(void)
 {
-	gdTpDev->close();
+	const TouchDrv *drv = TouchDevNode.drv;
+
+	drv->close();
 	return 0;
 }
-/*
-	
-	*/
 
-int tp_get_point(TouchPoint *samp, int nr)
+int tp_rotate(uint16_t rotate)
 {
-	if (gdTpDev->type == 2) {
+	TouchDevNode.rotate = rotate;
+}
+
+static int tp_get_point(TouchPoint *samp, int nr)
+{
+	const TouchDrv *drv = TouchDevNode.drv;
+
+	if (drv->type == TP_TYPE_CTP) {
 		return ctp_get_point(samp, nr);
-	} else if (gdTpDev->type == 1) {
+	} else if (drv->type == TP_TYPE_RTP) {
 		return rtp_get_point(samp, nr);
 	} else return 0;
 }
@@ -244,11 +250,44 @@ int tp_get_pointxy (int16_t *x, int16_t *y)
 	res = tp_get_point(&samp, 1);
 
 	if (res == 1) {
-		*x = samp.x;
-		*y = samp.y;
+
+		/* 旋转 */
+		if (TouchDevNode.rotate == 270) {
+			*x = 480 - samp.y;
+			*y =  samp.x;
+		} else {
+			*x = samp.x;
+			*y = samp.y;
+		}
+		
 		return 1;
 	}
 
 	return 0;
 }
 
+/*
+	touch buff have data return 1
+	
+	*/
+int tp_is_press(void)
+{
+	if (TouchPointBufW != TouchPointBufR) return 1;	
+	else return 0;
+}
+
+static uint16_t touch_task_cnt = 0;
+
+int tp_task_loop(uint8_t tick)
+{
+		
+	touch_task_cnt += tick;
+	if (touch_task_cnt >= 30) {
+		touch_task_cnt = 0;
+		
+		const TouchDrv *drv = TouchDevNode.drv;
+
+		drv->task(TouchDevNode.dev);
+	}
+
+}

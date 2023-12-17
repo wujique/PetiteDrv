@@ -73,9 +73,13 @@ void board_app_task(void)
 	lv_init();
 	lv_port_disp_init();
 	lv_port_indev_init();
-	lv_demo_benchmark();
+	//lv_demo_benchmark();
+	lv_demo_widgets();
 	#endif
-
+	
+	tp_open("board_ctp_g1158");
+	tp_rotate(270);
+	
 	while(1){
 		osDelay(2);
 		
@@ -100,6 +104,7 @@ s32 board_app_init(void)
 
 extern void *PetiteDevTable[];
 extern PartitionDef PetitePartitonTable[];
+extern const DevTouch BoardDevTp;
 
 /*
 	板级初始化
@@ -115,6 +120,9 @@ s32 board_init(void)
 	/* 初始化存储空间与分区*/
 	petite_partition_init(PetitePartitonTable);
 
+
+	tp_init(&BoardDevTp);
+
 	/*---------------------------------------*/
 	/* 创建目标板应用程序 */
 	board_app_init();
@@ -125,12 +133,15 @@ s32 board_init(void)
 /*
 	低优先级轮训任务
 */
-extern void (*tp_task)(void);
 
-void board_low_task(int tick)
+
+void board_low_task(uint8_t tick)
 {
-	//wjq_log(LOG_DEBUG, "low TASK ");
 	
+	//wjq_log(LOG_DEBUG, " low task ");
+	tp_task_loop(tick);
+
+	//fun_sound_task();
 }
 
 

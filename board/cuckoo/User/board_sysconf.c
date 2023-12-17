@@ -16,6 +16,7 @@
 #include "drv_config.h"
 
 #include "drv_spiflash.h"
+#include "touch.h"
 
 
 /* cuckoo 小板， SAI接口和外扩I2C接口的其他信号共用，
@@ -206,6 +207,28 @@ void *PetiteDevTable[]={
 	NULL,
 };
 
+
+const DevTouch BoardDevTp = {
+	.name = "board_ctp_g1158",
+
+	/** 触摸屏像素 */
+	.w = 800,
+	.h = 480,
+
+	/* 电阻屏或电容屏*/
+	.type = TP_TYPE_CTP,
+	/* 用于匹配 驱动*/
+	.icid = 0x1158,
+
+	.rstport = MCU_PORT_D,
+	.rstpin = MCU_IO_14,
+
+	.intport = MCU_PORT_D,
+	.intpin = MCU_IO_9,
+
+	.basebus = "VI2C1",
+
+};
 
 /*
 	定义板存储与分区。

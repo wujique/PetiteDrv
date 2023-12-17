@@ -12,9 +12,6 @@
 #include "touch.h"
 #include "partition.h"
 
-extern const TouchDev CtpGt9147;
-extern const TouchDev CtpGt1151;
-extern const TouchDev RtpXpt2046;
 
 extern void DCMI_PWDN_RESET_Init(void);
 
@@ -22,7 +19,7 @@ extern s32 petite_dev_register(void *DevTable[]);
 
 extern void *PetiteDevTable[];
 extern PartitionDef PetitePartitonTable[];
-
+extern const DevTouch BoardDevTp;
 /*
 	板级初始化
 */
@@ -44,20 +41,9 @@ s32 board_init(void)
 	//dev_wm8978_init();
 	//dev_wm8960_init();
 	/*  触摸屏初始化 */
-	res= -1;
-	#if 1
-	res = tp_init(&CtpGt9147);
-	/**/
-	if (res == -1) {
-		res = tp_init(&CtpGt1151);	
-	}
-	
-	/**/
-	if (res == -1) {
-		/*  初始化电阻屏 */
-		//tp_init(&RtpXpt2046);
-	}
-	#endif
+
+	res = tp_init(&BoardDevTp);	
+
 	/* 摄像头初始化 */
 	DCMI_PWDN_RESET_Init();
 	camera_init();
@@ -122,22 +108,11 @@ void board_main(void)
 	2 临时变量不要使用太多，否则会任务栈溢出。
 */
 extern void fun_sound_task(void);
-extern void (*tp_task)(void);
 
-uint16_t touch_task_cnt = 0;
 void board_low_task(uint8_t tick)
 {
-	
 	//wjq_log(LOG_DEBUG, " low task ");
-	touch_task_cnt += tick;
-	if (touch_task_cnt >= 30) {
-		touch_task_cnt = 0;
-		if (tp_task != NULL) {
-			//wjq_log(LOG_DEBUG, "1");
-			tp_task();
-		}
-	}
-
+	tp_task_loop();
 	//fun_sound_task();
 }
 

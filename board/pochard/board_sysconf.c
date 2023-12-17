@@ -18,6 +18,7 @@
 #include "log.h"	
 #include "drv_spiflash.h"
 #include "drv_lcd.h"
+#include "touch.h"
 
 /*
 	本文件用于配置系统有哪些设备和资源
@@ -140,6 +141,30 @@ const DevLcd DevLcdtTFT	=	{
 	/* 指定lcd 尺寸 */
 	.width = 320, 
 	.height = 480,
+};
+
+
+const DevTouch BoardDevTp = {
+	.name = "board_ctp_g1158",
+
+	/** 触摸屏像素 */
+	.w = 320,
+	.h = 480,
+
+	/* 电阻屏或电容屏*/
+	.type = TP_TYPE_CTP,
+	/* 用于匹配 驱动*/
+	.icid = 0x1158,
+
+	.rstport = MCU_PORT_NULL,
+	.rstpin = NULL,
+
+	.intport = MCU_PORT_NULL,
+	.intpin = NULL,
+
+	.basebus = "VI2C0",
+
+
 };
 
 

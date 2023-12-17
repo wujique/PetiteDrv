@@ -12,7 +12,7 @@
 #include "sd_diskio.h"
 
 #include "board_sysconf.h"
-
+#include "log.h"
 
 FATFS 	SD_FatFs; 
 FRESULT 	MyFile_Res;    

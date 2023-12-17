@@ -212,7 +212,7 @@ void rtp_adc_drv_task(void)
 }
 
 
-const TouchDev RtpAdc={
+const TouchDrv RtpAdc={
 	.name ="rtp_adc",
 	.type = 1, 
 

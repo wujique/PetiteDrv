@@ -168,7 +168,7 @@ static int Gt9147Gd = -1;
 	3 check & update the config
 
 */
-int gt9147_init(void)
+int gt9147_init(const DevTouch *dev)
 {
 	u8 ID[4];
 	u8 tmp[4];
@@ -337,9 +337,9 @@ int gt9147_close(void)
 }
 
 
-const TouchDev CtpGt9147={
+const TouchDrv CtpGt9147={
 	.name ="ctp_gt9147",
-	.type = 2, 
+	.type = TP_TYPE_CTP, 
 
 	.init = gt9147_init,
 	.open = gt9147_open,

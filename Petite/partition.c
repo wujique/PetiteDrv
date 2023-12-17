@@ -10,6 +10,7 @@
  */
 #include "mcu.h"
 #include "petite.h"
+#include "petite_config.h"
 #include "partition.h"
 #include "mem/p_malloc.h"
 
@@ -356,8 +357,11 @@ int petite_partition_init(PartitionDef *Partable)
 			if (strcmp(node->def->type, "spiflash") == 0 ) {
 				node->drv = &StorageExSpiFlash;
 			} else if (strcmp(node->def->type, "xip_flash") == 0) {
-				//node->drv = &StorageExQspiFlash;
-				node->drv = &StorageEmpty;
+				#if (STO_EX_QSPI_FLASH == 1)
+					node->drv = &StorageExQspiFlash;
+				#else
+					node->drv = &StorageEmpty;
+				#endif
 			}else {
 				node->drv = &StorageEmpty;
 			}

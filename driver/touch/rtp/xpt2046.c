@@ -78,7 +78,7 @@ void dev_xpt2046_task(void);
  *@param[out]  无
  *@retval:     
  */
-s32 dev_xpt2046_init(void)
+s32 dev_xpt2046_init(const DevTouch *dev)
 {
 	#if (DRV_XPT2046_MODULE == 1)
 	DevXpt2046Gd = -1;
@@ -252,9 +252,9 @@ void xpt2046_task(void)
 }
 
 
-const TouchDev RtpXpt2046={
+const TouchDrv RtpXpt2046={
 	.name ="rtp_xpt2046",
-	.type = 1, 
+	.type = TP_TYPE_RTP, 
 
 	.init = dev_xpt2046_init,
 	.open = dev_xpt2046_open,

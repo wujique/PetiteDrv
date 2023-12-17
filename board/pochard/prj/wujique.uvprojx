@@ -868,6 +868,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\driver\touch\rtp\rtp_adc.c</FilePath>
             </File>
+            <File>
+              <FileName>gt1151.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\driver\touch\ctp\gt1151.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1142,6 +1147,26 @@
               <FileName>lv_font_bechmark_montserrat_28_compr_az.c.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\components\lvgl\demos\benchmark\assets\lv_font_bechmark_montserrat_28_compr_az.c.c</FilePath>
+            </File>
+            <File>
+              <FileName>lv_demo_widgets.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\lvgl\demos\widgets\lv_demo_widgets.c</FilePath>
+            </File>
+            <File>
+              <FileName>img_clothes.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\lvgl\demos\widgets\assets\img_clothes.c</FilePath>
+            </File>
+            <File>
+              <FileName>img_demo_widgets_avatar.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\lvgl\demos\widgets\assets\img_demo_widgets_avatar.c</FilePath>
+            </File>
+            <File>
+              <FileName>img_lvgl_logo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\lvgl\demos\widgets\assets\img_lvgl_logo.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -153,6 +153,44 @@ s32 bus_i2c_transfer(DevI2cNode *node, u8 addr, u8 rw, u8* data, s32 datalen)
 	return -1;
 }
 
+/**
+ * @brief   带寄存器地址的I2C读写
+ * 
+ * @param   node        I2C设备节点
+ * @param   addr        设备地址
+ * @param   reg         寄存器地址数据
+ * @param   reglen      寄存器地址长度，字节
+ * @param   rw          读or写
+ * @param   data        数据地址
+ * @param   datalen     数据长度
+ * @return  s32 
+ * 
+ */
+s32 bus_vi2c_transfer_reg(DevI2cNode *node, u8 addr, u8* reg, u8 reglen, u8 rw, u8* data, s32 datalen)
+{
+	PetiteDevType type;
+	int res;
+	DevI2c *dev;
+	PDevNode *pnode;
+
+	if (node == NULL) return -1;
+	pnode = (PDevNode *)node;
+
+	dev = (DevI2c *)pnode->pdev;
+
+	type = node->pnode.pdev->type;
+	
+	if( type== BUS_I2C_H)
+		return 0;//mcu_hi2c_transfer (node, addr, rw, data, datalen);
+	else if (type == BUS_I2C_V)	{
+		res = mcu_vi2c_transfer_reg(dev, addr, reg, reglen, rw, data, datalen);
+		return res;
+	} else {
+		wjq_log(LOG_ERR, "i2c dev type err\r\n");	
+	}	
+	return -1;
+}
+
 
 #if 0
 

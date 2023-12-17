@@ -106,7 +106,7 @@ static s32 bus_lcd_rst(DevLcdNode *lcd, u8 sta)
 #if (PETITE_BUS_LCD_8080 == 1)
 extern volatile u16 *LcdReg;
 extern volatile u16 *LcdData;
-#endif	
+
 
 static DevLcdNode *bus_lcd_8080_open(DevLcdNode *lcd)
 {
@@ -186,6 +186,7 @@ BusLcdDrv BusLcd8080Drv = {
     .read_data = bus_lcd_8080_read_data,
     .write_cmd = bus_lcd_8080_write_cmd,
 };
+#endif	
 
 static DevLcdNode *bus_lcd_spi_open(DevLcdNode *lcd)
 {

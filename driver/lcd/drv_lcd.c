@@ -99,8 +99,10 @@ _lcd_drv *LcdDrvList[] = {
 };
 /*	可自动识别ID的驱动*/
 _lcd_drv *LcdProbDrvList[] = {
+				#if (LCD_DRIVER_ST7796U == 1) 
 				&TftLcdSt7796uDrv,
-				
+				#endif
+
 				#if( LCD_DRIVER_9341 == 1 )
 					&TftLcdILI9341Drv,
 				#endif
@@ -167,7 +169,11 @@ PDevNode *lcd_dev_register(const DevLcd *dev)
 	bus_lcd_IO_init(dev->ctrlio);
 
 	if (dev->pdev.basetype == BUS_8080) {
+		#if (PETITE_BUS_LCD_8080 == 1)
 		lcdnode->busdrv = &BusLcd8080Drv;
+		#else
+		return NULL;
+		#endif
 	} else if (dev->pdev.basetype == BUS_SPI_CH) {
 		lcdnode->busdrv = &BusLcdSpiDrv;
 	} else if (dev->pdev.basetype == BUS_I2C_H 

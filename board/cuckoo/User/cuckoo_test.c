@@ -25,6 +25,8 @@
 #include "lualib.h"
 #include "lauxlib.h"
 
+#include "touch.h"
+
 
 extern ADC_HandleTypeDef hadc2;
 
@@ -375,7 +377,7 @@ void cuckoo_7b0_test(void)
 	emenu_test(LcdOledI2C, wjqwqyst1212);
 	#endif
 
-	#if 1
+	#if 0
 	/* 测试tiny ttf 适量字库引擎, 用LCD 背光通过示波器测试渲染时间 */
 	/*把sd卡的矢量字库文件拷贝到spi flash
 		因为外扩的SPI FALSH时钟只有20M，跟放在SD卡差不多。
@@ -385,8 +387,6 @@ void cuckoo_7b0_test(void)
 	LcdOledI2C = lcd_open("spicoglcd");
 	tiny_tty_test();
 	#endif
-
-	while(1);
 	
 	/* 初始化lvgl 
 	注意，初始化LVGL的过程，会用到不少栈，
@@ -405,7 +405,7 @@ void cuckoo_7b0_test(void)
 	#endif
 	//camera_test();
 
-	tp_open();
+	tp_open("board_ctp_g1158");
 
 	while(1) {
 
