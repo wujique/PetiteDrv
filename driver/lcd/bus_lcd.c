@@ -201,8 +201,7 @@ static DevLcdNode *bus_lcd_spi_open(DevLcdNode *lcd)
 	
 	busname = pnode->pdev->basebus;
 	
-
-	LogLcdDrv(LOG_DEBUG, "lcd bus spi ch!\r\n");
+	//LogLcdDrv(LOG_DEBUG, "lcd bus spi ch!\r\n");
 		
 	spi_pra = (PraSpiSet *)pnode->pdev->busconf;
 	bus_clk = spi_pra->KHz;

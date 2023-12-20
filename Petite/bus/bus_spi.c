@@ -28,7 +28,7 @@
 
 #include "petite.h"
 
-//#define BUS_SPI_DEBUG
+#define BUS_SPI_DEBUG
 
 #ifdef BUS_SPI_DEBUG
 #define BUSSPI_DEBUG(l, args...) petite_log(l, "BUS SPI", NULL,__FUNCTION__, __LINE__, ##args); 
@@ -104,7 +104,7 @@ PDevNode *bus_spich_register(const DevSpiCh *dev)
 	return (PDevNode *)pnode;
 }
 
-
+DevSpiChNode *bus_spich_opennode(DevSpiChNode *node, SPI_MODE mode, u16 KHz,  uint32_t wait);
 /**
  *@brief:      bus_spi_open
  *@details:    打开SPI通道
@@ -117,64 +117,16 @@ PDevNode *bus_spich_register(const DevSpiCh *dev)
  */
 DevSpiChNode *bus_spich_open(char *name, SPI_MODE mode, u16 KHz,  uint32_t wait)
 {
-	s32 res;
 	PDevNode *pnode;
-
-	PDevNode *pbasenode;
 	DevSpiChNode *chnode;
 
-	DevSpiNode *spinode;
-	DevSpiCh *devspich;
-	
-	osStatus_t osres;
-	
 	pnode = petite_dev_get_node(name);
 	chnode = (DevSpiChNode *)pnode;
-	devspich = (DevSpiCh *)pnode->pdev;
-		
-	pbasenode = pnode->basenode;
-	spinode = (DevSpiNode *)pbasenode;
 
-	BUSSPI_DEBUG(LOG_DEBUG, "dev spi ch name:%s!\r\n", pnode->pdev->name);
-	BUSSPI_DEBUG(LOG_DEBUG, "dev spi name:%s!\r\n", pbasenode->pdev->name);
+	//BUSSPI_DEBUG(LOG_DEBUG, "dev spi ch name:%s!\r\n", pnode->pdev->name);
+	//BUSSPI_DEBUG(LOG_DEBUG, "dev spi name:%s!\r\n", pbasenode->pdev->name);
 	
-	if (chnode != NULL) {
-		
-		if(chnode->gd == 0) {
-			BUSSPI_DEBUG(LOG_ERR, "spi ch open err:using!\r\n");
-			chnode = NULL;
-		} else {
-			osres = osMutexAcquire(spinode->mutex, wait);
-			if ( osOK != osres) {
-				chnode = NULL;
-			} else {
-				spinode->clk = KHz;
-				spinode->mode = mode;
-
-				/*打开SPI控制器*/
-				res = -1;
-				if (pbasenode->pdev->type == BUS_SPI_H) {
-					res = mcu_hspi_open(spinode, mode, KHz);	
-				} else if(pbasenode->pdev->type == BUS_SPI_V) {
-					res = bus_vspi_open(spinode, mode, KHz);	
-				} else {
-					BUSSPI_DEBUG(LOG_ERR, "spi type err!\r\n");		
-				}
-
-				if (res == 0) {
-					chnode->gd = 0;
-					BUSSPI_DEBUG(LOG_DEBUG, "spi dev open ok: %s!\r\n", pbasenode->pdev->name);
-					mcu_io_output_resetbit(devspich->csport, devspich->cspin);
-				} else {
-					BUSSPI_DEBUG(LOG_ERR, "spi dev open err!\r\n");
-					chnode = NULL;
-					osMutexRelease(spinode->mutex);
-				}
-			}	
-		}
-	}else {
-		BUSSPI_DEBUG(LOG_ERR, "spi ch no exist!\r\n");	
-	}
+	chnode = bus_spich_opennode(chnode, mode, KHz,  wait);
 	
 	return chnode;
 }
@@ -212,8 +164,8 @@ DevSpiChNode *bus_spich_opennode(DevSpiChNode *node, SPI_MODE mode, u16 KHz,  ui
 	pbasenode = pnode->basenode;
 	spinode = (DevSpiNode *)pbasenode;
 
-	BUSSPI_DEBUG(LOG_DEBUG, "dev spi ch name:%s!\r\n", pnode->pdev->name);
-	BUSSPI_DEBUG(LOG_DEBUG, "dev spi name:%s!\r\n", pbasenode->pdev->name);
+	//BUSSPI_DEBUG(LOG_DEBUG, "dev spi ch name:%s!\r\n", pnode->pdev->name);
+	//BUSSPI_DEBUG(LOG_DEBUG, "dev spi name:%s!\r\n", pbasenode->pdev->name);
 	
 	if (chnode != NULL) {
 		
@@ -222,7 +174,9 @@ DevSpiChNode *bus_spich_opennode(DevSpiChNode *node, SPI_MODE mode, u16 KHz,  ui
 			chnode = NULL;
 		} else {
 			osres = osMutexAcquire(spinode->mutex, wait);
+
 			if ( osOK != osres) {
+				BUSSPI_DEBUG(LOG_ERR, "spi ch open err mutex:%s!\r\n", pbasenode->pdev->name);
 				chnode = NULL;
 			} else {
 				spinode->clk = KHz;
@@ -240,7 +194,7 @@ DevSpiChNode *bus_spich_opennode(DevSpiChNode *node, SPI_MODE mode, u16 KHz,  ui
 
 				if (res == 0) {
 					chnode->gd = 0;
-					BUSSPI_DEBUG(LOG_DEBUG, "spi dev open ok: %s!\r\n", pbasenode->pdev->name);
+					//BUSSPI_DEBUG(LOG_DEBUG, "spi dev open ok: %s!\r\n", pbasenode->pdev->name);
 					mcu_io_output_resetbit(devspich->csport, devspich->cspin);
 				} else {
 					BUSSPI_DEBUG(LOG_ERR, "spi dev open err!\r\n");

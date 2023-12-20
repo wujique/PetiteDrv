@@ -30,7 +30,7 @@ int ctp_fill_buf(int16_t x, int16_t y)
 	TouchPointBuf[TouchPointBufW].y = y;
 	TouchPointBufW++;
 	if (TouchPointBufW >= TouchPointBufSize) TouchPointBufW = 0;
-	//uart_printf("w: x=%d, y=%d\r\n",  x, y);
+	//LogTouchDrv(LOG_INFO, "w: x=%d, y=%d\r\n",  x, y);
 	return 1;
 }
 
@@ -47,7 +47,7 @@ int ctp_get_point(TouchPoint *samp, int nr)
 		p->x = TouchPointBuf[TouchPointBufR].x;
 		p->y = TouchPointBuf[TouchPointBufR].y;
 	
-		//uart_printf("r: x=%d, y=%d\r\n",  *x, *y);
+		//LogTouchDrv(LOG_INFO, "r: x=%d, y=%d\r\n",  p->x, p->y);
 	
 		TouchPointBufR++;
 		if (TouchPointBufR >= TouchPointBufSize) TouchPointBufR = 0;
@@ -140,7 +140,7 @@ int rtp_get_point(TouchPoint *rtpsamp, int nr)
 			p->pressure = samp.pressure;
 			p->x = samp.x;
 			p->y = samp.y;
-			//uart_printf("[%d %d] ", samp.x, samp.y);
+			//LogTouchDrv(LOG_INFO, "[%d %d] ", samp.x, samp.y);
 			p++;
 			i++;
 		} else return i;
@@ -155,7 +155,7 @@ extern const TouchDrv CtpGt1151;
 extern const TouchDrv RtpXpt2046;
 
 
-static NodeTouch TouchDevNode;
+NodeTouch TouchDevNode;
 
 /**
  *@brief:      dev_touchscreen_init
@@ -170,7 +170,7 @@ int tp_init(const DevTouch *TpDev)
 
 	if (TpDev == NULL) return -1;
 	
-	uart_printf("init tp:%s\r\n", TpDev->name);
+	LogTouchDrv(LOG_INFO, "init tp:%s\r\n", TpDev->name);
 
 	TouchDevNode.dev = TpDev;
 
@@ -286,8 +286,10 @@ int tp_task_loop(uint8_t tick)
 		touch_task_cnt = 0;
 		
 		const TouchDrv *drv = TouchDevNode.drv;
-
-		drv->task(TouchDevNode.dev);
+		if (drv->task != NULL) {
+			drv->task(TouchDevNode.dev);
+		}
+		
 	}
 
 }

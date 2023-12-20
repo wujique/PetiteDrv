@@ -68,7 +68,7 @@
 s32 DevXpt2046Gd = -2;
 DevSpiChNode *Xpt2046SpiCHNode;
 
-void dev_xpt2046_task(const DevTouch *TpDev);
+void xpt2046_timer_task(void);
 
 
 /**
@@ -83,12 +83,12 @@ s32 dev_xpt2046_init(const DevTouch *dev)
 	#if (DRV_XPT2046_MODULE == 1)
 	DevXpt2046Gd = -1;
 	
-	wjq_log(LOG_INFO, ">-----------xpt2046 init!\r\n");
+	LogTouchDrv(LOG_INFO, ">-----------xpt2046 init!\r\n");
 	#ifdef XPT2046_TIMER
 	mcu_timer_init(XPT2046_TIMER);
 	#endif
 	#else
-	wjq_log(LOG_INFO, ">-----------xpt2046 not init!\r\n");
+	LogTouchDrv(LOG_INFO, ">-----------xpt2046 not init!\r\n");
 
 	#endif
 
@@ -107,11 +107,10 @@ s32 dev_xpt2046_open(void)
 
 	if(DevXpt2046Gd != -1)
 		return -1;
-
-	wjq_log(LOG_INFO, ">--------------xpt2046 open!\r\n");
-	
+	LogTouchDrv(LOG_INFO, ">--------------xpt2046 open!\r\n");
 	#ifdef XPT2046_TIMER
-	mcu_timer_config(XPT2046_TIMER, MCU_TIMER_10US, 100, dev_xpt2046_task, MCU_TIMER_RE);
+	LogTouchDrv(LOG_INFO, ">--------------xpt2046 init timer!\r\n");
+	mcu_timer_config(XPT2046_TIMER, MCU_TIMER_10US, 100, xpt2046_timer_task, MCU_TIMER_RE);
 	mcu_timer_start(XPT2046_TIMER);
 	#endif
 	
@@ -157,6 +156,7 @@ void dev_xpt2046_task(const DevTouch *TpDev)
 	u8 stmp[4];
 	u8 rtmp[4];
 	
+
 	if(DevXpt2046Gd != 0) return;
 	/*
 
@@ -182,14 +182,14 @@ void dev_xpt2046_task(const DevTouch *TpDev)
 	Xpt2046SpiCHNode = bus_spich_open(XPT2046_SPI, SPI_MODE_0, XPT2046_SPI_KHZ, 0xffffffff);
 
 	if(Xpt2046SpiCHNode == NULL) return;
-	
+
 	stmp[0] = XPT2046_CMD_Z2;
 	bus_spich_transfer(Xpt2046SpiCHNode, stmp, NULL, 1);
 	//vspi_delay(100);
 	stmp[0] = 0x00;
 	stmp[1] = XPT2046_CMD_Z1;
 	bus_spich_transfer(Xpt2046SpiCHNode, stmp, rtmp, 2);
-	//wjq_log(LOG_DEBUG, "%d, %d- ", rtmp[0], rtmp[1]);
+	//LogTouchDrv(LOG_DEBUG, "%d, %d- ", rtmp[0], rtmp[1]);
 	
 	pre_y = ((u16)(rtmp[0]&0x7f)<<5) + (rtmp[1]>>3);
 	/*------------------------*/
@@ -225,7 +225,7 @@ void dev_xpt2046_task(const DevTouch *TpDev)
 		tss.x = sample_x;
 		tss.y = sample_y;
 		rtp_fill_buff(&tss,1);
-		//uart_printf("(%d,%d,%d) ", tss.pressure, tss.x, tss.y);
+		//LogTouchDrv(LOG_DEBUG, "(%d,%d,%d) ", tss.pressure, tss.x, tss.y);
 		pendownup = 0;
 	} else if(pre_x + DEV_XPT2046_PENUP_GATE < pre_y) {
 		//没压力，不进行XY轴检测
@@ -239,15 +239,16 @@ void dev_xpt2046_task(const DevTouch *TpDev)
 		}
 
 	} else {
-		//uart_printf("--press :%d %d\r\n", pre_y, pre_x);
+		//LogTouchDrv(LOG_DEBUG, "--press :%d %d\r\n", pre_y, pre_x);
 		/*上下笔的过渡，丢弃*/
 	}
 
 }
 
-
-void xpt2046_task(const DevTouch *TpDev)
+extern NodeTouch TouchDevNode;
+void xpt2046_timer_task(void)
 {
+	dev_xpt2046_task(TouchDevNode.dev);
 	return;
 }
 
@@ -261,7 +262,7 @@ const TouchDrv RtpXpt2046={
 	.close = dev_xpt2046_close,
 	
 	#ifdef XPT2046_TIMER
-	.task = xpt2046_task,
+	.task = NULL,
 	#else
 	.task = dev_xpt2046_task,
 	#endif

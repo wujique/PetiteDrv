@@ -73,6 +73,7 @@ typedef struct{
 	
 }NodeTouch;
 
+#define LogTouchDrv(l,args...) petite_log(l, "touch", NULL,__FUNCTION__, __LINE__, ##args);
 
 int tp_init(const DevTouch *TpDev);
 int tp_open(char *name);
