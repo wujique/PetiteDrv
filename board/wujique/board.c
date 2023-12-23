@@ -131,10 +131,15 @@ s32 bsp_exuart_wifi_write(u8 *buf, s32 len)
 
 /**/
 #include "cmsis_os.h"
+#include "lvgl.h"
+#include "lvgl_porting/lv_port_disp.h"
+#include "demos/benchmark/lv_demo_benchmark.h"
+
+DevLcdNode *lvgllcd;
 
 osThreadId_t TestTaskHandle;
 const osThreadAttr_t TestTask_attributes = {
-  .name = "TestTask",
+  .name = "AppTask",
   .stack_size = Wujique407_TASK_STK_SIZE,
   .priority = (osPriority_t) Wujique407_TASK_PRIO,//osPriorityNormal,
 };
@@ -173,8 +178,36 @@ void board_app_task(void)
 	}
 	#endif
 	
-	wujique_stm407_test();
-	while(1){}
+	//wujique_stm407_test();
+
+	/* 初始化lvgl 
+	注意，初始化LVGL的过程，会用到不少栈，
+	如果在rtos的任务中进行初始化，注意任务栈的大小，
+	防止溢出造成hardfault */
+	#if 1
+	
+    lvgllcd = lcd_open("tftlcd");
+	//lcd_setdir(lvgllcd, W_LCD, L2R_U2D);
+	
+	tp_open("board_rtp_xtp2046");
+	tp_rotate(90);
+
+	lv_init();
+	lv_port_disp_init();
+	lv_port_indev_init();
+	lv_demo_benchmark();
+	//lv_demo_widgets();
+
+	
+	#endif
+
+	while(1){
+		osDelay(2);
+		
+		/* lvgl */
+		lv_task_handler();
+
+	}
 }
 /**/
 s32 board_app_init(void)

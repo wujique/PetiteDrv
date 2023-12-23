@@ -557,7 +557,7 @@ s32 drv_ILI9341_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
 	width=(ec+1)-sc;
 	height=(ep+1)-sp;
 
-	LogLcdDrv(LOG_DEBUG, "fill width:%d, height:%d\r\n", width, height);
+	//LogLcdDrv(LOG_DEBUG, "fill width:%d, height:%d\r\n", width, height);
 	
 	DevLcdNode * node;
 

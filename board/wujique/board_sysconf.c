@@ -636,8 +636,8 @@ const DevTouch BoardDevTp = {
 	.name = "board_rtp_xtp2046",
 
 	/** 触摸屏像素 */
-	.w = 320,
-	.h = 240,
+	.w = 240,
+	.h = 320,
 
 	/* 电阻屏或电容屏*/
 	.type = TP_TYPE_RTP,
