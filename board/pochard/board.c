@@ -68,7 +68,13 @@ void board_app_task(void)
 	#if 1
 	
     lvgllcd = lcd_open("tftlcd");
+	lcd_setdir(lvgllcd, H_LCD, R2L_U2D);
+	tp_open("board_ctp_g1158");
+
+	#if 0
 	lcd_setdir(lvgllcd, W_LCD, R2L_U2D);
+	tp_rotate(270);
+	#endif
 
 	lv_init();
 	lv_port_disp_init();
@@ -76,9 +82,6 @@ void board_app_task(void)
 	//lv_demo_benchmark();
 	lv_demo_widgets();
 	#endif
-	
-	tp_open("board_ctp_g1158");
-	tp_rotate(270);
 	
 	while(1){
 		osDelay(2);
