@@ -195,8 +195,8 @@ void board_app_task(void)
 	lv_init();
 	lv_port_disp_init();
 	lv_port_indev_init();
-	lv_demo_benchmark();
-	//lv_demo_widgets();
+	//lv_demo_benchmark();
+	lv_demo_widgets();
 
 	
 	#endif
@@ -312,8 +312,6 @@ void board_low_task(int tick)
 	//wjq_log(LOG_DEBUG, "low TASK ");
 	
 	dev_key_scan();
-	
-
 	tp_task_loop(tick);
 
 	#if (SYS_USE_KEYPAD == 1)
@@ -323,10 +321,7 @@ void board_low_task(int tick)
 	//eth_loop_task();
 	fun_sound_task();
 	//fun_rec_task();
-	
 	dev_touchkey_task();
-
-	
 }
 
 

@@ -460,7 +460,7 @@ s32 test_tp_test(void)
 		int ret;
 		u8 i =0;	
 		while(1) {
-			ret = rtp_get_point(samp, 10);
+			ret = tp_get_point(samp, 10);
 			if (ret != 0) {
 				//uart_printf("pre:%d, x:%d, y:%d\r\n", samp[0].pressure, samp[0].x, samp[0].y);
 						
@@ -1436,7 +1436,7 @@ s32 test_tft_tp(void)
 	int ret;
 	u8 i =0;	
 	while(1) {
-		ret = rtp_get_point(samp, 10);
+		ret = tp_get_point(samp, 10);
 		if (ret != 0) {
 			//uart_printf("pre:%d, x:%d, y:%d\r\n", samp[0].pressure, samp[0].x, samp[0].y);
 					

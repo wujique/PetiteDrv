@@ -18,7 +18,7 @@
 
 int16_t TouchPointBufW = 0;
 int16_t TouchPointBufR = 0;
-#define TouchPointBufSize 1024
+#define TouchPointBufSize 256
 TouchPoint TouchPointBuf[TouchPointBufSize];
 
 /*
@@ -28,38 +28,20 @@ int ctp_fill_buf(int16_t x, int16_t y)
 {
 	TouchPointBuf[TouchPointBufW].x = x;
 	TouchPointBuf[TouchPointBufW].y = y;
+	TouchPointBuf[TouchPointBufW].pressure = 100;
+	TouchPointBuf[TouchPointBufW].index = 1;
 	TouchPointBufW++;
 	if (TouchPointBufW >= TouchPointBufSize) TouchPointBufW = 0;
 	//LogTouchDrv(LOG_INFO, "w: x=%d, y=%d\r\n",  x, y);
 	return 1;
 }
 
-int ctp_get_point(TouchPoint *samp, int nr)
-{
-	int i = 0;
-	TouchPoint *p;
-	
-	p = samp;
-
-	while(i < nr) {
-		if (TouchPointBufW == TouchPointBufR) break;
-
-		p->x = TouchPointBuf[TouchPointBufR].x;
-		p->y = TouchPointBuf[TouchPointBufR].y;
-	
-		//LogTouchDrv(LOG_INFO, "r: x=%d, y=%d\r\n",  p->x, p->y);
-	
-		TouchPointBufR++;
-		if (TouchPointBufR >= TouchPointBufSize) TouchPointBufR = 0;
-		
-		p++;
-		i++;
-
-	}
-	
-	return i;
-}
 /*---------------------------电阻屏样点处理----------------------------------------*/
+int16_t TPOriBufW = 0;
+int16_t TPOriBufR = 0;
+#define TPOriBufSize 256
+TouchPoint TPOriBuf[TPOriBufSize];
+
 /**
  *@brief:      rtp_fill_buff
  *@details:    将样点写入缓冲，底层调用
@@ -68,7 +50,19 @@ int ctp_get_point(TouchPoint *samp, int nr)
  *@param[out]  无
  *@retval:     
  */
-s32 rtp_fill_buff(TouchPoint *samp, int nr)
+int rtp_fill_buf(int16_t x, int16_t y, int16_t	pressure)
+{
+	TouchPointBuf[TouchPointBufW].x = x;
+	TouchPointBuf[TouchPointBufW].y = y;
+	TouchPointBuf[TouchPointBufW].pressure = pressure;
+	TouchPointBuf[TouchPointBufW].index = 1;
+	TouchPointBufW++;
+	if (TouchPointBufW >= TouchPointBufSize) TouchPointBufW = 0;
+	//LogTouchDrv(LOG_INFO, "w: x=%d, y=%d\r\n",  x, y);
+	return 1;
+}
+
+s32 rtp_fill_ori_buff(TouchPoint *samp, int nr)
 {
 	int index;
 	TouchPoint *p = samp;
@@ -77,11 +71,11 @@ s32 rtp_fill_buff(TouchPoint *samp, int nr)
 	while(1) {
 		if(index >= nr) break;	
 		
-		TouchPointBuf[TouchPointBufW].pressure = p->pressure;//压力要搞清楚怎么计算
-		TouchPointBuf[TouchPointBufW].x = p->x;
-		TouchPointBuf[TouchPointBufW].y = p->y;
-		TouchPointBufW++;
-		if (TouchPointBufW >=  TouchPointBufSize) TouchPointBufW = 0;
+		TPOriBuf[TPOriBufW].pressure = p->pressure;//压力要搞清楚怎么计算
+		TPOriBuf[TPOriBufW].x = p->x;
+		TPOriBuf[TPOriBufW].y = p->y;
+		TPOriBufW++;
+		if (TPOriBufW >=  TouchPointBufSize) TPOriBufW = 0;
 		
 		p++;
 		index++;
@@ -92,7 +86,7 @@ s32 rtp_fill_buff(TouchPoint *samp, int nr)
 
 /**
  *@brief:        
- *@details:    读触摸屏采样原始样点，应用层或者tslib调用
+ *@details:    读触摸屏采样原始样点，tslib调用
  *@param[in]   struct ts_sample *samp  
                int nr                  
  *@param[out]  无
@@ -107,14 +101,14 @@ s32 tslib_read_rtp(struct ts_sample *samp, int nr)
 	while(1) {
 		if(i>=nr) break;
 
-		if(TouchPointBufW ==  TouchPointBufR) break;
+		if(TPOriBufW ==  TPOriBufR) break;
 
-		p->pressure = TouchPointBuf[TouchPointBufR].pressure;
-		p->x = TouchPointBuf[TouchPointBufR].x;
-		p->y = TouchPointBuf[TouchPointBufR].y;
+		p->pressure = TPOriBuf[TPOriBufR].pressure;
+		p->x = TPOriBuf[TPOriBufR].x;
+		p->y = TPOriBuf[TPOriBufR].y;
 		
-		TouchPointBufR++;
-		if(TouchPointBufR >= TouchPointBufSize) TouchPointBufR = 0;
+		TPOriBufR++;
+		if(TPOriBufR >= TouchPointBufSize) TPOriBufR = 0;
 		p++;
 		i++;
 	}
@@ -122,31 +116,24 @@ s32 tslib_read_rtp(struct ts_sample *samp, int nr)
 	return i;
 }
 
-int rtp_get_point(TouchPoint *rtpsamp, int nr)
+void rtp_tslib_deal_point(void)
 {
-	int i = 0;
+
 	int res;
-	TouchPoint *p;
-	
 	struct ts_sample samp;
-	p = rtpsamp;
-	
-	/* 电阻屏*/
 	struct tsdev *ts;
-	while(i < nr) {
-		res = ts_read(ts, &samp, 1);
-		if (res == 1) {
-			
-			p->pressure = samp.pressure;
-			p->x = samp.x;
-			p->y = samp.y;
-			//LogTouchDrv(LOG_INFO, "[%d %d] ", samp.x, samp.y);
-			p++;
-			i++;
-		} else return i;
-	}
-	
-	return i;
+
+	res = ts_read(ts, &samp, 1);
+	if (res == 1) {
+		if (samp.pressure == 0) {
+			//uart_printf("-0-");
+			return;
+		}
+
+		rtp_fill_buf(samp.x, samp.y, samp.pressure);
+	} 
+
+
 }
 
 /*----------------------------------------------------------------------------*/
@@ -230,6 +217,33 @@ int tp_rotate(uint16_t rotate)
 	TouchDevNode.rotate = rotate;
 }
 
+
+int tp_get_point(TouchPoint *samp, int nr)
+{
+	int i = 0;
+	TouchPoint *p;
+	
+	p = samp;
+
+	while(i < nr) {
+		if (TouchPointBufW == TouchPointBufR) break;
+
+		p->x = TouchPointBuf[TouchPointBufR].x;
+		p->y = TouchPointBuf[TouchPointBufR].y;
+	
+		//LogTouchDrv(LOG_INFO, "r: x=%d, y=%d\r\n",  p->x, p->y);
+	
+		TouchPointBufR++;
+		if (TouchPointBufR >= TouchPointBufSize) TouchPointBufR = 0;
+		
+		p++;
+		i++;
+
+	}
+	
+	return i;
+}
+#if 0
 static int tp_get_point(TouchPoint *samp, int nr)
 {
 	const TouchDrv *drv = TouchDevNode.drv;
@@ -237,9 +251,10 @@ static int tp_get_point(TouchPoint *samp, int nr)
 	if (drv->type == TP_TYPE_CTP) {
 		return ctp_get_point(samp, nr);
 	} else if (drv->type == TP_TYPE_RTP) {
-		return rtp_get_point(samp, nr);
+		return ctp_get_point(samp, nr);
 	} else return 0;
 }
+#endif
 
 int tp_get_pointxy (int16_t *x, int16_t *y)
 {
@@ -247,29 +262,43 @@ int tp_get_pointxy (int16_t *x, int16_t *y)
 	
 	TouchPoint samp;
 	
+	uint16_t w;//X轴
+	uint16_t h;//Y轴
+
+	w = TouchDevNode.dev->w;
+	h = TouchDevNode.dev->h;
+
 	res = tp_get_point(&samp, 1);
 
 	if (res == 1) {
 
 		/* 旋转 */
-		if (TouchDevNode.rotate == 270) {
-			*x = 480 - samp.y;
+		if (TouchDevNode.rotate == 90) {
+			*x = samp.y;
+			*y =  w - samp.x;
+		} else if (TouchDevNode.rotate == 180) {
+			//*x = 480 - samp.y;
+			//*y =  samp.x;
+		} else if (TouchDevNode.rotate == 270) {
+			*x = h - samp.y;
 			*y =  samp.x;
 		} else {
 			*x = samp.x;
 			*y = samp.y;
 		}
-		
+		//uart_printf("(%d-%d)", *x, *y);
 		return 1;
 	}
-
+	//uart_printf("e\r\n");
 	return 0;
 }
 
-/*
-	touch buff have data return 1
-	
-	*/
+/**
+ * @brief   判断是否有按下
+ * 
+ * @return  int 
+ * 
+ */
 int tp_is_press(void)
 {
 	if (TouchPointBufW != TouchPointBufR) return 1;	

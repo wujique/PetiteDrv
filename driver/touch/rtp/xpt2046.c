@@ -224,7 +224,8 @@ void dev_xpt2046_task(const DevTouch *TpDev)
 		tss.pressure = 200;//DEV_XPT2046_PENDOWN_GATE - rpress;
 		tss.x = sample_x;
 		tss.y = sample_y;
-		rtp_fill_buff(&tss,1);
+		rtp_fill_ori_buff(&tss,1);
+		rtp_tslib_deal_point();
 		//LogTouchDrv(LOG_DEBUG, "(%d,%d,%d) ", tss.pressure, tss.x, tss.y);
 		pendownup = 0;
 	} else if(pre_x + DEV_XPT2046_PENUP_GATE < pre_y) {
@@ -235,7 +236,9 @@ void dev_xpt2046_task(const DevTouch *TpDev)
 			tss.pressure = 0;//压力要搞清楚怎么计算
 			tss.x = 0xffff;
 			tss.y = 0xffff;
-			rtp_fill_buff(&tss,1);
+			rtp_fill_ori_buff(&tss,1);
+			rtp_tslib_deal_point();
+			//uart_printf("u");
 		}
 
 	} else {
