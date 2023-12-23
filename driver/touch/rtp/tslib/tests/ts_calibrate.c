@@ -126,6 +126,7 @@ struct tsdev *ts_open_module(void)
 	char *tsdevice = NULL;
 	unsigned int i;
 
+	board_load_ts_cal_data(&cal);
 	wjq_log(LOG_DEBUG, "env Calibration constants: ");
 	for (i = 0; i < 7; i++) 
 		wjq_log(LOG_DEBUG, "%d ", cal.a [i]);
@@ -207,6 +208,8 @@ int ts_calibrate(DevLcdNode *lcd)
 			wjq_log(LOG_DEBUG, "%d ", cal.a [i]);
 		wjq_log(LOG_DEBUG, "\n");
 
+		///把校准数据固化到文件系统
+		board_save_ts_cal_data(&cal);
 	} else {
 		wjq_log(LOG_DEBUG, "Calibration failed.\n");
 		i = -1;
@@ -244,3 +247,33 @@ s32 ts_calibrate_test(void)
 }
 #endif
 
+/** 保存触摸屏校准数据到文件系统， 代码暂时放这里 */
+int board_save_ts_cal_data(calibration *cal)
+{
+	int filefd;
+	filefd = vfs_open("/mtd0/tslib_cal", O_CREAT);
+	if(filefd > 0) {
+		vfs_lseek(filefd, 0, SEEK_SET);
+		vfs_write(filefd, cal, sizeof(calibration));
+		vfs_close(filefd);
+		return 0;
+	}
+
+	return -1;
+}
+
+int board_load_ts_cal_data(calibration *cal)
+{
+
+	int filefd;
+	filefd = vfs_open("/mtd0/tslib_cal", O_CREAT);
+	if(filefd > 0) {
+		vfs_lseek(filefd, 0, SEEK_SET);
+		vfs_read(filefd, cal, sizeof(calibration));
+		vfs_close(filefd);
+		return 0;
+	}
+
+	return -1;
+
+}
