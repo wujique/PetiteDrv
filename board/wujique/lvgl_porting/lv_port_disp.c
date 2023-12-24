@@ -19,8 +19,8 @@
 
 extern DevLcdNode *lvgllcd;
 
-#define MY_DISP_HOR_RES   320//LCD_WIDTH
-#define MY_DISP_VER_RES   240//LCD_HEIGHT
+#define MY_DISP_HOR_RES   (lvgllcd->width)//LCD_WIDTH
+#define MY_DISP_VER_RES   (lvgllcd->height)//LCD_HEIGHT
 
 /*********************
  *      DEFINES
@@ -43,7 +43,7 @@ static void disp_flush(lv_disp_drv_t * disp_drv, const lv_area_t * area, lv_colo
 /**********************
  *  STATIC VARIABLES
  **********************/
-
+static lv_color_t *buf_1;
 /**********************
  *      MACROS
  **********************/
@@ -86,7 +86,7 @@ void lv_port_disp_init(void)
     /* Example for 1) */
 	#if 1
     static lv_disp_draw_buf_t draw_buf_dsc_1;
-    static lv_color_t buf_1[MY_DISP_HOR_RES * 20];                          /*A buffer for 10 rows*/
+    buf_1 = wjq_malloc(MY_DISP_HOR_RES * 30* sizeof(lv_color_t));                           /*A buffer for 10 rows*/
     lv_disp_draw_buf_init(&draw_buf_dsc_1, buf_1, NULL, MY_DISP_HOR_RES * 20);   /*Initialize the display buffer*/
 	#endif
 	
