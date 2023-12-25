@@ -339,7 +339,7 @@
               <MiscControls>--locale=english</MiscControls>
               <Define>NDEBUG</Define>
               <Undefine></Undefine>
-              <IncludePath>.\Core\Inc;.\Drivers\STM32H7xx_HAL_Driver\Inc;.\User;.\Drivers\CMSIS\Include;.\Drivers\CMSIS\Device\ST\STM32H7xx\Include;.\Drivers\STM32H7xx_HAL_Driver\Inc\Legacy;..\..\mcu\stm32h7b0vb;..\..\Petite;..\..\driver;..\..\driver\touch;..\..\driver\lcd;..\..\components\lvgl;..\..\components\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\..\components\FreeRTOS\Source\include;..\..\components\FreeRTOS\Source\CMSIS_RTOS_V2;..\..\components\FatFs;..\..\driver\sound;..\..\driver\touch\rtp\tslib;..\..\driver\touch\rtp;..\..\Petite\bus;..\..\components\emenu;..\..\components\tiny_ttf;..\..\components\FlashDB\inc;..\..\components\FlashDB\porting;..\..\components\littlefs;..\..\components\CmBacktrace\cm_backtrace;..\..\components\cmd\ubootcmd;..\..\components\Petitefont;..\..\panel;..\..\components\lua-5.4.4\src</IncludePath>
+              <IncludePath>.\Core\Inc;.\Drivers\STM32H7xx_HAL_Driver\Inc;.\User;.\Drivers\CMSIS\Include;.\Drivers\CMSIS\Device\ST\STM32H7xx\Include;.\Drivers\STM32H7xx_HAL_Driver\Inc\Legacy;..\..\mcu\stm32h7b0vb;..\..\Petite;..\..\driver;..\..\driver\touch;..\..\driver\lcd;..\..\components\lvgl;..\..\components\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\..\components\FreeRTOS\Source\include;..\..\components\FreeRTOS\Source\CMSIS_RTOS_V2;..\..\components\FatFs;..\..\driver\sound;..\..\driver\touch\rtp\tslib;..\..\driver\touch\rtp;..\..\Petite\bus;..\..\components\emenu;..\..\components\tiny_ttf;..\..\components\FlashDB\inc;..\..\components\FlashDB\porting;..\..\components\littlefs;..\..\components\CmBacktrace\cm_backtrace;..\..\components\cmd\ubootcmd;..\..\components\Petitefont;..\..\panel;..\..\components\lua-5.4.4\src;..\..\components\Freetype\include</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -2062,6 +2062,26 @@
               <FileName>lua_src.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\components\lua-5.4.4\lua_src.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>mid/freetype</GroupName>
+          <Files>
+            <File>
+              <FileName>freetype_src.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\Freetype\freetype_src.c</FilePath>
+            </File>
+            <File>
+              <FileName>freetype_test.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\Freetype\freetype_test.c</FilePath>
+            </File>
+            <File>
+              <FileName>ftdebug.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\Freetype\ftdebug.c</FilePath>
             </File>
           </Files>
         </Group>

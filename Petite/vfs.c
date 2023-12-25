@@ -834,8 +834,8 @@ int vfs_file_copy(char *srcname, char *dstname)
 }
 
 
-#if 0
-ft_file_struct * vfs_node_open(const char *pathname, char* oflags)
+#if 1
+ft_file_struct *vfs_node_open(const char *pathname, char* oflags)
 {
 	//Uprintf("vfs_node_open:%s\r\n", pathname);
 	int tmp;

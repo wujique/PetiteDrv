@@ -388,6 +388,11 @@ void cuckoo_7b0_test(void)
 	tiny_tty_test();
 	#endif
 	
+	#if 0
+	LcdOledI2C = lcd_open("spicoglcd");
+	FreeTypeTest(LcdOledI2C);
+	#endif
+
 	/* 初始化lvgl 
 	注意，初始化LVGL的过程，会用到不少栈，
 	如果在rtos的任务中进行初始化，注意任务栈的大小，
