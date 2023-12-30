@@ -604,6 +604,11 @@
           <GroupName>User</GroupName>
           <Files>
             <File>
+              <FileName>sd_diskio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\User\sd_diskio.c</FilePath>
+            </File>
+            <File>
               <FileName>cuckoo_test.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\User\cuckoo_test.c</FilePath>
@@ -1797,11 +1802,6 @@
               <FileName>ffunicode.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\components\FatFs\ffunicode.c</FilePath>
-            </File>
-            <File>
-              <FileName>sd_diskio.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\User\sd_diskio.c</FilePath>
             </File>
           </Files>
         </Group>
