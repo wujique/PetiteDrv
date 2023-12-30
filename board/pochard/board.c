@@ -38,7 +38,7 @@ void board_app_task(void)
 	LogBoard(LOG_DEBUG, "run app task! 2023.12.10\r\n");
 
 	/* 初始化文件系统 */
-	//sd_fatfs_init();
+	sd_fatfs_init();
 	
 	flashdb_demo();
 

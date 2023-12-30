@@ -125,11 +125,9 @@
 /*  配置 虚拟文件系统 */
 //#define SYS_FS_NUM 5
 
-//#define VFS_SD_DIR	"mtd0"//sd卡文件系统挂载vfs中的目录名
 #define SYS_FS_FATFS_SD "1:"//sd卡目录名， 这个名字跟diso.c中的序号有关系
 
-//#define VFS_USB_DIR	"mtd1"//USB
-#define SYS_FS_FATFS_USB "2:"//usb目录
+//#define SYS_FS_FATFS_USB "2:"//usb目录
 
 /*	字体类型定义 */
 #define FONT_LIST_MAX 6	

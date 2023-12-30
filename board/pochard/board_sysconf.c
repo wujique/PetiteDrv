@@ -218,8 +218,8 @@ void *PetiteDevTable[]={
 		/* 把sd卡也放到partiton，以便将其初始化为fatfs后挂载到vfs中 
 			目前sdmmc并不归 partition管理。
 			addr 和 size， 和实际不符，32位寻址最大才4G，sd卡早超出了 */
-		//{"sto", "sdmmc",  "socket1", 0x70000000, 0},
-		//	{"par",VFS_STR_FATFS, SYS_FS_FATFS_SD,	  0x70000000, 0},
+		{"sto", "sdmmc",  "socket1", 0x70000000, 0},
+			{"par",VFS_STR_FATFS, SYS_FS_FATFS_SD,	  0x70000000, 0},
 		/*--------------------------------------------------*/
 		{NULL,NULL,NULL,0,0},
 	};

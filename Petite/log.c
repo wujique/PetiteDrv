@@ -159,13 +159,16 @@ void petite_log(LOG_L l, char *tag, const char *file, const char *fun, int line,
         strcat(logbuf, file);
         strcat(logbuf, "]");
     }
+
+    strcat(logbuf, "[");
+
     if (fun != NULL) {
-        strcat(logbuf, "[");
+        
         strcat(logbuf, fun);
-        strcat(logbuf, "]");
+        strcat(logbuf, ":");
     }
 
-    sprintf(logbuf+strlen(logbuf), "[%d]: ", line);
+    sprintf(logbuf+strlen(logbuf), "%d]: ", line);
     mcu_uart_write(PC_PORT, (u8*)logbuf, strlen(logbuf));
 
     mcu_uart_write(PC_PORT, (u8*)log_color_tab[5], 10);
