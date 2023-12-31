@@ -20,7 +20,7 @@
 #define LOG_BOARD_TAG "BOARD"
 #define LogBoard(l,args...) petite_log(l, LOG_BOARD_TAG, NULL,__FUNCTION__, __LINE__, ##args);
 
-#define FSMC_LCD_ADDRESS      0x6C010000//DMA传输目的地址       LCD 地址
+#define FSMC_LCD_ADDRESS      0x60100000//DMA传输目的地址       LCD 地址
 
 /* 
 	本文件定义板设备情况。

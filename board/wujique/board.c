@@ -226,6 +226,8 @@ s32 board_app_init(void)
 extern void *PetiteDevTable[];
 extern PartitionDef PetitePartitonTable[];
 extern const DevTouch BoardDevTp;
+extern void DCMI_PWDN_RESET_Init(void);
+void board_test_camera(void);
 /*
 	板级初始化
 */
@@ -271,14 +273,15 @@ s32 board_init(void)
 
 	/* 摄像头不归入字符设备 */
 	/* camera xclk use the MCO1 */
-	
 	//SCCB_GPIO_Config();
 	BUS_DCMI_HW_Init();
 	bus_dcmi_init();
 	DCMI_PWDN_RESET_Init();
 	
 	camera_init();
-	//test_camera();
+	board_test_camera();
+
+
 	/* 要实现一个声卡框架 
 		兼容多种声音播放方式 */
 	dev_tea5767_init(DEV_TEA5767_I2CBUS);
@@ -356,7 +359,7 @@ s32 board_camera_show(DevLcdNode *lcd)
 
 	/* LCD Display window */
 	lcd_setdir(lcd, W_LCD, L2R_U2D);
-	lcd_prepare_display(lcd, 1, 320, 1, 240);
+	lcd_prepare_display(lcd, 0, 319, 0, 239);
 
 	BUS_DCMI_Config(DCMI_PCKPolarity_Rising, DCMI_VSPolarity_Low, DCMI_HSPolarity_Low);
 
@@ -438,6 +441,25 @@ s32 board_camera_show(DevLcdNode *lcd)
 	return 0;
 }
 #endif
+
+void board_test_camera(void)
+{
+	DevLcdNode *lcd;
+
+	lcd = lcd_open("tftlcd");
+	if (lcd == NULL) {
+		wjq_log(LOG_DEBUG, "open lcd err!");
+
+	} 
+
+	if (-1 == camera_open()) {
+			wjq_log(LOG_DEBUG, "open camera err\r\n");
+			return;
+	}
+
+	board_camera_show(lcd);
+}
+
 #endif
 
 void board_pre_sleep(uint32_t xModifiableIdleTime)

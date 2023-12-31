@@ -108,7 +108,7 @@ s32 board_app_init(void)
 extern void *PetiteDevTable[];
 extern PartitionDef PetitePartitonTable[];
 extern const DevTouch BoardDevTp;
-
+void board_test_camera(void);
 /*
 	板级初始化
 */
@@ -125,6 +125,14 @@ s32 board_init(void)
 
 
 	tp_init(&BoardDevTp);
+
+	//SCCB_GPIO_Config();
+	BUS_DCMI_HW_Init();
+	bus_dcmi_init();
+	DCMI_PWDN_RESET_Init();
+	
+	camera_init();
+	board_test_camera();
 
 	/*---------------------------------------*/
 	/* 创建目标板应用程序 */
@@ -178,7 +186,7 @@ s32 board_camera_show(DevLcdNode *lcd)
 
 	/* LCD Display window */
 	lcd_setdir(lcd, W_LCD, L2R_U2D);
-	lcd_prepare_display(lcd, 1, 320, 1, 240);
+	lcd_prepare_display(lcd, 0, 319, 0, 239);
 
 	BUS_DCMI_Config(DCMI_PCKPolarity_Rising, DCMI_VSPolarity_Low, DCMI_HSPolarity_Low);
 
@@ -198,7 +206,7 @@ s32 board_camera_show(DevLcdNode *lcd)
 
 		/*一定要先检测数据再检测帧完成，最后一次两个中断差不多同时来*/
 		if(DCMI_FLAG_FRAME == (sta&DCMI_FLAG_FRAME)) {
-			LogBoard(LOG_DEBUG, "-f-%d- ", DmaCnt);
+			wjq_log(LOG_DEBUG, "-f-%d- ", DmaCnt);
 			DmaCnt = 0;
 			mcu_dcmi_start();
 		}
@@ -260,6 +268,25 @@ s32 board_camera_show(DevLcdNode *lcd)
 	return 0;
 }
 #endif
+
+void board_test_camera(void)
+{
+	DevLcdNode *lcd;
+
+	lcd = lcd_open("tftlcd");
+	if (lcd == NULL) {
+		wjq_log(LOG_DEBUG, "open lcd err!");
+
+	} 
+
+	if (-1 == camera_open()) {
+			wjq_log(LOG_DEBUG, "open camera err\r\n");
+			return;
+	}
+
+	board_camera_show(lcd);
+}
+
 #endif
 
 void board_pre_sleep(uint32_t xModifiableIdleTime)
