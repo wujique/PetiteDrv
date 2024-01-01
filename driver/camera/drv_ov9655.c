@@ -564,7 +564,7 @@ void OV9655_Config(ImageFormat_TypeDef ImageFormat)
 	DCMI_InitTypeDef DCMI_InitStructure;
 	
 	/* DCMI configuration */ 
-	BUS_DCMI_Config(DCMI_PCKPolarity_Falling, DCMI_VSPolarity_High, DCMI_HSPolarity_High);
+	BUS_DCMI_Config(1,DCMI_PCKPolarity_Falling, DCMI_VSPolarity_High, DCMI_HSPolarity_High);
 	
 	switch (ImageFormat)
 	{

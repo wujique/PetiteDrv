@@ -361,7 +361,7 @@ s32 board_camera_show(DevLcdNode *lcd)
 	lcd_setdir(lcd, W_LCD, L2R_U2D);
 	lcd_prepare_display(lcd, 0, 319, 0, 239);
 
-	BUS_DCMI_Config(DCMI_PCKPolarity_Rising, DCMI_VSPolarity_Low, DCMI_HSPolarity_Low);
+	BUS_DCMI_Config(1, DCMI_PCKPolarity_Rising, DCMI_VSPolarity_Low, DCMI_HSPolarity_Low);
 
 	#if 0
 	/* 没有调试通 */
@@ -373,7 +373,7 @@ s32 board_camera_show(DevLcdNode *lcd)
 	#endif
 	/* 4个byte  也就是一个word , DMA会除4，也就是进行一次传输 */
 	mcu_dcmi_captruce(0, FSMC_LCD_ADDRESS, 4);
-
+	mcu_dcmi_start();
 	while(1) {
 		mcu_dcmi_get_sta(&sta);
 

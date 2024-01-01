@@ -14,7 +14,7 @@
 extern void Delay(__IO uint32_t nTime);
 
 
-void BUS_DCMI_Config(u16 pck, u16 vs, u16 hs)
+void BUS_DCMI_Config(u8 mode, u16 pck, u16 vs, u16 hs)
 {
 	DCMI_InitTypeDef DCMI_InitStructure;
 	NVIC_InitTypeDef NVIC_InitStructure;
@@ -23,7 +23,12 @@ void BUS_DCMI_Config(u16 pck, u16 vs, u16 hs)
 	RCC_AHB2PeriphClockCmd(RCC_AHB2Periph_DCMI, ENABLE);
 
 	/* DCMI configuration */ 
-	DCMI_InitStructure.DCMI_CaptureMode = DCMI_CaptureMode_SnapShot;
+	if (mode == 0) {
+		DCMI_InitStructure.DCMI_CaptureMode = DCMI_CaptureMode_Continuous;
+	} else  {
+		DCMI_InitStructure.DCMI_CaptureMode = DCMI_CaptureMode_SnapShot;
+	}
+	
 	DCMI_InitStructure.DCMI_SynchroMode = DCMI_SynchroMode_Hardware;
 	DCMI_InitStructure.DCMI_PCKPolarity = pck;
 	DCMI_InitStructure.DCMI_VSPolarity = vs;
@@ -187,14 +192,11 @@ s32 mcu_dcmi_get_sta(u8 *sta)
 	pData：数据地址
 	Length：传输长度，注意，此处传入的是字节数
 	*/
-int mcu_dcmi_captruce(uint32_t Mode, uint32_t pData, uint32_t Length)
+int mcu_dcmi_captruce(uint32_t Mode, uint32_t addr, uint32_t Length)
 {
-	BUS_DCMI_DMA_Init(Mode, pData, NULL, Length/4);
+	/* DMA长度和buf长度的关系是word*/
+	BUS_DCMI_DMA_Init(Mode, addr, NULL, Length/4);
 	
-	/* Enable DMA2 stream 1 and DCMI interface then start image capture */
-	DMA_Cmd(DMA2_Stream1, ENABLE); 
-	DCMI_Cmd(ENABLE); 
-	DCMI_CaptureCmd(ENABLE);	
 }
 
 int mcu_dcmi_start(void)

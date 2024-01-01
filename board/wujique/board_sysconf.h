@@ -17,6 +17,9 @@
 #define PC_PORT  MCU_UART_3 
 #define PC_PORT_STR "uart3"
 
+#define LOG_BOARD_TAG "BOARD"
+#define LogBoard(l,args...) petite_log(l, LOG_BOARD_TAG, NULL,__FUNCTION__, __LINE__, ##args);
+
 #define FSMC_LCD_ADDRESS      0x6C010000//DMA传输目的地址       LCD 地址
 
 /* 
