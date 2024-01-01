@@ -480,8 +480,9 @@ int OV5640_SET_SCPLL(uint8_t type)
 
 	OV5640_I2C_open();
 	/* 帧率要配置，如果跟LCD不匹配，LCD显示花屏 */
-	/* 480*272的屏幕*/		
+			
 	if (type == 1) {
+		/* 30 帧 480*272的屏幕*/
 		OV5640_WriteReg(0x3035,0X21);
 		OV5640_WriteReg(0x3036,0x98);
 	} else if (type == 2) {

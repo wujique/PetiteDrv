@@ -47,6 +47,8 @@ uint8_t OV5640_Auto_Focus(void);
 void rgb565_test(void);
 void jpeg_test(uint8_t jpg_size);
 
+int OV5640_SET_SCPLL(uint8_t type);
+
 #endif
 
 

@@ -384,19 +384,19 @@ const unsigned char OV2640_352x288_JPEG[][2]=
   0x5b, 0x48,  0x5c, 0x00,  0xe0, 0x00,
 };
 /*--------------------------------------------------------*/
-/*OV2640 UXGA³õÊ¼»¯¼Ä´æÆ÷ĞòÁĞ±í
-´ËÄ£Ê½ÏÂÖ¡ÂÊÎª15Ö¡
+/*OV2640 UXGAåˆå§‹åŒ–å¯„å­˜å™¨åºåˆ—è¡¨
+æ­¤æ¨¡å¼ä¸‹å¸§ç‡ä¸º15å¸§
 UXGA(1600*1200) */
 const u8 OV2640_1600x1200_UXGA[][2]= 
 {   
 	0xff, 0x00,	
-	0x2c, 0xff,	0x2e, 0xdf,	/*¹æ¸ñÊé¸ù±¾Ã»ÓĞÕâĞ©¼Ä´æÆ÷*/
+	0x2c, 0xff,	0x2e, 0xdf,	/*è§„æ ¼ä¹¦æ ¹æœ¬æ²¡æœ‰è¿™äº›å¯„å­˜å™¨*/
 	
 	0xff, 0x01,
 	0x3c, 0x32,	
 	0x11, 0x00,	/*clock rate control: off*/
 	0x09, 0x02,	/*common  control 2: 2x capability*/
-	/* ÉèÖÃ vertical flip£¬ ºìÉ«»á±äÂÌÉ« */
+	/* è®¾ç½® vertical flipï¼Œ çº¢è‰²ä¼šå˜ç»¿è‰² */
 	0x04, 0x18|0x40, /* register 04: bit7 horizontal mirror;bit6 vertical flip*/
 	0x13, 0xe5,	/* common control 8: */
 	0x14, 0x48,	/* common control 9: AGC gain ceiling*/
@@ -473,8 +473,8 @@ const u8 OV2640_1600x1200_UXGA[][2]=
 	0xda, 0x09,	0xe5, 0x1f,	0xe1, 0x67,	0xe0, 0x00,
 	0xdd, 0x7f,	0x05, 0x00,
 };  
-/* SVGA³õÊ¼»¯¼Ä´æÆ÷ĞòÁĞ±í
-	´ËÄ£Ê½ÏÂ,Ö¡ÂÊ¿ÉÒÔ´ïµ½30Ö¡
+/* SVGAåˆå§‹åŒ–å¯„å­˜å™¨åºåˆ—è¡¨
+	æ­¤æ¨¡å¼ä¸‹,å¸§ç‡å¯ä»¥è¾¾åˆ°30å¸§
 	SVGA 800*600 */
 const u8 OV2640_800x600_SVGA[][2]= 
 {    
@@ -828,16 +828,32 @@ u8 OV2640_UXGAConfig(void)
 	u16 i=0;
 
 	OV2640_Reset();
-    Delay(200);
+  Delay(200);
 
-	/* UXGA·Ö±æÂÊ(1600*1200) */  
+	/* UXGAåˆ†è¾¨ç‡(1600*1200) */  
 	for(i=0;i<sizeof(OV2640_1600x1200_UXGA)/2;i++) {
 		OV2640_WriteReg(OV2640_1600x1200_UXGA[i][0], OV2640_1600x1200_UXGA[i][1]);
 	} 
 	return 0x00;	//ok
 } 
 
-/* ÇĞ»»ÎªRGB565Ä£Ê½ */
+#if 0//æœªæµ‹è¯•
+u8 OV2640_SVGAConfig(void)
+{ 
+	u16 i=0;
+
+	OV2640_Reset();
+  Delay(200);
+
+	/* UXGAåˆ†è¾¨ç‡(1600*1200) */  
+	for(i=0;i<sizeof(OV2640_800x600_SVGA)/2;i++) {
+		OV2640_WriteReg(OV2640_800x600_SVGA[i][0], OV2640_800x600_SVGA[i][1]);
+	} 
+	return 0x00;	//ok
+} 
+#endif
+
+/* åˆ‡æ¢ä¸ºRGB565æ¨¡å¼ */
 void OV2640_RGB565_Mode(void) 
 {
 	u16 i=0;
@@ -848,16 +864,16 @@ void OV2640_RGB565_Mode(void)
 } 
 /*
 	window size >= ImageSize >= ImageWinSize >= OutSize
-	0v2640 ´«¸ĞÆ÷£º
-	window size×î´ó¾ÍÊÇ´«¸ĞÆ÷£º1632*1220
-	ImageSize£º1632*1220
-	ImageWinSize£º1600*1200
-	OutSize£º1600*1200
+	0v2640 ä¼ æ„Ÿå™¨ï¼š
+	window sizeæœ€å¤§å°±æ˜¯ä¼ æ„Ÿå™¨ï¼š1632*1220
+	ImageSizeï¼š1632*1220
+	ImageWinSizeï¼š1600*1200
+	OutSizeï¼š1600*1200
 	*/
 	
-/*  ÉèÖÃ´«¸ĞÆ÷Êä³ö´°¿Ú 
-    sx, sy,ÆğÊ¼µØÖ·
-	width,height:¿í¶È(¶ÔÓ¦:horizontal)ºÍ¸ß¶È(¶ÔÓ¦:vertical) 
+/*  è®¾ç½®ä¼ æ„Ÿå™¨è¾“å‡ºçª—å£ 
+    sx, sy,èµ·å§‹åœ°å€
+	width,height:å®½åº¦(å¯¹åº”:horizontal)å’Œé«˜åº¦(å¯¹åº”:vertical) 
 	
 	*/
 void OV2640_Window_Set(u16 sx, u16 sy, u16 width,u16 height)
@@ -883,9 +899,9 @@ void OV2640_Window_Set(u16 sx, u16 sy, u16 width,u16 height)
 	OV2640_WriteReg(0X17,sx>>3);		
 	OV2640_WriteReg(0X18,endx>>3);		
 }
-/* ¸Ãº¯ÊıÉèÖÃÍ¼Ïñ³ß´ç´óĞ¡,Ò²¾ÍÊÇËùÑ¡¸ñÊ½µÄÊä³ö·Ö±æÂÊ
+/* è¯¥å‡½æ•°è®¾ç½®å›¾åƒå°ºå¯¸å¤§å°,ä¹Ÿå°±æ˜¯æ‰€é€‰æ ¼å¼çš„è¾“å‡ºåˆ†è¾¨ç‡
 	UXGA:1600*1200,SVGA:800*600,CIF:352*288
-	width,height:Í¼Ïñ¿í¶ÈºÍÍ¼Ïñ¸ß¶È*/
+	width,height:å›¾åƒå®½åº¦å’Œå›¾åƒé«˜åº¦*/
 u8 OV2640_ImageSize_Set(u16 width,u16 height)
 { 
 	u8 temp; 
@@ -902,14 +918,14 @@ u8 OV2640_ImageSize_Set(u16 width,u16 height)
 	OV2640_WriteReg(0XE0,0X00); 			 
 	return 0;
 }
-/* ÉèÖÃÍ¼Ïñ¿ª´°´óĞ¡
-	±¾º¯ÊıÔÚImageSizeÉÏÃæ½øĞĞ¿ª´°,ÓÃÓÚOV2640_OutSize_SetµÄÊä³ö
-	×¢Òâ:±¾º¯ÊıµÄ¿í¶ÈºÍ¸ß¶È,±ØĞë´óÓÚµÈÓÚOutSize¿í¶ÈºÍ¸ß¶È
-	OV2640_OutSize_SetÉèÖÃµÄ¿í¶ÈºÍ¸ß¶È,¸ù¾İ±¾º¯ÊıÉèÖÃµÄ¿í¶ÈºÍ¸ß¶È,ÓÉDSP
-	×Ô¶¯¼ÆËãËõ·Å±ÈÀı,Êä³ö¸øÍâ²¿Éè±¸.
+/* è®¾ç½®å›¾åƒå¼€çª—å¤§å°
+	æœ¬å‡½æ•°åœ¨ImageSizeä¸Šé¢è¿›è¡Œå¼€çª—,ç”¨äºOV2640_OutSize_Setçš„è¾“å‡º
+	æ³¨æ„:æœ¬å‡½æ•°çš„å®½åº¦å’Œé«˜åº¦,å¿…é¡»å¤§äºç­‰äºOutSizeå®½åº¦å’Œé«˜åº¦
+	OV2640_OutSize_Setè®¾ç½®çš„å®½åº¦å’Œé«˜åº¦,æ ¹æ®æœ¬å‡½æ•°è®¾ç½®çš„å®½åº¦å’Œé«˜åº¦,ç”±DSP
+	è‡ªåŠ¨è®¡ç®—ç¼©æ”¾æ¯”ä¾‹,è¾“å‡ºç»™å¤–éƒ¨è®¾å¤‡.
 	   
-	width,height:¿í¶È(¶ÔÓ¦:horizontal)ºÍ¸ß¶È(¶ÔÓ¦:vertical)
-	widthºÍheight±ØĞëÊÇ4µÄ±¶Êı
+	width,height:å®½åº¦(å¯¹åº”:horizontal)å’Œé«˜åº¦(å¯¹åº”:vertical)
+	widthå’Œheightå¿…é¡»æ˜¯4çš„å€æ•°
 */
 u8 OV2640_ImageWinSize_Set(u16 offx,u16 offy,u16 width,u16 height)
 {
@@ -917,8 +933,10 @@ u8 OV2640_ImageWinSize_Set(u16 offx,u16 offy,u16 width,u16 height)
 	u16 vsize;
 	u8 temp; 
 	
-	if(width%4)return 1;
-	if(height%4)return 2;
+	if(((width%4)!= 0) || ((height%4)!= 0)){
+    LogBoard(LOG_ERR, "set win size err! width:%d, height:%d\n", width, height);
+    return 1;
+  }
 	
 	hsize=width/4;
 	vsize=height/4;
@@ -939,10 +957,10 @@ u8 OV2640_ImageWinSize_Set(u16 offx,u16 offy,u16 width,u16 height)
 	return 0;
 } 
 
-/*ÉèÖÃÍ¼ÏñÊä³ö´óĞ¡
-	OV2640Êä³öÍ¼ÏñµÄ·Ö±æÂÊ
-	width,height:¿í¶È(¶ÔÓ¦:horizontal)ºÍ¸ß¶È(¶ÔÓ¦:vertical)
-	widthºÍheight±ØĞëÊÇ4µÄ±¶Êı
+/*è®¾ç½®å›¾åƒè¾“å‡ºå¤§å°
+	OV2640è¾“å‡ºå›¾åƒçš„åˆ†è¾¨ç‡
+	width,height:å®½åº¦(å¯¹åº”:horizontal)å’Œé«˜åº¦(å¯¹åº”:vertical)
+	widthå’Œheightå¿…é¡»æ˜¯4çš„å€æ•°
 */
 u8 OV2640_OutSize_Set(u16 width,u16 height)
 {
@@ -977,7 +995,7 @@ int OV2640_Init(void)
 	OV2640_ReadID(&OV2640_Camera_ID);
 
 	if(OV2640_Camera_ID.PIDH  == 0x26){
-		wjq_log(LOG_DEBUG, "OV2640 Camera ID 0x%x\r\n", OV2640_Camera_ID.PIDH);
+		LogBoard(LOG_DEBUG, "OV2640 Camera ID 0x%x\r\n", OV2640_Camera_ID.PIDH);
 		return 0;
 	}
 
