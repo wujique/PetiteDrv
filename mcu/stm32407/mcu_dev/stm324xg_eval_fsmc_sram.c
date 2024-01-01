@@ -394,6 +394,52 @@ volatile u16 *LcdReg = NULL;
 volatile u16 *LcdData = NULL;
 
 /**
+ * @brief   保存fsmc参数，以便获取到LCD型号后重新配置
+ * 
+ * 
+ */
+static FSMC_NORSRAMInitTypeDef  FSMC_NORSRAMInitStructure;
+/**
+ * @brief   重新配置FSMC时序
+ * 
+ * @param   AddressSetupTime 
+ * @param   DataSetupTime 
+ * 
+ */
+void mcu_fsmc_reconfig_write_time(uint32_t AddressSetupTime, uint32_t DataSetupTime)
+{
+  
+  FSMC_NORSRAMCmd(FSMC_NORSRAMInitStructure.FSMC_Bank, DISABLE); 
+  
+/*-- FSMC Configuration ------------------------------------------------------*/
+  FSMC_NORSRAMTimingInitTypeDef  w,r;
+  w.FSMC_AddressSetupTime = AddressSetupTime;
+  w.FSMC_AddressHoldTime = 0;
+  w.FSMC_DataSetupTime = DataSetupTime;
+  w.FSMC_BusTurnAroundDuration = 0;
+  w.FSMC_CLKDivision = 0;
+  w.FSMC_DataLatency = 0;
+  w.FSMC_AccessMode = FSMC_AccessMode_A;
+
+  r.FSMC_AddressSetupTime = 16;
+  r.FSMC_AddressHoldTime = 0;
+  r.FSMC_DataSetupTime = 24;
+  r.FSMC_BusTurnAroundDuration = 0;
+  r.FSMC_CLKDivision = 0;
+  r.FSMC_DataLatency = 0;
+  r.FSMC_AccessMode = FSMC_AccessMode_A;
+
+  FSMC_NORSRAMInitStructure.FSMC_ReadWriteTimingStruct = &r;
+  FSMC_NORSRAMInitStructure.FSMC_WriteTimingStruct = &w;
+
+  FSMC_NORSRAMInit(&FSMC_NORSRAMInitStructure); 
+
+  /*!< Enable FSMC Bank1_SRAM4 Bank */
+  FSMC_NORSRAMCmd(FSMC_NORSRAMInitStructure.FSMC_Bank, ENABLE); 
+
+}
+
+/**
  *@brief:      mcu_fsmc_lcd_Init
  *@details:    LCD使用的FSMC初始化
  *@param[in]   void  
@@ -402,8 +448,8 @@ volatile u16 *LcdData = NULL;
  */
 void mcu_fsmc_lcd_Init(uint8_t conf_num)
 {
-  FSMC_NORSRAMInitTypeDef  FSMC_NORSRAMInitStructure;
-  FSMC_NORSRAMTimingInitTypeDef  w,r;
+
+  
   GPIO_InitTypeDef GPIO_InitStructure; 
   Stm32FsmcLcdDef *fsmc_conf;
 
@@ -444,6 +490,7 @@ void mcu_fsmc_lcd_Init(uint8_t conf_num)
   }
 
 /*-- FSMC Configuration ------------------------------------------------------*/
+  FSMC_NORSRAMTimingInitTypeDef  w,r;
   w.FSMC_AddressSetupTime = 10;
   w.FSMC_AddressHoldTime = 0;
   w.FSMC_DataSetupTime = 10;

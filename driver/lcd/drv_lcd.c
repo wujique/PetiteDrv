@@ -44,6 +44,7 @@
 #define LCD_DEBUG(a, ...)
 #endif
 
+
 /*	LCD驱动列表 */
 _lcd_drv *LcdDrvList[] = {
 				#if (LCD_DRIVER_ST7796U == 1) 
@@ -215,6 +216,20 @@ PDevNode *lcd_dev_register(const DevLcd *dev)
 	}
 
 	if(ret == 0) {
+
+		/** 
+		 * 	根据屏幕型号，重新配置FSMC
+		*/
+		#if (PETITE_BUS_LCD_8080 == 1)
+		if (dev->pdev.basetype == BUS_8080) {
+			if (lcdnode->drv->id == 0X7796) {
+				LogLcdDrv(LOG_WAR, "str7796u reconfig fsmc\r\n");
+				extern void mcu_fsmc_reconfig_write_time(uint32_t AddressSetupTime, uint32_t DataSetupTime);
+				mcu_fsmc_reconfig_write_time(3,3);	
+			}
+		}
+		#endif
+
 		lcdnode->gd = -1;
 		
 		lcdnode->dir = H_LCD;
