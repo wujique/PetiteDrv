@@ -159,6 +159,9 @@ void board_low_task(uint8_t tick)
 /*----------------------这是个垃圾桶 没有归属的，板相关的都先放这里 ------------------------------------*/
 #if 1
 
+#include "ov5640.h"
+#include "drv_ov2640.h"
+
 ImageFormat_TypeDef ImageFormat;
 
 
@@ -166,7 +169,7 @@ u16 *camera_buf0;
 u16 *camera_buf1;
 
 #define LCD_BUF_SIZE 320*2*2//一次传输2行数据，一个像素2个字节
-u16 DmaCnt;
+
 
 #define CAMERA_USE_RAM2LCD	0
 /*
@@ -180,36 +183,50 @@ s32 board_camera_show(DevLcdNode *lcd)
 	
 	uart_printf("board_camera_show\r\n");
 
-	DmaCnt = 0;
-	/* 选择图片格式 */
-	ImageFormat = (ImageFormat_TypeDef)BMP_QVGA;
-
 	/* LCD Display window */
 	lcd_setdir(lcd, W_LCD, L2R_U2D);
-	lcd_prepare_display(lcd, 0, 319, 0, 239);
+	/** 设置显示窗口 */
+	lcd_prepare_display(lcd, 0, 480, 0, 320);
 
-	BUS_DCMI_Config(DCMI_PCKPolarity_Rising, DCMI_VSPolarity_Low, DCMI_HSPolarity_Low);
+	u8 dcmimode = 0;
+	/** 第一个参数是模式，连续 or 快照 */
+	BUS_DCMI_Config(dcmimode, DCMI_PCKPolarity_Rising, DCMI_VSPolarity_Low, DCMI_HSPolarity_Low);
 
-	#if 0
-	/* 没有调试通 */
-	//OV5640_RGB565_Mode();	
-	//OV5640_OutSize_Set(4, 0, 320 , 240); 
-	//OV5640_SET_SCPLL(3);
-	#else
-	OV2640_Config(ImageFormat);
-	#endif
-	/* 4个byte  也就是一个word , DMA会除4，也就是进行一次传输 */
-	mcu_dcmi_captruce(0, FSMC_LCD_ADDRESS, 4);
+	Camera_TypeDef cameratype;
+	cameratype = camera_get_type();
+	if (cameratype == OV5640_CAMERA){
+		//OV5640_RGB565_Mode();	
+		OV5640_OutSize_Set(4, 0, 480 , 320); 
+		OV5640_SET_SCPLL(2);
+	} else if(cameratype == OV2640_CAMERA) {
+		/* 选择图片格式 */
+		OV2640_UXGAConfig();
+		OV2640_RGB565_Mode();
+		OV2640_OutSize_Set(480, 320);
+
+	} else {
+		LogBoard(LOG_INFO, "test camera type err!\r\n");
+		return 0;
+	}
+	
+	/*  配置DCMI传输参数，第三个参数是目标地址空间长度，
+		8080 接口LCD，地址不变，因此设置为1，此时，传输模式必须是0
+		如果是传输到buf，则是buf的长度*/
+	mcu_dcmi_captruce(0, FSMC_LCD_ADDRESS, 1);
+	mcu_dcmi_start();
 
 	while(1) {
-		mcu_dcmi_get_sta(&sta);
+		if (dcmimode == 1) {
 
-		/*一定要先检测数据再检测帧完成，最后一次两个中断差不多同时来*/
-		if(DCMI_FLAG_FRAME == (sta&DCMI_FLAG_FRAME)) {
-			wjq_log(LOG_DEBUG, "-f-%d- ", DmaCnt);
-			DmaCnt = 0;
-			mcu_dcmi_start();
+			mcu_dcmi_get_sta(&sta);
+
+			/*一定要先检测数据再检测帧完成，最后一次两个中断差不多同时来*/
+			if(DCMI_FLAG_FRAME == (sta&DCMI_FLAG_FRAME)) {
+				osDelay(1000);
+				mcu_dcmi_start();
+			}
 		}
+		
 	}
 	return 0;
 }
