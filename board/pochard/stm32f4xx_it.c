@@ -288,20 +288,20 @@ void DMA2_Stream3_IRQHandler(void)
   SD_ProcessDMAIRQ();
 }
 
-void DMA1_Stream4_IRQHandler(void)
+void DMA1_Stream5_IRQHandler(void)
 {
-	if(DMA_GetITStatus(DMA1_Stream4,DMA_IT_TCIF4)==SET)		// 判断是否完成传输
+	if(DMA_GetITStatus(DMA1_Stream5,DMA_IT_TCIF5)==SET)		// 判断是否完成传输
 	{ 
-		DMA_ClearITPendingBit(DMA1_Stream4,DMA_IT_TCIF4);	//	清除相应的标志位
+		DMA_ClearITPendingBit(DMA1_Stream5,DMA_IT_TCIF5);	//	清除相应的标志位
 		mcu_i2s_dma_process();		
 	} 
 
 }
-void DMA1_Stream3_IRQHandler(void)
+void DMA1_Stream0_IRQHandler(void)
 {  
-	if(DMA_GetITStatus(DMA1_Stream3,DMA_IT_TCIF3)==SET) //DMA1_Stream3,传输完成标志
+	if(DMA_GetITStatus(DMA1_Stream0,DMA_IT_TCIF0)==SET) //DMA1_Stream3,传输完成标志
 	{ 
-		DMA_ClearITPendingBit(DMA1_Stream3, DMA_IT_TCIF3);	//清除传输完成中断
+		DMA_ClearITPendingBit(DMA1_Stream0, DMA_IT_TCIF0);	//清除传输完成中断
 		mcu_i2sext_dma_process();	//执行回调函数,读取数据等操作在这里面处理  
 	}
 }

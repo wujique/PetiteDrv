@@ -404,9 +404,9 @@ void cuckoo_7b0_test(void)
 	lv_demo_widgets();
 	#endif
 
-	#if 0//测试WM8978
-	fun_sound_play("mtd0/0:sound/stereo_16bit_32k.wav", "wm8960");
-	//fun_sound_play("mtd0/0:sound/stereo_16bit_32k.wav", "wm8978");
+	#if 1//测试WM8978
+	//fun_sound_play("/0:/sound/stereo_16bit_32k.wav", "wm8960");
+	fun_sound_play("/0:/sound/stereo_16bit_32k.wav", "wm8978");
 	#endif
 	//camera_test();
 

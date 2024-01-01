@@ -16,6 +16,8 @@
 /* */
 #define PC_PORT  MCU_UART_4 
 
+#define LOG_BOARD_TAG "BOARD"
+#define LogBoard(l,args...) petite_log(l, LOG_BOARD_TAG, NULL,__FUNCTION__, __LINE__, ##args);
 /* 
 	本文件定义板设备情况。
 	是对board_sysconf.c的补充0	

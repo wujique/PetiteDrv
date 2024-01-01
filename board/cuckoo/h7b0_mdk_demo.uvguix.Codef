@@ -1883,7 +1883,7 @@
       </Doc>
       <Doc>
         <Name>..\..\Petite\partition.c</Name>
-        <ColumnNumber>32</ColumnNumber>
+        <ColumnNumber>39</ColumnNumber>
         <TopLine>353</TopLine>
         <CurrentLine>358</CurrentLine>
         <Folding>1</Folding>
@@ -1927,7 +1927,7 @@
         <PaneID>0</PaneID>
       </Doc>
       <Doc>
-        <Name>..\..\components\Freetype\src\base\ftsystem.c</Name>
+        <Name>E:\work\PetiteDrv\prog\PetiteDrv\components\Freetype\src\base\ftsystem.c</Name>
         <ColumnNumber>22</ColumnNumber>
         <TopLine>103</TopLine>
         <CurrentLine>113</CurrentLine>
@@ -1936,7 +1936,7 @@
         <PaneID>0</PaneID>
       </Doc>
       <Doc>
-        <Name>..\..\components\Freetype\src\base\ftobjs.c</Name>
+        <Name>E:\work\PetiteDrv\prog\PetiteDrv\components\Freetype\src\base\ftobjs.c</Name>
         <ColumnNumber>0</ColumnNumber>
         <TopLine>2682</TopLine>
         <CurrentLine>2692</CurrentLine>

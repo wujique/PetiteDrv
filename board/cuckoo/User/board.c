@@ -38,7 +38,7 @@ s32 board_init(void)
     lcd_reset();
     LCD_Config();
 
-	//dev_wm8978_init();
+	dev_wm8978_init();
 	//dev_wm8960_init();
 	/*  触摸屏初始化 */
 
@@ -113,7 +113,7 @@ void board_low_task(uint8_t tick)
 {
 	//wjq_log(LOG_DEBUG, " low task ");
 	tp_task_loop();
-	//fun_sound_task();
+	fun_sound_task();
 }
 
 

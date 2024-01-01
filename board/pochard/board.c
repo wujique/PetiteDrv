@@ -61,7 +61,9 @@ void board_app_task(void)
 	}
 	#endif
 	
-		/* 初始化lvgl 
+	//fun_sound_play("/1:/sound/stereo_16bit_32k.wav", "wm8978");
+
+	/* 初始化lvgl 
 	注意，初始化LVGL的过程，会用到不少栈，
 	如果在rtos的任务中进行初始化，注意任务栈的大小，
 	防止溢出造成hardfault */
@@ -132,7 +134,11 @@ s32 board_init(void)
 	DCMI_PWDN_RESET_Init();
 	
 	camera_init();
-	board_test_camera();
+	//board_test_camera();
+
+	mcu_i2s_init(1);//初始化I2S接口
+	dev_wm8978_init();
+	
 
 	/*---------------------------------------*/
 	/* 创建目标板应用程序 */
@@ -152,7 +158,7 @@ void board_low_task(uint8_t tick)
 	//wjq_log(LOG_DEBUG, " low task ");
 	tp_task_loop(tick);
 
-	//fun_sound_task();
+	fun_sound_task();
 }
 
 

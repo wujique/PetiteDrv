@@ -178,6 +178,7 @@ void board_app_task(void)
 	}
 	#endif
 	
+	fun_sound_play("/1:/sound/stereo_16bit_32k.wav", "wm8978");
 	//wujique_stm407_test();
 
 	/* 初始化lvgl 
@@ -287,7 +288,7 @@ s32 board_init(void)
 	dev_tea5767_init(DEV_TEA5767_I2CBUS);
 	dev_dacsound_init(&BoardDacSound);
 
-	mcu_i2s_init();//初始化I2S接口
+	mcu_i2s_init(2);//初始化I2S接口
 	dev_wm8978_init();
 
 	//sys_spiffs_mount_coreflash();

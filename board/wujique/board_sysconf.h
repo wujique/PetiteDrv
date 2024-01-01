@@ -106,6 +106,19 @@
 #define DEV_HTU21D_I2CBUS "VI2C2"
 #define DEV_PTHCHO_UART "uart1"
 
+/**
+ * @brief   I2S通道配置， STM32
+ * 
+ * 
+ */
+#define I2S_SPI_BASE		SPI2
+#define I2S_SPI_CLK			RCC_APB1Periph_SPI2
+#define I2S_DMA_STREAM 		DMA1_Stream4//SPI2
+#define I2S_DMA_IRQ			DMA1_Stream4_IRQn
+#define I2S_EXT_TYPE 		I2S2ext
+#define I2S_EXT_DMA 		DMA1_Stream3//spi2
+#define I2S_EXT_DMA_IRQ		DMA1_Stream3_IRQn
+
 /*----------------------------------------------------
 	任务优先级，数字越小优先级越低
 	栈定义的是U32
