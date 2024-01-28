@@ -36,12 +36,17 @@ LOG_L LogLevel = LOG_DEBUG;//系统调试信息等级
 s8 string[256];//调试信息缓冲，输出调试信息一次不可以大于256
 
 #if 1
-#ifdef __GNUC__
+#ifdef __CC_ARM//优先配置MDK，因为MDK也可能使用GNU扩展
+#define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
+#warning "__CC_ARM redef printf putchar in fputc"
+#elif __GNUC__
 /* With GCC/RAISONANCE, small printf (option LD Linker->Libraries->Small printf
      set to 'Yes') calls __io_putchar() */
 #define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
+#warning "__GNUC__ redef printf putchar in __io_putchar"
 #else
 #define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
+#warning "default redef printf putchar in fputc"
 #endif /* __GNUC__ */
 
 PUTCHAR_PROTOTYPE
