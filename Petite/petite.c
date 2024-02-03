@@ -100,6 +100,8 @@ void petite_task(void *pvParameters)
   */
 int petite_app(void)
 {	
+	cm_backtrace_init(CM_BACKTRACE_AXF_NAME, HARDWARE_VERSION, SOFTWARE_VERSION);
+
 	/*           http://www.network-science.de/ascii/   */
 	printf("\r\n*********************************************************\r\n");
 	printf("*   ___     _   _ _          ___                        \r\n");       
@@ -109,7 +111,7 @@ int petite_app(void)
 	printf("*\\/    \\___|\\__|_|\\__\\___/___,' |_|    \\_/www.wujique.com\r\n");
 	printf("*********************************************************\r\n\r\n");
 
-	cm_backtrace_init(CM_BACKTRACE_AXF_NAME, HARDWARE_VERSION, SOFTWARE_VERSION);
+	
 
   /* Infinite loop 
 	尽快启动RTOS， 进入start_task再做其他设备初始化 */
