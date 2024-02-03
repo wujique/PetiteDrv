@@ -73,7 +73,7 @@
 /**-------------------qfsm-----------------------*/
 #include "../../components/qfsm/qfsm.c"
 /**-------------------free rtos------------------------*/
-#include "..\..\components\FreeRTOS\Source\portable\RVDS\ARM_CM4F\port.c"
+#include "..\freertos_port\port.c"
 //#include "..\..\components\FreeRTOS\Source\portable\MemMang\heap_4.c"
 
 #include "..\..\components\FreeRTOS\Source\timers.c"
