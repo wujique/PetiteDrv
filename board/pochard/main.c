@@ -70,7 +70,7 @@ s32 board_mcu_preinit(void)
 		中断优先级分组
 	*/	
 	/* 2 bit for pre-emption priority, 2 bits for subpriority */
-	//NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
+	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);
 	  
 	RCC_GetClocksFreq(&RCC_Clocks);
 		
