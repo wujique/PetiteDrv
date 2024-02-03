@@ -15,9 +15,17 @@
 
 /** Includes **/
 #include "cmsis_os.h"
+#include "semphr.h"
+
 #include "string.h"
-#include "spi.h"
-#include "gpio.h"
+
+//#include "spi.h"
+//#include "gpio.h"
+#include "board_sysconf.h"
+#include "mcu.h"
+#include "mcu_io.h"
+#include "bus_spi.h"
+
 #include "trace.h"
 #include "spi_drv.h"
 #include "adapter.h"
@@ -67,7 +75,7 @@ static struct netdev_ops esp_net_ops = {
 
 /** Exported variables **/
 
-static osSemaphoreId osSemaphore;
+static osSemaphoreId HandshakeSemaphore;
 static osMutexId mutex_spi_trans;
 
 static osThreadId process_rx_task_id = 0;
@@ -175,6 +183,7 @@ static void deinit_netdev(void)
   * @param  GPIOx - GPIO Instance like A,B,..
   * @retval 1 if alternate function set else 0
   */
+ #if 0
 static int is_gpio_alternate_function_set(GPIO_TypeDef  *GPIOx, uint32_t pin)
 {
 #define GPIO_NUMBER 16U
@@ -203,6 +212,7 @@ static int is_gpio_alternate_function_set(GPIO_TypeDef  *GPIOx, uint32_t pin)
 	}
 	return 0;
 }
+#endif
 
 /**
   * @brief  Set hardware type to ESP32 or ESP32S2 depending upon
@@ -215,11 +225,15 @@ static int is_gpio_alternate_function_set(GPIO_TypeDef  *GPIOx, uint32_t pin)
   */
 static void set_hardware_type(void)
 {
+	#if 0
 	if (is_gpio_alternate_function_set(USR_SPI_CS_GPIO_Port,USR_SPI_CS_Pin)) {
 		hardware_type = HARDWARE_TYPE_ESP32;
 	} else {
 		hardware_type = HARDWARE_TYPE_OTHER_ESP_CHIPSETS;
 	}
+	#else
+	hardware_type = HARDWARE_TYPE_OTHER_ESP_CHIPSETS;
+	#endif
 }
 
 /** function definition **/
@@ -247,8 +261,8 @@ void transport_init(void(*transport_evt_handler_fp)(uint8_t))
 	}
 
 	/* spi handshake semaphore */
-	osSemaphore = osSemaphoreCreate(osSemaphore(SEM) , 1);
-	assert(osSemaphore);
+	HandshakeSemaphore = osSemaphoreNew(1, 0, osSemaphore(SEM));
+	assert(HandshakeSemaphore);
 
 	mutex_spi_trans = xSemaphoreCreateMutex();
 	assert(mutex_spi_trans);
@@ -264,31 +278,55 @@ void transport_init(void(*transport_evt_handler_fp)(uint8_t))
 	assert(from_slave_queue);
 
 	/* Task - SPI transaction (full duplex) */
+	#if 0
 	osThreadDef(transaction_thread, transaction_task,
 			osPriorityAboveNormal, 0, TRANSACTION_TASK_STACK_SIZE);
 	transaction_task_id = osThreadCreate(osThread(transaction_thread), NULL);
+	#else
+	const osThreadAttr_t transaction_thread_attributes = {
+  		.name = "transaction",
+  		.stack_size = TRANSACTION_TASK_STACK_SIZE,
+  		.priority = (osPriority_t) osPriorityNormal,
+	};
+	transaction_task_id = osThreadNew(transaction_task, NULL, &transaction_thread_attributes);
+	if (transaction_task_id == NULL) {
+		printf("osThreadNew:transaction err!\r\n");
+	}
+	#endif
+	
 	assert(transaction_task_id);
 
 	/* Task - RX processing */
+	#if 0
 	osThreadDef(rx_thread, process_rx_task,
 			osPriorityAboveNormal, 0, PROCESS_RX_TASK_STACK_SIZE);
 	process_rx_task_id = osThreadCreate(osThread(rx_thread), NULL);
+	#else
+	const osThreadAttr_t rx_thread_attributes = {
+  		.name = "rx_thread",
+  		.stack_size = PROCESS_RX_TASK_STACK_SIZE,
+  		.priority = (osPriority_t)osPriorityNormal,
+	};
+	process_rx_task_id = osThreadNew(process_rx_task, NULL, &rx_thread_attributes);
+	#endif
 	assert(process_rx_task_id);
+
 }
 
 /**
   * @brief EXTI line detection callback, used as SPI handshake GPIO
   * @param GPIO_Pin: Specifies the pins connected EXTI line
   * @retval None
+  * @note io外部中断线，上升沿触发
   */
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+void ESP_HOST_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
 	if ( (GPIO_Pin == GPIO_DATA_READY_Pin) ||
 	     (GPIO_Pin == GPIO_HANDSHAKE_Pin) )
-	{
+	{	
 		/* Post semaphore to notify SPI slave is ready for next transaction */
-		if (osSemaphore != NULL) {
-			osSemaphoreRelease(osSemaphore);
+		if (HandshakeSemaphore != NULL) {
+			osSemaphoreRelease(HandshakeSemaphore);
 		}
 	}
 }
@@ -304,26 +342,27 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 
 static void check_and_execute_spi_transaction(void)
 {
+
 	uint8_t * txbuff = NULL;
 	uint8_t is_valid_tx_buf = 0;
-	GPIO_PinState gpio_handshake = GPIO_PIN_RESET;
-	GPIO_PinState gpio_rx_data_ready = GPIO_PIN_RESET;
+	MCU_IO_STA gpio_handshake = MCU_IO_STA_0;
+	MCU_IO_STA gpio_rx_data_ready = MCU_IO_STA_0;
 
 
 	/* handshake line SET -> slave ready for next transaction */
-	gpio_handshake = HAL_GPIO_ReadPin(GPIO_HANDSHAKE_GPIO_Port,
+	gpio_handshake = mcu_io_input_readbit(GPIO_HANDSHAKE_GPIO_Port,
 			GPIO_HANDSHAKE_Pin);
 
 	/* data ready line SET -> slave wants to send something */
-	gpio_rx_data_ready = HAL_GPIO_ReadPin(GPIO_DATA_READY_GPIO_Port,
+	gpio_rx_data_ready = mcu_io_input_readbit(GPIO_DATA_READY_GPIO_Port,
 			GPIO_DATA_READY_Pin);
 
-	if (gpio_handshake == GPIO_PIN_SET) {
+	if (gpio_handshake == MCU_IO_STA_1) {
 
 		/* Get next tx buffer to be sent */
 		txbuff = get_tx_buffer(&is_valid_tx_buf);
 
-		if ( (gpio_rx_data_ready == GPIO_PIN_SET) ||
+		if ( (gpio_rx_data_ready == MCU_IO_STA_1) ||
 		     (is_valid_tx_buf) ) {
 
 			/* Execute transaction only if EITHER holds true-
@@ -354,7 +393,7 @@ stm_ret_t send_to_slave(uint8_t iface_type, uint8_t iface_num,
 		printf("write fail: buff(%p) 0? OR (0<len(%u)<=max_poss_len(%u))?\n\r",
 				wbuffer, wlen, MAX_PAYLOAD_SIZE);
 		if(wbuffer) {
-			free(wbuffer);
+			esp_host_free(wbuffer);
 			wbuffer = NULL;
 		}
 		return STM_FAIL;
@@ -366,12 +405,12 @@ stm_ret_t send_to_slave(uint8_t iface_type, uint8_t iface_num,
 	buf_handle.payload_len = wlen;
 	buf_handle.payload = wbuffer;
 	buf_handle.priv_buffer_handle = wbuffer;
-	buf_handle.free_buf_handle = free;
+	buf_handle.free_buf_handle = esp_host_free;
 
 	if (pdTRUE != xQueueSend(to_slave_queue, &buf_handle, portMAX_DELAY)) {
 		printf("Failed to send buffer to_slave_queue\n\r");
 		if(wbuffer) {
-			free(wbuffer);
+			esp_host_free(wbuffer);
 			wbuffer = NULL;
 		}
 		return STM_FAIL;
@@ -401,6 +440,7 @@ static void stop_spi_transactions_for_msec(int x)
   */
 static stm_ret_t spi_transaction_v1(uint8_t * txbuff)
 {
+	#if 0
 	uint8_t *rxbuff = NULL;
 	interface_buffer_handle_t buf_handle = {0};
 	struct  esp_payload_header *payload_header;
@@ -518,6 +558,8 @@ done:
 		free(rxbuff);
 		rxbuff = NULL;
 	}
+	#endif
+
 	return STM_FAIL;
 }
 
@@ -528,15 +570,16 @@ done:
   */
 static stm_ret_t spi_transaction_v2(uint8_t * txbuff)
 {
+
 	uint8_t *rxbuff = NULL;
 	interface_buffer_handle_t buf_handle = {0};
 	struct  esp_payload_header *payload_header;
 	uint16_t len, offset;
-	HAL_StatusTypeDef retval = HAL_ERROR;
+	int retval = -1;
 	uint16_t rx_checksum = 0, checksum = 0;
 
 	/* Allocate rx buffer */
-	rxbuff = (uint8_t *)malloc(MAX_SPI_BUFFER_SIZE);
+	rxbuff = (uint8_t *)esp_host_malloc(MAX_SPI_BUFFER_SIZE);
 	assert(rxbuff);
 	memset(rxbuff, 0, MAX_SPI_BUFFER_SIZE);
 
@@ -544,24 +587,37 @@ static stm_ret_t spi_transaction_v2(uint8_t * txbuff)
 		/* Even though, there is nothing to send,
 		 * valid reseted txbuff is needed for SPI driver
 		 */
-		txbuff = (uint8_t *)malloc(MAX_SPI_BUFFER_SIZE);
+		txbuff = (uint8_t *)esp_host_malloc(MAX_SPI_BUFFER_SIZE);
 		assert(txbuff);
 		memset(txbuff, 0, MAX_SPI_BUFFER_SIZE);
 	}
 
 	/* SPI transaction */
+	#if 0
 	HAL_GPIO_WritePin(USR_SPI_CS_GPIO_Port, USR_SPI_CS_Pin, GPIO_PIN_RESET);
 	retval = HAL_SPI_TransmitReceive(&hspi1, (uint8_t*)txbuff,
 			(uint8_t *)rxbuff, MAX_SPI_BUFFER_SIZE, HAL_MAX_DELAY);
 	while( hspi1.State == HAL_SPI_STATE_BUSY );
 	HAL_GPIO_WritePin(USR_SPI_CS_GPIO_Port, USR_SPI_CS_Pin, GPIO_PIN_SET);
+	#else
+	DevSpiChNode *node;
+	node = bus_spich_open("SPI2_CH1", SPI_MODE_2, 20000, 0xffffffff);
+	bus_spich_cs(node, 0);
+	retval = bus_spich_transfer(node, txbuff, rxbuff, MAX_SPI_BUFFER_SIZE);
+	bus_spich_cs(node, 1);
 
+	bus_spich_close(node);
+	printf("retval:%d\r\n", retval);
+	dump_hex( rxbuff, 32, 16);
+	if (retval > 0 ) retval = 0;
+	#endif
+
+	
 	switch(retval)
 	{
-		case HAL_OK:
+		case 0://HAL_OK:
 
 			/* Transaction successful */
-
 			/* create buffer rx handle, used for processing */
 			payload_header = (struct esp_payload_header *) rxbuff;
 
@@ -580,7 +636,7 @@ static stm_ret_t spi_transaction_v2(uint8_t * txbuff)
 				 * wrong header/bit packing?
 				 * */
 				if (rxbuff) {
-					free(rxbuff);
+					esp_host_free(rxbuff);
 					rxbuff = NULL;
 				}
 				/* Give chance to other tasks */
@@ -594,7 +650,7 @@ static stm_ret_t spi_transaction_v2(uint8_t * txbuff)
 
 				if (checksum == rx_checksum) {
 					buf_handle.priv_buffer_handle = rxbuff;
-					buf_handle.free_buf_handle = free;
+					buf_handle.free_buf_handle = esp_host_free;
 					buf_handle.payload_len = len;
 					buf_handle.if_type     = payload_header->if_type;
 					buf_handle.if_num      = payload_header->if_num;
@@ -609,7 +665,7 @@ static stm_ret_t spi_transaction_v2(uint8_t * txbuff)
 					}
 				} else {
 					if (rxbuff) {
-						free(rxbuff);
+						esp_host_free(rxbuff);
 						rxbuff = NULL;
 					}
 				}
@@ -617,11 +673,12 @@ static stm_ret_t spi_transaction_v2(uint8_t * txbuff)
 
 			/* Free input TX buffer */
 			if (txbuff) {
-				free(txbuff);
+				esp_host_free(txbuff);
 				txbuff = NULL;
 			}
 			break;
 
+		#if 0
 		case HAL_TIMEOUT:
 			printf("timeout in SPI transaction\n\r");
 			goto done;
@@ -631,6 +688,8 @@ static stm_ret_t spi_transaction_v2(uint8_t * txbuff)
 			printf("Error in SPI transaction\n\r");
 			goto done;
 			break;
+		#endif
+		
 		default:
 			printf("default handler: Error in SPI transaction\n\r");
 			goto done;
@@ -642,12 +701,12 @@ static stm_ret_t spi_transaction_v2(uint8_t * txbuff)
 done:
 	/* error cases, abort */
 	if (txbuff) {
-		free(txbuff);
+		esp_host_free(txbuff);
 		txbuff = NULL;
 	}
 
 	if (rxbuff) {
-		free(rxbuff);
+		esp_host_free(rxbuff);
 		rxbuff = NULL;
 	}
 	return STM_FAIL;
@@ -671,9 +730,9 @@ static void transaction_task(void const* pvParameters)
 
 	for (;;) {
 
-		if (osSemaphore != NULL) {
+		if (HandshakeSemaphore != NULL) {
 			/* Wait till slave is ready for next transaction */
-			if (osSemaphoreWait(osSemaphore , osWaitForever) == osOK) {
+			if (osSemaphoreAcquire(HandshakeSemaphore , osWaitForever) == osOK) {
 				check_and_execute_spi_transaction();
 			}
 		}
@@ -715,11 +774,11 @@ static void process_rx_task(void const* pvParameters)
 			priv = get_priv(buf_handle.if_type, buf_handle.if_num);
 
 			if (priv) {
-				buffer = (struct pbuf *)malloc(sizeof(struct pbuf));
+				buffer = (struct pbuf *)esp_host_malloc(sizeof(struct pbuf));
 				assert(buffer);
 
 				buffer->len = buf_handle.payload_len;
-				buffer->payload = malloc(buf_handle.payload_len);
+				buffer->payload = esp_host_malloc(buf_handle.payload_len);
 				assert(buffer->payload);
 
 				memcpy(buffer->payload, buf_handle.payload,
@@ -729,11 +788,11 @@ static void process_rx_task(void const* pvParameters)
 			}
 
 		} else if (buf_handle.if_type == ESP_PRIV_IF) {
-			buffer = (struct pbuf *)malloc(sizeof(struct pbuf));
+			buffer = (struct pbuf *)esp_host_malloc(sizeof(struct pbuf));
 			assert(buffer);
 
 			buffer->len = buf_handle.payload_len;
-			buffer->payload = malloc(buf_handle.payload_len);
+			buffer->payload = esp_host_malloc(buf_handle.payload_len);
 			assert(buffer->payload);
 
 			memcpy(buffer->payload, buf_handle.payload,
@@ -801,9 +860,9 @@ static uint8_t * get_tx_buffer(uint8_t *is_valid_tx_buf)
 
 	if (len) {
 
-		sendbuf = (uint8_t *) malloc(MAX_SPI_BUFFER_SIZE);
+		sendbuf = (uint8_t *) esp_host_malloc(MAX_SPI_BUFFER_SIZE);
 		if (!sendbuf) {
-			printf("malloc failed\n\r");
+			printf("esp_host_malloc failed\n\r");
 			goto done;
 		}
 
@@ -824,7 +883,7 @@ static uint8_t * get_tx_buffer(uint8_t *is_valid_tx_buf)
 	}
 
 done:
-	/* free allocated buffer */
+	/* esp_host_free allocated buffer */
 	if (buf_handle.free_buf_handle)
 		buf_handle.free_buf_handle(buf_handle.priv_buffer_handle);
 

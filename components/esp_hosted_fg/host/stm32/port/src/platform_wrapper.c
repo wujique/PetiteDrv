@@ -50,11 +50,11 @@ int control_path_platform_init(void)
 	osSemaphoreDef(READSEM);
 
 	/* control path semaphore */
-	readSemaphore = osSemaphoreCreate(osSemaphore(READSEM) , 1);
+	readSemaphore = osSemaphoreNew(1,0,osSemaphore(READSEM));
 	assert(readSemaphore);
 
 	/* grab the semaphore, so that task will be mandated to wait on semaphore */
-	if (osSemaphoreWait(readSemaphore , portMAX_DELAY) != osOK) {
+	if (osSemaphoreAcquire(readSemaphore , portMAX_DELAY) != osOK) {
 		printf("could not obtain readSemaphore\n\r");
 		return STM_FAIL;
 	}
@@ -90,14 +90,16 @@ static void control_path_rx_indication(void)
 }
 
 /* -------- Memory ---------- */
+#include "mem/p_malloc.h"
+
 void* hosted_malloc(size_t size)
 {
-	return malloc(size);
+	return pmalloc(size);
 }
 
 void* hosted_calloc(size_t blk_no, size_t size)
 {
-	void* ptr = malloc(blk_no*size);
+	void* ptr = pmalloc(blk_no*size);
 	if (!ptr) {
 		return NULL;
 	}
@@ -109,7 +111,7 @@ void* hosted_calloc(size_t blk_no, size_t size)
 void hosted_free(void* ptr)
 {
 	if(ptr) {
-		free(ptr);
+		p_f_free(ptr);
 		ptr=NULL;
 	}
 }
@@ -149,12 +151,21 @@ void *hosted_thread_create(void (*start_routine)(void const *), void *arg)
 		return NULL;
 	}
 
+	#if 0
 	osThreadDef(
 			Ctrl_port_tsk,
 			start_routine,
 			CTRL_PATH_TASK_PRIO, 0,
 			CTRL_PATH_TASK_STACK_SIZE);
 	*thread_handle = osThreadCreate(osThread(Ctrl_port_tsk), arg);
+	#else
+	const osThreadAttr_t Ctrl_port_tsk_attributes = {
+  		.name = "Ctrl_port_tsk",
+  		.stack_size = CTRL_PATH_TASK_STACK_SIZE,
+  		.priority = (osPriority_t) CTRL_PATH_TASK_PRIO,
+	};
+	*thread_handle = osThreadNew(start_routine, NULL, &Ctrl_port_tsk_attributes);
+	#endif
 
 	if (!(*thread_handle)) {
 		printf("Failed to create ctrl path task\n");
@@ -201,8 +212,8 @@ void * hosted_create_semaphore(int init_value)
 		return NULL;
 	}
 
-	*sem_id = osSemaphoreCreate(osSemaphore(sem_template_ctrl) , 1);
-
+	*sem_id = osSemaphoreNew(1 , 0, osSemaphore(sem_template_ctrl));
+	
 	if (!*sem_id) {
 		printf("sem create failed\n");
 		return NULL;
@@ -239,12 +250,12 @@ int hosted_get_semaphore(void * semaphore_handle, int timeout)
 
 	if (!timeout) {
 		/* non blocking */
-		return osSemaphoreWait(*sem_id, 0);
+		return osSemaphoreAcquire(*sem_id, 0);
 	} else if (timeout<0) {
 		/* Blocking */
-		return osSemaphoreWait(*sem_id, osWaitForever);
+		return osSemaphoreAcquire(*sem_id, osWaitForever);
 	} else {
-		return osSemaphoreWait(*sem_id, SEC_TO_MILLISEC(timeout));
+		return osSemaphoreAcquire(*sem_id, SEC_TO_MILLISEC(timeout));
 	}
 }
 
@@ -315,7 +326,7 @@ void *hosted_timer_start(int duration, int type,
 	struct timer_handle_t *timer_handle = NULL;
 	int ret = STM_OK;
 	os_timer_type timer_type = osTimerOnce;
-	osTimerDef (timerNew, timeout_handler);
+	//osTimerDef (timerNew, timeout_handler);
 
 
 	/* alloc */
@@ -341,8 +352,8 @@ void *hosted_timer_start(int duration, int type,
 
 	/* create */
 	timer_handle->timer_id =
-			osTimerCreate(osTimer(timerNew),
-			timer_type, arg);
+			osTimerNew(timeout_handler,
+			timer_type, arg, NULL);
 
 	if (!timer_handle->timer_id) {
 		printf("Failed to create timer\n");
@@ -443,7 +454,7 @@ uint8_t * serial_drv_read(struct serial_drv_handle_t *serial_drv_handle,
 		printf("Semaphore not initialized\n\r");
 		return NULL;
 	}
-	if (osSemaphoreWait(readSemaphore, portMAX_DELAY) != osOK) {
+	if (osSemaphoreAcquire(readSemaphore, portMAX_DELAY) != osOK) {
 		printf("Failed to read data \n\r");
 		return NULL;
 	}

@@ -70,7 +70,7 @@
 	静态和动态都支持，这两种模式用不同的API */
 #define configSUPPORT_STATIC_ALLOCATION          1
 #define configSUPPORT_DYNAMIC_ALLOCATION         1
-#define configTOTAL_HEAP_SIZE			( ( size_t ) ( 10 * 1024 ) )//堆，使用FreeRtos的内存分配方案才会用到
+#define configTOTAL_HEAP_SIZE			( ( size_t ) ( 20 * 1024 ) )//堆，使用FreeRtos的内存分配方案才会用到
 
 #define configUSE_IDLE_HOOK				0//hook就是钩子函数
 #define configUSE_TICK_HOOK				0

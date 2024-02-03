@@ -26,6 +26,8 @@ extern "C" {
 
 struct serial_ll_operations;
 
+#include "queue.h"
+
 /* serial interface handle */
 typedef struct serial_handle_s {
 	QueueHandle_t queue;

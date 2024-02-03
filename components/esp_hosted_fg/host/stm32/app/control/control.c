@@ -166,9 +166,19 @@ void control_path_init(void(*control_path_evt_handler)(uint8_t))
 	control_path_evt_handler_fp = control_path_evt_handler;
 
 	/* Task - application task */
+	#if 0
 	osThreadDef(SEM_Thread, control_path_task, osPriorityAboveNormal, 0,
 			CONTROL_PATH_TASK_STACK_SIZE);
 	control_path_task_id = osThreadCreate(osThread(SEM_Thread), NULL);
+	#else
+	const osThreadAttr_t SEM_Thread_attributes = {
+  		.name = "SEM_Thread",
+  		.stack_size = CONTROL_PATH_TASK_STACK_SIZE,
+  		.priority = (osPriority_t) osPriorityAboveNormal,
+	};
+	control_path_task_id = osThreadNew(control_path_task, NULL, &SEM_Thread_attributes);
+	#endif
+	
 	assert(control_path_task_id);
 	register_event_callbacks();
 }

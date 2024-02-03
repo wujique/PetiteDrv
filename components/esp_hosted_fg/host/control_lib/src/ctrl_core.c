@@ -8,7 +8,7 @@
 #include "serial_if.h"
 #include "platform_wrapper.h"
 #include "esp_queue.h"
-#include <unistd.h>
+//#include <unistd.h>
 
 
 #ifdef MCU_SYS
@@ -891,9 +891,12 @@ static ctrl_cmd_t * get_response(int *read_len, int timeout_sec)
 		timeout_sec = DEFAULT_CTRL_RESP_TIMEOUT;
 
 	/* 3. Wait for response */
+	
 	ret = hosted_get_semaphore(read_sem, timeout_sec);
 	if (ret) {
-		if (errno == ETIMEDOUT)
+		///@bug erron need fix
+		//if (errno == ETIMEDOUT)
+		if (errno == 110) 
 			printf("Control response timed out after %u sec\n", timeout_sec);
 		else
 			printf("ctrl lib error[%u] in sem of timeout[%u]\n", errno, timeout_sec);

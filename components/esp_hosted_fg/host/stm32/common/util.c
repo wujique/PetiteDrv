@@ -26,6 +26,8 @@
 /** Function declaration **/
 
 /** Exported Functions **/
+extern int isascii(int c);
+
 /*
  * Check whether "cp" is a valid ascii representation
  * of an Internet address and convert to a binary address.

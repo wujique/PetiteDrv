@@ -132,6 +132,7 @@
 #define USB_TASK_STK_SIZE (1024)
 #define USB_TASK_PRIO	2
 
+/* 底层驱动轮询任务，高优先级*/
 #define START_TASK_STK_SIZE (2048)
 #define START_TASK_PRIO	3
 
@@ -239,6 +240,22 @@ EXTI15_10_IRQn 1 1
 #define NVIC_SUB_PRI_EXTI15_10_IRQn	1
 
 #define HAL_Delay Delay
+
+
+/* Private defines -----------------------------------------------------------*/
+//#define USR_SPI_CS_Pin 				MCU_IO_12
+//#define USR_SPI_CS_GPIO_Port 		MCU_PORT_B
+/// ready and handshake  rising triger
+#define GPIO_DATA_READY_Pin 		MCU_IO_12
+#define GPIO_DATA_READY_GPIO_Port 	MCU_PORT_D
+//#define GPIO_DATA_READY_EXTI_IRQn 	EXTI9_5_IRQn
+
+#define GPIO_HANDSHAKE_Pin 			MCU_IO_13
+#define GPIO_HANDSHAKE_GPIO_Port 	MCU_PORT_D
+//#define GPIO_HANDSHAKE_EXTI_IRQn 	EXTI9_5_IRQn
+
+#define GPIO_RESET_Pin 				MCU_IO_9
+#define GPIO_RESET_GPIO_Port 		MCU_PORT_A
 
 #endif
 

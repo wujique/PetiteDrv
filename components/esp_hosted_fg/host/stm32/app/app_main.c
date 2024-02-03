@@ -15,7 +15,7 @@
 //
 
 /** Includes **/
-#include "usart.h"
+//#include "usart.h"
 #include "transport_drv.h"
 #include "control.h"
 #include "trace.h"
@@ -26,6 +26,7 @@
 /** Constants/Macros **/
 #define ARPING_PATH_TASK_STACK_SIZE     4096
 
+#if 0//已经在log.c中定义
 #ifdef __GNUC__
 /* With GCC, small printf (option LD Linker->Libraries->Small printf
  set to 'Yes') calls __io_putchar() */
@@ -33,6 +34,7 @@
 #else
 #define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
 #endif /* __GNUC__ */
+#endif
 
 /** Exported variables **/
 
@@ -63,28 +65,86 @@ static osThreadId arping_task_id = 0;
   * @param  None
   * @retval None
   */
+#include "mcu.h"
+#include "mcu_io.h"
+#include "board_sysconf.h"
+
+/**
+ * @brief   初始化相关IO口
+ * 
+ * 
+ */
+void esp_host_GPIO_Init(void)
+{
+
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
+
+  /*Configure GPIO pin Output Level */
+	//mcu_io_output_resetbit(USR_SPI_CS_GPIO_Port,	USR_SPI_CS_Pin);
+  /*Configure GPIO pin Output Level */
+	mcu_io_output_setbit(GPIO_RESET_GPIO_Port,	GPIO_RESET_Pin);
+
+  /*Configure GPIO pin : PtPin */
+	//mcu_io_config_out(USR_SPI_CS_GPIO_Port, 	USR_SPI_CS_Pin);
+  /*Configure GPIO pins : PCPin PCPin */
+  #if 0
+  GPIO_InitStruct.Pin = GPIO_DATA_READY_Pin|GPIO_HANDSHAKE_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+  #else
+  mcu_io_config_in(GPIO_DATA_READY_GPIO_Port, 	GPIO_DATA_READY_Pin);
+  mcu_io_config_in(GPIO_HANDSHAKE_GPIO_Port, 	GPIO_HANDSHAKE_Pin);
+#endif
+  /*Configure GPIO pin : PtPin */
+  mcu_io_config_out(GPIO_RESET_GPIO_Port, 	GPIO_RESET_Pin);
+
+  /* EXTI interrupt init*/
+	#if 1
+
+	EXTI_InitTypeDef EXTI_InitStructure;
+  NVIC_InitTypeDef NVIC_InitStructure;
+    /* Enable the INT () Clock */
+  RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
+
+  /* Connect EXTI Line to INT Pin */
+  SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOD, EXTI_PinSource12 | EXTI_PinSource13);
+
+  /* Configure EXTI line */
+  EXTI_InitStructure.EXTI_Line = EXTI_Line12 | EXTI_Line13;
+  EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
+  EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising;
+  EXTI_InitStructure.EXTI_LineCmd = ENABLE;
+  EXTI_Init(&EXTI_InitStructure);
+
+  /* Enable and set the EXTI interrupt to priority 1*/
+  NVIC_InitStructure.NVIC_IRQChannel = EXTI15_10_IRQn;
+  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 15;
+  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+  NVIC_Init(&NVIC_InitStructure);
+
+
+  #else
+  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 15, 0);
+  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
+  #endif
+
+}
+
 static void reset_slave(void)
 {
-	GPIO_InitTypeDef GPIO_InitStruct;
+	mcu_io_config_out(GPIO_RESET_GPIO_Port, 	GPIO_RESET_Pin);
+	mcu_io_output_resetbit(GPIO_RESET_GPIO_Port,	GPIO_RESET_Pin);
 
-	/* GPIO Ports Clock Enable */
-	__HAL_RCC_GPIOB_CLK_ENABLE();
-
-	/* TODO: make this pin configurable from project config */
-	GPIO_InitStruct.Pin = GPIO_RESET_Pin;
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	HAL_GPIO_Init(GPIO_RESET_GPIO_Port, &GPIO_InitStruct);
-
-	HAL_GPIO_WritePin(GPIO_RESET_GPIO_Port, GPIO_RESET_Pin, GPIO_PIN_RESET);
-	hard_delay(50);
+	osDelay(50);
 
 	/* revert to initial state */
-	GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-	HAL_GPIO_Init(GPIO_RESET_GPIO_Port, &GPIO_InitStruct);
+	mcu_io_config_in(GPIO_RESET_GPIO_Port, 	GPIO_RESET_Pin);
 
 	/* stop spi transactions short time to avoid slave sync issues */
-	hard_delay(50000);
+	osDelay(100);
+
 }
 
 
@@ -153,8 +213,12 @@ static void transport_driver_event_handler(uint8_t event)
   * @param  None
   * @retval None
   */
-void MX_FREERTOS_Init(void)
+void esp_host_task_Init(void)
 {
+	printf("run %s\r\n", __FUNCTION__);
+
+	esp_host_GPIO_Init();
+
 	reset_slave();
 
 	/* Init network interface */
@@ -164,13 +228,23 @@ void MX_FREERTOS_Init(void)
 	transport_init(transport_driver_event_handler);
 #if !TEST_RAW_TP
 	/* This thread's priority shouls be >= transport driver's transaction task priority */
+	#if 0
 	osThreadDef(Arping_Thread, arping_task, osPriorityAboveNormal, 0,
 			ARPING_PATH_TASK_STACK_SIZE);
 	arping_task_id = osThreadCreate(osThread(Arping_Thread), NULL);
+	#else
+	const osThreadAttr_t Arping_Thread_attributes = {
+  		.name = "Arping_Thread",
+  		.stack_size = ARPING_PATH_TASK_STACK_SIZE,
+  		.priority = (osPriority_t) osPriorityAboveNormal,
+	};
+	arping_task_id = osThreadNew(arping_task, NULL, &Arping_Thread_attributes);
+	#endif
 	assert(arping_task_id);
 #endif
 }
 
+#if 0
 /**
   * @brief  Retargets the C library printf function to the USART.
   * @param  None
@@ -185,7 +259,7 @@ PUTCHAR_PROTOTYPE
 
 	return ch;
 }
-
+#endif
 
 /**
   * @brief FreeRTOS hook function for idle task stack

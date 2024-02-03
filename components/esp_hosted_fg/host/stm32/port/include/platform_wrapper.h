@@ -6,8 +6,8 @@
 
 #include <signal.h>
 #include "cmsis_os.h"
-#include <unistd.h>
-#include <sys/types.h>
+//#include <unistd.h>
+//#include <sys/types.h>
 
 #define MCU_SYS                                1
 

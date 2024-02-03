@@ -121,17 +121,17 @@ netdev_handle_t netdev_alloc(uint32_t sizeof_priv, char *name)
 	if (!name)
 		return NULL;
 
-	ndev = (struct netdev *) malloc(sizeof(struct netdev));
+	ndev = (struct netdev *) pmalloc(sizeof(struct netdev));
 
 	if (ndev) {
 		memset(ndev, 0, sizeof(struct netdev));
 		memcpy(ndev->name, name, MAX_IF_NAME_SIZE);
 
-		ndev->priv = malloc(sizeof_priv);
+		ndev->priv = pmalloc(sizeof_priv);
 
 		if (!ndev->priv) {
 			printf("Failed to allocate memory for priv\n");
-			free(ndev);
+			p_m_free(ndev);
 			ndev = NULL;
 			return NULL;
 		}
@@ -154,17 +154,17 @@ void netdev_free(netdev_handle_t dev)
 
 	if (ndev) {
 		if (ndev->priv) {
-			free(ndev->priv);
+			p_m_free(ndev->priv);
 			ndev->priv = NULL;
 		}
 
 		if (ndev->net_handle) {
-			free(ndev->net_handle);
+			p_m_free(ndev->net_handle);
 			ndev->net_handle = NULL;
 		}
 
 
-		free(ndev);
+		p_m_free(ndev);
 		ndev = NULL;
 	}
 }

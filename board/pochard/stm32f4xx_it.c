@@ -213,7 +213,7 @@ void SysTick_Handler(void)
   /* rtos的接口放在这里     */
    osSystickHandler();
 
-  	lv_tick_inc(1);
+  	//lv_tick_inc(1);
 }
 
 /******************************************************************************/
@@ -440,5 +440,30 @@ void DMA2_Stream1_IRQHandler(void)
 		 mcu_dcmi_dma_process();
 	}    											 
 }  
+
+
+/**
+  * @brief  EXTI15_10_IRQHandler
+  *         This function handles External line  interrupt request.
+  * @param  None
+  * @retval None
+  */
+extern void ESP_HOST_GPIO_EXTI_Callback(uint16_t GPIO_Pin);
+
+void EXTI15_10_IRQHandler(void)
+{
+
+  if(EXTI_GetITStatus(EXTI_Line12) != RESET)
+  {
+      ESP_HOST_GPIO_EXTI_Callback(GPIO_DATA_READY_Pin);
+      EXTI_ClearITPendingBit(EXTI_Line12);
+  }
+
+  if(EXTI_GetITStatus(EXTI_Line13) != RESET)
+  {
+      ESP_HOST_GPIO_EXTI_Callback(GPIO_HANDSHAKE_Pin);
+      EXTI_ClearITPendingBit(EXTI_Line13);
+  }
+}
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

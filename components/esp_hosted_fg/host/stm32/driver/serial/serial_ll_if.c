@@ -126,7 +126,7 @@ static int serial_ll_close(serial_ll_handle_t * serial_ll_hdl)
 	}
 
 	if (serial_ll_hdl) {
-		free(serial_ll_hdl);
+		esp_host_free(serial_ll_hdl);
 		serial_ll_hdl = NULL;
 	}
 	return STM_OK;
@@ -263,7 +263,7 @@ stm_ret_t serial_ll_rx_handler(interface_buffer_handle_t * buf_handle)
 	memcpy((r.data + r.len), buf_handle->payload, buf_handle->payload_len);
 	r.len += buf_handle->payload_len;
 
-	serial_buf = (uint8_t *)malloc(r.len);
+	serial_buf = (uint8_t *)esp_host_malloc(r.len);
 	if(!serial_buf) {
 		printf("Malloc failed, drop pkt\n\r");
 		goto serial_buff_cleanup;
@@ -276,7 +276,7 @@ stm_ret_t serial_ll_rx_handler(interface_buffer_handle_t * buf_handle)
 	new_buf_handle.payload_len = r.len;
 	new_buf_handle.payload = serial_buf;
 	new_buf_handle.priv_buffer_handle = serial_buf;
-	new_buf_handle.free_buf_handle = free;
+	new_buf_handle.free_buf_handle = esp_host_free;
 
 	r.len = 0;
 	hosted_free(r.data);
@@ -319,9 +319,9 @@ serial_ll_handle_t * serial_ll_init(void(*serial_rx_callback)(void))
 	/* Check if more serial interfaces be created */
 	if ((conn_num+1) < MAX_SERIAL_INTF) {
 
-		serial_ll_hdl = (serial_ll_handle_t *)malloc(sizeof(serial_ll_handle_t));
+		serial_ll_hdl = (serial_ll_handle_t *)esp_host_malloc(sizeof(serial_ll_handle_t));
 		if (! serial_ll_hdl) {
-			printf("Serial interface - malloc failed\n\r");
+			printf("Serial interface - esp_host_malloc failed\n\r");
 			return NULL;
 		}
 
