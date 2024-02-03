@@ -66,10 +66,28 @@ const DevSpi DevSpi1IO={
 		.misopin = MCU_IO_4,
 	};
 
+const DevSpi DevSpi2IO={
+		.pdev={
+				.name = "SPI2",
+				.type = BUS_SPI_H,
+				.basebus = NULL,
+				.busconf = NULL,
+				.basetype = DEV_NULL,
+		},
+		/*clk*/
+		.clkport = MCU_PORT_B,
+		.clkpin = MCU_IO_13,
+		/*mosi*/
+		.mosiport = MCU_PORT_B,
+		.mosipin = MCU_IO_15,
+		/*miso*/
+		.misoport = MCU_PORT_B,
+		.misopin = MCU_IO_14,
+	};
 /*------------------------ 
 	SPI通道
 -------------------------*/
-/* 	FLASH用  */
+/* 	板上FLASH用  */
 const DevSpiCh DevSpi1CH1={
 		.pdev={
 			.name = "SPI1_CH1",
@@ -84,8 +102,21 @@ const DevSpiCh DevSpi1CH1={
 		.cspin = MCU_IO_1,
 		
 	};		
+/** WIFI 模组 */
+const DevSpiCh DevSpi2CH1={
+		.pdev={
+			.name = "SPI2_CH1",
+			.type = BUS_SPI_CH,
 
-
+			.basebus = "SPI2",
+			.busconf = NULL,
+			.basetype = BUS_SPI_H,
+		},					
+		
+		.csport = MCU_PORT_B,
+		.cspin = MCU_IO_12,
+		
+	};	
 /*-------------------------------------
 	LCD硬件接口总线定义
 	LCD硬件接口包含一个基本通信接口basebus、A0管脚，复位管脚，背光管脚。
@@ -174,10 +205,13 @@ void *PetiteDevTable[]={
 	/*注册I2C总线*/
 	(void *)(&DevVi2c0),
 					
-	/*硬SPI3控制器，核心板和底板的FLASH、外扩接口的SPI口*/
+	/*硬SPI3控制器，板的FLASH、外扩接口的SPI口*/
 	(void *)(&DevSpi1IO),
 		(void *)(&DevSpi1CH1),
 			(void *)(&DevSpiFlashCore),			
+	/*硬SPI2控制器，wifi模组*/
+	(void *)(&DevSpi2IO),
+		(void *)(&DevSpi2CH1),
 
 	(void *)(&DevLcdtTFT),
 

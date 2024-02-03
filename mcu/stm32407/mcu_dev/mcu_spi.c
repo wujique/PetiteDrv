@@ -77,17 +77,9 @@ s32 mcu_hspi_init(const DevSpi *dev)
     GPIO_Init((GPIO_TypeDef *)Stm32PortList[dev->clkport], &GPIO_InitStructure);//---初始化
 
 	GPIO_InitStructure.GPIO_Pin = dev->misopin;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;//---复用功能
-    GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;//---推挽输出
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;//---100MHz
-    GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;//---上拉
     GPIO_Init((GPIO_TypeDef *)Stm32PortList[dev->misoport], &GPIO_InitStructure);//---初始化
 
 	GPIO_InitStructure.GPIO_Pin = dev->mosipin;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;//---复用功能
-    GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;//---推挽输出
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;//---100MHz
-    GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;//---上拉
     GPIO_Init((GPIO_TypeDef *)Stm32PortList[dev->mosiport], &GPIO_InitStructure);//---初始化
 
 
@@ -96,6 +88,8 @@ s32 mcu_hspi_init(const DevSpi *dev)
 		GPIO_AF = GPIO_AF_SPI3;
     } else if(strcmp(dev->pdev.name, "SPI1") == 0) {
 		GPIO_AF = GPIO_AF_SPI1;
+    } else if(strcmp(dev->pdev.name, "SPI2") == 0) {
+		GPIO_AF = GPIO_AF_SPI2;
     }
 	
 	pinsource = math_log2(dev->clkpin);
@@ -110,6 +104,8 @@ s32 mcu_hspi_init(const DevSpi *dev)
 		RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI3, ENABLE);
     } else if(strcmp(dev->pdev.name, "SPI1") == 0) {
         RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1, ENABLE);
+    } else if(strcmp(dev->pdev.name, "SPI2") == 0) {
+        RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI2, ENABLE);
     }
     return 0;
 }
@@ -134,6 +130,8 @@ s32 mcu_hspi_open(DevSpiNode *node, SPI_MODE mode, u16 KHz)
 		SPIC = SPI3;
     } else if (strcmp(node->pnode.pdev->name, "SPI1") == 0) {
 		SPIC = SPI1;
+    } else if (strcmp(node->pnode.pdev->name, "SPI2") == 0) {
+		SPIC = SPI2;
     }
 
 	SPI_I2S_DeInit(SPIC);
@@ -172,6 +170,8 @@ s32 mcu_hspi_close(DevSpiNode *node)
 		SPIC = SPI3;
     } else if (strcmp(node->pnode.pdev->name, "SPI1") == 0) {
 		SPIC = SPI1;
+    } else if (strcmp(node->pnode.pdev->name, "SPI2") == 0) {
+		SPIC = SPI2;
     }
 	
 	SPI_Cmd(SPIC, DISABLE);
@@ -197,19 +197,21 @@ s32 mcu_hspi_transfer(DevSpiNode *node, u8 *snd, u8 *rsv, s32 len)
 	if (node == NULL) return -1;
 	
     if ( ((snd == NULL) && (rsv == NULL)) || (len < 0) ) {
-        return -1;
+        return -2;
     }
 	
     if (strcmp(node->pnode.pdev->name, "SPI3") == 0) {
 		SPIC = SPI3;
     } else if (strcmp(node->pnode.pdev->name, "SPI1") == 0) {
 		SPIC = SPI1;
+    } else if (strcmp(node->pnode.pdev->name, "SPI2") == 0) {
+		SPIC = SPI2;
     }
     /* 忙等待 */
     time_out = 0;
     while (SPI_I2S_GetFlagStatus(SPIC, SPI_I2S_FLAG_BSY) == SET) {
         if (time_out++ > MCU_SPI_WAIT_TIMEOUT) {
-            return(-1);
+            return(-3);
         }
     }
 
@@ -217,8 +219,8 @@ s32 mcu_hspi_transfer(DevSpiNode *node, u8 *snd, u8 *rsv, s32 len)
     time_out = 0;
     while (SPI_I2S_GetFlagStatus(SPIC, SPI_I2S_FLAG_RXNE) == SET) {
         SPI_I2S_ReceiveData(SPIC);
-        if(time_out++ > 2) {
-            return(-1);
+        if(time_out++ > MCU_SPI_WAIT_TIMEOUT) {
+            return(-4);
         }
     }
 
@@ -239,7 +241,7 @@ s32 mcu_hspi_transfer(DevSpiNode *node, u8 *snd, u8 *rsv, s32 len)
         while (SPI_I2S_GetFlagStatus(SPIC, SPI_I2S_FLAG_RXNE) == RESET) {
             time_out++;
             if (time_out > MCU_SPI_WAIT_TIMEOUT) {
-                return -1;
+                return -5;
             }    
         }
         // 读数据
