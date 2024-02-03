@@ -1,0 +1,20 @@
+{
+    "files.associations": {
+        //"os_task.h": "c",
+    },
+
+    "search.exclude": {
+        "**/*.o"           :true,
+        "**/*.d"         :true,
+        "**/*.crf"         :true,
+        "**/*.htm"         :true,
+        "**/*.dep"         :true,
+    },
+
+    "files.exclude": {
+        "**/*.o"           :true,
+        "**/*.d"         :true,
+        "**/*.crf"         :true,
+        "**/*.htm"         :true,
+    }
+}
