@@ -733,17 +733,17 @@ __asm uint32_t vPortGetIPSR( void )
 	uint8_t ucCurrentPriority;
 
 		/* Obtain the number of the currently executing interrupt. */
-		//²Î¿¼ÄÚºËÖ¸ÄÏ£¬Õâ¸öÃüÁîÊÇ»ñÈ¡µ±Ç°µÄÖĞ¶ÏºÅ
+		//å‚è€ƒå†…æ ¸æŒ‡å—ï¼Œè¿™ä¸ªå‘½ä»¤æ˜¯è·å–å½“å‰çš„ä¸­æ–­å·
 		ulCurrentInterrupt = vPortGetIPSR();
 
 		/* Is the interrupt number a user defined interrupt? */
-		/*portFIRST_USER_INTERRUPT_NUMBER ÊÇÒ»¸öºÍĞ¾Æ¬Ïà¹ØµÄÓÃ»§ÖĞ¶ÏºÅ
-    		ÔÚM3¡¢M4µÄĞ¾Æ¬ÉÏ¾ÍÊÇ15ÒÔºóÊÇÍâ²¿ÖĞ¶ÏµÄÖĞ¶ÏºÅËùÒÔÕâÀïÅäÖÃ³É16
-    		ÅĞ¶ÏÊÇ²»ÊÇÔÚÍâ²¿ÖĞ¶ÏÖĞµ÷ÓÃµÄAPIº¯Êı£¬Èç¹ûÊÇÖ´ĞĞifÀïµÄÄÚÈİ*/
+		/*portFIRST_USER_INTERRUPT_NUMBER æ˜¯ä¸€ä¸ªå’ŒèŠ¯ç‰‡ç›¸å…³çš„ç”¨æˆ·ä¸­æ–­å·
+    		åœ¨M3ã€M4çš„èŠ¯ç‰‡ä¸Šå°±æ˜¯15ä»¥åæ˜¯å¤–éƒ¨ä¸­æ–­çš„ä¸­æ–­å·æ‰€ä»¥è¿™é‡Œé…ç½®æˆ16
+    		åˆ¤æ–­æ˜¯ä¸æ˜¯åœ¨å¤–éƒ¨ä¸­æ–­ä¸­è°ƒç”¨çš„APIå‡½æ•°ï¼Œå¦‚æœæ˜¯æ‰§è¡Œifé‡Œçš„å†…å®¹*/
 		if( ulCurrentInterrupt >= portFIRST_USER_INTERRUPT_NUMBER )
 		{
 			/* Look up the interrupt's priority. */
-			/*¸ù¾İÖĞ¶Ï·şÎñº¯ÊıµÄÖĞ¶ÏºÅ»ñÈ¡µ±Ç°ÖĞ¶ÏµÄÓÅÏÈ¼¶ÉèÖÃ*/
+			/*æ ¹æ®ä¸­æ–­æœåŠ¡å‡½æ•°çš„ä¸­æ–­å·è·å–å½“å‰ä¸­æ–­çš„ä¼˜å…ˆçº§è®¾ç½®*/
 			ucCurrentPriority = pcInterruptPriorityRegisters[ ulCurrentInterrupt ];
 			
 			/* The following assertion will fail if a service routine (ISR) for
@@ -769,9 +769,9 @@ __asm uint32_t vPortGetIPSR( void )
 			The following links provide detailed information:
 			http://www.freertos.org/RTOS-Cortex-M3-M4.html
 			http://www.freertos.org/FAQHelp.html */
-			/*Èç¹ûµ±Ç°Ö´ĞĞµÄÖĞ¶ÏÓÅÏÈ¼¶Êı×ÖĞ¡ÓÚÅäÖÃucMaxSysCallPriorityÕâ¸öÖµÊµ¼ÊÉÏÊÇ
-        		configMAX_SYSCALL_INTERRUPT_PRIORITY£¬Ò²¾ÍÊÇµ±Ç°ÖĞ¶ÏÓÅÏÈ¼¶¸ßÓÚÅäÖÃ×î¸ßÓÅÏÈ¼¶
-        		¶ÏÑÔ½«»áÊ§°Ü£¬³ÌĞò½«Í£Ö¹ÔÚÕâÀï*/
+			/*å¦‚æœå½“å‰æ‰§è¡Œçš„ä¸­æ–­ä¼˜å…ˆçº§æ•°å­—å°äºé…ç½®ucMaxSysCallPriorityè¿™ä¸ªå€¼å®é™…ä¸Šæ˜¯
+        		configMAX_SYSCALL_INTERRUPT_PRIORITYï¼Œä¹Ÿå°±æ˜¯å½“å‰ä¸­æ–­ä¼˜å…ˆçº§é«˜äºé…ç½®æœ€é«˜ä¼˜å…ˆçº§
+        		æ–­è¨€å°†ä¼šå¤±è´¥ï¼Œç¨‹åºå°†åœæ­¢åœ¨è¿™é‡Œ*/
 			configASSERT( ucCurrentPriority >= ucMaxSysCallPriority );
 		}
 
@@ -788,7 +788,7 @@ __asm uint32_t vPortGetIPSR( void )
 		scheduler.  Note however that some vendor specific peripheral libraries
 		assume a non-zero priority group setting, in which cases using a value
 		of zero will result in unpredictable behaviour. */
-		/*µ±Ç°ÖĞ¶ÏÓÅÏÈ¼¶·Ö×é×é´óÓÚÅäÖÃ·Ö×é£¨Ò²¾ÍÊÇ±íÊ¾ÇÀÕ¼ÓÅÏÈ¼¶µÄÎ»ÊıÉÙÓÚÅäÖÃ£©Ôò¶ÏÑÔÊ§°Ü£¬³ÌĞòÍ£Ö¹*/
+		/*å½“å‰ä¸­æ–­ä¼˜å…ˆçº§åˆ†ç»„ç»„å¤§äºé…ç½®åˆ†ç»„ï¼ˆä¹Ÿå°±æ˜¯è¡¨ç¤ºæŠ¢å ä¼˜å…ˆçº§çš„ä½æ•°å°‘äºé…ç½®ï¼‰åˆ™æ–­è¨€å¤±è´¥ï¼Œç¨‹åºåœæ­¢*/
 		configASSERT( ( portAIRCR_REG & portPRIORITY_GROUP_MASK ) <= ulMaxPRIGROUPValue );
 	}
 

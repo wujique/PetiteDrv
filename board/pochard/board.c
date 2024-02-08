@@ -88,9 +88,17 @@ void board_app_task(void)
 	lv_demo_widgets();
 	#endif
 	
+	int cnt = 0;
+
 	while(1){
+		
 		osDelay(2);
 		
+		cnt++;
+		if (cnt >= 1000) {
+			cnt = 0;
+			printf("board_app_task\r\n");
+		}
 		/* lvgl */
 		//lv_task_handler();
 

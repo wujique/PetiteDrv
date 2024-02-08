@@ -55,7 +55,7 @@
         msg->free_buffer_handle = NULL;                   \
       }                                                   \
     }                                                     \
-    free(msg);                                            \
+    pfree(msg);                                            \
     msg = NULL;                                           \
   }                                                       \
 } while(0);
@@ -690,7 +690,7 @@ int test_reset_vendor_specific_ie(void)
 	ctrl_cmd_t *resp = NULL;
 	char *data = "Example vendor IE data";
 
-	char *v_data = (char*)calloc(1, strlen(data));
+	char *v_data = (char*)pcalloc(1, strlen(data));
 	if (!v_data) {
 		printf("Failed to allocate memory \n");
 		return FAILURE;
@@ -724,7 +724,7 @@ int test_set_vendor_specific_ie(void)
 	ctrl_cmd_t *resp = NULL;
 	char *data = "Example vendor IE data";
 
-	char *v_data = (char*)calloc(1, strlen(data));
+	char *v_data = (char*)pcalloc(1, strlen(data));
 	if (!v_data) {
 		printf("Failed to allocate memory \n");
 		return FAILURE;

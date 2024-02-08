@@ -29,6 +29,10 @@
 
 LOG_L LogLevel = LOG_DEBUG;//系统调试信息等级
 
+//osMutexId_t LogMutex = NULL;
+
+volatile static int LogInit = -1;
+
 
 /*
 使用串口输出调试信息
@@ -59,6 +63,7 @@ PUTCHAR_PROTOTYPE
     /* Loop until the end of transmission */
     while (USART_GetFlagStatus(USART1, USART_FLAG_TC) == RESET);
 	#else
+    if (LogInit == -1) return ch;
 	/* 用hal库实现putc，效率很低*/
 	char tmp[2];
 	tmp[0] = ch;
@@ -87,6 +92,8 @@ void uart_printf(s8 *fmt,...)
 
     s8 *pt;
     
+    if (LogInit == -1) return;
+
     va_start(ap,fmt);
     vsprintf((char *)string,(const char *)fmt,ap);
     pt = &string[0];
@@ -115,6 +122,7 @@ const char *log_color_tab[]={
 void wjq_log(LOG_L l, s8 *fmt,...)
 {
 	if(l > LogLevel) return;
+    if (LogInit == -1) return;
 
 	s32 length = 0;
     va_list ap;
@@ -144,6 +152,7 @@ void petite_log(LOG_L l, char *tag, const char *file, const char *fun, int line,
     uint32_t systime;
 
 	if(l > LogLevel) return;
+    if (LogInit == -1) return;
 
 	mcu_uart_write(PC_PORT, (u8*)log_color_tab[l], 10);
 
@@ -209,6 +218,8 @@ void dump_hex(const uint8_t *buf, uint32_t size, uint32_t number)
 {
     int i, j;
 
+    if (LogInit == -1) return;
+
     ///@todo 一个字符调一次printf太慢了，有空要优化，组织一行字符在printf
     for (i = 0; i < size; i += number) {
         uart_printf("%08X: ", i);
@@ -241,7 +252,9 @@ void cmd_uart_printf(s8 *fmt,...)
     va_list ap;
 
     s8 *pt;
- 
+
+    if (LogInit == -1) return;
+
     va_start(ap,fmt);
     vsprintf((char *)string,(const char *)fmt,ap);
     pt = &string[0];
@@ -267,6 +280,7 @@ BusUartNode *LogUartNode;
 
 void log_init(void)
 {
-	//LogUartNode = bus_uart_open(PC_PORT, &PcPortPra);
+    //LogMutex = osMutexNew(NULL);
+    LogInit = 0;
 }
 

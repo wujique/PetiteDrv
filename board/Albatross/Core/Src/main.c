@@ -141,7 +141,7 @@ int main(void)
 	mcu_io_init();
 	mcu_uart_init();
 	mcu_uart_open(MCU_UART_4);
-
+  log_init();
   	wjq_log(LOG_INFO, "****************************************\r\n");
 	wjq_log(LOG_INFO, "        Board Albatross stm32h750vb\r\n");
 	wjq_log(LOG_INFO, "****************************************\r\n\r\n");

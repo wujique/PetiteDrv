@@ -6,6 +6,7 @@
 
 #include <signal.h>
 #include "cmsis_os.h"
+#include "mem/p_malloc.h"
 //#include <unistd.h>
 //#include <sys/types.h>
 

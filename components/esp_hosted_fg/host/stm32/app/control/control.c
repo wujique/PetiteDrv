@@ -157,11 +157,12 @@ void control_path_init(void(*control_path_evt_handler)(uint8_t))
 	/* do not start control path until all tasks are in place */
 	mode = WIFI_MODE_NONE;
 
+	printf("%s %d\r\n", __FUNCTION__,__LINE__);
 	if (init_hosted_control_lib()) {
 		printf("init hosted control lib failed\n\r");
 		return;
 	}
-
+	printf("%s %d\r\n", __FUNCTION__,__LINE__);
 	/* register event handler */
 	control_path_evt_handler_fp = control_path_evt_handler;
 
@@ -171,6 +172,7 @@ void control_path_init(void(*control_path_evt_handler)(uint8_t))
 			CONTROL_PATH_TASK_STACK_SIZE);
 	control_path_task_id = osThreadCreate(osThread(SEM_Thread), NULL);
 	#else
+	printf("creat thread conttrol_path_task!\r\n");
 	const osThreadAttr_t SEM_Thread_attributes = {
   		.name = "SEM_Thread",
   		.stack_size = CONTROL_PATH_TASK_STACK_SIZE,
@@ -520,11 +522,13 @@ static void control_path_task(void const *argument)
 	bool scan_ap_list = false, stop = false;
 
 	app_mode = get_application_mode();
+
 	sleep(1);
 
 	for (;;) {
 
 		if (!stop) {
+			
 			if (get_boolean_param(INPUT_GET_AP_SCAN_LIST) && !scan_ap_list) {
 				ret = get_ap_scan_list();
 				if (ret) {
@@ -616,7 +620,8 @@ static void control_path_task(void const *argument)
 			}
 
 		} else {
-			osDelay(5000);
+			printf("control_path_task stop=true!");
+			osDelay(1000);
 		}
 	}
 }

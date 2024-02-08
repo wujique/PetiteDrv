@@ -1,5 +1,4 @@
 
-
 #include "stdlib.h"
 
 #include "mcu.h"
@@ -9,7 +8,11 @@
 #include "mem/alloc.h"
 #include "mem/tlsf.h"
 
-int wjq_alloc_init(void);
+#include "cmsis_os.h"
+
+osMutexId_t PmallocMutex = NULL;
+
+int palloc_init(void);
 void wjq_free_m(void*ap);
 
 uint8_t WjqAllocGd = 0;
@@ -39,7 +42,11 @@ MallocInterface KRallocInterface={
 //MallocInterface *WJQInterface = &KRallocInterface;
 MallocInterface *WJQInterface = &TlsfInterface;
 
-void *WjqMalloc;
+/*
+	用于支持多个堆。
+	如果要支持多个堆，互斥锁就需要一个堆一个。
+*/
+static void *PmallocNode;
 
 /*
 	二次封装，如果需要做互斥，在_m后缀的函数内实现。
@@ -47,19 +54,23 @@ void *WjqMalloc;
 void *wjq_malloc_m(unsigned nbytes, const char *f, int l)
 {
 	void*p;
-	//uart_printf("malloc:%d, %s, %d\r\n", nbytes, f, l);
-	//uart_printf("malloc:%d\r\n", nbytes);
+	printf("malloc:%d, %s, %d,", nbytes, f, l);
+
 	if (WjqAllocGd == 0) {
-		wjq_alloc_init();
+		palloc_init();
 		WjqAllocGd = 1;
 	}
-	p = WJQInterface->imalloc(WjqMalloc, nbytes);
-
+	osMutexAcquire(PmallocMutex, osWaitForever);
+	p = WJQInterface->imalloc(PmallocNode, nbytes);
+	osMutexRelease(PmallocMutex);
 	if (p ==NULL) {
 		/*对于嵌入式来说，没有机制整理内存，因此，不允许内存分配失败*/
-		wjq_log(LOG_ERR, "\r\n\r\n----wujique malloc err!!---------\r\n\r\n");
+		printf("\r\n\r\n----petite malloc err!!---------\r\n\r\n");
 		while(1);
 	}
+
+	printf("0X%08X\r\n", p);
+
 	return p;
 }
 
@@ -67,17 +78,23 @@ void *wjq_calloc_m(size_t n, size_t size)
 {
 	void *p;
 
-	//wjq_log(LOG_DEBUG, "wjq_calloc\r\n");
+	printf("calloc:%d,%d,", n, size);
 	if (WjqAllocGd == 0) {
-		wjq_alloc_init();
+		palloc_init();
 		WjqAllocGd = 1;
 	}
-	
-	p = WJQInterface->imalloc(WjqMalloc, n*size);
-
+	osMutexAcquire(PmallocMutex, osWaitForever);
+	p = WJQInterface->imalloc(PmallocNode, n*size);
+	osMutexRelease(PmallocMutex);
 	if(p!=NULL) {
 		memset((char*) p, 0, n*size);
+	} else {
+		/*对于嵌入式来说，没有机制整理内存，因此，不允许内存分配失败*/
+		printf("\r\n\r\n----petite malloc err!!---------\r\n\r\n");
+		while(1);
 	}
+
+	printf("0X%08X\r\n", p);
 	return p;
 }
 
@@ -86,11 +103,21 @@ void *wjq_realloc_m(void *ap, unsigned int newsize)
 	void *p;
 	
 	if (WjqAllocGd == 0) {
-		wjq_alloc_init();
+		palloc_init();
 		WjqAllocGd = 1;
 	}
-	
-	p = WJQInterface->irealloc(WjqMalloc, ap, newsize);
+	printf("realloc:0x%08x,%d,", ap, newsize);
+	osMutexAcquire(PmallocMutex, osWaitForever);
+	p = WJQInterface->irealloc(PmallocNode, ap, newsize);
+	osMutexRelease(PmallocMutex);
+
+	if (p ==NULL) {
+		/*对于嵌入式来说，没有机制整理内存，因此，不允许内存分配失败*/
+		printf("\r\n\r\n----petite malloc err!!---------\r\n\r\n");
+		while(1);
+	}
+
+	printf("0X%08X\r\n", p);
 	return p;
 }
 
@@ -98,7 +125,10 @@ void wjq_free_m(void*ap)
 {
 	if(ap==NULL) return;
 	
-	WJQInterface->ifree(WjqMalloc, ap);
+	printf("free_m:0x%08x\r\n", ap);
+	osMutexAcquire(PmallocMutex, osWaitForever);
+	WJQInterface->ifree(PmallocNode, ap);
+	osMutexRelease(PmallocMutex);
 	return;
 }
 
@@ -142,7 +172,10 @@ void wjq_malloc_test(void)
 
 #ifdef ALLOC_USE_ARRAY
 	/*不同编译器用的宏不一样，各编译器定义请参考core_m4.h*/
-#ifdef __GNUC__
+#ifdef __CC_ARM//优先配置MDK，因为MDK也可能使用GNU扩展
+	__align(4) //保证内存池四字节对齐
+	char AllocArray[AllocArraySize];
+#elif __GNUC__
 	__attribute((aligned(4))) char AllocArray[AllocArraySize];
 #else
 	__align(4) //保证内存池四字节对齐
@@ -156,9 +189,13 @@ void wjq_malloc_test(void)
 /*
 	初始化内存堆
 	*/
-int wjq_alloc_init(void)
+int palloc_init(void)
 {
-	WjqMalloc = WJQInterface->init_pool((void *)AllocArray, AllocArraySize);	
+	PmallocMutex = osMutexNew(NULL);
+	if (PmallocMutex == NULL) printf("palloc_init mutex err!\r\n");
+	osMutexAcquire(PmallocMutex, osWaitForever);
+	PmallocNode = WJQInterface->init_pool((void *)AllocArray, AllocArraySize);	
+	osMutexRelease(PmallocMutex);
 	return 0;
 }
 

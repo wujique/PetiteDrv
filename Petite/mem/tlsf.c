@@ -265,6 +265,9 @@ enum tlsf_private
 /*
 ** Set assert macro, if it has not been provided by the user.
 */
+#define assert(x) do { if (!(x)) { \
+	printf("tlsf assert: %u\n", __LINE__); while(1);}} while (0);
+
 #if !defined (tlsf_assert)
 #define tlsf_assert assert
 #endif

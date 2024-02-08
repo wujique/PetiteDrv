@@ -317,7 +317,7 @@ void transport_init(void(*transport_evt_handler_fp)(uint8_t))
   * @brief EXTI line detection callback, used as SPI handshake GPIO
   * @param GPIO_Pin: Specifies the pins connected EXTI line
   * @retval None
-  * @note ioÍâ²¿ÖĞ¶ÏÏß£¬ÉÏÉıÑØ´¥·¢
+  * @note ioï¿½â²¿ï¿½Ğ¶ï¿½ï¿½ß£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø´ï¿½ï¿½ï¿½
   */
 void ESP_HOST_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
@@ -608,7 +608,7 @@ static stm_ret_t spi_transaction_v2(uint8_t * txbuff)
 
 	bus_spich_close(node);
 	printf("retval:%d\r\n", retval);
-	dump_hex( rxbuff, 32, 16);
+	//dump_hex( rxbuff, 32, 16);
 	if (retval > 0 ) retval = 0;
 	#endif
 

@@ -40,7 +40,7 @@ extern "C" {
 
 #include "mem/p_malloc.h"
 #define esp_host_malloc                            pmalloc//pvPortMalloc
-#define esp_host_free                              p_f_free//vPortFree
+#define esp_host_free                              pfree//vPortFree
 
 #define htole16(x)                        ((uint16_t)(x))
 #define le16toh(x)                        ((uint16_t)(x))

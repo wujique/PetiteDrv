@@ -50,7 +50,7 @@ int control_path_platform_init(void)
 	osSemaphoreDef(READSEM);
 
 	/* control path semaphore */
-	readSemaphore = osSemaphoreNew(1,0,osSemaphore(READSEM));
+	readSemaphore = osSemaphoreNew(1,1,osSemaphore(READSEM));
 	assert(readSemaphore);
 
 	/* grab the semaphore, so that task will be mandated to wait on semaphore */
@@ -111,8 +111,8 @@ void* hosted_calloc(size_t blk_no, size_t size)
 void hosted_free(void* ptr)
 {
 	if(ptr) {
-		p_f_free(ptr);
-		ptr=NULL;
+		pfree(ptr);
+		//ptr=NULL;
 	}
 }
 
@@ -164,7 +164,7 @@ void *hosted_thread_create(void (*start_routine)(void const *), void *arg)
   		.stack_size = CTRL_PATH_TASK_STACK_SIZE,
   		.priority = (osPriority_t) CTRL_PATH_TASK_PRIO,
 	};
-	*thread_handle = osThreadNew(start_routine, NULL, &Ctrl_port_tsk_attributes);
+	*thread_handle = osThreadNew(start_routine, arg, &Ctrl_port_tsk_attributes);
 	#endif
 
 	if (!(*thread_handle)) {
@@ -212,7 +212,7 @@ void * hosted_create_semaphore(int init_value)
 		return NULL;
 	}
 
-	*sem_id = osSemaphoreNew(1 , 0, osSemaphore(sem_template_ctrl));
+	*sem_id = osSemaphoreNew(1 , 1, osSemaphore(sem_template_ctrl));
 	
 	if (!*sem_id) {
 		printf("sem create failed\n");

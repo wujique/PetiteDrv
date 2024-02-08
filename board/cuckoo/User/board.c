@@ -72,6 +72,7 @@ void board_main(void)
 {
 	bus_uart_init();
 	LogUartNode = bus_uart_open("uart4", &Uart4Pra);
+	log_init();
 	wjq_log(LOG_INFO, "------Cuckoo (stm32h7b0vb) run! 20220809------\r\n");
 
 	/*  尽早初始化 Flash，并使其进入map模式，因为后续有代码是保存在 QSPI Flash上 

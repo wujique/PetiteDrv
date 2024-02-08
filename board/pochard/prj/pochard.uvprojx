@@ -326,7 +326,7 @@
             <uThumb>0</uThumb>
             <uSurpInc>0</uSurpInc>
             <uC99>1</uC99>
-            <uGnu>0</uGnu>
+            <uGnu>1</uGnu>
             <useXO>0</useXO>
             <v6Lang>1</v6Lang>
             <v6LangP>1</v6LangP>
@@ -339,7 +339,7 @@
               <MiscControls>--locale=english</MiscControls>
               <Define>NDEBUG</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\app;..\usb\inc;..\eth\inc;..\..\..\driver;..\..\..\driver\lcd;..\..\..\driver\cdev;..\..\..\mcu\stm32407\mcu_dev;..\..\..\mcu\stm32407\StLib\STM32F4xx_StdPeriph_Driver\inc;..\..\..\panel;..\..\..\Petite;..\..\..\components\FatFs;..\eth\inc;..\..\..\components\cmd\ubootcmd;..\..\..\components\littlefs-master;..\usb\inc;..\..\..\mcu\stm32407;..\..\..\driver\camera;..\..\..\mcu\stm32407\StLib\CMSIS\Include;..\..\..\driver\touch;..\..\..\components\FreeRTOS\Source\include;..\freertos_port;..\..\..\components\FreeRTOS\Source\CMSIS_RTOS_V2;..\..\..\driver\touch\rtp\tslib;..\..\..\driver\touch\rtp\tslib\tests;..\..\..\driver\sound;..\..\..\driver\touch;..\..\..\driver\touch\rtp;..\..\..\Petite\bus;..\..\..\components\emenu;..\..\..\components\CmBacktrace\cm_backtrace;..\..\..\components\FlashDB\inc;..\..\..\components\FlashDB\porting;..\..\..\components\littlefs;..\..\..\components\Petitefont;..\mcu;..\..\..\components\lvgl;..\lvgl_porting;..\..\pochard;..\sdio_mmc</IncludePath>
+              <IncludePath>..\..\..\app;..\usb\inc;..\eth\inc;..\..\..\driver;..\..\..\driver\lcd;..\..\..\driver\cdev;..\..\..\mcu\stm32407\mcu_dev;..\..\..\mcu\stm32407\StLib\STM32F4xx_StdPeriph_Driver\inc;..\..\..\panel;..\..\..\Petite;..\..\..\components\FatFs;..\eth\inc;..\..\..\components\cmd\ubootcmd;..\..\..\components\littlefs-master;..\usb\inc;..\..\..\mcu\stm32407;..\..\..\driver\camera;..\..\..\mcu\stm32407\StLib\CMSIS\Include;..\..\..\driver\touch;..\..\..\components\FreeRTOS\Source\include;..\freertos_port;..\..\..\components\FreeRTOS\Source\CMSIS_RTOS_V2;..\..\..\driver\touch\rtp\tslib;..\..\..\driver\touch\rtp\tslib\tests;..\..\..\driver\sound;..\..\..\driver\touch;..\..\..\driver\touch\rtp;..\..\..\Petite\bus;..\..\..\components\emenu;..\..\..\components\CmBacktrace\cm_backtrace;..\..\..\components\FlashDB\inc;..\..\..\components\FlashDB\porting;..\..\..\components\littlefs;..\..\..\components\Petitefont;..\mcu;..\..\..\components\lvgl;..\lvgl_porting;..\..\pochard;..\sdio_mmc;..\..\..\components\esp_hosted_fg\host\components\include;..\..\..\components\esp_hosted_fg\host\control_lib\include;..\..\..\components\esp_hosted_fg\host\stm32\app\control;..\..\..\components\esp_hosted_fg\host\stm32\app\data;..\..\..\components\esp_hosted_fg\host\stm32\app;..\..\..\components\esp_hosted_fg\host\stm32\common;..\..\..\components\esp_hosted_fg\host\stm32\driver\netif;..\..\..\components\esp_hosted_fg\host\stm32\driver\network;..\..\..\components\esp_hosted_fg\host\stm32\driver\serial;..\..\..\components\esp_hosted_fg\host\stm32\driver\transport\spi;..\..\..\components\esp_hosted_fg\host\stm32\driver\transport;..\..\..\components\esp_hosted_fg\host\stm32\port\include;..\..\..\components\esp_hosted_fg\host\stm32\port;..\..\..\components\esp_hosted_fg\host\virtual_serial_if\include;..\..\..\components\esp_hosted_fg\common\include;..\..\..\components\esp_hosted_fg\common;..\..\..\components\esp_hosted_fg\common\protobuf-c;..\..\..\components\esp_hosted_fg\host\control_lib\src\include</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -932,6 +932,11 @@
               <FileName>petite_dev.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\Petite\petite_dev.c</FilePath>
+            </File>
+            <File>
+              <FileName>clib.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Petite\clib.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1892,6 +1897,111 @@
               <FileName>lv_port_indev.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\lvgl_porting\lv_port_indev.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>esp_host</GroupName>
+          <Files>
+            <File>
+              <FileName>protobuf-c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\esp_hosted_fg\common\protobuf-c\protobuf-c\protobuf-c.c</FilePath>
+            </File>
+            <File>
+              <FileName>esp_hosted_config.pb-c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\esp_hosted_fg\common\esp_hosted_config.pb-c.c</FilePath>
+            </File>
+            <File>
+              <FileName>esp_queue.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\esp_hosted_fg\host\components\src\esp_queue.c</FilePath>
+            </File>
+            <File>
+              <FileName>ctrl_api.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\esp_hosted_fg\host\control_lib\src\ctrl_api.c</FilePath>
+            </File>
+            <File>
+              <FileName>ctrl_core.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\esp_hosted_fg\host\control_lib\src\ctrl_core.c</FilePath>
+            </File>
+            <File>
+              <FileName>app_main.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\esp_hosted_fg\host\stm32\app\app_main.c</FilePath>
+            </File>
+            <File>
+              <FileName>app_main_api.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\esp_hosted_fg\host\stm32\app\app_main_api.c</FilePath>
+            </File>
+            <File>
+              <FileName>common.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\esp_hosted_fg\host\stm32\common\common.c</FilePath>
+            </File>
+            <File>
+              <FileName>stats.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\esp_hosted_fg\host\stm32\common\stats.c</FilePath>
+            </File>
+            <File>
+              <FileName>util.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\esp_hosted_fg\host\stm32\common\util.c</FilePath>
+            </File>
+            <File>
+              <FileName>control.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\esp_hosted_fg\host\stm32\app\control\control.c</FilePath>
+            </File>
+            <File>
+              <FileName>control_utils.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\esp_hosted_fg\host\stm32\app\control\control_utils.c</FilePath>
+            </File>
+            <File>
+              <FileName>arp_server_stub.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\esp_hosted_fg\host\stm32\app\data\arp_server_stub.c</FilePath>
+            </File>
+            <File>
+              <FileName>netdev_api.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\esp_hosted_fg\host\stm32\driver\network\netdev_api.c</FilePath>
+            </File>
+            <File>
+              <FileName>netdev_stub.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\esp_hosted_fg\host\stm32\driver\network\netdev_stub.c</FilePath>
+            </File>
+            <File>
+              <FileName>serial_ll_if.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\esp_hosted_fg\host\stm32\driver\serial\serial_ll_if.c</FilePath>
+            </File>
+            <File>
+              <FileName>spi_drv.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\esp_hosted_fg\host\stm32\driver\transport\spi\spi_drv.c</FilePath>
+            </File>
+            <File>
+              <FileName>transport_drv.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\esp_hosted_fg\host\stm32\driver\transport\transport_drv.c</FilePath>
+            </File>
+            <File>
+              <FileName>platform_wrapper.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\esp_hosted_fg\host\stm32\port\src\platform_wrapper.c</FilePath>
+            </File>
+            <File>
+              <FileName>serial_if.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\esp_hosted_fg\host\virtual_serial_if\src\serial_if.c</FilePath>
             </File>
           </Files>
         </Group>

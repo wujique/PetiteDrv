@@ -82,6 +82,7 @@ static int serial_ll_open(serial_ll_handle_t *serial_ll_hdl)
 		sizeof(interface_buffer_handle_t));
 
 	if (! serial_ll_hdl->queue) {
+		printf("%s %d create queue err!\n\r", __FUNCTION__, __LINE__);
 		serial_ll_close(serial_ll_hdl);
 		return STM_FAIL;
 	}

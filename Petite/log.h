@@ -34,4 +34,6 @@ void dump_hex(const uint8_t *buf, uint32_t size, uint32_t number);
 
 #define Uprintf uart_printf
 
+void log_init(void);
+
 #endif

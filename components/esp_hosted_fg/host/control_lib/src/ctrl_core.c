@@ -804,7 +804,7 @@ static void ctrl_rx_thread(void const *arg)
 	}
 
 	/* 4. Infinite loop to process incoming msg on serial interface */
-	while (1) {
+	for(;;) {
 		uint8_t *buf = NULL;
 		CtrlMsg *resp = NULL;
 

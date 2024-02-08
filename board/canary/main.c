@@ -65,7 +65,7 @@ s32 board_mcu_preinit(void)
 	mcu_io_init();
 	mcu_uart_init();
 	mcu_uart_open(PC_PORT);
-	
+	log_init();
 	wjq_log(LOG_DEBUG, "****************************************\r\n");
 	wjq_log(LOG_DEBUG, "        Board canary stm32f103\r\n");
 	wjq_log(LOG_DEBUG, "****************************************\r\n\r\n");

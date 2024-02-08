@@ -9,10 +9,11 @@
 #include <stdlib.h>
 #include "esp_queue.h"
 
+#include "mem/p_malloc.h"
 /* create new node */
 static q_node_t * new_q_node(void *data)
 {
-	q_node_t* new_node = (q_node_t*)malloc(sizeof(q_node_t));
+	q_node_t* new_node = (q_node_t*)pmalloc(sizeof(q_node_t));
 	if (!new_node)
 		return NULL;
 	new_node->data = data;
@@ -23,7 +24,7 @@ static q_node_t * new_q_node(void *data)
 /* Create app queue */
 esp_queue_t* create_esp_queue(void)
 {
-	esp_queue_t* q = (esp_queue_t*)malloc(sizeof(esp_queue_t));
+	esp_queue_t* q = (esp_queue_t*)pmalloc(sizeof(esp_queue_t));
 	if (!q)
 		return NULL;
 
@@ -77,7 +78,7 @@ void *esp_queue_get(esp_queue_t* q)
 
 	data = temp->data;
 
-	free(temp);
+	pfree(temp);
 	temp = NULL;
 
 	/* If front is NULL, change rear also as NULL */
@@ -99,10 +100,10 @@ void esp_queue_destroy(esp_queue_t** q)
 		temp = (*q)->front;
 		(*q)->front = (*q)->front->next;
 
-		free(temp);
+		pfree(temp);
 		temp = NULL;
 	}
 
-	free(*q);
+	pfree(*q);
 	*q = NULL;
 }
