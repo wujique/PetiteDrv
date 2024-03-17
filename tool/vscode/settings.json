@@ -1,0 +1,117 @@
+{
+    "cmake.configureOnOpen": true,
+    "security.workspace.trust.untrustedFiles": "open",
+
+    "highlightwords.colors": [
+        {"dark":"yellow"},
+
+        {
+            "light": "#b3d9ff",
+            "dark": "cyan"
+        },
+        {
+            "light": "#e6ffb3",
+            "dark": "pink"
+        },
+        {
+            "light": "#b3b3ff",
+            "dark": "lightgreen"
+        },
+        {
+            "light": "#ffd9b3",
+            "dark": "magenta"
+        },
+        {
+            "light": "#ffb3ff",
+            "dark": "cornflowerblue"
+        },
+        {
+            "light": "#b3ffb3",
+            "dark": "orange"
+        },
+        {
+            "light": "#ffff80",
+            "dark": "green"
+        },
+        {
+            "light": "#d1e0e0",
+            "dark": "red"
+        }
+    ],
+    "highlightwords.box": {
+        "light": true,
+        "dark": false
+    },
+    "highlightwords.defaultMode": 1,
+    "security.workspace.trust.untrustedFiles": "open",
+    "cmake.configureOnOpen": true,
+    "EIDE.ARM.GCC.InstallDirectory": "${userRoot}/.eide/tools/gcc_arm",
+    "EIDE.ARM.ARMCC5.InstallDirectory": "C:\\Program Files (x86)\\ARM_Compiler_5.06u7",
+    
+
+  // --------------注释--------------------------------------
+  "doxdocgen.c.triggerSequence": "/**",   // 触发自动注释的前缀
+  "doxdocgen.c.commentPrefix": " * ",     // 注释行的前缀
+  "doxdocgen.c.firstLine": "/**",         // 注释行的首行
+  "doxdocgen.c.lastLine": " */",          // 注释行的尾行
+
+  // file 注释顺序
+  "doxdocgen.file.fileOrder": [
+  
+      "file",
+      "brief",
+      "empty",
+      "author",
+      "version",
+      "date",
+      "copyright",
+      // "custom"    // 自定义选项
+  ],
+  // file自定义选项
+  "doxdocgen.file.customTag": [
+      "自定义选项",
+  ],
+// file注释
+  "doxdocgen.file.copyrightTag": [
+      "@copyright Copyright (c) {year}.."
+  ],
+
+  "doxdocgen.generic.authorEmail":    "email@xxx.com",         // {email}  样式
+  "doxdocgen.generic.authorName":     "pochard",                // {author} 样式
+  "doxdocgen.generic.dateFormat":     "YYYY-MM-DD",               // {date}   样式
+
+  "doxdocgen.generic.dateTemplate":   "@date{indent:9}{date}",    // {date}   模板
+  "doxdocgen.file.fileTemplate":      "@file{indent:9}{name}",    // {name}   模板
+  "doxdocgen.generic.briefTemplate":  "@brief{indent:9}描述",
+  "doxdocgen.file.versionTag":        "@version{indent:9}0.1",
+  "doxdocgen.generic.authorTag":      "@author{indent:9}{author}({email})",
+
+  // generic注释的内容和顺序
+  "doxdocgen.generic.order": [
+      "brief",
+      "empty",
+      "param",
+      "return",
+      "empty",
+      //"author",
+      //"date",
+      // "custom",       // 自定义选项
+  ],
+  // generic自定义选项
+  "doxdocgen.generic.customTags": [
+      "自定义选项",
+  ],
+  "doxdocgen.cpp.tparamTemplate": "@tparam {param} ", // ???
+  "doxdocgen.generic.paramTemplate": "@param{indent:9}{param}{indent:21}参数描述",
+  "doxdocgen.generic.returnTemplate": "@return{indent:9}{type} ",
+
+  "doxdocgen.generic.includeTypeAtReturn": true,      // return 中包含类型信息
+  "doxdocgen.generic.boolReturnsTrueFalse": false,    // bool 返回值拆分成 true 和 false 两种情况
+  "doxdocgen.generic.linesToGet": 4,                  // 回车后最多向下多少行去找函数声明
+  "doxdocgen.generic.useGitUserName": false,          // {author} 是都根据 git config --get user.name 替换
+"doxdocgen.generic.useGitUserEmail": false,
+
+"git.openRepositoryInParentFolders": "never",
+"explorer.confirmDelete": false,
+
+}

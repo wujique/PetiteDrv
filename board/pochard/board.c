@@ -62,7 +62,7 @@ void board_app_task(void)
 	}
 	#endif
 	
-	esp_host_task_Init();
+	//esp_host_task_Init();
 
 	//fun_sound_play("/1:/sound/stereo_16bit_32k.wav", "wm8978");
 
@@ -71,7 +71,6 @@ void board_app_task(void)
 	如果在rtos的任务中进行初始化，注意任务栈的大小，
 	防止溢出造成hardfault */
 	#if 0
-	
     lvgllcd = lcd_open("tftlcd");
 	lcd_setdir(lvgllcd, H_LCD, R2L_U2D);
 	tp_open("board_ctp_g1158");

@@ -339,7 +339,7 @@
               <MiscControls>--locale=english</MiscControls>
               <Define>NDEBUG</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\app;..\..\wujique;..\usb\inc;..\eth\inc;..\..\..\driver;..\..\..\driver\lcd;..\..\..\driver\cdev;..\..\..\mcu\stm32407\mcu_dev;..\..\..\mcu\stm32407\StLib\STM32F4xx_StdPeriph_Driver\inc;..\..\..\panel;..\..\..\Petite;..\..\..\components\FatFs;..\eth\inc;..\..\..\components\cmd\ubootcmd;..\..\..\components\littlefs-master;..\usb\inc;..\..\..\mcu\stm32407;..\..\..\driver\camera;..\..\..\mcu\stm32407\StLib\CMSIS\Include;..\..\..\driver\touch;..\..\..\components\FreeRTOS\Source\include;..\..\..\components\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\..\..\components\FreeRTOS\Source\CMSIS_RTOS_V2;..\..\..\driver\touch\rtp\tslib;..\..\..\driver\touch\rtp\tslib\tests;..\..\..\driver\sound;..\..\..\driver\touch;..\..\..\driver\touch\rtp;..\..\..\Petite\bus;..\..\..\components\emenu;..\..\..\components\CmBacktrace\cm_backtrace;..\..\..\components\FlashDB\inc;..\..\..\components\FlashDB\porting;..\..\..\components\littlefs;..\..\..\components\Petitefont;..\mcu;..\lvgl_porting;..\..\..\components\lvgl;..\sdio_mmc</IncludePath>
+              <IncludePath>..\..\..\app;..\..\wujique;..\usb\inc;..\eth\inc;..\..\..\driver;..\..\..\driver\lcd;..\..\..\driver\sensor;..\..\..\mcu\stm32407\mcu_dev;..\..\..\mcu\stm32407\StLib\STM32F4xx_StdPeriph_Driver\inc;..\..\..\panel;..\..\..\Petite;..\..\..\components\FatFs;..\eth\inc;..\..\..\components\cmd\ubootcmd;..\..\..\components\littlefs-master;..\usb\inc;..\..\..\mcu\stm32407;..\..\..\driver\camera;..\..\..\mcu\stm32407\StLib\CMSIS\Include;..\..\..\driver\touch;..\..\..\components\FreeRTOS\Source\include;..\..\..\components\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\..\..\components\FreeRTOS\Source\CMSIS_RTOS_V2;..\..\..\driver\touch\rtp\tslib;..\..\..\driver\touch\rtp\tslib\tests;..\..\..\driver\codec;..\..\..\driver\touch;..\..\..\driver\touch\rtp;..\..\..\Petite\bus;..\..\..\components\emenu;..\..\..\components\CmBacktrace\cm_backtrace;..\..\..\components\FlashDB\inc;..\..\..\components\FlashDB\porting;..\..\..\components\littlefs;..\..\..\components\Petitefont;..\mcu;..\lvgl_porting;..\..\..\components\lvgl;..\sdio_mmc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -791,17 +791,17 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>driver/cdev</GroupName>
+          <GroupName>driver/sensor</GroupName>
           <Files>
             <File>
               <FileName>drv_htu21d.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\driver\cdev\drv_htu21d.c</FilePath>
+              <FilePath>..\..\..\driver\sensor\drv_htu21d.c</FilePath>
             </File>
             <File>
               <FileName>drv_ptHCHO.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\driver\cdev\drv_ptHCHO.c</FilePath>
+              <FilePath>..\..\..\driver\sensor\drv_ptHCHO.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -831,32 +831,32 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>drv/sound</GroupName>
+          <GroupName>drv/codec</GroupName>
           <Files>
+            <File>
+              <FileName>audio_pipeline.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\driver\codec\audio_pipeline.c</FilePath>
+            </File>
             <File>
               <FileName>dacsound.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\driver\sound\dacsound.c</FilePath>
+              <FilePath>..\..\..\driver\codec\dacsound.c</FilePath>
             </File>
             <File>
               <FileName>ES8388.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\driver\sound\ES8388.c</FilePath>
-            </File>
-            <File>
-              <FileName>wm8978.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\driver\sound\wm8978.c</FilePath>
-            </File>
-            <File>
-              <FileName>audio_pipeline.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\driver\sound\audio_pipeline.c</FilePath>
+              <FilePath>..\..\..\driver\codec\ES8388.c</FilePath>
             </File>
             <File>
               <FileName>wm8960.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\driver\sound\wm8960.c</FilePath>
+              <FilePath>..\..\..\driver\codec\wm8960.c</FilePath>
+            </File>
+            <File>
+              <FileName>wm8978.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\driver\codec\wm8978.c</FilePath>
             </File>
           </Files>
         </Group>

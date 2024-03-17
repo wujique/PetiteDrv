@@ -1183,7 +1183,7 @@
   </Group>
 
   <Group>
-    <GroupName>driver/cdev</GroupName>
+    <GroupName>driver/sensor</GroupName>
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
@@ -1195,7 +1195,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\driver\cdev\drv_htu21d.c</PathWithFileName>
+      <PathWithFileName>..\..\..\driver\sensor\drv_htu21d.c</PathWithFileName>
       <FilenameWithoutPath>drv_htu21d.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -1207,7 +1207,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\driver\cdev\drv_ptHCHO.c</PathWithFileName>
+      <PathWithFileName>..\..\..\driver\sensor\drv_ptHCHO.c</PathWithFileName>
       <FilenameWithoutPath>drv_ptHCHO.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -1271,8 +1271,8 @@
   </Group>
 
   <Group>
-    <GroupName>drv/sound</GroupName>
-    <tvExp>0</tvExp>
+    <GroupName>drv/codec</GroupName>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -1283,8 +1283,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\driver\sound\dacsound.c</PathWithFileName>
-      <FilenameWithoutPath>dacsound.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\driver\codec\audio_pipeline.c</PathWithFileName>
+      <FilenameWithoutPath>audio_pipeline.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1295,8 +1295,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\driver\sound\ES8388.c</PathWithFileName>
-      <FilenameWithoutPath>ES8388.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\driver\codec\dacsound.c</PathWithFileName>
+      <FilenameWithoutPath>dacsound.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1307,8 +1307,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\driver\sound\wm8978.c</PathWithFileName>
-      <FilenameWithoutPath>wm8978.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\driver\codec\ES8388.c</PathWithFileName>
+      <FilenameWithoutPath>ES8388.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1319,8 +1319,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\driver\sound\audio_pipeline.c</PathWithFileName>
-      <FilenameWithoutPath>audio_pipeline.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\driver\codec\wm8960.c</PathWithFileName>
+      <FilenameWithoutPath>wm8960.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1331,8 +1331,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\driver\sound\wm8960.c</PathWithFileName>
-      <FilenameWithoutPath>wm8960.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\driver\codec\wm8978.c</PathWithFileName>
+      <FilenameWithoutPath>wm8978.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1948,7 +1948,7 @@
 
   <Group>
     <GroupName>board</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>

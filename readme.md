@@ -38,5 +38,10 @@ PetiteDrv尝试做一些编译，例如 基于gn + ninja+ gcc 编译STM32。
 Website:
 <www.wujique.com>
 
+## TODO
+soft timer
+AT框架----SPI&UART----WIFI管理
+LUA与设备驱动对接
+
 
 
