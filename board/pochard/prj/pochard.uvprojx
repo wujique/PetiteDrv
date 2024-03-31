@@ -339,7 +339,7 @@
               <MiscControls>--locale=english</MiscControls>
               <Define>NDEBUG</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\app;..\usb\inc;..\eth\inc;..\..\..\driver;..\..\..\driver\lcd;..\..\..\driver\sensor;..\..\..\mcu\stm32407\mcu_dev;..\..\..\mcu\stm32407\StLib\STM32F4xx_StdPeriph_Driver\inc;..\..\..\panel;..\..\..\Petite;..\..\..\components\FatFs;..\eth\inc;..\..\..\components\cmd\ubootcmd;..\..\..\components\littlefs-master;..\usb\inc;..\..\..\mcu\stm32407;..\..\..\driver\camera;..\..\..\mcu\stm32407\StLib\CMSIS\Include;..\..\..\driver\touch;..\..\..\components\FreeRTOS\Source\include;..\freertos_port;..\..\..\components\FreeRTOS\Source\CMSIS_RTOS_V2;..\..\..\driver\touch\rtp\tslib;..\..\..\driver\touch\rtp\tslib\tests;..\..\..\driver\codec;..\..\..\driver\touch;..\..\..\driver\touch\rtp;..\..\..\Petite\bus;..\..\..\components\emenu;..\..\..\components\CmBacktrace\cm_backtrace;..\..\..\components\FlashDB\inc;..\..\..\components\FlashDB\porting;..\..\..\components\littlefs;..\..\..\components\Petitefont;..\mcu;..\..\..\components\lvgl;..\lvgl_porting;..\..\pochard;..\sdio_mmc;..\..\..\components\esp_hosted_fg\host\components\include;..\..\..\components\esp_hosted_fg\host\control_lib\include;..\..\..\components\esp_hosted_fg\host\stm32\app\control;..\..\..\components\esp_hosted_fg\host\stm32\app\data;..\..\..\components\esp_hosted_fg\host\stm32\app;..\..\..\components\esp_hosted_fg\host\stm32\common;..\..\..\components\esp_hosted_fg\host\stm32\driver\netif;..\..\..\components\esp_hosted_fg\host\stm32\driver\network;..\..\..\components\esp_hosted_fg\host\stm32\driver\serial;..\..\..\components\esp_hosted_fg\host\stm32\driver\transport\spi;..\..\..\components\esp_hosted_fg\host\stm32\driver\transport;..\..\..\components\esp_hosted_fg\host\stm32\port\include;..\..\..\components\esp_hosted_fg\host\stm32\port;..\..\..\components\esp_hosted_fg\host\virtual_serial_if\include;..\..\..\components\esp_hosted_fg\common\include;..\..\..\components\esp_hosted_fg\common;..\..\..\components\esp_hosted_fg\common\protobuf-c;..\..\..\components\esp_hosted_fg\host\control_lib\src\include</IncludePath>
+              <IncludePath>..\..\..\app;..\usb\inc;..\eth\inc;..\..\..\driver;..\..\..\driver\lcd;..\..\..\driver\sensor;..\..\..\mcu\stm32407\mcu_dev;..\..\..\mcu\stm32407\StLib\STM32F4xx_StdPeriph_Driver\inc;..\..\..\panel;..\..\..\Petite;..\..\..\components\FatFs;..\eth\inc;..\..\..\components\cmd\ubootcmd;..\..\..\components\littlefs-master;..\usb\inc;..\..\..\mcu\stm32407;..\..\..\driver\camera;..\..\..\mcu\stm32407\StLib\CMSIS\Include;..\..\..\driver\touch;..\..\..\components\FreeRTOS\Source\include;..\freertos_port;..\..\..\components\FreeRTOS\Source\CMSIS_RTOS_V2;..\..\..\driver\touch\rtp\tslib;..\..\..\driver\touch\rtp\tslib\tests;..\..\..\driver\codec;..\..\..\driver\touch;..\..\..\driver\touch\rtp;..\..\..\Petite\bus;..\..\..\components\emenu;..\..\..\components\CmBacktrace\cm_backtrace;..\..\..\components\FlashDB\inc;..\..\..\components\FlashDB\porting;..\..\..\components\littlefs;..\..\..\components\Petitefont;..\mcu;..\..\..\components\lvgl;..\lvgl_porting;..\..\pochard;..\sdio_mmc;..\..\..\components\esp_hosted_fg\host\components\include;..\..\..\components\esp_hosted_fg\host\control_lib\include;..\..\..\components\esp_hosted_fg\host\stm32\app\control;..\..\..\components\esp_hosted_fg\host\stm32\app\data;..\..\..\components\esp_hosted_fg\host\stm32\app;..\..\..\components\esp_hosted_fg\host\stm32\common;..\..\..\components\esp_hosted_fg\host\stm32\driver\netif;..\..\..\components\esp_hosted_fg\host\stm32\driver\network;..\..\..\components\esp_hosted_fg\host\stm32\driver\serial;..\..\..\components\esp_hosted_fg\host\stm32\driver\transport\spi;..\..\..\components\esp_hosted_fg\host\stm32\driver\transport;..\..\..\components\esp_hosted_fg\host\stm32\port\include;..\..\..\components\esp_hosted_fg\host\stm32\port;..\..\..\components\esp_hosted_fg\host\virtual_serial_if\include;..\..\..\components\esp_hosted_fg\common\include;..\..\..\components\esp_hosted_fg\common;..\..\..\components\esp_hosted_fg\common\protobuf-c;..\..\..\components\esp_hosted_fg\host\control_lib\src\include;..\..\..\components\RTTViewer\RTT;..\..\..\components\RTTViewer\Config</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -2002,6 +2002,21 @@
               <FileName>serial_if.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\components\esp_hosted_fg\host\virtual_serial_if\src\serial_if.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>rtt</GroupName>
+          <Files>
+            <File>
+              <FileName>SEGGER_RTT.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\RTTViewer\RTT\SEGGER_RTT.c</FilePath>
+            </File>
+            <File>
+              <FileName>SEGGER_RTT_printf.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\RTTViewer\RTT\SEGGER_RTT_printf.c</FilePath>
             </File>
           </Files>
         </Group>

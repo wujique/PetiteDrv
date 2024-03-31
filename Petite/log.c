@@ -26,8 +26,15 @@
 #include "board_sysconf.h"
 #include "bus/bus_uart.h"
 #include "log.h"
+#include "SEGGER_RTT.h"
 
 LOG_L LogLevel = LOG_DEBUG;//系统调试信息等级
+
+#define LOG_SEGGER_RTT 1
+#define BUFFER_INDEX 0
+
+#define LOG_WRITE_DATA(data, len)  mcu_uart_write(PC_PORT, data, len);
+//#define LOG_WRITE_DATA(data, len)  SEGGER_RTT_Write(BUFFER_INDEX,  data, len);
 
 //osMutexId_t LogMutex = NULL;
 
@@ -67,7 +74,8 @@ PUTCHAR_PROTOTYPE
 	/* 用hal库实现putc，效率很低*/
 	char tmp[2];
 	tmp[0] = ch;
-	mcu_uart_write(PC_PORT, (u8*)&tmp[0], 1);
+
+	LOG_WRITE_DATA(tmp, 1);
 	#endif
 	
     return ch;
@@ -76,7 +84,7 @@ PUTCHAR_PROTOTYPE
 #endif 
 
 
-extern int vsprintf(char * s, const char * format, __va_list arg);
+//extern int vsprintf(char * s, const char * format, __va_list arg);
 /**
  *@brief:      uart_printf
  *@details:    从串口格式化输出调试信息
@@ -87,23 +95,20 @@ extern int vsprintf(char * s, const char * format, __va_list arg);
  */
 void uart_printf(s8 *fmt,...)
 {
-    s32 length = 0;
+   
     va_list ap;
 
-    s8 *pt;
-    
     if (LogInit == -1) return;
 
     va_start(ap,fmt);
-    vsprintf((char *)string,(const char *)fmt,ap);
-    pt = &string[0];
-    while(*pt!='\0') {
-        length++;
-        pt++;
-    }
-    
-    mcu_uart_write(PC_PORT, (u8*)&string[0], length);  //写串口
-    
+    vsnprintf((char *)string, sizeof(string) -1, (const char *)fmt, ap);
+
+    s32 length = 0;
+    string[sizeof(string) -1] = 0;
+    length = strlen(string);
+
+    LOG_WRITE_DATA(string, length); 
+
     va_end(ap);
 }
 /*
@@ -124,24 +129,18 @@ void wjq_log(LOG_L l, s8 *fmt,...)
 	if(l > LogLevel) return;
     if (LogInit == -1) return;
 
-	s32 length = 0;
     va_list ap;
 
-    s8 *pt;
-
-	
     va_start(ap,fmt);
-    vsprintf((char *)&string[0],(const char *)fmt,ap);
-	
-    pt = &string[0];
-    while(*pt!='\0') {
-        length++;
-        pt++;
-    }
+    memcpy(string, (u8*)log_color_tab[l], 10);
+    vsnprintf((char *)&string[10], sizeof(string) -1, (const char *)fmt, ap);
+ 
+    s32 length = 0;
+    string[sizeof(string) -1] = 0;
+    length = strlen(string);
 
-	mcu_uart_write(PC_PORT, (u8*)log_color_tab[l], 10);
-    mcu_uart_write(PC_PORT, (u8*)&string[0], length);  //写串口
-    
+    LOG_WRITE_DATA(string, length); 
+
     va_end(ap);
 }
 
@@ -150,18 +149,16 @@ static char logbuf[128];
 void petite_log(LOG_L l, char *tag, const char *file, const char *fun, int line, s8 *fmt,...)
 {
     uint32_t systime;
+    uint8_t hlen;
 
 	if(l > LogLevel) return;
     if (LogInit == -1) return;
 
-	mcu_uart_write(PC_PORT, (u8*)log_color_tab[l], 10);
-
+    memset(logbuf, 0, sizeof(logbuf));
+    strcpy(logbuf, log_color_tab[l]);
 
     systime = Stime_get_localtime();
-
-    memset(logbuf, 0, sizeof(logbuf));
-
-    sprintf(logbuf, "[%010d]", systime);
+    sprintf(logbuf+strlen(logbuf), "[%010d]", systime);
     if (tag != NULL) {
         strcat(logbuf, "[");
         strcat(logbuf, tag);
@@ -177,31 +174,31 @@ void petite_log(LOG_L l, char *tag, const char *file, const char *fun, int line,
     strcat(logbuf, "[");
 
     if (fun != NULL) {
-        
         strcat(logbuf, fun);
         strcat(logbuf, ":");
     }
 
     sprintf(logbuf+strlen(logbuf), "%d]: ", line);
-    mcu_uart_write(PC_PORT, (u8*)logbuf, strlen(logbuf));
+    strcat(logbuf, log_color_tab[5]);
 
-    mcu_uart_write(PC_PORT, (u8*)log_color_tab[5], 10);
+    strcpy(string, logbuf);
+    hlen = strlen(logbuf);
+
+    va_list ap;
+    va_start(ap,fmt);
+    vsnprintf((char *)&string[hlen], sizeof(string)-hlen, (const char *)fmt, ap);
 
     s32 length = 0;
-    va_list ap;
-    s8 *pt;
-    va_start(ap,fmt);
-    vsprintf((char *)&string[0],(const char *)fmt,ap);
-    pt = &string[0];
-    while(*pt!='\0') {
-        length++;
-        pt++;
-    }
-    mcu_uart_write(PC_PORT, (u8*)&string[0], length);  //写串口
+    string[sizeof(string) -1] = 0;
+    length = strlen(string);
+    
+    LOG_WRITE_DATA(string, length); 
     va_end(ap);
 }
 
 #define __is_print(ch) ((unsigned int)((ch) - ' ') < 127u - ' ')
+
+/**------------------------------------------------------------------------------------------*/
 
 /**
  * dump_hex
@@ -264,15 +261,15 @@ void cmd_uart_printf(s8 *fmt,...)
         pt++;
     }
     
-    mcu_uart_write(PC_PORT, (u8*)&string[0], length);  //写串口
-    
+    LOG_WRITE_DATA( (u8*)&string[0], length);  //写串口
+
     va_end(ap);
 }
 
 #if 0
 const static BusUartPra PcPortPra={
 	.BaudRate = 115200,
-	.bufsize = 256,
+board_mcu_preinit	.bufsize = 256,
 	};
 	
 BusUartNode *LogUartNode;
@@ -281,6 +278,6 @@ BusUartNode *LogUartNode;
 void log_init(void)
 {
     //LogMutex = osMutexNew(NULL);
+    SEGGER_RTT_Init();
     LogInit = 0;
 }
-
