@@ -1,0 +1,1 @@
+https://github.com/eclipse/paho.mqtt.embedded-c
