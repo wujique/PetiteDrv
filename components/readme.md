@@ -8,7 +8,7 @@
 AT
 	AT指令框架，用来和ES8266等模块进行交互。
 cjson
-	json构建于解析
+	json构建于解析 1.7.17
 CmBacktrace
 	hardfault后堆栈信息跟踪，用来调试死机问题。
 CMD
