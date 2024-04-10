@@ -70,7 +70,7 @@ void board_app_task(void)
 	注意，初始化LVGL的过程，会用到不少栈，
 	如果在rtos的任务中进行初始化，注意任务栈的大小，
 	防止溢出造成hardfault */
-	#if 0
+	#if 1
     lvgllcd = lcd_open("tftlcd");
 	lcd_setdir(lvgllcd, H_LCD, R2L_U2D);
 	tp_open("board_ctp_g1158");
@@ -99,7 +99,7 @@ void board_app_task(void)
 			printf("board_app_task\r\n");
 		}
 		/* lvgl */
-		//lv_task_handler();
+		lv_task_handler();
 
 	}
 }
@@ -169,6 +169,17 @@ void board_low_task(uint8_t tick)
 	tp_task_loop(tick);
 
 	fun_sound_task();
+}
+
+/**
+ * @brief   插到系统嘀嗒中执行的功能
+ * @note 	不可以长时间执行
+ * 
+ * 
+ */
+void board_systick_handler(void)
+{
+	lv_tick_inc(1);
 }
 
 

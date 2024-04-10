@@ -15,4 +15,8 @@ Ninja则用于更简单的生成makefile文件。
 4. backtrace、coredump
 5. 如何调用py脚本添加编译功能。
 
+##　参考
+https://blog.csdn.net/define_me_freedom/article/details/104194338
+
+
 

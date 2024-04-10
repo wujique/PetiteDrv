@@ -54,7 +54,7 @@ static void *PmallocNode;
 void *wjq_malloc_m(unsigned nbytes, const char *f, int l)
 {
 	void*p;
-	printf("malloc:%d, %s, %d,", nbytes, f, l);
+	//printf("malloc:%d, %s, %d,", nbytes, f, l);
 
 	if (WjqAllocGd == 0) {
 		palloc_init();
@@ -69,7 +69,7 @@ void *wjq_malloc_m(unsigned nbytes, const char *f, int l)
 		while(1);
 	}
 
-	printf("0X%08X\r\n", p);
+	//printf("0X%08X\r\n", p);
 
 	return p;
 }
@@ -78,7 +78,7 @@ void *wjq_calloc_m(size_t n, size_t size)
 {
 	void *p;
 
-	printf("calloc:%d,%d,", n, size);
+	//printf("calloc:%d,%d,", n, size);
 	if (WjqAllocGd == 0) {
 		palloc_init();
 		WjqAllocGd = 1;
@@ -90,11 +90,11 @@ void *wjq_calloc_m(size_t n, size_t size)
 		memset((char*) p, 0, n*size);
 	} else {
 		/*对于嵌入式来说，没有机制整理内存，因此，不允许内存分配失败*/
-		printf("\r\n\r\n----petite malloc err!!---------\r\n\r\n");
+		printf("\r\n\r\n----petite cmalloc err!!---------\r\n\r\n");
 		while(1);
 	}
 
-	printf("0X%08X\r\n", p);
+	//printf("0X%08X\r\n", p);
 	return p;
 }
 
@@ -106,18 +106,18 @@ void *wjq_realloc_m(void *ap, unsigned int newsize)
 		palloc_init();
 		WjqAllocGd = 1;
 	}
-	printf("realloc:0x%08x,%d,", ap, newsize);
+	//printf("realloc:0x%08x,%d,", ap, newsize);
 	osMutexAcquire(PmallocMutex, osWaitForever);
 	p = WJQInterface->irealloc(PmallocNode, ap, newsize);
 	osMutexRelease(PmallocMutex);
 
 	if (p ==NULL) {
 		/*对于嵌入式来说，没有机制整理内存，因此，不允许内存分配失败*/
-		printf("\r\n\r\n----petite malloc err!!---------\r\n\r\n");
+		printf("\r\n\r\n----petite rmalloc err!!---------\r\n\r\n");
 		while(1);
 	}
 
-	printf("0X%08X\r\n", p);
+	//printf("0X%08X\r\n", p);
 	return p;
 }
 
@@ -125,7 +125,7 @@ void wjq_free_m(void*ap)
 {
 	if(ap==NULL) return;
 	
-	printf("free_m:0x%08x\r\n", ap);
+	//printf("free_m:0x%08x\r\n", ap);
 	osMutexAcquire(PmallocMutex, osWaitForever);
 	WJQInterface->ifree(PmallocNode, ap);
 	osMutexRelease(PmallocMutex);
