@@ -305,20 +305,12 @@ int tp_is_press(void)
 	else return 0;
 }
 
-static uint16_t touch_task_cnt = 0;
-
-int tp_task_loop(uint8_t tick)
+int tp_task_loop(void *userdata)
 {
-		
-	touch_task_cnt += tick;
-	if (touch_task_cnt >= 30) {
-		touch_task_cnt = 0;
-		
-		const TouchDrv *drv = TouchDevNode.drv;
-		if (drv->task != NULL) {
-			drv->task(TouchDevNode.dev);
-		}
-		
+	const TouchDrv *drv = TouchDevNode.drv;
+	if (drv->task != NULL) {
+		drv->task(TouchDevNode.dev);
 	}
+
 
 }

@@ -209,7 +209,6 @@ void osSystickHandler(void)
 void SysTick_Handler(void)
 {
   //wjq_log(LOG_DEBUG, "DebugMon_Handler\r\n");
-  board_systick_handler();
   Time_Update();
   /* rtos的接口放在这里     */
    osSystickHandler();

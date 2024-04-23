@@ -81,5 +81,6 @@ int tp_close(void);
 int tp_rotate(uint16_t rotate);
 int tp_get_pointxy (int16_t *x, int16_t *y);
 int tp_is_press(void);
+int tp_task_loop(void *userdata);
 
 #endif

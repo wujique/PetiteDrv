@@ -22,6 +22,18 @@
 #include "lvgl_porting/lv_port_disp.h"
 #include "demos/benchmark/lv_demo_benchmark.h"
 
+#include "panel/soundplay.h"
+
+#include "components/softtimer/softtimer.h"
+
+void *BoardSlstLoop = NULL;
+
+int board_add_loop(char *name, void *cb, uint32_t periodic)
+{
+	void *looptimer = slst_create(name, cb);
+	slst_start(BoardSlstLoop, looptimer, periodic, looptimer, SOFTTIMER_TYPE_PERIODIC);
+}
+
 DevLcdNode *lvgllcd;
 
 osThreadId_t TestTaskHandle;
@@ -33,18 +45,28 @@ const osThreadAttr_t TestTask_attributes = {
 
 extern void esp_host_task_Init(void);
 
+void loop_lv_task_handler(void *userdata)
+{
+	lv_task_handler();
+}
+void board_lv_tick_inc(void *userdata)
+{
+	lv_tick_inc(5);
+}
 /**/
 void board_app_task(void)
 {
 	LogBoard(LOG_DEBUG, "run app task! 2023.12.10\r\n");
 
+	BoardSlstLoop = slst_create_loop();
+
 	/* 初始化文件系统 */
 	sd_fatfs_init();
 	
-	flashdb_demo();
+	//flashdb_demo();
 
 	/* 测试littlefs */
-	#if 1
+	#if 0
 	int filefd;
 	filefd = vfs_open("/mtd0/bootcnt", O_CREAT);
 	if(filefd > 0) {
@@ -85,24 +107,20 @@ void board_app_task(void)
 	lv_port_indev_init();
 	//lv_demo_benchmark();
 	lv_demo_widgets();
+	board_add_loop("lvgl", loop_lv_task_handler, 10);
+	board_add_loop("lvgl tick", board_lv_tick_inc, 2);
+	
 	#endif
 	
 	int cnt = 0;
 
 	while(1){
-		
-		osDelay(2);
-		
-		cnt++;
-		if (cnt >= 1000) {
-			cnt = 0;
-			printf("board_app_task\r\n");
-		}
-		/* lvgl */
-		lv_task_handler();
+		slst_task(BoardSlstLoop);
 
+		osDelay(5);//不会执行
 	}
 }
+
 /**/
 s32 board_app_init(void)
 {
@@ -135,9 +153,9 @@ s32 board_init(void)
 	/* 初始化存储空间与分区*/
 	petite_partition_init(PetitePartitonTable);
 
-
 	tp_init(&BoardDevTp);
-
+	petite_add_loop("tp loop", tp_task_loop, 30);
+	
 	//SCCB_GPIO_Config();
 	BUS_DCMI_HW_Init();
 	bus_dcmi_init();
@@ -148,7 +166,7 @@ s32 board_init(void)
 
 	mcu_i2s_init(1);//初始化I2S接口
 	dev_wm8978_init();
-	
+	petite_add_loop("sound", fun_sound_task, 30);
 
 	/*---------------------------------------*/
 	/* 创建目标板应用程序 */
@@ -156,32 +174,6 @@ s32 board_init(void)
 
 	return 0;
 }
-
-/*
-	低优先级轮训任务
-*/
-
-
-void board_low_task(uint8_t tick)
-{
-	
-	//wjq_log(LOG_DEBUG, " low task ");
-	tp_task_loop(tick);
-
-	fun_sound_task();
-}
-
-/**
- * @brief   插到系统嘀嗒中执行的功能
- * @note 	不可以长时间执行
- * 
- * 
- */
-void board_systick_handler(void)
-{
-	lv_tick_inc(1);
-}
-
 
 /*----------------------这是个垃圾桶 没有归属的，板相关的都先放这里 ------------------------------------*/
 #if 1

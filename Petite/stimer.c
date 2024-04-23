@@ -63,9 +63,12 @@ void Delay(uint32_t nCount)
 }
 
 
-
-
 uint32_t Stime_get_localtime(void)
+{
+	return LocalTime;
+}
+
+uint32_t Stime_get_systime(void)
 {
 	return LocalTime;
 }

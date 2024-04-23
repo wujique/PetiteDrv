@@ -19,5 +19,5 @@
 
 extern void Delay(uint32_t nCount);
 extern uint32_t Stime_get_localtime(void);
-
+uint32_t Stime_get_systime(void);
 #endif

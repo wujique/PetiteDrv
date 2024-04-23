@@ -175,7 +175,7 @@ int fun_sound_play(char *name, char *dev)
  *@param[out]  无
  *@retval:     
  */
-void fun_sound_task(void)
+void fun_sound_task(void *userdata)
 {
 
 	int len;

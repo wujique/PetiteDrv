@@ -53,7 +53,7 @@
 RCC_ClocksTypeDef RCC_Clocks;
 
 const static BusUartPra PcPortPra={
-	.BaudRate = 115200,
+	.BaudRate = PC_COM_BAUDRATE,
 	.bufsize = 256,
 	};
 

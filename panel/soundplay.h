@@ -30,7 +30,7 @@ typedef enum{
 
 extern int fun_sound_play(char *name, char *dev);
 extern s32 fun_sound_stop(void);
-extern void fun_sound_task(void);
+void fun_sound_task(void *userdata);
 extern s32 fun_sound_pause(void);
 extern s32 fun_sound_resume(void);
 extern s32 fun_sound_setvol(u8 vol);

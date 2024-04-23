@@ -8,6 +8,7 @@
 #include "cmsis_os.h"
 #include "board_sysconf.h"
 #include "drv_lcd.h"
+#include "components/softtimer/softtimer.h"
 
 /** @addtogroup Template_Project
   * @{
@@ -24,6 +25,44 @@
 
 /* Private functions ---------------------------------------------------------*/
 
+void *PetiteSlstLoop = NULL;
+
+
+int petite_add_loop(char *name, void *cb, uint32_t periodic)
+{
+	void *looptimer = slst_create(name, cb);
+	slst_start(PetiteSlstLoop, looptimer, periodic, looptimer, SOFTTIMER_TYPE_PERIODIC);
+}
+
+
+extern osThreadId_t TestTaskHandle;
+char TaskListBuf[512];
+
+void petite_os_sta_slst_cb(void *userdata)
+{
+
+	printf("petite_task\r\n");
+
+	#if 1
+	vTaskList(TaskListBuf);
+	printf("name\t\tstate\tpri\tstack\tNUM\r\n");
+	printf("%s", TaskListBuf);
+			
+	vTaskGetRunTimeStats(TaskListBuf);
+	printf("name\t\tcount\t\tper\r\n");
+	printf("%s", TaskListBuf);
+
+	/* 栈的水位线，指栈剩余多少个 U32 */
+			
+	//stackHWM = uxTaskGetStackHighWaterMark(defaultTaskHandle);
+	//uart_printf("PetiteTask hwm:%d\r\n", stackHWM);
+	//stackHWM = uxTaskGetStackHighWaterMark(TestTaskHandle);
+	//uart_printf("TestTask hwm:%d\r\n", stackHWM);
+	#endif
+
+}
+
+/*----------------------------------------*/
 extern s32 board_init(void);
 /**
  *@brief:      start_task
@@ -40,10 +79,6 @@ const osThreadAttr_t defaultTask_attributes = {
   .priority = (osPriority_t) osPriorityBelowNormal7,
 };
 
-extern osThreadId_t TestTaskHandle;
-
-char TaskListBuf[256];
-
 void petite_task(void *pvParameters)
 {
 	
@@ -51,6 +86,8 @@ void petite_task(void *pvParameters)
 	UBaseType_t stackHWM;
 	
 	LogPetite(LOG_INFO,"petite_task\r\n");
+
+	PetiteSlstLoop = slst_create_loop();
 
 	/* 初始化petite模块状态*/
 	//vfs_init();
@@ -60,38 +97,16 @@ void petite_task(void *pvParameters)
 	
 	board_init();
 
+	petite_add_loop("os sta", petite_os_sta_slst_cb, 1000);
 	/* 测试内存溢出 rtos检测 ，溢出后HOOK函数会被调用
 		vApplicationStackOverflowHook */
 	//memset(TaskListBuf, 0, sizeof(TaskListBuf));
 	
 	for(;;) {
-		
-		osDelay(5);
-		board_low_task(5);
-		tcnt++;
-		#if 1
-		if (tcnt >= 400) {
-			tcnt = 0;
-			printf("petite_task\r\n");
+		slst_task(PetiteSlstLoop);
 
-			#if 1
-			vTaskList(TaskListBuf);
-			printf("  name         state priority   stack   NUM\r\n");
-			printf("%s", TaskListBuf);
-			
-			vTaskGetRunTimeStats(TaskListBuf);
-			printf("  name count per\r\n");
-			printf("%s", TaskListBuf);
+		osDelay(20);//不执行
 
-			/* 栈的水位线，指栈剩余多少个 U32 */
-			
-			//stackHWM = uxTaskGetStackHighWaterMark(defaultTaskHandle);
-			//uart_printf("PetiteTask hwm:%d\r\n", stackHWM);
-			//stackHWM = uxTaskGetStackHighWaterMark(TestTaskHandle);
-			//uart_printf("TestTask hwm:%d\r\n", stackHWM);
-			#endif
-		}
-		#endif
 	}
 }
 
