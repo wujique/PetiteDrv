@@ -54,6 +54,7 @@ s32 KeyGd = -1;
 s32 dev_key_init(void)
 {
 	mcu_io_config_in(MCU_PORT_A, MCU_IO_0);
+	petite_add_loop("key", dev_key_scan, 20);
 	return 0;
 }
 /**
@@ -88,7 +89,7 @@ s32 dev_key_close(void)
  *@param[out]  无
  *@retval:     
  */
-s32 dev_key_scan(void)
+void dev_key_scan(void *userdata)
 {
 	volatile u8 sta;//局部变量，放在栈空间，进入函数时使用，退出后释放。
 	static u8 new_sta = MCU_IO_STA_1;
@@ -97,7 +98,7 @@ s32 dev_key_scan(void)
 	static u8 cnt = 0;
 
 	if(KeyGd != 0)
-		return -1;
+		return;
 
 	/*读按键状态*/
 	sta = mcu_io_input_readbit(MCU_PORT_A, MCU_IO_0);
@@ -147,7 +148,7 @@ s32 dev_key_scan(void)
 			old_sta = new_sta;
 		}
 	}
-	return 0;
+	return;
 }
 /**
  *@brief:      dev_key_read
@@ -213,6 +214,3 @@ s32 dev_key_waitkey(void)
 
 	return 0;
 }
-
-
-

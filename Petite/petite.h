@@ -28,7 +28,7 @@
 #define LOG_PETITE_TAG "PETITE"
 #define LogPetite(l,args...) petite_log(l, LOG_PETITE_TAG, NULL,__FUNCTION__, __LINE__, ##args);
 
-/** 将一个函数加入petite任务轮询 */
+
 int petite_add_loop(char *name, void *cb, uint32_t periodic);
 
 #endif

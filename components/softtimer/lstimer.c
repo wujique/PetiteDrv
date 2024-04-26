@@ -215,7 +215,7 @@ int slst_stop(void *loop, void *timer)
 
     //LogSoftTimerFunOut
     
-    return;  
+    return 0;  
 }
 /**
  * @brief   删除定时器
@@ -234,7 +234,7 @@ int slst_delete(void *loop, void *timer)
 
     //LogSoftTimerFunOut
 
-    return;
+    return 0;
 }
 
 /**

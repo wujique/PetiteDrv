@@ -3,7 +3,7 @@
 
 
 extern s32 dev_key_init(void);
-extern s32 dev_key_scan(void);
+extern void dev_key_scan(void *userdata);
 extern s32 dev_key_read(u8 *key, u8 len);
 extern s32 dev_key_open(void);
 extern s32 dev_key_close(void);

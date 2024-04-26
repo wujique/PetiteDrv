@@ -129,13 +129,23 @@ s32 bsp_exuart_wifi_write(u8 *buf, s32 len)
 	return res;
 }
 
-/**/
+
 #include "cmsis_os.h"
 #include "lvgl.h"
 #include "lvgl_porting/lv_port_disp.h"
 #include "demos/benchmark/lv_demo_benchmark.h"
+#include "panel/soundplay.h"
+#include "components/softtimer/softtimer.h"
 
 DevLcdNode *lvgllcd;
+
+void *BoardSlstLoop = NULL;
+
+int board_add_loop(char *name, void *cb, uint32_t periodic)
+{
+	void *looptimer = slst_create(name, cb);
+	slst_start(BoardSlstLoop, looptimer, periodic, looptimer, SOFTTIMER_TYPE_PERIODIC);
+}
 
 osThreadId_t TestTaskHandle;
 const osThreadAttr_t TestTask_attributes = {
@@ -146,19 +156,25 @@ const osThreadAttr_t TestTask_attributes = {
 
 extern void wujique_stm407_test(void);
 
+void loop_lv_task_handler(void *userdata)
+{
+	lv_task_handler();
+}
+void board_lv_tick_inc(void *userdata)
+{
+	lv_tick_inc(1);
+}
+
 /**/
 void board_app_task(void)
 {
 	wjq_log(LOG_DEBUG, "[   board] run app task! 2020.10.15 \r\n");
 
-	//spi_example();
-	//bus_uart_test();
+	BoardSlstLoop = slst_create_loop();
 
 	/* 初始化文件系统 */
 	sd_fatfs_init();
-	
 	flashdb_demo();
-
 	/* 测试littlefs */
 	#if 1
 	int filefd;
@@ -178,7 +194,7 @@ void board_app_task(void)
 	}
 	#endif
 	
-	fun_sound_play("/1:/sound/stereo_16bit_32k.wav", "wm8978");
+	//fun_sound_play("/1:/sound/stereo_16bit_32k.wav", "wm8978");
 	//wujique_stm407_test();
 
 	/* 初始化lvgl 
@@ -186,10 +202,8 @@ void board_app_task(void)
 	如果在rtos的任务中进行初始化，注意任务栈的大小，
 	防止溢出造成hardfault */
 	#if 1
-	
     lvgllcd = lcd_open("tftlcd");
 	//lcd_setdir(lvgllcd, W_LCD, L2R_U2D);
-	
 	tp_open("board_rtp_xtp2046");
 	tp_rotate(90);
 
@@ -198,16 +212,14 @@ void board_app_task(void)
 	lv_port_indev_init();
 	//lv_demo_benchmark();
 	lv_demo_widgets();
-
-	
+	board_add_loop("lvgl", loop_lv_task_handler, 10);
+	board_add_loop("lvgl tick", board_lv_tick_inc, 2);
 	#endif
 
 	while(1){
-		osDelay(2);
-		
-		/* lvgl */
-		lv_task_handler();
+		slst_task(BoardSlstLoop);
 
+		osDelay(5);//不会执行
 	}
 }
 /**/
@@ -249,25 +261,32 @@ s32 board_init(void)
 	#if (SYS_USE_KEYPAD == 1)
 	dev_keypad_init();
 	#endif
+
 	#if (SYS_USE_EXUART == 1)
 	bsp_exuart_wifi_init();
 	#endif
+
 	dev_buzzer_init(&BoardBuzzer);
+
 	dev_key_init();
+	
 	//dev_rs485_init();
 	//mcu_adc_test();
 
 	#if (SYS_USE_TS_IC_CASE == 1)
 	tp_init(&BoardDevTp);
+	petite_add_loop("tp", tp_task_loop, 30);
 	#endif
 
 	#if (SYS_USE_TS_ADC_CASE == 1)
 	tp_init(&RtpAdc);
 	#endif
+
 	dev_touchkey_init();
 	#if (SYS_USE_TS_ADC_CASE != 1)
 	mcu_adc_temprate_init();
 	#endif
+
 	//dev_htu21d_init();
 	//dev_ptHCHO_init();
 	//dev_srf05_test();
@@ -282,7 +301,6 @@ s32 board_init(void)
 	camera_init();
 	board_test_camera();
 
-
 	/* 要实现一个声卡框架 
 		兼容多种声音播放方式 */
 	dev_tea5767_init(DEV_TEA5767_I2CBUS);
@@ -290,6 +308,7 @@ s32 board_init(void)
 
 	mcu_i2s_init(2);//初始化I2S接口
 	dev_wm8978_init();
+	petite_add_loop("sound", fun_sound_task, 10);
 
 	//sys_spiffs_mount_coreflash();
 	//sys_lfs_mount();
@@ -303,32 +322,9 @@ s32 board_init(void)
 	//eth_app_init();
 	//fun_cmd_init();
 	//mcu_timer_test();	
-	
+
 	return 0;
 }
-
-/*
-	低优先级轮训任务
-*/
-
-void board_low_task(int tick)
-{
-	//wjq_log(LOG_DEBUG, "low TASK ");
-	
-	dev_key_scan();
-	tp_task_loop(tick);
-
-	#if (SYS_USE_KEYPAD == 1)
-	dev_keypad_scan();
-	#endif
-	
-	//eth_loop_task();
-	fun_sound_task();
-	//fun_rec_task();
-	dev_touchkey_task();
-}
-
-
 
 /*----------------------这是个垃圾桶 没有归属的，板相关的都先放这里 ------------------------------------*/
 #if 1

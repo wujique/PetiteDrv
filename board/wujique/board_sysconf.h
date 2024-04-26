@@ -16,6 +16,7 @@
 /*定义调试信息输出串口号*/
 #define PC_PORT  MCU_UART_3 
 #define PC_PORT_STR "uart3"
+#define PC_COM_BAUDRATE 230400//115200
 
 #define LOG_BOARD_TAG "BOARD"
 #define LogBoard(l,args...) petite_log(l, LOG_BOARD_TAG, NULL,__FUNCTION__, __LINE__, ##args);

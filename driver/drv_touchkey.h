@@ -6,7 +6,7 @@
 #define DEV_TOUCHKEY_TOUCH 		0X01
 #define DEV_TOUCHKEY_RELEASE 	0X02
 
-extern s32 dev_touchkey_task(void);
+extern void dev_touchkey_task(void *userdata);
 extern s32 dev_touchkey_test(void);
 extern s32 dev_touchkey_open(void);
 extern s32 dev_touchkey_init(void);

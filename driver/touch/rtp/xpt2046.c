@@ -19,19 +19,14 @@
 		7 如侵犯你的权利，请联系：code@wujique.com
 		8 一切解释权归屋脊雀工作室所有。
 */
-
 #include "mcu.h"
-
 #include "petite_config.h"
-
 #include "board_sysconf.h"
 #include "log.h"
-
 #include "bus/bus_spi.h"
 #include "mcu_spi.h"
 #include "mcu_timer.h"
 #include "touch.h"
-
 
 /*
 	命令字意义：
@@ -51,7 +46,6 @@
 #define XPT2046_CMD_Y 0X90
 #define XPT2046_CMD_Z1 0xb0
 #define XPT2046_CMD_Z2 0xc0
-
 /*
 测量到的压力电压阈值，小于PENdown，认为是下笔，
 大于penup认为是起笔，两者之间不处理
@@ -59,17 +53,14 @@
 上送的样点压力最小是0，也就是起笔后，
 最大是电压阈值为0的时候（可能达不到），
 通过计算转换，也就是0-400；0起笔，400，电压压力为0
-
 */
 #define DEV_XPT2046_PENDOWN_GATE (3500)
 #define DEV_XPT2046_PENUP_GATE	 (3700)
-
 
 s32 DevXpt2046Gd = -2;
 DevSpiChNode *Xpt2046SpiCHNode;
 
 void xpt2046_timer_task(void);
-
 
 /**
  *@brief:      dev_xpt2046_init
@@ -159,7 +150,6 @@ void dev_xpt2046_task(const DevTouch *TpDev)
 
 	if(DevXpt2046Gd != 0) return;
 	/*
-
 		整个流程分四步
 		读Z1,Z2，用于计算压力
 		读X,Y轴，用于计算坐标
@@ -226,7 +216,7 @@ void dev_xpt2046_task(const DevTouch *TpDev)
 		tss.y = sample_y;
 		rtp_fill_ori_buff(&tss,1);
 		rtp_tslib_deal_point();
-		//LogTouchDrv(LOG_DEBUG, "(%d,%d,%d) ", tss.pressure, tss.x, tss.y);
+		//uart_printf("(%d,%d,%d) ", tss.pressure, tss.x, tss.y);
 		pendownup = 0;
 	} else if(pre_x + DEV_XPT2046_PENUP_GATE < pre_y) {
 		//没压力，不进行XY轴检测

@@ -85,6 +85,7 @@ static s32 dev_touchkey_iocap(void)
 s32 dev_touchkey_init(void)
 {
 	TouchKeyGd = -1;
+	petite_add_loop("touchkey", dev_touchkey_task, 20);
 	return 0;
 }
 
@@ -223,13 +224,13 @@ static s32 dev_touchkey_scan(u32 cap)
  *@param[out]  无
  *@retval:     
  */
-s32 dev_touchkey_task(void)
+void dev_touchkey_task(void *userdata)
 {
 	volatile u32 i = 0;
 	u32 cap;
 
 	if(TouchKeyGd != 0)
-		return -1;
+		return;
 
 	TOUCHKEY_DEBUG(LOG_DEBUG, "\r\ndev_touchkey_task\r\n");
 	
@@ -247,7 +248,7 @@ s32 dev_touchkey_task(void)
 
 	dev_touchkey_scan(cap);
 	
-	return 0;
+	return;
 }
 
 /**

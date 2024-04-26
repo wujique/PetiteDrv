@@ -123,6 +123,7 @@ s32 dev_keypad_init(void)
 	
 	DevKeypadGd = -1;
 	
+	petite_add_loop("keypad", dev_keypad_scan, 10);
 	return 0;
 }
 
@@ -180,7 +181,7 @@ s32 dev_keypad_read(u8 *key, u8 len)
  *@param[out]  无
  *@retval:     
  */
-s32 dev_keypad_scan(void)
+void dev_keypad_scan(void *userdata)
 {
 	u16 ColSta;
 	u8 chgbit;
@@ -188,7 +189,7 @@ s32 dev_keypad_scan(void)
 	u8 keyvalue;
 	u8 i;
 	
-	if(DevKeypadGd != 0) return -1;
+	if(DevKeypadGd != 0) return;
 	
 	/*读输入的状态，如果不是连续IO，先拼成连续IO*/
 	#if 0
@@ -263,7 +264,7 @@ s32 dev_keypad_scan(void)
 	}
 	mcu_io_output_resetbit(KeyPadIOList[scanrow].port, KeyPadIOList[scanrow].pin);
 
-	return 0;
+	return;
 }
 /**
  *@brief:      dev_keypad_test

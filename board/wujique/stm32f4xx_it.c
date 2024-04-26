@@ -212,8 +212,6 @@ void SysTick_Handler(void)
   Time_Update();
   /* rtos的接口放在这里     */
    osSystickHandler();
-
-  lv_tick_inc(1);
 }
 
 /******************************************************************************/
