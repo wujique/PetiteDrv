@@ -20,9 +20,7 @@
 		8 一切解释权归屋脊雀工作室所有。
 */
 #include "mcu.h"
-#include "mcu_uart.h"
 #include "log.h"
-#include "petite.h"
 
 
 static BusUartNode *McuUart[MCU_UART_MAX];
@@ -62,8 +60,6 @@ s32 mcu_uart_init(McuUartNum comport, BusUartNode *BusNode, const BusUartPra *Pr
 
 		NVIC_IRQChannel = USART1_IRQn;
 		USARTx = USART1;
-		McuUart[comport] = BusNode;
-
 	}else if(comport == MCU_UART_2) {
 
 		RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);// 打开GPIO时钟
@@ -77,7 +73,6 @@ s32 mcu_uart_init(McuUartNum comport, BusUartNode *BusNode, const BusUartPra *Pr
 
 		NVIC_IRQChannel = USART2_IRQn;
 		USARTx = USART2;
-		McuUart[comport] = BusNode;
 	}else if(comport == MCU_UART_3) {
 
 		RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);// 打开GPIO时钟
@@ -93,11 +88,12 @@ s32 mcu_uart_init(McuUartNum comport, BusUartNode *BusNode, const BusUartPra *Pr
 		
 		NVIC_IRQChannel = USART3_IRQn;
 		USARTx = USART3;
-		McuUart[comport] = BusNode;
 	}else {
 		/* 串口号不支持*/
 		return -1;
 	}
+
+	McuUart[comport] = BusNode;
 
 	/* USART 初始化设置 */
 	USART_InitStructure.USART_BaudRate = Pra->BaudRate;//波特率;

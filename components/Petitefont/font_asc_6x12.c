@@ -1,13 +1,7 @@
 
-
 #include "mcu.h"
-#include "petite_config.h"
 #include "petite_font.h"
 #include "log.h"
-#include "board_sysconf.h"
-#include "vfs.h"
-#include "petite.h"
-#include "drv_config.h"
 
 /*
 	屋脊雀工作室制作的ASC点阵。
@@ -246,7 +240,7 @@ const uint8_t *FontAsc6X12_get_glyph_bitmap(const petite_font_t * pfont, uint32_
 PetiteFontDsc FontAsc6x12Pfd={
 	.fdt = FONT_H_H_L_R_U_D,
 	.st = FONT_ST_ASC,
-	.stc = NULL,
+	.stc = FONT_DOT_NULL,
 };
 
 

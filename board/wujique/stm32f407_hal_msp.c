@@ -1,8 +1,6 @@
 
 
 #include "mcu.h"
-#include "mcu_dcmi.h"
-
 
 /**
   * @brief  Initializes the hardware resources (I2C and GPIO) used to configure 

@@ -21,7 +21,6 @@
 
 #include "mcu.h"
 #include "log.h"
-#include "bus/bus_i2c.h"
 
 #define MCU_I2C_DEBUG
 
@@ -227,20 +226,18 @@ uint8_t bus_sccb_readreg(uint8_t DeviceAddr, uint16_t Addr)
 }
 
 
-s32 mcu_hi2c_init(DevI2c * dev)
+s32 mcu_hi2c_init(char * name)
 {
 	return -1;
 }
 
 
-s32 mcu_hi2c_transfer(DevI2cNode *node, u8 addr, u8 rw, u8* data, s32 datalen)
+s32 mcu_hi2c_transfer(char *name, u8 addr, u8 rw, u8* data, s32 datalen)
 {
-	if(rw == MCU_I2C_MODE_W)//写
-    {
+	if(rw == MCU_I2C_MODE_W) {
 
     }
-    else if(rw == MCU_I2C_MODE_R)//读
-    {
+    else if(rw == MCU_I2C_MODE_R) {
 		
     }
 	return -1;

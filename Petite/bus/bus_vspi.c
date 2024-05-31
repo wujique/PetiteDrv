@@ -44,18 +44,20 @@ extern uint32_t McuDelayUs;
  */
 s32 bus_vspi_init(const DevSpi *dev)
 {
+	SpiIoDef *devio;
+	devio = (SpiIoDef *)&(dev->io);
 
 	//wjq_log(LOG_DEBUG, "vspi init:%s\r\n", dev->pnode.name);
 
-	mcu_io_config_out(dev->clkport, dev->clkpin);
-	mcu_io_output_setbit(dev->clkport,dev->clkpin);
+	mcu_io_config_out(devio->clkport, devio->clkpin);
+	mcu_io_output_setbit(devio->clkport,devio->clkpin);
 
-	mcu_io_config_out(dev->mosiport, dev->mosipin);
-	mcu_io_output_setbit(dev->mosiport, dev->mosipin);
+	mcu_io_config_out(devio->mosiport, devio->mosipin);
+	mcu_io_output_setbit(devio->mosiport, devio->mosipin);
 
 
-	mcu_io_config_in(dev->misoport, dev->misopin);
-	mcu_io_output_setbit(dev->misoport, dev->misopin);
+	mcu_io_config_in(devio->misoport, devio->misopin);
+	mcu_io_output_setbit(devio->misoport, devio->misopin);
 	
 	return 0;
 }
@@ -132,7 +134,9 @@ s32 bus_vspi_transfer(DevSpiNode *node, u8 *snd, u8 *rsv, s32 len)
 
 	pnode = (PDevNode *)node;
 	dev = (DevSpi *)pnode->pdev;
-	
+	SpiIoDef *devio;
+	devio = &(dev->io);
+
 	if (node == NULL) {
 		VSPI_DEBUG(LOG_DEBUG, "vspi dev err\r\n");
 		return -1;
@@ -153,7 +157,7 @@ s32 bus_vspi_transfer(DevSpiNode *node, u8 *snd, u8 *rsv, s32 len)
 			data = *(snd+slen);
 		
 		for(i=0; i<8; i++) {
-			mcu_io_output_resetbit(dev->clkport, dev->clkpin);
+			mcu_io_output_resetbit(devio->clkport, devio->clkpin);
 
 			delay = node->clk;
 			while(delay>0) {
@@ -161,9 +165,9 @@ s32 bus_vspi_transfer(DevSpiNode *node, u8 *snd, u8 *rsv, s32 len)
 			}
 			
 			if(data&0x80)
-				mcu_io_output_setbit(dev->mosiport, dev->mosipin);
+				mcu_io_output_setbit(devio->mosiport, devio->mosipin);
 			else
-				mcu_io_output_resetbit(dev->mosiport, dev->mosipin);
+				mcu_io_output_resetbit(devio->mosiport, devio->mosipin);
 			
 			delay = node->clk;
 			while(delay>0) {
@@ -171,14 +175,14 @@ s32 bus_vspi_transfer(DevSpiNode *node, u8 *snd, u8 *rsv, s32 len)
 			}
 			
 			data<<=1;
-			mcu_io_output_setbit(dev->clkport, dev->clkpin);
+			mcu_io_output_setbit(devio->clkport, devio->clkpin);
 			
 			delay = node->clk;
 			while(delay>0) {
 				delay--;	
 			}
 			
-			misosta = mcu_io_input_readbit(dev->misoport, dev->misopin);
+			misosta = mcu_io_input_readbit(devio->misoport, devio->misopin);
 			if(misosta == MCU_IO_STA_1) {
 				data |=0x01;
 			} else {

@@ -20,7 +20,6 @@
 */
 #include "mcu.h"
 #include "log.h"
-#include "mcu_adc.h"
 
 //#define MCU_ADC_DEBUG_G
 

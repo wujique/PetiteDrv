@@ -1,5 +1,4 @@
 #include "mcu.h"
-#include "mcu_dcmi.h"
 #include "board_sysconf.h"
 
 /* Private function prototypes -----------------------------------------------*/

@@ -19,8 +19,6 @@
 		8 一切解释权归屋脊雀工作室所有。
 */
 #include "mcu.h"
-#include "cmsis_os.h"
-
 #include "log.h"
 #include "mem/p_list.h"
 #include "bus/bus_i2c.h"

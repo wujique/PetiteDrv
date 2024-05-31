@@ -1,7 +1,7 @@
 
 
 #include "stm32f4xx.h"
-#include "mcu_dcmi.h"
+#include "mcu.h"
 
 
 

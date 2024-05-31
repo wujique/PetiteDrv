@@ -1,6 +1,15 @@
+/**
+ * @file    slstimer.c
+ * @brief   有序双向链表软定时器
+ * 
+ * @author  pochard(email@xxx.com)
+ * @version 0.1
+ * @date    2024-05-25
+ * @copyright Copyright (c) 2024..
+ */
+#include <stdio.h>
+#include <string.h>
 
-
-#include "stdlib.h"
 #include "log.h"
 #include "mem/p_malloc.h"
 #include "stimer.h"

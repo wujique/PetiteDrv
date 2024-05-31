@@ -35,7 +35,6 @@ typedef enum{
 	MCU_PORT_MAX
 }MCU_PORT;
 
-extern const GPIO_TypeDef *Stm32PortList[MCU_PORT_MAX];
 
 /*IO 电平定义 */
 typedef enum{

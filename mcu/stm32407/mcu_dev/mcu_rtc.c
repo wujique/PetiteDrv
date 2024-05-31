@@ -12,7 +12,9 @@
 */
 #include "stm32f4xx.h"
 #include "log.h"
-#include "mcu_rtc.h"
+#include "mcu.h"
+
+#include "time.h"
 
 /**
  *@brief:      mcu_rtc_init

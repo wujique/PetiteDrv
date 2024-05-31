@@ -339,7 +339,7 @@
               <MiscControls>--locale=english</MiscControls>
               <Define>NDEBUG</Define>
               <Undefine></Undefine>
-              <IncludePath>.\Core\Inc;.\Drivers\STM32H7xx_HAL_Driver\Inc;.\User;.\Drivers\CMSIS\Include;.\Drivers\CMSIS\Device\ST\STM32H7xx\Include;.\Drivers\STM32H7xx_HAL_Driver\Inc\Legacy;..\..\mcu\stm32h7b0vb;..\..\Petite;..\..\driver;..\..\driver\touch;..\..\driver\lcd;..\..\components\lvgl;..\..\components\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\..\components\FreeRTOS\Source\include;..\..\components\FreeRTOS\Source\CMSIS_RTOS_V2;..\..\components\FatFs;..\..\driver\sound;..\..\driver\touch\rtp\tslib;..\..\driver\touch\rtp;..\..\Petite\bus;..\..\components\emenu;..\..\components\tiny_ttf;..\..\components\FlashDB\inc;..\..\components\FlashDB\porting;..\..\components\littlefs;..\..\components\CmBacktrace\cm_backtrace;..\..\components\cmd\ubootcmd;..\..\components\Petitefont;..\..\panel;..\..\components\lua-5.4.4\src;..\..\components\Freetype\include</IncludePath>
+              <IncludePath>.\Core\Inc;.\Drivers\STM32H7xx_HAL_Driver\Inc;.\User;.\Drivers\CMSIS\Include;.\Drivers\CMSIS\Device\ST\STM32H7xx\Include;.\Drivers\STM32H7xx_HAL_Driver\Inc\Legacy;..\..\mcu\stm32h7b0vb;..\..\Petite;..\..\driver;..\..\driver\touch;..\..\driver\lcd;..\..\components\lvgl;..\..\components\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\..\components\FreeRTOS\Source\include;..\..\components\FreeRTOS\Source\CMSIS_RTOS_V2;..\..\components\FatFs;..\..\driver\sound;..\..\driver\touch\rtp\tslib;..\..\driver\touch\rtp;..\..\Petite\bus;..\..\components\emenu;..\..\components\tiny_ttf;..\..\components\FlashDB\inc;..\..\components\FlashDB\porting;..\..\components\littlefs;..\..\components\CmBacktrace\cm_backtrace;..\..\components\cmd\ubootcmd;..\..\components\Petitefont;..\..\panel;..\..\components\lua-5.4.4\src;..\..\components\Freetype\include;..\..\mcu;..\..\..\PetiteDrv;..\..\components\RTTViewer\RTT;..\..\components\RTTViewer\Config;..\..\driver\codec;..\..\driver\camera;..\..\driver\lcd;..\..\driver\sensor;..\..\driver\touch</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -891,17 +891,17 @@
             <File>
               <FileName>audio_pipeline.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\driver\sound\audio_pipeline.c</FilePath>
-            </File>
-            <File>
-              <FileName>wm8978.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\driver\sound\wm8978.c</FilePath>
+              <FilePath>..\..\driver\codec\audio_pipeline.c</FilePath>
             </File>
             <File>
               <FileName>wm8960.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\driver\sound\wm8960.c</FilePath>
+              <FilePath>..\..\driver\codec\wm8960.c</FilePath>
+            </File>
+            <File>
+              <FileName>wm8978.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\driver\codec\wm8978.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1811,7 +1811,7 @@
             <File>
               <FileName>drv_ptHCHO.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\driver\cdev\drv_ptHCHO.c</FilePath>
+              <FilePath>..\..\driver\sensor\drv_ptHCHO.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -2082,6 +2082,31 @@
               <FileName>ftdebug.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\components\Freetype\ftdebug.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>components</GroupName>
+          <Files>
+            <File>
+              <FileName>lstimer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\softtimer\lstimer.c</FilePath>
+            </File>
+            <File>
+              <FileName>softtimer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\softtimer\softtimer.c</FilePath>
+            </File>
+            <File>
+              <FileName>SEGGER_RTT_printf.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\RTTViewer\RTT\SEGGER_RTT_printf.c</FilePath>
+            </File>
+            <File>
+              <FileName>SEGGER_RTT.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\RTTViewer\RTT\SEGGER_RTT.c</FilePath>
             </File>
           </Files>
         </Group>

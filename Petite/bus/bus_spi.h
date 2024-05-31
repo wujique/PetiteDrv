@@ -1,10 +1,8 @@
 #ifndef __BUS_SPI_H_
 #define __BUS_SPI_H_
 
-#include "mem/p_list.h"
-#include "petite_def.h"
+#include "mcu.h"
 #include "petite_dev.h"
-
 #include "cmsis_os.h"
 
 /*
@@ -15,16 +13,10 @@
 /*	SPI 设备定义 */
 typedef struct
 {
+	//dev节点定义
 	PetiteDev pdev;
-	
-	MCU_PORT clkport;
-	u16 clkpin;
 
-	MCU_PORT mosiport;
-	u16 mosipin;
-
-	MCU_PORT misoport;
-	u16 misopin;
+	SpiIoDef io;
 
 }DevSpi;
 
@@ -47,9 +39,9 @@ typedef struct
 {
 	PetiteDev pdev;
 	
-	/*cs脚*/
+	/*cs脚 */
 	MCU_PORT csport;
-	u16 cspin;
+	MCU_IO cspin;
 }DevSpiCh;
 
 /*SPI通道节点*/
@@ -71,7 +63,7 @@ typedef struct{
 extern PDevNode * bus_spi_register(const DevSpi *dev);
 extern PDevNode * bus_spich_register(const DevSpiCh *dev);
 
-extern DevSpiChNode *bus_spich_open(char *name, SPI_MODE mode, u16 KHz,  uint32_t wait);
+extern DevSpiChNode *bus_spich_open(const char *name, SPI_MODE mode, u16 KHz,  uint32_t wait);
 extern DevSpiChNode *bus_spich_opennode(DevSpiChNode *node, SPI_MODE mode, u16 KHz,  uint32_t wait);
 
 extern s32 bus_spich_close(DevSpiChNode * node);

@@ -50,25 +50,14 @@ s32 mcu_io_config_timer(MCU_PORT port, MCU_IO pin, McuTimerNum timer)
 	
 	if(port == NULL)
 		return -1;
-	/*
-	//GPIO_PinRemapConfig(GPIO_PartialRemap_TIM3, ENABLE);
-    GPIO_InitStructure.GPIO_Pin = pin; 
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP; //---复用功能
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz; //---速度 50MHz
-    GPIO_Init((GPIO_TypeDef *)Stm32PortList[port], &GPIO_InitStructure);
-*/
+
 	return 0;
 }
 
 s32 mcu_io_config_dac(MCU_PORT port, MCU_IO pin)
 {
 	GPIO_InitTypeDef GPIO_InitStructure;
-/*
-	GPIO_InitStructure.GPIO_Pin = pin;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AIN;//---模拟模式
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_Init((GPIO_TypeDef *)Stm32PortList[port], &GPIO_InitStructure);//---初始化 GPIO
-*/
+
 	return 0;
 }
 
@@ -112,12 +101,6 @@ void mcu_io_config_af(MCU_PORT port, MCU_IO pin)
 	
 	if(port == NULL)
 		return;
-/*
-	GPIO_InitStructure.GPIO_Pin = pin; //GPIOA5
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;//复用功能
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;//速度 100MHz
-	GPIO_Init((GPIO_TypeDef *)Stm32PortList[port], &GPIO_InitStructure); //初始化 PA3
-*/
 }
 
 void mcu_io_output_setbit(MCU_PORT port, MCU_IO pin)
@@ -149,7 +132,7 @@ u16 mcu_io_input_readport(MCU_PORT port)
 	if(port == NULL)
 		return GPIO_PIN_SET;
 	
-	return 0xff;//GPIO_ReadInputData((GPIO_TypeDef *)Stm32PortList[port]);
+	return 0xff;
 }
 
 

@@ -19,11 +19,8 @@
 	8 一切解释权归屋脊雀工作室所有。
 */
 #include "mcu.h"
-#include "petite_config.h"
 #include "petite_font.h"
 #include "log.h"
-#include "board_sysconf.h"
-
 #include "vfs.h"
 
 /*-------------------GBK 共用函数------------------------------*/

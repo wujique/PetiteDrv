@@ -13,7 +13,7 @@
 #include "partition.h"
 
 
-extern void DCMI_PWDN_RESET_Init(void);
+void DCMI_PWDN_RESET_Init(void);
 
 extern s32 petite_dev_register(void *DevTable[]);
 
@@ -25,8 +25,7 @@ extern const DevTouch BoardDevTp;
 */
 s32 board_init(void)
 {
-	int res= -1;
-	
+
 	wjq_log(LOG_DEBUG, "[   board] cuckoo other dev init!\r\n");
 
 	/* 初始化设备*/
@@ -42,7 +41,7 @@ s32 board_init(void)
 	//dev_wm8960_init();
 	/*  触摸屏初始化 */
 
-	res = tp_init(&BoardDevTp);	
+	tp_init(&BoardDevTp);	
 
 	/* 摄像头初始化 */
 	DCMI_PWDN_RESET_Init();
@@ -60,7 +59,7 @@ const BusUartPra Uart4Pra = {
 	.bufsize = 128,//接收缓冲长度, 如不使用交互，可设置为8
 };
 
-BusUartNode *LogUartNode;
+void *LogUartNode;
 #if 0
 extern const unsigned char elfsimage[];
 extern const unsigned long elfsimage_length;
@@ -113,7 +112,7 @@ extern void fun_sound_task(void);
 void board_low_task(uint8_t tick)
 {
 	//wjq_log(LOG_DEBUG, " low task ");
-	tp_task_loop();
+	tp_task_loop(NULL);
 	fun_sound_task();
 }
 

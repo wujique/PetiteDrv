@@ -1,11 +1,8 @@
 #include "mcu.h"
 
 #include "petite_config.h"
-
 #include "board_sysconf.h"
 #include "log.h"
-
-#include "mcu_timer.h"
 #include "touch.h"
 
 

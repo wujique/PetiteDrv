@@ -1,4 +1,15 @@
-#include "stdlib.h"
+/**
+ * @file    lstimer.c
+ * @brief   无序单向链表软定时器
+ * 
+ * @author  pochard(email@xxx.com)
+ * @version 0.1
+ * @date    2024-05-25
+ * @copyright Copyright (c) 2024..
+ */
+#include <stdio.h>
+#include <string.h>
+
 #include "log.h"
 #include "mem/p_malloc.h"
 #include "stimer.h"
@@ -43,6 +54,7 @@ typedef struct NllsTimerLoop_s{
 
 }NllsTimerLoop_t;
 
+#if 0
 static void slst_list_lock(NllsTimerLoop_t *slstloop_P)
 {
 
@@ -52,6 +64,7 @@ static void slst_list_unlock(NllsTimerLoop_t *slstloop_P)
 {
     
 }
+#endif
 /*-----------------------------------------------*/
 void nllstimer_show_list(NllsTimer_t *ptimer, SOFTTIMER_V now)
 {

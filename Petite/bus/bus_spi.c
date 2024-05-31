@@ -21,11 +21,8 @@
 */
 #include "mcu.h"
 #include "cmsis_os.h"
-
 #include "log.h"
-
 #include "board_sysconf.h"
-
 #include "petite.h"
 
 #define BUS_SPI_DEBUG
@@ -59,7 +56,7 @@ PDevNode *bus_spi_register(const DevSpi *dev)
 	if (dev->pdev.type == BUS_SPI_V)
 		bus_vspi_init(dev);
 	else if (dev->pdev.type == BUS_SPI_H)
-		mcu_hspi_init(dev);
+		mcu_hspi_init(dev->pdev.name, &(dev->io));
 	else {
 		wjq_log(LOG_ERR, "spi register type err!\r\n");	
 	}
@@ -94,7 +91,6 @@ PDevNode *bus_spich_register(const DevSpiCh *dev)
 	
 	petite_dev_init_node((PDevNode *)pnode, (PetiteDev *) dev);
 
-	
 	pnode->gd = -1;
 
 	/* 初始化管脚 */
@@ -115,12 +111,12 @@ DevSpiChNode *bus_spich_opennode(DevSpiChNode *node, SPI_MODE mode, u16 KHz,  ui
  *@retval:     
  			   打开一次SPI，在F407上大概要2us
  */
-DevSpiChNode *bus_spich_open(char *name, SPI_MODE mode, u16 KHz,  uint32_t wait)
+DevSpiChNode *bus_spich_open(const char *name, SPI_MODE mode, u16 KHz,  uint32_t wait)
 {
 	PDevNode *pnode;
 	DevSpiChNode *chnode;
 
-	pnode = petite_dev_get_node(name);
+	pnode = petite_dev_get_node((char *)name);
 	chnode = (DevSpiChNode *)pnode;
 
 	//BUSSPI_DEBUG(LOG_DEBUG, "dev spi ch name:%s!\r\n", pnode->pdev->name);
@@ -185,7 +181,7 @@ DevSpiChNode *bus_spich_opennode(DevSpiChNode *node, SPI_MODE mode, u16 KHz,  ui
 				/*打开SPI控制器*/
 				res = -1;
 				if (pbasenode->pdev->type == BUS_SPI_H) {
-					res = mcu_hspi_open(spinode, mode, KHz);	
+					res = mcu_hspi_open(spinode->pnode.pdev->name, mode, KHz);	
 				} else if(pbasenode->pdev->type == BUS_SPI_V) {
 					res = bus_vspi_open(spinode, mode, KHz);	
 				} else {
@@ -241,7 +237,7 @@ s32 bus_spich_close(DevSpiChNode * node)
 	if(chnode->gd != 0) return -1;
 
 	if(pbasenode->pdev->type == BUS_SPI_H){
-		mcu_hspi_close(spinode);
+		mcu_hspi_close(spinode->pnode.pdev->name);
 	} else if(pbasenode->pdev->type == BUS_SPI_V) { 
 		bus_vspi_close(spinode);
 	} else {
@@ -286,7 +282,7 @@ s32 bus_spich_transfer(DevSpiChNode * node, u8 *snd, u8 *rsv, s32 len)
 	if (node == NULL) return -1;
 
 	if (pbasenode->pdev->type == BUS_SPI_H)
-		return mcu_hspi_transfer(spinode, snd, rsv, len);
+		return mcu_hspi_transfer(spinode->pnode.pdev->name, snd, rsv, len);
 	else if (pbasenode->pdev->type == BUS_SPI_V)	
 		return bus_vspi_transfer(spinode, snd, rsv, len);
 	else {

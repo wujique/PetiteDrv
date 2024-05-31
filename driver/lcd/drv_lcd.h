@@ -54,17 +54,17 @@ typedef struct
 	/*	3根线：A0-命令数据，rst-复位，bl-背光
 		I2C总线的LCD不需要这三根线    	*/
 	MCU_PORT A0port;
-	u16 A0pin;
+	MCU_IO A0pin;
 
 	MCU_PORT rstport;
-	u16 rstpin;
+	MCU_IO rstpin;
 
 	MCU_PORT blport;
-	u16 blpin;
+	MCU_IO blpin;
 
 	/* 电子纸 91874 需要一个busy状态脚*/
 	MCU_PORT staport;
-	u16 stapin;
+	MCU_IO stapin;
 }DevLcdCtrlIO;
 
 

@@ -114,8 +114,10 @@ s32 dev_wm8960_set_dataformat(u8 Standard, short BitsPerSample)
 	RegValue  = Standard<<3;	
 	RegValue |= format<<5;
 	dev_wm8960_writereg(4, RegValue);
-	return 0;
 #endif
+	return 0;
+
+
 }
 
 /**
@@ -396,9 +398,9 @@ s32 dev_wm8960_inout(u8 In, u8 Out)
 	if (In & WM8978_INPUT_DAC){
 		dev_wm8960_writereg(10, 0);
 	}
-	
+#endif	
 	return 0;
-#endif
+
 }
 
 

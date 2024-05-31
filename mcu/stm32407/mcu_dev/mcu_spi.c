@@ -19,11 +19,11 @@
 		7 如侵犯你的权利，请联系：code@wujique.com
 		8 一切解释权归屋脊雀工作室所有。
 */
+#include <stdio.h>
+#include <string.h>
+
 #include "mcu.h"
 #include "log.h"
-#include "bus/bus_spi.h"
-#include "board_sysconf.h"
-#include "petite_dev.h"
 
 #define MCU_SPI_DEBUG
 
@@ -36,6 +36,7 @@
 
 #define MCU_SPI_WAIT_TIMEOUT 0x40000
 
+extern const GPIO_TypeDef *Stm32PortList[MCU_PORT_MAX];
 /*
 	相位配置，一共四种模式
 */
@@ -60,7 +61,7 @@ const _strSpiModeSet SpiModeSet[SPI_MODE_MAX]=
  *@param[out]  无
  *@retval:     
  */
-s32 mcu_hspi_init(const DevSpi *dev)
+s32 mcu_hspi_init(const char *name, const SpiIoDef *io)
 {
     GPIO_InitTypeDef GPIO_InitStructure;
     SPI_InitTypeDef SPI_InitStruct;
@@ -69,42 +70,42 @@ s32 mcu_hspi_init(const DevSpi *dev)
 	uint16_t pinsource;
 	
 	/*配置IO口*/
-    GPIO_InitStructure.GPIO_Pin = dev->clkpin;
+    GPIO_InitStructure.GPIO_Pin = io->clkpin;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;//---复用功能
     GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;//---推挽输出
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;//---100MHz
     GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;//---上拉
-    GPIO_Init((GPIO_TypeDef *)Stm32PortList[dev->clkport], &GPIO_InitStructure);//---初始化
+    GPIO_Init((GPIO_TypeDef *)Stm32PortList[io->clkport], &GPIO_InitStructure);//---初始化
 
-	GPIO_InitStructure.GPIO_Pin = dev->misopin;
-    GPIO_Init((GPIO_TypeDef *)Stm32PortList[dev->misoport], &GPIO_InitStructure);//---初始化
+	GPIO_InitStructure.GPIO_Pin = io->misopin;
+    GPIO_Init((GPIO_TypeDef *)Stm32PortList[io->misoport], &GPIO_InitStructure);//---初始化
 
-	GPIO_InitStructure.GPIO_Pin = dev->mosipin;
-    GPIO_Init((GPIO_TypeDef *)Stm32PortList[dev->mosiport], &GPIO_InitStructure);//---初始化
+	GPIO_InitStructure.GPIO_Pin = io->mosipin;
+    GPIO_Init((GPIO_TypeDef *)Stm32PortList[io->mosiport], &GPIO_InitStructure);//---初始化
 
 
     //配置引脚复用映射
-    if(strcmp(dev->pdev.name, "SPI3") == 0) {
+    if(strcmp(name, "SPI3") == 0) {
 		GPIO_AF = GPIO_AF_SPI3;
-    } else if(strcmp(dev->pdev.name, "SPI1") == 0) {
+    } else if(strcmp(name, "SPI1") == 0) {
 		GPIO_AF = GPIO_AF_SPI1;
-    } else if(strcmp(dev->pdev.name, "SPI2") == 0) {
+    } else if(strcmp(name, "SPI2") == 0) {
 		GPIO_AF = GPIO_AF_SPI2;
     }
 	
-	pinsource = math_log2(dev->clkpin);
-    GPIO_PinAFConfig((GPIO_TypeDef *)Stm32PortList[dev->clkport], pinsource,  GPIO_AF); //复用
-    pinsource = math_log2(dev->misopin);
-    GPIO_PinAFConfig((GPIO_TypeDef *)Stm32PortList[dev->misoport], pinsource, GPIO_AF); //复用
-    pinsource = math_log2(dev->mosipin);
-    GPIO_PinAFConfig((GPIO_TypeDef *)Stm32PortList[dev->mosiport], pinsource, GPIO_AF); //复用
+	pinsource = math_log2(io->clkpin);
+    GPIO_PinAFConfig((GPIO_TypeDef *)Stm32PortList[io->clkport], pinsource,  GPIO_AF); //复用
+    pinsource = math_log2(io->misopin);
+    GPIO_PinAFConfig((GPIO_TypeDef *)Stm32PortList[io->misoport], pinsource, GPIO_AF); //复用
+    pinsource = math_log2(io->mosipin);
+    GPIO_PinAFConfig((GPIO_TypeDef *)Stm32PortList[io->mosiport], pinsource, GPIO_AF); //复用
 
     // ---使能时钟
-    if(strcmp(dev->pdev.name, "SPI3") == 0) {
+    if(strcmp(name, "SPI3") == 0) {
 		RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI3, ENABLE);
-    } else if(strcmp(dev->pdev.name, "SPI1") == 0) {
+    } else if(strcmp(name, "SPI1") == 0) {
         RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1, ENABLE);
-    } else if(strcmp(dev->pdev.name, "SPI2") == 0) {
+    } else if(strcmp(name, "SPI2") == 0) {
         RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI2, ENABLE);
     }
     return 0;
@@ -112,25 +113,25 @@ s32 mcu_hspi_init(const DevSpi *dev)
 
 /**
  *@brief:      mcu_spi_open
- *@details:       打开SPI
- *@param[in]   SPI_DEV dev  ：SPI号
+ *@details:    打开SPI
+ *@param[in]   name  SPI号
                u8 mode      模式
                u16 pre      预分频
  *@param[out]  无
  *@retval:     
  */
-s32 mcu_hspi_open(DevSpiNode *node, SPI_MODE mode, u16 KHz)
+s32 mcu_hspi_open(const char *name, SPI_MODE mode, u16 KHz)
 {
 	SPI_InitTypeDef SPI_InitStruct;
 	SPI_TypeDef* SPIC;
 		
 	if (mode >= SPI_MODE_MAX) return -1;
 
-	if (strcmp(node->pnode.pdev->name, "SPI3") == 0) {
+	if (strcmp(name, "SPI3") == 0) {
 		SPIC = SPI3;
-    } else if (strcmp(node->pnode.pdev->name, "SPI1") == 0) {
+    } else if (strcmp(name, "SPI1") == 0) {
 		SPIC = SPI1;
-    } else if (strcmp(node->pnode.pdev->name, "SPI2") == 0) {
+    } else if (strcmp(name, "SPI2") == 0) {
 		SPIC = SPI2;
     }
 
@@ -162,15 +163,15 @@ s32 mcu_hspi_open(DevSpiNode *node, SPI_MODE mode, u16 KHz)
  *@param[out]  无
  *@retval:     
  */
-s32 mcu_hspi_close(DevSpiNode *node)
+s32 mcu_hspi_close(const char *name)
 {
     SPI_TypeDef* SPIC;
 		
-	if (strcmp(node->pnode.pdev->name, "SPI3") == 0) {
+	if (strcmp(name, "SPI3") == 0) {
 		SPIC = SPI3;
-    } else if (strcmp(node->pnode.pdev->name, "SPI1") == 0) {
+    } else if (strcmp(name, "SPI1") == 0) {
 		SPIC = SPI1;
-    } else if (strcmp(node->pnode.pdev->name, "SPI2") == 0) {
+    } else if (strcmp(name, "SPI2") == 0) {
 		SPIC = SPI2;
     }
 	
@@ -186,7 +187,7 @@ s32 mcu_hspi_close(DevSpiNode *node)
  *@param[out]  无
  *@retval:     
  */
-s32 mcu_hspi_transfer(DevSpiNode *node, u8 *snd, u8 *rsv, s32 len)
+s32 mcu_hspi_transfer(const char *name, u8 *snd, u8 *rsv, s32 len)
 {
     s32 i = 0;
     s32 pos = 0;
@@ -194,17 +195,17 @@ s32 mcu_hspi_transfer(DevSpiNode *node, u8 *snd, u8 *rsv, s32 len)
     u16 ch;
 	SPI_TypeDef* SPIC;
 	
-	if (node == NULL) return -1;
+	if (name == NULL) return -1;
 	
     if ( ((snd == NULL) && (rsv == NULL)) || (len < 0) ) {
         return -2;
     }
 	
-    if (strcmp(node->pnode.pdev->name, "SPI3") == 0) {
+    if (strcmp(name, "SPI3") == 0) {
 		SPIC = SPI3;
-    } else if (strcmp(node->pnode.pdev->name, "SPI1") == 0) {
+    } else if (strcmp(name, "SPI1") == 0) {
 		SPIC = SPI1;
-    } else if (strcmp(node->pnode.pdev->name, "SPI2") == 0) {
+    } else if (strcmp(name, "SPI2") == 0) {
 		SPIC = SPI2;
     }
     /* 忙等待 */

@@ -14,14 +14,10 @@
 	*/
 
 #include "mcu.h"
-#include "petite_config.h"
+#include "mem/p_malloc.h"
 #include "petite_font.h"
 #include "log.h"
-#include "board_sysconf.h"
 #include "vfs.h"
-#include "petite.h"
-#include "drv_config.h"
-
 
 /**
  * @brief    bitmap字库头
@@ -188,7 +184,6 @@ const uint8_t *bitmapfont_get_glyph_bitmap(const petite_font_t * pfont, uint32_t
 	
 	BitmapFontDsc *dsc;
 	PetiteFontDsc *pfdsc;
-	int uindex;
 	int rlen = 0;
 	int index;
 	
@@ -219,6 +214,9 @@ const uint8_t *bitmapfont_get_glyph_bitmap(const petite_font_t * pfont, uint32_t
 	vfs_lseek(pfdsc->fd, dsc->BitmapFontHead.bitmap +  head->index, 0);
 	rlen = vfs_read(pfdsc->fd, dotbuf, bitmap_size);
 
+	if (rlen != bitmap_size) {
+
+	}
 	//DUMP_HEX_16BYTE(dotbuf, bitmap_size);
 
 	return (const uint8_t *)dotbuf;
@@ -299,7 +297,7 @@ petite_font_t *bitmapfont_create_from_file(const char * path, uint16_t line_heig
 
 	pfdsc->fdt = FONT_H_H_L_R_U_D;
 	pfdsc->st = FONT_ST_UNICODE;
-	pfdsc->stc = NULL;
+	pfdsc->stc = FONT_DOT_NULL;
 	
 	dsc->lettercache = NULL;
 	pfont->dsc = dsc;

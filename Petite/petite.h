@@ -13,10 +13,6 @@
 #include "mem/p_kfifo.h"
 #include "mem/p_list.h"
 
-
-#include "petite_font.h"
-
-
 #include "bus/bus_i2c.h"
 #include "bus/bus_vi2c.h"
 

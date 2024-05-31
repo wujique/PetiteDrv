@@ -23,7 +23,6 @@
 //#include "gpio.h"
 #include "board_sysconf.h"
 #include "mcu.h"
-#include "mcu_io.h"
 #include "bus_spi.h"
 
 #include "trace.h"

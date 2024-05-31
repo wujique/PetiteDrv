@@ -662,7 +662,7 @@ s32 drv_ILI9325_color_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 colo
 {
 
 	u16 height,width;
-	u16 i,j;
+	//u16 i,j;
 	u16 hsa,hea,vsa,vea;
 
 	drv_ILI9325_xy2cp(lcd, sx, ex, sy, ey, &hsa,&hea,&vsa,&vea);
@@ -704,7 +704,7 @@ s32 drv_ILI9325_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
 {
 
 	u16 height,width;
-	u16 i,j;
+	//u16 i,j;
 	u16 hsa,hea,vsa,vea;
 
 	drv_ILI9325_xy2cp(lcd, sx, ex, sy, ey, &hsa,&hea,&vsa,&vea);

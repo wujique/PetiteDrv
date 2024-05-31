@@ -6,6 +6,8 @@
 #include <command.h>
 #include "console.h"
 
+#include "log.h"
+
 #if defined(CONFIG_BOOTDELAY) && (CONFIG_BOOTDELAY >= 0)
 static int abortboot(int);
 #endif

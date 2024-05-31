@@ -21,11 +21,13 @@
 */
 #include <stdarg.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "mcu.h"
 #include "board_sysconf.h"
 #include "bus/bus_uart.h"
 #include "log.h"
+#include "stimer.h"
 #include "SEGGER_RTT.h"
 
 LOG_L LogLevel = LOG_DEBUG;//系统调试信息等级
@@ -33,7 +35,7 @@ LOG_L LogLevel = LOG_DEBUG;//系统调试信息等级
 #define LOG_SEGGER_RTT 1
 #define BUFFER_INDEX 0
 
-#define LOG_WRITE_DATA(data, len)  mcu_uart_write(PC_PORT, data, len);
+#define LOG_WRITE_DATA(data, len)  mcu_uart_write(PC_PORT, (u8 *)data, len);
 //#define LOG_WRITE_DATA(data, len)  SEGGER_RTT_Write(BUFFER_INDEX,  data, len);
 
 //osMutexId_t LogMutex = NULL;
@@ -105,7 +107,7 @@ void uart_printf(s8 *fmt,...)
 
     s32 length = 0;
     string[sizeof(string) -1] = 0;
-    length = strlen(string);
+    length = strlen((const char *)string);
 
     LOG_WRITE_DATA(string, length); 
 
@@ -137,7 +139,7 @@ void wjq_log(LOG_L l, s8 *fmt,...)
  
     s32 length = 0;
     string[sizeof(string) -1] = 0;
-    length = strlen(string);
+    length = strlen((const char *)string);
 
     LOG_WRITE_DATA(string, length); 
 
@@ -158,7 +160,7 @@ void petite_log(LOG_L l, char *tag, const char *file, const char *fun, int line,
     strcpy(logbuf, log_color_tab[l]);
 
     systime = Stime_get_localtime();
-    sprintf(logbuf+strlen(logbuf), "[%010d]", systime);
+    sprintf(logbuf+strlen((const char *)logbuf), "[%010d]", systime);
     if (tag != NULL) {
         strcat(logbuf, "[");
         strcat(logbuf, tag);
@@ -178,11 +180,11 @@ void petite_log(LOG_L l, char *tag, const char *file, const char *fun, int line,
         strcat(logbuf, ":");
     }
 
-    sprintf(logbuf+strlen(logbuf), "%d]: ", line);
+    sprintf(logbuf+strlen((const char *)logbuf), "%d]: ", line);
     strcat(logbuf, log_color_tab[5]);
 
-    strcpy(string, logbuf);
-    hlen = strlen(logbuf);
+    strcpy((char *)string, logbuf);
+    hlen = strlen((const char *)logbuf);
 
     va_list ap;
     va_start(ap,fmt);
@@ -190,7 +192,7 @@ void petite_log(LOG_L l, char *tag, const char *file, const char *fun, int line,
 
     s32 length = 0;
     string[sizeof(string) -1] = 0;
-    length = strlen(string);
+    length = strlen((const char *)string);
     
     LOG_WRITE_DATA(string, length); 
     va_end(ap);
@@ -272,7 +274,7 @@ const static BusUartPra PcPortPra={
 board_mcu_preinit	.bufsize = 256,
 	};
 	
-BusUartNode *LogUartNode;
+void *LogUartNode;
 #endif
 
 void log_init(void)
@@ -281,3 +283,4 @@ void log_init(void)
     SEGGER_RTT_Init();
     LogInit = 0;
 }
+

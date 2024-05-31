@@ -318,7 +318,7 @@ static s32 bus_lcd_i2c_write_data(DevLcdNode *lcd, u8 *data, u32 len)
 {
 	/*直接定义256字节，可能有BUG，要根据len动态申请*/
 	u8 tmp[256];
-	u32 i;
+	//u32 i;
 	
 	u8 i2c_addr;
 	I2CPra *i2c_pra;

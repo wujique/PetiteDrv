@@ -507,7 +507,7 @@ s32 drv_R61408_color_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 color
 {
 
 	u16 height,width;
-	u16 i,j;
+	//u16 i,j;
 	u16 hsa,hea,vsa,vea;
 
 	drv_R61408_xy2cp(lcd, sx, ex, sy, ey, &hsa,&hea,&vsa,&vea);
@@ -547,7 +547,7 @@ s32 drv_R61408_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
 {
 
 	u16 height,width;
-	u32 i,j;
+	//u32 i,j;
 	u16 sc,ec,sp,ep;
 
 	drv_R61408_xy2cp(lcd, sx, ex, sy, ey, &sc,&ec,&sp,&ep);

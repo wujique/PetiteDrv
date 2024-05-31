@@ -26,7 +26,8 @@
 #include "..\..\components\FatFs\ff.c"
 #include "..\..\components\FatFs\ff_gen_drv.c"
 #include "..\..\components\FatFs\ffunicode.c"
-#include "..\..\components\FatFs\option\cc936.c"
+///@bug need fix
+//#include "..\..\components\FatFs\option\cc936.c"
 #include "..\..\components\FatFs\option\syscall.c"
 /**---------------------littlefs---------------------------*/
 #include "../../components/littlefs/lfs.c"

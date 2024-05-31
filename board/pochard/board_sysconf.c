@@ -55,15 +55,17 @@ const DevSpi DevSpi1IO={
 				.busconf = NULL,
 				.basetype = DEV_NULL,
 		},
-		/*clk*/
-		.clkport = MCU_PORT_B,
-		.clkpin = MCU_IO_3,
-		/*mosi*/
-		.mosiport = MCU_PORT_A,
-		.mosipin = MCU_IO_7,
-		/*miso*/
-		.misoport = MCU_PORT_B,
-		.misopin = MCU_IO_4,
+		.io={
+			/*clk*/
+			.clkport = MCU_PORT_B,
+			.clkpin = MCU_IO_3,
+			/*mosi*/
+			.mosiport = MCU_PORT_A,
+			.mosipin = MCU_IO_7,
+			/*miso*/
+			.misoport = MCU_PORT_B,
+			.misopin = MCU_IO_4,
+		},
 	};
 
 const DevSpi DevSpi2IO={
@@ -74,15 +76,18 @@ const DevSpi DevSpi2IO={
 				.busconf = NULL,
 				.basetype = DEV_NULL,
 		},
-		/*clk*/
-		.clkport = MCU_PORT_B,
-		.clkpin = MCU_IO_13,
-		/*mosi*/
-		.mosiport = MCU_PORT_B,
-		.mosipin = MCU_IO_15,
-		/*miso*/
-		.misoport = MCU_PORT_B,
-		.misopin = MCU_IO_14,
+
+		.io={
+			/*clk*/
+			.clkport = MCU_PORT_B,
+			.clkpin = MCU_IO_13,
+			/*mosi*/
+			.mosiport = MCU_PORT_B,
+			.mosipin = MCU_IO_15,
+			/*miso*/
+			.misoport = MCU_PORT_B,
+			.misopin = MCU_IO_14,
+		},
 	};
 /*------------------------ 
 	SPI通道

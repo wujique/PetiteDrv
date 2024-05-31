@@ -430,12 +430,11 @@ int vfs_mount_lfs(VfsMountNode *vfs_node)
  * @return  s32 
  * 
  */
-static s32 vfs_get_dir_name(const u8 *lpPath, u8 *lpDir, u8 *lpName)
+static s32 vfs_get_dir_name(const char *lpPath, char *lpDir, char *lpName)
 {
     int index;
     u8 name_index, dir_index;    
-    u8 str_len, dir_len, name_len;
-    u8 flag = 0;
+    u8 dir_len, name_len;
 
     name_index = 0;
 	name_len = 0;
@@ -443,13 +442,13 @@ static s32 vfs_get_dir_name(const u8 *lpPath, u8 *lpDir, u8 *lpName)
 	dir_len = 0;
 	
 	index = 0;
-	while(index < strlen(lpPath)){
+	while(index < strlen((const char *)lpPath)){
 		if(*(lpPath+index) != '/') break;
 		index++;
 	}	
 	dir_index = index;
 	
-	while(index < strlen(lpPath)){
+	while(index < strlen((const char *)lpPath)){
 		if(*(lpPath+index) == '/') break;
 		index++;
 	}	
@@ -458,7 +457,7 @@ static s32 vfs_get_dir_name(const u8 *lpPath, u8 *lpDir, u8 *lpName)
 
 	if(*(lpPath+index) == '/')index++;
 	name_index = index;
-	name_len = 	strlen(lpPath) - name_index;
+	name_len = 	strlen((const char *)lpPath) - name_index;
 
 	if (name_len == 0){
 		name_index = dir_index;
@@ -527,8 +526,8 @@ int vfs_creat(const char *filename, int mode)
  */
 int vfs_open(const char *pathname, int oflags)
 {
-	u8 dir[VFS_DIR_LEN];
-    u8 name[VFS_NAME_LEN];
+	char dir[VFS_DIR_LEN];
+    char name[VFS_NAME_LEN];
 	FileNode *filenode;
 
 	PartitionNode *part;
@@ -609,7 +608,7 @@ int vfs_read(int fd, void *buf, size_t length)
 		return vfs_node->read(filenode, buf, length);
 	}
 
-	return -2;
+	//return -2;
 }
 /**
  * @brief   描述
@@ -654,7 +653,7 @@ int vfs_write(int fd, void *buf, size_t length)
 	}else
 		return vfs_node->write(filenode, buf, length);
 
-	return -2;
+	//return -2;
 }
 
 /**
@@ -671,7 +670,6 @@ int vfs_write(int fd, void *buf, size_t length)
  */
 int vfs_lseek(int fd, int offset, int whence)
 {
-	unsigned int len;
 	int file_len;
 	
 	if(fd == NULL) {
@@ -716,7 +714,7 @@ int vfs_lseek(int fd, int offset, int whence)
 		return vfs_node->lseek(filenode, offset, whence);
 	}
 
-	return -2;
+	//return -2;
 }
 /**
  * @brief   描述
@@ -727,8 +725,8 @@ int vfs_lseek(int fd, int offset, int whence)
  */
 int vfs_close(int fd)
 {
-	unsigned int len;
-		
+	int res;
+
 	if(fd == NULL) return -1;
 	
 	FileNode *filenode;
@@ -743,19 +741,16 @@ int vfs_close(int fd)
 	if (strcmp(part->def->type, VFS_STR_FATFS)==0){
 		VfsDebug(LOG_DEBUG, "vfs_close FS_TYPE_FATFS\r\n");
 #if (SYS_FS_FATFS == 1)	
-
-		FRESULT res;
 		res = f_close(&filenode->pra.fatfd);
-
 #endif
 
 	}else {
-		vfs_node->close(filenode);
+		res = vfs_node->close(filenode);
 	}
 
 	wjq_free(filenode);
 
-	return NULL;
+	return res;
 }
 /**
  * @brief   描述
@@ -766,9 +761,7 @@ int vfs_close(int fd)
  */
 int vfs_tell(int fd)
 {
-
-	unsigned int len;
-		
+	
 	if(fd == NULL) 	return -1;
 
 	FileNode *filenode;
@@ -783,7 +776,6 @@ int vfs_tell(int fd)
 	if (strcmp(part->def->type, VFS_STR_FATFS)==0){
 		VfsDebug(LOG_INFO, "vfs_tell FS_TYPE_FATFS\r\n");
 #if (SYS_FS_FATFS == 1)	
-
 		int res;
 		res = f_tell(&filenode->pra.fatfd);
 		return res;
@@ -793,14 +785,14 @@ int vfs_tell(int fd)
 		return vfs_node->tell(filenode);
 	}
 
-	return NULL;
+	//return NULL;
 }
 
 
 int vfs_file_copy(char *srcname, char *dstname)
 {
 	int srcfilefd, dstfilefd;
-	int res;
+	int res = 0;
 	
 	srcfilefd = vfs_open(srcname, O_RDONLY);
 	if(srcfilefd <= 0)  {
@@ -831,6 +823,7 @@ int vfs_file_copy(char *srcname, char *dstname)
 	vfs_close(srcfilefd);
 	vfs_close(dstfilefd);
 	
+	return res;
 }
 
 
@@ -851,6 +844,7 @@ int vfs_node_read(void *buf, unsigned int size,unsigned int nmemb, ft_file_struc
 
 int vfs_node_write(ft_file_struct * fd, const void *buf, size_t length)
 {
+	return -1;
 }
 
 int vfs_node_lseek(ft_file_struct * fd, int offset, int whence)

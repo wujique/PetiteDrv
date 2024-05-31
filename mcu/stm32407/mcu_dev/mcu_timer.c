@@ -21,7 +21,7 @@
 
 #include "stm32f4xx.h"
 #include "log.h"
-#include "mcu_timer.h"
+#include "mcu.h"
 
 /*
 
@@ -191,6 +191,8 @@ s32 mcu_timer_init(McuTimerNum timer)
     TIM_ITConfig((TIM_TypeDef *)STM32TimerList[timer], TIM_IT_Update, ENABLE);//打开定时器中断
     
 	McuTimerCtrlList[timer].Callback = NULL;
+
+	return 0;
 }  
 /**
  *@brief:      

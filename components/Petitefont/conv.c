@@ -2,9 +2,6 @@
 #include "mcu.h"
 #include "log.h"
 
-//#include "gb2312.h"
-//#include "gb18030.h"
-
 #include "mem/p_malloc.h"
 
 

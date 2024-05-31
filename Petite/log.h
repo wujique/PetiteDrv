@@ -36,4 +36,6 @@ void dump_hex(const uint8_t *buf, uint32_t size, uint32_t number);
 
 void log_init(void);
 
+void cmd_uart_printf(s8 *fmt,...);
+
 #endif

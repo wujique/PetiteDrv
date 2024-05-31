@@ -21,8 +21,6 @@
 */
 #include "mcu.h"
 #include "log.h"
-
-#include "mcu_uart.h"
 #include "petite.h"
 
 extern UART_HandleTypeDef huart4;

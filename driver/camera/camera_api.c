@@ -36,7 +36,7 @@
 
 #include "board_sysconf.h"
 
-#include "mcu_dcmi.h"
+#include "mcu.h"
 #include "camera_api.h"
 #include "drv_ov9655.h"
 #include "drv_ov2640.h"

@@ -12,6 +12,7 @@
 */
 #include <command.h>
 #include "console.h"
+#include "stimer.h"
 
 #define DAY_SECOND		(24*60*60)
 #define HOUR_SECOND		(60*60)

@@ -7,7 +7,6 @@
 #include "petite_def.h"
 #include "cmsis_os.h"
 #include "board_sysconf.h"
-#include "drv_lcd.h"
 #include "components/softtimer/softtimer.h"
 
 /** @addtogroup Template_Project
@@ -81,10 +80,6 @@ const osThreadAttr_t defaultTask_attributes = {
 
 void petite_task(void *pvParameters)
 {
-	
-	uint16_t tcnt=0;
-	UBaseType_t stackHWM;
-	
 	LogPetite(LOG_INFO,"petite_task\r\n");
 
 	PetiteSlstLoop = slst_create_loop();

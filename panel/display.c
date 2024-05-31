@@ -18,11 +18,15 @@
 		7 如侵犯你的权利，请联系：code@wujique.com
 		8 一切解释权归屋脊雀工作室所有。
 */
+#include <stdio.h>
+#include <string.h>
+
 #include "mcu.h"
 #include "petite_config.h"
 #include "petite.h"
 #include "board_sysconf.h"
 #include "drv_lcd.h"
+#include "petite_font.h"
 
 u16 PenColor = BLACK;
 u16 BackColor = BLUE;
@@ -320,6 +324,7 @@ s32 display_put_str_to_framebuff(DevLcdNode *lcd, petite_font_t *font, int x, in
 	未测试，
 	针对8080接口的，没有framebuff的LCD
 	*/
+#if 0
 s32 display_put_str_to_lcd(DevLcdNode *lcd, petite_font_t *font, int x, int y, char *s, unsigned colidx)
 {
 	u16 slen;
@@ -386,9 +391,9 @@ s32 display_put_str_to_lcd(DevLcdNode *lcd, petite_font_t *font, int x, int y, c
 	
 	sidx = 0;
 	/* framebuff 坐标*/
-	s16 fbx, fby;
+	s16 fbx;
 	fbx = 0;
-	fby = 0;
+
 	
 	/*获取点阵，并转化为LCD像素*/
 	while(1) {
@@ -470,6 +475,7 @@ s32 display_put_str_to_lcd(DevLcdNode *lcd, petite_font_t *font, int x, int y, c
 
 	return 0;
 }
+#endif
 
 /**
  *@brief:      dev_lcd_put_string
@@ -481,7 +487,7 @@ s32 display_put_str_to_lcd(DevLcdNode *lcd, petite_font_t *font, int x, int y, c
  */
 s32 display_lcd_put_string(DevLcdNode *lcd, petite_font_t *font, int x, int y, char *str, unsigned colidx)
 {
-	s32 res;
+	//s32 res;
 
 	if (lcd->fb == LCD_HAVE_FRAMEBUFF) {
 		//uart_printf("lcd have framebuff!\r\n");
@@ -572,7 +578,9 @@ int bmp_parse_open(struct _strBmpParse *pbmp, char *bmpname)
 		return -1;
 	}
 	rlen = vfs_read(pbmp->fd, (void *)buf, 14);
-    
+    if (rlen != 14) {
+		wjq_log(LOG_DEBUG, "read bf err!\r\n");	
+	}
 	pbmp->bf.bfType      = buf[0];
     pbmp->bf.bfSize      = buf[2];
     pbmp->bf.bfSize = (pbmp->bf.bfSize<<16)+buf[1];

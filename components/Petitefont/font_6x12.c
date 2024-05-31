@@ -320,7 +320,7 @@ const uint8_t *FontVga6X12_get_glyph_bitmap(const petite_font_t * pfont, uint32_
 PetiteFontDsc FontVga6x12Pfd={
 	.fdt = FONT_H_H_L_R_U_D,
 	.st = FONT_ST_ASC,
-	.stc = NULL,
+	.stc = FONT_DOT_NULL,
 };
 
 

@@ -13,6 +13,9 @@
 #ifndef __BOARD_SYSCONF__
 #define __BOARD_SYSCONF__
 
+/* 配置 mcu接口类型 */
+#define MCU_STM32H7XX
+
 /* */
 #define PC_PORT  MCU_UART_4 
 

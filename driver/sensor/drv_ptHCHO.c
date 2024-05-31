@@ -19,7 +19,7 @@
 		8 一切解释权归屋脊雀工作室所有。
 */
 #include "mcu.h"
-
+#include "bus_uart.h"
 #include "petite_config.h"
 
 #if (DRV_HCOC_MODULE == 1)
@@ -40,7 +40,7 @@ const BusUartPra PtHCHOPortPra={
 	.bufsize = 512,
 	};
 	
-BusUartNode *PtHCHOUartNode;
+void *PtHCHOUartNode;
 
 s32 dev_ptHCHO_init(void)
 {

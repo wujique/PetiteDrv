@@ -18,19 +18,6 @@ typedef struct {
 }AudioPipeNode;
 
 
-#define 	AUDIO_I2S_LSB         0x00	
-#define 	AUDIO_I2S_MSB         0x01
-#define 	AUDIO_I2S_Phillips    0x02
-#define 	AUDIO_I2S_PCM         0x03
-
-
-#if 0	
-#define 	AUDIO_I2S_Data_16b    0x00
-#define 	AUDIO_I2S_Data_20b    0x01
-#define 	AUDIO_I2S_Data_24b    0x02
-#define 	AUDIO_I2S_Data_32b    0x03
-#endif
-
 #endif
 
 

@@ -12,12 +12,9 @@
  */
 
 #include "mcu.h"
-#include "petite_config.h"
 #include "petite_font.h"
 #include "mem/p_malloc.h"
 #include "log.h"
-#include "board_sysconf.h"
-
 #include "vfs.h"
 
 typedef struct _sFontWjqDsc{

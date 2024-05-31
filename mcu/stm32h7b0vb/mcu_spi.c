@@ -22,10 +22,6 @@
 #include "mcu.h"
 #include "log.h"
 
-#include "bus/bus_spi.h"
-
-#include "mcu_spi.h"
-
 //#define MCU_SPI_DEBUG
 
 #ifdef MCU_SPI_DEBUG
@@ -68,7 +64,7 @@ const _strSpiModeSet SpiModeSet[SPI_MODE_MAX]=
  *@param[out]  无
  *@retval:     
  */
-s32 mcu_hspi_init(const DevSpi *dev)
+s32 mcu_hspi_init(const char *name, const SpiIoDef *io)
 {
 	GPIO_InitTypeDef GPIO_InitStruct = {0};
 
@@ -95,7 +91,7 @@ s32 mcu_hspi_init(const DevSpi *dev)
  *@param[out]  无
  *@retval:     
  */
-s32 mcu_hspi_open(DevSpiNode *node, SPI_MODE mode, u16 pre)
+s32 mcu_hspi_open(const char *name, SPI_MODE mode, u16 KHz)
 {
 	SPI_DEBUG("mcu_hspi_open\r\n");
     return 0;
@@ -107,7 +103,7 @@ s32 mcu_hspi_open(DevSpiNode *node, SPI_MODE mode, u16 pre)
  *@param[out]  无
  *@retval:     
  */
-s32 mcu_hspi_close(DevSpiNode *node)
+s32 mcu_hspi_close(const char *name)
 {
 	SPI_DEBUG("mcu_hspi_close\r\n");
     return 0;
@@ -121,7 +117,7 @@ s32 mcu_hspi_close(DevSpiNode *node)
  *@param[out]  无
  *@retval:     
  */
-s32 mcu_hspi_transfer(DevSpiNode *node, u8 *snd, u8 *rsv, s32 len)
+s32 mcu_hspi_transfer(const char *name, u8 *snd, u8 *rsv, s32 len)
 {
     s32 i = 0;
     s32 pos = 0;

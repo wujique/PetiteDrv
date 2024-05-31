@@ -19,9 +19,7 @@
 	当数据量大，可以考虑直接将用回调函数，通过修改接收数缓冲的方式，减少数据拷贝。
 	*/
 #include "mcu.h"
-#include "mcu_uart.h"
 #include "log.h"
-
 #include "petite.h"
 
 
@@ -40,7 +38,7 @@ int bus_uart_init(void) {
 	失败返回0；
 	成功返回节点 
 	需要传入串口的参数        	*/
-BusUartNode *bus_uart_open(char *name, const BusUartPra *Pra)
+void *bus_uart_open(char *name, const BusUartPra *Pra)
 {
 	int res;
 	/* 查找有没有这个串口 */
@@ -87,12 +85,15 @@ BusUartNode *bus_uart_open(char *name, const BusUartPra *Pra)
 	node->comport = comport;
 	BusUartGd[comport] = (int)node;
 	uart_printf("mcu uart open %08x\r\n", node);
-	return node;
+	return (void *)node;
 }
 
-void bus_uart_close(BusUartNode *node)
+void bus_uart_close(void *vnode)
 {
+	BusUartNode *node = vnode;
+
 	if(node == NULL) return;
+
 
 	//mcu_uart_deinit(node->comport);
 	wjq_free(node->buf);
@@ -108,7 +109,7 @@ void bus_uart_close(BusUartNode *node)
  *@param[out]  无
  *@retval:     
  */
-s32 bus_uart_tcflush(BusUartNode *node)
+s32 bus_uart_tcflush(void *node)
 { 
 
 }
@@ -122,8 +123,9 @@ s32 bus_uart_tcflush(BusUartNode *node)
  *@param[out]  无
  *@retval:     
  */
-s32 bus_uart_read (BusUartNode *node, u8 *buf, s32 len)
+s32 bus_uart_read (void *vnode, u8 *buf, s32 len)
 {
+	BusUartNode *node = vnode;
     s32 i;
     struct _pkfifo *pfifo;
 	int res;
@@ -146,8 +148,9 @@ s32 bus_uart_read (BusUartNode *node, u8 *buf, s32 len)
 	return i;
 }
 
-int bus_uart_write(BusUartNode *node, u8 *buf, s32 len)
+int bus_uart_write(void *vnode, u8 *buf, s32 len)
 {
+	BusUartNode *node=vnode;
 	return mcu_uart_send(node->comport, buf, len);
 }
 

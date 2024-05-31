@@ -193,9 +193,7 @@ static s32 drv_IL3820_refresh_gram(DevLcdNode *lcd, u16 sc, u16 ec, u16 sp, u16 
 	
 	u32 cnt;
 	u32 gramsize;
-	u16 i,j;
 	u8 data;
-	u16 w,l;
 	
 	drvdata = (struct _epaper3820_drv_data *)lcd->pri;
 	node = lcd->busdrv->open(lcd);
@@ -262,7 +260,6 @@ const unsigned char LUT_DATA_part[]={  //30 bytes
 
 void EPD_select_LUT(DevLcdNode *node, const unsigned char * wave_data)
 {      
-	u8 tmp[16];
     unsigned char count;
 
      drv_il3820_write_cmd(node, 0x32);
@@ -281,8 +278,6 @@ void EPD_select_LUT(DevLcdNode *node, const unsigned char * wave_data)
  */
 s32 drv_IL3820_init(DevLcdNode *lcd)
 {
-	u16 data;
-	
 	DevLcdNode * node = lcd;
 	PDevNode *pnode = (PDevNode *)lcd;
 	
@@ -293,7 +288,6 @@ s32 drv_IL3820_init(DevLcdNode *lcd)
 	ctrlio = dev->ctrlio;
 	
 	u8 tmp[16];
-	u8 testbuf[2];
 
 	LogLcdDrv(LOG_DEBUG, "drv_IL3820_init\r\n ");
 	
@@ -442,7 +436,7 @@ s32 drv_IL3820_color_fill(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey, u16 c
 	u16 i,j;
 	u16 xtmp,ytmp;
 	u16 page, colum;
-	u16 sp, ep, sc, ec;
+	//u16 sp, ep, sc, ec;
 	
 	struct _epaper3820_drv_data *drvdata;
 
@@ -542,11 +536,11 @@ s32 drv_IL3820_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
 {
 	u16 i,j;
 	u16 xtmp,ytmp;
-	u16 xlen,ylen;
+	u16 xlen;//,ylen;
 	u16 page, colum;
 	u32 index;
 	u16 cdata;
-	u16 sp, ep, sc, ec;
+	//u16 sp, ep, sc, ec;
 	
 	struct _epaper3820_drv_data *drvdata;
 
@@ -556,7 +550,7 @@ s32 drv_IL3820_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
 
 	/*xlen跟ylen是用来取数据的，不是填LCD*/
 	xlen = ex-sx+1;//全包含
-	ylen = ey-sy+1;
+	//ylen = ey-sy+1;
 
 	/*防止坐标溢出*/
 	if (sy >= lcd->height) {

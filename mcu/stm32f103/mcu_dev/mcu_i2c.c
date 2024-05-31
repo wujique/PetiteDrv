@@ -31,6 +31,7 @@
 #define I2C_DEBUG(a, ...)
 #endif
 
+extern const GPIO_TypeDef *Stm32PortList[MCU_PORT_MAX];
 
 #define SCCB_TIMEOUT_MAX    10000
 	

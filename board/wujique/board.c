@@ -8,15 +8,11 @@
 #include "drv_buzzer.h"
 #include "dacsound.h"
 #include "touch.h"
-
-#include "mcu_dcmi.h"
 #include "drv_lcd.h"
 #include "camera_api.h"
 
-#include "gb18030.h"
 #include "gb2312.h"
-
-
+#include "gb18030.h"
 /* 硬件相关的都在board.c定义
 	调用对应的驱动进行初始化。
 	不能在驱动中包含硬件相关信息。
@@ -74,7 +70,7 @@ const static BusUartPra Esp8266PortPra={
 	.bufsize = 512,
 	};
 	
-BusUartNode *Esp8266UartNode;
+void *Esp8266UartNode;
 
 s32 bsp_exuart_wifi_init(void)
 {
@@ -195,13 +191,13 @@ void board_app_task(void)
 	#endif
 	
 	//fun_sound_play("/1:/sound/stereo_16bit_32k.wav", "wm8978");
-	//wujique_stm407_test();
+	wujique_stm407_test();
 
 	/* 初始化lvgl 
 	注意，初始化LVGL的过程，会用到不少栈，
 	如果在rtos的任务中进行初始化，注意任务栈的大小，
 	防止溢出造成hardfault */
-	#if 1
+	#if 0
     lvgllcd = lcd_open("tftlcd");
 	//lcd_setdir(lvgllcd, W_LCD, L2R_U2D);
 	tp_open("board_rtp_xtp2046");

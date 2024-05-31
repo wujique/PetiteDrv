@@ -2,7 +2,7 @@
 #define _PETITE_DEV_H_
 
 #include "mem/p_list.h"
-
+#include "petite_config.h"
 
 typedef enum{
 	DEV_NULL = 0,

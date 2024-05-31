@@ -1,8 +1,7 @@
 #ifndef _DEV_DACSOUND_H_
 #define _DEV_DACSOUND_H_
 
-#include "mcu_timer.h"
-#include "mcu_io.h"
+#include "mcu.h"
 
 /* DAC播放语音设备*/
 typedef struct _strDevDacSound

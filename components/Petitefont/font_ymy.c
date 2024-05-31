@@ -4,12 +4,8 @@
 	*/
 
 #include "mcu.h"
-#include "petite_config.h"
 #include "petite_font.h"
-
 #include "log.h"
-#include "board_sysconf.h"
-
 #include "vfs.h"
 
 

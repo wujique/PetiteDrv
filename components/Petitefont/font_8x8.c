@@ -8,9 +8,9 @@
 #include "petite_font.h"
 
 
-#define FONTDATAMAX 2048
+#define FONTDATAMAX_8X8 2048
 
- unsigned char const fontdata_8x8[FONTDATAMAX] = {
+ unsigned char const fontdata_8x8[FONTDATAMAX_8X8] = {
 
 	/* 0 0x00 '^@' */
 	0x00, /* 00000000 */
@@ -2604,7 +2604,6 @@ bool FontVga8x8_get_glyph_dsc(const struct _petite_font_t *pfont, petite_font_gl
 const uint8_t *FontVga8x8_get_glyph_bitmap(const petite_font_t * pfont, uint32_t letter)
 {
 	uint32_t shift;
-	uint16_t code;
 
 	//uart_printf("get bmp font:%04x\r\n", letter);
 	/* */
@@ -2618,7 +2617,7 @@ const uint8_t *FontVga8x8_get_glyph_bitmap(const petite_font_t * pfont, uint32_t
 PetiteFontDsc FontVga8x8Pfd={
 	.fdt = FONT_H_H_L_R_U_D,
 	.st = FONT_ST_ASC,
-	.stc = NULL,
+	.stc = FONT_DOT_NULL,
 };
 
 

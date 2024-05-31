@@ -252,7 +252,7 @@ s32 drv_ST7565_drawpoint(DevLcdNode *lcd, u16 x, u16 y, u16 color)
 	u16 page, colum;
 
 	struct _cog_drv_data *drvdata;
-	DevLcdNode * node = lcd;
+	//DevLcdNode * node = lcd;
 	
 	drvdata = (struct _cog_drv_data *)lcd->pri;
 
@@ -364,7 +364,7 @@ s32 drv_ST7565_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
 {
 	u16 i,j;
 	u16 xtmp,ytmp;
-	u16 xlen,ylen;
+	u16 xlen;//,ylen;
 	u16 page, colum;
 	u32 index;
 	
@@ -376,7 +376,7 @@ s32 drv_ST7565_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
 
 	/*xlen跟ylen是用来取数据的，不是填LCD*/
 	xlen = ex-sx+1;//全包含
-	ylen = ey-sy+1;
+	//ylen = ey-sy+1;
 
 	/*防止坐标溢出*/
 	if(sy >= lcd->height) {
@@ -444,7 +444,7 @@ s32 drv_ST7565_prepare_display(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey)
 
 s32 drv_ST7565_flush(DevLcdNode *lcd, u16 *color, u32 len)
 {
-	u16 i,j;
+	//u16 i,j;
 	u16 xtmp,ytmp;
 	u16 page, colum;
 	u32 index;

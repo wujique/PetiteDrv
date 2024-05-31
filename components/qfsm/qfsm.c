@@ -8,8 +8,7 @@
  * @copyright Copyright (c) 2023..
  */
 #include "mcu.h"
-#include "petite_config.h"
-#include "petite_font.h"
+//#include "petite_config.h"
 #include "log.h"
 /**
  * QFSM（QEP FSM）

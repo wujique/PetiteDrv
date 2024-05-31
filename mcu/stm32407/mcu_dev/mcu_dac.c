@@ -67,17 +67,13 @@ s32 mcu_dac_open(void)
  *@param[out]  无
  *@retval:     
  */
-s32 mcu_dac_output_vol(u16 vol)
+void mcu_dac_output_vol(u16 vol)
 {
-
     u32 temp;
     
     temp = (0xfff*vol)/3300;
-
     MCU_DAC_DEBUG(LOG_DEBUG, "\r\n---test dac data:%d-----\r\n", temp);
-    
     DAC_SetChannel2Data(DAC_Align_12b_R, temp);//12 位右对齐数据格式
-		return 0;
 }
 /**
  *@brief:      mcu_dac_output

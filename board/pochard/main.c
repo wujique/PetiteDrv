@@ -57,7 +57,7 @@ const static BusUartPra PcPortPra={
 	.bufsize = 256,
 	};
 
-BusUartNode *LogUartNode;
+void *LogUartNode;
 
 /*
 	cpu初始化

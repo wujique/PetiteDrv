@@ -59,6 +59,8 @@ typedef struct _strMenu
 
 
 #include "drv_lcd.h"
+#include "petite_font.h"
+
 extern s32 emenu_run(DevLcdNode *lcd, MENU *p, u16 len, petite_font_t *font, u8 spaced, u8 lang);
 
 

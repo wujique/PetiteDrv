@@ -21,7 +21,6 @@
 
 #include "mcu.h"
 #include "log.h"
-#include "mcu_io.h"
 #include "bus/bus_i2c.h"
 
 #define MCU_I2C_TIMEOUT 250

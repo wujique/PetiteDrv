@@ -45,7 +45,7 @@ const static BusUartPra Uart7Pra = {
 void esp8266_uart_test(void)
 {
 	int rlen;
-	BusUartNode *uartnode;
+	void *uartnode;
 	uint8_t buf[16];
 	uartnode = bus_uart_open("uart7", &Uart7Pra);
 

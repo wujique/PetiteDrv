@@ -8,13 +8,8 @@
 #include "drv_buzzer.h"
 #include "dacsound.h"
 #include "touch.h"
-
-#include "mcu_dcmi.h"
 #include "drv_lcd.h"
 #include "camera_api.h"
-
-#include "gb18030.h"
-#include "gb2312.h"
 
 #include "cmsis_os.h"
 
@@ -25,6 +20,9 @@
 #include "panel/soundplay.h"
 
 #include "components/softtimer/softtimer.h"
+
+#include "gb2312.h"
+#include "gb18030.h"
 
 void *BoardSlstLoop = NULL;
 

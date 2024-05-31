@@ -203,9 +203,9 @@ static s32 drv_IL91874_refresh_gram(DevLcdNode *lcd, u16 sc, u16 ec, u16 sp, u16
 	
 	u32 cnt;
 	u32 gramsize;
-	u16 i,j;
-	u8 data;
-	u16 w,l;
+	//u16 i,j;
+	//u8 data;
+	//u16 w,l;
 
 	PDevNode *pnode;
 	DevLcd *dev;
@@ -359,11 +359,9 @@ static s32 drv_IL91874_display_onoff(DevLcdNode *lcd, u8 sta)
  */
 s32 drv_IL91874_init(DevLcdNode *lcd)
 {
-	u16 data;
 	DevLcdNode * node = lcd;
 
 	u8 tmp[16];
-	u8 testbuf[2];
 
 	PDevNode *pnode;
 	DevLcd *dev;
@@ -496,7 +494,7 @@ s32 drv_IL91874_color_fill(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey, u16 
 	u16 i,j;
 	u16 xtmp,ytmp;
 	u16 page, colum;
-	u16 sp, ep, sc, ec;
+	//u16 sp, ep, sc, ec;
 	
 	struct _epaper_drv_data *drvdata;
 
@@ -526,19 +524,19 @@ s32 drv_IL91874_color_fill(DevLcdNode *lcd, u16 sx, u16 ex, u16 sy, u16 ey, u16 
 
 	/*求出被改动的page和cloum*/
 	if(lcd->dir == H_LCD) {
-		sp = sy;
-		ep = ey;
+		//sp = sy;
+		//ep = ey;
 
-		sc = sx;
-		ec = ex;
+		//sc = sx;
+		//ec = ex;
 			
 	} else {
 		//如果是竖屏，XY轴跟显存的映射要对调
-		sp = sx;
-		ep = ex;
+		//sp = sx;
+		//ep = ex;
 
-		ec = (lcd->height - sy);
-		sc = (lcd->height - ey);
+		//ec = (lcd->height - sy);
+		//sc = (lcd->height - ey);
 	}
 
 	for(j=sy;j<=ey;j++) {
@@ -605,11 +603,11 @@ s32 drv_IL91874_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
 {
 	u16 i,j;
 	u16 xtmp,ytmp;
-	u16 xlen,ylen;
+	u16 xlen;//ylen;
 	u16 page, colum;
 	u32 index;
 	u16 cdata;
-	u16 sp, ep, sc, ec;
+	//u16 sp, ep, sc, ec;
 	
 	struct _epaper_drv_data *drvdata;
 
@@ -624,7 +622,7 @@ s32 drv_IL91874_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
 
 	/*xlen跟ylen是用来取数据的，不是填LCD*/
 	xlen = ex-sx+1;//全包含
-	ylen = ey-sy+1;
+	//ylen = ey-sy+1;
 
 	/*防止坐标溢出*/
 	if(sy >= lcd->height) {
@@ -644,19 +642,19 @@ s32 drv_IL91874_fill(DevLcdNode *lcd, u16 sx,u16 ex,u16 sy,u16 ey,u16 *color)
 
 	/*求出被改动的page和cloum*/
 	if(lcd->dir == H_LCD) {
-		sp = sy;
-		ep = ey;
+		//sp = sy;
+		//ep = ey;
 
-		sc = sx;
-		ec = ex;
+		//sc = sx;
+		//ec = ex;
 			
 	} else {
 		//如果是竖屏，XY轴跟显存的映射要对调
-		sp = sx;
-		ep = ex;
+		//sp = sx;
+		//ep = ex;
 
-		ec = (lcd->height - sy);
-		sc = (lcd->height - ey);
+		//ec = (lcd->height - sy);
+		//sc = (lcd->height - ey);
 	}
 	
 	for(j=sy;j<=ey;j++) {

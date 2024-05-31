@@ -22,7 +22,6 @@
 	封装IO操作，以便移植到其他芯片
 */
 #include "mcu.h"
-#include "mcu_timer.h"
 #include "log.h"
 
 const GPIO_TypeDef *Stm32PortList[MCU_PORT_MAX] = {NULL, GPIOA,  GPIOB, GPIOC, GPIOD,

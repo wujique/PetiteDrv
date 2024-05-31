@@ -75,15 +75,17 @@ const DevSpi DevVSpi1IO={
 				.busconf = NULL,
 				.basetype = DEV_NULL,
 			},
-		/*clk*/
-		.clkport = MCU_PORT_B,
-		.clkpin = MCU_IO_0,
-		/*mosi*/
-		.mosiport = MCU_PORT_D,
-		.mosipin = MCU_IO_11,
-		/*miso*/
-		.misoport = MCU_PORT_D,
-		.misopin = MCU_IO_12,
+		.io={
+			/*clk*/
+			.clkport = MCU_PORT_B,
+			.clkpin = MCU_IO_0,
+			/*mosi*/
+			.mosiport = MCU_PORT_D,
+			.mosipin = MCU_IO_11,
+			/*miso*/
+			.misoport = MCU_PORT_D,
+			.misopin = MCU_IO_12,
+		},
 	};
 
 #if 0
@@ -94,6 +96,7 @@ const DevSpi DevVspi3IO={
 				.name = "VSPI3",
 				.type = BUS_SPI_V,
 			},
+		.io={
 		/*clk*/
 		.clkport = MCU_PORT_G,
 		.clkpin = MCU_IO_6,
@@ -105,7 +108,7 @@ const DevSpi DevVspi3IO={
 		/*miso*/
 		.misoport = MCU_PORT_NULL,
 		.misopin = NULL,
-
+		},
 	};
 #endif
 
@@ -116,6 +119,7 @@ const DevSpi DevVspi2IO={
 				.name = "VSPI2",
 				.type = BUS_SPI_V,
 			},
+		.io={
 		/*clk*/
 		.clkport = MCU_PORT_F,
 		.clkpin = MCU_IO_11,
@@ -127,7 +131,7 @@ const DevSpi DevVspi2IO={
 		/*miso*/
 		.misoport = MCU_PORT_F,
 		.misopin = MCU_IO_9,
-
+		},
 	};
 #endif
 /*
@@ -143,15 +147,17 @@ const DevSpi DevSpi3IO={
 				.busconf = NULL,
 				.basetype = DEV_NULL,
 		},
-		/*clk*/
-		.clkport = MCU_PORT_B,
-		.clkpin = MCU_IO_3,
-		/*mosi*/
-		.mosiport = MCU_PORT_B,
-		.mosipin = MCU_IO_5,
-		/*miso*/
-		.misoport = MCU_PORT_B,
-		.misopin = MCU_IO_4,
+		.io={
+			/*clk*/
+			.clkport = MCU_PORT_B,
+			.clkpin = MCU_IO_3,
+			/*mosi*/
+			.mosiport = MCU_PORT_B,
+			.mosipin = MCU_IO_5,
+			/*miso*/
+			.misoport = MCU_PORT_B,
+			.misopin = MCU_IO_4,
+		},
 	};
 
 /*------------------------ 

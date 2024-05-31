@@ -1,5 +1,7 @@
 
 #include "stdlib.h"
+#include <stdio.h>
+#include <string.h>
 
 #include "mcu.h"
 #include "petite_config.h"

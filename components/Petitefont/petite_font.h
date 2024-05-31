@@ -35,6 +35,7 @@ typedef enum{
 	字库类型，匹配取点阵算法
 	*/
 typedef enum{
+	FONT_DOT_NULL = 0,
 	/* 屋脊雀字库，使用双字节码码位排布 */
 	FONT_DOT_WJQ = 1,
 	/* 中易点阵字库 */

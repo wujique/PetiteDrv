@@ -21,7 +21,6 @@
 */
 #include "mcu.h"
 #include "log.h"
-#include "bus_spi.h"
 #include "board_sysconf.h"
 
 #define MCU_SPI_DEBUG
@@ -106,7 +105,7 @@ static void mcu_MX_SPI2_Init(void)
  *@param[out]  无
  *@retval:     
  */
-s32 mcu_hspi_init(const DevSpi *dev)
+s32 mcu_hspi_init(const char *name, const SpiIoDef *io)
 {
 	SPI_DEBUG(LOG_DEBUG, ">----mcu_hspi_init\r\n");
 	mcu_MX_SPI2_Init();
@@ -122,7 +121,7 @@ s32 mcu_hspi_init(const DevSpi *dev)
  *@param[out]  无
  *@retval:     
  */
-s32 mcu_hspi_open(DevSpiNode *node, SPI_MODE mode, u16 KHz)
+s32 mcu_hspi_open(const char *name, SPI_MODE mode, u16 KHz)
 {
 
 	if (node->gd != -1) {
@@ -133,7 +132,7 @@ s32 mcu_hspi_open(DevSpiNode *node, SPI_MODE mode, u16 KHz)
 	if(mode >= SPI_MODE_MAX)
 		return -1;
 	
-	if (strcmp(node->dev.pnode.name, "SPI2") != 0) {
+	if (strcmp(name, "SPI2") != 0) {
 		return -1;
     }
 
@@ -141,6 +140,7 @@ s32 mcu_hspi_open(DevSpiNode *node, SPI_MODE mode, u16 KHz)
   	McuHspi2.Init.CLKPhase = SpiModeSet[mode].CPHA;
 
 	/* 根据传入的KHz 计算分频*/
+	///@bug need fix
 	McuHspi2.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_64;
 	
 	if (HAL_SPI_Init(&McuHspi2) != HAL_OK) {
@@ -158,18 +158,11 @@ s32 mcu_hspi_open(DevSpiNode *node, SPI_MODE mode, u16 KHz)
  *@param[out]  无
  *@retval:     
  */
-s32 mcu_hspi_close(DevSpiNode *node)
+s32 mcu_hspi_close(const char *name)
 {
     SPI_TypeDef* SPIC;
-	
-	if(node->gd != 0) return -1;
-	
-	if (strcmp(node->dev.pnode.name, "SPI2") == 0) {
 
-    }
 	
-
-	node->gd = -1;
     return 0;
 }
 /**
@@ -181,24 +174,17 @@ s32 mcu_hspi_close(DevSpiNode *node)
  *@param[out]  无
  *@retval:     
  */
-s32 mcu_hspi_transfer(DevSpiNode *node, u8 *snd, u8 *rsv, s32 len)
+s32 mcu_hspi_transfer(const char *name, u8 *snd, u8 *rsv, s32 len)
 {
     s32 i = 0;
 
 	HAL_StatusTypeDef res;
 	
-	if(node == NULL) return -1;
-
-	if (node->gd != 0) {
-		SPI_DEBUG(LOG_DEBUG, "spi dev no open\r\n");
-		return -1;
-	}
-	
     if ( ((snd == NULL) && (rsv == NULL)) || (len < 0) ) {
         return -1;
     }
 	
-	if (strcmp(node->dev.pnode.name, "SPI2") != 0) {
+	if (strcmp(name, "SPI2") != 0) {
 		return -1;
 	}
 	

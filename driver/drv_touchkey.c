@@ -29,9 +29,7 @@
 
 #include "mcu.h"
 #include "petite_config.h"
-
 #include "log.h"
-#include "mcu_timer.h"
 #include "drv_touchkey.h"
 
 //#define DEV_TOUCHKEY_DEBUG

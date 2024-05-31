@@ -2,6 +2,8 @@
 #include "log.h"
 
 
+extern const GPIO_TypeDef *Stm32H7B0PortList[MCU_PORT_MAX];
+
 /*
 	VI2C io口配置 ，
 	

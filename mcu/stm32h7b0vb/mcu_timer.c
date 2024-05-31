@@ -21,7 +21,6 @@
 
 #include "mcu.h"
 #include "log.h"
-#include "mcu_timer.h"
 
 /*
 

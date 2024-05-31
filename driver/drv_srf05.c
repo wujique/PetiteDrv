@@ -36,9 +36,6 @@
 */
 #include "mcu.h"
 #include "petite_config.h"
-
-#include "mcu_timer.h"
-#include "mcu_io.h"
 #include "log.h"
 #include "drv_srf05.h"
 

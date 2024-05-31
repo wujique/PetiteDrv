@@ -2,7 +2,7 @@
 #include "mcu.h"
 #include "log.h"
 #include "board_sysconf.h"
-
+#include "stimer.h"
 #include <ft2build.h>
 #include <freetype\freetype.h>
 #include <freetype\ftglyph.h>

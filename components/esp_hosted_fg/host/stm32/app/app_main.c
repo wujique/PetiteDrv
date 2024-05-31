@@ -66,7 +66,6 @@ static osThreadId arping_task_id = 0;
   * @retval None
   */
 #include "mcu.h"
-#include "mcu_io.h"
 #include "board_sysconf.h"
 
 /**

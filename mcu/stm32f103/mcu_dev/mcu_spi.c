@@ -32,6 +32,7 @@
 #define SPI_DEBUG(a, ...)
 #endif
 
+extern const GPIO_TypeDef *Stm32PortList[MCU_PORT_MAX];
 
 #define MCU_SPI_WAIT_TIMEOUT 0x40000
 
@@ -60,35 +61,35 @@ const _strSpiModeSet SpiModeSet[SPI_MODE_MAX]=
  *@param[out]  无
  *@retval:     
  */
-s32 mcu_hspi_init(const DevSpi *dev)
+s32 mcu_hspi_init(const char *name, const SpiIoDef *io)
 {
     GPIO_InitTypeDef GPIO_InitStructure;
 
-	if (strcmp(dev->pnode.name, "SPI3") == 0) {
+	if (strcmp(name, "SPI3") == 0) {
 		RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI3, ENABLE);
-    }else if (strcmp(dev->pnode.name, "SPI1") == 0)	{	
+    }else if (strcmp(name, "SPI1") == 0)	{	
 		RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1, ENABLE);
-	}else if (strcmp(dev->pnode.name, "SPI2") == 0)	{	
+	}else if (strcmp(name, "SPI2") == 0)	{	
 		RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI2, ENABLE);
 	}else {
 		return -1;
 	}
 
 	/*配置IO口*/
-    GPIO_InitStructure.GPIO_Pin = dev->clkpin;
+    GPIO_InitStructure.GPIO_Pin = io->clkpin;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_Init((GPIO_TypeDef *)Stm32PortList[dev->clkport], &GPIO_InitStructure);
+    GPIO_Init((GPIO_TypeDef *)Stm32PortList[io->clkport], &GPIO_InitStructure);
 
-	GPIO_InitStructure.GPIO_Pin = dev->misopin;
+	GPIO_InitStructure.GPIO_Pin = io->misopin;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_Init((GPIO_TypeDef *)Stm32PortList[dev->misoport], &GPIO_InitStructure);
+    GPIO_Init((GPIO_TypeDef *)Stm32PortList[io->misoport], &GPIO_InitStructure);
 
-	GPIO_InitStructure.GPIO_Pin = dev->mosipin;
+	GPIO_InitStructure.GPIO_Pin = io->mosipin;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_Init((GPIO_TypeDef *)Stm32PortList[dev->mosiport], &GPIO_InitStructure);
+    GPIO_Init((GPIO_TypeDef *)Stm32PortList[io->mosiport], &GPIO_InitStructure);
 
     return 0;
 }
@@ -102,7 +103,7 @@ s32 mcu_hspi_init(const DevSpi *dev)
  *@param[out]  无
  *@retval:     
  */
-s32 mcu_hspi_open(DevSpiNode *node, SPI_MODE mode, u16 pre)
+s32 mcu_hspi_open(const char *name, SPI_MODE mode, u16 KHz)
 {
 	SPI_InitTypeDef SPI_InitStruct;
 	SPI_TypeDef* SPIC;
@@ -114,7 +115,7 @@ s32 mcu_hspi_open(DevSpiNode *node, SPI_MODE mode, u16 pre)
 	
 	if(mode >= SPI_MODE_MAX) return -1;
 
-	if(strcmp(node->dev.pnode.name, "SPI3") == 0) {
+	if(strcmp(name, "SPI3") == 0) {
 		SPIC = SPI3;
     }
 
@@ -127,7 +128,8 @@ s32 mcu_hspi_open(DevSpiNode *node, SPI_MODE mode, u16 pre)
     SPI_InitStruct.SPI_CPOL = SpiModeSet[mode].CPOL;
     SPI_InitStruct.SPI_CPHA = SpiModeSet[mode].CPHA;
     SPI_InitStruct.SPI_NSS = SPI_NSS_Soft; //---SPI_NSS_Hard; 片选由硬件管理，SPI控制器不管理
-    SPI_InitStruct.SPI_BaudRatePrescaler = pre;  //---预分频
+    ///@bug needfix
+    SPI_InitStruct.SPI_BaudRatePrescaler = 4;  //---预分频
     SPI_InitStruct.SPI_FirstBit = SPI_FirstBit_MSB;//---数据传输从 MSB 位开始
     SPI_InitStruct.SPI_CRCPolynomial = 7;//---CRC 值计算的多项式
 
@@ -146,18 +148,15 @@ s32 mcu_hspi_open(DevSpiNode *node, SPI_MODE mode, u16 pre)
  *@param[out]  无
  *@retval:     
  */
-s32 mcu_hspi_close(DevSpiNode *node)
+s32 mcu_hspi_close(const char *name)
 {
     SPI_TypeDef* SPIC;
 	
-	if(node->gd != 0) return -1;
-	
-	if (strcmp(node->dev.pnode.name, "SPI3") == 0) {
+	if (strcmp(name, "SPI3") == 0) {
 		SPIC = SPI3;
     }
-	
 	SPI_Cmd(SPIC, DISABLE);
-	node->gd = -1;
+
     return 0;
 }
 /**
@@ -169,7 +168,7 @@ s32 mcu_hspi_close(DevSpiNode *node)
  *@param[out]  无
  *@retval:     
  */
-s32 mcu_hspi_transfer(DevSpiNode *node, u8 *snd, u8 *rsv, s32 len)
+s32 mcu_hspi_transfer(const char *name, u8 *snd, u8 *rsv, s32 len)
 {
     s32 i = 0;
     s32 pos = 0;
@@ -177,18 +176,11 @@ s32 mcu_hspi_transfer(DevSpiNode *node, u8 *snd, u8 *rsv, s32 len)
     u16 ch;
 	SPI_TypeDef* SPIC;
 	
-	if(node == NULL) return -1;
-
-	if(node->gd != 0) {
-		SPI_DEBUG(LOG_DEBUG, "spi dev no open\r\n");
-		return -1;
-	}
-	
     if ( ((snd == NULL) && (rsv == NULL)) || (len < 0) ) {
         return -1;
     }
 	
-    if(strcmp(node->dev.pnode.name, "SPI3") == 0) {
+    if(strcmp(name, "SPI3") == 0) {
 		SPIC = SPI3;
     }
     /* 忙等待 */

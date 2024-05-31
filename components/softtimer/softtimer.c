@@ -1,9 +1,14 @@
 #include "stdlib.h"
+#include <stdio.h>
 #include "log.h"
 #include "mem/p_malloc.h"
 #include "stimer.h"
 
 #include "softtimer.h"
+
+/*
+    软定时器测试程序
+*/
 
 /*
         请考虑：

@@ -1,8 +1,7 @@
 #ifndef __DEV_BUZZER_H__
 #define __DEV_BUZZER_H__
 
-#include "mcu_timer.h"
-#include "mcu_io.h"
+#include "mcu.h"
 
 /*蜂鸣器设备定义 */
 typedef struct _strDevBuzzer

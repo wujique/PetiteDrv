@@ -4,6 +4,7 @@
 #include "petite_config.h"
 #include "petite.h"
 #include "board_sysconf.h"
+
 #include "drv_lcd.h"
 #include "drv_spiflash.h"
 

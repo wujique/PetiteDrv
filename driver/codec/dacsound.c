@@ -25,8 +25,7 @@
 #if (PANEL_SOUND_DAC == 1)
 
 #include "log.h"
-#include "mcu_dac.h"
-#include "mcu_timer.h"
+#include "mcu.h"
 #include "dacsound.h"
 
 //#define DEV_DACSOUND_DEBUG

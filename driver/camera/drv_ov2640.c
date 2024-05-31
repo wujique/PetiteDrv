@@ -34,7 +34,7 @@
 
 #include "board_sysconf.h"
 #include "bus_i2c.h"
-#include "mcu_dcmi.h"
+#include "mcu.h"
 
 #include "drv_ov2640.h"
 

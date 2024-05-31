@@ -35,9 +35,7 @@
 
 #include "board_sysconf.h"
 
-#include "mcu_dcmi.h"
-#include "mcu_i2c.h"
-
+#include "mcu.h"
 #include "drv_ov9655.h"
 
 extern void Delay(__IO uint32_t nTime);

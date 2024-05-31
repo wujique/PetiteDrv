@@ -21,15 +21,39 @@
 
 #include "stm32f4xx.h"
 #include "log.h"
+#include "mcu.h"
 
+#if 1
+/**
+ * @brief   pochar开发板 I2S通道配置
+ * 
+ * 
+ */
+#define I2S_SPI_BASE		SPI3
+#define I2S_SPI_CLK			RCC_APB1Periph_SPI3
+#define I2S_DMA_STREAM 		DMA1_Stream5//SPI3
+#define I2S_DMA_IRQ			DMA1_Stream5_IRQn
+#define I2S_EXT_TYPE 		I2S3ext
+#define I2S_EXT_DMA 		DMA1_Stream0//spi3
+#define I2S_EXT_DMA_IRQ		DMA1_Stream0_IRQn
+#endif
 
-#include "audio_pipeline.h"
-
-#include "board_sysconf.h"
+#if 0
+/**
+ * @brief   WUJIQUE开发板 I2S通道配置
+ * 
+ * 
+ */
+#define I2S_SPI_BASE		SPI2
+#define I2S_SPI_CLK			RCC_APB1Periph_SPI2
+#define I2S_DMA_STREAM 		DMA1_Stream4//SPI2
+#define I2S_DMA_IRQ			DMA1_Stream4_IRQn
+#define I2S_EXT_TYPE 		I2S2ext
+#define I2S_EXT_DMA 		DMA1_Stream3//spi2
+#define I2S_EXT_DMA_IRQ		DMA1_Stream3_IRQn
+#endif
 
 extern s32 fun_sound_set_free_buf(u8 index);
-
-
 
 /**
  *@brief:      mcu_i2s_init
@@ -232,16 +256,15 @@ void mcu_i2s_dma_process(void)
 {
 	if(I2S_DMA_STREAM->CR&(1<<19)) {
 		/*当前目标存储器为1，我们就设置空闲BUF为0*/
-		audio_pipe_callback(0);
+		///@todo 调试播放功能
+		//audio_pipe_callback(0);
 	} else {
-		audio_pipe_callback(1);
+		//audio_pipe_callback(1);
 	}
 }
 
 /*
-
-	I2SEXT
-	
+	I2SEXT	
 	扩展 I2S (I2Sx_ext) 只能用于全双工模式。 I2Sx_ext 始终在从模式下工作。
 */
 extern s32 fun_rec_set_free_buf(u8 index);
@@ -361,6 +384,7 @@ void mcu_i2sext_dma_stop(void)
 void mcu_i2sext_dma_process(void)
 {
 	if(I2S_EXT_DMA->CR&(1<<19)) {
+		///@todo 调试录音功能回调
 		//fun_rec_set_free_buf(0);
 	} else {
 		//fun_rec_set_free_buf(1);
