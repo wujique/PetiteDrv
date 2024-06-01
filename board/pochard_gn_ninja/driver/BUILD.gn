@@ -1,0 +1,71 @@
+
+config("driver_config") {
+  include_dirs = [
+    "../../../components/FreeRTOS/Source/include",
+    "..\..\..\components\FreeRTOS\Source\CMSIS_RTOS_V2",
+
+    "../user/freertos_port",
+
+    "..\..\..\driver",
+    "..\..\..\driver\camera",
+    "..\..\..\driver\touch",
+    "..\..\..\driver\touch\rtp\tslib",
+    "..\..\..\driver\touch\rtp\tslib\tests",
+    "..\..\..\driver\codec",
+    "..\..\..\driver\touch",
+    "..\..\..\driver\touch\rtp",
+
+    "..\..\..\driver\lcd",
+
+    "..\..\..\Petite",
+  ]
+}
+ 
+#配置一个编译.o集合的目标，与static_library的区别是该目标为虚拟打包，速度更快
+source_set("source_driver") {
+  sources = [
+    "..\..\..\driver\touch\rtp\xpt2046.c",
+    "..\..\..\driver\touch\rtp\tslib\tslib.c",
+    "..\..\..\driver\touch\rtp\tslib\tests\testutils.c",
+    "..\..\..\driver\touch\rtp\tslib\tests\ts_calibrate.c",
+    "..\..\..\driver\touch\touch.c",
+    "..\..\..\driver\touch\rtp\rtp_adc.c",
+    "..\..\..\driver\touch\ctp\gt1151.c",
+
+    "..\..\..\driver\codec\dacsound.c",
+    "..\..\..\driver\codec\wm8960.c",
+    "..\..\..\driver\codec\wm8978.c",
+    "..\..\..\driver\codec\audio_pipeline.c",
+
+    "..\..\..\driver\camera\camera_api.c",
+    "..\..\..\driver\camera\drv_ov2640.c",
+    "..\..\..\driver\camera\drv_ov9655.c",
+    "..\..\..\driver\camera\ov5640.c",
+
+    "..\..\..\driver\sensor\drv_htu21d.c",
+    "..\..\..\driver\sensor\drv_ptHCHO.c",
+
+    "..\..\..\driver\lcd\drv_nt35510.c",
+    "..\..\..\driver\lcd\drv_r61408.c",
+    "..\..\..\driver\lcd\drv_IL3820.c",
+    "..\..\..\driver\lcd\drv_IL91874.c",
+    "..\..\..\driver\lcd\drv_ILI9325.c",
+    "..\..\..\driver\lcd\drv_ILI9341.c",
+    "..\..\..\driver\lcd\drv_lcd.c",
+    "..\..\..\driver\lcd\drv_st7735r.c",
+    "..\..\..\driver\lcd\drv_st7789.c",
+    "..\..\..\driver\lcd\drv_str7565.c",
+    "..\..\..\driver\lcd\bus_lcd.c",
+    "..\..\..\driver\lcd\drv_st7796u.c",
+
+    "..\..\..\driver\drv_buzzer.c",
+    "..\..\..\driver\drv_key.c",
+    "..\..\..\driver\drv_spiflash.c",
+  ]
+  configs = [ 
+      "//build/mcuconfig:stm32f407vgt6_conf",
+      "//MCU:stm32f407_config",
+  ]
+  #配置默认包含config，即所有依赖于该lib的目标均会继承该config
+  all_dependent_configs = [ ":driver_config" ]
+}

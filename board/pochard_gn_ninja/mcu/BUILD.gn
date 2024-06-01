@@ -1,0 +1,81 @@
+
+MCU_SRC_PATH = "../../../mcu/stm32407"
+STM32LIB_PATH = "$MCU_SRC_PATH/StLib"
+STM32LIB_CMSIS_INC_PATH = "$STM32LIB_PATH/CMSIS/Include"
+STM32LIB_STD_SRC_PATH = "$STM32LIB_PATH/STM32F4xx_StdPeriph_Driver"
+
+config("stm32f407_config") {
+  include_dirs = [
+    "../../../",
+    "../../../mcu",
+    "$MCU_SRC_PATH/mcu_dev",
+    "$STM32LIB_CMSIS_INC_PATH",
+    "$STM32LIB_STD_SRC_PATH/inc",
+    "//CORE",
+    "//USER",
+    "../../../petite",
+    "../../../petite/bus",
+    "../../../petite/mem",
+    "../../../petite/panel",
+  ]
+}
+ 
+#配置一个编译.o集合的目标，与static_library的区别是该目标为虚拟打包，速度更快
+source_set("source_stm32f407") {
+  sources = [
+    # std lib
+    "$STM32LIB_STD_SRC_PATH/src/misc.c",
+    "$STM32LIB_STD_SRC_PATH/src/stm32f4xx_adc.c",
+    "$STM32LIB_STD_SRC_PATH/src/stm32f4xx_can.c",
+    "$STM32LIB_STD_SRC_PATH/src/stm32f4xx_cec.c",
+    "$STM32LIB_STD_SRC_PATH/src/stm32f4xx_crc.c",
+    "$STM32LIB_STD_SRC_PATH/src/stm32f4xx_dac.c",
+    "$STM32LIB_STD_SRC_PATH/src/stm32f4xx_dbgmcu.c",
+    "$STM32LIB_STD_SRC_PATH/src/stm32f4xx_dcmi.c",
+    "$STM32LIB_STD_SRC_PATH/src/stm32f4xx_dfsdm.c",
+    "$STM32LIB_STD_SRC_PATH/src/stm32f4xx_dma.c",
+    "$STM32LIB_STD_SRC_PATH/src/stm32f4xx_dma2d.c",
+    "$STM32LIB_STD_SRC_PATH/src/stm32f4xx_exti.c",
+    "$STM32LIB_STD_SRC_PATH/src/stm32f4xx_flash.c",
+    #"$STM32LIB_STD_SRC_PATH/src/stm32f4xx_fmc.c",
+    "$STM32LIB_STD_SRC_PATH/src/stm32f4xx_fmpi2c.c",
+    "$STM32LIB_STD_SRC_PATH/src/stm32f4xx_fsmc.c",
+    "$STM32LIB_STD_SRC_PATH/src/stm32f4xx_gpio.c",
+    "$STM32LIB_STD_SRC_PATH/src/stm32f4xx_i2c.c",
+    "$STM32LIB_STD_SRC_PATH/src/stm32f4xx_lptim.c",
+    "$STM32LIB_STD_SRC_PATH/src/stm32f4xx_ltdc.c",
+    "$STM32LIB_STD_SRC_PATH/src/stm32f4xx_pwr.c",
+    "$STM32LIB_STD_SRC_PATH/src/stm32f4xx_qspi.c",
+    "$STM32LIB_STD_SRC_PATH/src/stm32f4xx_rcc.c",
+    "$STM32LIB_STD_SRC_PATH/src/stm32f4xx_rtc.c",
+    "$STM32LIB_STD_SRC_PATH/src/stm32f4xx_sai.c",
+    "$STM32LIB_STD_SRC_PATH/src/stm32f4xx_sdio.c",
+    "$STM32LIB_STD_SRC_PATH/src/stm32f4xx_spdifrx.c",
+    "$STM32LIB_STD_SRC_PATH/src/stm32f4xx_spi.c",
+    "$STM32LIB_STD_SRC_PATH/src/stm32f4xx_syscfg.c",
+    "$STM32LIB_STD_SRC_PATH/src/stm32f4xx_tim.c",
+    "$STM32LIB_STD_SRC_PATH/src/stm32f4xx_usart.c",
+    "$STM32LIB_STD_SRC_PATH/src/stm32f4xx_wwdg.c",
+
+    # mcd dev
+    "$MCU_SRC_PATH/mcu_dev/mcu_adc.c",
+    "$MCU_SRC_PATH/mcu_dev/mcu_can.c",
+    "$MCU_SRC_PATH/mcu_dev/mcu_dac.c",
+    "$MCU_SRC_PATH/mcu_dev/mcu_dcmi.c",
+    "$MCU_SRC_PATH/mcu_dev/mcu_i2c.c",
+    "$MCU_SRC_PATH/mcu_dev/mcu_i2s.c",
+    "$MCU_SRC_PATH/mcu_dev/mcu_io.c",
+    "$MCU_SRC_PATH/mcu_dev/mcu_rtc.c",
+    "$MCU_SRC_PATH/mcu_dev/mcu_spi.c",
+    "$MCU_SRC_PATH/mcu_dev/mcu_timer.c",
+    "$MCU_SRC_PATH/mcu_dev/mcu_uart.c",
+    "$MCU_SRC_PATH/mcu_dev/stm324xg_eval_fsmc_sram.c",
+
+  ]
+  configs = [ 
+      "//build/mcuconfig:stm32f407vgt6_conf",
+      "//MCU:stm32f407_config",
+  ]
+  #配置默认包含config，即所有依赖于该lib的目标均会继承该config
+  all_dependent_configs = [ ":stm32f407_config" ]
+}

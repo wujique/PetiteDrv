@@ -1,0 +1,6 @@
+# 这是整个gn系统的根
+group("default") {#指定了一个虚拟目标default
+  deps = [
+    "//USER:build_target",#该目标依赖于USER文件夹下BUILD.gn中的目标build_target
+  ]
+}

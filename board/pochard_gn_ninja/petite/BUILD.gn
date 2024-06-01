@@ -1,0 +1,63 @@
+
+PETITE_PATH = "../../../Petite"
+
+config("petite_config") {
+  include_dirs = [
+    #依赖rtos系统
+    "../../../components/FreeRTOS/Source/include",
+    "..\..\..\components\FreeRTOS\Source\CMSIS_RTOS_V2",
+
+    "..\..\..\components/RTTViewer/RTT",
+    "..\..\..\components/RTTViewer/Config",
+
+    "..\..\..\components/FatFs",
+    "..\..\..\components/littlefs",
+
+    "..\..\..\components/CmBacktrace/cm_backtrace",
+
+    "..\..\..\driver",
+    "..\..\..\driver/lcd",
+
+    "//USER",
+    "//USER/freertos_port",
+    "$PETITE_PATH",
+    "$PETITE_PATH/bus",
+    "$PETITE_PATH/mem",
+
+  ]
+}
+ 
+#配置一个编译.o集合的目标，与static_library的区别是该目标为虚拟打包，速度更快
+source_set("source_petite") {
+  sources = [
+    #bus
+    "$PETITE_PATH/bus/bus_i2c.c",
+    "$PETITE_PATH/bus/bus_spi.c",
+    "$PETITE_PATH/bus/bus_uart.c",
+    "$PETITE_PATH/bus/bus_vi2c.c",
+    "$PETITE_PATH/bus/bus_vspi.c",
+    #mem
+    "$PETITE_PATH/mem/alloc.c",
+    "$PETITE_PATH/mem/p_kfifo.c",
+    "$PETITE_PATH/mem/p_list.c",
+    "$PETITE_PATH/mem/p_malloc.c",
+    "$PETITE_PATH/mem/tlsf.c",
+
+    #other
+    "$PETITE_PATH/clib.c",
+    "$PETITE_PATH/log.c",
+    "$PETITE_PATH/maths.c",
+    "$PETITE_PATH/partition.c",
+    "$PETITE_PATH/petite_dev.c",
+    "$PETITE_PATH/petite.c",
+    "$PETITE_PATH/stimer.c",
+    "$PETITE_PATH/storage.c",
+    "$PETITE_PATH/vfs.c",
+  ]
+  configs = [ 
+    "//build/mcuconfig:stm32f407vgt6_conf",
+    "//MCU:stm32f407_config",
+  ]
+  #配置默认包含config，即所有依赖于该lib的目标均会继承该config
+  all_dependent_configs = [ ":petite_config" ]
+}

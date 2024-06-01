@@ -1,0 +1,38 @@
+# 参考mdk的参数
+
+#这三个参数--c99 --apcs=interwork --split_sections，在toolchain中的BUILD.gn已配置
+
+config("stm32f407vgt6_conf") {
+    #C/C++编译参数
+    cflags = [
+        "--cpu=Cortex-M4.fp.sp",
+        "-O0",#优化等级
+        "--interleave",
+        "--gnu",#启用gnu特性
+        "-diag_suppress=9931",#忽略9931警告
+        "--locale=english",#utf-8编码
+        "-D__MICROLIB",#微库
+        "-DNDEBUG",#__aeabi_assert错误
+        #"--omf_browse",
+    ]
+    #ASM编译参数
+    asmflags = [
+        "--cpu=Cortex-M4.fp.sp",
+        "--pd",
+        "STM32F407xx SETA 1",
+        "--pd",
+        "__MICROLIB SETA 1",
+    ]
+    defines = [
+        "STM32F407xx",
+    ]
+    #link 参数
+    ldflags = [
+        "--cpu=Cortex-M4.fp.sp",
+        "--library_type=microlib",
+        "--scatter",
+        rebase_path("pochard.sct"),
+    ]
+    include_dirs = []
+}
+

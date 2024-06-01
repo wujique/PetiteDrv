@@ -1,0 +1,21 @@
+config("core_config") {
+  include_dirs = [
+    "../../../mcu/stm32407/StLib/CMSIS/Include",
+    "../../../mcu/stm32407/StLib/STM32F4xx_StdPeriph_Driver/inc",
+    "//CORE",
+  ]
+}
+ 
+#配置一个编译.o集合的目标，与static_library的区别是该目标为虚拟打包，速度更快
+source_set("source_core") {
+  sources = [
+    "system_stm32f4xx.c",
+    "startup_stm32f40_41xxx.s",
+  ]
+  configs = [ 
+      "//build/mcuconfig:stm32f407vgt6_conf",
+      "//MCU:stm32f407_config",
+  ]
+  #配置默认包含config，即所有依赖于该lib的目标均会继承该config
+  all_dependent_configs = [ ":core_config" ]
+}

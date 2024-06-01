@@ -1,0 +1,39 @@
+executable("build_target") {#这就是整个工程的目标
+
+  include_dirs = [
+    "./sdio_mmc",
+
+  ]
+
+  sources = [
+    "main.c",
+    "component_src.c",
+    "board_sysconf.c",
+    "board.c",
+    "stm32f4xx_it.c",
+    "sd_fat.c",
+    "stm32f407_hal_msp.c",
+    "sdio_mmc\board_sdio.c",
+    "sdio_mmc\stm324xg_eval_sdio_sd.c",
+
+    "lvgl_porting\lv_port_disp.c",
+    "lvgl_porting\lv_port_fs.c",
+    "lvgl_porting\lv_port_indev.c",
+
+
+  ]
+
+  deps = [#依赖的目标
+    "//COMPONENTS:source_components",
+    "//CORE:source_core",
+    "//DRIVER:source_driver", 
+    "//MCU:source_stm32f407",
+    "//PANEL:source_panel", 
+    "//PETITE:source_petite", 
+  ]
+
+  configs = [ 
+      "//build/mcuconfig:stm32f407vgt6_conf",
+      "//MCU:stm32f407_config",
+     ]
+}
