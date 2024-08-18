@@ -2,3 +2,4 @@ Listings/
 *.d
 *.crf
 *.o
+board/pochard_gn_ninja/out/
