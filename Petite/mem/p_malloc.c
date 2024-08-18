@@ -12,6 +12,11 @@
 
 #include "cmsis_os.h"
 
+#undef pm_dbg_printf
+//#define pm_dbg_printf(...) wjq_log(LOG_DEBUG, __VA_ARGS__)
+#define pm_dbg_printf(...) 
+
+
 osMutexId_t PmallocMutex = NULL;
 
 int palloc_init(void);
@@ -53,10 +58,10 @@ static void *PmallocNode;
 /*
 	二次封装，如果需要做互斥，在_m后缀的函数内实现。
 */
-void *wjq_malloc_m(unsigned nbytes, const char *f, int l)
+void *wjq_malloc_m(unsigned nbytes)
 {
 	void*p;
-	//printf("malloc:%d, %s, %d,", nbytes, f, l);
+	pm_dbg_printf("malloc:%d", nbytes);
 
 	if (WjqAllocGd == 0) {
 		palloc_init();
@@ -67,11 +72,11 @@ void *wjq_malloc_m(unsigned nbytes, const char *f, int l)
 	osMutexRelease(PmallocMutex);
 	if (p ==NULL) {
 		/*对于嵌入式来说，没有机制整理内存，因此，不允许内存分配失败*/
-		printf("\r\n\r\n----petite malloc err!!---------\r\n\r\n");
+		pm_dbg_printf("\r\n\r\n----petite malloc err!!---------\r\n\r\n");
 		while(1);
 	}
 
-	//printf("0X%08X\r\n", p);
+	pm_dbg_printf("0X%08X\r\n", p);
 
 	return p;
 }
@@ -80,7 +85,7 @@ void *wjq_calloc_m(size_t n, size_t size)
 {
 	void *p;
 
-	//printf("calloc:%d,%d,", n, size);
+	pm_dbg_printf("calloc:%d,%d,", n, size);
 	if (WjqAllocGd == 0) {
 		palloc_init();
 		WjqAllocGd = 1;
@@ -92,11 +97,11 @@ void *wjq_calloc_m(size_t n, size_t size)
 		memset((char*) p, 0, n*size);
 	} else {
 		/*对于嵌入式来说，没有机制整理内存，因此，不允许内存分配失败*/
-		printf("\r\n\r\n----petite cmalloc err!!---------\r\n\r\n");
+		pm_dbg_printf("\r\n\r\n----petite cmalloc err!!---------\r\n\r\n");
 		while(1);
 	}
 
-	//printf("0X%08X\r\n", p);
+	pm_dbg_printf("0X%08X\r\n", p);
 	return p;
 }
 
@@ -108,18 +113,18 @@ void *wjq_realloc_m(void *ap, unsigned int newsize)
 		palloc_init();
 		WjqAllocGd = 1;
 	}
-	//printf("realloc:0x%08x,%d,", ap, newsize);
+	pm_dbg_printf("realloc:0x%08x,%d,", ap, newsize);
 	osMutexAcquire(PmallocMutex, osWaitForever);
 	p = WJQInterface->irealloc(PmallocNode, ap, newsize);
 	osMutexRelease(PmallocMutex);
 
 	if (p ==NULL) {
 		/*对于嵌入式来说，没有机制整理内存，因此，不允许内存分配失败*/
-		printf("\r\n\r\n----petite rmalloc err!!---------\r\n\r\n");
+		pm_dbg_printf("\r\n\r\n----petite rmalloc err!!---------\r\n\r\n");
 		while(1);
 	}
 
-	//printf("0X%08X\r\n", p);
+	pm_dbg_printf("0X%08X\r\n", p);
 	return p;
 }
 
@@ -127,7 +132,7 @@ void wjq_free_m(void*ap)
 {
 	if(ap==NULL) return;
 	
-	//printf("free_m:0x%08x\r\n", ap);
+	pm_dbg_printf("free_m:0x%08x\r\n", ap);
 	osMutexAcquire(PmallocMutex, osWaitForever);
 	WJQInterface->ifree(PmallocNode, ap);
 	osMutexRelease(PmallocMutex);
@@ -158,9 +163,9 @@ void wjq_malloc_test(void)
 
 /*
 使用编译器定义的堆作为内存池，注意，直接使用malloc，会调用C库的函数，使用的就是堆
-	，
 要防止冲突
 */
+#if 0
 //#define ALLOC_USE_HEAP	//用堆做内存池
 #define ALLOC_USE_ARRAY //用定义的数组做内存池
 
@@ -171,22 +176,26 @@ void wjq_malloc_test(void)
 	char*__HEAP_START = __section_begin("HEAP");
 	char*__HEAP_END = __section_end("HEAP");
 #endif
+#endif
 
-#ifdef ALLOC_USE_ARRAY
 	/*不同编译器用的宏不一样，各编译器定义请参考core_m4.h*/
-#ifdef __CC_ARM//优先配置MDK，因为MDK也可能使用GNU扩展
+#if ((__PETITE_COMPILER_IS__ == _petite_COMPILER_ARM_CC_5 )\
+		|| (__PETITE_COMPILER_IS__ == _petite_COMPILER_ARM_CC_6 )\
+		||  (__PETITE_COMPILER_IS__ == _petite_COMPILER_ARM_CC))//优先配置MDK，因为MDK也可能使用GNU扩展
+	#warning "[p_malloc] compiler armcc!!!"
 	__align(4) //保证内存池四字节对齐
 	char AllocArray[AllocArraySize];
-#elif __GNUC__
+#elif (__PETITE_COMPILER_IS__ == _petite_COMPILER_GCC)
+	#warning "[p_malloc] compiler gcc!!!"
 	__attribute((aligned(4))) char AllocArray[AllocArraySize];
 #else
+	#warning "[p_malloc] unkown compiler!!!"
 	__align(4) //保证内存池四字节对齐
 	char AllocArray[AllocArraySize];
 #endif
 
 	char*__HEAP_START = AllocArray;
 	char*__HEAP_END =   AllocArray + AllocArraySize;
-#endif
 
 /*
 	初始化内存堆
@@ -194,7 +203,9 @@ void wjq_malloc_test(void)
 int palloc_init(void)
 {
 	PmallocMutex = osMutexNew(NULL);
-	if (PmallocMutex == NULL) printf("palloc_init mutex err!\r\n");
+	if (PmallocMutex == NULL) {
+		pm_dbg_printf("palloc_init mutex err!\r\n");
+	}
 	osMutexAcquire(PmallocMutex, osWaitForever);
 	PmallocNode = WJQInterface->init_pool((void *)AllocArray, AllocArraySize);	
 	osMutexRelease(PmallocMutex);

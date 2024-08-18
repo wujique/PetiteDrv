@@ -13,7 +13,7 @@ const char *CompilerType[]={
 	"unkown",
 	"ArmCC5",
 	"ArmCC6",
-	"ArmC",
+	"ArmCC",
 	"IAR",
 	"LLVM",
 	"GCC"

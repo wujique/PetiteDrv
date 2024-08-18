@@ -95,13 +95,19 @@ PUTCHAR_PROTOTYPE
 }
 
 
-#if 0
+#if 1
 #include "mem/p_malloc.h"
 
 //AC5
-#pragma import(__use_no_heap_region)  //声明不使用C库的堆
+#if ((__PETITE_COMPILER_IS__ == _petite_COMPILER_ARM_CC_5 )\
+		||  (__PETITE_COMPILER_IS__ == _petite_COMPILER_ARM_CC))
+	#pragma import(__use_no_heap_region)  //声明不使用C库的堆
+#endif
+
+#if (__PETITE_COMPILER_IS__ == _petite_COMPILER_ARM_CC_6 )
 //AC6:Arm Compiler 6（armclang）
-__asm(".global __use_no_heap_region\n\t"); //声明不使用C库的堆
+//__asm(".global __use_no_heap_region\n\t"); //声明不使用C库的堆
+#endif
 
 void *malloc (size_t size){
         return wjq_malloc_m(size);
@@ -128,9 +134,11 @@ void clib_test(void)
 	void *pcl = NULL;
 
 	p = malloc(128);
+	if (p == NULL) printf("malloc err!\r\n");
 	pcl = calloc(256, 1);
-
+	if (p == NULL) printf("calloc err!\r\n");
 	p = realloc(p, 256);
+	if (p == NULL) printf("realloc err!\r\n");
 	free(p);
 	free(pcl);
 
