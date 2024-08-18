@@ -60,7 +60,7 @@ python -m pyocd list --targets
 
 烧录
 ```
-PS E:\work\PetiteDrv\prog\PetiteDrv> python -m pyocd flash --target stm32f407vg .\out\demo\bin\build_target.axf
+PS E:\work\PetiteDrv\prog\PetiteDrv\board\pochard_gn_ninja> python -m pyocd flash --target stm32f407vg .\out\demo\bin\build_target.axf
 0001088 W Board ID 5050 is not recognized [mbed_board]
 0001631 I Loading E:\work\PetiteDrv\prog\PetiteDrv\board\pochard_gn_ninja\out\demo\bin\build_target.axf [load_cmd]
 [=====                                             ]  11%

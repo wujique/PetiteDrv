@@ -9,6 +9,16 @@
 #include "board_sysconf.h"
 #include "components/softtimer/softtimer.h"
 
+const char *CompilerType[]={
+	"unkown",
+	"ArmCC5",
+	"ArmCC6",
+	"ArmC",
+	"IAR",
+	"LLVM",
+	"GCC"
+};
+
 /** @addtogroup Template_Project
   * @{
   */ 
@@ -124,9 +134,9 @@ int petite_app(void)
 	printf("* / /_)/ _ \\ __| | __/ _ \\ / /\\ / '__\\ \\ / /             \r\n");
 	printf("*/ ___/  __/ |_| | ||  __// /_//| |   \\ V /              \r\n");
 	printf("*\\/    \\___|\\__|_|\\__\\___/___,' |_|    \\_/www.wujique.com\r\n");
-	printf("*********************************************************\r\n\r\n");
-
-	
+	printf("*********************************************************\r\n");
+	printf("__PETITE_COMPILER_IS__:%s\r\n",CompilerType[__PETITE_COMPILER_IS__]);
+	printf("compiler time:%s, %s\r\n\r\n", __DATE__,__TIME__);
 
   /* Infinite loop 
 	尽快启动RTOS， 进入start_task再做其他设备初始化 */

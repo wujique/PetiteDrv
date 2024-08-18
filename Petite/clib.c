@@ -4,12 +4,43 @@
 #include <string.h>
 
 #include "mcu.h"
+#include "petite.h"
+
+#if __IS_COMPILER_ARM_COMPILER_6__
+void _sys_exit(int ret)
+{
+    (void)ret;
+    while(1) {}
+}
+#endif
+
+#if 0
+/* 为 arm compiler 5 和 arm compiler 6 都添加这个空函数 */
+#if __IS_COMPILER_ARM_COMPILER__
+void _ttywrch(int ch)
+{
+    ARM_2D_UNUSED(ch);
+}
+#endif
+#endif
+
+#if __IS_COMPILER_ARM_COMPILER_6__ && defined(__MICROLIB)
+void __aeabi_assert(const char *chCond, const char *chLine, int wErrCode) 
+{
+    (void)chCond;
+    (void)chLine;
+    (void)wErrCode;
+    
+    while(1) {
+        __NOP();
+    }
+}
+#endif
 
 /*
 	移植某些组件时，缺失某些函数会编译失败。
 	在此定义一些空函数。
 	*/
-
 void exit(int status)
 {
 
@@ -27,11 +58,12 @@ int isascii(int c) {
     return (c >= 0) && (c <= 127);
 }
 
-#if 1
-#ifdef __CC_ARM//优先配置MDK，因为MDK也可能使用GNU扩展
+#if ((__PETITE_COMPILER_IS__ == _petite_COMPILER_ARM_CC_5 )\
+		|| (__PETITE_COMPILER_IS__ == _petite_COMPILER_ARM_CC_6 )\
+		||  (__PETITE_COMPILER_IS__ == _petite_COMPILER_ARM_CC))//优先配置MDK，因为MDK也可能使用GNU扩展
 #define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
 #warning "__CC_ARM redef printf putchar in fputc"
-#elif __GNUC__
+#elif (__PETITE_COMPILER_IS__ == _petite_COMPILER_GCC)
 /* With GCC/RAISONANCE, small printf (option LD Linker->Libraries->Small printf
      set to 'Yes') calls __io_putchar() */
 #define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
@@ -62,27 +94,44 @@ PUTCHAR_PROTOTYPE
     return ch;
 }
 
-#endif 
 
 #if 0
+#include "mem/p_malloc.h"
+
 //AC5
 #pragma import(__use_no_heap_region)  //声明不使用C库的堆
-//AC6
+//AC6:Arm Compiler 6（armclang）
 __asm(".global __use_no_heap_region\n\t"); //声明不使用C库的堆
 
 void *malloc (size_t size){
-        return OS_Malloc(size);
+        return wjq_malloc_m(size);
 }
 
 void free(void* p){
-        OS_Free(p);
+        wjq_free_m(p);
 }
 
 void *realloc(void* p,size_t want){
-        return OS_Realloc(p,want);
+        return wjq_realloc_m(p, want);
 }
 
 void *calloc(size_t nmemb, size_t size){
-        return OS_Calloc(nmemb,size);
+        return wjq_calloc_m(nmemb,size);
 }
 #endif
+
+void clib_test(void)
+{
+
+	/* test: c 库内存分配 */
+	void *p = NULL;
+	void *pcl = NULL;
+
+	p = malloc(128);
+	pcl = calloc(256, 1);
+
+	p = realloc(p, 256);
+	free(p);
+	free(pcl);
+
+}
