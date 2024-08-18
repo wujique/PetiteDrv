@@ -36,6 +36,10 @@ LOG_L LogLevel = LOG_DEBUG;//系统调试信息等级
 #define BUFFER_INDEX 0
 
 #define LOG_WRITE_DATA(data, len)  mcu_uart_write(PC_PORT, (u8 *)data, len);
+s32 log_redef_putc(u8 *buf, s32 len)
+{
+    mcu_uart_write(PC_PORT, buf, len);   
+}
 //#define LOG_WRITE_DATA(data, len)  SEGGER_RTT_Write(BUFFER_INDEX,  data, len);
 
 //osMutexId_t LogMutex = NULL;
@@ -47,44 +51,6 @@ volatile static int LogInit = -1;
 使用串口输出调试信息
 */
 s8 string[256];//调试信息缓冲，输出调试信息一次不可以大于256
-
-#if 1
-#ifdef __CC_ARM//优先配置MDK，因为MDK也可能使用GNU扩展
-#define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
-#warning "__CC_ARM redef printf putchar in fputc"
-#elif __GNUC__
-/* With GCC/RAISONANCE, small printf (option LD Linker->Libraries->Small printf
-     set to 'Yes') calls __io_putchar() */
-#define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
-#warning "__GNUC__ redef printf putchar in __io_putchar"
-#else
-#define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
-#warning "default redef printf putchar in fputc"
-#endif /* __GNUC__ */
-
-PUTCHAR_PROTOTYPE
-{
-	#if 0
-    /* Place your implementation of fputc here */
-    /* e.g. write a character to the USART */
-    USART_SendData(USART3, (uint8_t) ch);
-
-    /* Loop until the end of transmission */
-    while (USART_GetFlagStatus(USART1, USART_FLAG_TC) == RESET);
-	#else
-    if (LogInit == -1) return ch;
-	/* 用hal库实现putc，效率很低*/
-	char tmp[2];
-	tmp[0] = ch;
-
-	LOG_WRITE_DATA(tmp, 1);
-	#endif
-	
-    return ch;
-}
-
-#endif 
-
 
 //extern int vsprintf(char * s, const char * format, __va_list arg);
 /**
