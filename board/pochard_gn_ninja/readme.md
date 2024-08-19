@@ -33,6 +33,8 @@ https://github.com/timniederhausen/gn
 .\ninja.exe -C out/demo
 清除
 .\ninja.exe -C out/demo -t clean
+编译日志输出到文件
+.\ninja.exe -C out/demo > out/log
 
 烧录程序用pyocd
 https://github.com/pyocd/pyOCD
@@ -65,4 +67,7 @@ PS E:\work\PetiteDrv\prog\PetiteDrv\board\pochard_gn_ninja> python -m pyocd flas
 0001631 I Loading E:\work\PetiteDrv\prog\PetiteDrv\board\pochard_gn_ninja\out\demo\bin\build_target.axf [load_cmd]
 [=====                                             ]  11%
 ```
+
+调试中使用addr2line, -f 后的地址换成实际地址
+.\addr2line.exe -e .\out\demo\bin\build_target.axf -a -f 0800061c 0800074e
 

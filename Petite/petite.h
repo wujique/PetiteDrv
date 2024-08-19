@@ -19,7 +19,6 @@ https://cloud.tencent.com/developer/article/2005074
 enum{
     _petite_COMPILER_ARM_CC_5 = 1,
     _petite_COMPILER_ARM_CC_6,
-    _petite_COMPILER_ARM_CC,
     _petite_COMPILER_IAR,
     _petite_COMPILER_LLVM,
     _petite_COMPILER_GCC,
@@ -53,7 +52,6 @@ enum{
 ||  defined(__IS_COMPILER_ARM_COMPILER_6__) && __IS_COMPILER_ARM_COMPILER_6__
 
 #   define __IS_COMPILER_ARM_COMPILER__         1
-#define __PETITE_COMPILER_IS__  _petite_COMPILER_ARM_CC
 
 #endif
 

@@ -180,8 +180,7 @@ void wjq_malloc_test(void)
 
 	/*不同编译器用的宏不一样，各编译器定义请参考core_m4.h*/
 #if ((__PETITE_COMPILER_IS__ == _petite_COMPILER_ARM_CC_5 )\
-		|| (__PETITE_COMPILER_IS__ == _petite_COMPILER_ARM_CC_6 )\
-		||  (__PETITE_COMPILER_IS__ == _petite_COMPILER_ARM_CC))//优先配置MDK，因为MDK也可能使用GNU扩展
+		|| (__PETITE_COMPILER_IS__ == _petite_COMPILER_ARM_CC_6 ))
 	#warning "[p_malloc] compiler armcc!!!"
 	__align(4) //保证内存池四字节对齐
 	char AllocArray[AllocArraySize];

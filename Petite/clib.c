@@ -3,10 +3,11 @@
 #include <stdio.h>
 #include <string.h>
 
+
 #include "mcu.h"
 #include "petite.h"
 
-#if __IS_COMPILER_ARM_COMPILER_6__
+#if (__PETITE_COMPILER_IS__ == _petite_COMPILER_ARM_CC_6)
 void _sys_exit(int ret)
 {
     (void)ret;
@@ -14,17 +15,16 @@ void _sys_exit(int ret)
 }
 #endif
 
-#if 0
+#if ((__PETITE_COMPILER_IS__ == _petite_COMPILER_ARM_CC_5 )\
+		|| (__PETITE_COMPILER_IS__ == _petite_COMPILER_ARM_CC_6 ))
 /* 为 arm compiler 5 和 arm compiler 6 都添加这个空函数 */
-#if __IS_COMPILER_ARM_COMPILER__
 void _ttywrch(int ch)
 {
-    ARM_2D_UNUSED(ch);
+    //ARM_2D_UNUSED(ch);
 }
 #endif
-#endif
 
-#if __IS_COMPILER_ARM_COMPILER_6__ && defined(__MICROLIB)
+#if ((__PETITE_COMPILER_IS__ == _petite_COMPILER_ARM_CC_6) && defined(__MICROLIB))
 void __aeabi_assert(const char *chCond, const char *chLine, int wErrCode) 
 {
     (void)chCond;
@@ -59,8 +59,7 @@ int isascii(int c) {
 }
 
 #if ((__PETITE_COMPILER_IS__ == _petite_COMPILER_ARM_CC_5 )\
-		|| (__PETITE_COMPILER_IS__ == _petite_COMPILER_ARM_CC_6 )\
-		||  (__PETITE_COMPILER_IS__ == _petite_COMPILER_ARM_CC))//优先配置MDK，因为MDK也可能使用GNU扩展
+		|| (__PETITE_COMPILER_IS__ == _petite_COMPILER_ARM_CC_6 ))//优先配置MDK，因为MDK也可能使用GNU扩展
 #define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
 #warning "__CC_ARM redef printf putchar in fputc"
 #elif (__PETITE_COMPILER_IS__ == _petite_COMPILER_GCC)
@@ -94,13 +93,12 @@ PUTCHAR_PROTOTYPE
     return ch;
 }
 
-
+/*-------------------------------------------------------------*/
 #if 1
 #include "mem/p_malloc.h"
 
 //AC5
-#if ((__PETITE_COMPILER_IS__ == _petite_COMPILER_ARM_CC_5 )\
-		||  (__PETITE_COMPILER_IS__ == _petite_COMPILER_ARM_CC))
+#if (__PETITE_COMPILER_IS__ == _petite_COMPILER_ARM_CC_5 )
 	#pragma import(__use_no_heap_region)  //声明不使用C库的堆
 #endif
 

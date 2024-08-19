@@ -116,9 +116,9 @@
 
 /* 统计CPU使用率，CPU_RunTime 是一个时钟滴答，最好比 RTOS 的tick精度高*/
 #define configGENERATE_RUN_TIME_STATS     		1
-extern volatile uint32_t LocalTime; 
-#define portCONFIGURE_TIMER_FOR_RUN_TIME_STATS() 	(LocalTime = 0ul) 
-#define portGET_RUN_TIME_COUNTER_VALUE() 			LocalTime
+extern volatile uint32_t SysTickCnt; 
+#define portCONFIGURE_TIMER_FOR_RUN_TIME_STATS() 	(SysTickCnt = 0ul) 
+#define portGET_RUN_TIME_COUNTER_VALUE() 			SysTickCnt
 /*--------------------------------*/
 #define configUSE_PORT_OPTIMISED_TASK_SELECTION  0
 /* USER CODE BEGIN MESSAGE_BUFFER_LENGTH_TYPE */

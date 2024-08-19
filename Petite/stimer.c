@@ -29,8 +29,11 @@
 
 #include "stimer.h"
 
+#include "time.h"
+#define CLOCKS_PER_SEC (1000)
+volatile uint32_t SysTickCnt = 0;//系统上电后运行时间计数，如果是32位，1ms周期下最大计时49.7天
+time_t time_dat;//设置localtime相对于公元1970年1月1日0时0分0秒算起至今的UTC时间所经过的秒数
 
-volatile uint32_t LocalTime = 0; 
 /**
   * @brief  Updates the system local time
   * @param  None
@@ -40,12 +43,115 @@ volatile uint32_t LocalTime = 0;
   */
 void Time_Update(void)
 {
-  LocalTime += SYSTEMTICK_PERIOD_MS;
+    SysTickCnt+= SYSTEMTICK_PERIOD_MS;
+    if ((SysTickCnt % CLOCKS_PER_SEC) == 0) {
+        time_dat++;
+    }
+
+}
+
+/* Private functions ---------------------------------------------------------*/
+clock_t clock (void) {
+    return (SysTickCnt);
+}
+ 
+time_t time(time_t *t)
+{
+	if (t != NULL) *t = time_dat;
+
+	return time_dat;
+}
+ 
+const char * __getzone(void)
+{
+    return ": GMT+8:GMT+9:+0800";
+}
+ 
+int sys_timer_test(void)
+{
+	printf("run sys timer test!\r\n");
+  //设置时间，localtime
+  printf("set localtime\r\n");
+  {
+      struct tm set_time;
+      set_time.tm_sec = 10;
+      set_time.tm_min = 0;
+      set_time.tm_hour = 22;
+      set_time.tm_mday = 19;
+      set_time.tm_mon = 8-1;
+      set_time.tm_year = 2024-1900;
+      //set_time.tm_wday = 1;
+      //set_time.tm_yday = 2;
+      set_time.tm_isdst = -1;
+      //C 库函数 time_t mktime(struct tm *timeptr) 把 timeptr 所指向的结构转换为一个依据本地时区的 time_t 值，根据当前时区设置。
+      time_dat = mktime(&set_time);//mktime()用来将参数timeptr所指的tm结构数据转换成从公元1970年1月1日0时0分0 秒算起至今的UTC时间所经过的秒数。
+  }
+  
+  //显示时间
+	printf("show localtime\r\n");
+  {
+      int32_t now;
+      struct tm *ts;
+	  /* 得到一个秒时间 */
+      now = time(NULL);
+	  printf("now:%d\r\n", now);
+
+	  /* 将秒转未tm格式的时间戳*/
+      ts = localtime(&now);
+      /* 将本地时间戳转为字符串 */
+      //printf("localtime = %s\r\n", asctime(ts));
+	  /** gmtime获取到的是GMT时间 */
+      //printf("gmtime    = %s\r\n", asctime(gmtime(&now)));
+      
+      printf("ts->tm_yesr   = %d\r\n", 1990 + ts->tm_year);
+      printf("ts->tm_mon    = %d\r\n", 1 + ts->tm_mon);
+      printf("ts->tm_mday   = %d\r\n", 0 + ts->tm_mday);
+      printf("ts->tm_hour   = %d\r\n", 0 + ts->tm_hour);
+      printf("ts->tm_min    = %d\r\n", 0 + ts->tm_min);
+      printf("ts->tm_sec    = %d\r\n", 0 + ts->tm_sec);
+      printf("ts->tm_wday   = %d\r\n", 0 + ts->tm_wday);
+      printf("ts->tm_yday   = %d\r\n", 1 + ts->tm_yday);
+      
+      printf("ctime = %s\r\n", ctime(&now));
+      
+      char buf[80] = {0};
+      strftime (buf, sizeof (buf), "%a %Y-%m-%d %H:%M:%S%Z", ts);
+      printf ("%s \n", buf);
+  }
+  
+  {
+      clock_t clock_start, clock_end;
+      clock_start = clock();
+      osDelay(5000);
+      clock_end = clock();
+      double total_t = (double)(clock_end - clock_start) / CLOCKS_PER_SEC;
+      printf("sleep(5) use times %f seconds\r\n", total_t);
+  }
+
+  {
+      time_t time_start, time_end;
+      time(&time_start);
+      osDelay(5000);
+      time(&time_end);
+      double diff_t = difftime(time_end, time_start);
+      printf("sleep(5) use times %f seconds\r\n", diff_t);
+  }
+  
+  /* Display time in infinite loop */
+  while (1) {
+      time_t now;
+      now = time(NULL);
+      printf("localtime = %s\r\n", asctime(localtime(&now)));
+      printf("gmtime    = %s\r\n", asctime(gmtime(&now)));
+      osDelay(5000); 
+  }
 }
 
 
-uint32_t timingdelay;
 
+
+
+/*---------------------------------------------------*/
 /**
   * @brief  Inserts a delay time.
   * @param  nCount: number of 10ms periods to wait for.
@@ -53,24 +159,25 @@ uint32_t timingdelay;
   */
 void Delay(uint32_t nCount)
 {
-  /* Capture the current local time */
-  timingdelay = LocalTime + nCount;  
+	uint32_t timingdelay = 0;
+  	/* Capture the current local time */
+  	timingdelay = SysTickCnt + nCount;  
 
-  /* wait until the desired delay finish */  
-  while(timingdelay > LocalTime)
-  {     
+  	/* wait until the desired delay finish */  
+  	while(timingdelay > SysTickCnt){
+
   }
 }
 
 
 uint32_t Stime_get_localtime(void)
 {
-	return LocalTime;
+	return SysTickCnt;
 }
 
 uint32_t Stime_get_systime(void)
 {
-	return LocalTime;
+	return SysTickCnt;
 }
 
 uint32_t stime_get_passtime(uint32_t StrTime)
@@ -78,7 +185,7 @@ uint32_t stime_get_passtime(uint32_t StrTime)
 	uint32_t cur, pass;
 
 	/* 当前时间*/
-	cur = LocalTime;
+	cur = SysTickCnt;
 
 	if(cur >= StrTime)
 		pass = cur - StrTime;
@@ -88,12 +195,8 @@ uint32_t stime_get_passtime(uint32_t StrTime)
 	return pass;
 }
 
+/*---------------------------------------------------*/
 
-#include "time.h"
-///@bug need fix
-time_t time(time_t *t)
-{
 
-	return LocalTime;
-}
+
 
