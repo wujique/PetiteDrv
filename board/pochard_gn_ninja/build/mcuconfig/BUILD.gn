@@ -11,7 +11,7 @@ config("stm32f407vgt6_conf") {
         "--gnu",#启用gnu特性
         "-diag_suppress=9931",#忽略9931警告
         "--locale=english",#utf-8编码
-        "-D__MICROLIB",#微库
+        #"-D__MICROLIB",#微库
         "-DNDEBUG",#__aeabi_assert错误
         #"--omf_browse",
     ]
@@ -29,7 +29,7 @@ config("stm32f407vgt6_conf") {
     #link 参数
     ldflags = [
         "--cpu=Cortex-M4.fp.sp",
-        "--library_type=microlib",
+        #"--library_type=microlib",
         "--scatter",
         rebase_path("pochard.sct"),
     ]

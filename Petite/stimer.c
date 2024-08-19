@@ -51,22 +51,7 @@ void Time_Update(void)
 }
 
 /* Private functions ---------------------------------------------------------*/
-clock_t clock (void) {
-    return (SysTickCnt);
-}
- 
-time_t time(time_t *t)
-{
-	if (t != NULL) *t = time_dat;
 
-	return time_dat;
-}
- 
-const char * __getzone(void)
-{
-    return ": GMT+8:GMT+9:+0800";
-}
- 
 int sys_timer_test(void)
 {
 	printf("run sys timer test!\r\n");

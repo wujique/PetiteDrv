@@ -7,7 +7,7 @@
 #include "mcu.h"
 #include "petite.h"
 
-#if (__PETITE_COMPILER_IS__ == _petite_COMPILER_ARM_CC_6)
+#if 0//(__PETITE_COMPILER_IS__ == _petite_COMPILER_ARM_CC_6)
 void _sys_exit(int ret)
 {
     (void)ret;
@@ -15,8 +15,7 @@ void _sys_exit(int ret)
 }
 #endif
 
-#if ((__PETITE_COMPILER_IS__ == _petite_COMPILER_ARM_CC_5 )\
-		|| (__PETITE_COMPILER_IS__ == _petite_COMPILER_ARM_CC_6 ))
+#if 0//__IS_COMPILER_ARM_COMPILER__
 /* 为 arm compiler 5 和 arm compiler 6 都添加这个空函数 */
 void _ttywrch(int ch)
 {
@@ -140,4 +139,100 @@ void clib_test(void)
 	free(p);
 	free(pcl);
 
+}
+
+/*----------------------------------------*/
+
+//#pragma import(__use_no_semihosting_swi)
+//#pragma import(_main_redirection)
+ 
+ 
+const char __stdin_name[150];
+const char __stdout_name[150];
+const char __stderr_name[150];
+typedef int FILEHANDLE;
+ 
+//重写标准库函数，这时printf、fopen、fclose等文件操作函数运行时就会调用你的重写函数，这些重写函数只是几个简单的例子，并没有重写所有的文件操作函数
+void _sys_exit(int status)
+{
+    while(1);
+}
+FILEHANDLE _sys_open(const char *name, int openmode)
+{
+    return 0;
+}
+ 
+int _sys_close(FILEHANDLE fh)
+{
+    return 0;
+}
+ 
+int _sys_write(FILEHANDLE fh, const unsigned char *buf, unsigned len, int mode)
+{
+    return 0;
+}
+/* 重定义fputc和_sys_read可能有冲突*/ 
+int _sys_read(FILEHANDLE fh, unsigned char*buf, unsigned len, int mode)
+{
+    return 0;
+}
+ 
+int _sys_istty(FILEHANDLE fh)
+{
+    return 0;
+}
+ 
+int _sys_seek(FILEHANDLE fh, long pos)
+{
+    return 0;
+}
+ 
+int _sys_ensure(FILEHANDLE fh)
+{
+    return 0;
+}
+ 
+long _sys_flen(FILEHANDLE fh)
+{
+    return 0;
+}
+ 
+int _sys_tmpnam(char *name, int fileno, unsigned maxlength)
+{
+    return 0;
+}
+ 
+void _ttywrch(int ch)
+{
+    return 0;
+}
+int remove(const char *filename)
+{
+    return 0;
+}
+ 
+char *_sys_command_string(char *cmd, int len)
+{
+    return 0;
+}
+ 
+/*----------------------*/
+#include "time.h"
+extern volatile uint32_t SysTickCnt;//系统上电后运行时间计数，如果是32位，1ms周期下最大计时49.7天
+extern time_t time_dat;//设置localtime相对于公元1970年1月1日0时0分0秒算起至今的UTC时间所经过的秒数
+
+clock_t clock (void) {
+    return (SysTickCnt);
+}
+ 
+time_t time(time_t *t)
+{
+	if (t != NULL) *t = time_dat;
+
+	return time_dat;
+}
+ 
+const char * __getzone(void)
+{
+    return ": GMT+8:GMT+9:+0800";
 }
