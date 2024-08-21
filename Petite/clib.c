@@ -204,7 +204,7 @@ int _sys_tmpnam(char *name, int fileno, unsigned maxlength)
  
 void _ttywrch(int ch)
 {
-    return 0;
+    return;
 }
 int remove(const char *filename)
 {
@@ -236,3 +236,4 @@ const char * __getzone(void)
 {
     return ": GMT+8:GMT+9:+0800";
 }
+
