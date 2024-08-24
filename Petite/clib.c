@@ -231,9 +231,9 @@ time_t time(time_t *t)
 
 	return time_dat;
 }
- 
+#if 0
 const char * __getzone(void)
 {
-    return ": GMT+8:GMT+9:+0800";
+    return ":GMT+8:GMT+9:+0800";
 }
-
+#endif

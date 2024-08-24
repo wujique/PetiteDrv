@@ -88,7 +88,7 @@
 	#define configPOST_SLEEP_PROCESSING( x )
 
 	*/
-#define configUSE_TICKLESS_IDLE		1
+#define configUSE_TICKLESS_IDLE		0
 
 #define configUSE_TRACE_FACILITY                1/* 使能可视化追踪功能*/
 #define configUSE_STATS_FORMATTING_FUNCTIONS	1

@@ -171,6 +171,7 @@ time_t mcu_rtc_get_utc_time()
 	return time;
 }
 
+#if 0
 struct tm* gmtime (const time_t *timep)
 {
 	return 0;
@@ -184,6 +185,7 @@ struct tm* localtime (const time_t *timep)
 {
 	return 0;
 }
+#endif
 
 s32 mcu_rtc_test(void)
 {

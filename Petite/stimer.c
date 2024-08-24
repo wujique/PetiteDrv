@@ -40,6 +40,10 @@ time_t time_dat;//设置localtime相对于公元1970年1月1日0时0分0秒算�
   * @retval None
   本函数放在系统滴答中执行，通常滴答间隔1ms
   在board_mcu_preinit中，如果没有用RTOS，会初始化一个裸奔用的滴答定时器。
+
+  systick中断可能被停止，也就是tickless模式，请参考configUSE_TICKLESS_IDLE
+  如果使能tickless，SysTickCnt就不准了。
+
   */
 void Time_Update(void)
 {
@@ -79,7 +83,7 @@ int sys_timer_test(void)
       struct tm *ts;
 	  /* 得到一个秒时间 */
       now = time(NULL);
-	  printf("now:%d\r\n", now);
+	    printf("time:%d\r\n", now);
 
 	  /* 将秒转未tm格式的时间戳*/
       ts = localtime(&now);
@@ -101,17 +105,17 @@ int sys_timer_test(void)
       
       char buf[80] = {0};
       strftime (buf, sizeof (buf), "%a %Y-%m-%d %H:%M:%S%Z", ts);
-      printf ("%s \n", buf);
+      printf ("strftime:%s \r\n", buf);
   }
   
-  {
+
       clock_t clock_start, clock_end;
       clock_start = clock();
       osDelay(5000);
       clock_end = clock();
       double total_t = (double)(clock_end - clock_start) / CLOCKS_PER_SEC;
       printf("sleep(5) use times %f seconds\r\n", total_t);
-  }
+
 
   {
       time_t time_start, time_end;
@@ -126,15 +130,15 @@ int sys_timer_test(void)
   while (1) {
       time_t now;
       now = time(NULL);
-      printf("localtime = %s\r\n", asctime(localtime(&now)));
-      printf("gmtime    = %s\r\n", asctime(gmtime(&now)));
+      clock_start = clock();
+      int systick = xTaskGetTickCount();
+      printf("clock:%d, systick:%d, localtime = %s, \r\n", clock_start, systick, asctime(localtime(&now)));
+      //printf("gmtime    = %s\r\n", asctime(gmtime(&now)));
+    
       osDelay(5000); 
+      //vTaskDelay(5000);
   }
 }
-
-
-
-
 
 /*---------------------------------------------------*/
 /**
