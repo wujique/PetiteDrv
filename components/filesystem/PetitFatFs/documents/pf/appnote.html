@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<link rel="up" title="Petit FatFs" href="../00index_p.html">
+<link rel="stylesheet" href="../css_e.css" type="text/css" media="screen" title="ELM Default">
+<link rel="stylesheet" href="../css_p.css" type="text/css" media="screen" title="ELM Default">
+<title>Petit FatFs Module Application Note</title>
+</head>
+
+<body>
+<h1>Petit FatFs Module Application Note</h1>
+
+<div class="para" id="port">
+<h3>Basic Considerations</h3>
+<p>The FatFs module assumes following conditions on portability.</p>
+<ul>
+<li>ANSI C<br>
+The Petit FatFs module is a middleware written in ANSI C (C89). There is no platform dependence, so long as the compiler is in compliance with C89 or later.</li>
+<li>Size of integer types<br>
+<ul>
+<li>When the C standard is in C89, size of <tt>char</tt>/<tt>short</tt>/<tt>long</tt> must be 8/16/32-bit respectively.</li>
+<li>When it is in C99 or later, <tt>stdint.h</tt> is used to obtain the correct sizes.</li>
+<li>Size of <tt>char</tt> must be 8-bit.</li>
+<li>Size of <tt>int</tt>, as well as integer promotion, must be 16-bit or 32-bit.</li>
+</ul>
+Integer types used in Petit FatFs are defined in <tt>pff.h</tt>. This will not be a problem on most platform. When a conflict with existing definitions occured, you must resolve it with care.</li>
+</ul>
+</div>
+
+<div class="para">
+<h3>Memory Usage (R0.03a)</h3>
+<table class="lst2">
+<tr><th></th><th>AVR</th><th>PIC24</th><th>CM0</th></tr>
+<tr class="cal"><td>Compiler</td><td>gcc</td><td>C30</td><td>gcc</td></tr>
+<tr class="ral"><td class="cal">text (default)</td><td>1948</td><td>1962</td><td>1114</td></tr>
+<tr class="ral"><td class="cal">text (!PF_USE_READ)</td><td>-356</td><td>-288</td><td>-196</td></tr>
+<tr class="ral"><td class="cal">text (PF_USE_DIR)</td><td>+552</td><td>+528</td><td>+370</td></tr>
+<tr class="ral"><td class="cal">text (PF_USE_LSEEK)</td><td>+474</td><td>+432</td><td>+172</td></tr>
+<tr class="ral"><td class="cal">text (PF_USE_WRITE)</td><td>+440</td><td>+453</td><td>+276</td></tr>
+<tr class="ral"><td class="cal">bss</td><td>2</td><td>2</td><td>4</td></tr>
+<tr class="ral"><td class="cal">Work</td><td>42</td><td>42</td><td>44</td></tr>
+</table>
+<p>Other options are set as: <tt>PF_FS_FAT16 = 1</tt>, <tt>PF_FS_FAT12 = 0</tt>, <tt>PF_FS_FAT32 = 0</tt> and <tt>PF_USE_LCC = 0</tt>. This is the size of the Petit FatFs module itself. In addition to this, a low level disk I/O module will be required for a complete function. For instance, size of MMC/SDC module on AVR becomes approximate 620 bytes without write function and 840 bytes with write function.</p>
+</div>
+
+<div class="para">
+<h3>Module Size Reduction</h3>
+<p>Follwing table shows which function is removed by configuration options for the module size reduction.</p>
+<table class="lst2">
+<tr><td rowspan="2">Function</td><td>PF_USE_READ</td><td>PF_USE_DIR</td><td>PF_USE_LSEEK</td><td>PF_USE_WRITE</td></tr>
+<tr><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+<tr class="lst3"><td>pf_mount</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>pf_open</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>pf_read</td><td>x</td><td></td><td></td><td></td></tr>
+<tr><td>pf_lseek</td><td></td><td></td><td>x</td><td></td></tr>
+<tr><td>pf_opendir</td><td></td><td>x</td><td></td><td></td></tr>
+<tr><td>pf_readdir</td><td></td><td>x</td><td></td><td></td></tr>
+<tr><td>pf_write</td><td></td><td></td><td></td><td>x</td></tr>
+</table>
+</div>
+
+<div class="para">
+<h3>Performance effective file access</h3>
+<p>For good performance on reading a file on the small embedded system, application programmer should consider what process is done in the file system module.</p>
+<p>The Petit FatFs reads the disk sectors without a sector buffer. This means the file system reads a part of the sector contains the required data every reference point even if they are in the same sector. However the generic storage device are not byte addressable so that the disk I/O layer will read the entire sector and pick up the data bytes from the read data steram.</p>
+<p>When read 512 byte data from a file at a time, the data sector will be read only a time. When read that data in byte-by-byte, the data sector will be read 512 times. Therefore the byte-by-byte read request will <a href="../res/rwtest3.png">drastically decrease</a> the read performance. To avoid this stupid read controls, the file data should be read in long block as possible. Sector alignment access is not impotant on the Petit FatFs.</p>
+<p>The tiny microcontrollers targeted by Petit FatFs has a limited size of RAM. It may not able to allocate a certain size of read buffer and most type of text processing will require byte-by-byte read operation. The Petit FatFs supports data forwarding feature for such purpose.</p>
+
+</div>
+
+<div class="para">
+<h3>About FatFs License</h3>
+<p>Petit FatFs has being developped as a personal project of author, ChaN. It is free from the code anyone else wrote. Following code block shows a copy of the license document that included in the source files.</p>
+<pre>
+/*----------------------------------------------------------------------------/
+/  Petit FatFs - FAT file system module  R0.03a
+/-----------------------------------------------------------------------------/
+/
+/ Copyright (C) 2019, ChaN, all right reserved.
+/
+/ Petit FatFs module is an open source software. Redistribution and use of
+/ Petit FatFs in source and binary forms, with or without modification, are
+/ permitted provided that the following condition is met:
+/
+/ 1. Redistributions of source code must retain the above copyright notice,
+/    this condition and the following disclaimer.
+/
+/ This software is provided by the copyright holder and contributors "AS IS"
+/ and any warranties related to this software are DISCLAIMED.
+/ The copyright owner or contributors be NOT LIABLE for any damages caused
+/ by use of this software.
+/-----------------------------------------------------------------------------/
+...
+</pre>
+<p>Therefore FatFs license is one of the BSD-style licenses but there is a significant feature. FatFs is mainly intended for embedded systems. In order to extend the usability for commercial products, the redistributions of FatFs in binary form, such as embedded code, binary library and any forms without source code, does not need to include about FatFs in the documentations. This is equivalent to the 1-clause BSD license. Of course FatFs is compatible with the most of open source software licenses including GNU GPL. When you redistribute the FatFs source code with any changes or create a fork, the license can also be changed to GNU GPL, BSD-style license or any open source software license that not conflict with FatFs license.</p>
+</div>
+
+<p class="foot"><a href="../00index_p.html">Return</a></p>
+</body>
+</html>

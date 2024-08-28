@@ -339,7 +339,7 @@
               <MiscControls>--locale=english</MiscControls>
               <Define>NDEBUG</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\app;..\..\wujique;..\usb\inc;..\eth\inc;..\..\..\driver;..\..\..\driver\lcd;..\..\..\driver\sensor;..\..\..\mcu\stm32407\mcu_dev;..\..\..\mcu\stm32407\StLib\STM32F4xx_StdPeriph_Driver\inc;..\..\..\panel;..\..\..\Petite;..\..\..\components\FatFs;..\eth\inc;..\..\..\components\cmd\ubootcmd;..\..\..\components\littlefs-master;..\usb\inc;..\..\..\mcu\stm32407;..\..\..\driver\camera;..\..\..\mcu\stm32407\StLib\CMSIS\Include;..\..\..\driver\touch;..\..\..\components\FreeRTOS\Source\include;..\..\..\components\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\..\..\components\FreeRTOS\Source\CMSIS_RTOS_V2;..\..\..\driver\touch\rtp\tslib;..\..\..\driver\touch\rtp\tslib\tests;..\..\..\driver\codec;..\..\..\driver\touch;..\..\..\driver\touch\rtp;..\..\..\Petite\bus;..\..\..\components\emenu;..\..\..\components\CmBacktrace\cm_backtrace;..\..\..\components\FlashDB\inc;..\..\..\components\FlashDB\porting;..\..\..\components\littlefs;..\..\..\components\Petitefont;..\mcu;..\lvgl_porting;..\..\..\components\lvgl;..\sdio_mmc;..\..\..\..\PetiteDrv;..\..\..\components\RTTViewer\RTT;..\..\..\components\RTTViewer\Config;..\..\..\mcu</IncludePath>
+              <IncludePath>..\..\..\app;..\..\wujique;..\usb\inc;..\eth\inc;..\..\..\driver;..\..\..\driver\lcd;..\..\..\driver\sensor;..\..\..\mcu\stm32407\mcu_dev;..\..\..\mcu\stm32407\StLib\STM32F4xx_StdPeriph_Driver\inc;..\..\..\panel;..\..\..\Petite;..\..\..\components\filesystem\FatFs;..\eth\inc;..\..\..\components\cmd\ubootcmd;..\..\..\components\littlefs-master;..\usb\inc;..\..\..\mcu\stm32407;..\..\..\driver\camera;..\..\..\mcu\stm32407\StLib\CMSIS\Include;..\..\..\driver\touch;..\..\..\components\FreeRTOS\Source\include;..\..\..\components\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\..\..\components\FreeRTOS\Source\CMSIS_RTOS_V2;..\..\..\driver\touch\rtp\tslib;..\..\..\driver\touch\rtp\tslib\tests;..\..\..\driver\codec;..\..\..\driver\touch;..\..\..\driver\touch\rtp;..\..\..\Petite\bus;..\..\..\components\emenu;..\..\..\components\CmBacktrace\cm_backtrace;..\..\..\components\FlashDB\inc;..\..\..\components\FlashDB\porting;..\..\..\components\filesystem\littlefs;..\..\..\components\Petitefont;..\mcu;..\lvgl_porting;..\..\..\components\lvgl;..\sdio_mmc;..\..\..\..\PetiteDrv;..\..\..\components\RTTViewer\RTT;..\..\..\components\RTTViewer\Config;..\..\..\mcu</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1086,12 +1086,12 @@
             <File>
               <FileName>lfs_util.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\components\littlefs\lfs_util.c</FilePath>
+              <FilePath>..\..\..\components\filesystem\littlefs\lfs_util.c</FilePath>
             </File>
             <File>
               <FileName>lfs.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\components\littlefs\lfs.c</FilePath>
+              <FilePath>..\..\..\components\filesystem\littlefs\lfs.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1101,32 +1101,32 @@
             <File>
               <FileName>diskio.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\components\FatFs\diskio.c</FilePath>
+              <FilePath>..\..\..\components\filesystem\FatFs\diskio.c</FilePath>
             </File>
             <File>
               <FileName>ff.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\components\FatFs\ff.c</FilePath>
+              <FilePath>..\..\..\components\filesystem\FatFs\ff.c</FilePath>
             </File>
             <File>
               <FileName>ff_gen_drv.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\components\FatFs\ff_gen_drv.c</FilePath>
+              <FilePath>..\..\..\components\filesystem\FatFs\ff_gen_drv.c</FilePath>
             </File>
             <File>
               <FileName>ffunicode.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\components\FatFs\ffunicode.c</FilePath>
+              <FilePath>..\..\..\components\filesystem\FatFs\ffunicode.c</FilePath>
             </File>
             <File>
               <FileName>cc936.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\components\FatFs\option\cc936.c</FilePath>
+              <FilePath>..\..\..\components\filesystem\FatFs\option\cc936.c</FilePath>
             </File>
             <File>
               <FileName>syscall.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\components\FatFs\option\syscall.c</FilePath>
+              <FilePath>..\..\..\components\filesystem\FatFs\option\syscall.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -22,16 +22,16 @@
  * 存储类
 */
 /**---------------------fatfs----------------------------*/
-#include "..\..\components\FatFs\diskio.c"
-#include "..\..\components\FatFs\ff.c"
-#include "..\..\components\FatFs\ff_gen_drv.c"
-#include "..\..\components\FatFs\ffunicode.c"
+#include "..\..\components\filesystem\FatFs\diskio.c"
+#include "..\..\components\filesystem\FatFs\ff.c"
+#include "..\..\components\filesystem\FatFs\ff_gen_drv.c"
+#include "..\..\components\filesystem\FatFs\ffunicode.c"
 ///@bug need fix
-//#include "..\..\components\FatFs\option\cc936.c"
-#include "..\..\components\FatFs\option\syscall.c"
+//#include "..\..\components\filesystem\FatFs\option\cc936.c"
+#include "..\..\components\filesystem\FatFs\option\syscall.c"
 /**---------------------littlefs---------------------------*/
-#include "../../components/littlefs/lfs.c"
-#include "../../components/littlefs/lfs_util.c"
+#include "../../components/filesystem/littlefs/lfs.c"
+#include "../../components/filesystem/littlefs/lfs_util.c"
 /**--------------------FlashDB-------------------------*/
 //port
 #include "../../components/FlashDB/porting/fal.c"

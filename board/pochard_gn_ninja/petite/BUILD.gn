@@ -10,8 +10,8 @@ config("petite_config") {
     "..\..\..\components/RTTViewer/RTT",
     "..\..\..\components/RTTViewer/Config",
 
-    "..\..\..\components/FatFs",
-    "..\..\..\components/littlefs",
+    "..\..\..\components\filesystem/FatFs",
+    "..\..\..\components\filesystem/littlefs",
 
     "..\..\..\components/CmBacktrace/cm_backtrace",
 

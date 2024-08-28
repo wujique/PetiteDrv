@@ -12,8 +12,8 @@ config("components_config") {
       "$COMPONENTS_SRC_PATH/emenu",
       "$COMPONENTS_SRC_PATH/FlashDB\inc",
       "$COMPONENTS_SRC_PATH/FlashDB\porting",
-      "$COMPONENTS_SRC_PATH/littlefs",
-      "$COMPONENTS_SRC_PATH/FatFs",
+      "$COMPONENTS_SRC_PATH/filesystem/littlefs",
+      "$COMPONENTS_SRC_PATH/filesystem/FatFs",
       
       "$COMPONENTS_SRC_PATH/",
 

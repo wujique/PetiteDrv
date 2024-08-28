@@ -60,7 +60,7 @@ void board_app_task(void)
 
 	/* 初始化文件系统 */
 	sd_fatfs_init();
-	sys_timer_test();
+	//sys_timer_test();
 	//flashdb_demo();
 
 	/* 测试littlefs */

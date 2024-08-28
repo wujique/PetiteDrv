@@ -1848,7 +1848,7 @@
 
   <Group>
     <GroupName>components/littlefs</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -1859,7 +1859,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\components\littlefs\lfs_util.c</PathWithFileName>
+      <PathWithFileName>..\..\..\components\filesystem\littlefs\lfs_util.c</PathWithFileName>
       <FilenameWithoutPath>lfs_util.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -1871,7 +1871,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\components\littlefs\lfs.c</PathWithFileName>
+      <PathWithFileName>..\..\..\components\filesystem\littlefs\lfs.c</PathWithFileName>
       <FilenameWithoutPath>lfs.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -1880,7 +1880,7 @@
 
   <Group>
     <GroupName>components/fatfs</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -1891,7 +1891,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\components\FatFs\diskio.c</PathWithFileName>
+      <PathWithFileName>..\..\..\components\filesystem\FatFs\diskio.c</PathWithFileName>
       <FilenameWithoutPath>diskio.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -1903,7 +1903,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\components\FatFs\ff.c</PathWithFileName>
+      <PathWithFileName>..\..\..\components\filesystem\FatFs\ff.c</PathWithFileName>
       <FilenameWithoutPath>ff.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -1915,7 +1915,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\components\FatFs\ff_gen_drv.c</PathWithFileName>
+      <PathWithFileName>..\..\..\components\filesystem\FatFs\ff_gen_drv.c</PathWithFileName>
       <FilenameWithoutPath>ff_gen_drv.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -1927,7 +1927,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\components\FatFs\ffunicode.c</PathWithFileName>
+      <PathWithFileName>..\..\..\components\filesystem\FatFs\ffunicode.c</PathWithFileName>
       <FilenameWithoutPath>ffunicode.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -1939,7 +1939,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\components\FatFs\option\cc936.c</PathWithFileName>
+      <PathWithFileName>..\..\..\components\filesystem\FatFs\option\cc936.c</PathWithFileName>
       <FilenameWithoutPath>cc936.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -1951,7 +1951,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\components\FatFs\option\syscall.c</PathWithFileName>
+      <PathWithFileName>..\..\..\components\filesystem\FatFs\option\syscall.c</PathWithFileName>
       <FilenameWithoutPath>syscall.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -4420,7 +4420,7 @@
 
   <Group>
     <GroupName>components</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>

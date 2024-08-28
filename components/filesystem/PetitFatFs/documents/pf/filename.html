@@ -1,0 +1,30 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<link rel="up" title="Petit FatFs" href="../00index_p.html">
+<link rel="stylesheet" href="../css_e.css" type="text/css" media="screen" title="ELM Default">
+<link rel="stylesheet" href="../css_p.css" type="text/css" media="screen" title="ELM Default">
+<title>Petit FatFs - Path Names</title>
+</head>
+
+<body>
+<h1>Path Names on the Petit FatFs</h1>
+
+<div class="para">
+<h3>Format of the path names</h3>
+<p>The path name format on the Petit FatFs module is similer to MS-DOS as follows.</p>
+<pre>"[/]<em>DIRECTORY</em>/<em>FILE</em>"</pre>
+<p>The Petit FatFs module supports only 8.3 format file name. The sub-directories are separated with a '/'. The path name is terminated with a '\0', control character or white space. Heading spaces are ignored and skipped. When <tt>PF_USE_LCC == 1</tt>, lower case ASCII characters (a-z) and extended characters (\x80-\xFF) are allowed for the path name.</p>
+<p>The Petit FatFs module does not have a concept of current directory like OS oriented file system. Every object on the volume is always specified in full path name follows from the root directory. Heading separator is ignored and it can be exist or omitted.</p>
+</div>
+
+<div class="para">
+<h3>Legal Characters and Case Sensitivity</h3>
+<p>On the FAT filesystem, legal characters for object name (file/directory name) are, <tt>0-9 A-Z ! # $ % &amp; ' ( ) - @ ^ _ ` { } ~</tt> and any extended character. The valid character codes of extended characters are depends on the configured code page.</p>
+<p>FAT filesystem is case-insensitive to the object names on the volume. Object name on the FAT volume is compared in case-insensitive. For instance, these three names, <tt>file.txt</tt>, <tt>File.Txt</tt> and <tt>FILE.TXT</tt>, are identical. This is applied to extended charactres as well. When an object is created on the FAT volume, up-converted name is recorded to the directory entry.</p>
+</div>
+
+</body>
+</html>
