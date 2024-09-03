@@ -28,14 +28,13 @@ typedef struct _strMtdPra
     u8 dir[8];
 }VFSDIR;
 
-#define O_RDONLY 	1
-#define O_WRONLY	2
-#define O_RDWR		3
-#define O_APPEND	4
-#define O_CREAT		5//不存在时创建新文件
-#define O_EXTC		6
-#define O_NOBLOCK	7
-#define O_TRUNC		8
+#define O_RDONLY 	1// Open a file as read only
+#define O_WRONLY	2// Open a file as write only
+#define O_RDWR		3// Open a file as read and write
+#define O_CREAT		0x0100// Create a file if it does not exist
+#define O_EXTC		0x0200// Fail if a file already exists
+#define O_TRUNC		0x0400// Truncate the existing file to zero size
+#define O_APPEND	0x0800// Move to end of file on every write
 
 extern void vfs_init(void);
 extern int vfs_mount(void *part);
