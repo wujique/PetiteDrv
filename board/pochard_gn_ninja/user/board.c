@@ -159,10 +159,12 @@ s32 board_init(void)
 	camera_init();
 	//board_test_camera();
 
+	//esp8266_uart_test();
+	#if 0
 	mcu_i2s_init(1);//初始化I2S接口
 	dev_wm8978_init();
 	petite_add_loop("sound", fun_sound_task, 30);
-
+	#endif
 	/*---------------------------------------*/
 	/* 创建目标板应用程序 */
 	board_app_init();
@@ -330,5 +332,61 @@ void board_post_sleep(uint32_t xExpectedIdleTime)
 	//LogBoard("2");
 }
 
+/*--------------------------
 
 
+
+----------------------------*/
+
+/*
+	8266 串口WIFI模块简单测试
+
+ */
+/*
+	pochard stm32f407vgt 单板
+	PA1 IO2
+	PA0 IO0
+	PC10 EN
+	PA15 RST
+
+	外扩串口接ESP8266串口模块，IO与I2S复用，需要屏蔽调I2S功能
+	*/
+
+void esp8266_io_init(void)
+{
+	/* 全部配置为输入，就不会影像模块工作了 */
+	mcu_io_config_in(MCU_PORT_A, MCU_IO_0);	
+	mcu_io_config_in(MCU_PORT_A, MCU_IO_1);	
+	mcu_io_config_in(MCU_PORT_A, MCU_IO_15);	
+	mcu_io_config_in(MCU_PORT_C, MCU_IO_10);	
+}
+
+char ESP8266_buf[10];
+
+const static BusUartPra Uart7Pra = {
+	.BaudRate = 115200, //波特率			 
+
+	.bufsize = 512,//接收缓冲长度
+};
+
+void esp8266_uart_test(void)
+{
+	int rlen;
+	void *uartnode;
+	uint8_t buf[16];
+
+	esp8266_io_init();
+
+	uartnode = bus_uart_open("uart2", &Uart7Pra);
+
+	while(1) {
+		//uart_printf("s ");
+		bus_uart_write(uartnode, "AT\r\n", 4);
+		HAL_Delay(1000);
+		memset(buf, 0, sizeof(buf));
+		rlen = bus_uart_read(uartnode, buf, 10);
+		if (rlen != 0) {
+			uart_printf("%s", buf);
+		}
+	}
+}
