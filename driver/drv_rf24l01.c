@@ -327,7 +327,7 @@ s32 NRF_Rx_Dat(u8 *rxb)
         dev_nrf24l01_write_reg(NRF_WRITE_REG+NRF_REG_STATUS,state);/* 清除中断标志*/   
         dev_nrf24l01_read_buf(NRF_RD_RX_PLOAD, rxb, RX_PLOAD_WIDTH);//读取数据  
         
-        dump_hex(rxb, RX_PLOAD_WIDTH,16);
+        dump_hex(rxb, RX_PLOAD_WIDTH);
 		
 //      SPI_NRF_WriteReg(FLUSH_RX,NOP);          //清除RX FIFO寄存器  
         res = NRF_STA_BIT_RX_DR;   
@@ -404,9 +404,9 @@ s32 dev_nrf24l01_check(void)
 	dev_nrf24l01_closespi();
 	
 	wjq_log(LOG_DEBUG, "\r\n-------------\r\n");
-	dump_hex(buf, sizeof(buf),16);
+	dump_hex(buf, sizeof(buf));
 	wjq_log(LOG_DEBUG, "\r\n-------------\r\n");
-	dump_hex(buf1, sizeof(buf1),16);
+	dump_hex(buf1, sizeof(buf1));
 	wjq_log(LOG_DEBUG, "\r\n-------------\r\n");
 	
 	if(0 == memcmp(buf,buf1, sizeof(buf)))  

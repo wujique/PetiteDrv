@@ -595,7 +595,7 @@ void esp32_c3_spi_at_test(void)
 
 			if(SlaveSta.dre == 1 && SlaveSta.len != 0) {
 				at_spi_master_recv_data(databuf, SlaveSta.len);
-				dump_hex(databuf, SlaveSta.len, 16);
+				dump_hex(databuf, SlaveSta.len);
 				at_spi_rddma_done();
 			} else if (SlaveSta.dre == 2) {
 				at_spi_master_send_data("AT\r\n", 4);

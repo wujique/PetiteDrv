@@ -167,7 +167,8 @@ void petite_log(LOG_L l, char *tag, const char *file, const char *fun, int line,
 #define __is_print(ch) ((unsigned int)((ch) - ' ') < 127u - ' ')
 
 /**------------------------------------------------------------------------------------------*/
-
+char dumphexbuf[80];
+#define DUMP_HEX_PERLINE 16
 /**
  * dump_hex
  * 
@@ -175,39 +176,46 @@ void petite_log(LOG_L l, char *tag, const char *file, const char *fun, int line,
  * 
  * @param buf: User buffer
  * @param size: Dump data size
- * @param number: The number of outputs per line
  * 
  * @return void
 */
-void dump_hex(const uint8_t *buf, uint32_t size, uint32_t number)
+void dump_hex(const uint8_t *buf, uint32_t size)
 {
     int i, j;
-
+    int shift;
     if (LogInit == -1) return;
 
     ///@todo 一个字符调一次printf太慢了，有空要优化，组织一行字符在printf
-    for (i = 0; i < size; i += number) {
-        uart_printf("%08X: ", i);
+    for (i = 0; i < size; i += DUMP_HEX_PERLINE) {
+        shift = 0;
 
-        for (j = 0; j < number; j++) {
+        sprintf(dumphexbuf, "%08X: ", i);//10 byte
+        shift = 10;
+        for (j = 0; j < DUMP_HEX_PERLINE; j++) {
             if (j % 8 == 0) {
-                uart_printf(" ");
+                sprintf(dumphexbuf + shift, " ");//1byte
+                shift += 1;
             }
             if (i + j < size)
-                uart_printf("%02X ", buf[i + j]);
+                sprintf(dumphexbuf + shift, "%02X ", buf[i + j]);
             else
-                uart_printf("   ");
-        }
-        uart_printf(" ");
+                sprintf(dumphexbuf + shift, "   ");
 
-        for (j = 0; j < number; j++)
-        {
-            if (i + j < size)
-            {
-                uart_printf("%c", __is_print(buf[i + j]) ? buf[i + j] : '.');
+            shift += 3;
+        } //16*3 byte
+        uart_printf(" ");//1byte
+
+        for (j = 0; j < DUMP_HEX_PERLINE; j++) {
+            if (i + j < size) {
+                char ch = buf[i + j];
+                sprintf(dumphexbuf + shift, "%c", ( ch >= 0x20 && ch < 0x7f) ? ch : '.');
+                shift++;
             }
-        }
-        uart_printf("\r\n");
+        }//16byte
+        sprintf(dumphexbuf + shift, "\r\n");//2 byte
+        shift+=2;
+        dumphexbuf[shift] = 0;
+        uart_printf("%s", dumphexbuf);
     }
 }
 

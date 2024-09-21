@@ -99,7 +99,7 @@ void pkfifo_test(void)
 	pfifo = &kfifo_u8;
 	PKFIFO_IN_1U8(pfifo, 0x55);
 
-	dump_hex(kfifo_u8_buf, 513, 16);
+	dump_hex(kfifo_u8_buf, 513);
 	/**/
 	pkfifo_init(&kfifo_u16, (void *)kfifo_u16_buf, 516, sizeof(u16));
 	tmpu16 = 0;
@@ -109,7 +109,7 @@ void pkfifo_test(void)
 	}
 	pfifo = &kfifo_u16;
 	PKFIFO_IN_1U16(pfifo, 0x1234);
-	dump_hex((char*)kfifo_u16_buf, 513*2, 16);
+	dump_hex((char*)kfifo_u16_buf, 513*2);
 
 	#if 0
 	u16 a,b,c;

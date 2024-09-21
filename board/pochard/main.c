@@ -90,7 +90,7 @@ s32 board_mcu_preinit(void)
 	LogMainC(LOG_DEBUG, "PCLK2_Frequency: %d Hz\r\n", RCC_Clocks.PCLK2_Frequency);
 
   char buf[64];
-  dump_hex(buf, 64, 16);
+  dump_hex(buf, 64);
 
   mcu_rtc_init();
 	return 0;

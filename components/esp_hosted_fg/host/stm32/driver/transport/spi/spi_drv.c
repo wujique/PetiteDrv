@@ -607,7 +607,7 @@ static stm_ret_t spi_transaction_v2(uint8_t * txbuff)
 
 	bus_spich_close(node);
 	printf("retval:%d\r\n", retval);
-	//dump_hex( rxbuff, 32, 16);
+	//dump_hex( rxbuff, 32);
 	if (retval > 0 ) retval = 0;
 	#endif
 
