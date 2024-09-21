@@ -10,9 +10,9 @@ LCD-----LVGL DEMO----完成
 Flash-----外扩SPI Flash板----littlefs----完成
 I2S----WM8978----完成
 
-SPI-------COG LCD----
-I2C-------EPROM---OLED----
-WIFI------spi AT---
+SPI-------COG LCD----ok
+I2C-------EPROM---OLED----ok
+WIFI------spi AT---ok
 充电-------
 EX UART----ESP8266模块------------完成
 USB----测试ST USB下载----

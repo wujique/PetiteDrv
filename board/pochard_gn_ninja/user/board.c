@@ -562,8 +562,11 @@ int esp_spi_at_handshake_sta(void)
 void esp32_c3_io_init(void)
 {
 	/* spi 接口已经 初始化 */
-	mcu_io_config_in(MCU_PORT_D, MCU_IO_13);
-	mcu_io_config_out(MCU_PORT_A, MCU_IO_9);
+	mcu_io_config_in(MCU_PORT_D, MCU_IO_12);//no use
+
+	mcu_io_config_in(MCU_PORT_D, MCU_IO_13);//handshake
+
+	mcu_io_config_out(MCU_PORT_A, MCU_IO_9);//reset
 	mcu_io_output_resetbit(MCU_PORT_A, MCU_IO_9);
 	osDelay(50);
 	mcu_io_output_setbit(MCU_PORT_A, MCU_IO_9);
