@@ -134,6 +134,7 @@ extern void *PetiteDevTable[];
 extern PartitionDef PetitePartitonTable[];
 extern const DevTouch BoardDevTp;
 void board_test_camera(void);
+void esp32_c3_spi_at_test(void);
 /*
 	板级初始化
 */
@@ -160,6 +161,8 @@ s32 board_init(void)
 	//board_test_camera();
 
 	//esp8266_uart_test();
+	//esp32_c3_spi_at_test();
+
 	#if 0
 	mcu_i2s_init(1);//初始化I2S接口
 	dev_wm8978_init();
@@ -390,3 +393,218 @@ void esp8266_uart_test(void)
 		}
 	}
 }
+
+/**
+ * 贴在板子上的esp32-c3模块，SPI接口
+ * 
+ * https://github.com/espressif/esp-at/tree/9bd111dd3233caead0fdf40dc99092cc7e9b0930/examples/at_spi_master/spi/esp32_c_series
+ * 
+ * https://docs.espressif.com/projects/esp-at/zh_CN/latest/esp32c3/Compile_and_Develop/How_to_implement_SPI_AT.html
+ * 
+ * 
+ * esp32 c3固件默认管脚
+ * SCLK 		GPIO6
+ * MISO 		GPIO2
+ * MOSI 		GPIO7
+ * CS   		GPIO10
+ * HANDSHAKE 	GIIO3
+ * 
+ * 
+ * 
+ * stm32对应管脚如下
+#define ESP32_C3_SPI2_MISO  PB14
+#define ESP32_C3_SPI2_CLK	PB13
+#define ESP32_C3_SPI2_MOSI  PB15
+#define ESP32_C3_SPI2_NSS	PB12
+
+#define ESP32_C3_HANDSHAKE	PD13
+#define ESP32_C3_DATA_READY	PD12  DATA_READY脚是 esp host方式使用
+#define ESP32_C3_RESET		PA9
+
+使用握手线的具体方法为：
+Master 向 slave 发送 AT 数据时，使用握手线的方法为：
+master 向 slave 发送请求传输数据的请求，然后等待 slave 向握手线发出的允许发送数据的信号。
+master 检测到握手线上的 slave 发出的允许发送的信号后，开始发送数据。
+master 发送数据后，通知 slave 数据发送结束。
+Master 接收 slave 发送的 AT 数据时，使用握手线的方法为：
+slave 通过握手线通知 master 开始接收数据。
+master 接收数据，并在接收所有数据后，通知 slave 数据已经全部接收。
+
+ */
+
+DevSpiChNode *EspAtSpiChNode;
+uint8_t EspAtSpiSN = 0;
+
+
+struct _sSlaveSta {
+	uint8_t NA[3];
+	uint8_t dre;//0x01, 可读， 0x02, 可写
+	uint8_t sn; // slave sn
+	uint8_t len_l;
+	uint8_t len_h;
+
+	/* len */
+	uint16_t len;
+};
+
+struct _sSlaveSta SlaveSta;
+
+#define ESP_SPI_DMA_MAX_LEN   4092
+
+#define CMD_HD_WRBUF_REG      0x01
+#define CMD_HD_RDBUF_REG      0x02
+#define CMD_HD_WRDMA_REG      0x03
+#define CMD_HD_RDDMA_REG      0x04
+#define CMD_HD_WR_END_REG     0x07
+#define CMD_HD_INT0_REG       0x08
+
+#define WRBUF_START_ADDR      0x0
+#define RDBUF_START_ADDR      0x4
+#define STREAM_BUFFER_SIZE    1024 * 8
+
+#define CMD_HD_DUMMY	0x00
+
+#define CMD_DEFAULT_SN		0x00
+#define CMD_WRITE_DATALEN	0x02
+#define CMD_MAGIC			0xfe
+/*-------------------------------------------------------------------*/
+// 主机向从机发送数据
+int at_spi_master_send_data(uint8_t *data, uint16_t len)
+{
+	char tmp[3] = {CMD_HD_WRDMA_REG, WRBUF_START_ADDR, CMD_HD_DUMMY};
+	bus_spich_cs(EspAtSpiChNode, 0);
+	bus_spich_transfer(EspAtSpiChNode, tmp, NULL, 3);
+	bus_spich_transfer(EspAtSpiChNode, data, NULL, len);
+	bus_spich_cs(EspAtSpiChNode, 1);
+
+	return 0;
+}
+
+// 主机读取从机发送的数据
+void at_spi_master_recv_data(uint8_t* data, uint32_t len)
+{
+	
+	char tmp[3] = {CMD_HD_RDDMA_REG, RDBUF_START_ADDR, CMD_HD_DUMMY};
+	bus_spich_cs(EspAtSpiChNode, 0);
+	bus_spich_transfer(EspAtSpiChNode, tmp, NULL, 3);
+	bus_spich_transfer(EspAtSpiChNode, NULL, data, len);
+	bus_spich_cs(EspAtSpiChNode, 1);
+}
+// send a single to slave to tell slave that master has read DMA done
+// 主机通知从机，主机读取数据已经结束
+static void at_spi_rddma_done(void)
+{
+	char tmp[3] = {CMD_HD_INT0_REG, 0, 0};
+	bus_spich_cs(EspAtSpiChNode, 0);
+	bus_spich_transfer(EspAtSpiChNode, tmp, NULL, 3);
+	bus_spich_cs(EspAtSpiChNode, 1);
+}
+
+// send a single to slave to tell slave that master has write DMA done
+static void at_spi_wrdma_done(void)
+{
+	char tmp[3] = {CMD_HD_WR_END_REG, 0, 0};
+	bus_spich_cs(EspAtSpiChNode, 0);
+	bus_spich_transfer(EspAtSpiChNode, tmp, NULL, 3);
+	bus_spich_cs(EspAtSpiChNode, 1);
+}
+
+// when spi slave ready to send/recv data from the spi master, the spi slave will a trigger GPIO interrupt,
+// then spi master should query whether the slave will perform read or write operation.
+// 读状态
+
+
+
+static int query_slave_data_trans_info(void)
+{
+
+	char tmp[7] = {CMD_HD_RDBUF_REG, RDBUF_START_ADDR, 0, 0xff, 0xff, 0xff, 0xff};
+	bus_spich_cs(EspAtSpiChNode, 0);
+	bus_spich_transfer(EspAtSpiChNode, tmp, &SlaveSta, 7);
+	//bus_spich_transfer(EspAtSpiChNode, NULL, sta, 4);
+	bus_spich_cs(EspAtSpiChNode, 1);
+
+	SlaveSta.len = SlaveSta.len_h*256 + SlaveSta.len_l;
+	printf("slave sta(1=r, 2=w):%d, sn:%d, len:%d\r\n", SlaveSta.dre, SlaveSta.sn, SlaveSta.len);
+
+    return 0;
+}
+
+char SpiAtReqWri[7]={CMD_HD_WRBUF_REG, WRBUF_START_ADDR, CMD_HD_DUMMY, 
+					CMD_WRITE_DATALEN&0xff, (CMD_WRITE_DATALEN>>8)&0xff,
+					CMD_DEFAULT_SN, CMD_MAGIC};
+
+/* 请求写数据，len是希望写数据长度 */
+int esp_spi_at_request_to_write(uint16_t len)
+{
+	SpiAtReqWri[3] = len & 0xff;
+	SpiAtReqWri[4] = (len>>8) & 0xff;
+	SpiAtReqWri[5] = EspAtSpiSN;
+
+	/* 拉低 */
+	bus_spich_cs(EspAtSpiChNode, 0);
+	bus_spich_transfer(EspAtSpiChNode, SpiAtReqWri, NULL, 7);
+	bus_spich_cs(EspAtSpiChNode, 1);
+
+	return 0;
+}
+/*-------------------------------------------------------------------*/
+
+// before spi master write to slave, the master should write WRBUF_REG register to notify slave,
+// and then wait for handshark line trigger gpio interrupt to start the data transmission.
+// 握手管脚状态
+int esp_spi_at_handshake_sta(void)
+{
+	return mcu_io_input_readbit(MCU_PORT_D, MCU_IO_13);
+}
+
+
+void esp32_c3_io_init(void)
+{
+	/* spi 接口已经 初始化 */
+	mcu_io_config_in(MCU_PORT_D, MCU_IO_13);
+	mcu_io_config_out(MCU_PORT_A, MCU_IO_9);
+	mcu_io_output_resetbit(MCU_PORT_A, MCU_IO_9);
+	osDelay(50);
+	mcu_io_output_setbit(MCU_PORT_A, MCU_IO_9);
+}
+
+uint8_t databuf[256];
+
+void esp32_c3_spi_at_test(void)
+{
+	int handshake_sta;
+
+	EspAtSpiChNode = bus_spich_open("SPI2_CH1", SPI_MODE_0, 2000, 0xffffffff);
+
+	if (EspAtSpiChNode == NULL) {
+		printf("open spich err!\r\n");
+	}
+
+	esp32_c3_io_init();
+
+	while(1) {
+		osDelay(1000);
+		handshake_sta = esp_spi_at_handshake_sta();
+		printf("handshake sta:%d\r\n", handshake_sta);
+		if (handshake_sta == 1) {
+			query_slave_data_trans_info();
+
+			if(SlaveSta.dre == 1 && SlaveSta.len != 0) {
+				at_spi_master_recv_data(databuf, SlaveSta.len);
+				dump_hex(databuf, SlaveSta.len, 16);
+				at_spi_rddma_done();
+			} else if (SlaveSta.dre == 2) {
+				at_spi_master_send_data("AT\r\n", 4);
+				at_spi_wrdma_done();
+			}
+		} else {
+			esp_spi_at_request_to_write(4);
+		}
+	
+	}
+
+}
+
+/*------------------------end----------------------*/
+
