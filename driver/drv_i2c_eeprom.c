@@ -13,9 +13,9 @@
 #define MC24XX_SIZE 256
 
 
-#define EEPROM_I2C_BUS "VI2C1"
-extern const DevI2c DevVi2c1;
-DevI2c *DevVi2cEeprom = (DevI2c *)&DevVi2c1;
+//#define EEPROM_I2C_BUS "VI2C1"
+char *EEPROM_I2C_BUS;
+DevI2c *DevVi2cEeprom;
 
 /*
 	
@@ -150,7 +150,7 @@ int m24c_write_byte(char Data, uint32_t Addr)
 	*/
 	cnt = 0;
 	while(1) {
-		delay(100);
+		osDelay(2);
 		res = bus_i2c_transfer(busnode, sel, MCU_I2C_MODE_W, NULL, 0);
 		if (res == 0) {
 			break;
@@ -183,42 +183,48 @@ int m24c_write_byte(char Data, uint32_t Addr)
 /*
 	
 */
-void mc24c_test(void)
+void mc24c_test(char *I2cName, DevI2c *dev)
 {
 	uint16_t addr = 0;
 	uint8_t wdata = 0;
-	uint8_t rdata = 0;
+	uint8_t rdata[MC24XX_SIZE];
+
+	EEPROM_I2C_BUS = I2cName;
+	DevVi2cEeprom = dev;
 
 	uart_printf("mc24c_test read data:\r\n");
 	while(1) {	
 		if(addr >= MC24XX_SIZE)
 			break;
 		
-		m24c_read_byte(&rdata, addr);
-		uart_printf("[%d = %02x] ", addr, rdata);
+		m24c_read_byte(&rdata[addr], addr);
 		addr++;	
 	}
+	dump_hex(rdata, MC24XX_SIZE);
 
 	uart_printf("\r\n mc24c_test write&check:\r\n");
 	addr = 0;
 	while(1) {	
 		if(addr >= MC24XX_SIZE)
 			break;
-		wdata = 0x55;
+		wdata = 0x89;
+		///@bug 写进去就要读出来，否则写不进去？
 		m24c_write_byte(wdata, addr);
-		m24c_read_byte(&rdata, addr);
-		if (wdata != rdata) {
+		m24c_read_byte(&rdata[addr], addr);
+		if (wdata != rdata[addr]) {
 			uart_printf("mc24c_test err:%d!\r\n", addr);	
-
 		}
-		
 		wdata++;
 		addr++;
 		
 	}
 
+	dump_hex(rdata, MC24XX_SIZE);
+
 	uart_printf("mc24c_test finish!\r\n");
-	while(1);
+	while(1) {
+		osDelay(1000);	
+	}
 }
 
 

@@ -301,7 +301,7 @@ int do_lua_file_script(void)
 
 extern int flashdb_demo(void);
 extern void petite_partition_test(void);
-extern void mc24c_test(void);
+extern void mc24c_test(char *I2cName);
 uint8_t lrt[64];
 void cuckoo_7b0_test(void)
 {
@@ -353,7 +353,7 @@ void cuckoo_7b0_test(void)
 	#endif
 
 	#if 0
-	mc24c_test();
+	mc24c_test("VI2C1", &DevVi2c1);
 	#endif
 	
 	#if 0//测试lua脚本

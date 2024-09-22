@@ -61,6 +61,7 @@ source_set("source_driver") {
     "..\..\..\driver\drv_buzzer.c",
     "..\..\..\driver\drv_key.c",
     "..\..\..\driver\drv_spiflash.c",
+    "..\..\..\driver\drv_i2c_eeprom.c",
   ]
   configs = [ 
       "//build/mcuconfig:stm32f407vgt6_conf",

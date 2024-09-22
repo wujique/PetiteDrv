@@ -32,6 +32,9 @@ typedef struct
 }I2cEepromNode;
 
 
+extern void mc24c_test(char *I2cName, DevI2c *dev);
+
+
 #endif
 
 

@@ -133,6 +133,8 @@ s32 board_app_init(void)
 extern void *PetiteDevTable[];
 extern PartitionDef PetitePartitonTable[];
 extern const DevTouch BoardDevTp;
+extern const DevI2c DevVi2c0;
+
 void board_test_camera(void);
 void esp32_c3_spi_at_test(void);
 /*
@@ -162,6 +164,7 @@ s32 board_init(void)
 
 	//esp8266_uart_test();
 	//esp32_c3_spi_at_test();
+	mc24c_test("VI2C0", &DevVi2c0);
 
 	#if 0
 	mcu_i2s_init(1);//初始化I2S接口
