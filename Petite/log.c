@@ -203,7 +203,8 @@ void dump_hex(const uint8_t *buf, uint32_t size)
 
             shift += 3;
         } //16*3 byte
-        uart_printf(" ");//1byte
+        sprintf(dumphexbuf + shift, " ");//1byte
+        shift += 1;
 
         for (j = 0; j < DUMP_HEX_PERLINE; j++) {
             if (i + j < size) {
